@@ -1,0 +1,105 @@
+{
+    // General Editor Settings
+    "editor.formatOnSave": true,
+    "editor.suggest.insertMode": "replace",
+    "editor.linkedEditing": true,
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "editor.lineNumbers": "on",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+    // Terminal Settings
+    "terminal.integrated.fontFamily": "'MesloLGL Nerd Font'",
+    "code-runner.runInTerminal": true,
+    "workbench.iconTheme": "material-icon-theme",
+    "zenMode.hideLineNumbers": false,
+
+    // Language-specific Settings
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[cpp]": {
+        "editor.defaultFormatter": "ms-vscode.cpptools"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
+    // Other Settings
+    "workbench.startupEditor": "none",
+    "files.autoSave": "afterDelay",
+    "cSpell.userWords": [
+        "alexa",
+        "anchorlayout",
+        "boxlayout",
+        "Flexbox",
+        "gridlayout",
+        "kivy",
+        "nums",
+        "pagelayout",
+        "Saurav",
+        "screenmanager",
+        "scrollview",
+        "stacklayout",
+        "todoitems",
+        "todos",
+        "vmax",
+        "vmin"
+    ],
+    "git.openRepositoryInParentFolders": "never",
+    "liveServer.settings.donotVerifyTags": true,
+    "liveServer.settings.donotShowInfoMsg": true,
+    "explorer.confirmDragAndDrop": false,
+    "editor.autoClosingBrackets": "always",
+    "tabnine.experimentalAutoImports": true,
+    "terminal.integrated.env.linux": {},
+    "console-ninja.featureSet": "Community",
+    "editor.cursorBlinking": "expand",
+    "editor.cursorSmoothCaretAnimation": "on",
+    "glassit.alpha": 220,
+    "editor.renderWhitespace": "all",
+    "editor.fontSize": 16,
+    "Codegeex.Privacy": true,
+    "editor.mouseWheelZoom": true,
+    "workbench.editor.enablePreview": false,
+    "window.zoomLevel": 1,
+    "editor.cursorWidth": 3,
+    "editor.fontFamily": "'Cascadia Code'",
+    "workbench.colorTheme": "Aura Dark",
+    "editor.codeLensFontFamily": "'Cascadia Mono'",
+    "workbench.editor.splitInGroupLayout": "vertical",
+    "git.autofetch": true,
+    "explorer.confirmPasteNative": false,
+    "prettier.tabWidth": 4,
+    "git.confirmSync": false,
+    "prettier.jsxSingleQuote": true,
+    "javascript.preferences.quoteStyle": "single",
+    "typescript.preferences.quoteStyle": "single",
+    "workbench.statusBar.visible": false,
+    "editor.minimap.enabled": false,
+    "editor.stickyScroll.enabled": false,
+    "workbench.productIconTheme": "fluent-icons",
+    "window.commandCenter": false,
+    "workbench.layoutControl.enabled": false,
+    "window.menuBarVisibility": "compact",
+    "accessibility.verbosity.terminal": false,
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "[ignore]": {
+        "editor.defaultFormatter": "foxundermoon.shell-format"
+    },
+    "accessibility.accessibleView.closeOnKeyPress": false,
+    "terminal.integrated.accessibleViewPreserveCursorPosition": true,
+    "extensions.experimental.affinity": {
+        "asvetliakov.vscode-neovim": 1
+    },
+    "emulator.emulatorPathWindows": "C:\\Users\\asus\\AppData\\Local\\Android\\Sdk\\emulator",
+    "emulator.emulatorPath": "C:\\Users\\asus\\AppData\\Local\\Android\\Sdk\\emulator"
+}
