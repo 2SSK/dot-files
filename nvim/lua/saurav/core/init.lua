@@ -1,5 +1,3 @@
 require("saurav.core.options")
 require("saurav.core.keymaps")
-require("saurav.core.copy_file_path_to_clipboard")
-require("saurav.core.edit_text")
 require("saurav.core.highlight_yank")
