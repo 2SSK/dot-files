@@ -11,6 +11,7 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+-- Load your plugins
 require("lazy").setup({ { import = "saurav.plugins" }, { import = "saurav.plugins.lsp" } }, {
   checker = {
     enabled = true,
