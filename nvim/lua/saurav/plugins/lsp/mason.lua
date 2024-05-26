@@ -36,6 +36,8 @@ return {
         "graphql",
         "emmet_ls",
         "prismals",
+        "clangd",
+        "gopls",
       },
     })
 

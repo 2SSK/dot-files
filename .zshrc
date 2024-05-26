@@ -31,11 +31,6 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
-# Set up fzf key bindings and fuzzy completion
-source /usr/share/doc/fzf/examples/key-bindings.zsh
-source /usr/share/doc/fzf/examples/completion.zsh
-
-
 # Node.js and NVM setup
 export NODE_ENV=development
 export NVM_DIR="$HOME/.nvm"
@@ -50,25 +45,6 @@ typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
 # Nvim path
 export PATH="$HOME/.local/bin:$PATH"
 
-# Set up fzf key bindings and fuzzy completion
-# eval "$(fzf --zsh)"
-
-# -- Use fd instead of fzf --
-export FZF_DEAFULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
-export FZF_CTRL_T_COMMAND="$FZF_DEAFULT_COMMAND"
-export FZF_ALT_C_COMMAND="fd --type=d --hidden --strip-cwd-prefix --exclude .git"
-
-# Use fd
-_fzf_compgen_path() {
-  fd --hidden --exclude .git . "$1"
-}
-
-# Use fd to generate the list for directoy completion
-_fzf_compgen_dir() {
-  fd --type=d --hidden --exclude .git . "$1"
-}
-
-source ~/fzf-git.sh/fzf-git.sh
 
 # --- Bat (bettter cat) ---
 export BAT_THEME=tokyonight_night
@@ -88,9 +64,28 @@ export PATH="/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH"
 export PATH="/usr/bin:$PATH"
 
 # Banner
-figlet -f slant "S A U R A V" | lolcat -f -d 1
+# figlet -f slant "S A U R A V" | lolcat -f -d 1
 
 # set alias for clear
 alias cls='clear'
 
+# set alias for xsel
+alias xcopy='xsel --input --clipboard'
+alias xpaste='xsel --output --clipboard'
 
+# React Native env
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export PATH=$PATH:$JAVA_HOME/bin
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+export WSL_HOST=$(tail -1 /etc/resolv.conf | cut -d' ' -f2)
+export ADB_SERVER_SOCKET=tcp:$WSL_HOST:5037
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+# GOLANG PATH SETUP
+export GOPATH=$HOME/go
+export PATH=$PATH:/snap/bin
