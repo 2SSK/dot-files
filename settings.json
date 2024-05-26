@@ -6,13 +6,11 @@
     "javascript.updateImportsOnFileMove.enabled": "always",
     "editor.lineNumbers": "on",
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-
     // Terminal Settings
     "terminal.integrated.fontFamily": "'MesloLGL Nerd Font'",
     "code-runner.runInTerminal": true,
     "workbench.iconTheme": "material-icon-theme",
     "zenMode.hideLineNumbers": false,
-
     // Language-specific Settings
     "[typescriptreact]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -21,10 +19,10 @@
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "[jsonc]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "vscode.json-language-features"
     },
     "[javascript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
     },
     "[cpp]": {
         "editor.defaultFormatter": "ms-vscode.cpptools"
@@ -32,7 +30,6 @@
     "[html]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-
     // Other Settings
     "workbench.startupEditor": "none",
     "files.autoSave": "afterDelay",
@@ -49,6 +46,7 @@
         "screenmanager",
         "scrollview",
         "stacklayout",
+        "toastify",
         "todoitems",
         "todos",
         "vmax",
@@ -73,7 +71,7 @@
     "window.zoomLevel": 1,
     "editor.cursorWidth": 3,
     "editor.fontFamily": "'Cascadia Code'",
-    "workbench.colorTheme": "Aura Dark",
+    "workbench.colorTheme": "Catppuccin Mocha",
     "editor.codeLensFontFamily": "'Cascadia Mono'",
     "workbench.editor.splitInGroupLayout": "vertical",
     "git.autofetch": true,
@@ -83,13 +81,10 @@
     "prettier.jsxSingleQuote": true,
     "javascript.preferences.quoteStyle": "single",
     "typescript.preferences.quoteStyle": "single",
-    "workbench.statusBar.visible": false,
     "editor.minimap.enabled": false,
     "editor.stickyScroll.enabled": false,
     "workbench.productIconTheme": "fluent-icons",
     "window.commandCenter": false,
-    "workbench.layoutControl.enabled": false,
-    "window.menuBarVisibility": "compact",
     "accessibility.verbosity.terminal": false,
     "terminal.integrated.defaultProfile.windows": "PowerShell",
     "[ignore]": {
@@ -101,5 +96,24 @@
         "asvetliakov.vscode-neovim": 1
     },
     "emulator.emulatorPathWindows": "C:\\Users\\asus\\AppData\\Local\\Android\\Sdk\\emulator",
-    "emulator.emulatorPath": "C:\\Users\\asus\\AppData\\Local\\Android\\Sdk\\emulator"
+    "emulator.emulatorPath": "C:\\Users\\asus\\AppData\\Local\\Android\\Sdk\\emulator",
+    "explorer.confirmDelete": false,
+    "workbench.activityBar.location": "bottom",
+    "workbench.sideBar.location": "right",
+    "window.menuBarVisibility": "compact",
+    "workbench.layoutControl.enabled": false,
+    "vim.smartRelativeLine": true,
+    "[dotenv]": {
+        "editor.defaultFormatter": "foxundermoon.shell-format"
+    },
+    "workbench.statusBar.visible": false,
+    "[lua]": {
+        "editor.defaultFormatter": "sumneko.lua"
+    },
+    "editor.wordWrap": "on",
+    "vim.commandLineModeKeyBindingsNonRecursive": [],
+    "emulator.emulatorPathLinux": "C:\\Users\\asus\\AppData\\Local\\Android\\Sdk\\emulator",
+    "[javascriptreact]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    }
 }

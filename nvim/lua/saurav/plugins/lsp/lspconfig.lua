@@ -131,23 +131,14 @@ return {
           },
         })
       end,
-      ["gopls"] = function()
-        -- configure gopls server
-        lspconfig["gopls"].setup({
-          on_attach = require("plugis.configs.lspconfig").on_attach,
+      ["clangd"] = function()
+        -- configure clangd server
+        lspconfig["clangd"].setup({
           capabilities = capabilities,
-          cmd = { "gopls" },
-          filetypes = { "go", "gomod", "gowork", "gotmpl" },
-          root_dir = require("lspconfig/util").root_pattern("go.work", "go.mod", ".git"),
-          settings = {
-            gopls = {
-              completeUnimported = true,
-              usePlaceholders = true,
-              analyses = {
-                unusedparams = true,
-              },
-            },
-          },
+          on_attach = function(client, bufnr)
+            client.server_capabilities.signatureHelpProvider = false
+            on_attach(client, bufnr)
+          end,
         })
       end,
     })
