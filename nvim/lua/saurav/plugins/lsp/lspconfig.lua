@@ -131,16 +131,16 @@ return {
           },
         })
       end,
-      ["clangd"] = function()
-        -- configure clangd server
-        lspconfig["clangd"].setup({
-          capabilities = capabilities,
-          on_attach = function(client, bufnr)
-            client.server_capabilities.signatureHelpProvider = false
-            on_attach(client, bufnr)
-          end,
-        })
-      end,
+      --["clangd"] = function()
+      -- configure clangd server
+      --lspconfig["clangd"].setup({
+      --capabilities = capabilities,
+      --on_attach = function(client, bufnr)
+      --client.server_capabilities.signatureHelpProvider = false
+      --on_attach(client, bufnr)
+      --end,
+      --})
+      --end,
     })
   end,
 }

@@ -1,0 +1,92 @@
+configuration {
+    modi: "drun,run";
+    lines: 5;
+    font: "MesloLGS Nerd Font Mono 14";
+    show-icons: true;
+    icon-theme: "Papirus-Dark";
+    terminal: "alacritty";
+    drun-display-format: "{icon} {name}";
+    location: 0;
+    disable-history: false;
+    hide-scrollbar: true;
+    sidebar-mode: true;
+    display-drun: "   Apps ";
+    display-run: "   Command ";
+    display-window: " 﩯  Window ";
+}
+
+
+element-text, element-icon , mode-switcher {
+    background-color: inherit;
+    text-color:       inherit;
+}
+
+window {
+    height: 400px;
+    width: 600px;
+    border: 0px;
+    border-radius: 5px;
+    padding: 0px 0px 0px 0px;
+    fullscreen: false;
+}
+
+mainbox {
+}
+
+inputbar {
+    children: [prompt,entry];
+    border-radius: 3px;
+    padding: 2px;
+}
+
+prompt {
+    padding: 12px;
+    border-radius: 3px;
+    margin: 8px 0px 0px 8px;
+}
+
+textbox-prompt-colon {
+    expand: false;
+    str: ":";
+}
+
+entry {
+    padding: 6px;
+    margin: 14px 0px 0px 2.5px;
+}
+
+listview {
+    border: 0px 0px 0px;
+    margin: 7px 10px 0px 10px;
+    columns: 1;
+}
+
+element {
+    padding: 12px 12px 12px 12px;
+}
+
+element-icon {
+    size: 25px;
+}
+
+element selected {
+    border-radius: 3px;
+}
+
+mode-switcher {
+    spacing: 0;
+  }
+
+button {
+    padding: 12px;
+    margin: 10px;
+    vertical-align: 0.5; 
+    horizontal-align: 0.5;
+}
+
+button selected {
+  border-radius: 3px;
+}
+
+
+@theme "catppuccin-mocha"

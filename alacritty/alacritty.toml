@@ -1,5 +1,28 @@
+import = [
+'~/.config/alacritty/themes/themes/catppuccin_mocha.toml'
+]
+
 [env]
 TERM = "xterm-256color"
+
+[font]
+size = 19
+
+[font.bold]
+family = "MesloLGS Nerd Font Mono"
+style = "Bold"
+
+[font.bold_italic]
+family = "MesloLGS Nerd Font Mono"
+style = "Bold Italic"
+
+[font.italic]
+family = "MesloLGS Nerd Font Mono"
+style = "Italic"
+
+[font.normal]
+family = "MesloLGS Nerd Font Mono"
+style = "Regular"
 
 [window]
 padding.x = 10
@@ -12,7 +35,3 @@ blur = true
 
 option_as_alt = "Both"
 
-[font]
-normal.family = "MesloLGS Nerd Font Mono"
-
-size = 17
