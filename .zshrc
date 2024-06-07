@@ -22,15 +22,8 @@ alias cls='clear'
 alias lg='lazygit'
 alias c='xsel --input --clipboard'
 alias v='xsel --output --clipboard'
-
-# Enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='colorls'
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
-fi
+alias nv='nvim'
+alias off='shutdown -h now'
 
 # history setup
 HISTFILE=$HOME/.zsh_history
@@ -40,6 +33,9 @@ setopt share_history
 setopt hist_expire_dups_first
 setopt hist_ignore_dups
 setopt hist_verify
+
+# ---- Eza (better ls) -----
+alias ls="eza --color=always --long --git --no-filesize --icons=always --no-time --no-user --no-permissions"
 
 # --- setup fzf theme ---
 fg="#CBE0F0"
