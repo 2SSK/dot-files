@@ -25,6 +25,14 @@ alias v='xsel --output --clipboard'
 alias nv='nvim'
 alias off='shutdown -h now'
 
+# TMUX alias
+alias t='tmux'
+alias tl='tmux ls'
+alias ta='tmux attach -t'
+alias tk='tmux kill-session -t'
+alias tn='tmux new -s'
+
+
 # history setup
 HISTFILE=$HOME/.zsh_history
 SAVEHIST=1000

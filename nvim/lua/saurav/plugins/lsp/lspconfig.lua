@@ -132,7 +132,7 @@ return {
         })
       end,
       --["clangd"] = function()
-      -- configure clangd server
+      ----configure clangd server
       --lspconfig["clangd"].setup({
       --capabilities = capabilities,
       --on_attach = function(client, bufnr)
