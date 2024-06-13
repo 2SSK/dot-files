@@ -31,7 +31,10 @@ alias tl='tmux ls'
 alias ta='tmux attach -t'
 alias tk='tmux kill-session -t'
 alias tn='tmux new -s'
+alias td='tmux detach'
 
+# gcc compiler alias
+alias gc='g++ -o'
 
 # history setup
 HISTFILE=$HOME/.zsh_history
