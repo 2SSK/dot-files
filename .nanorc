@@ -1,0 +1,26 @@
+## Enable Syntax Highlighting
+include "/usr/share/nano/*.nanorc"
+
+## Display Line Numbers
+set linenumbers
+
+## Enable soft Wrapping
+set softwrap
+
+## Show Whitespace
+set whitespace "show-all"
+
+## Set Tab Size
+set tabsize 2
+
+## Convert Tabs to Spaces
+set tabstospaces
+
+## Enable smooth Scrolling
+set smooth
+
+## Persistent Search Highlighting
+set highlight
+
+## Backup Files
+set backup
