@@ -15,15 +15,15 @@ plugins=(git zsh-syntax-highlighting zsh-autosuggestions)
 source $ZSH/oh-my-zsh.sh
 
 # Add custom aliases here
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
 alias cls='clear'
 alias lg='lazygit'
 alias c='xsel --input --clipboard'
 alias v='xsel --output --clipboard'
 alias nv='nvim'
 alias off='shutdown -h now'
+alias e='exit'
+alias y='yazi'
+alias ff='fastfetch'
 
 # TMUX alias
 alias t='tmux'
@@ -47,6 +47,8 @@ setopt hist_verify
 
 # ---- Eza (better ls) -----
 alias ls="eza --color=always --long --git --no-filesize --icons=always --no-time --no-user --no-permissions"
+alias lsp="eza --color=always --long --git --no-filesize --icons=always --no-time --no-user"
+alias lsa="eza --color=always --long --git --no-filesize  --icons=always "
 
 # --- setup fzf theme ---
 fg="#CBE0F0"
