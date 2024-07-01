@@ -3,6 +3,9 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+# Disable instant prompt to prevent consolve output warning
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
+
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
@@ -10,9 +13,13 @@ export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # Set list of plugins to load
-plugins=(git zsh-syntax-highlighting zsh-autosuggestions)
+plugins=( git sudo zsh-autosuggestions zsh-syntax-highlighting )
 
 source $ZSH/oh-my-zsh.sh
+
+# Set nvim as defult editor
+export EDITOR='nvim'
+export VISUAL='nvim'
 
 # Add custom aliases here
 alias cls='clear'
@@ -32,9 +39,13 @@ alias ta='tmux attach -t'
 alias tk='tmux kill-session -t'
 alias tn='tmux new -s'
 alias td='tmux detach'
+alias cd='z'
 
 # gcc compiler alias
 alias gc='g++ -o'
+
+# todo app alias
+alias todo='~/Code/project/GO/go-todo-cli-app/./todo'
 
 # history setup
 HISTFILE=$HOME/.zsh_history
@@ -46,9 +57,13 @@ setopt hist_ignore_dups
 setopt hist_verify
 
 # ---- Eza (better ls) -----
+alias dir="eza --color=always --git --no-filesize --icons=always --no-time --no-user --no-permissions"
 alias ls="eza --color=always --long --git --no-filesize --icons=always --no-time --no-user --no-permissions"
 alias lsp="eza --color=always --long --git --no-filesize --icons=always --no-time --no-user"
 alias lsa="eza --color=always --long --git --no-filesize  --icons=always "
+
+# ---- Zoxide (better cd) ----
+eval "$(zoxide init zsh)"
 
 # --- setup fzf theme ---
 fg="#CBE0F0"
@@ -69,7 +84,5 @@ export PATH="/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH"
 # Path to colorls
 export PATH="$PATH:$HOME/.local/share/gem/ruby/3.0.0/bin"
 
-# Banner
-# figlet -f slant "S A U R A V" | lolcat -f -d 1
 
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
