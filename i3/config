@@ -9,13 +9,13 @@
 #
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
-for_window [class="^.*"] border pixel 4
+for_window [class="^.*"] border pixel 2
 
 set $mod Mod4
 # set $mod Mod1
 
 exec --no-startup-id picom
-exec --no-startup-id feh --bg-scale ~/Pictures/Wallpapers/Wallpaper-Bank/City-Rain.png
+exec --no-startup-id feh --bg-scale ~/Wallpaper-Bank/City-Rain.png
 exec --no-startup-id xrdb -merge ~/.Xresources
 exec_always --no-startup-id setxkbmap -option ctrl:nocaps
 
@@ -35,6 +35,10 @@ bindsym Ctrl+Shift+Print exec maim --select | xclip -selection clipboard -t imag
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
 font pango:MesloLGS Nerd Font Mono Bold 14
+
+# Gaps
+gaps inner 2
+gaps outer 2
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
