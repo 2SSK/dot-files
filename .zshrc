@@ -5,6 +5,7 @@ fi
 
 # Disable instant prompt to prevent consolve output warning
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -31,6 +32,7 @@ alias off='shutdown -h now'
 alias e='exit'
 alias y='yazi'
 alias ff='fastfetch'
+alias aq='asciiquarium'
 
 # TMUX alias
 alias t='tmux'
@@ -83,6 +85,16 @@ export PATH="/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH"
 
 # Path to colorls
 export PATH="$PATH:$HOME/.local/share/gem/ruby/3.0.0/bin"
+
+
+# Fortune
+# fortune | cowsay -f stegosaurus | lolcat
+# sl train 
+alias sl='sl --help -F -a'
+# pipe.sh
+alias p='pipes.sh'
+# cbonsai
+alias cb='cbonsai -l'
 
 
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
