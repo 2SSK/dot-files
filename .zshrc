@@ -18,20 +18,38 @@ plugins=( git sudo zsh-autosuggestions zsh-syntax-highlighting )
 
 source $ZSH/oh-my-zsh.sh
 
+# Set the autosuggestion highlight style
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#c99e84'  
+
+# Always mkdir a path 
+alias mkdir='mkdir -p'
+
 # Set nvim as defult editor
 export EDITOR='nvim'
 export VISUAL='nvim'
 
-# Add custom aliases here
-alias cls='clear'
+# Alias for lazygit
 alias lg='lazygit'
+
+# Alias for clipboard
 alias c='xsel --input --clipboard'
 alias v='xsel --output --clipboard'
+
+# Alias for neovim
 alias nv='nvim'
+
+# Alias for sudo command
 alias off='shutdown -h now'
+alias cls='clear'
 alias e='exit'
+
+# Alias for yazi
 alias y='yazi'
+
+# Alias for fastfetch
 alias ff='fastfetch'
+
+# Alias for asciiquarium
 alias aq='asciiquarium'
 
 # TMUX alias
@@ -41,13 +59,33 @@ alias ta='tmux attach -t'
 alias tk='tmux kill-session -t'
 alias tn='tmux new -s'
 alias td='tmux detach'
+
+# Zoxide alias
 alias cd='z'
 
 # gcc compiler alias
-alias gc='g++ -o'
+alias gc='g++ -std=c++20 -o'
 
-# todo app alias
-alias todo='~/Code/project/GO/go-todo-cli-app/./todo'
+# System alias
+alias update='sudo pacman -Sy'
+alias upgrade='sudo pacman -Syu'
+alias install='sudo pacman -S'
+alias remove='sudo pacman -Rs'
+alias search='pacman -Ss'
+
+# yay alias
+alias yupdate='yay -Sy'
+alias yupgrade='yay -Syu'
+alias yinstall='yay -S'
+alias yremove='yay -Rs'
+alias ysearch='yay -Ss'
+
+# Handy change dir shortcuts
+alias ..='cd ..'
+alias ...='cd ../..'
+alias .3='cd ../../..'
+alias .4='cd ../../../..'
+alias .5='cd ../../../../..'
 
 # history setup
 HISTFILE=$HOME/.zsh_history
@@ -87,8 +125,6 @@ export PATH="/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH"
 export PATH="$PATH:$HOME/.local/share/gem/ruby/3.0.0/bin"
 
 
-# Fortune
-# fortune | cowsay -f stegosaurus | lolcat
 # sl train 
 alias sl='sl --help -F -a'
 # pipe.sh
