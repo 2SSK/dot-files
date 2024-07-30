@@ -17,6 +17,28 @@
             "format": "┌──────────────────────────────────────────┐"
         },
         {
+            "type": "host",
+            "key": "    Host",
+            "keyColor": "red"
+        },
+        {
+            "type": "uptime",
+            "key": "    Uptime",
+            "keyColor": "magenta"
+        },
+        {
+            "type": "custom",
+            "format": "└──────────────────────────────────────────┘"
+        },
+        {
+            "type": "custom",
+            "format": "\u001b[36m    コンピューター"
+        },
+        {
+            "type": "custom",
+            "format": "┌──────────────────────────────────────────┐"
+        },
+        {
             "type": "os",
             "key": "   OS",
             "keyColor": "red"
