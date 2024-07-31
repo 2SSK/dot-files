@@ -130,7 +130,8 @@ bindsym F7 exec --no-startup-id ~/bin/toggle_kbd_backlight.sh
 bindsym F9 exec --no-startup-id amixer set Capture toggle
 
 # Screenshot
-bindsym F12 exec --no-startup-id flameshot gui 
+bindsym F12 exec gnome-screenshot -f ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
+bindsym Shift+F12 exec gnome-screenshot -w -f ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
