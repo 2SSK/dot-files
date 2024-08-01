@@ -5,8 +5,7 @@ for_window [class="^.*"] border pixel 3
 set $mod Mod4
 # set $mod Mod1
 
-exec --no-startup-id picom
-#exec --no-startup-id feh --bg-scale ~/Wallpaper-Bank/City-Rain.png
+exec --no-startup-id picom --config ~/.config/picom/picom.conf
 exec --no-startup-id xrdb -merge ~/.Xresources
 #exec_always --no-startup-id setxkbmap -option :nocaps
 exec_always --no-startup-id setxkbmap -option 
