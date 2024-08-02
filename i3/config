@@ -1,9 +1,9 @@
 # i3 config file (v4)
 
-for_window [class="^.*"] border pixel 3
+for_window [class="^.*"] border pixel 4
 
+# set mod key (Mod1=<Alt>, Mod4=<Super>)
 set $mod Mod4
-# set $mod Mod1
 
 exec --no-startup-id picom --config ~/.config/picom/picom.conf
 exec --no-startup-id xrdb -merge ~/.Xresources
@@ -26,15 +26,10 @@ bindsym Ctrl+Shift+Print exec maim --select | xclip -selection clipboard -t imag
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:MesloLGS Nerd Font Mono Bold 14
+font pango:JetbrainsMono Nerd Font Bold 11
 
 # Gaps
-gaps outer 4
-for_window [all] title_window_icon on
-for_window [all] title_window_icon padding 5px
-for_window [class=".*"] border pixel 5
-default_border pixel 5
-title_align center
+gaps outer 5
 gaps inner 10
 
 # Start XDG autostart .desktop files using dex. See also
@@ -68,8 +63,6 @@ bindsym $mod+q kill
 
 # start rofi (a program launcher)
 bindsym $mod+d exec --no-startup-id rofi -show drun
-#bindsym $mod+space exec --no-startup-id rofi -show combi
-bindsym $mod+space exec --no-startup-id ulauncher
 bindsym $mod+Tab exec --no-startup-id rofi -show window
 
 # change focus
@@ -104,9 +97,6 @@ bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
 
-# toggle tiling / floating
-bindsym $mod+Shift+space floating toggle
-
 # focus the parent container
 bindsym $mod+a focus parent
 
@@ -131,6 +121,16 @@ bindsym F9 exec --no-startup-id amixer set Capture toggle
 # Screenshot
 bindsym F12 exec gnome-screenshot -f ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
 bindsym Shift+F12 exec gnome-screenshot -w -f ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
+
+# split orientation
+bindsym $mod+z split h;exec notify-send 'tile horizontally'
+bindsym $mod+v split v;exec notify-send 'tile vertically'
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
