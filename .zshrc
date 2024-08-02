@@ -38,7 +38,7 @@ alias v='xsel --output --clipboard'
 # Alias for neovim
 alias nv='nvim'
 
-# Alias for sudo command
+# Alias for most used commands
 alias off='shutdown -h now'
 alias cls='clear'
 alias e='exit'
@@ -121,9 +121,8 @@ export BAT_THEME=tokyonight_night
 # Path variable
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH"
 
-# Path to colorls
-export PATH="$PATH:$HOME/.local/share/gem/ruby/3.0.0/bin"
-
+# rofimoji path
+export PATH="/usr/bin/rofimoji:$PATH"
 
 # sl train 
 alias sl='sl --help -F -a'
