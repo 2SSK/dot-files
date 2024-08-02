@@ -1,20 +1,13 @@
-/**
- *
- * Author : Aditya Shakya (adi1090x)
- * Github : @adi1090x
- * 
- * Rofi Theme File
- * Rofi Version: 1.7.3
- **/
 
 /*****----- Configuration -----*****/
 configuration {
-	modi:                       "drun,filebrowser,window";
+	modi:                       "drun,filebrowser,window,emoji:rofimoji";
     show-icons:                 true;
     display-drun:               "";
     display-run:                "";
     display-filebrowser:        "";
     display-window:             "";
+    display-emoji:              "😀";
 	drun-display-format:        "{name}";
 	window-format:              "{w} · {c} · {t}";
 }
