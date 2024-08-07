@@ -1,6 +1,6 @@
 # i3 config file (v4)
 
-# for_window [class="^.*"] border pixel 4
+ for_window [class="^.*"] border pixel 5
 
 # set mod key (Mod1=<Alt>, Mod4=<Super>)
 set $mod Mod4
@@ -21,7 +21,7 @@ font pango:JetbrainsMono Nerd Font Bold 11
 
 # Gaps
 gaps outer 5
-gaps inner 10
+gaps inner 12
 
 # Start XDG autostart .desktop files using dex. See also
 # https://wiki.archlinux.org/index.php/XDG_Autostart
