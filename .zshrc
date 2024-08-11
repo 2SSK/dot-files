@@ -74,11 +74,11 @@ alias remove='sudo pacman -Rs'
 alias search='pacman -Ss'
 
 # yay alias
-alias yupdate='yay -Sy'
-alias yupgrade='yay -Syu'
-alias yinstall='yay -S'
-alias yremove='yay -Rs'
-alias ysearch='yay -Ss'
+alias yd='yay -Sy'
+alias yg='yay -Syu'
+alias yi='yay -S'
+alias yr='yay -Rs'
+alias ys='yay -Ss'
 
 # Handy change dir shortcuts
 alias ..='cd ..'
@@ -124,6 +124,12 @@ export PATH="/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH"
 # rofimoji path
 export PATH="/usr/bin/rofimoji:$PATH"
 
+# ttyper 
+alias tt='ttyper'
+
+# tty-clock
+alias tc='tty-clock'
+
 # sl train 
 alias sl='sl --help -F -a'
 # pipe.sh
@@ -133,3 +139,5 @@ alias cb='cbonsai -l'
 
 
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+export PATH=$PATH:/home/ssk/.spicetify
