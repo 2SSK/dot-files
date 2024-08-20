@@ -1,7 +1,7 @@
 
 /*****----- Configuration -----*****/
 configuration {
-	modi:                       "drun,filebrowser,window,emoji:rofimoji";
+	modi:                       "drun,filebrowser,window"; /*emoji:rofimoji*/
     show-icons:                 true;
     display-drun:               "";
     display-run:                "";

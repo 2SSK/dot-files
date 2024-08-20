@@ -1,6 +1,6 @@
 # i3 config file (v4)
 
- for_window [class="^.*"] border pixel 5
+ for_window [class="^.*"] border pixel 0
 
 # set mod key (Mod1=<Alt>, Mod4=<Super>)
 set $mod Mod4
@@ -20,13 +20,13 @@ exec_always --no-startup-id ~/.config/polybar/launch_polybar.sh
 font pango:JetbrainsMono Nerd Font Bold 11
 
 # Gaps
-gaps outer 8
-gaps inner 16
-gaps top -5
+gaps outer 10
+gaps inner 20
+# gaps top   -5
 
 # Start XDG autostart .desktop files using dex. See also
 # https://wiki.archlinux.org/index.php/XDG_Autostart
-exec --no-startup-id dex --autostart --environment i3
+ exec --no-startup-id dex --autostart --environment i3
 
 # screen before suspend. Use loginctl lock-session to lock your screen.
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
@@ -57,6 +57,7 @@ bindsym $mod+q kill
 # start rofi (a program launcher)
 bindsym $mod+d exec --no-startup-id rofi -show drun
 bindsym $mod+Tab exec --no-startup-id rofi -show window
+bindsym $mod+p exec --no-startup-id ~/.config/rofi/powermenu.sh
 
 # change focus
 bindsym $mod+h focus left
