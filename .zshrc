@@ -1,9 +1,11 @@
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
+
+# Disable instant prompt to prevent consolve output warning
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -12,85 +14,130 @@ export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # Set list of plugins to load
-plugins=(git zsh-syntax-highlighting zsh-autosuggestions)
+plugins=( git sudo zsh-autosuggestions zsh-syntax-highlighting )
 
 source $ZSH/oh-my-zsh.sh
 
-# Add custom aliases here
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
+# Set the autosuggestion highlight style
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#c99e84'  
 
+# Always mkdir a path 
+alias mkdir='mkdir -p'
 
-# Enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='colorls'
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
-fi
+# Set nvim as defult editor
+export EDITOR='nvim'
+export VISUAL='nvim'
 
-# Set up fzf key bindings and fuzzy completion
-source /usr/share/doc/fzf/examples/key-bindings.zsh
-source /usr/share/doc/fzf/examples/completion.zsh
+# Alias for lazygit
+alias lg='lazygit'
 
+# Alias for clipboard
+alias c='xsel --input --clipboard'
+alias v='xsel --output --clipboard'
 
-# Node.js and NVM setup
-export NODE_ENV=development
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# Alias for neovim
+alias nv='nvim'
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-(( ! ${+functions[p10k]} )) || p10k finalize
-typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
+# Alias for most used commands
+alias off='shutdown -h now'
+alias cls='clear'
+alias e='exit'
 
-# Nvim path
-export PATH="$HOME/.local/bin:$PATH"
+# Alias for yazi
+alias y='yazi'
 
-# Set up fzf key bindings and fuzzy completion
-# eval "$(fzf --zsh)"
+# Alias for fastfetch
+alias ff='fastfetch'
 
-# -- Use fd instead of fzf --
-export FZF_DEAFULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
-export FZF_CTRL_T_COMMAND="$FZF_DEAFULT_COMMAND"
-export FZF_ALT_C_COMMAND="fd --type=d --hidden --strip-cwd-prefix --exclude .git"
+# Alias for asciiquarium
+alias aq='asciiquarium'
 
-# Use fd
-_fzf_compgen_path() {
-  fd --hidden --exclude .git . "$1"
-}
+# TMUX alias
+alias t='tmux'
+alias tl='tmux ls'
+alias ta='tmux attach -t'
+alias tk='tmux kill-session -t'
+alias tn='tmux new -s'
+alias td='tmux detach'
 
-# Use fd to generate the list for directoy completion
-_fzf_compgen_dir() {
-  fd --type=d --hidden --exclude .git . "$1"
-}
+# Zoxide alias
+alias cd='z'
 
-source ~/fzf-git.sh/fzf-git.sh
+# gcc compiler alias
+alias gc='g++ -std=c++20 -o'
+
+# System alias
+alias update='sudo pacman -Sy'
+alias upgrade='sudo pacman -Syu'
+alias install='sudo pacman -S'
+alias remove='sudo pacman -Rs'
+alias search='pacman -Ss'
+
+# yay alias
+alias yd='yay -Sy'
+alias yg='yay -Syu'
+alias yi='yay -S'
+alias yr='yay -Rs'
+alias ys='yay -Ss'
+
+# Handy change dir shortcuts
+alias ..='cd ..'
+alias ...='cd ../..'
+alias .3='cd ../../..'
+alias .4='cd ../../../..'
+alias .5='cd ../../../../..'
+
+# history setup
+HISTFILE=$HOME/.zsh_history
+SAVEHIST=1000
+HISTSIZE=999
+setopt share_history
+setopt hist_expire_dups_first
+setopt hist_ignore_dups
+setopt hist_verify
+
+# ---- Eza (better ls) -----
+alias dir="eza --color=always --git --no-filesize --icons=always --no-time --no-user --no-permissions"
+alias ls="eza --color=always --long --git --no-filesize --icons=always --no-time --no-user --no-permissions"
+alias lsp="eza --color=always --long --git --no-filesize --icons=always --no-time --no-user"
+alias lsa="eza --color=always --long --git --no-filesize  --icons=always "
+
+# ---- Zoxide (better cd) ----
+eval "$(zoxide init zsh)"
+
+# --- setup fzf theme ---
+fg="#CBE0F0"
+bg="#011628"
+bg_highlight="#143652"
+purple="#B388FF"
+blue="#06BCE4"
+cyan="#2CF9ED"
+
+export FZF_DEFAULT_OPTS="--color=fg:${fg},bg:${bg},hl:${purple},fg+:${fg},bg+:${bg_highlight},hl+:${purple},info:${blue},prompt:${cyan},pointer:${cyan},marker:${cyan},spinner:${cyan},header:${cyan}"
 
 # --- Bat (bettter cat) ---
 export BAT_THEME=tokyonight_night
 
-# Cargo path
-export PATH="$HOME/.cargo/bin:$PATH"
-
-export PATH="/usr/local/bin:$PATH"
-
-# Pyton path
-export PATH="/path/to/python/bin:$PATH"
-
 # Path variable
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH"
 
-# Git path
-export PATH="/usr/bin:$PATH"
+# rofimoji path
+export PATH="/usr/bin/rofimoji:$PATH"
 
-# Banner
-figlet -f slant "S A U R A V" | lolcat -f -d 1
+# ttyper 
+alias tt='ttyper'
 
-# set alias for clear
-alias cls='clear'
+# tty-clock
+alias tc='tty-clock'
+
+# sl train 
+alias sl='sl --help -F -a'
+# pipe.sh
+alias p='pipes.sh'
+# cbonsai
+alias cb='cbonsai -l'
 
 
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+export PATH=$PATH:/home/ssk/.spicetify

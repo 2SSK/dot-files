@@ -1,38 +1,29 @@
 return {
-  { "nvim-neotest/nvim-nio" },
+  {
+    "jay-babu/mason-nvim-dap.nvim",
+    event = "VeryLazy",
+    dependencies = {
+      "williamboman/mason.nvim",
+      "mfussenegger/nvim-dap",
+    },
+    opts = {
+      handlers = {},
+    },
+  },
   {
     "mfussenegger/nvim-dap",
     dependencies = {
       "rcarriga/nvim-dap-ui",
+      "nvim-neotest/nvim-nio",
+      "leoluz/nvim-dap-go",
     },
     config = function()
       local dap = require("dap")
       local dapui = require("dapui")
 
-      -- Configure LLDB adapter
-      dap.adapters.lldb = {
-        type = "executable",
-        command = "/usr/bin/lldb-vscode", -- adjust as needed, must be absolute path
-        name = "lldb",
-      }
+      require("dapui").setup()
+      require("dap-go").setup()
 
-      -- Configure C++ debugging
-      dap.configurations.cpp = {
-        {
-          name = "Launch",
-          type = "lldb",
-          request = "launch",
-          program = function()
-            return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
-          end,
-          cwd = "${workspaceFolder}",
-          stopOnEntry = false,
-          args = {},
-          -- runInTerminal = false, -- Uncomment this line if needed
-        },
-      }
-
-      -- DAP UI configurations
       dap.listeners.before.attach.dapui_config = function()
         dapui.open()
       end
@@ -46,7 +37,6 @@ return {
         dapui.close()
       end
 
-      -- Key bindings
       vim.keymap.set("n", "<leader>dt", dap.toggle_breakpoint, {})
       vim.keymap.set("n", "<leader>dc", dap.continue, {})
     end,

@@ -1,0 +1,15 @@
+# A TOML linter such as https://taplo.tamasfe.dev/ can use this schema to validate your config.
+# If you encounter any issues, please make an issue at https://github.com/yazi-rs/schemas.
+"$schema" = "https://yazi-rs.github.io/schemas/keymap.json"
+
+[manager]
+
+prepend_keymap = [
+	{ on = [ "j" ], run = [ "plugin --sync arrow --args=1"],  desc = "Move selection downwards, or wrap." },
+	{ on = [ "k" ], run = [ "plugin --sync arrow --args=-1"], desc = "Move selection upwards, or wrap." },
+	{ on = [ "l" ], run = [ "plugin smart-enter --sync", "escape --visual --select" ], desc = "Enter the child directory, or open file." },
+	{ on = [ "L" ], run = "plugin smart-enter --sync --args='detatch'", desc = "Open in new window." },
+    { on = [ "=" ], run = """
+        shell 'printf "Mode Bits: "; read ans; chmod $ans "$@"' --block --confirm
+    """, desc = "chmod" },
+]

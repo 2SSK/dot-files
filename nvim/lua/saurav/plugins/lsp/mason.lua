@@ -36,7 +36,8 @@ return {
         "graphql",
         "emmet_ls",
         "prismals",
-        "pyright",
+        "clangd",
+        "gopls",
       },
     })
 
@@ -45,6 +46,7 @@ return {
         "prettier", -- prettier formatter
         "stylua", -- lua formatter
         "eslint_d",
+        "delve",
       },
     })
   end,
