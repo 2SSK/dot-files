@@ -12,7 +12,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 -- Load your plugins
-require("lazy").setup({ { import = "saurav.plugins" }, { import = "saurav.plugins.lsp" } }, {
+require("lazy").setup({ { import = "ssk.plugins" }, { import = "ssk.plugins.lsp" } }, {
   checker = {
     enabled = true,
     notify = false,
