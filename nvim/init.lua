@@ -1,2 +1,2 @@
-require("saurav.core")
-require("saurav.lazy")
+require("ssk.core")
+require("ssk.lazy")
