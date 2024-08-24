@@ -33,17 +33,17 @@
     },
     {
       "type": "packages",
-      "key": " ",
+      "key": "  ",
       "keyColor": "green"
     },
     {
       "type": "display",
-      "key": " ",
+      "key": " ",
       "keyColor": "green"
     },
     {
       "type": "wm",
-      "key": " ",
+      "key": " ",
       "keyColor": "yellow"
     },
     {
@@ -72,7 +72,7 @@
     },
     {
       "type": "memory",
-      "key": "﬙ ",
+      "key": "󰍛 ",
       "keyColor": "magenta"
     },      
     "break",

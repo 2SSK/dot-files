@@ -2,7 +2,7 @@ return {
   "folke/tokyonight.nvim",
   priority = 1000,
   config = function()
-    local transparent = true
+    local transparent = false
     local bg = "#011628"
     local bg_dark = "#011423"
     local bg_highlight = "#143652"
@@ -12,7 +12,7 @@ return {
     local fg_dark = "#B4D0E9"
     local fg_gutter = "#627E97"
     local border = "#547998"
-    local comment_fg = "#79a3a5"
+    -- local comment_fg = "#79a3a5"
 
     require("tokyonight").setup({
       style = "night",
@@ -37,7 +37,7 @@ return {
         colors.fg_float = fg
         colors.fg_gutter = fg_gutter
         colors.fg_sidebar = fg_dark
-        colors.comment = comment_fg
+        -- colors.comment = comment_fg
       end,
     })
 
