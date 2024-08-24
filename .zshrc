@@ -128,14 +128,15 @@ export PATH="/usr/bin/rofimoji:$PATH"
 alias tt='ttyper'
 
 # tty-clock
-alias tc='tty-clock'
-
+alias tc='tty-clock -t'
 # sl train 
 alias sl='sl --help -F -a'
 # pipe.sh
 alias p='pipes.sh'
 # cbonsai
-alias cb='cbonsai -l'
+alias cb='cbonsai -li'
+# cmatrix
+alias cm='cmatrix -absr'
 
 
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
