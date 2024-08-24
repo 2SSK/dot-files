@@ -10,6 +10,8 @@ exec --no-startup-id xrdb -merge ~/.Xresources
 #exec_always --no-startup-id setxkbmap -option :nocaps
 exec_always --no-startup-id setxkbmap -option 
 exec --no-startup-id variety
+exec_always --no-startup-id autotiling
+exec_always --no-startup-id xborders
 
 # kill any hanging polybar processes
 exec_always killall polybar

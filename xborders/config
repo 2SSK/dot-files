@@ -1,0 +1,24 @@
+[default]
+border_width = 3
+border_color = #7aa2f7  # A medium blue that works well with both themes
+border_radius = 24      # Rounded corners
+
+[focused]
+border_color = #89ddff  # Light cyan, matches both themes' accent colors
+
+[unfocused]
+border_color = #1a1b26  # Dark background color, blending with both themes
+
+[urgent]
+border_color = #f7768e  # Soft red for urgent windows, aligns with both themes
+
+[sticky]
+border_color = #cba6f7  # Mauve, a color that fits the pastel tone of Catppuccin and also complements Tokyonight
+
+# Specific Application Overrides (Optional)
+[Kitty]
+border_color = #7dcfff  # Light blue, harmonious with both themes
+
+[Firefox]
+border_color = #ff9e64  # Warm orange, adds contrast and works with both themes
+
