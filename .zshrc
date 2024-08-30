@@ -11,7 +11,8 @@ typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load
-ZSH_THEME="powerlevel10k/powerlevel10k"
+# ZSH_THEME="powerlevel10k/powerlevel10k"
+ZSH_THEME="cloud"
 
 # Set list of plugins to load
 plugins=( git sudo zsh-autosuggestions zsh-syntax-highlighting )
@@ -134,7 +135,7 @@ alias sl='sl --help -F -a'
 # pipe.sh
 alias p='pipes.sh'
 # cbonsai
-alias cb='cbonsai -li'
+alias cb='cbonsai -liv'
 # cmatrix
 alias cm='cmatrix -absr'
 
