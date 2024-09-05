@@ -16,7 +16,6 @@ ZSH_THEME="cloud"
 
 # Set list of plugins to load
 plugins=( git sudo zsh-autosuggestions zsh-syntax-highlighting )
-
 source $ZSH/oh-my-zsh.sh
 
 # Set the autosuggestion highlight style
@@ -38,6 +37,7 @@ alias v='xsel --output --clipboard'
 
 # Alias for neovim
 alias nv='nvim'
+alias nrd='npm run dev'
 
 # Alias for most used commands
 alias off='shutdown -h now'
@@ -101,7 +101,7 @@ setopt hist_verify
 alias dir="eza --color=always --git --no-filesize --icons=always --no-time --no-user --no-permissions"
 alias ls="eza --color=always --long --git --no-filesize --icons=always --no-time --no-user --no-permissions"
 alias lsp="eza --color=always --long --git --no-filesize --icons=always --no-time --no-user"
-alias lsa="eza --color=always --long --git --no-filesize  --icons=always "
+alias lsa="eza --color=always --long --git  --icons=always -b -a --total-size "
 
 # ---- Zoxide (better cd) ----
 eval "$(zoxide init zsh)"
@@ -139,7 +139,13 @@ alias cb='cbonsai -liv'
 # cmatrix
 alias cm='cmatrix -absr'
 
+# alias for network manager
+alias status='nmcli device status'
+alias list='nmcli device wifi list'
+alias connect='nmcli device wifi connect'
+alias disconnect='nmcli device disconnect'
+
+export PATH=$PATH:/home/ssk/.spicetify
 
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-export PATH=$PATH:/home/ssk/.spicetify
