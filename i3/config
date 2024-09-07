@@ -19,7 +19,7 @@ exec_always --no-startup-id ~/.config/polybar/launch_polybar.sh
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:JetbrainsMono Nerd Font Bold 11
+font pango:JetbrainsMono Nerd Font Bold 14
 
 # Gaps
 gaps outer 10
@@ -52,6 +52,11 @@ floating_modifier $mod
 # start a terminal
 bindsym $mod+Return exec kitty
 
+# Send the terminal to the scratchpad
+bindsym $mod+Shift+Return move scratchpad
+
+# Show the scratchpad terminal
+bindsym $mod+minus scratchpad show
 
 # kill focused window
 bindsym $mod+q kill
@@ -203,37 +208,55 @@ bindsym $mod+c exec "~/.config/i3/lockscreen.sh"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 
-set $rosewater #f5e0dc
-set $flamingo  #f2cdcd
-set $pink      #f5c2e7
-set $mauve     #cba6f7
-set $red       #f38ba8
-set $maroon    #eba0ac
-set $peach     #fab387
-set $yellow    #f9e2af
-set $green     #a6e3a1
-set $teal      #94e2d5
-set $sky       #89dceb
-set $sapphire  #74c7ec
-set $blue      #89b4fa
-set $lavender  #b4befe
-set $text      #cdd6f4
-set $subtext1  #bac2de
-set $subtext0  #a6adc8
-set $overlay2  #9399b2
-set $overlay1  #7f849c
-set $overlay0  #6c7086
-set $surface2  #585b70
-set $surface1  #45475a
-set $surface0  #313244
-set $base      #1e1e2e
-set $mantle    #181825
-set $crust     #11111b
+# set $rosewater #f5e0dc
+# set $flamingo  #f2cdcd
+# set $pink      #f5c2e7
+# set $mauve     #cba6f7
+# set $red       #f38ba8
+# set $maroon    #eba0ac
+# set $peach     #fab387
+# set $yellow    #f9e2af
+# set $green     #a6e3a1
+# set $teal      #94e2d5
+# set $sky       #89dceb
+# set $sapphire  #74c7ec
+# set $blue      #89b4fa
+# set $lavender  #b4befe
+# set $text      #cdd6f4
+# set $subtext1  #bac2de
+# set $subtext0  #a6adc8
+# set $overlay2  #9399b2
+# set $overlay1  #7f849c
+# set $overlay0  #6c7086
+# set $surface2  #585b70
+# set $surface1  #45475a
+# set $surface0  #313244
+# set $base      #1e1e2e
+# set $mantle    #181825
+# set $crust     #11111b
+#
+# # target                 title     bg    text      indicator    border
+# client.focused           $mantle   $mauve $mantle  $mauve     $mauve
+# client.focused_inactive  $overlay0 $base  $text    $mauve     $overlay0
+# client.unfocused         $overlay0 $base  $text    $rosewater $overlay0
+# client.urgent            $peach    $base  $peach   $overlay0  $peach
+# client.placeholder       $overlay0 $base  $text    $overlay0  $overlay0
+# client.background        $base
 
-# target                 title     bg    text      indicator    border
-client.focused           $mantle   $mauve $mantle  $mauve     $mauve
-client.focused_inactive  $overlay0 $base  $text    $mauve     $overlay0
-client.unfocused         $overlay0 $base  $text    $rosewater $overlay0
-client.urgent            $peach    $base  $peach   $overlay0  $peach
-client.placeholder       $overlay0 $base  $text    $overlay0  $overlay0
-client.background        $base
+# Color Scheme
+set $background      #990000
+set $background_alt  #373B41
+set $foreground      #ffffff
+set $primary         #00aaff
+set $primary_alt     #F0C674
+set $secondary       #4c7899
+set $alert           #A54242
+set $border_inactive #222D31
+
+# Colors for window borders, background, text, and indicators.
+#                       border              background         text                 indicator
+client.focused          $primary            $primary            $foreground          $primary
+client.focused_inactive $secondary          $secondary          $foreground          $secondary
+client.unfocused        $background_alt     $background_alt     $foreground          $background_alt
+client.urgent           $alert              $alert              $foreground          $alert
+
