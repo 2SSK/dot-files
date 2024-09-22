@@ -35,5 +35,14 @@ opt.clipboard:append("unnamedplus") -- use system clipboard as default register
 opt.splitright = true -- split vertical window to the right
 opt.splitbelow = true -- split horizontal window to the bottom
 
+-- auto save on text change, only for normal buffers
+vim.api.nvim_create_autocmd({ "TextChanged", "TextChangedI" }, {
+  callback = function()
+    if vim.bo.buftype == "" then -- only write if it's a normal buffer
+      vim.cmd("silent write")
+    end
+  end,
+})
+
 -- turn off swapfile
 opt.swapfile = false

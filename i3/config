@@ -57,6 +57,7 @@ bindsym $mod+Shift+Return move scratchpad
 
 # Show the scratchpad terminal
 bindsym $mod+minus scratchpad show
+bindsym $mod+shift+minus  move workspace current
 
 # kill focused window
 bindsym $mod+q kill

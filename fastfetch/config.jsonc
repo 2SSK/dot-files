@@ -15,7 +15,7 @@
   "modules": [
     {
       "type": "title",
-      "key": "  "
+      "key": " "
     },
     {
       "type": "custom",
@@ -23,17 +23,17 @@
     },
     {
       "type": "os",
-      "key": "  ",
+      "key": " ",
       "keyColor": "red"
     },
     {
       "type": "kernel",
-      "key": "  ",
+      "key": " ",
       "keyColor": "red"
     },
     {
       "type": "packages",
-      "key": "  ",
+      "key": " ",
       "keyColor": "green"
     },
     {
@@ -48,14 +48,14 @@
     },
     {
       "type": "terminal",
-      "key": "  ",
+      "key": " ",
       "keyColor": "yellow"
     },
     "break",
     {
       "type": "cpu",
       "format": "{1}",
-      "key": " ",
+      "key": " ",
       "keyColor": "blue"
     },
     {
