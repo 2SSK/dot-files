@@ -47,6 +47,7 @@ return {
         "stylua", -- lua formatter
         "eslint_d",
         "delve",
+        "clang-format",
       },
     })
   end,
