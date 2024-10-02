@@ -20,16 +20,20 @@
 
 (add-hook 'emacs-startup-hook #'efs/display-startup-time)
 
-;; Enable line numbers globally
+;; Enable line numbers globally, starting with absolute
 (setq display-line-numbers 't)  ;; Enable absolute line numbers globally
-(global-display-line-numbers-mode 1)  ;; Enable globally
+(global-display-line-numbers-mode 1)  ;; Enable line numbers globally
 
 ;; Function to enable relative line numbers
 (defun my-relative-line-numbers ()
-  (setq display-line-numbers 'relative))
+  (setq display-line-numbers 'relative))  ;; Set line numbers to relative
 
 ;; Enable relative line numbers in programming modes
 (add-hook 'prog-mode-hook 'my-relative-line-numbers)
+
+;; Optional: Disable line numbers in other modes (if desired)
+(add-hook 'text-mode-hook (lambda () (setq display-line-numbers 'nil)))
+
 
 
 ;; Initialize package sources
