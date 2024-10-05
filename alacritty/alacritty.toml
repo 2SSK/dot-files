@@ -25,7 +25,7 @@ save_to_clipboard = true
 [window]
 decorations = "none"
 dynamic_title = true
-opacity = 0.6
+opacity = 0.7
 dynamic_padding = true
 
 [window.padding]
@@ -40,3 +40,7 @@ multiplier = 3
 animation = "Linear"
 duration = 0
 command = { program = "paplay", args = ["/usr/share/sounds/freedesktop/stereo/dialog-error.oga"] }
+
+[shell]
+program = "/bin/bash"
+args = ["-l", "-c", "tmux"]
