@@ -31,5 +31,11 @@
 
 ![emacs](./screenshots/emacs_ss.png)
 
+---
+
+## Firefox
+
+![firefox](./screenshots/firefox_ss.png)
+
 
 
