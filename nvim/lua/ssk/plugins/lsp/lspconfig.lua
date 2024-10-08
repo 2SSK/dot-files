@@ -126,7 +126,6 @@ return {
             clangdFileStatus = true,
           },
           filetypes = { "c", "cpp", "objc", "objcpp" },
-          cmd = { "clangd", "--std=c++20" },
         })
       end,
 

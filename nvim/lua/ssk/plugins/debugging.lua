@@ -16,7 +16,6 @@ return {
       require("dap-go").setup()
 
       require("nvim-dap-virtual-text").setup({
-        -- This just tries to mitigate the chance that I leak tokens here. Probably won't stop it from happening...
         display_callback = function(variable)
           local name = string.lower(variable.name)
           local value = string.lower(variable.value)
@@ -32,16 +31,35 @@ return {
         end,
       })
 
-      -- Handled by nvim-dap-go
-      -- dap.adapters.go = {
-      --   type = "server",
-      --   port = "${port}",
-      --   executable = {
-      --     command = "dlv",
-      --     args = { "dap", "-l", "127.0.0.1:${port}" },
-      --   },
-      -- }
+      -- C++ Debugger Configuration
+      dap.adapters.cppdbg = {
+        type = "executable",
+        command = "OpenDebugAD7", -- Make sure this points to your OpenDebugAD7 installation
+      }
 
+      dap.configurations.cpp = {
+        {
+          name = "Launch file",
+          type = "cppdbg",
+          request = "launch",
+         program = "${workspaceFolder}/path/to/your/executable", -- Update to your executable path
+          args = {}, -- Arguments to pass to the program
+          stopAtEntry = false,
+          cwd = "${workspaceFolder}",
+          environment = {}, -- Environment variables
+          externalConsole = false,
+          MIMode = "gdb", -- Use "lldb" for LLDB
+          setupCommands = {
+            {
+              text = "-enable-pretty-printing",
+              description = "Enable pretty printing",
+              ignoreFailures = true,
+            },
+          },
+        },
+      }
+
+      -- Elixir Debugger Configuration
       local elixir_ls_debugger = vim.fn.exepath("elixir-ls-debugger")
       if elixir_ls_debugger ~= "" then
         dap.adapters.mix_task = {
@@ -62,20 +80,31 @@ return {
         }
       end
 
-      vim.keymap.set("n", "<space>b", dap.toggle_breakpoint)
-      vim.keymap.set("n", "<space>gb", dap.run_to_cursor)
+      -- Additional Adapter Configuration (if needed)
+      dap.adapters.codelldb = {
+        type = "server",
+        port = "${port}",
+        executable = {
+          command = "codelldb",
+          args = { "--port", "${port}" },
+        },
+      }
 
-      -- Eval var under cursor
-      vim.keymap.set("n", "<space>?", function()
+      -- Updated Keybindings
+      vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint) -- Toggle breakpoint
+      vim.keymap.set("n", "<leader>dgb", dap.run_to_cursor) -- Run to cursor
+
+      -- Eval variable under cursor
+      vim.keymap.set("n", "<leader>d?", function()
         require("dapui").eval(nil, { enter = true })
       end)
 
-      vim.keymap.set("n", "<F1>", dap.continue)
-      vim.keymap.set("n", "<F2>", dap.step_into)
-      vim.keymap.set("n", "<F3>", dap.step_over)
-      vim.keymap.set("n", "<F4>", dap.step_out)
-      vim.keymap.set("n", "<F5>", dap.step_back)
-      vim.keymap.set("n", "<F13>", dap.restart)
+      vim.keymap.set("n", "<leader>d1", dap.continue) -- Continue
+      vim.keymap.set("n", "<leader>d2", dap.step_into) -- Step into
+      vim.keymap.set("n", "<leader>d3", dap.step_over) -- Step over
+      vim.keymap.set("n", "<leader>d4", dap.step_out) -- Step out
+      vim.keymap.set("n", "<leader>d5", dap.step_back) -- Step back
+      vim.keymap.set("n", "<leader>d13", dap.restart) -- Restart
 
       dap.listeners.before.attach.dapui_config = function()
         ui.open()
