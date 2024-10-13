@@ -30,8 +30,7 @@ gaps inner 20
 # https://wiki.archlinux.org/index.php/XDG_Autostart
  exec --no-startup-id dex --autostart --environment i3
 
-# screen before suspend. Use loginctl lock-session to lock your screen.
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+# screen before suspend. Use loginctl lock-session to lock your screen. exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
@@ -247,8 +246,8 @@ bindsym $mod+c exec "~/.config/i3/lockscreen.sh"
 # Color Scheme
 set $background      #990000
 set $background_alt  #373B41
-set $foreground      #ffffff
-set $primary         #00aaff
+set $foreground      #e6ebef
+set $primary         #5294e2
 set $primary_alt     #F0C674
 set $secondary       #4c7899
 set $alert           #A54242
@@ -256,7 +255,7 @@ set $border_inactive #222D31
 
 # Colors for window borders, background, text, and indicators.
 #                       border              background         text                 indicator
-client.focused          $primary            $primary            $foreground          $primary
+client.focused          $primary            $secondary            $foreground          $primary
 client.focused_inactive $secondary          $secondary          $foreground          $secondary
 client.unfocused        $background_alt     $background_alt     $foreground          $background_alt
 client.urgent           $alert              $alert              $foreground          $alert
