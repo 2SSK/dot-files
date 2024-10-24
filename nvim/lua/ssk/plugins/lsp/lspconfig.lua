@@ -18,12 +18,6 @@ return {
 
     local keymap = vim.keymap -- for conciseness
 
-    -- Function to check if ESLint is installed
-    local function is_eslint_installed()
-      local eslint_binary = vim.fn.executable("eslint")
-      return eslint_binary == 1
-    end
-
     vim.api.nvim_create_autocmd("LspAttach", {
       group = vim.api.nvim_create_augroup("UserLspConfig", {}),
       callback = function(ev)
@@ -77,17 +71,6 @@ return {
         lspconfig[server_name].setup({
           capabilities = capabilities,
         })
-      end,
-
-      -- ESLint specific setup
-      ["eslint"] = function()
-        if is_eslint_installed() then
-          lspconfig.eslint.setup({
-            capabilities = capabilities,
-          })
-        else
-          vim.notify("ESLint not found. Skipping ESLint setup.", vim.log.levels.WARN)
-        end
       end,
 
       -- Specific server configurations
