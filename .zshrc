@@ -4,8 +4,8 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 # Disable instant prompt to prevent consolve output warning
-typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
-typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
+# typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
+# typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -67,19 +67,12 @@ alias cd='z'
 # gcc compiler alias
 alias gc='g++ -std=c++20 -o'
 
-# System alias
-alias update='sudo pacman -Sy'
-alias upgrade='sudo pacman -Syu'
-alias install='sudo pacman -S'
-alias remove='sudo pacman -Rs'
-alias search='pacman -Ss'
-
 # yay alias
-alias yd='yay -Sy'
-alias yg='yay -Syu'
-alias yi='yay -S'
-alias yr='yay -Rs'
-alias ys='yay -Ss'
+alias update='yay -Sy'
+alias upgrade='yay -Syu'
+alias install='yay -S'
+alias remove='yay -Rs'
+alias search='yay -Ss'
 
 # Handy change dir shortcuts
 alias ..='cd ..'
@@ -122,12 +115,8 @@ export BAT_THEME=tokyonight_night
 # Path variable
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH"
 
-# rofimoji path
-export PATH="/usr/bin/rofimoji:$PATH"
-
 # ttyper 
 alias tt='ttyper'
-
 # tty-clock
 alias tc='tty-clock -t'
 # sl train 
@@ -146,6 +135,3 @@ alias connect='nmcli device wifi connect'
 alias disconnect='nmcli device disconnect'
 
 export PATH=$PATH:/home/ssk/.spicetify
-
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
