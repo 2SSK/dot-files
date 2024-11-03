@@ -19,7 +19,7 @@ exec_always --no-startup-id ~/.config/polybar/launch_polybar.sh
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:JetbrainsMono Nerd Font Bold 14
+font pango:JetbrainsMono Nerd Font Bold 12
 
 # Gaps
 gaps outer 10
@@ -247,15 +247,15 @@ bindsym $mod+c exec "~/.config/i3/lockscreen.sh"
 set $background      #990000
 set $background_alt  #373B41
 set $foreground      #e6ebef
-set $primary         #5294e2
+set $primary         #00aaff
 set $primary_alt     #F0C674
 set $secondary       #4c7899
 set $alert           #A54242
 set $border_inactive #222D31
 
 # Colors for window borders, background, text, and indicators.
-#                       border              background         text                 indicator
-client.focused          $primary            $secondary            $foreground          $primary
+#                       border              background          text                 indicator
+client.focused          $primary            $secondary          $foreground          $primary
 client.focused_inactive $secondary          $secondary          $foreground          $secondary
 client.unfocused        $background_alt     $background_alt     $foreground          $background_alt
 client.urgent           $alert              $alert              $foreground          $alert
