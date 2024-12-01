@@ -1,0 +1,281 @@
+# Set the modifier key to super:
+set $mod Mod4
+
+# Set the ALT key to $alt (since Mod1 is harder to remember):
+set $alt Mod1
+
+#-------------------------------------------#
+# switch between current and last workspace #
+#-------------------------------------------#
+#slash(/)
+    bindsym $mod+slash workspace back_and_forth
+
+#-------------------------------#
+# Switch to prev/next workspace #
+#-------------------------------#
+#comma(,) period(.)
+bindsym $mod+period workspace next
+bindsym $mod+comma workspace prev
+
+
+# Add gaps in between all application windows:
+gaps inner 10
+gaps outer 20
+
+# Configure the default border:
+default_border pixel 4
+default_floating_border pixel 4
+
+# Startup applications:
+exec --no-startup-id variety
+bindsym $mod+shift+o exec --no-startup-id smile 
+bindsym $mod+p exec --no-startup-id ~/.config/rofi/powermenu.sh
+
+xwayland force
+exec --no-startup-id autotiling
+
+# Set the Wallpaper:
+# output * bg $HOME/Wallpaper-Bank/cozy_street.jpg fill
+
+
+#====================================#
+# Activate the panel                 #
+#====================================#
+# Set the waybar command for the application launcher:
+bar {
+    swaybar_command waybar
+}
+
+
+
+# Set up a shortcut to reload this config file:
+bindsym $mod+Shift+r reload
+bindsym $mod+ctrl+r restart
+
+# Quit your current session and return to the log-in manager/tty:
+bindsym $mod+Shift+e exec $HOME/.config/sway/exit.sh
+
+# Screen locking (automatic, with a timeout)
+set $lock swaylock -c 550000
+exec swayidle -w \
+    timeout 600 $lock \
+    timeout 570 'swaymsg "output * dpms off"' \
+    resume 'swaymsg "output * dpms on"' \
+    before-sleep $lock
+
+# Screen locking (manual)
+set $lock_screen exec bash ~/.config/sway/lock_screen.sh
+bindsym $mod+Escape exec $lock_screen
+
+
+#========================================#
+# Keyboard Shortcuts (Window Management) #
+#========================================#
+# Move focus to another window:
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# Move focus to another window ("cult of vim" version):
+bindsym $mod+j focus down
+bindsym $mod+h focus left
+bindsym $mod+l focus right
+bindsym $mod+k focus up
+
+# Move the window:
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# Move the the window ("cult of vim" version):
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+# Hold the modifier key and hold the left/right mouse button
+# to drag or resize a window respectively. This isn't exclusive
+# to floating windows:
+floating_modifier $mod normal
+
+# Resizing containers:
+mode "resize" {
+    # Resize windows with arrow keys:
+    bindsym Left resize shrink width 10px
+    bindsym Down resize grow height 10px
+    bindsym Up resize shrink height 10px
+    bindsym Right resize grow width 10px
+
+    # "cult of vim" version:
+    bindsym h resize shrink width 10px
+    bindsym j resize grow height 10px
+    bindsym k resize shrink height 10px
+    bindsym l resize grow width 10px
+
+    # Return to default mode
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
+
+#=================================#
+# Keyboard Shortcuts (Workspaces) #
+#=================================#
+# Switch to workspace
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws10 "10"
+
+# Move between workspaces
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+bindsym $mod+0 workspace  $ws10
+
+# Move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws0
+
+
+#=============================#
+# Keyboard Shortcuts (Layout) #
+#=============================#
+# You can "split" the current object of your focus with
+# $mod+b or $mod+v, for horizontal and vertical splits
+# respectively.
+bindsym $mod+b splith
+bindsym $mod+v splitv
+
+# Switch the current container between different layout styles
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# Make the current focus fullscreen
+bindsym $mod+f fullscreen
+
+# Toggle the current focus between tiling and floating mode
+bindsym $mod+Shift+f floating toggle
+
+# Swap focus between the tiling area and the floating area
+bindsym $mod+tab focus mode_toggle
+
+# Move focus to the parent container
+bindsym $mod+a focus parent
+
+
+#=================================#
+# Keyboard Shortcuts (Scratchpad) #
+#=================================#
+# Sway has a "scratchpad", which is a bag of holding for windows.
+# You can send windows there and get them back later.
+
+# Move the currently focused window to the scratchpad
+bindsym $mod+Shift+return move scratchpad
+
+# Show the next scratchpad window or hide the focused scratchpad window.
+# If there are multiple scratchpad windows, this command cycles through them.
+bindsym $mod+minus scratchpad show
+
+#===============================#
+# Keyboard Shortcuts (Hardware) #
+#===============================#
+# Audio controls
+bindsym F1 exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym F2 exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym F3 exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+
+# Brightness controls
+bindsym F4 exec brightnessctl set 10%-
+bindsym F5 exec brightnessctl set +10%
+
+# Microphone mute/unmute
+bindsym F9 exec amixer set Capture toggle
+
+# Screenshot
+# Fullscreen screenshot
+bindsym F12 exec grim ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
+
+# Select a region for the screenshot
+bindsym Shift+F12 exec grim -g "$(slurp)" ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
+
+#=============================================#
+# Keyboard Shortcuts (launching applications) #
+#=============================================#
+# Start Rofi (program launcher)
+bindsym $mod+d exec --no-startup-id rofi -show drun
+
+# Start Rofi for window switching
+# bindsym $mod+Tab exec --no-startup-id rofi -show window
+
+# Launch your browser:
+bindsym $mod+shift+b exec firefox
+
+# Open a file manager:
+bindsym ctrl+$mod+f exec nautilus
+
+# Open a terminal emulator:
+set $term kitty
+bindsym $mod+return exec $term
+
+# Kill focused window:
+bindsym $mod+q kill
+
+# Open the application launcher:
+bindsym $mod+space exec $menu
+
+
+#========================#
+# Appearance and Theming #
+#========================#
+# Color Scheme
+set $background      #990000
+set $background_alt  #373B41
+set $foreground      #e6ebef
+set $primary         #00aaff
+set $primary_alt     #F0C674
+set $secondary       #4c7899
+set $alert           #A54242
+set $border_inactive #222D31
+
+# Colors for window borders, background, text, and indicators.
+#                       border              background          text                 indicator
+client.focused          $primary            $secondary          $foreground          $primary
+client.focused_inactive $secondary          $secondary          $foreground          $secondary
+client.unfocused        $background_alt     $background_alt     $foreground          $background_alt
+client.urgent           $alert              $alert              $foreground          $alert
+
+
+# Open the application launcher (alternate version):
+# bindsym $mod+d exec $menu
+
+#======#
+# Misc #
+#======#
+include /etc/sway/config-vars.d/*
+include /etc/sway/config.d/*
+

@@ -70,7 +70,7 @@ alias grc='g++ -std=c++20 -lraylib -lGL -lm -lpthread -ldl -lrt -lX11'
 alias update='yay -Sy'
 alias upgrade='yay -Syu'
 alias install='yay -S'
-alias remove='yay -Rs'
+alias remove='yay -Rns'
 alias search='yay -Ss'
 
 # Directory navigation aliases
