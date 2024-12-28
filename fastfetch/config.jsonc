@@ -1,5 +1,6 @@
 {
   "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+  // Renders ASCII art
   "logo": {
     "source":"$HOME/.config/fastfetch/ArchLogo.txt",
     "type": "file",
@@ -9,6 +10,14 @@
       "3": "38;2;23;147;209"
     }
   },
+  // Renders png
+  // "logo": {
+  //   "source": "$HOME/.config/fastfetch/hacker.png",
+  //   "height": 18,
+  //   "padding":{
+  //     "top": 1
+  //   }
+  // },
   "display": {
     "separator": " : "
   },
