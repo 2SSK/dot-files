@@ -1,0 +1,104 @@
+# Theme
+theme = tokyonight
+cursor-invert-fg-bg = true
+background-opacity = 0.90
+window-theme = ghostty
+
+font-family = JetBrains Mono Nerd Font
+font-size = 16
+
+# Appearance
+gtk-titlebar = false
+gtk-single-instance = true
+gtk-tabs-location = top
+gtk-wide-tabs = false
+window-padding-y = 50,0
+window-padding-x = 50,0
+window-padding-balance = true
+window-decoration = true
+
+# Mouse
+mouse-hide-while-typing = true
+
+# Other
+copy-on-select = clipboard
+shell-integration-features = cursor,sudo,no-title
+
+# Keybindings
+# Navigation Between Splits
+keybind = ctrl+alt+j=goto_split:top
+keybind = ctrl+alt+k=goto_split:bottom
+keybind = ctrl+alt+h=goto_split:left
+keybind = ctrl+alt+l=goto_split:right
+
+# Navigation Between Tabs
+keybind = ctrl+tab=next_tab
+keybind = ctrl+shift+tab=previous_tab
+keybind = ctrl+h=previous_tab
+keybind = ctrl+l=next_tab
+keybind = alt+one=goto_tab:1
+keybind = alt+two=goto_tab:2
+keybind = alt+three=goto_tab:3
+keybind = alt+four=goto_tab:4
+keybind = alt+five=goto_tab:5
+keybind = alt+six=goto_tab:6
+keybind = alt+seven=goto_tab:7
+keybind = alt+eight=goto_tab:8
+keybind = alt+nine=goto_tab:9
+
+# Selection
+keybind = shift+k=adjust_selection:up
+keybind = shift+j=adjust_selection:down
+keybind = shift+h=adjust_selection:left
+keybind = shift+l=adjust_selection:right
+keybind = ctrl+shift+a=select_all
+
+# Clipboard Management
+keybind = ctrl+shift+c=copy_to_clipboard
+keybind = ctrl+shift+v=paste_from_clipboard
+keybind = shift+insert=paste_from_selection
+
+# Font Size Adjustments
+keybind = ctrl+equal=increase_font_size:1
+keybind = ctrl+plus=increase_font_size:1
+keybind = ctrl+minus=decrease_font_size:1
+keybind = ctrl+zero=reset_font_size
+
+# Split Management
+keybind = ctrl+shift+w=new_split:right
+keybind = ctrl+shift+s=new_split:down
+keybind = super+ctrl+/=goto_split:next
+keybind = super+ctrl+.=goto_split:previous
+keybind = ctrl+shift+enter=toggle_split_zoom
+keybind = super+ctrl+shift+j=resize_split:up,10
+keybind = super+ctrl+shift+k=resize_split:down,10
+keybind = super+ctrl+shift+h=resize_split:left,10
+keybind = super+ctrl+shift+l=resize_split:right,10
+keybind = super+ctrl+shift+e=equalize_splits
+
+# Window Management
+keybind = ctrl+shift+n=new_window
+keybind = alt+q=close_window
+# keybind = ctrl+shift+w=close_surface
+keybind = ctrl+enter=toggle_fullscreen
+
+# Scrolling
+keybind = shift+page_up=scroll_page_up
+keybind = shift+page_down=scroll_page_down
+keybind = shift+home=scroll_to_top
+keybind = shift+end=scroll_to_bottom
+
+# Prompts
+keybind = ctrl+shift+page_up=jump_to_prompt:-1
+keybind = ctrl+shift+page_down=jump_to_prompt:1
+
+# Configuration Management
+keybind = ctrl+comma=open_config
+keybind = ctrl+shift+comma=reload_config
+
+# Miscellaneous
+keybind = ctrl+shift+t=new_tab
+keybind = ctrl+shift+q=quit
+keybind = ctrl+shift+i=inspector:toggle
+keybind = ctrl+alt+shift+j=write_scrollback_file:open
+keybind = ctrl+shift+j=write_scrollback_file:paste
