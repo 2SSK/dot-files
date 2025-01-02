@@ -1,0 +1,33 @@
+# Colors based on your Kitty configuration
+
+# Default colors
+[colors.primary]
+background = "#0d0f20"
+foreground = "#e4f0fb"
+
+# Cursor colors
+[colors.cursor]
+cursor = "#00d9ff"
+text = "#0d0f20"
+
+# Normal colors
+[colors.normal]
+black = "#1b1e34"
+red = "#ff6161"
+green = "#7fff00"
+yellow = "#ffc600"
+blue = "#00d9ff"
+magenta = "#ff4dff"
+cyan = "#00ffcc"
+white = "#e4f0fb"
+
+# Bright colors
+[colors.bright]
+black = "#4e505c"
+red = "#ff7878"
+green = "#9dff00"
+yellow = "#ffd500"
+blue = "#00ffff"
+magenta = "#ff66ff"
+cyan = "#00ffee"
+white = "#ffffff"
