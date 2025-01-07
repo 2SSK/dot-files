@@ -2,15 +2,22 @@
 # Instant Prompt Configuration
 # ==============================
 # Enable Powerlevel10k instant prompt for faster shell startup.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+#   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+# fi
 
 # ==============================
 # Oh My Zsh & Theme Configuration
 # ==============================
 # Path to Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
+#
+# Reevaluate the prompt string each time it's displaying a prompt
+setopt prompt_subst
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+autoload bashcompinit && bashcompinit
+autoload -Uz compinit
+compinit
 
 # Set the theme to Starship (overrides Powerlevel10k).
 eval "$(starship init zsh)"
@@ -62,6 +69,10 @@ export EDITOR='nvim'
 export VISUAL='nvim'
 alias nv='nvim'
 
+# Lazy aliases
+alias lg="lazygit"
+alias ld="lazydocker"
+
 # Node.js Aliases
 alias nrd='npm run dev'
 alias ys='yarn start'
@@ -74,6 +85,12 @@ alias dpa="docker ps -a"
 alias dl="docker ps -l -q"
 alias dx="docker exec -it"
 
+# Git Aliases
+alias gc="git commit"
+alias gco="git commit -m"
+alias gl="git log --oneline --graph"
+alias gs="git status"
+
 # System Management Aliases
 alias off='shutdown -h now'
 
@@ -81,6 +98,7 @@ alias off='shutdown -h now'
 alias y='yazi'
 
 # Fastfetch and Pfetch Aliases
+alias nf='neofetch'
 alias ff='fastfetch'
 alias pf='pfetch'
 
