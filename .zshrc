@@ -90,9 +90,16 @@ alias gc="git commit"
 alias gco="git commit -m"
 alias gl="git log --oneline --graph"
 alias gs="git status"
+alias ga="git add ."
+alias gp="git push"
+alias gd="git diff"
 
 # System Management Aliases
 alias off='shutdown -h now'
+#
+# Alias for clipboard
+alias c='xsel --input --clipboard'
+alias v='xsel --output --clipboard'
 
 # Yazi Alias
 alias y='yazi'
@@ -164,7 +171,7 @@ setopt hist_verify
 export FZF_DEFAULT_OPTS="--color=fg:#CBE0F0,bg:#011628,hl:#B388FF,fg+:#CBE0F0,bg+:#143652,hl+:#B388FF,info:#06BCE4,prompt:#2CF9ED,pointer:#2CF9ED,marker:#2CF9ED,spinner:#2CF9ED,header:#2CF9ED"
 
 # Bat Theme Setup
-export BAT_THEME="gruvbox-dark"
+export BAT_THEME="tokyonight_night"
 
 # NVM Initialization
 export NVM_DIR="$HOME/.nvm"
@@ -194,4 +201,4 @@ alias cd='z'
 # Powerlevel10k Prompt
 # ==============================
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
