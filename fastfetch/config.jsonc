@@ -1,23 +1,14 @@
 {
   "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
-  // Renders ASCII art
   "logo": {
-    "source":"$HOME/.config/fastfetch/EndeavourLogo.txt",
-    "type": "file",
+    "source": "",
     "color": {
-      "1": "white",
-      "2": "red",
       "3": "38;2;23;147;209"
+    },
+    "padding": {
+      "top": 2
     }
   },
-  // Renders png
-  // "logo": {
-  //   "source": "$HOME/.config/fastfetch/hacker.png",
-  //   "height": 18,
-  //   "padding":{
-  //     "top": 1
-  //   }
-  // },
   "display": {
     "separator": " : "
   },
@@ -60,7 +51,6 @@
       "key": " ",
       "keyColor": "yellow"
     },
-    "break",
     {
       "type": "cpu",
       "format": "{1}",
@@ -83,8 +73,13 @@
       "type": "memory",
       "key": "󰍛 ",
       "keyColor": "magenta"
-    },      
-    "break",
+    },
+    {
+      "type": "disk",
+      "key": " ",
+      "keyColor": "cyan",
+      "format": "{1}/{2} ({3}%)"
+    },
     {
       "type": "command",
       "key": "󱦟 ",
@@ -107,6 +102,5 @@
       "symbol": "circle"
     },
     "break"
-
-    ]
+  ]
 }
