@@ -1,12 +1,11 @@
 # Theme
-# theme = catppuccin-mocha
 theme = tokyonight
-background-opacity = 0.75
+background-opacity = 0.80
 
 # Font
-font-family = "JetBrains Mono Nerd Font"
-font-family-bold = "JetBrains Mono Nerd Font"
-font-style = "JetBrains Mono Nerd Font"
+font-family = "JetBrains Mono Nerd Font Bold"
+font-style = bold
+bold-is-bright = true
 font-size = 14
 
 # Appearance
@@ -23,7 +22,10 @@ window-decoration = true
 mouse-hide-while-typing = true
 copy-on-select = clipboard
 shell-integration-features = cursor,sudo,no-title
+confirm-close-surface = false
 
 # Configuration Management
 keybind = ctrl+comma=open_config
 keybind = ctrl+shift+comma=reload_config
+
+# Background = "#011423",
