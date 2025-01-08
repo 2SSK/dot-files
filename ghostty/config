@@ -1,6 +1,6 @@
 # Theme
-theme = tokyonight
-background-opacity = 0.80
+theme = coolnight
+background-opacity = 0.75
 
 # Font
 font-family = "JetBrains Mono Nerd Font Bold"
@@ -16,7 +16,7 @@ gtk-wide-tabs = false
 window-padding-y = 50,0
 window-padding-x = 50,0
 window-padding-balance = true
-window-decoration = true
+window-decoration = false
 
 # Other
 mouse-hide-while-typing = true
