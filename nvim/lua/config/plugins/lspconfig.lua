@@ -10,6 +10,7 @@ return {
 		-- Import required plugins
 		local lspconfig = require("lspconfig")
 		local cmp_nvim_lsp = require("cmp_nvim_lsp")
+		local util = require("lspconfig/util")
 
 		-- Enhanced capabilities for autocompletion
 		local capabilities = cmp_nvim_lsp.default_capabilities()
@@ -98,6 +99,13 @@ return {
 			},
 			graphql = {
 				filetypes = { "graphql", "gql", "svelte", "typescriptreact", "javascriptreact" },
+			},
+			gopls = {
+				on_attach = on_attach,
+				capabilities = capabilities,
+				cmd = { "gopls", "serve" },
+				filetypes = { "go", "gomod", "gowork", "gotmpl" },
+				root_dir = util.root_pattern("go.mod", "go.work", ".git"),
 			},
 		}
 
