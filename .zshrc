@@ -61,7 +61,7 @@ bindkey '^j' down-line-or-search
 
 # Basic Aliases
 alias mkdir='mkdir -p'
-alias cls='clear'
+alias cl='clear'
 alias e='exit'
 
 # Editor Aliases
@@ -82,17 +82,18 @@ alias yd='yarn dev'
 alias dco="docker compose"
 alias dps="docker ps"
 alias dpa="docker ps -a"
+alias di="docker images"
 alias dl="docker ps -l -q"
 alias dx="docker exec -it"
 
 # Git Aliases
-alias gc="git commit"
-alias gco="git commit -m"
-alias gl="git log --oneline --graph"
 alias gs="git status"
 alias ga="git add ."
+alias gr="git reset"
+alias gc="git commit"
+alias gco="git commit -m"
 alias gp="git push"
-alias gd="git diff"
+alias gl="git log --oneline --graph"
 
 # System Management Aliases
 alias off='shutdown -h now'
@@ -100,6 +101,10 @@ alias off='shutdown -h now'
 # Alias for clipboard
 alias c='xsel --input --clipboard'
 alias v='xsel --output --clipboard'
+
+# Alias for 
+alias cmp='g++ -std=c++20 -o'
+alias grc='g++ -std=c++20 -lraylib -lGL -lm -lpthread -ldl -lrt -lX11'
 
 # Yazi Alias
 alias y='yazi'
@@ -115,6 +120,7 @@ alias tc='tty-clock -t'
 alias sl='sl --help -F -a'
 alias p='pipes.sh'
 alias cb='cbonsai -liv'
+alias aq='asciiquarium'
 alias cm='cmatrix'
 
 # TMUX Aliases
@@ -146,7 +152,7 @@ alias lsp="eza --color=always --long --git --no-filesize --icons=always --no-tim
 alias lsa="eza --color=always --long --git --icons=always -b -a --total-size"
 alias l="eza -l --icons --git -a"
 alias lt="eza --tree --level=2 --long --icons --git"
-alias ltree="eza --tree --level=2 --icons --git"
+alias tree="eza --tree --level=2 --icons --git"
 
 # Network Manager Aliases
 alias status='nmcli device status'
@@ -198,6 +204,19 @@ eval "$(zoxide init zsh)"
 alias cd='z'
 
 # ==============================
+# Fzf alias and key bindings
+# ==============================
+fo() {
+  local selection
+  selection=$(fzf --preview 'bat --style=numbers --color=always {} || ls -al {}')
+  
+  if [[ -d "$selection" ]]; then
+    cd "$selection" || return
+  elif [[ -f "$selection" ]]; then
+    nvim "$selection"
+  fi
+}
+
 # Powerlevel10k Prompt
 # ==============================
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
