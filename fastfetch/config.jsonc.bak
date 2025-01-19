@@ -4,10 +4,7 @@
     "source": "",
     "color": {
       "3": "38;2;23;147;209"
-    },
-    //"padding": {
-    //  "top": 2
-    //}
+    }
   },
   "display": {
     "separator": " : "
@@ -32,13 +29,19 @@
       "keyColor": "red"
     },
     {
-      "type": "packages",
-      "key": " ",
-      "keyColor": "green"
+      "type": "command",
+      "key": "󱦟 ",
+      "keyColor": "31",
+      "text": "birth_install=$(stat -c %W /); current=$(date +%s); time_progression=$((current - birth_install)); days_difference=$((time_progression / 86400)); echo $days_difference days"
     },
     {
-      "type": "display",
-      "key": " ",
+      "type": "uptime",
+      "key": "󱫐 ",
+      "keyColor": "red"
+    },
+    {
+      "type": "packages",
+      "key": " ",
       "keyColor": "green"
     },
     {
@@ -52,44 +55,15 @@
       "keyColor": "yellow"
     },
     {
-      "type": "cpu",
-      "format": "{1}",
-      "key": " ",
-      "keyColor": "blue"
-    },
-    {
-      "type": "gpu",
-      "format": "{2}",
-      "key": " ",
-      "keyColor": "blue"
-    },
-    //{
-    //  "type": "gpu",
-    //  "format": "{3}",
-    //  "key": " ",
-    //  "keyColor": "magenta"
-    //},
-    {
-      "type": "memory",
-      "key": "󰍛 ",
-      "keyColor": "cyan"
+      "type": "display",
+      "key": " ",
+      "keyColor": "green"
     },
     {
       "type": "disk",
       "key": "󰋊 ",
       "keyColor": "cyan",
       "format": "{1}/{2} ({3})"
-    },
-    {
-      "type": "command",
-      "key": "󱦟 ",
-      "keyColor": "31",
-      "text": "birth_install=$(stat -c %W /); current=$(date +%s); time_progression=$((current - birth_install)); days_difference=$((time_progression / 86400)); echo $days_difference days"
-    },
-    {
-      "type": "uptime",
-      "key": "󱫐 ",
-      "keyColor": "red"
     },
     {
       "type": "custom",
@@ -99,7 +73,7 @@
     {
       "type": "colors",
       "paddingLeft": 2,
-      "symbol": "star",
+      "symbol": "circle",
       "height": 4
     },
     "break"
