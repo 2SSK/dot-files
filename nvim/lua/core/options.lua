@@ -13,7 +13,7 @@ opt.wrap = true
 opt.ignorecase = true
 opt.smartcase = true
 
-opt.cursorline = true
+opt.cursorline = false
 
 opt.termguicolors = true
 opt.background = "dark"
