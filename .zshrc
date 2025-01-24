@@ -51,7 +51,7 @@ source $ZSH/oh-my-zsh.sh
 bindkey '^w' autosuggest-execute
 bindkey '^e' autosuggest-accept
 bindkey '^u' autosuggest-toggle
-bindkey '^L' vi-forward-word
+bindkey '^l' vi-forward-word
 bindkey '^k' up-line-or-search
 bindkey '^j' down-line-or-search
 
@@ -88,19 +88,28 @@ alias dx="docker exec -it"
 
 # Git Aliases
 alias gs="git status"
+alias gb="git branch"
+alias gsw="git switch"
 alias ga="git add ."
 alias gr="git reset"
 alias gc="git commit"
 alias gco="git commit -m"
 alias gp="git push"
 alias gl="git log --oneline --graph"
+alias gm="git merge"
+alias grb="git rebase"
 
 # System Management Aliases
 alias off='shutdown -h now'
 #
 # Alias for clipboard
-alias c='xsel --input --clipboard'
-alias v='xsel --output --clipboard'
+if [ "$WAYLAND_DISPLAY" ]; then
+    alias c='wl-copy'
+    alias v='wl-paste'
+else
+    alias c='xsel --input --clipboard'
+    alias v='xsel --output --clipboard'
+fi
 
 # Alias for 
 alias cmp='g++ -std=c++20 -o'
@@ -173,9 +182,6 @@ setopt hist_expire_dups_first
 setopt hist_ignore_dups
 setopt hist_verify
 
-# FastFetch Theme Selector
-alias fastfetch-theme-selector="bash ~/.config/fastfetch-theme-selector/FastCat/fastcat.sh -s"
-
 # FZF Theme Setup
 export FZF_DEFAULT_OPTS="--color=fg:#CBE0F0,bg:#011628,hl:#B388FF,fg+:#CBE0F0,bg+:#143652,hl+:#B388FF,info:#06BCE4,prompt:#2CF9ED,pointer:#2CF9ED,marker:#2CF9ED,spinner:#2CF9ED,header:#2CF9ED"
 
@@ -191,6 +197,10 @@ export PATH=$PATH:/home/ssk/.spicetify
 
 # Go Path
 export PATH=$PATH:/home/ssk/go/bin/
+alias gn='go run'
+# eval "$(task --completion zsh)"
+alias task="go-task"
+
 
 # Android SDK Path
 export ANDROID_HOME=/home/ssk/Android/Sdk
@@ -209,7 +219,7 @@ alias cd='z'
 # ==============================
 # Fzf alias and key bindings
 # ==============================
-fo() {
+f() {
   local selection
   selection=$(fzf --preview 'bat --style=numbers --color=always {} || ls -al {}')
   
