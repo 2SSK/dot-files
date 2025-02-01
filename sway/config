@@ -16,7 +16,12 @@ set $term ghostty
 
 # Your preferred application launcher
 set $menu --no-startup-id rofi -show drun
-bindsym $mod+p exec --no-startup-id ~/.config/rofi/powermenu.sh
+
+# Lock Screen
+bindsym $mod+c exec --no-startup-id ~/.config/sway/swaylock.sh
+
+# Power Menu
+bindsym $mod+p exec --no-startup-id wlogout
 
 # switch between current and last workspace 
 #slash(/)
