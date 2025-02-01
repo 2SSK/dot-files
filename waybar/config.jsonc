@@ -1,0 +1,140 @@
+// -*- mode: jsonc -*-
+[
+  // Top Bar
+{
+     "layer": "top",
+     "position": "top",
+    "height": 30, 
+    "spacing": 4, 
+
+    "modules-left": [
+      "sway/workspaces",
+      "sway/mode",
+      "sway/scratchpad",
+      "custom/media"
+    ],
+    "modules-center": [
+      "clock"
+    ],
+    "modules-right": [
+      "pulseaudio",
+      "backlight",
+      "battery"
+    ],
+    // Modules configuration
+    // "sway/workspaces": {
+    //     "disable-scroll": true,
+    //     "all-outputs": true,
+    //     "warp-on-scroll": false,
+    //     "format": "{name}: {icon}",
+    //     "format-icons": {
+    //         "1": "",
+    //         "2": "",
+    //         "3": "",
+    //         "4": "",
+    //         "5": "",
+    //         "urgent": "",
+    //         "focused": "",
+    //         "default": ""
+    //     }
+    // },
+
+    "sway/mode": {
+      "format": "<span style=\"italic\">{}</span>"
+    },
+    "sway/scratchpad": {
+      "format": "{icon} {count}",
+      "show-empty": false,
+      "format-icons": ["", " "],
+      "tooltip": true,
+      "tooltip-format": "{app}: {title}"
+    },
+"clock": {
+    "locale": "C", 
+    "format": "<span foreground='#bd93f9'>  </span><span> {:%a %d-%b %Y  %I:%M %p}</span>",
+    "format-alt": " {:%a,%b %d}" // Icon: calendar-alt
+},
+"backlight": {
+    // "device": "acpi_video1",
+    "format": "{icon}&#8239;{percent}%",
+    "format-icons": "󰃠 ",
+    "on-scroll-down": "brightnessctl -c backlight set 1%-",
+    "on-scroll-up": "brightnessctl -c backlight set +1%"
+},
+    "battery": {
+      "states": {
+             "good": 90,
+            "warning": 25,
+            "critical": 15
+      },
+      "format": "{capacity}% {icon}",
+      "format-full": "{capacity}% {icon}",
+      "format-charging": "{capacity}% ",
+      "format-plugged": "{capacity}% ",
+      "format-alt": "{time} {icon}",
+        // "format-good": "", // An empty format will hide the module
+        // "format-full": "",
+        "format-icons": [" ", " ", " ", " ", " "]
+    },
+    "pulseaudio": {
+        "format": "{volume}% {icon}",
+        "format-muted": " {format_source}",
+        "format-source": "{volume}%  ",
+        "format-source-muted": " ",
+        "format-icons": {
+          "headphone": " ",
+          "hands-free": " ",
+          "headset": " ",
+          "phone": " ",
+          "portable": " ",
+          "car": " ",
+          "default": [" ", " ", " "]
+        },
+        "on-click": "pavucontrol"
+    }
+},
+
+// Bottom Bar
+{
+     "layer": "top",
+     "position": "bottom",
+    "height": 30, 
+    "spacing": 4,
+
+    "modules-left": [
+      "cpu",
+      "memory",
+      "temperature"
+    ],
+    "modules-center": [
+      "sway/window"
+    ],
+    "modules-right": [
+      "network"
+    ],
+    "cpu": {
+      "format": "{usage}% ",
+      "tooltip": false
+    },
+    "memory": {
+      "format": "{}% "
+    },
+    "temperature": {
+      "critical-threshold": 80,
+      "format": "{temperatureC}°C",
+      "format-icons": ["", "", ""]
+    },
+    "network": {
+      "interval": 2,
+      "format-wifi": "   {essid}",
+      "format-ethernet": " ",
+      "format-linked": " {ipaddr}",
+      "format-disconnected": " Disconnected",
+      "format-disabled": "",
+      "tooltip": false,
+      "max-length": 20,
+      "min-length": 6,
+      "format-alt": "{essid}"
+    }
+}
+]
