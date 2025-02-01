@@ -1,6 +1,4 @@
 // -*- mode: jsonc -*-
-[
-  // Top Bar
 {
      "layer": "top",
      "position": "top",
@@ -11,34 +9,21 @@
       "sway/workspaces",
       "sway/mode",
       "sway/scratchpad",
-      "custom/media"
+      "sway/window"
     ],
     "modules-center": [
       "clock"
     ],
     "modules-right": [
+      "battery",
       "pulseaudio",
       "backlight",
-      "battery"
+      "cpu",
+      "memory",
+      "disk",
+      "temperature",
+      "network"
     ],
-    // Modules configuration
-    // "sway/workspaces": {
-    //     "disable-scroll": true,
-    //     "all-outputs": true,
-    //     "warp-on-scroll": false,
-    //     "format": "{name}: {icon}",
-    //     "format-icons": {
-    //         "1": "",
-    //         "2": "",
-    //         "3": "",
-    //         "4": "",
-    //         "5": "",
-    //         "urgent": "",
-    //         "focused": "",
-    //         "default": ""
-    //     }
-    // },
-
     "sway/mode": {
       "format": "<span style=\"italic\">{}</span>"
     },
@@ -51,15 +36,17 @@
     },
 "clock": {
     "locale": "C", 
-    "format": "<span foreground='#bd93f9'>  </span><span> {:%a %d-%b %Y  %I:%M %p}</span>",
-    "format-alt": " {:%a,%b %d}" // Icon: calendar-alt
+    "format": " {:%a %d-%b %Y  %I:%M %p}",
+    "format-alt": " {:%a,%b %d}", // Icon: calendar-alt
+    "format-icons": " "
 },
 "backlight": {
     // "device": "acpi_video1",
-    "format": "<span foreground='#bd93f9'>{icon}</span> {percent}%",
+    "format": "<span foreground='#000000'>{icon}</span>{percent}% ",
     "format-icons": "󰃠 ",
     "on-scroll-down": "brightnessctl -c backlight set 1%-",
-    "on-scroll-up": "brightnessctl -c backlight set +1%"
+    "on-scroll-up": "brightnessctl -c backlight set +1%",
+    "tooltip": false
 },
     "battery": {
       "states": {
@@ -67,17 +54,17 @@
             "warning": 25,
             "critical": 15
       },
-      "format": "{capacity}% <span foreground='#bd93f9'>{icon}</span>",
-      "format-full": "{capacity}% {icon}",
-      "format-charging": "{capacity}% ",
-      "format-plugged": "{capacity}% ",
+      "format": "{icon}{capacity}%",
+      "format-full": "{icon}{capacity}%",
+      "format-charging": " {capacity}%",
+      "format-plugged": " {capacity}% ",
       "format-alt": "{time} {icon}",
         // "format-good": "", // An empty format will hide the module
         // "format-full": "",
         "format-icons": [" ", " ", " ", " ", " "]
     },
     "pulseaudio": {
-        "format": "{volume}%  <span foreground='#bd93f9'>{icon}</span>{format_source}",
+        "format": "{icon}{volume}% {format_source}",
         "format-muted": " {format_source}",
         "format-source": "{volume}%  ",
         "format-source-muted": " ",
@@ -91,47 +78,26 @@
           "default": [" ", " ", " "]
         },
         "on-click": "pavucontrol"
-    }
-},
-
-// Bottom Bar
-{
-     "layer": "top",
-     "position": "bottom",
-    "height": 30, 
-    "spacing": 4,
-
-    "modules-left": [
-      "temperature",
-      "cpu",
-      "memory",
-      "disk"
-    ],
-    "modules-center": [
-      "sway/window"
-    ],
-    "modules-right": [
-      "network"
-    ],
+    },
     "disk": {
       "interval": 30,
-      "format": "{percentage_used}% <span foreground='#bd93f9'> </span>"
+      "format": " {percentage_used}%"
     },
     "cpu": {
-      "format": "{usage}%  <span foreground='#bd93f9'> </span>",
-      "tooltip": false
+      "format": " {usage}%",
+      "tooltip": true
     },
     "memory": {
-      "format": "{}%  <span foreground='#bd93f9'> </span>"
+      "format": " {}%"
     },
     "temperature": {
       "critical-threshold": 80,
-      "format": "{temperatureC}°C  <span foreground='#bd93f9'>{icon}</span>",
+      "format": "{icon} {temperatureC}°C",
       "format-icons": ["", "", ""]
     },
     "network": {
       "interval": 2,
-      "format-wifi": " <span foreground='#bd93f9'> </span>  {essid}",
+      "format-wifi": "  {essid}",
       "format-ethernet": " ",
       "format-linked": " {ipaddr}",
       "format-disconnected": " Disconnected",
@@ -142,4 +108,3 @@
       "format-alt": "{essid}"
     }
 }
-]

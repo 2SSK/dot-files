@@ -23,22 +23,18 @@ bindsym $mod+c exec --no-startup-id ~/.config/sway/swaylock.sh
 # Power Menu
 bindsym $mod+p exec --no-startup-id wlogout
 
-# switch between current and last workspace 
-#slash(/)
-bindsym $mod+slash workspace back_and_forth
-
 # Switch to prev/next workspace 
 #comma(,) period(.)
-bindsym $mod+period workspace next
-bindsym $mod+comma workspace prev
+bindsym $mod+slash workspace next
+bindsym $mod+period workspace prev
 
 # Gaps 
-gaps inner 10
-gaps outer 10
+gaps inner 16
+gaps outer 1
 
 # Borders
-default_border pixel 1
-default_floating_border pixel 1
+default_border pixel 4
+default_floating_border pixel 3
 
 # Startup applications
 exec --no-startup-id variety
@@ -163,7 +159,7 @@ input type:touchpad {
     # You can send windows there and get them back later.
 
     # Move the currently focused window to the scratchpad
-    bindsym $mod+Shift+minus move scratchpad
+    bindsym $mod+Shift+return move scratchpad
 
     # Show the next scratchpad window or hide the focused scratchpad window.
     # If there are multiple scratchpad windows, this command cycles through them.
@@ -221,24 +217,12 @@ bar {
     swaybar_command waybar
 }
 
-#========================#
-# Appearance and Theming #
-#========================#
-# Color Scheme
-set $background      #990000
-set $background_alt  #373B41
-set $foreground      #e6ebef
-set $primary         #00aaff
-set $primary_alt     #F0C674
-set $secondary       #4c7899
-set $alert           #A54242
-set $border_inactive #222D31
-
-# Colors for window borders, background, text, and indicators.
-#                       border              background          text                 indicator
-client.focused          $primary            $secondary          $foreground          $primary
-client.focused_inactive $secondary          $secondary          $foreground          $secondary
-client.unfocused        $background_alt     $background_alt     $foreground          $background_alt
-client.urgent           $alert              $alert              $foreground          $alert
+### Borders
+client.focused          #bd93f9 #bd93f9 #282a36 #bd93f9 #bd93f9
+client.focused_inactive #282a36 #282a36 #bd93f9 #282a36 #282a36
+client.unfocused        #282a36 #282a36 #bd93f9 #282a36 #282a36
+client.urgent           #ff5555 #ff5555 #282a36 #ff5555 #ff5555
+client.placeholder      #282a36 #282a36 #bd93f9 #282a36 #282a36
+client.background       #282a36
 
 include /etc/sway/config.d/*
