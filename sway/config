@@ -57,6 +57,7 @@ input type:touchpad {
 #
     # Start a terminal
     bindsym $mod+Return exec $term
+    bindsym $alt+Return exec foot
 
     # Kill focused window
     bindsym $mod+q kill

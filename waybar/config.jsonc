@@ -1,110 +1,163 @@
-// -*- mode: jsonc -*-
 {
-     "layer": "top",
-     "position": "top",
-    "height": 30, 
-    "spacing": 4, 
+  "layer": "top",
+  "height": 20,
+  "spacing": 5,
+  "margin-top" :5,
+  "margin-right" :8,
+  "margin-left" :8,
 
-    "modules-left": [
-      "sway/workspaces",
-      "sway/mode",
-      "sway/scratchpad",
-      "sway/window"
-    ],
-    "modules-center": [
-      "clock"
-    ],
-    "modules-right": [
-      "battery",
-      "pulseaudio",
-      "backlight",
-      "cpu",
-      "memory",
-      "disk",
-      "temperature",
-      "network"
-    ],
-    "sway/mode": {
-      "format": "<span style=\"italic\">{}</span>"
-    },
-    "sway/scratchpad": {
-      "format": "{icon} {count}",
-      "show-empty": false,
-      "format-icons": ["", " "],
-      "tooltip": true,
-      "tooltip-format": "{app}: {title}"
-    },
-"clock": {
-    "locale": "C", 
-    "format": " {:%a %d-%b %Y  %I:%M %p}",
-    "format-alt": " {:%a,%b %d}", // Icon: calendar-alt
-    "format-icons": " "
-},
-"backlight": {
+  "modules-left": [
+    "sway/workspaces",
+    "sway/scratchpad",
+    "sway/window"
+  ],
+
+  "modules-center": ["clock"],
+
+  "modules-right": [
+    "cpu",
+    "memory",
+    //"disk",
+    "temperature",
+    "pulseaudio",
+    "backlight",
+    "network",
+    "battery"
+  ],
+
+  "custom/rofi": {
+    "format": "<span ></span>",
+    "on-click": "rofi -show drun -disable-history -show-icons",
+    "on-click-right": "~/.config/custom_scripts/power.sh",
+    "escape" : true,
+    "tooltip" : false
+  },
+  // Modules configuration
+  //"sway/workspaces": {
+  //  "disable-scroll": true,
+  //  "active-only": false,
+  //  "all-outputs": true,
+  //  "warp-on-scroll": false,
+  //  "format": "{icon}",
+  //  "format-icons": {
+  //    "1": "<span >󰧨</span>",
+  //    "2": "<span >󰈹</span>",
+  //    "3": "<span ></span>",
+  //    "4": "<span ></span>",
+  //    "5": "<span ></span>",
+  //    "6": "<span >󰭛</span>",
+  //    "7": "<span >󱓷</span>",
+  //    "8": "<span >󰚀</span>"
+  //  }
+  //},
+
+  "sway/scratchpad": {
+    "format": "<span color='#202020' bgcolor='#bd93f9' >  </span> {count}",
+    "show-empty": false,
+    "format-icons": ["", " "],
+    "tooltip": true,
+    "tooltip-format": "{app}: {title}"
+  },
+
+  "sway/window": {
+    //"format": "<span color='#202020' bgcolor='#d3869b' > 󰣆 </span> {app_id}",
+    "format": "<span color='#202020' bgcolor='#bd93f9' > 󰣆 </span> {app_id}",
+    "separate-outputs": true,
+    "icon":true
+  },
+
+  "disk": {
+    //"format": "<span color='#202020' bgcolor='#ea6962' >  </span> {free}",
+    "format": "<span color='#202020' bgcolor='#bd93f9' >  </span> {free}",
+    "interval": 20
+  },
+
+  "cpu": {
+    //"format": "<span color='#202020' bgcolor='#e78a4e' >  </span> {usage}%",
+    "format": "<span color='#202020' bgcolor='#bd93f9' >  </span> {}%",
+    "tooltip": false,
+    "interval": 1
+  },
+
+  "temperature": {
+    "tooltip":false,
+    "thermal-zone": 2,
+    "hwmon-path": "/sys/class/hwmon/hwmon1/temp1_input",
+    "critical-threshold": 70,
+    //"format": "<span color='#202020' bgcolor='#d8a657' >  </span> {temperatureC}°C",
+    "format": "<span color='#202020' bgcolor='#bd93f9' >  </span> {temperatureC}°C",
+    "format-critical": "<span color='#202020' bgcolor='#cc241d' >  </span> {temperatureC}°C"
+  },
+
+  "backlight": {
     // "device": "acpi_video1",
-    "format": "<span foreground='#000000'>{icon}</span>{percent}% ",
-    "format-icons": "󰃠 ",
-    "on-scroll-down": "brightnessctl -c backlight set 1%-",
-    "on-scroll-up": "brightnessctl -c backlight set +1%",
+    //"format": "<span color='#202020' bgcolor='#f6c657' > 󰞏 </span> {percent}%",
+    "format": "<span color='#202020' bgcolor='#bd93f9' > 󰃠 </span> {percent}%",
     "tooltip": false
-},
-    "battery": {
-      "states": {
-             "good": 90,
-            "warning": 25,
-            "critical": 15
-      },
-      "format": "{icon}{capacity}%",
-      "format-full": "{icon}{capacity}%",
-      "format-charging": " {capacity}%",
-      "format-plugged": " {capacity}% ",
-      "format-alt": "{time} {icon}",
-        // "format-good": "", // An empty format will hide the module
-        // "format-full": "",
-        "format-icons": [" ", " ", " ", " ", " "]
-    },
-    "pulseaudio": {
-        "format": "{icon}{volume}% {format_source}",
-        "format-muted": " {format_source}",
-        "format-source": "{volume}%  ",
-        "format-source-muted": " ",
-        "format-icons": {
-          "headphone": " ",
-          "hands-free": " ",
-          "headset": " ",
-          "phone": " ",
-          "portable": " ",
-          "car": " ",
-          "default": [" ", " ", " "]
-        },
-        "on-click": "pavucontrol"
-    },
-    "disk": {
-      "interval": 30,
-      "format": " {percentage_used}%"
-    },
-    "cpu": {
-      "format": " {usage}%",
-      "tooltip": true
-    },
+  },
+
     "memory": {
-      "format": " {}%"
+    "format": "<span color='#202020' bgcolor='#bd93f9' >  </span> {}%",
+    "interval": 1
     },
-    "temperature": {
-      "critical-threshold": 80,
-      "format": "{icon} {temperatureC}°C",
-      "format-icons": ["", "", ""]
+
+  "pulseaudio": {
+    // "scroll-step": 1, // %, can be a float
+    //"format": "<span color='#202020' bgcolor='#83a598' >  </span> {volume}%",
+    "format": "<span color='#202020' bgcolor='#bd93f9' >  </span> {volume}%",
+    "format-muted": "<span color='#202020' bgcolor='#ea6962' >  </span> {volume}%",
+    //"format-bluetooth": "<span color='#202020' bgcolor='#83a598' > 󰂰 </span> {volume}%",
+    "format-bluetooth": "<span color='#202020' bgcolor='#bd93f9' > 󰂰 </span> {volume}%",
+    "format-bluetooth-muted": "<span color='#202020' bgcolor='#ea6962' > 󰂲 </span> {volume}%",
+    "format-source": "{volume}% ",
+    "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+    "tooltip": false,
+    "max-volume": 130
+  },
+
+  "battery#bat2": {
+    "bat": "BAT2"
+  },
+
+  "battery": {
+    "interval": 1,
+    "states": {
+      "good": 99,
+      "warning": 30,
+      "critical": 20
     },
-    "network": {
-      "interval": 2,
-      "format-wifi": "  {essid}",
-      "format-ethernet": " ",
-      "format-linked": " {ipaddr}",
-      "format-disconnected": " Disconnected",
-      "format-disabled": "",
-      "tooltip": false,
-      "max-length": 20,
-      "min-length": 6,
-      "format-alt": "{essid}"
-    }
+    "format-icons": ["󰂎","󰁺","󰁻","󰁽","󰁾","󰁿","󰂀","󰂁","󰂂","󰁹"],
+    //"format": "<span color='#202020' bgcolor='#689d6a' > {icon} </span> {capacity}%",
+    "format": "<span color='#202020' bgcolor='#bd93f9' > {icon} </span> {capacity}%",
+    "format-critical": "<span color='#202020' bgcolor='#cc241d' > {icon} </span> {capacity}%!!",
+    "format-warning": "<span color='#202020' bgcolor='#e78a4e' > {icon} </span> {capacity}%",
+    "format-full": "<span color='#202020' bgcolor='#689d6a' > {icon} </span> {capacity}%",
+    "format-charging": "<span color='#202020' bgcolor='#689d6a' > 󰂅 </span> {capacity}%",
+    "format-charging-warning": "<span color='#202020' bgcolor='#e78a4e' > 󰢝 </span> {capacity}%",
+    "format-charging-critical": "<span color='#202020' bgcolor='#cc241d' > 󰢜 </span> {capacity}%",
+    "format-plugged": "<span color='#202020' bgcolor='#689d6a' > 󰂅 </span> {capacity}%",
+    "format-alt": "<span color='#202020' bgcolor='#689d6a' > 󱧥 </span> {time}",
+    "tooltip": false
+  },
+
+  "clock": {
+    // "timezone": "America/New_York",
+    //"format": "<span color='#202020' bgcolor='#8ec07c' >  </span> {:%a %d %b %H:%M:%S}",
+    "format": "<span color='#202020' bgcolor='#bd93f9' >  </span> {:%a %d %b %Y | %I:%M %p}",
+    "tooltip": false,
+    "interval":1,
+  },
+  "network": {
+    "interval": 2,
+    //"format-wifi": "  {essid}",
+    "format-wifi": "<span color='#202020' bgcolor='#bd93f9' >  </span> {essid}",
+    "format-ethernet": " ",
+    "format-linked": " {ipaddr}",
+    "format-disconnected": " Disconnected",
+    "format-disabled": "",
+    "tooltip": false,
+    "max-length": 20,
+    "min-length": 6,
+    "format-alt": "{essid}"
+  }
 }
