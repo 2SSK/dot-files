@@ -82,15 +82,15 @@ return {
 		end,
 	},
 	-- Crackboard
-	{
-		"boganworld/crackboard.nvim",
-		dependencies = { "nvim-lua/plenary.nvim" },
-		config = function()
-			require("crackboard").setup({
-				session_key = "17080c898aec7c3667fbbd125cf79e94f3ea297c5b65e528521f8bab95da0c33",
-			})
-		end,
-	},
+	-- {
+	-- 	"boganworld/crackboard.nvim",
+	-- 	dependencies = { "nvim-lua/plenary.nvim" },
+	-- 	config = function()
+	-- 		require("crackboard").setup({
+	-- 			session_key = "17080c898aec7c3667fbbd125cf79e94f3ea297c5b65e528521f8bab95da0c33",
+	-- 		})
+	-- 	end,
+	-- },
 	-- Noice plugin
 	{
 		"folke/noice.nvim",
@@ -111,5 +111,20 @@ return {
 			"rcarriga/nvim-notify",
 		},
 	},
-	-- Ufo plugin
+	-- nvim silicon
+	{
+		"michaelrommel/nvim-silicon",
+		lazy = true,
+		cmd = "Silicon",
+		config = function()
+			require("silicon").setup({
+				font = "JetBrains Mono Nerd Font=34;Noto Color Emoji=34",
+				theme = "Dracula",
+				background = "#94e2d5",
+				window_title = function()
+					return vim.fn.fnamemodify(vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf()), ":t")
+				end,
+			})
+		end,
+	},
 }
