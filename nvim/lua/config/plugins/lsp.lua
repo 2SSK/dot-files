@@ -88,6 +88,10 @@ return {
 			ts_ls = {
 				filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
 			},
+			tailwindcss = {
+				on_attach = on_attach,
+				capabilities = capabilities,
+			},
 			svelte = {
 				on_attach = function(client, bufnr)
 					vim.api.nvim_create_autocmd("BufWritePost", {
