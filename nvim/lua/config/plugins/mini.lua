@@ -22,5 +22,8 @@ return {
 		require("mini.files").setup({
 			vim.api.nvim_set_keymap("n", "<leader>e", ":lua MiniFiles.open()<CR>", { noremap = true, silent = true }),
 		})
+
+		-- Mini statusline
+		require("mini.statusline").setup({})
 	end,
 }
