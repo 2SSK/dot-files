@@ -81,16 +81,11 @@ return {
 			vim.keymap.set("n", "<Leader><Leader>y", "<cmd>IconPickerYank<cr>", opts) --> Yank the selected icon into register
 		end,
 	},
-	-- Crackboard
-	-- {
-	-- 	"boganworld/crackboard.nvim",
-	-- 	dependencies = { "nvim-lua/plenary.nvim" },
-	-- 	config = function()
-	-- 		require("crackboard").setup({
-	-- 			session_key = "17080c898aec7c3667fbbd125cf79e94f3ea297c5b65e528521f8bab95da0c33",
-	-- 		})
-	-- 	end,
-	-- },
+	-- Cursor smearing
+	{
+		"sphamba/smear-cursor.nvim",
+		opts = {},
+	},
 	-- Noice plugin
 	{
 		"folke/noice.nvim",
@@ -126,5 +121,9 @@ return {
 				end,
 			})
 		end,
+	},
+	-- 🧘 Zen mode
+	{
+		"folke/zen-mode.nvim",
 	},
 }

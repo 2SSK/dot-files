@@ -208,7 +208,8 @@ window#waybar.hidden {
 }
 
 #battery.critical {
-  color: #cc241d;
+  /*color: #cc241d;*/
+  color: #fff;
 }
 
 #battery.warning {

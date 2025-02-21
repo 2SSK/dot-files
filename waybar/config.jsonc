@@ -9,29 +9,50 @@
   "modules-left": [
     "sway/workspaces",
     "sway/scratchpad",
-    "sway/window"
+    "sway/window",
+    "hyprland/workspaces",
+    "hyprland/scratchpad",
+    "hyprland/window"
   ],
 
   "modules-center": ["clock"],
 
   "modules-right": [
-    "cpu",
-    "memory",
-    //"disk",
-    "temperature",
+    "battery",
     "pulseaudio",
     "backlight",
-    "network",
-    "battery"
+    "temperature",
+    //"cpu",
+    //"memory",
+    //"disk",
+    "network"
   ],
 
-  "custom/rofi": {
-    "format": "<span ></span>",
-    "on-click": "rofi -show drun -disable-history -show-icons",
-    "on-click-right": "~/.config/custom_scripts/power.sh",
-    "escape" : true,
-    "tooltip" : false
+  "hyprland/workspaces": {
+    "disable-scroll": true,
+    "active-only": false,
+    "all-outputs": true,
+    "warp-on-scroll": false,
+    "format": "{}"
+    //"format": "{icon}",
+    //"format-icons": {
+    //  "1": "<span >󰧨</span>",
+    //  "2": "<span >󰈹</span>",
+    //  "3": "<span ></span>",
+    //  "4": "<span ></span>",
+    //  "5": "<span ></span>",
+    //  "6": "<span >󰭛</span>",
+    //  "7": "<span >󱓷</span>",
+    //  "8": "<span >󰚀</span>"
+    //}
   },
+
+  "hyprland/window": {
+    "format": "<span color='#202020' bgcolor='#d3869b' > 󰣆 </span> {class}",
+    "separate-outputs": true,
+    "icon":false,
+  },
+
   // Modules configuration
   //"sway/workspaces": {
   //  "disable-scroll": true,
@@ -50,6 +71,14 @@
   //    "8": "<span >󰚀</span>"
   //  }
   //},
+
+  "hyprland/scratchpad": {
+    "format": "<span color='#202020' bgcolor='#bd93f9' >  </span> {count}",
+    "show-empty": false,
+    "format-icons": ["", " "],
+    "tooltip": true,
+    "tooltip-format": "{app}: {title}"
+  },
 
   "sway/scratchpad": {
     "format": "<span color='#202020' bgcolor='#bd93f9' >  </span> {count}",
@@ -129,7 +158,7 @@
     "format-icons": ["󰂎","󰁺","󰁻","󰁽","󰁾","󰁿","󰂀","󰂁","󰂂","󰁹"],
     //"format": "<span color='#202020' bgcolor='#689d6a' > {icon} </span> {capacity}%",
     "format": "<span color='#202020' bgcolor='#bd93f9' > {icon} </span> {capacity}%",
-    "format-critical": "<span color='#202020' bgcolor='#cc241d' > {icon} </span> {capacity}%!!",
+    "format-critical": "<span color='#202020' bgcolor='#cc241d' > {icon} </span> {capacity}%",
     "format-warning": "<span color='#202020' bgcolor='#e78a4e' > {icon} </span> {capacity}%",
     "format-full": "<span color='#202020' bgcolor='#689d6a' > {icon} </span> {capacity}%",
     "format-charging": "<span color='#202020' bgcolor='#689d6a' > 󰂅 </span> {capacity}%",
