@@ -28,12 +28,12 @@ opt.splitbelow = true
 
 -- auto save on text change, only for normal buffers
 -- vim.api.nvim_create_autocmd({ "TextChanged", "TextChangedI" }, {
---   callback = function()
---     if vim.bo.buftype == "" and vim.fn.expand('%') ~= '' then
---       -- only write if it's a normal buffer with a file name
---       vim.cmd("silent write")
---     end
---   end,
+-- 	callback = function()
+-- 		if vim.bo.buftype == "" and vim.fn.expand("%") ~= "" then
+-- 			-- only write if it's a normal buffer with a file name
+-- 			vim.cmd("silent write")
+-- 		end
+-- 	end,
 -- })
 
 opt.swapfile = false
