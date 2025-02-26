@@ -20,10 +20,10 @@ return {
 
 		-- Mini Files
 		require("mini.files").setup({
-			vim.api.nvim_set_keymap("n", "<leader>e", ":lua MiniFiles.open()<CR>", { noremap = true, silent = true }),
+			mappings = {
+				synchronize = "s",
+			},
 		})
-
-		-- Mini statusline
-		require("mini.statusline").setup({})
+		vim.api.nvim_set_keymap("n", "<leader>e", ":lua MiniFiles.open()<CR>", { noremap = true, silent = true })
 	end,
 }

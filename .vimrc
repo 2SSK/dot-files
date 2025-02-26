@@ -28,7 +28,10 @@ set clipboard=unnamedplus
 set mouse=a
 
 inoremap jk <ESC>
+nnoremap <leader>ww :wa!<CR> 
+nnoremap <leader>wq :wqa!<CR> 
 nnoremap <leader>ee :NERDTreeToggle<CR> 
+let NERDTreeShowHidden=1
 nnoremap <leader>ff :Files<CR>         
 nnoremap <leader>pv :Ex<CR>
 

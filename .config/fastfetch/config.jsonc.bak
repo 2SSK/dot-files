@@ -1,81 +1,124 @@
 {
   "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
   "logo": {
-    "source": "",
-    "color": {
-      "3": "38;2;23;147;209"
-    }
+    "type": "chafa",
+    "width": 60,
+    "printRemaining": false,
+    "source": "~/.config/wall.png",
+    // "recache": true,
+    "chafa": {
+      "symbols": "-block-border-space+vhalf",
+    },
+    "padding": {
+      "top": 1,
+      "left": 2,
+      "right": 2,
+      "bottom": 0,
+    },
   },
   "display": {
-    "separator": " : "
+    "separator": "",
+    "key": { "width": 15 },
   },
   "modules": [
     {
+      "key": " ",
+      "type": "custom",
+    },
+    {
+      "key": "╭───────────╮",
+      "type": "custom",
+    },
+    {
+      // draw borders first to make colors of left and right border consistant
+      "key": "│           │\u001b[11D{#31}  \u001b[{#37}user",
       "type": "title",
-      "key": " "
+      "format": "{1}",
+      "outputColor": "31;1",
     },
     {
-      "type": "custom",
-      "format": "┌──────────────────────────────────────────┐"
+      "key": "│           │\u001b[11D{#32}󰇅  \u001b[{#37}hname",
+      "type": "title",
+      "format": "{2}",
+      "outputColor": "32;1",
     },
     {
-      "type": "os",
-      "key": " ",
-      "keyColor": "red"
-    },
-    {
-      "type": "kernel",
-      "key": " ",
-      "keyColor": "red"
-    },
-    {
+      "key": "│           │\u001b[11D{#33}󱦟  \u001b[{#37}OS Age",
       "type": "command",
-      "key": "󱦟 ",
-      "keyColor": "31",
-      "text": "birth_install=$(stat -c %W /); current=$(date +%s); time_progression=$((current - birth_install)); days_difference=$((time_progression / 86400)); echo $days_difference days"
+      //"keyColor": "31",
+      "text": "birth_install=$(stat -c %W /); current=$(date +%s); time_progression=$((current - birth_install)); days_difference=$((time_progression / 86400)); echo $days_difference days",
+      "outputColor": "33;1",
     },
     {
+      "key": "│           │\u001b[11D{#33}󰅐  \u001b[{#37}uptime",
       "type": "uptime",
-      "key": "󱫐 ",
-      "keyColor": "red"
+      "outputColor": "33;1",
     },
     {
+      "key": "│           │\u001b[11D{#34}󰟾  \u001b[{#37}distro",
+      "type": "os",
+      "outputColor": "34;1",
+    },
+    {
+      "key": "│           │\u001b[11D{#35}  \u001b[{#37}kernel",
+      "type": "kernel",
+      "outputColor": "35;1",
+    },
+    {
+      "key": "│           │\u001b[11D{#36}󰏗  \u001b[{#37}pkgs",
       "type": "packages",
-      "key": " ",
-      "keyColor": "green"
+      "outputColor": "36;1",
     },
     {
-      "type": "wm",
-      "key": " ",
-      "keyColor": "yellow"
+      "key": "│           │\u001b[11D{#36}󰇄  \u001b[{#37}desktop",
+      "type": "de",
+      "outputColor": "36;1",
     },
     {
+      "key": "│           │\u001b[11D{#31}  \u001b[{#37}term",
       "type": "terminal",
-      "key": " ",
-      "keyColor": "yellow"
+      "outputColor": "31;1",
     },
     {
-      "type": "display",
-      "key": " ",
-      "keyColor": "green"
+      "key": "│           │\u001b[11D{#32}  \u001b[{#37}shell",
+      "type": "shell",
+      "outputColor": "32;1",
     },
     {
+      "key": "│           │\u001b[11D{#33}󰍛  \u001b[{#37}cpu",
+      "type": "cpu",
+      "showPeCoreCount": true,
+      "outputColor": "33;1",
+    },
+    {
+      "key": "│           │\u001b[11D{#34}󰉉  \u001b[{#37}disk",
       "type": "disk",
-      "key": "󰋊 ",
-      "keyColor": "cyan",
-      "format": "{1}/{2} ({3})"
+      "folders": "/",
+      "outputColor": "34;1",
     },
     {
+      "key": "│           │\u001b[11D{#35}  \u001b[{#37}memory",
+      "type": "memory",
+      "outputColor": "35;1",
+    },
+    //{
+    //  "key": "│           │\u001b[11D{#36}󰩟  \u001b[{#37}network",
+    //  "type": "localip",
+    //  "format": "{1} ({4})",
+    //  "outputColor": "36;1",
+    //},
+    {
+      "key": "├───────────┤",
       "type": "custom",
-      "format": "└──────────────────────────────────────────┘"
     },
-    //"break",
     {
+      "key": "│           │\u001b[11D{#39}  colors",
       "type": "colors",
-      "paddingLeft": 2,
       "symbol": "circle",
-      "height": 4
     },
-    "break"
-  ]
+    {
+      "key": "╰───────────╯",
+      "type": "custom",
+    },
+  ],
 }

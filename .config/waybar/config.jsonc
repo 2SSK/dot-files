@@ -21,7 +21,7 @@
     "battery",
     "pulseaudio",
     "backlight",
-    "temperature",
+    //"temperature",
     //"cpu",
     //"memory",
     //"disk",
