@@ -71,7 +71,7 @@ alias nv='nvim'
 
 # Lazy aliases
 alias lg="lazygit"
-alias ld="lazydocker"
+alias ldc="lazydocker"
 
 # Node.js Aliases
 alias nrd='npm run dev'
@@ -161,7 +161,7 @@ alias lsp="eza --color=always --long --git --no-filesize --icons=always --no-tim
 alias lsa="eza --color=always --long --git --icons=always -b -a --total-size"
 alias l="eza -l --icons --git -a"
 alias lt="eza --tree --level=2 --long --icons --git"
-alias tree="eza --tree --level=2 --icons --git"
+alias tree="eza --tree --level=3 --icons --git"
 
 # Network Manager Aliases
 alias status='nmcli device status'
@@ -228,6 +228,30 @@ f() {
   elif [[ -f "$selection" ]]; then
     nvim "$selection"
   fi
+}
+
+fd() {
+  local selection
+  selection=$(find . -type d -readable 2>/dev/null | fzf --preview 'exa -la --color=always {}')
+
+  if [[ -d "$selection" ]]; then
+    cd "$selection" || return
+  fi
+}
+
+# ==============================
+# Assembly Language Aliases
+# ==============================
+nld() {
+  if [ -z "$2" ]; then
+    asm_file="$1"
+  else
+    asm_file="$2"
+  fi
+
+  nasm -f elf64 -o "$1.o" "$asm_file.asm"
+  ld -o "$1" "$1.o"
+  ./"$1"
 }
 
 # Powerlevel10k Prompt

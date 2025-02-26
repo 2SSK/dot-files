@@ -75,3 +75,4 @@ element-icon {
    text-color: @foreground;
    font: "Sora Regular 20";
 }
+

@@ -3,10 +3,10 @@ theme = coolnight
 background-opacity = 0.75
 
 # Font
-font-family = "JetBrains Mono Nerd Font Bold"
+font-family = "JetBrains Mono Nerd Font"
 font-style = bold
 bold-is-bright = true
-font-size = 14
+font-size = 16
 
 # Appearance
 gtk-titlebar = false
@@ -20,7 +20,7 @@ window-decoration = false
 
 # Other
 mouse-hide-while-typing = true
-copy-on-select = clipboard
+# copy-on-select = clipboard
 shell-integration-features = cursor,sudo,no-title
 confirm-close-surface = false
 
@@ -28,4 +28,3 @@ confirm-close-surface = false
 keybind = ctrl+comma=open_config
 keybind = ctrl+shift+comma=reload_config
 
-# Background = "#011423",

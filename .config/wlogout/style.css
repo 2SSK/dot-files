@@ -1,4 +1,5 @@
 * {
+  font-family: "JetBrainsMono Nerd Font";
   background-image: none;
   box-shadow: none;
 }
@@ -8,10 +9,12 @@ window {
 }
 
 button {
-  border-radius: 0;
+  margin: 10px;
+  border-radius: 15px;
+  font-size: 20px;
   border-color: black;
-  text-decoration-color: #ffffff;
-  color: #ffffff;
+  text-decoration-color: #bd93f9;
+  color: #bd93f9;
   background-color: #1e1e1e;
   border-style: solid;
   border-width: 1px;
@@ -23,7 +26,7 @@ button {
 button:focus,
 button:active,
 button:hover {
-  background-color: #3700b3;
+  background-color: rgba(76, 86, 106, 1);
   outline-style: none;
 }
 

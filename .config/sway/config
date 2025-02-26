@@ -1,3 +1,4 @@
+
 # Logo key. Use Mod1 for Alt.
 set $mod Mod4
 set $alt Mod1
@@ -11,8 +12,15 @@ set $right l
 # fonts
 font pango:JetbrainsMono Nerd Font Bold 12
 
+# Cursor
+set $cursor_theme Bibata-Modern-Ice
+seat * xcursor_theme $cursor_theme 24
+
 # Your preferred terminal emulator
 set $term ghostty
+
+# Your preferred filemanager
+set $files nautilus
 
 # Your preferred application launcher
 set $menu --no-startup-id rofi -show drun
@@ -24,7 +32,7 @@ bindsym $mod+c exec --no-startup-id ~/.config/sway/swaylock.sh
 bindsym $mod+p exec --no-startup-id wlogout
 
 # Switch to prev/next workspace 
-#comma(,) period(.)
+# comma(,) period(.)
 bindsym $mod+slash workspace next
 bindsym $mod+period workspace prev
 
@@ -37,8 +45,8 @@ default_border pixel 4
 default_floating_border pixel 3
 
 # Startup applications
-exec --no-startup-id variety
 xwayland force
+exec --no-startup-id variety
 exec --no-startup-id autotiling
 exec --no-startup-id xborders
 
@@ -57,7 +65,10 @@ input type:touchpad {
 #
     # Start a terminal
     bindsym $mod+Return exec $term
-    bindsym $alt+Return exec foot
+    bindsym $alt+Return exec wezterm
+
+    # Launch file manager  
+    bindsym $mod+b exec $files
 
     # Kill focused window
     bindsym $mod+q kill
@@ -134,8 +145,8 @@ input type:touchpad {
     # You can "split" the current object of your focus with
     # $mod+b or $mod+v, for horizontal and vertical splits
     # respectively.
-    bindsym $mod+b splith
-    bindsym $mod+v splitv
+    # bindsym $mod+b splith
+    # bindsym $mod+v splitv
 
     # Switch the current container between different layout styles
     bindsym $mod+s layout stacking
@@ -215,7 +226,7 @@ bindsym Shift+F12 exec grim -g "$(slurp)" ~/Pictures/Screenshots/screenshot_$(da
 #
 # Read `man 5 sway-bar` for more information about this section.
 bar {
-    swaybar_command waybar
+  swaybar_command waybar
 }
 
 ### Borders
