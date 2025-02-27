@@ -254,6 +254,11 @@ nld() {
   ./"$1"
 }
 
+# ==============================
+# Python Aliases
+# ==============================
+alias mkvenv='python -m venv venv && source venv/bin/activate'
+
 # Powerlevel10k Prompt
 # ==============================
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.

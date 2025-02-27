@@ -83,8 +83,15 @@ return {
 				filetypes = { "c", "cpp", "objc", "objcpp" },
 			},
 			pyright = {
+				on_attach = on_attach,
+				capabilities = capabilities,
 				filetypes = { "python" },
 			},
+			-- pylint = {
+			-- 	on_attach = on_attach,
+			-- 	capabilities = capabilities,
+			-- 	filetypes = { "python" },
+			-- },
 			ts_ls = {
 				filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
 			},
