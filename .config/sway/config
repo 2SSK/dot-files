@@ -26,7 +26,8 @@ set $files nautilus
 set $menu --no-startup-id rofi -show drun
 
 # Lock Screen
-bindsym $mod+c exec --no-startup-id ~/.config/sway/swaylock.sh
+# bindsym $mod+c exec --no-startup-id ~/.config/sway/swaylock.sh
+bindsym $mod+c exec hyprlock 
 
 # Power Menu
 bindsym $mod+p exec --no-startup-id wlogout
@@ -58,6 +59,17 @@ input type:touchpad {
     middle_emulation enabled
     scroll_method two_finger
 }
+
+# Blur, rounded corner and shadow 
+smart_corner_radius on
+corner_radius 10
+default_dim_inactive 0.05
+blur enable
+blur_passes 2
+blur_radius 3
+layer_effects "waybar" "blur enable"; shadows enable
+shadows on
+shadow_blur_radius 20
 
 ### Key bindings
 #
@@ -216,11 +228,14 @@ bindsym F5 exec brightnessctl set +10%
 bindsym F9 exec amixer set Capture toggle
 
 # Screenshot
+# bindsym F12 exec hyprshot -m output -o $HOME/Pictures/Screenshots/
+# bindsym Shift+F12 exec hyprshot -m window -m active -o $HOME/Pictures/Screenshots/
+
 # Fullscreen screenshot
 bindsym F12 exec grim ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
-
 # Select a region for the screenshot
 bindsym Shift+F12 exec grim -g "$(slurp)" ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
+
 #
 # Status Bar:
 #
