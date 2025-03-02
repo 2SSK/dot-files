@@ -19,7 +19,7 @@
 
 ![rice](./screenshots/rice_ss_1.png)
 
---- 
+---
 
 ## NVIM Config && Brave
 
@@ -27,7 +27,7 @@
 
 ---
 
-## Emacs 
+## Emacs
 
 ![emacs](./screenshots/emacs_ss.png)
 
@@ -36,14 +36,3 @@
 ## Firefox
 
 ![firefox](./screenshots/firefox_ss.png)
-
-
-## FastFetch Themes
-
-![fastfetch](https://github.com/user-attachments/assets/167ac282-915f-4cb7-b47f-780f473b5645)
-
-<a href="https://m3tozz.github.io/FastCat-Themes/">Preview FastFetch Themes</a>
-<details>
-<summary>To use the Fastfetch theme selector tool</summary>
-Use This Command:<code>fastfetch-theme-selector</code>
-</details>
