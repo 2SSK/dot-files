@@ -16,7 +16,7 @@
 /* the whole window */
 window#waybar {
   color: #fff4d2;
-  background: none;
+  background: #0a0a0a;
 }
 
 window#waybar.hidden {
@@ -52,9 +52,7 @@ window#waybar.hidden {
   font-size: 16px;
   font-weight: 800;
   color: #202020;
-  background: #202020;
-  border: 3px solid #202020;
-  border-radius: 3px;
+  background: none;
 }
 
 #window,
@@ -77,11 +75,6 @@ window#waybar.hidden {
   padding-right: 4px;
 }
 
-#custom-rofi {
-  background: #83a598;
-  padding: 0 6px;
-}
-
 /* ================================ */
 /*       workspaces module          */
 /* ================================ */
@@ -90,7 +83,6 @@ window#waybar.hidden {
 }
 
 #workspaces button {
-  /*color: #fff4d2;*/
   color: #ffffff;
   padding: 0 4px;
   margin: 0px 3px;
@@ -102,23 +94,19 @@ window#waybar.hidden {
 }
 
 #workspaces button.visible {
-  /*background: #8ec07c;*/
-  background: #bd93f9;
+  background: #0369a1;
 }
 
 #workspaces button.visible:hover {
-  /*background: #8ec07c;*/
-  background: #bd93f9;
+  background: #0369a1;
 }
 
 #workspaces button.active {
-  /*background: #8ec07c;*/
-  background: #bd93f9;
+  background: #0369a1;
 }
 
 #workspaces button.active:hover {
-  /*background: #8ec07c;*/
-  background: #bd93f9;
+  background: #0369a1;
 }
 
 #workspaces button.urgent {
@@ -131,16 +119,7 @@ window#waybar.hidden {
 
 #window,
 #scratchpad {
-  /*color: #d3869b;*/
-  color: #ffffff;
-}
-
-/* ================================ */
-/*            tray                 */
-/* ================================ */
-
-#tray {
-  padding: 0 6px 0 6px;
+  color: #ff5555;
 }
 
 /* ================================ */
@@ -148,24 +127,21 @@ window#waybar.hidden {
 /* ================================ */
 
 #disk {
-  /*color: #ea6962;*/
-  color: #fff;
+  color: #ea6962;
 }
 
 /* ================================ */
 /*            cpu                  */
 /* ================================ */
 #cpu {
-  /*color: #e78a4e;*/
-  color: #fff;
+  color: #e78a4e;
 }
 
 /* ================================ */
 /*            temp                  */
 /* ================================ */
 #temperature {
-  /*color: #d8a657;*/
-  color: #fff;
+  color: #d8a657;
 }
 
 #temperature.critical {
@@ -175,24 +151,22 @@ window#waybar.hidden {
 /* ================================ */
 /*            backlight             */
 /* ================================ */
-#backlight,
-#bluetooth,
-#network {
-  color: #fff;
+#backlight {
+  color: #f6c657;
 }
 
 /* ================================ */
 /*            memory                */
 /* ================================ */
 #memory {
-  color: #fff;
+  color: #458588;
 }
 
 /* ================================ */
 /*         pulseaudio               */
 /* ================================ */
 #pulseaudio {
-  color: #fff;
+  color: #83a598;
 }
 
 #pulseaudio.muted {
@@ -203,23 +177,27 @@ window#waybar.hidden {
 /*            battery               */
 /* ================================ */
 #battery {
-  /*color: #689d6a;*/
-  color: #fff;
+  color: #689d6a;
 }
 
 #battery.critical {
-  /*color: #cc241d;*/
-  color: #fff;
+  color: #cc241d;
 }
 
 #battery.warning {
-  /*color: #e78a4e;*/
-  color: #fff;
+  color: #e78a4e;
 }
 /* ================================ */
 /*            clock                 */
 /* ================================ */
 #clock {
-  /*color: #8ec07c;*/
-  color: #fff;
+  color: #8ec07c;
+}
+
+#network {
+  color: #d3869b;
+}
+
+#bluetooth {
+  color: #ea6962;
 }
