@@ -8,10 +8,10 @@
 
   "modules-left": [
     "sway/workspaces",
-    "sway/scratchpad",
-    "sway/window",
     "hyprland/workspaces",
     "hyprland/scratchpad",
+    "sway/scratchpad",
+    "sway/window",
     "hyprland/window"
   ],
 
@@ -48,7 +48,7 @@
   },
 
   "hyprland/window": {
-    "format": "<span color='#202020' bgcolor='#d3869b' > 󰣆 </span> {class}",
+    "format": "<span color='#202020' bgcolor='#bd93f9' > 󰣆 </span> {class}",
     "separate-outputs": true,
     "icon":false,
   },
@@ -179,7 +179,7 @@
   "network": {
     "interval": 2,
     //"format-wifi": "  {essid}",
-    "format-wifi": "<span color='#202020' bgcolor='#bd93f9' >  </span> {essid}",
+    "format-wifi": "<span color='#202020' bgcolor='#bd93f9' >  </span> {essid}  {bandwidthDownBytes}",
     "format-ethernet": " ",
     "format-linked": " {ipaddr}",
     "format-disconnected": " Disconnected",
@@ -188,5 +188,21 @@
     "max-length": 20,
     "min-length": 6,
     "format-alt": "{essid}"
+  },
+  "bluetooth": {
+    //"format": "{icon}",
+    "format": " <span color='#202020' bgcolor='#bd93f9'>  </span> {device_enumerate}",
+    "format-icons": ["", "󰤾", "󰥀", "󰥄", "󰥈"],
+
+    "tooltip-format-off": "Bluetooth is off",
+    "tooltip-format-on": "Bluetooth is on",
+
+    "format-connected": "{icon} {num_connections}",
+    "format-connected-battery": "{icon} {device_battery_percentage}%",
+
+    "tooltip-format-connected": "{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias}\t{device_battery_percentage}%",
+
+    "on-click": "blueman-manager"
   }
 }
