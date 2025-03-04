@@ -36,6 +36,7 @@ window#waybar.hidden {
 #tray,
 #disk,
 #network,
+#bluetooth,
 #cpu,
 #temperature,
 #temperature.critical,
@@ -65,6 +66,7 @@ window#waybar.hidden {
 #temperature.critical,
 #backlight,
 #network,
+#bluetooth,
 #memory,
 #pulseaudio,
 #pulseaudio.muted,
@@ -174,8 +176,8 @@ window#waybar.hidden {
 /*            backlight             */
 /* ================================ */
 #backlight,
+#bluetooth,
 #network {
-  /*color: #f6c657;*/
   color: #fff;
 }
 
@@ -183,7 +185,6 @@ window#waybar.hidden {
 /*            memory                */
 /* ================================ */
 #memory {
-  /*color: #458588;*/
   color: #fff;
 }
 
@@ -191,7 +192,6 @@ window#waybar.hidden {
 /*         pulseaudio               */
 /* ================================ */
 #pulseaudio {
-  /*color: #83a598;*/
   color: #fff;
 }
 
