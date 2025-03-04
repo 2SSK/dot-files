@@ -1,12 +1,12 @@
 # Theme
 theme = coolnight
-background-opacity = 0.9
+background-opacity = 0.75
 
 # Font
 font-family = "JetBrains Mono Nerd Font"
 font-style = bold
 bold-is-bright = true
-font-size = 16
+font-size = 14
 
 # Appearance
 gtk-titlebar = false
@@ -28,3 +28,6 @@ confirm-close-surface = false
 keybind = ctrl+comma=open_config
 keybind = ctrl+shift+comma=reload_config
 
+
+# background = #011423
+# foreground = #CBE0F0

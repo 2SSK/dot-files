@@ -247,11 +247,11 @@ bar {
 }
 
 ### Borders
-client.focused          #bd93f9 #bd93f9 #282a36 #bd93f9 #bd93f9
-client.focused_inactive #282a36 #282a36 #bd93f9 #282a36 #282a36
-client.unfocused        #282a36 #282a36 #bd93f9 #282a36 #282a36
+client.focused          #0369a1 #0369a1 #282a36 #0369a1 #0369a1
+client.focused_inactive #282a36 #282a36 #0369a1 #282a36 #282a36
+client.unfocused        #282a36 #282a36 #0369a1 #282a36 #282a36
 client.urgent           #ff5555 #ff5555 #282a36 #ff5555 #ff5555
-client.placeholder      #282a36 #282a36 #bd93f9 #282a36 #282a36
+client.placeholder      #282a36 #282a36 #0369a1 #282a36 #282a36
 client.background       #282a36
 
 include /etc/sway/config.d/*

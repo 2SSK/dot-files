@@ -1,18 +1,21 @@
 {
   "layer": "top",
-  "height": 20,
+  "height": 30,
   "spacing": 5,
-  "margin-top" :5,
-  "margin-right" :8,
-  "margin-left" :8,
+  "margin": 0,
+  "padding-top": 2,
+  "padding-bottom": 2,
+  "padding-left": 4,
+  "padding-right": 4,
 
   "modules-left": [
     "sway/workspaces",
     "hyprland/workspaces",
     "hyprland/scratchpad",
     "sway/scratchpad",
-    "sway/window",
-    "hyprland/window"
+    // "sway/window",
+    // "hyprland/window"
+    "network"
   ],
 
   "modules-center": ["clock"],
@@ -21,12 +24,11 @@
     "battery",
     "pulseaudio",
     "backlight",
-    //"temperature",
-    //"cpu",
-    //"memory",
-    //"disk",
-    "network"
-  ],
+    "temperature",
+    "cpu",
+    "memory",
+    "disk"
+ ],
 
   "hyprland/workspaces": {
     "disable-scroll": true,
@@ -48,7 +50,7 @@
   },
 
   "hyprland/window": {
-    "format": "<span color='#202020' bgcolor='#bd93f9' > 󰣆 </span> {class}",
+    "format": " 󰣆  {class}",
     "separate-outputs": true,
     "icon":false,
   },
@@ -73,7 +75,7 @@
   //},
 
   "hyprland/scratchpad": {
-    "format": "<span color='#202020' bgcolor='#bd93f9' >  </span> {count}",
+    "format": "   {count}",
     "show-empty": false,
     "format-icons": ["", " "],
     "tooltip": true,
@@ -81,7 +83,7 @@
   },
 
   "sway/scratchpad": {
-    "format": "<span color='#202020' bgcolor='#bd93f9' >  </span> {count}",
+    "format": " {count}",
     "show-empty": false,
     "format-icons": ["", " "],
     "tooltip": true,
@@ -89,21 +91,18 @@
   },
 
   "sway/window": {
-    //"format": "<span color='#202020' bgcolor='#d3869b' > 󰣆 </span> {app_id}",
-    "format": "<span color='#202020' bgcolor='#bd93f9' > 󰣆 </span> {app_id}",
+    "format": "󰣆  {app_id}",
     "separate-outputs": true,
     "icon":true
   },
 
   "disk": {
-    //"format": "<span color='#202020' bgcolor='#ea6962' >  </span> {free}",
-    "format": "<span color='#202020' bgcolor='#bd93f9' >  </span> {free}",
+    "format": "  {free}",
     "interval": 20
   },
 
   "cpu": {
-    //"format": "<span color='#202020' bgcolor='#e78a4e' >  </span> {usage}%",
-    "format": "<span color='#202020' bgcolor='#bd93f9' >  </span> {}%",
+    "format": "  {}%",
     "tooltip": false,
     "interval": 1
   },
@@ -113,31 +112,28 @@
     "thermal-zone": 2,
     "hwmon-path": "/sys/class/hwmon/hwmon1/temp1_input",
     "critical-threshold": 70,
-    //"format": "<span color='#202020' bgcolor='#d8a657' >  </span> {temperatureC}°C",
-    "format": "<span color='#202020' bgcolor='#bd93f9' >  </span> {temperatureC}°C",
-    "format-critical": "<span color='#202020' bgcolor='#cc241d' >  </span> {temperatureC}°C"
+    "format": "  {temperatureC}°C",
+    "format-critical": "   {temperatureC}°C"
   },
 
   "backlight": {
     // "device": "acpi_video1",
-    //"format": "<span color='#202020' bgcolor='#f6c657' > 󰞏 </span> {percent}%",
-    "format": "<span color='#202020' bgcolor='#bd93f9' > 󰃠 </span> {percent}%",
+    "format": " 󰃠 {percent}%",
     "tooltip": false
   },
 
     "memory": {
-    "format": "<span color='#202020' bgcolor='#bd93f9' >  </span> {}%",
+    "format": "  {}%",
     "interval": 1
     },
 
   "pulseaudio": {
     // "scroll-step": 1, // %, can be a float
-    //"format": "<span color='#202020' bgcolor='#83a598' >  </span> {volume}%",
-    "format": "<span color='#202020' bgcolor='#bd93f9' >  </span> {volume}%",
-    "format-muted": "<span color='#202020' bgcolor='#ea6962' >  </span> {volume}%",
+    "format": "  {volume}%",
+    "format-muted": "  {volume}%",
     //"format-bluetooth": "<span color='#202020' bgcolor='#83a598' > 󰂰 </span> {volume}%",
-    "format-bluetooth": "<span color='#202020' bgcolor='#bd93f9' > 󰂰 </span> {volume}%",
-    "format-bluetooth-muted": "<span color='#202020' bgcolor='#ea6962' > 󰂲 </span> {volume}%",
+    "format-bluetooth": " 󰂰 {volume}%",
+    "format-bluetooth-muted": " 󰂲 {volume}%",
     "format-source": "{volume}% ",
     "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
     "tooltip": false,
@@ -156,30 +152,27 @@
       "critical": 20
     },
     "format-icons": ["󰂎","󰁺","󰁻","󰁽","󰁾","󰁿","󰂀","󰂁","󰂂","󰁹"],
-    //"format": "<span color='#202020' bgcolor='#689d6a' > {icon} </span> {capacity}%",
-    "format": "<span color='#202020' bgcolor='#bd93f9' > {icon} </span> {capacity}%",
-    "format-critical": "<span color='#202020' bgcolor='#cc241d' > {icon} </span> {capacity}%",
-    "format-warning": "<span color='#202020' bgcolor='#e78a4e' > {icon} </span> {capacity}%",
-    "format-full": "<span color='#202020' bgcolor='#689d6a' > {icon} </span> {capacity}%",
-    "format-charging": "<span color='#202020' bgcolor='#689d6a' > 󰂅 </span> {capacity}%",
-    "format-charging-warning": "<span color='#202020' bgcolor='#e78a4e' > 󰢝 </span> {capacity}%",
-    "format-charging-critical": "<span color='#202020' bgcolor='#cc241d' > 󰢜 </span> {capacity}%",
-    "format-plugged": "<span color='#202020' bgcolor='#689d6a' > 󰂅 </span> {capacity}%",
-    "format-alt": "<span color='#202020' bgcolor='#689d6a' > 󱧥 </span> {time}",
+    "format": " {icon} {capacity}%",
+    "format-critical": " {icon} {capacity}%",
+    "format-warning": " {icon} {capacity}%",
+    "format-full": " {icon} {capacity}%",
+    "format-charging": " 󰂅 {capacity}%",
+    "format-charging-warning": " 󰢝 {capacity}%",
+    "format-charging-critical": " 󰢜 {capacity}%",
+    "format-plugged": " 󰂅 {capacity}%",
+    "format-alt": " 󱧥  {time}",
     "tooltip": false
   },
 
   "clock": {
     // "timezone": "America/New_York",
-    //"format": "<span color='#202020' bgcolor='#8ec07c' >  </span> {:%a %d %b %H:%M:%S}",
-    "format": "<span color='#202020' bgcolor='#bd93f9' >  </span> {:%a %d %b %Y | %I:%M %p}",
+    "format": " {:%a %d %b %Y | %I:%M %p}",
     "tooltip": false,
     "interval":1,
   },
   "network": {
-    "interval": 2,
-    //"format-wifi": "  {essid}",
-    "format-wifi": "<span color='#202020' bgcolor='#bd93f9' >  </span> {essid}  {bandwidthDownBytes}",
+    "interval": 1,
+    "format-wifi": "  {essid} {bandwidthDownBytes}",
     "format-ethernet": " ",
     "format-linked": " {ipaddr}",
     "format-disconnected": " Disconnected",
@@ -187,11 +180,11 @@
     "tooltip": false,
     "max-length": 20,
     "min-length": 6,
-    "format-alt": "{essid}"
+    "format-alt": "  {bandwidthDownBytes}"
   },
   "bluetooth": {
     //"format": "{icon}",
-    "format": " <span color='#202020' bgcolor='#bd93f9'>  </span> {device_enumerate}",
+    "format": " {icon} {device_alias}",
     "format-icons": ["", "󰤾", "󰥀", "󰥄", "󰥈"],
 
     "tooltip-format-off": "Bluetooth is off",
