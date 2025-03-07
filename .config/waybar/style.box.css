@@ -4,9 +4,9 @@
 * {
   /* `otf-font-awesome` is required to be installed for icons */
   padding: 0;
-  border-radius: 0;
-  min-height: 0;
   margin: 0;
+  min-height: 0;
+  border-radius: 0;
   border: none;
   text-shadow: none;
   transition: none;
@@ -15,19 +15,12 @@
 
 /* the whole window */
 window#waybar {
-  background: #1d1d1d;
   color: #fff4d2;
-  padding: 0px 5px;
-  margin: 0;
-  border-radius: 3px;
+  background: none;
 }
 
-.modules-left {
-  padding-left: 5px;
-}
-
-.modules-right {
-  padding-right: 5px;
+window#waybar.hidden {
+  opacity: 1;
 }
 
 #custom-rofi,
@@ -40,10 +33,10 @@ window#waybar {
 #workspaces button.urgent,
 #window,
 #scratchpad,
+#network,
 #tray,
 #disk,
 #cpu,
-#network,
 #temperature,
 #temperature.critical,
 #backlight,
@@ -59,15 +52,15 @@ window#waybar {
   font-weight: 800;
   color: #202020;
   background: #202020;
-  border-radius: 2px;
+  border: 3px solid #202020;
+  border-radius: 3px;
 }
 
 #window,
-#scratchpad,
 #tray,
 #disk,
-#cpu,
 #network,
+#cpu,
 #temperature,
 #temperature.critical,
 #backlight,
@@ -79,14 +72,11 @@ window#waybar {
 #battery.warning,
 #clock {
   padding-right: 4px;
-  margin: 5px 0px;
 }
 
 #custom-rofi {
-  border: 2px solid #458588;
   background: #83a598;
   padding: 0 6px;
-  margin: 5px 0px;
 }
 
 /* ================================ */
@@ -98,40 +88,32 @@ window#waybar {
 
 #workspaces button {
   color: #fff4d2;
-  background: #202020;
-  border: 2px solid #fff4d2;
-  min-width: 25px;
   padding: 0 4px;
-  margin: 5px 3px;
+  margin: 0px 3px;
+  min-width: 25px;
 }
 
 #workspaces button:hover {
   background: #d3869b;
-  border: 2px solid #b16286;
 }
 
 #workspaces button.visible {
-  border: 2px solid #689d6a;
   background: #8ec07c;
 }
 
 #workspaces button.visible:hover {
-  border: 2px solid #689d6a;
   background: #8ec07c;
 }
 
 #workspaces button.active {
-  border: 2px solid #689d6a;
   background: #8ec07c;
 }
 
 #workspaces button.active:hover {
-  border: 2px solid #689d6a;
   background: #8ec07c;
 }
 
 #workspaces button.urgent {
-  border: 2px solid #cc241d;
   background: #ea6962;
 }
 
@@ -142,7 +124,10 @@ window#waybar {
 #window,
 #scratchpad {
   color: #d3869b;
-  border: 2px solid #d3869b;
+}
+
+#scratchpad {
+  padding-right: 6px;
 }
 
 /* ================================ */
@@ -150,8 +135,7 @@ window#waybar {
 /* ================================ */
 
 #tray {
-  padding: 0 6px;
-  background: #333333;
+  padding: 0 6px 0 6px;
 }
 
 /* ================================ */
@@ -160,7 +144,6 @@ window#waybar {
 
 #disk {
   color: #ea6962;
-  border: 2px solid #ea6962;
 }
 
 /* ================================ */
@@ -169,7 +152,12 @@ window#waybar {
 #cpu,
 #network {
   color: #e78a4e;
-  border: 2px solid #e78a4e;
+}
+
+/* ================================ */
+/*         network                  */
+/* ================================ */
+#network {
 }
 
 /* ================================ */
@@ -177,12 +165,10 @@ window#waybar {
 /* ================================ */
 #temperature {
   color: #d8a657;
-  border: 2px solid #d8a657;
 }
 
 #temperature.critical {
   color: #cc241d;
-  border: 2px solid #cc241d;
 }
 
 /* ================================ */
@@ -190,7 +176,6 @@ window#waybar {
 /* ================================ */
 #backlight {
   color: #f6c657;
-  border: 2px solid #f6c657;
 }
 
 /* ================================ */
@@ -198,7 +183,6 @@ window#waybar {
 /* ================================ */
 #memory {
   color: #458588;
-  border: 2px solid #458588;
 }
 
 /* ================================ */
@@ -206,12 +190,10 @@ window#waybar {
 /* ================================ */
 #pulseaudio {
   color: #83a598;
-  border: 2px solid #83a598;
 }
 
 #pulseaudio.muted {
   color: #ea6962;
-  border: 2px solid #ea6962;
 }
 
 /* ================================ */
@@ -219,22 +201,18 @@ window#waybar {
 /* ================================ */
 #battery {
   color: #689d6a;
-  border: 2px solid #689d6a;
 }
 
 #battery.critical {
   color: #cc241d;
-  border: 2px solid #cc241d;
 }
 
 #battery.warning {
   color: #e78a4e;
-  border: 2px solid #e78a4e;
 }
 /* ================================ */
 /*            clock                 */
 /* ================================ */
 #clock {
   color: #8ec07c;
-  border: 2px solid #8ec07c;
 }

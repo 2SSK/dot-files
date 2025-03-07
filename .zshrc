@@ -98,6 +98,7 @@ alias gp="git push"
 alias gl="git log --oneline --graph"
 alias gm="git merge"
 alias grb="git rebase"
+alias update-all-branches="git fetch origin && for branch in \$(git branch | sed 's/^\*//'); do git checkout \$branch && git merge main; done && git checkout main"
 
 # System Management Aliases
 alias off='shutdown -h now'
@@ -130,7 +131,7 @@ alias sl='sl --help -F -a'
 alias p='pipes.sh'
 alias cb='cbonsai -liv'
 alias aq='asciiquarium'
-alias cm='cmatrix'
+alias cm='cmatrix -a -b -s'
 
 # TMUX Aliases
 alias t='tmux'

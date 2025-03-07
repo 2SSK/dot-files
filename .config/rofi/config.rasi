@@ -180,5 +180,5 @@ configuration {
 */
 }
 
-@theme "~/.config/rofi/themes/cat_chainsaw.rasi"
+@theme "~/.config/rofi/themes/new.rasi"
 
