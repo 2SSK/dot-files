@@ -26,3 +26,6 @@ keymap.set("n", "<leader>nd", "<cmd>NoiceDismiss<CR>", { desc = "Dismiss Noice M
 
 -- Zen mode toggle
 keymap.set("n", "<leader>zm", ":ZenMode<CR>", { desc = "Toggle Zen Mode" })
+
+-- Silicon command
+keymap.set("v", "<leader>ss", ":Silicon<CR>", { desc = "Screenshot Code" })

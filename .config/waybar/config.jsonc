@@ -1,42 +1,83 @@
 {
   "layer": "top",
-  "height": 30,
+  "height": 20,
   "spacing": 5,
-  "margin": 0,
-  "padding-top": 2,
-  "padding-bottom": 2,
-  "padding-left": 4,
-  "padding-right": 4,
+  "margin-top" :5,
+  "margin-right" :8,
+  "margin-left" :8,
 
   "modules-left": [
+    //"custom/rofi",
     "sway/workspaces",
     "hyprland/workspaces",
-    "hyprland/scratchpad",
     "sway/scratchpad",
-    // "sway/window",
-    // "hyprland/window"
-    "network"
+    //"tray",
+    "sway/window",
+    //"hyprland/window",
+    //"disk",
+    "cpu",
+    "memory"
   ],
 
   "modules-center": ["clock"],
 
   "modules-right": [
+    //"disk",
+    //"cpu",
     "battery",
     "pulseaudio",
     "backlight",
     "temperature",
-    "cpu",
-    "memory",
-    "disk"
- ],
+    "network"
+  ],
+
+  "custom/rofi": {
+		"format": "<span ></span>",
+		"on-click": "rofi -show drun -disable-history -show-icons",
+    "on-click-right": "~/.config/custom_scripts/power.sh",
+    "escape" : true,
+    "tooltip" : false
+	},
+
+  // Modules configuration
+  "sway/workspaces": {
+    "disable-scroll": true,
+    "active-only": false,
+    "all-outputs": true,
+    "warp-on-scroll": false,
+    "format": "{icon}",
+    //"format-icons": {
+    //  "1": "<span >󰧨</span>",
+    //  "2": "<span >󰈹</span>",
+    //  "3": "<span ></span>",
+    //  "4": "<span ></span>",
+    //  "5": "<span ></span>",
+    //  "6": "<span >󰭛</span>",
+    //  "7": "<span >󱓷</span>",
+    //  "8": "<span >󰚀</span>"
+    //}
+  },
+
+  "sway/scratchpad": {
+    "format": "<span color='#202020' bgcolor='#d3869b' >  </span> {count}",
+    "show-empty": false,
+    "format-icons": ["", " "],
+    "tooltip": true,
+    "tooltip-format": "{app}: {title}"
+  },
+
+  "sway/window": {
+    "format": "<span color='#202020' bgcolor='#d3869b' > 󰣆 </span> {app_id}",
+    "separate-outputs": true,
+    "icon":false,
+  },
 
   "hyprland/workspaces": {
     "disable-scroll": true,
     "active-only": false,
     "all-outputs": true,
     "warp-on-scroll": false,
-    "format": "{}"
-    //"format": "{icon}",
+    "format": "{icon}",
     //"format-icons": {
     //  "1": "<span >󰧨</span>",
     //  "2": "<span >󰈹</span>",
@@ -50,59 +91,36 @@
   },
 
   "hyprland/window": {
-    "format": " 󰣆  {class}",
+    "format": "<span color='#202020' bgcolor='#d3869b' > 󰣆 </span> {class}",
     "separate-outputs": true,
     "icon":false,
   },
 
-  // Modules configuration
-  //"sway/workspaces": {
-  //  "disable-scroll": true,
-  //  "active-only": false,
-  //  "all-outputs": true,
-  //  "warp-on-scroll": false,
-  //  "format": "{icon}",
-  //  "format-icons": {
-  //    "1": "<span >󰧨</span>",
-  //    "2": "<span >󰈹</span>",
-  //    "3": "<span ></span>",
-  //    "4": "<span ></span>",
-  //    "5": "<span ></span>",
-  //    "6": "<span >󰭛</span>",
-  //    "7": "<span >󱓷</span>",
-  //    "8": "<span >󰚀</span>"
-  //  }
-  //},
-
-  "hyprland/scratchpad": {
-    "format": "   {count}",
-    "show-empty": false,
-    "format-icons": ["", " "],
-    "tooltip": true,
-    "tooltip-format": "{app}: {title}"
+  "tray": {
+    "icon-size": 15,
+    "spacing": 8
   },
 
-  "sway/scratchpad": {
-    "format": " {count}",
-    "show-empty": false,
-    "format-icons": ["", " "],
-    "tooltip": true,
-    "tooltip-format": "{app}: {title}"
-  },
-
-  "sway/window": {
-    "format": "󰣆  {app_id}",
-    "separate-outputs": true,
-    "icon":true
+  "network": {
+    "interval": 1,
+    "format-wifi": "<span color='#202020' bgcolor='#e78a4e' >  </span> {essid}",
+    "format-ethernet": " ",
+    "format-linked": " {ipaddr}",
+    "format-disconnected": " Disconnected",
+    "format-disabled": "",
+    "tooltip": false,
+    "max-length": 20,
+    "min-length": 6,
+    "format-alt": "<span color='#202020' bgcolor='#e78a4e' >  </span> {bandwidthDownBytes}"
   },
 
   "disk": {
-    "format": "  {free}",
+    "format": "<span color='#202020' bgcolor='#ea6962' >  </span> {free}",
     "interval": 20
   },
 
   "cpu": {
-    "format": "  {}%",
+    "format": "<span color='#202020' bgcolor='#e78a4e' >  </span> {usage}%",
     "tooltip": false,
     "interval": 1
   },
@@ -112,28 +130,28 @@
     "thermal-zone": 2,
     "hwmon-path": "/sys/class/hwmon/hwmon1/temp1_input",
     "critical-threshold": 70,
-    "format": "  {temperatureC}°C",
-    "format-critical": "   {temperatureC}°C"
+    "format": "<span color='#202020' bgcolor='#d8a657' >  </span> {temperatureC}°C",
+    "format-critical": "<span color='#202020' bgcolor='#cc241d' >  </span> {temperatureC}°C",
   },
 
   "backlight": {
     // "device": "acpi_video1",
-    "format": " 󰃠 {percent}%",
+    "format": "<span color='#202020' bgcolor='#f6c657' > 󰞏 </span> {percent}%",
     "tooltip": false
   },
 
-    "memory": {
-    "format": "  {}%",
+
+  "memory": {
+    "format": "<span color='#202020' bgcolor='#458588' >  </span> {}%",
     "interval": 1
-    },
+  },
 
   "pulseaudio": {
     // "scroll-step": 1, // %, can be a float
-    "format": "  {volume}%",
-    "format-muted": "  {volume}%",
-    //"format-bluetooth": "<span color='#202020' bgcolor='#83a598' > 󰂰 </span> {volume}%",
-    "format-bluetooth": " 󰂰 {volume}%",
-    "format-bluetooth-muted": " 󰂲 {volume}%",
+    "format": "<span color='#202020' bgcolor='#83a598' >  </span> {volume}%",
+    "format-muted": "<span color='#202020' bgcolor='#ea6962' >  </span> {volume}%",
+    "format-bluetooth": "<span color='#202020' bgcolor='#83a598' > 󰂰 </span> {volume}%",
+    "format-bluetooth-muted": "<span color='#202020' bgcolor='#ea6962' > 󰂲 </span> {volume}%",
     "format-source": "{volume}% ",
     "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
     "tooltip": false,
@@ -152,50 +170,22 @@
       "critical": 20
     },
     "format-icons": ["󰂎","󰁺","󰁻","󰁽","󰁾","󰁿","󰂀","󰂁","󰂂","󰁹"],
-    "format": " {icon} {capacity}%",
-    "format-critical": " {icon} {capacity}%",
-    "format-warning": " {icon} {capacity}%",
-    "format-full": " {icon} {capacity}%",
-    "format-charging": " 󰂅 {capacity}%",
-    "format-charging-warning": " 󰢝 {capacity}%",
-    "format-charging-critical": " 󰢜 {capacity}%",
-    "format-plugged": " 󰂅 {capacity}%",
-    "format-alt": " 󱧥  {time}",
+    "format": "<span color='#202020' bgcolor='#689d6a' > {icon} </span> {capacity}%",
+    "format-critical": "<span color='#202020' bgcolor='#cc241d' > {icon} </span> {capacity}%!!",
+    "format-warning": "<span color='#202020' bgcolor='#e78a4e' > {icon} </span> {capacity}%",
+    "format-full": "<span color='#202020' bgcolor='#689d6a' > {icon} </span> {capacity}%",
+    "format-charging": "<span color='#202020' bgcolor='#689d6a' > 󰂅 </span> {capacity}%",
+    "format-charging-warning": "<span color='#202020' bgcolor='#e78a4e' > 󰢝 </span> {capacity}%",
+    "format-charging-critical": "<span color='#202020' bgcolor='#cc241d' > 󰢜 </span> {capacity}%",
+    "format-plugged": "<span color='#202020' bgcolor='#689d6a' > 󰂅 </span> {capacity}%",
+    "format-alt": "<span color='#202020' bgcolor='#689d6a' > 󱧥 </span> {time}",
     "tooltip": false
   },
 
   "clock": {
     // "timezone": "America/New_York",
-    "format": " {:%a %d %b %Y | %I:%M %p}",
+    "format": "<span color='#202020' bgcolor='#8ec07c' >  </span> {:%a %d %b %Y | %I:%M %p}",
     "tooltip": false,
     "interval":1,
-  },
-  "network": {
-    "interval": 1,
-    "format-wifi": "  {essid} {bandwidthDownBytes}",
-    "format-ethernet": " ",
-    "format-linked": " {ipaddr}",
-    "format-disconnected": " Disconnected",
-    "format-disabled": "",
-    "tooltip": false,
-    "max-length": 20,
-    "min-length": 6,
-    "format-alt": "  {bandwidthDownBytes}"
-  },
-  "bluetooth": {
-    //"format": "{icon}",
-    "format": " {icon} {device_alias}",
-    "format-icons": ["", "󰤾", "󰥀", "󰥄", "󰥈"],
-
-    "tooltip-format-off": "Bluetooth is off",
-    "tooltip-format-on": "Bluetooth is on",
-
-    "format-connected": "{icon} {num_connections}",
-    "format-connected-battery": "{icon} {device_battery_percentage}%",
-
-    "tooltip-format-connected": "{device_enumerate}",
-    "tooltip-format-enumerate-connected": "{device_alias}\t{device_battery_percentage}%",
-
-    "on-click": "blueman-manager"
   }
 }

@@ -1,4 +1,3 @@
-
 # Logo key. Use Mod1 for Alt.
 set $mod Mod4
 set $alt Mod1
@@ -24,6 +23,7 @@ set $files nautilus
 
 # Your preferred application launcher
 set $menu --no-startup-id rofi -show drun
+# set $menu --no-startup-id wofi --show drun
 
 # Lock Screen
 # bindsym $mod+c exec --no-startup-id ~/.config/sway/swaylock.sh
@@ -45,12 +45,13 @@ gaps inner 8
 gaps outer 2
 
 # Borders
-default_border pixel 3
+default_border pixel 2
 default_floating_border pixel 1
 
 # Startup applications
 xwayland force
 exec --no-startup-id waypaper --restore
+# exec --no-startup-id hyprpaper
 exec --no-startup-id autotiling
 
 # Enable touchpad
@@ -67,8 +68,8 @@ smart_corner_radius on
 corner_radius 10
 default_dim_inactive 0.05
 blur enable
-blur_passes 2
 blur_radius 3
+blur_passes 3
 layer_effects "waybar" "blur disable"; shadows disable
 shadows on
 shadow_blur_radius 20
@@ -229,14 +230,15 @@ bindsym F5 exec brightnessctl set +5%
 # Microphone mute/unmute
 bindsym F9 exec amixer set Capture toggle
 
-# Screenshot
-# bindsym F12 exec hyprshot -m output -o $HOME/Pictures/Screenshots/
-# bindsym Shift+F12 exec hyprshot -m window -m active -o $HOME/Pictures/Screenshots/
+# Screenshots
+bindsym F12 exec grimshot save screen ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
+bindsym Shift+F12 exec grimshot save active ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
+bindsym ctrl+Shift+F12 exec grimshot save area ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
 
-# Fullscreen screenshot
-bindsym F12 exec grim ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
-# Select a region for the screenshot
-bindsym Shift+F12 exec grim -g "$(slurp)" ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
+# # Fullscreen screenshot
+# bindsym F12 exec grim ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
+# # Select a region for the screenshot
+# bindsym Shift+F12 exec grim -g "$(slurp)" ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
 
 #
 # Status Bar:
@@ -246,12 +248,16 @@ bar {
   swaybar_command waybar
 }
 
-### Borders
-client.focused          #0369a1 #0369a1 #282a36 #0369a1 #0369a1
-client.focused_inactive #282a36 #282a36 #0369a1 #282a36 #282a36
-client.unfocused        #282a36 #282a36 #0369a1 #282a36 #282a36
-client.urgent           #ff5555 #ff5555 #282a36 #ff5555 #ff5555
-client.placeholder      #282a36 #282a36 #0369a1 #282a36 #282a36
-client.background       #282a36
+######################################
+# color settings fo windows         #
+######################################
+set $color1     #222222
+set $color2     #d8a657
+
+#app_id                          border          bground         text            indicator       child_border
+client.focused               $color2           $color2         $color1           $color2         $color2
+client.unfocused             $color2           $color1         $color2           $color1         $color1
+client.focused_inactive      $color2           $color1         $color2           $color1         $color1
+client.urgent                $color2           $color2         $color1           $color2         $color1
 
 include /etc/sway/config.d/*

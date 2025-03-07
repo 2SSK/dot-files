@@ -31,3 +31,6 @@ keybind = ctrl+shift+comma=reload_config
 
 # background = #011423
 # foreground = #CBE0F0
+#
+# background = #0a0a0a
+# foreground = #cdd6f4
