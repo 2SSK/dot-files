@@ -2,166 +2,123 @@
   "layer": "top",
   "height": 20,
   "spacing": 5,
-  "margin-top" :5,
-  "margin-right" :8,
-  "margin-left" :8,
 
   "modules-left": [
-    //"custom/rofi",
     "sway/workspaces",
     "hyprland/workspaces",
     "sway/scratchpad",
-    //"tray",
-    "sway/window",
+    //"sway/window",
     //"hyprland/window",
-    //"disk",
     "cpu",
-    "memory"
+    "memory",
+    "network#speed"
   ],
-
   "modules-center": ["clock"],
-
   "modules-right": [
-    //"disk",
-    //"cpu",
     "battery",
     "pulseaudio",
     "backlight",
     "temperature",
     "network"
   ],
-
-  "custom/rofi": {
-		"format": "<span ></span>",
-		"on-click": "rofi -show drun -disable-history -show-icons",
-    "on-click-right": "~/.config/custom_scripts/power.sh",
-    "escape" : true,
-    "tooltip" : false
-	},
-
-  // Modules configuration
   "sway/workspaces": {
-    "disable-scroll": true,
-    "active-only": false,
     "all-outputs": true,
-    "warp-on-scroll": false,
-    "format": "{icon}",
+    "warp-on-scroll": true,
+    "enable-bar-scroll": true,
+    "disable-scroll-wraparound": false,
+    "format": " {icon} ",
     //"format-icons": {
-    //  "1": "<span >󰧨</span>",
-    //  "2": "<span >󰈹</span>",
-    //  "3": "<span ></span>",
-    //  "4": "<span ></span>",
-    //  "5": "<span ></span>",
-    //  "6": "<span >󰭛</span>",
-    //  "7": "<span >󱓷</span>",
-    //  "8": "<span >󰚀</span>"
+    //  "urgent": "",
+    //  "active": "",
+    //  "default": ""
     //}
   },
-
+  "hyprland/workspaces": {
+    "all-outputs": true,
+    "warp-on-scroll": true,
+    "enable-bar-scroll": true,
+    "disable-scroll-wraparound": false,
+    "format": " {icon} ",
+    "format-icons": {
+      "urgent": "",
+      "active": "",
+      "default": ""
+    }
+  },
   "sway/scratchpad": {
-    "format": "<span color='#202020' bgcolor='#d3869b' >  </span> {count}",
+    "format": "  {count}",
     "show-empty": false,
     "format-icons": ["", " "],
     "tooltip": true,
     "tooltip-format": "{app}: {title}"
   },
-
-  "sway/window": {
-    "format": "<span color='#202020' bgcolor='#d3869b' > 󰣆 </span> {app_id}",
-    "separate-outputs": true,
-    "icon":false,
-  },
-
-  "hyprland/workspaces": {
-    "disable-scroll": true,
-    "active-only": false,
-    "all-outputs": true,
-    "warp-on-scroll": false,
-    "format": "{icon}",
-    //"format-icons": {
-    //  "1": "<span >󰧨</span>",
-    //  "2": "<span >󰈹</span>",
-    //  "3": "<span ></span>",
-    //  "4": "<span ></span>",
-    //  "5": "<span ></span>",
-    //  "6": "<span >󰭛</span>",
-    //  "7": "<span >󱓷</span>",
-    //  "8": "<span >󰚀</span>"
-    //}
-  },
-
-  "hyprland/window": {
-    "format": "<span color='#202020' bgcolor='#d3869b' > 󰣆 </span> {class}",
-    "separate-outputs": true,
-    "icon":false,
-  },
-
-  "tray": {
-    "icon-size": 15,
-    "spacing": 8
-  },
-
   "network": {
-    "interval": 1,
-    "format-wifi": "<span color='#202020' bgcolor='#e78a4e' >  </span> {essid}",
-    "format-ethernet": " ",
-    "format-linked": " {ipaddr}",
-    "format-disconnected": " Disconnected",
-    "format-disabled": "",
-    "tooltip": false,
-    "max-length": 20,
-    "min-length": 6,
-    "format-alt": "<span color='#202020' bgcolor='#e78a4e' >  </span> {bandwidthDownBytes}"
+    "format-wifi": "{icon} {essid}",
+    "format-ethernet": "󰈀",
+    "format-icons": ["󰤯 ", "󰤟 ", "󰤢 ", "󰤢 ", "󰤨 "],
+    "format-disconnected": "󰪎",
+    "interval": 5,
+    "tooltip-format-wifi": " {bandwidthDownBytes} |  {bandwidthUpBytes} | {essid}",
+    "tooltip-format-disconnected": "Disconnected",
+    "on-click": "exec ~/.config/rofi/wifi/wifi.sh",
+    "on-click-right": "ghostty -e nmtui"
   },
-
+  "network#speed": {
+    "interval": 1,
+    "format": "{ifname}%%",
+    "format-wifi": " {bandwidthDownBytes}",
+    "format-ethernet": " {bandwidthDownBytes}  {bandwidthUpBytes} ",
+    "format-disconnected": "󰌙",
+    "tooltip-format": "{ipaddr}",
+    "format-linked": "󰈁 {ifname} (No IP)",
+    "tooltip-format-wifi": "{essid} {icon} {signalStrength}%",
+    "tooltip-format-ethernet": "{ifname} 󰌘",
+    "tooltip-format-disconnected": "󰌙 Disconnected",
+    "max-length": 22,
+    "min-length": 20,
+    "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"]
+  },
   "disk": {
-    "format": "<span color='#202020' bgcolor='#ea6962' >  </span> {free}",
+    "format": "   {free}",
     "interval": 20
   },
-
   "cpu": {
-    "format": "<span color='#202020' bgcolor='#e78a4e' >  </span> {usage}%",
-    "tooltip": false,
-    "interval": 1
+    "interval": 1,
+    "format": "<span font='Font Awesome 6 Free-Solid'>\uf2db</span>  {usage}%",
+    "on-click": "ghostty btop"
   },
-
   "temperature": {
     "tooltip":false,
     "thermal-zone": 2,
     "hwmon-path": "/sys/class/hwmon/hwmon1/temp1_input",
     "critical-threshold": 70,
-    "format": "<span color='#202020' bgcolor='#d8a657' >  </span> {temperatureC}°C",
-    "format-critical": "<span color='#202020' bgcolor='#cc241d' >  </span> {temperatureC}°C",
+    "format": " {temperatureC}°C",
+    "format-critical": "{temperatureC}°C ",
   },
-
   "backlight": {
-    // "device": "acpi_video1",
-    "format": "<span color='#202020' bgcolor='#f6c657' > 󰞏 </span> {percent}%",
-    "tooltip": false
+    "device": "intel_backlight",
+    "scroll-step": 5,
+    "format": "{icon}{percent}",
+    "format-icons": ["󰃞 ", "󰃟 ", "󰃝 ", "󰃠 "],
+    "tooltip": true,
+    "tooltip-format": "{percent}%"
   },
-
-
   "memory": {
-    "format": "<span color='#202020' bgcolor='#458588' >  </span> {}%",
-    "interval": 1
+    "interval": 1,
+    "format": "<span font='Font Awesome 5 Free'>\uf538</span>  {percentage}%",
+    "on-click": "ghostty btop",
+    "tooltip-format": "{used}/{total} GiB"
   },
-
   "pulseaudio": {
-    // "scroll-step": 1, // %, can be a float
-    "format": "<span color='#202020' bgcolor='#83a598' >  </span> {volume}%",
-    "format-muted": "<span color='#202020' bgcolor='#ea6962' >  </span> {volume}%",
-    "format-bluetooth": "<span color='#202020' bgcolor='#83a598' > 󰂰 </span> {volume}%",
-    "format-bluetooth-muted": "<span color='#202020' bgcolor='#ea6962' > 󰂲 </span> {volume}%",
-    "format-source": "{volume}% ",
-    "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
-    "tooltip": false,
-    "max-volume": 130
+    "format": "<span font='Font Awesome 5 Free'>{icon}</span>  {volume}",
+    "format-muted": "<span font='Font Awesome 5 Free'>\uf6a9</span>",
+    "format-icons": {
+      "headphone": "\uf025",
+      "default": ["\uf028"]
+    },
+    "tooltip-format": "{volume}% {desc}",
+    "on-click": "pamixer -t"
   },
-
-  "battery#bat2": {
-    "bat": "BAT2"
-  },
-
   "battery": {
     "interval": 1,
     "states": {
@@ -170,22 +127,21 @@
       "critical": 20
     },
     "format-icons": ["󰂎","󰁺","󰁻","󰁽","󰁾","󰁿","󰂀","󰂁","󰂂","󰁹"],
-    "format": "<span color='#202020' bgcolor='#689d6a' > {icon} </span> {capacity}%",
-    "format-critical": "<span color='#202020' bgcolor='#cc241d' > {icon} </span> {capacity}%!!",
-    "format-warning": "<span color='#202020' bgcolor='#e78a4e' > {icon} </span> {capacity}%",
-    "format-full": "<span color='#202020' bgcolor='#689d6a' > {icon} </span> {capacity}%",
-    "format-charging": "<span color='#202020' bgcolor='#689d6a' > 󰂅 </span> {capacity}%",
-    "format-charging-warning": "<span color='#202020' bgcolor='#e78a4e' > 󰢝 </span> {capacity}%",
-    "format-charging-critical": "<span color='#202020' bgcolor='#cc241d' > 󰢜 </span> {capacity}%",
-    "format-plugged": "<span color='#202020' bgcolor='#689d6a' > 󰂅 </span> {capacity}%",
-    "format-alt": "<span color='#202020' bgcolor='#689d6a' > 󱧥 </span> {time}",
+    "format": "{icon} {capacity}%",
+    "format-critical": "{icon} {capacity}%!!",
+    "format-warning": "{icon} {capacity}%",
+    "format-full": "{icon} {capacity}%",
+    "format-charging": "󰂅 {capacity}%",
+    "format-charging-warning": "󰢝 {capacity}%",
+    "format-charging-critical": "󰢜 {capacity}%",
+    "format-plugged": " 󰂅  {capacity}%",
+    "format-alt": " 󱧥  {time}",
     "tooltip": false
   },
 
   "clock": {
-    // "timezone": "America/New_York",
-    "format": "<span color='#202020' bgcolor='#8ec07c' >  </span> {:%a %d %b %Y | %I:%M %p}",
-    "tooltip": false,
-    "interval":1,
+    "format": "{:%I:%M %p • %a %d/%m/%y}",
+    "tooltip": true,
+    "tooltip-format": "<tt>{calendar}</tt>"
   }
 }

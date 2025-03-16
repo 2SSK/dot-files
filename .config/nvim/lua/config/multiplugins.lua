@@ -82,10 +82,10 @@ return {
 		end,
 	},
 	-- Cursor smearing
-	{
-		"sphamba/smear-cursor.nvim",
-		opts = {},
-	},
+	-- {
+	-- 	"sphamba/smear-cursor.nvim",
+	-- 	opts = {},
+	-- },
 	-- Noice plugin
 	{
 		"folke/noice.nvim",
@@ -125,5 +125,14 @@ return {
 	-- 🧘 Zen mode
 	{
 		"folke/zen-mode.nvim",
+	},
+	-- Rust autosave plugin
+	{
+		"rust-lang/rust.vim",
+		ft = "rust",
+		dependencies = "neovim/nvim-lspconfig",
+		config = function()
+			vim.g.rustfmt_autosave = 1
+		end,
 	},
 }

@@ -52,6 +52,7 @@ default_floating_border pixel 1
 xwayland force
 exec --no-startup-id waypaper --restore
 # exec --no-startup-id hyprpaper
+# exec --no-startup-id variety
 exec --no-startup-id autotiling
 
 # Enable touchpad
@@ -69,7 +70,7 @@ corner_radius 10
 default_dim_inactive 0.05
 blur enable
 blur_radius 3
-blur_passes 3
+blur_passes 6
 layer_effects "waybar" "blur disable"; shadows disable
 shadows on
 shadow_blur_radius 20
@@ -251,8 +252,8 @@ bar {
 ######################################
 # color settings fo windows         #
 ######################################
-set $color1     #222222
-set $color2     #d8a657
+set $color1     #1e1e2e
+set $color2     #cba6f7
 
 #app_id                          border          bground         text            indicator       child_border
 client.focused               $color2           $color2         $color1           $color2         $color2
