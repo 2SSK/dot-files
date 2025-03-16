@@ -30,6 +30,7 @@ return {
 			ensure_installed = {
 				"pyright",
 				"html",
+				"zls",
 				"cssls",
 				"tailwindcss",
 				"svelte",

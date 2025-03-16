@@ -119,6 +119,25 @@ return {
 				filetypes = { "go", "gomod", "gowork", "gotmpl" },
 				root_dir = util.root_pattern("go.mod", "go.work", ".git"),
 			},
+			zls = {
+				on_attach = on_attach,
+				capabilities = capabilities,
+				cmd = { "zls" },
+				filetypes = { "zig" },
+			},
+			rust_analyzer = {
+				on_attach = on_attach,
+				capabilities = capabilities,
+				filetypes = { "rust" },
+				root_dir = util.root_pattern("Cargo.toml"),
+				settings = {
+					["rust-analyzer"] = {
+						cargo = {
+							allFeatures = true,
+						},
+					},
+				},
+			},
 		}
 
 		-- Apply server configurations

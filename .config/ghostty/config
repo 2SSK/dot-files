@@ -9,7 +9,7 @@ bold-is-bright = true
 font-size = 14
 
 # Appearance
-gtk-titlebar = false
+gtk-titlebar = true
 gtk-single-instance = true
 gtk-tabs-location = top
 gtk-wide-tabs = false

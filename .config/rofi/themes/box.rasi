@@ -1,43 +1,40 @@
-
 /*****----- Configuration -----*****/
 configuration {
-	modi:                       "drun,filebrowser,window"; /*emoji:rofimoji*/
+    modi:                       "drun,window";
     show-icons:                 true;
-    display-drun:               "";
+    display-drun:               "";
     display-run:                "";
     display-filebrowser:        "";
-    display-window:             "";
-    display-emoji:              "😀";
+    display-window:             "";
 	drun-display-format:        "{name}";
-	window-format:              "{w} · {c} · {t}";
+	window-format:              "{w} {c}";
 }
 
 /*****----- Global Properties -----*****/
 * {
-    font:                        "JetBrains Mono Nerd Font 16";
-    background-alt:              #282839E6;
-    background:                  #1e222a;
-    foreground:                  #D9E0EEFF;
-    selected:                    #A789CCFF;
-    active:                      #ABE9B3FF;
-    urgent:                      #F28FADFF;
+    font:                        "JetBrains Mono Nerd Font 14";
+    background:                  #11111b;
+    background-alt:              #313244;
+    foreground:                  #eff1f5;
+    selected:                    #cba6f7;
+    active:                      #6E77FF;
+    urgent:                      #8E3596;
 }
 
 /*****----- Main Window -----*****/
 window {
     /* properties for window widget */
     transparency:                "real";
-    location:                    west;
-    anchor:                      west;
+    location:                    center;
+    anchor:                      center;
     fullscreen:                  false;
-    width:                       550px;
-    height:                      100%;
+    width:                       400px;
     x-offset:                    0px;
     y-offset:                    0px;
 
     /* properties for all widgets */
     enabled:                     true;
-    border-radius:               0px;
+    border-radius:               4px;
     cursor:                      "default";
     background-color:            @background;
 }
@@ -45,49 +42,48 @@ window {
 /*****----- Main Box -----*****/
 mainbox {
     enabled:                     true;
-    spacing:                     25px;
+    spacing:                     0px;
     background-color:            transparent;
     orientation:                 vertical;
-    children:                    [ "inputbar", "listbox", "mode-switcher" ];
+    children:                    [ "inputbar", "listbox" ];
 }
 
 listbox {
-    spacing:                     15px;
-    padding:                     15px;
+    spacing:                     0px;
+    padding:                     0px;
     background-color:            transparent;
     orientation:                 vertical;
-    children:                    [ "message", "listview" ];
+    children:                    [ "listview" ];
 }
 
 /*****----- Inputbar -----*****/
 inputbar {
     enabled:                     true;
-    spacing:                     10px;
-    padding:                     40px 40px 200px;
+    spacing:                     8px;
+    padding:                     16px 16px 0px 16px;
     background-color:            transparent;
-    background-image:            url("~/Dots/Wallpapers/chainsaw_denji_cat.png", width);
     text-color:                  @foreground;
     orientation:                 horizontal;
-    children:                    [ "textbox-prompt-colon", "entry" ];
+    children:                    [ "textbox-prompt-colon", "entry"];
 }
 textbox-prompt-colon {
     enabled:                     true;
     expand:                      false;
-    str:                         "";
-    padding:                     12px 15px;
-    border-radius:               0px;
-    background-color:            @background-alt;
-    text-color:                  inherit;
+    str:                         "Search";
+    padding:                     12px 20px 12px 15px;
+    border-radius:               4px;
+    background-color:            #a6e3a1;
+    text-color:                  @background;
 }
 entry {
     enabled:                     true;
-    expand:                      true;
-    padding:                     12px 16px;
-    border-radius:               0px;
-    background-color:            @background-alt;
+    expand:                      false;
+    width:                       200px;
+    padding:                     12px 16px 8px 16px;
+    border-radius:               4px;
+    background-color:            @background;
     text-color:                  inherit;
     cursor:                      text;
-    placeholder:                 "Search";
     placeholder-color:           inherit;
 }
 dummy {
@@ -98,28 +94,28 @@ dummy {
 /*****----- Mode Switcher -----*****/
 mode-switcher{
     enabled:                     true;
-    padding:                     18px;
-    spacing:                     10px;
+    spacing:                     8px;
     background-color:            transparent;
     text-color:                  @foreground;
 }
 button {
-    padding:                     12px;
-    border-radius:               0px;
-    background-color:            @background-alt;
+    padding:                     12px 22px 12px 16px;
+    border-radius:               4px;
+    background-color:            @background;
     text-color:                  inherit;
     cursor:                      pointer;
 }
 button selected {
     background-color:            @selected;
-    text-color:                  @foreground;
+    text-color:                  @background;
 }
 
 /*****----- Listview -----*****/
 listview {
+    padding :                   8px;
     enabled:                     true;
     columns:                     1;
-    lines:                       10;
+    lines:                       5;
     cycle:                       true;
     dynamic:                     true;
     scrollbar:                   false;
@@ -127,9 +123,11 @@ listview {
     reverse:                     false;
     fixed-height:                true;
     fixed-columns:               true;
-    
-    spacing:                     10px;
-    background-color:            transparent;
+
+    spacing:                     8px;
+    margin: 			        16px 12px;
+    border-radius: 		         4px;
+    background-color:            #1e1e2e;
     text-color:                  @foreground;
     cursor:                      "default";
 }
@@ -137,49 +135,30 @@ listview {
 /*****----- Elements -----*****/
 element {
     enabled:                     true;
-    spacing:                     10px;
+    spacing:                     0px;
     padding:                     8px;
-    border-radius:               0px;
+    border-radius:               4px;
     background-color:            transparent;
     text-color:                  @foreground;
     cursor:                      pointer;
 }
-element normal.normal {
-    background-color:            inherit;
-    text-color:                  inherit;
-}
-element normal.urgent {
-    background-color:            @urgent;
-    text-color:                  @foreground;
-}
-element normal.active {
-    background-color:            @active;
-    text-color:                  @foreground;
-}
 element selected.normal {
     background-color:            @selected;
-    text-color:                  @foreground;
-}
-element selected.urgent {
-    background-color:            @urgent;
-    text-color:                  @foreground;
-}
-element selected.active {
-    background-color:            @urgent;
-    text-color:                  @foreground;
+    text-color:                  @background;
 }
 element-icon {
     background-color:            transparent;
     text-color:                  inherit;
-    size:                        24px;
+    size:                        32px;
     cursor:                      inherit;
 }
 element-text {
+    padding: 			 0px 16px;
     background-color:            transparent;
     text-color:                  inherit;
     cursor:                      inherit;
     vertical-align:              0.5;
-    horizontal-align:            0.0;
+    horizontal-align:            0;
 }
 
 /*****----- Message -----*****/
@@ -187,15 +166,15 @@ message {
     background-color:            transparent;
 }
 textbox {
-    padding:                     12px;
+    padding:                     0px;
     border-radius:               0px;
-    background-color:            @background-alt;
+    background-color:            @background;
     text-color:                  @foreground;
     vertical-align:              0.5;
-    horizontal-align:            0.0;
+    horizontal-align:            0.5;
 }
 error-message {
-    padding:                     12px;
+    padding:                     0px;
     border-radius:               0px;
     background-color:            @background;
     text-color:                  @foreground;

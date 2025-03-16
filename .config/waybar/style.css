@@ -1,36 +1,46 @@
-/* ================================ */
-/*            Common CSS            */
-/* ================================ */
+/* Define Catppuccin Mocha Colors */
+@define-color base #1e1e2e;
+@define-color crust #11111b;
+@define-color mantle #181825;
+@define-color text #cdd6f4;
+@define-color subtext0 #a6adc8;
+@define-color subtext1 #bac2de;
+@define-color surface0 #313244;
+@define-color surface1 #45475a;
+@define-color surface2 #585b70;
+@define-color overlay0 #6c7086;
+@define-color overlay1 #7f849c;
+@define-color overlay2 #9399b2;
+@define-color lavender #b4befe;
+@define-color blue #89b4fa;
+@define-color sapphire #74c7ec;
+@define-color sky #89dceb;
+@define-color teal #94e2d5;
+@define-color green #a6e3a1;
+@define-color yellow #f9e2af;
+@define-color peach #fab387;
+@define-color maroon #eba0ac;
+@define-color red #f38ba8;
+@define-color mauve #cba6f7;
+@define-color pink #f5c2e7;
+@define-color flamingo #f2cdcd;
+
+/* Waybar Styles */
 * {
-  /* `otf-font-awesome` is required to be installed for icons */
-  padding: 0;
-  border-radius: 0;
-  min-height: 0;
-  margin: 0;
-  border: none;
-  text-shadow: none;
-  transition: none;
-  box-shadow: none;
+  font-family: "JetBrainsMono Nerd Font";
+  font-size: 16px;
+  font-weight: 800;
 }
 
-/* the whole window */
 window#waybar {
-  background: #1d1d1d;
-  color: #fff4d2;
-  padding: 0px 5px;
-  margin: 0;
-  border-radius: 3px;
+  background-color: @mantle;
+  /*background-color: transparent;*/
+  color: @text;
 }
 
-.modules-left {
-  padding-left: 5px;
-}
-
-.modules-right {
-  padding-right: 5px;
-}
-
-#custom-rofi,
+#clock,
+#battery,
+#cpu,
 #workspaces button,
 #workspaces button:hover,
 #workspaces button.visible,
@@ -38,203 +48,102 @@ window#waybar {
 #workspaces button.active,
 #workspaces button.active:hover,
 #workspaces button.urgent,
-#window,
-#scratchpad,
-#tray,
-#disk,
-#cpu,
-#network,
-#temperature,
-#temperature.critical,
-#backlight,
 #memory,
-#pulseaudio,
-#pulseaudio.muted,
-#battery,
-#battery.critical,
-#battery.warning,
-#clock {
-  font-family: JetBrainsMono Nerd Font Propo;
-  font-size: 16px;
-  font-weight: 800;
-  color: #202020;
-  background: #202020;
-  border-radius: 2px;
-}
-
-#window,
-#scratchpad,
-#tray,
-#disk,
-#cpu,
 #network,
+#scratchpad,
 #temperature,
-#temperature.critical,
-#backlight,
-#memory,
 #pulseaudio,
-#pulseaudio.muted,
-#battery,
-#battery.critical,
-#battery.warning,
-#clock {
-  padding-right: 4px;
-  margin: 5px 0px;
+#backlight {
+  background: @surface1;
+  padding: 5px 10px;
+  margin: 3px;
+  border-radius: 16px;
 }
 
-#custom-rofi {
-  border: 2px solid #458588;
-  background: #83a598;
-  padding: 0 6px;
-  margin: 5px 0px;
-}
-
-/* ================================ */
-/*       workspaces module          */
-/* ================================ */
 #workspaces {
   margin: 0px;
 }
 
 #workspaces button {
-  color: #fff4d2;
-  background: #202020;
-  border: 2px solid #fff4d2;
-  min-width: 25px;
-  padding: 0 4px;
-  margin: 5px 3px;
+  background: @surface0;
+  color: #f5e0dc;
+  padding: 5px 10px;
+  margin: 3px;
 }
 
 #workspaces button:hover {
   background: #d3869b;
-  border: 2px solid #b16286;
 }
 
 #workspaces button.visible {
-  border: 2px solid #689d6a;
-  background: #8ec07c;
+  background: #cba6f7;
+  color: #1e1e2e;
 }
 
 #workspaces button.visible:hover {
-  border: 2px solid #689d6a;
-  background: #8ec07c;
+  background: #cba6f7;
+  color: #1e1e2e;
 }
 
 #workspaces button.active {
-  border: 2px solid #689d6a;
-  background: #8ec07c;
+  background: @mauve;
 }
 
-#workspaces button.active:hover {
-  border: 2px solid #689d6a;
-  background: #8ec07c;
+#workspaces button:hover {
+  color: #c3dee5;
+  background: #1e1e2e;
+  opacity: 1;
+  animation: none;
 }
 
 #workspaces button.urgent {
-  border: 2px solid #cc241d;
   background: #ea6962;
 }
 
-/* ================================ */
-/*            window                 */
-/* ================================ */
-
-#window,
-#scratchpad {
-  color: #d3869b;
-  border: 2px solid #d3869b;
+#battery {
+  color: #52b788;
+}
+#battery.warning {
+  color: #f9c74f;
+}
+#battery.critical {
+  color: #ea6962;
 }
 
-/* ================================ */
-/*            tray                 */
-/* ================================ */
+#cpu {
+  color: #eef5db;
+}
+
+#memory {
+  color: #eef5db;
+}
+
+#temperature {
+  color: #adf7b6;
+}
+
+#network {
+  color: #cba6f7;
+}
+
+#pulseaudio {
+  color: #eef5db;
+}
+
+#clock {
+  color: @yellow;
+}
+
+#backlight {
+  color: #eef5db;
+}
 
 #tray {
-  padding: 0 6px;
-  background: #333333;
+  padding: 5px;
 }
 
-/* ================================ */
-/*            disk                 */
-/* ================================ */
-
-#disk {
-  color: #ea6962;
-  border: 2px solid #ea6962;
-}
-
-/* ================================ */
-/*            cpu                  */
-/* ================================ */
-#cpu,
-#network {
-  color: #e78a4e;
-  border: 2px solid #e78a4e;
-}
-
-/* ================================ */
-/*            temp                  */
-/* ================================ */
-#temperature {
-  color: #d8a657;
-  border: 2px solid #d8a657;
-}
-
-#temperature.critical {
-  color: #cc241d;
-  border: 2px solid #cc241d;
-}
-
-/* ================================ */
-/*            backlight             */
-/* ================================ */
-#backlight {
-  color: #f6c657;
-  border: 2px solid #f6c657;
-}
-
-/* ================================ */
-/*            memory                */
-/* ================================ */
-#memory {
-  color: #458588;
-  border: 2px solid #458588;
-}
-
-/* ================================ */
-/*         pulseaudio               */
-/* ================================ */
-#pulseaudio {
-  color: #83a598;
-  border: 2px solid #83a598;
-}
-
-#pulseaudio.muted {
-  color: #ea6962;
-  border: 2px solid #ea6962;
-}
-
-/* ================================ */
-/*            battery               */
-/* ================================ */
-#battery {
-  color: #689d6a;
-  border: 2px solid #689d6a;
-}
-
-#battery.critical {
-  color: #cc241d;
-  border: 2px solid #cc241d;
-}
-
-#battery.warning {
-  color: #e78a4e;
-  border: 2px solid #e78a4e;
-}
-/* ================================ */
-/*            clock                 */
-/* ================================ */
-#clock {
-  color: #8ec07c;
-  border: 2px solid #8ec07c;
+.modules-left,
+.modules-right,
+.modules-center {
+  padding: 5px;
 }
