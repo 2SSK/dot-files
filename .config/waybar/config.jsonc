@@ -1,17 +1,15 @@
 {
   "layer": "top",
-  "height": 20,
-  "spacing": 5,
+  "position": "top",
+  //"height": 20,
+  //"spacing": 5,
 
   "modules-left": [
     "sway/workspaces",
     "hyprland/workspaces",
     "sway/scratchpad",
-    //"sway/window",
+    "sway/window"
     //"hyprland/window",
-    "cpu",
-    "memory",
-    "network#speed"
   ],
   "modules-center": ["clock"],
   "modules-right": [
@@ -19,7 +17,10 @@
     "pulseaudio",
     "backlight",
     "temperature",
+    "cpu",
+    "memory",
     "network"
+    //"network#speed"
   ],
   "sway/workspaces": {
     "all-outputs": true,
@@ -40,10 +41,15 @@
     "disable-scroll-wraparound": false,
     "format": " {icon} ",
     "format-icons": {
-      "urgent": "",
-      "active": "",
-      "default": ""
+      //"urgent": "",
+      //"active": "",
+      //"default": ""
     }
+  },
+ "sway/window": {
+    "format": "{app_id}",
+    "separate-outputs": true,
+    "icon":true
   },
   "sway/scratchpad": {
     "format": "  {count}",
@@ -53,7 +59,7 @@
     "tooltip-format": "{app}: {title}"
   },
   "network": {
-    "format-wifi": "{icon} {essid}",
+    "format-wifi": "{icon} {essid}  {bandwidthDownBytes}",
     "format-ethernet": "󰈀",
     "format-icons": ["󰤯 ", "󰤟 ", "󰤢 ", "󰤢 ", "󰤨 "],
     "format-disconnected": "󰪎",

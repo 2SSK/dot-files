@@ -67,7 +67,7 @@ alias e='exit'
 # Editor Aliases
 export EDITOR='nvim'
 export VISUAL='nvim'
-alias nv='nvim'
+alias vi='nvim'
 
 # Lazy aliases
 alias lg="lazygit"
