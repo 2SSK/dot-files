@@ -45,7 +45,7 @@ gaps inner 8
 gaps outer 2
 
 # Borders
-default_border pixel 2
+default_border pixel 3
 default_floating_border pixel 1
 
 # Startup applications
@@ -70,10 +70,10 @@ corner_radius 10
 default_dim_inactive 0.05
 blur enable
 blur_radius 3
-blur_passes 6
-layer_effects "waybar" "blur disable"; shadows disable
+blur_passes 2
+layer_effects "waybar" "blur disable"; shadows enable
 shadows on
-shadow_blur_radius 20
+shadow_blur_radius 10
 
 ### Key bindings
 #
@@ -252,8 +252,8 @@ bar {
 ######################################
 # color settings fo windows         #
 ######################################
-set $color1     #1e1e2e
-set $color2     #cba6f7
+set $color1     #24283b
+set $color2     #7aa2f7
 
 #app_id                          border          bground         text            indicator       child_border
 client.focused               $color2           $color2         $color1           $color2         $color2
