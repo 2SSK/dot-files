@@ -45,7 +45,7 @@ gaps inner 8
 gaps outer 2
 
 # Borders
-default_border pixel 3
+default_border pixel 2
 default_floating_border pixel 1
 
 # Startup applications

@@ -6,6 +6,7 @@ local keymap = vim.keymap
 keymap.set("i", "jk", "<ESC>", { desc = "Exit insert mode with jk" })
 keymap.set("n", "<leader>ww", ":w<CR>", { desc = "Save file" })
 keymap.set("n", "<leader>wq", ":wqa!<CR>", { desc = "Save file" })
+keymap.set("n", "<leader>qa", ":qa<CR>", { desc = "Close file" })
 keymap.set("n", "<leader>wx", ":w<bar>tabclose<CR>", { desc = "Save file and close tab" })
 keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" })
 

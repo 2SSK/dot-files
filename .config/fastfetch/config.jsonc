@@ -10,7 +10,7 @@
       "symbols": "-block-border-space+vhalf",
     },
     "padding": {
-      "top": 1,
+      "top": 2,
       "left": 2,
       "right": 4,
       "bottom": 0,
