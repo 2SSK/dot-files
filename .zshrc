@@ -220,7 +220,7 @@ alias cd='z'
 # ==============================
 # Fzf alias and key bindings
 # ==============================
-f() {
+f() { # Find a file using fzf
   local selection
   selection=$(fzf --preview 'bat --style=numbers --color=always {} || ls -al {}')
   
@@ -231,7 +231,7 @@ f() {
   fi
 }
 
-fd() {
+fd() { # Find a directory using fzf
   local selection
   selection=$(find . -type d -readable 2>/dev/null | fzf --preview 'exa -la --color=always {}')
 
@@ -264,3 +264,5 @@ alias mkvenv='python -m venv venv && source venv/bin/activate'
 # ==============================
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+source /home/ssk/.config/broot/launcher/bash/br
