@@ -180,4 +180,4 @@ configuration {
 */
 }
 
-@theme "~/.config/rofi/themes/box.rasi"
+@theme "~/.config/rofi/themes/floating.rasi"
