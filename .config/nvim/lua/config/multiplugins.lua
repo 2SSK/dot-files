@@ -1,27 +1,27 @@
 -- Description: Plugins with minimal configuration
 return {
 	-- Colorscheme
-	{
-		"folke/tokyonight.nvim",
-		priority = 1000,
-		config = function()
-			-- Custom comments color
-			local comment_fg = "#79a3a5"
-
-			require("tokyonight").setup({
-				style = "night",
-				transparent = true,
-				styles = {
-					sidebars = "transparent",
-					floats = "transparent",
-				},
-				on_colors = function(colors)
-					colors.comment = comment_fg
-				end,
-			})
-			vim.cmd.colorscheme("tokyonight")
-		end,
-	},
+	-- {
+	-- 	"folke/tokyonight.nvim",
+	-- 	priority = 1000,
+	-- 	config = function()
+	-- 		-- Custom comments color
+	-- 		local comment_fg = "#79a3a5"
+	--
+	-- 		require("tokyonight").setup({
+	-- 			style = "night",
+	-- 			transparent = false,
+	-- 			styles = {
+	-- 				sidebars = "transparent",
+	-- 				floats = "transparent",
+	-- 			},
+	-- 			on_colors = function(colors)
+	-- 				colors.comment = comment_fg
+	-- 			end,
+	-- 		})
+	-- 		vim.cmd.colorscheme("tokyonight")
+	-- 	end,
+	-- },
 
 	-- Copilot plugin
 	{ "github/copilot.vim" },

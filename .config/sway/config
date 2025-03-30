@@ -41,7 +41,7 @@ bindsym $mod+slash workspace next
 bindsym $mod+period workspace prev
 
 # Gaps 
-gaps inner 8
+gaps inner 13
 gaps outer 2
 
 # Borders
@@ -64,16 +64,6 @@ input type:touchpad {
     scroll_method two_finger
 }
 
-# Blur, rounded corner and shadow 
-smart_corner_radius on
-corner_radius 10
-default_dim_inactive 0.05
-blur enable
-blur_radius 3
-blur_passes 2
-layer_effects "waybar" "blur disable"; shadows enable
-shadows on
-shadow_blur_radius 10
 
 ### Key bindings
 #
@@ -260,5 +250,19 @@ client.focused               $color2           $color2         $color1          
 client.unfocused             $color2           $color1         $color2           $color1         $color1
 client.focused_inactive      $color2           $color1         $color2           $color1         $color1
 client.urgent                $color2           $color2         $color1           $color2         $color1
+
+# Blur, rounded corner and shadow 
+shadows enable
+shadow_offset -8 -8
+shadow_color #111111
+
+default_dim_inactive 0.1
+for_window [app_id=".*"] opacity 0.9
+
+blur enable
+blur_radius 5
+blur_passes 2
+
+corner_radius 10
 
 include /etc/sway/config.d/*
