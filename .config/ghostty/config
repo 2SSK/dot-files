@@ -16,7 +16,7 @@ gtk-wide-tabs = false
 # window-padding-y = 50,0
 # window-padding-x = 50,0
 window-padding-balance = false
-window-decoration = false
+window-decoration = true
 
 # Other
 mouse-hide-while-typing = true
@@ -29,8 +29,3 @@ keybind = ctrl+comma=open_config
 keybind = ctrl+shift+comma=reload_config
 
 
-# background = #011423
-# foreground = #CBE0F0
-#
-# background = #0a0a0a
-# foreground = #cdd6f4
