@@ -4,11 +4,7 @@
 #  ██╔══██║██║     ██╔══██║██║     ██╔══██╗██║   ██║      ██║     ╚██╔╝  
 #  ██║  ██║███████╗██║  ██║╚██████╗██║  ██║██║   ██║      ██║      ██║   
 #  ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝   ╚═╝      ╚═╝      ╚═╝   
-#	gh0stzk - https://github.com/gh0stzk/dotfiles
 
-import = ["~/.config/alacritty/rice-colors.toml", "~/.config/alacritty/fonts.toml"]
-
-live_config_reload = true
 
 [cursor]
 blink_interval = 550
@@ -28,9 +24,9 @@ dynamic_title = true
 opacity = 0.7
 dynamic_padding = true
 
-[window.padding]
-x = 25
-y = 25
+# [window.padding]
+# x = 25
+# y = 25
 
 [scrolling]
 history = 10000
@@ -41,6 +37,12 @@ animation = "Linear"
 duration = 0
 command = { program = "paplay", args = ["/usr/share/sounds/freedesktop/stereo/dialog-error.oga"] }
 
-[shell]
-program = "/bin/bash"
-args = ["-l", "-c", "tmux"]
+[general]
+
+live_config_reload = true
+
+import = ["~/.config/alacritty/rice-colors.toml", "~/.config/alacritty/fonts.toml"]
+
+# [shell]
+# program = "/bin/bash"
+# args = ["-l", "-c", "tmux"]

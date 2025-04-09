@@ -1,12 +1,12 @@
 [manager]
 show_hidden = true
-ratio = [1,2,3]
+ratio = [1,3,4]
 linemode = "size_and_mtime"
 
 [preview]
 tab_size = 2
-max_width = 800
-max_height = 900
+max_width = 1200
+max_height = 1000
 cache_dir = ""
 # image_delay = 30
 image_filter = "triangle"

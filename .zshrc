@@ -220,17 +220,6 @@ alias cd='z'
 # ==============================
 # Fzf alias and key bindings
 # ==============================
-f() { # Find a file using fzf
-  local selection
-  selection=$(fzf --preview 'bat --style=numbers --color=always {} || ls -al {}')
-  
-  if [[ -d "$selection" ]]; then
-    cd "$selection" || return
-  elif [[ -f "$selection" ]]; then
-    nvim "$selection"
-  fi
-}
-
 fd() { # Find a directory using fzf
   local selection
   selection=$(find . -type d -readable 2>/dev/null | fzf --preview 'exa -la --color=always {}')
