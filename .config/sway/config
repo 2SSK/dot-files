@@ -1,3 +1,5 @@
+output eDP-1 scale 1
+
 # Logo key. Use Mod1 for Alt.
 set $mod Mod4
 set $alt Mod1
@@ -9,7 +11,7 @@ set $up k
 set $right l
 
 # fonts
-font pango:JetbrainsMono Nerd Font Bold 10
+font pango:JetbrainsMono Nerd Font Bold 12
 
 # Cursor
 set $cursor_theme Bibata-Modern-Ice
@@ -71,10 +73,14 @@ input type:touchpad {
 #
     # Start a terminal
     bindsym $mod+Return exec $term
-    bindsym $alt+Return exec wezterm
+    bindsym $alt+Return exec kitty
+
+    # Start browser
+    bindsym $mod+b exec brave
+    bindsym $alt+b exec firefox
 
     # Launch file manager  
-    bindsym $mod+shift+f exec $files
+    bindsym $alt+f exec $files
 
     # Kill focused window
     bindsym $mod+q kill
@@ -262,7 +268,7 @@ for_window [app_id=".*"] opacity 0.9
 
 blur enable
 blur_radius 5
-blur_passes 2
+blur_passes 3
 
 corner_radius 15
 

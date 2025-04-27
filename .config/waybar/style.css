@@ -5,8 +5,8 @@
 }
 
 window#waybar {
-  /* background-color: transparent; */
-  background-color: #1a1b26;
+  background-color: transparent;
+  /* background-color: #1a1b26; */
   color: #fdf6e3;
 }
 
@@ -28,8 +28,8 @@ window#waybar {
 #pulseaudio,
 #backlight {
   background: #24283b;
-  padding: 3px 10px;
-  border-radius: 5px;
+  padding: 5px 15px;
+  border-radius: 16px;
   margin: 3px;
   margin-top: 0px;
   margin-bottom: 0px;
@@ -42,7 +42,7 @@ window#waybar {
 #workspaces button.active,
 #workspaces button.active:hover,
 #workspaces button.urgent {
-  padding: 0 2px;
+  padding: 0 6px;
 }
 
 #workspaces button {
@@ -68,6 +68,14 @@ window#waybar {
   background: #ea6962;
 }
 
+#clock {
+  color: #91d7e3;
+}
+
+#battery {
+  color: #a6da95;
+}
+
 #battery.warning {
   color: #f9c74f;
 }
@@ -76,7 +84,7 @@ window#waybar {
 }
 
 #backlight {
-  color: #9ece6a;
+  color: #eed49f;
 }
 
 #cpu {

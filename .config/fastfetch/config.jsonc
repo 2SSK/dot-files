@@ -5,26 +5,17 @@
     "width": 60,
     "printRemaining": false,
     "source": "~/.config/wall.png",
-    // "recache": true,
+    "recache": true,
     "chafa": {
-      "symbols": "-block-border-space+vhalf",
+      "symbols": "-block-border-space+vhalf"
     },
     "padding": {
       "top": 2,
       "left": 2,
       "right": 4,
-      "bottom": 0,
-    },
+      "bottom": 0
+    }
   },
-  //"logo": {
-  //  "source": "",
-  //  "color": {
-  //    "3": "38;2;23;147;209"
-  //  },
-  //  //"padding": {
-  //  //  "top": 2
-  //  //}
-  //},
   "display": {
     "separator": " : "
   },
