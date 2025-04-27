@@ -1,37 +1,38 @@
 -- Description: Plugins with minimal configuration
 return {
-	-- Colorscheme
-	-- {
-	-- 	"folke/tokyonight.nvim",
-	-- 	priority = 1000,
-	-- 	config = function()
-	-- 		-- Custom comments color
-	-- 		local comment_fg = "#79a3a5"
-	--
-	-- 		require("tokyonight").setup({
-	-- 			style = "night",
-	-- 			transparent = false,
-	-- 			styles = {
-	-- 				sidebars = "transparent",
-	-- 				floats = "transparent",
-	-- 			},
-	-- 			on_colors = function(colors)
-	-- 				colors.comment = comment_fg
-	-- 			end,
-	-- 		})
-	-- 		vim.cmd.colorscheme("tokyonight")
-	-- 	end,
-	-- },
-
-	-- Copilot plugin
+	-- copilot
 	{ "github/copilot.vim" },
-	--
+
 	-- Vim-move plugin
 	{ "matze/vim-move" },
-	--
+
 	-- tmux movement
 	{ "christoomey/vim-tmux-navigator" },
-	--
+
+	-- UI enhancement plugin
+	{
+		"stevearc/dressing.nvim",
+		event = "VeryLazy",
+	},
+
+	-- Cursor smearing
+	{
+		"sphamba/smear-cursor.nvim",
+		opts = {},
+	},
+
+	-- 🧘 Zen mode
+	{
+		"folke/zen-mode.nvim",
+	},
+
+	-- screenkey
+	{
+		"NStefan002/screenkey.nvim",
+		lazy = false,
+		version = "*", -- or branch = "main", to use the latest commit
+	},
+
 	-- Colorizer
 	{
 		"NvChad/nvim-colorizer.lua",
@@ -52,12 +53,6 @@ return {
 		end,
 	},
 
-	-- UI enhancement plugin
-	{
-		"stevearc/dressing.nvim",
-		event = "VeryLazy",
-	},
-
 	-- Tab bar
 	{
 		"akinsho/bufferline.nvim",
@@ -69,6 +64,7 @@ return {
 			},
 		},
 	},
+
 	-- Icons picker
 	{
 		"ziontee113/icon-picker.nvim",
@@ -81,11 +77,7 @@ return {
 			vim.keymap.set("n", "<Leader><Leader>y", "<cmd>IconPickerYank<cr>", opts) --> Yank the selected icon into register
 		end,
 	},
-	-- Cursor smearing
-	-- {
-	-- 	"sphamba/smear-cursor.nvim",
-	-- 	opts = {},
-	-- },
+
 	-- Noice plugin
 	{
 		"folke/noice.nvim",
@@ -106,6 +98,7 @@ return {
 			"rcarriga/nvim-notify",
 		},
 	},
+
 	-- nvim silicon
 	{
 		"michaelrommel/nvim-silicon",
@@ -120,19 +113,6 @@ return {
 					return vim.fn.fnamemodify(vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf()), ":t")
 				end,
 			})
-		end,
-	},
-	-- 🧘 Zen mode
-	{
-		"folke/zen-mode.nvim",
-	},
-	-- Rust autosave plugin
-	{
-		"rust-lang/rust.vim",
-		ft = "rust",
-		dependencies = "neovim/nvim-lspconfig",
-		config = function()
-			vim.g.rustfmt_autosave = 1
 		end,
 	},
 }

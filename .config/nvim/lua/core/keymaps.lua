@@ -4,9 +4,10 @@ vim.g.maplocalleader = "\\"
 local keymap = vim.keymap
 
 keymap.set("i", "jk", "<ESC>", { desc = "Exit insert mode with jk" })
-keymap.set("n", "<leader>ww", ":w<CR>", { desc = "Save file" })
-keymap.set("n", "<leader>wq", ":wqa!<CR>", { desc = "Save file" })
-keymap.set("n", "<leader>qa", ":qa<CR>", { desc = "Close file" })
+keymap.set("n", "<leader>w", ":w<CR>", { desc = "Save file" })
+keymap.set("n", "<leader>q", ":q<CR>", { desc = "Close file" })
+keymap.set("n", "<leader>wq", ":wqa!<CR>", { desc = "Save and close all files" })
+keymap.set("n", "<leader>qa", ":qa<CR>", { desc = "Close all files" })
 keymap.set("n", "<leader>wx", ":w<bar>tabclose<CR>", { desc = "Save file and close tab" })
 keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" })
 
@@ -30,3 +31,9 @@ keymap.set("n", "<leader>zm", ":ZenMode<CR>", { desc = "Toggle Zen Mode" })
 
 -- Silicon command
 keymap.set("v", "<leader>ss", ":Silicon<CR>", { desc = "Screenshot Code" })
+
+-- Resize window
+keymap.set("n", "<C-Up>", ":resize -3<CR>")
+keymap.set("n", "<C-Down>", ":resize +3<CR>")
+keymap.set("n", "<C-Left>", ":vertical resize -3<CR>")
+keymap.set("n", "<C-Right>", ":vertical resize +3<CR>")

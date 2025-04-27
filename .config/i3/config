@@ -9,7 +9,7 @@ exec --no-startup-id picom --config ~/.config/picom/picom.conf
 exec --no-startup-id xrdb -merge ~/.Xresources
 #exec_always --no-startup-id setxkbmap -option :nocaps
 exec_always --no-startup-id setxkbmap -option 
-exec --no-startup-id variety
+# exec --no-startup-id variety
 exec_always --no-startup-id autotiling
 exec_always --no-startup-id xborders
 
