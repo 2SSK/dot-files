@@ -1,17 +1,16 @@
 [user]
     name = 2SSK
     email = 100ravsinghkarmwar@gmail.com
-    signingkey = 0230C41EBA8D32AC
 
 [commit]
     gpgSign = false
     template = ~/.config/git/template
 
 [core]
-    autocrlf = input  # keep newlines as in input
-    compression = 9  # trade cpu for network
+    autocrlf = input  
+    compression = 9  
     fsync = none
-    whitespace = error  # threat incorrect whitespace as errors
+    whitespace = error
 
 [advice]  # disable advices
     addEmptyPathspec = false
@@ -23,32 +22,32 @@
     date = relative
 
 [diff]
-    context = 3  # less context in diffs
-    renames = copies  # detect copies as renames in diffs
-    interHunkContext = 10  # merge near hunks in diffs
+    context = 3  
+    renames = copies 
+    interHunkContext = 10
 
 [init]
     defaultBranch = main
 
 [log]
-    abbrevCommit = true  # short commits
+    abbrevCommit = true
     graphColors = blue,yellow,cyan,magenta,green,red
 
 [status]
     branch = true
     short = true
     showStash = true
-    showUntrackedFiles = all  # show individual untracked files
+    showUntrackedFiles = all
 
 [pager]
-    branch = false  # no need to use pager for git branch
-    diff = diff-so-fancy | $PAGER  # diff-so-fancy as diff pager
+    branch = false
+    diff = diff-so-fancy | $PAGER
 
 [push]
-    autoSetupRemote = true  # easier to push new branches
-    default = current  # push only current branch by default
-    followTags = true  # push also tags
-    gpgSign = false  # my remotes doesn't support sign pushes
+    autoSetupRemote = true
+    default = current 
+    followTags = true 
+    gpgSign = false 
 
 [pull]
     rebase = true
@@ -91,7 +90,7 @@
     markEmptyLines = false
 
 # URL shortcuts
-[url "https://github.com:"]
+[url "https://github.com/"]
     insteadOf = "gh:"
 
 [url "ssh://git@git.qrator.net:2202/radar/"]
