@@ -267,8 +267,8 @@ default_dim_inactive 0.1
 for_window [app_id=".*"] opacity 0.9
 
 blur enable
-blur_radius 5
-blur_passes 3
+blur_radius 3
+blur_passes 2
 
 corner_radius 15
 

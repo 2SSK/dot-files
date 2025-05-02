@@ -1,28 +1,28 @@
 {
   "layer": "top",
-  "position": "top",
+  "position": "bottom",
   //"height": 20,
   //"spacing": 5,
-  "margin-top": 5,
-  "margin-left": 13,
-  "margin-right": 13,
+  // "margin-top": 5,
+  // "margin-left": 13,
+  // "margin-right": 13,
 
   "modules-left": [
     "sway/workspaces",
     "hyprland/workspaces",
     "sway/scratchpad",
     "sway/window",
-    "hyprland/window",
-    "network"
+    "hyprland/window"
   ],
   "modules-center": ["clock"],
   "modules-right": [
-    "cpu",
-    "memory",
     "battery",
     "pulseaudio",
     "backlight",
-    "temperature"
+    "temperature",
+    "cpu",
+    "memory",
+    "network"
     //"network#speed"
   ],
   "sway/workspaces": {
