@@ -91,7 +91,7 @@
     markEmptyLines = false
 
 # URL shortcuts
-[url "git@github.com:"]
+[url "https://github.com:"]
     insteadOf = "gh:"
 
 [url "ssh://git@git.qrator.net:2202/radar/"]
