@@ -87,22 +87,34 @@ alias dl="docker ps -l -q"
 alias dx="docker exec -it"
 
 # Git Aliases
-alias gs="git status"
-alias gb="git branch"
-alias gsw="git switch"
-alias ga="git add ."
+alias gi="git init"
+alias gcl="git clone"
+
+alias gs="git status --short"
+alias gd="git diff"
+alias gds="gd --staged"
+
+alias ga="git add"
+alias gap="git add --patch"
 alias gr="git reset"
 alias gc="git commit"
-alias gco="git commit -m"
+
 alias gp="git push"
-alias gl="git log --oneline --graph"
+alias gu="git pull"
+
+alias gl='git log --graph --all --pretty=format:"%C(magenta)%h %C(white) %an  %ar%C(blue)  %D%n%s%n"'
+alias gb="git branch"
+
 alias gm="git merge"
 alias grb="git rebase"
+
+
+alias gsw="git switch"
 alias update-all-branches="git fetch origin && for branch in \$(git branch | sed 's/^\*//'); do git checkout \$branch && git merge main; done && git checkout main"
 
 # System Management Aliases
 alias off='shutdown -h now'
-#
+
 # Alias for clipboard
 if [ "$WAYLAND_DISPLAY" ]; then
     alias c='wl-copy'
@@ -111,10 +123,6 @@ else
     alias c='xsel --input --clipboard'
     alias v='xsel --output --clipboard'
 fi
-
-# Alias for 
-alias cmp='g++ -std=c++20 -o'
-alias grc='g++ -std=c++20 -lraylib -lGL -lm -lpthread -ldl -lrt -lX11'
 
 # Yazi Alias
 alias y='yazi'
@@ -131,7 +139,7 @@ alias sl='sl --help -F -a'
 alias p='pipes.sh'
 alias cb='cbonsai -liv'
 alias aq='asciiquarium'
-alias cm='cmatrix -a -b -s'
+alias cm='cmatrix -abs'
 
 # TMUX Aliases
 alias t='tmux'
