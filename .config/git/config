@@ -96,3 +96,5 @@
 
 [url "ssh://git@git.qrator.net:2202/radar/"]
     insteadOf = "radar:"
+[credential]
+	helper = store
