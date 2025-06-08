@@ -2,17 +2,17 @@
   "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
   "logo": {
     "type": "chafa",
-    "width": 60,
+    "width": 40,
     "printRemaining": false,
-    "source": "~/.config/wall.png",
+    "source": "./logo/batman.txt",
     "recache": true,
     "chafa": {
       "symbols": "-block-border-space+vhalf"
     },
     "padding": {
-      "top": 2,
-      "left": 2,
-      "right": 4,
+      "top": 0,
+      "left": 1,
+      "right": 1,
       "bottom": 0
     }
   },
@@ -40,7 +40,7 @@
     },
     {
       "type": "packages",
-      "key": " ",
+      "key": "󰏗 ",
       "keyColor": "green"
     },
     {
@@ -55,7 +55,7 @@
     },
     {
       "type": "terminal",
-      "key": " ",
+      "key": " ",
       "keyColor": "yellow"
     },
     {
@@ -67,8 +67,8 @@
     {
       "type": "gpu",
       "format": "{2}",
-      "key": " ",
-      "keyColor": "blue"
+      "key": " ",
+      "keyColor": "magenta"
     },
     {
       "type": "gpu",
@@ -99,6 +99,12 @@
       "keyColor": "red"
     },
     {
+      "type": "localip",
+      "key": "󰩟 ",
+        "format": "{1} ({4})",
+        // "outputColor": "36;1"
+    },
+    {
       "type": "custom",
       "format": "└──────────────────────────────────────────┘"
     },
@@ -110,5 +116,5 @@
       "height": 4
     },
     "break"
-  ]
+      ]
 }
