@@ -12,7 +12,7 @@
     "padding": {
       "top": 0,
       "left": 1,
-      "right": 1,
+      "right": 2,
       "bottom": 0
     }
   },
@@ -64,18 +64,18 @@
       "key": " ",
       "keyColor": "blue"
     },
-    {
-      "type": "gpu",
-      "format": "{2}",
-      "key": " ",
-      "keyColor": "magenta"
-    },
-    {
-      "type": "gpu",
-      "format": "{3}",
-      "key": " ",
-      "keyColor": "magenta"
-    },
+    // {
+    //   "type": "gpu",
+    //   "format": "{2}",
+    //   "key": " ",
+    //   "keyColor": "magenta"
+    // },
+    // {
+    //   "type": "gpu",
+    //   "format": "{3}",
+    //   "key": " ",
+    //   "keyColor": "magenta"
+    // },
     {
       "type": "memory",
       "key": "󰍛 ",

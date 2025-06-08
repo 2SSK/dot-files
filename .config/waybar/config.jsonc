@@ -1,7 +1,7 @@
 {
   "layer": "top",
-  "position": "bottom",
-  //"height": 20,
+  "position": "top",
+  // "height": 10,
   //"spacing": 5,
   // "margin-top": 5,
   // "margin-left": 13,
@@ -11,8 +11,11 @@
     "sway/workspaces",
     "hyprland/workspaces",
     "sway/scratchpad",
-    "sway/window",
-    "hyprland/window"
+    "disk",
+    "cpu",
+    "memory"
+    // "sway/window",
+    // "hyprland/window"
   ],
   "modules-center": ["clock"],
   "modules-right": [
@@ -20,8 +23,6 @@
     "pulseaudio",
     "backlight",
     "temperature",
-    "cpu",
-    "memory",
     "network"
     //"network#speed"
   ],
@@ -91,6 +92,7 @@
     "tooltip-format": "{app}: {title}"
   },
   "network": {
+    // "format-wifi": "{icon} {essid}",
     "format-wifi": "{icon} {essid}  {bandwidthDownBytes}",
     "format-ethernet": "󰈀",
     "format-icons": ["󰤯 ", "󰤟 ", "󰤢 ", "󰤢 ", "󰤨 "],
@@ -117,7 +119,8 @@
     "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"]
   },
   "disk": {
-    "format": "   {free}",
+    "format": "   {}%",
+    "tooltip-format": "{used}/{total}",
     "interval": 20
   },
   "cpu": {
@@ -143,7 +146,8 @@
   },
   "memory": {
     "interval": 1,
-    "format": "<span font='Font Awesome 5 Free'>\uf538</span>  {percentage}%",
+    "format": "<span font='Font Awesome 5 Free'>\uf538</span>  {used}/{total} GiB",
+    // "format": "<span font='Font Awesome 5 Free'>\uf538</span>  {percentage}%",
     "on-click": "ghostty btop",
     "tooltip-format": "{used}/{total} GiB"
   },
