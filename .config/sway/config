@@ -28,8 +28,8 @@ set $menu --no-startup-id rofi -show drun
 # set $menu --no-startup-id wofi --show drun
 
 # Lock Screen
-# bindsym $mod+c exec --no-startup-id ~/.config/sway/swaylock.sh
-bindsym $mod+c exec hyprlock 
+bindsym $mod+c exec --no-startup-id ~/.config/sway/swaylock.sh
+# bindsym $mod+c exec hyprlock 
 
 # Emojis
 bindsym $mod+comma exec smile 
@@ -43,8 +43,8 @@ bindsym $mod+slash workspace next
 bindsym $mod+period workspace prev
 
 # Gaps 
-gaps inner 13
-gaps outer 2
+gaps inner 8
+gaps outer 8
 
 # Borders
 default_border pixel 3
@@ -286,6 +286,6 @@ blur enable
 blur_radius 3
 blur_passes 2
 
-corner_radius 15
+corner_radius 8
 
 include /etc/sway/config.d/*

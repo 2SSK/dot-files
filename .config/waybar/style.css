@@ -13,6 +13,7 @@ window#waybar {
 #clock,
 #battery,
 #cpu,
+#disk,
 #workspaces button,
 #workspaces button:hover,
 #workspaces button.visible,
@@ -79,6 +80,7 @@ window#waybar {
 #battery.warning {
   color: #f9c74f;
 }
+
 #battery.critical {
   color: #ea6962;
 }
@@ -95,10 +97,12 @@ window#waybar {
   color: #859900;
 }
 
+#disk,
 #temperature {
   color: #e0af68;
 }
 
+#scratchpad,
 #network {
   color: #f776ae;
 }

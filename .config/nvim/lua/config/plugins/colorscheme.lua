@@ -1,29 +1,29 @@
 return {
 	-- Gruvbox theme configuration
-	{
-		"f4z3r/gruvbox-material.nvim",
-		name = "gruvbox-material",
-		lazy = false,
-		priority = 1000,
-		opts = {
-			transparent = true, -- This is a plugin-specific option, but it may not work for all cases
-		},
-		config = function()
-			vim.cmd([[colorscheme gruvbox-material]])
-			-- Transparency settings
-			vim.api.nvim_set_hl(0, "Normal", { bg = "NONE", ctermbg = "NONE" })
-			vim.api.nvim_set_hl(0, "NormalFloat", { bg = "NONE", ctermbg = "NONE" })
-			vim.api.nvim_set_hl(0, "SignColumn", { bg = "NONE", ctermbg = "NONE" })
-			vim.api.nvim_set_hl(0, "LineNr", { bg = "NONE", ctermbg = "NONE" })
-			vim.api.nvim_set_hl(0, "EndOfBuffer", { bg = "NONE", ctermbg = "NONE" })
-		end,
-	},
+	-- {
+	-- 	"f4z3r/gruvbox-material.nvim",
+	-- 	name = "gruvbox-material",
+	-- 	lazy = false,
+	-- 	priority = 1000,
+	-- 	opts = {
+	-- 		transparent = true, -- This is a plugin-specific option, but it may not work for all cases
+	-- 	},
+	-- 	config = function()
+	-- 		vim.cmd([[colorscheme gruvbox-material]])
+	-- 		-- Transparency settings
+	-- 		vim.api.nvim_set_hl(0, "Normal", { bg = "NONE", ctermbg = "NONE" })
+	-- 		vim.api.nvim_set_hl(0, "NormalFloat", { bg = "NONE", ctermbg = "NONE" })
+	-- 		vim.api.nvim_set_hl(0, "SignColumn", { bg = "NONE", ctermbg = "NONE" })
+	-- 		vim.api.nvim_set_hl(0, "LineNr", { bg = "NONE", ctermbg = "NONE" })
+	-- 		vim.api.nvim_set_hl(0, "EndOfBuffer", { bg = "NONE", ctermbg = "NONE" })
+	-- 	end,
+	-- },
 	-- Tokyonight theme configuration
 	{
 		"folke/tokyonight.nvim",
 		priority = 1000,
 		config = function()
-			local transparent = true -- set to true if you would like to enable transparency
+			local transparent = false -- set to true if you would like to enable transparency
 
 			local bg = "#011628"
 			local bg_dark = "#011423"
