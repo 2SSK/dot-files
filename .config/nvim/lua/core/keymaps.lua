@@ -37,3 +37,11 @@ keymap.set("n", "<C-Up>", ":resize -3<CR>")
 keymap.set("n", "<C-Down>", ":resize +3<CR>")
 keymap.set("n", "<C-Left>", ":vertical resize -3<CR>")
 keymap.set("n", "<C-Right>", ":vertical resize +3<CR>")
+
+-- Disable default Tab mapping to avoid conflicts
+vim.g.copilot_no_tab_map = true
+
+-- Custom keybindings for Copilot
+vim.api.nvim_set_keymap("i", "<C-a>", "copilot#Accept('<CR>')", { expr = true, silent = true, script = true })
+vim.api.nvim_set_keymap("i", "<C-r>", "<Plug>(copilot-dismiss)", { silent = true })
+vim.api.nvim_set_keymap("n", "<leader>ct", ":Copilot toggle<CR>", { silent = true, noremap = true })

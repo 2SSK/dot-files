@@ -1,16 +1,5 @@
-# ==============================
-# Instant Prompt Configuration
-# ==============================
-# Enable Powerlevel10k instant prompt for faster shell startup.
-# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-#   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-# fi
-
-# ==============================
-# Oh My Zsh & Theme Configuration
-# ==============================
-# Path to Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
+# ZSH_THEME="robbyrussell"
 #
 # Reevaluate the prompt string each time it's displaying a prompt
 setopt prompt_subst
@@ -19,14 +8,9 @@ autoload bashcompinit && bashcompinit
 autoload -Uz compinit
 compinit
 
-# Set the theme to Starship (overrides Powerlevel10k).
 eval "$(starship init zsh)"
 export STARSHIP_CONFIG=~/.config/starship/starship.toml
 
-# ==============================
-# Locale Configuration
-# ==============================
-# Set default language and locale.
 export LANG=en_IN.UTF-8
 export LC_ALL=en_IN.UTF-8
 
@@ -61,6 +45,7 @@ bindkey '^j' down-line-or-search
 
 # Basic Aliases
 alias mkdir='mkdir -p'
+alias rmf='rm -rf'
 alias cl='clear'
 alias e='exit'
 
@@ -150,11 +135,11 @@ alias tn='tmux new -s'
 alias td='tmux detach'
 
 # Yay Package Manager Aliases
-alias update='yay -Sy'
-alias upgrade='yay -Syu'
-alias install='yay -S'
-alias remove='yay -Rns'
-alias search='yay -Ss'
+alias update='sudo dnf check-update'
+alias upgrade='sudo dnf upgrade'
+alias install='sudo dnf install'
+alias remove='sudo dnf remove'
+alias search='dnf search'
 
 # Directory Navigation Aliases
 alias ..='cd ..'
@@ -194,72 +179,14 @@ setopt hist_verify
 # FZF Theme Setup
 export FZF_DEFAULT_OPTS="--color=fg:#CBE0F0,bg:#011628,hl:#B388FF,fg+:#CBE0F0,bg+:#143652,hl+:#B388FF,info:#06BCE4,prompt:#2CF9ED,pointer:#2CF9ED,marker:#2CF9ED,spinner:#2CF9ED,header:#2CF9ED"
 
-# Bat Theme Setup
-export BAT_THEME="tokyonight_night"
-
-# NVM Initialization
-export NVM_DIR="$HOME/.nvm"
-[ -s "/usr/share/nvm/init-nvm.sh" ] && source "/usr/share/nvm/init-nvm.sh"
-
-# Spicetify Path
-export PATH=$PATH:/home/ssk/.spicetify
-
-# Go Path
-export PATH=$PATH:/home/ssk/go/bin/
-alias gn='go run'
-# eval "$(task --completion zsh)"
-alias task="go-task"
-
-
-# Android SDK Path
-export ANDROID_HOME=/home/ssk/Android/Sdk
-export PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
-
-# Doom Emacs
-alias doom='~/.emacs.d/bin/doom'
-alias emacs="emacsclient -c -a 'emacs'"
-
 # ==============================
 # Zoxide Initialization
 # ==============================
 eval "$(zoxide init zsh)"
 alias cd='z'
 
-# ==============================
-# Fzf alias and key bindings
-# ==============================
-fd() { # Find a directory using fzf
-  local selection
-  selection=$(find . -type d -readable 2>/dev/null | fzf --preview 'exa -la --color=always {}')
+# Go Path
+export PATH=$PATH:$HOME/go/bin
 
-  if [[ -d "$selection" ]]; then
-    cd "$selection" || return
-  fi
-}
-
-# ==============================
-# Assembly Language Aliases
-# ==============================
-nld() {
-  if [ -z "$2" ]; then
-    asm_file="$1"
-  else
-    asm_file="$2"
-  fi
-
-  nasm -f elf64 -o "$1.o" "$asm_file.asm"
-  ld -o "$1" "$1.o"
-  ./"$1"
-}
-
-# ==============================
-# Python Aliases
-# ==============================
-alias mkvenv='python -m venv venv && source venv/bin/activate'
-
-# Powerlevel10k Prompt
-# ==============================
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-# [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-source /home/ssk/.config/broot/launcher/bash/br
+# Rust Path
+export PATH="$HOME/.cargo/bin:$PATH"
