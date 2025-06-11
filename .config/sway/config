@@ -43,11 +43,11 @@ bindsym $mod+slash workspace next
 bindsym $mod+period workspace prev
 
 # Gaps 
-gaps inner 8
-gaps outer 8
+gaps inner 2
+gaps outer 10
 
 # Borders
-default_border pixel 3
+default_border pixel 2
 default_floating_border pixel 2
 
 # Startup applications
@@ -239,26 +239,34 @@ bindsym ctrl+Shift+F12 exec grimshot save area ~/Pictures/Screenshots/screenshot
 
 #
 # Status Bar:
-#
-# Read `man 5 sway-bar` for more information about this section.
 bar {
-    swaybar_command waybar
-    # status_command i3status
-    # position bottom
-    # font pango:Jetbrains Mono 10
+    # position top
+    # status_command while ~/.config/sway/status.sh; do sleep 1; done 
     # colors {
-    #     background #000000
-    #     statusline #ffffff
-    #     separator #666666
-    #     focused_workspace  #4c7899 #285577 #ffffff
-    #     active_workspace   #333333 #5c5c5c #ffffff
-    #     inactive_workspace #333333 #222222 #888888
-    #     urgent_workspace   #2f343a #900000 #ffffff
-    #     binding_mode       #2f343a #900000 #ffffff
+    # 	statusline #ffffff
+    #   background #000000
+    #   inactive_workspace #000000 #000000 #ffffff
+    #   focused_workspace #ffffff #ffffff #000000
     # }
-    # separator_symbol " | "
-    # strip_workspace_numbers yes
-    # tray_output primary
+# ----------------------
+swaybar_command waybar
+# ----------------------
+# status_command i3status
+# position bottom
+# font pango:Jetbrains Mono 10
+# colors {
+#     background #000000
+#     statusline #ffffff
+#     separator #666666
+#     focused_workspace  #4c7899 #285577 #ffffff
+#     active_workspace   #333333 #5c5c5c #ffffff
+#     inactive_workspace #333333 #222222 #888888
+#     urgent_workspace   #2f343a #900000 #ffffff
+#     binding_mode       #2f343a #900000 #ffffff
+# }
+# separator_symbol " | "
+# strip_workspace_numbers yes
+# tray_output primary
 }
 
 ######################################
@@ -274,18 +282,18 @@ client.focused_inactive      $color2           $color1         $color2          
 client.urgent                $color2           $color2         $color1           $color2         $color1
 
 # Blur, rounded corner and shadow 
-shadows enable
-shadow_blur_radius 15
-shadow_offset 8 8
-shadow_color #000000
-
-default_dim_inactive 0.1
-for_window [app_id=".*"] opacity 0.9
-
-blur enable
-blur_radius 3
-blur_passes 2
-
-corner_radius 8
+# shadows enable
+# shadow_blur_radius 15
+# shadow_offset 8 8
+# shadow_color #000000
+#
+# default_dim_inactive 0.1
+# # for_window [app_id=".*"] opacity 1
+#
+# blur enable
+# blur_radius 3
+# blur_passes 2
+#
+# corner_radius 6
 
 include /etc/sway/config.d/*
