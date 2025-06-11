@@ -135,11 +135,11 @@ alias tn='tmux new -s'
 alias td='tmux detach'
 
 # Yay Package Manager Aliases
-alias update='sudo dnf check-update'
-alias upgrade='sudo dnf upgrade'
-alias install='sudo dnf install'
-alias remove='sudo dnf remove'
-alias search='dnf search'
+alias update='yay -Sy'
+alias upgrade='yay -Syu'
+alias install='yay -S'
+alias remove='yay -Rns'
+alias search='yay -Ss'
 
 # Directory Navigation Aliases
 alias ..='cd ..'

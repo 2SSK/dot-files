@@ -53,10 +53,35 @@ Plug 'tpope/vim-fugitive'     " Git commands in Vim
 Plug 'airblade/vim-gitgutter' " Show git diff in gutter
 Plug 'preservim/nerdcommenter' " Commenting utility
 Plug 'itchyny/lightline.vim'  " Lightweight statusline
+Plug 'neoclide/coc.nvim', {'branch':'release'}
+Plug 'jiangmiao/auto-pairs'
+Plug 'kana/vim-textobj-user'
+Plug 'tpope/vim-surround'
+Plug 'kana/vim-textobj-function'
+Plug 'glts/vim-textobj-comment'
 
 call plug#end()
 
+" Set retro-style cursor with block in normal mode and bar in insert mode
+set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
 
-  " Set retro-style cursor with block in normal mode and bar in insert mode
-  set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
+" Use tab for trigger completion
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ CheckBackspace() ? "\<TAB>" :
+      \ coc#refresh()
+
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use K to show documentation
+nnoremap <silent> K :call CocActionAsync('doHover')<CR>
+
+" Go to definition
+nnoremap <silent> gd <Plug>(coc-definition)
+
+" Formatting
+nnoremap <silent> <leader>f  :call CocAction('format')<CR>gruvbox
 
