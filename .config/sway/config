@@ -47,8 +47,8 @@ gaps inner 2
 gaps outer 10
 
 # Borders
-default_border pixel 2
-default_floating_border pixel 2
+default_border pixel 3
+default_floating_border pixel 1
 
 # Startup applications
 xwayland force

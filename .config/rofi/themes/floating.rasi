@@ -72,8 +72,10 @@ textbox-prompt-colon {
     str:                         "Search";
     padding:                     12px 20px 12px 15px;
     border-radius:               4px;
-    background-color:            #a6e3a1;
-    text-color:                  @background;
+    // background-color:            #a6e3a1;
+    background-color:            @background-alt;
+    // text-color:                  @background;
+    text-color:                  @foreground;
 }
 entry {
     enabled:                     true;
