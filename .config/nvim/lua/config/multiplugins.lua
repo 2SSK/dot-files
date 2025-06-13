@@ -115,4 +115,16 @@ return {
 			})
 		end,
 	},
+
+	-- Are you locked in?
+	{
+		"voltycodes/areyoulockedin.nvim",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		event = "VeryLazy",
+		config = function()
+			require("areyoulockedin").setup({
+				session_key = "b22ee0f9-8084-46e1-a38b-f9cfba774253",
+			})
+		end,
+	},
 }

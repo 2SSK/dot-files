@@ -5,8 +5,8 @@
 }
 
 window#waybar {
-  background-color: #1a1b26;
-  /* background-color: rgba(26, 27, 38, 0.8); */
+  /* background-color: #1a1b26; */
+  background-color: rgba(26, 27, 38, 0.4);
   color: #fdf6e3;
 }
 
@@ -30,7 +30,7 @@ window#waybar {
 #backlight {
   background: #24283b;
   padding: 5px 15px;
-  border-radius: 2px;
+  border-radius: 16px;
   margin: 3px;
   margin-top: 0px;
   margin-bottom: 0px;
