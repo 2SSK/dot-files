@@ -43,9 +43,12 @@ mem_pct=$((mem_used * 100 / mem_total))
 
 # Get battery info: percentage and status
 battery_info=$(acpi -b 2>/dev/null)
+
 if [ -n "$battery_info" ]; then
-    batt_status=$(echo "$battery_info" | awk -F': ' '/Battery 0:/ {print $2}' | awk -F', ' '{print $1}')
-    batt_pct=$(echo "$battery_info" | awk -F', ' '/Battery 0:/ {print $2}' | sed 's/%//')
+    # Extract battery with the highest percentage
+    batt_pct=$(echo "$battery_info" | awk -F', ' '{gsub(/%/, "", $2); if ($2 > max) {max=$2; status=$1; percent=$2}} END {print percent}')
+    batt_status=$(echo "$battery_info" | awk -F', ' -v target="$batt_pct" '{gsub(/%/, "", $2); if ($2 == target) {split($1, a, ": "); print a[2]}}')
+
     # Fallbacks
     batt_pct=${batt_pct:-0}
     batt_status=${batt_status:-"Unknown"}
