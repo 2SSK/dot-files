@@ -1,4 +1,5 @@
-@import "themes/gruvbox.css"; /* Change this import to switch themes */
+@import "themes/monochrome.css";
+/* Change this import to switch themes */
 
 * {
   font-family: "JetbrainsMono Nerd Font";
@@ -65,47 +66,68 @@ window#waybar {
 #scratchpad {
   color: @scratchpad;
 }
+
 #disk {
   color: @disk;
 }
+
 #cpu {
   color: @cpu;
 }
+
 #memory {
   color: @memory;
 }
+
 #temperature {
   color: @temperature;
 }
+
 #network {
   color: @network;
 }
+
 #pulseaudio {
   color: @pulseaudio;
 }
+
 #backlight {
   color: @backlight;
 }
+
 #battery {
   color: @battery;
 }
+
 #clock {
   color: @clock;
 }
 
 /* Conditional Colors */
+#network.connected {
+  color: @good;
+}
+
 #network.disconnected {
   color: @critical;
 }
+
 #temperature.critical {
   color: @critical;
 }
+
+#pulseaudio.muted {
+  color: @critical;
+}
+
 #battery.charging {
   color: @good;
 }
+
 #battery.warning {
   color: @warning;
 }
+
 #battery.critical {
   color: @critical;
 }

@@ -8,7 +8,7 @@ bindsym $mod+Shift+e exec swaynag -t warning -m 'Do you really want to exit sway
 floating_modifier $mod normal
 
 # Lock Screen
-bindsym $mod+c exec --no-startup-id ~/.config/sway/swaylock.sh
+bindsym $mod+c exec --no-startup-id ~/.config/sway/scripts/swaylock.sh
 
 # Emojis
 bindsym $mod+comma exec smile
