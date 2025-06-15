@@ -1,5 +1,5 @@
 include ~/.config/sway/variables
-include ~/.config/sway/colorschemes/gruvbox-material
+include ~/.config/sway/colorschemes/default
 include ~/.config/sway/outputs
 include ~/.config/sway/inputs
 include ~/.config/sway/startup
@@ -12,5 +12,12 @@ include ~/.config/sway/keybindings/scratchpad
 include ~/.config/sway/keybindings/resizing
 
 include ~/.config/sway/bar/waybar
+# include ~/.config/sway/bar/swaybar
 
 include /etc/sway/config.d/*
+
+# Correct swayidle setup: kills old instance, starts new one
+exec_always pkill swayidle; swayidle -w timeout 300 /home/ssk/.local/bin/wallpaper-rotate
+
+# Keybinding to manually rotate wallpaper
+bindsym $mod+Shift+w exec --no-startup-id ~/.local/bin/wallpaper-rotate

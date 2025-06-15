@@ -1,4 +1,4 @@
-input type:touchpad {
+input "1267:12932:ASUE1306:00_04F3:3284_Touchpad" {
     tap enabled
     natural_scroll enabled
     dwt enabled

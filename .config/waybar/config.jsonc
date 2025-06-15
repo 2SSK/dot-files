@@ -122,6 +122,7 @@
     "format-critical": "Batt: {capacity}% (Critical!!)",
     "format-charging-warning": "Batt: {capacity}% (Charging)",
     "format-charging-critical": "Batt: {capacity}% (Charging)",
+    "format-discharging-critical": "Batt: {capacity}% (critical!!)",
     "tooltip-format": "{time} remaining",
     "tooltip-format-charging": "{time} until full",
     "tooltip-format-discharging": "{time} remaining",
