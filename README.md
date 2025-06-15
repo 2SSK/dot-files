@@ -19,7 +19,7 @@
 
 ![rice](./screenshots/rice_ss_1.png)
 
---- 
+---
 
 ## NVIM Config && Brave
 
@@ -27,7 +27,7 @@
 
 ---
 
-## Emacs 
+## Emacs
 
 ![emacs](./screenshots/emacs_ss.png)
 
@@ -36,6 +36,3 @@
 ## Firefox
 
 ![firefox](./screenshots/firefox_ss.png)
-
-
-

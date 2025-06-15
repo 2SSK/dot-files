@@ -1,0 +1,4 @@
+# Startup Applications
+xwayland force
+exec --no-startup-id waypaper --restore
+exec --no-startup-id autotiling

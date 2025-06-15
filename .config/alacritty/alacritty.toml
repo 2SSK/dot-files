@@ -1,0 +1,48 @@
+#   █████╗ ██╗      █████╗  ██████╗██████╗ ██╗████████╗████████╗██╗   ██╗
+#  ██╔══██╗██║     ██╔══██╗██╔════╝██╔══██╗██║╚══██╔══╝╚══██╔══╝╚██╗ ██╔╝
+#  ███████║██║     ███████║██║     ██████╔╝██║   ██║      ██║    ╚████╔╝ 
+#  ██╔══██║██║     ██╔══██║██║     ██╔══██╗██║   ██║      ██║     ╚██╔╝  
+#  ██║  ██║███████╗██║  ██║╚██████╗██║  ██║██║   ██║      ██║      ██║   
+#  ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝   ╚═╝      ╚═╝      ╚═╝   
+
+
+[cursor]
+blink_interval = 550
+unfocused_hollow = false
+thickness = 0.15
+
+[cursor.style]
+blinking = "On"
+shape = "Block"
+
+[selection]
+save_to_clipboard = true
+
+[window]
+decorations = "none"
+dynamic_title = true
+opacity = 0.7
+dynamic_padding = true
+
+# [window.padding]
+# x = 25
+# y = 25
+
+[scrolling]
+history = 10000
+multiplier = 3
+
+[bell]
+animation = "Linear"
+duration = 0
+command = { program = "paplay", args = ["/usr/share/sounds/freedesktop/stereo/dialog-error.oga"] }
+
+[general]
+
+live_config_reload = true
+
+import = ["~/.config/alacritty/rice-colors.toml", "~/.config/alacritty/fonts.toml"]
+
+# [shell]
+# program = "/bin/bash"
+# args = ["-l", "-c", "tmux"]

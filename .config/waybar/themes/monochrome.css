@@ -1,0 +1,19 @@
+@define-color background #000000;
+@define-color background-alt #1a1a1a;
+@define-color foreground #ffffff;
+
+@define-color warning #bbbbbb;
+@define-color critical #ffffff;
+@define-color good #888888;
+
+/* Module Colors (All Shades of Grey) */
+@define-color scratchpad #999999;
+@define-color disk #aaaaaa;
+@define-color cpu #bbbbbb;
+@define-color memory #cccccc;
+@define-color temperature #dddddd;
+@define-color network #eeeeee;
+@define-color pulseaudio #bbbbbb;
+@define-color backlight #cccccc;
+@define-color battery #dddddd;
+@define-color clock #ffffff;

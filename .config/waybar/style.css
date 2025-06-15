@@ -1,0 +1,111 @@
+@import "themes/gruvbox.css"; /* Change this import to switch themes */
+
+* {
+  font-family: "JetbrainsMono Nerd Font";
+  font-size: 16px;
+  font-weight: bold;
+}
+
+window#waybar {
+  background-color: @background;
+  color: @foreground;
+}
+
+#workspaces,
+#scratchpad,
+#disk,
+#cpu,
+#memory,
+#temperature,
+#network,
+#pulseaudio,
+#backlight,
+#battery,
+#clock {
+  padding: 2px 4px;
+  margin: 3px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+/* Workspaces Styling */
+#workspaces {
+  padding: 0;
+  margin: 0;
+  margin-right: 5px;
+}
+
+#workspaces button,
+#workspaces button:hover,
+#workspaces button.visible,
+#workspaces button.visible:hover,
+#workspaces button.active,
+#workspaces button.active:hover,
+#workspaces button.urgent {
+  padding: 0 6px;
+  border-radius: 0;
+}
+
+#workspaces button.visible {
+  background: @disk;
+  color: @background;
+}
+
+#workspaces button:hover,
+#workspaces button.visible:hover {
+  background: @background-alt;
+  color: @foreground;
+}
+
+#workspaces button.urgent {
+  background: @critical;
+}
+
+/* Module Specific Colors */
+#scratchpad {
+  color: @scratchpad;
+}
+#disk {
+  color: @disk;
+}
+#cpu {
+  color: @cpu;
+}
+#memory {
+  color: @memory;
+}
+#temperature {
+  color: @temperature;
+}
+#network {
+  color: @network;
+}
+#pulseaudio {
+  color: @pulseaudio;
+}
+#backlight {
+  color: @backlight;
+}
+#battery {
+  color: @battery;
+}
+#clock {
+  color: @clock;
+}
+
+/* Conditional Colors */
+#network.disconnected {
+  color: @critical;
+}
+#temperature.critical {
+  color: @critical;
+}
+#battery.charging {
+  color: @good;
+}
+#battery.warning {
+  color: @warning;
+}
+#battery.critical {
+  color: @critical;
+}

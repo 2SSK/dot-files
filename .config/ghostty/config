@@ -1,0 +1,35 @@
+# Theme
+theme = coolnight
+background-opacity = 0.75
+
+# Font
+font-family = "JetBrains Mono Nerd Font"
+font-style = bold
+bold-is-bright = true
+font-size = 14
+
+# Appearance
+gtk-titlebar = true
+gtk-single-instance = true
+gtk-tabs-location = top
+gtk-wide-tabs = false
+# window-padding-y = 50,0
+# window-padding-x = 50,0
+window-padding-balance = false
+window-decoration = true
+
+# Other
+mouse-hide-while-typing = true
+# copy-on-select = clipboard
+shell-integration-features = cursor,sudo,no-title
+confirm-close-surface = false
+
+# Configuration Management
+keybind = ctrl+comma=open_config
+keybind = ctrl+shift+comma=reload_config
+
+# background = #011423
+# foreground = #CBE0F0
+
+# background = #0a0a0a
+# foreground = #cdd6f4

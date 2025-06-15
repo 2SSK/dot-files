@@ -1,0 +1,16 @@
+include ~/.config/sway/variables
+include ~/.config/sway/colorschemes/gruvbox-material
+include ~/.config/sway/outputs
+include ~/.config/sway/inputs
+include ~/.config/sway/startup
+
+include ~/.config/sway/keybindings/basics
+include ~/.config/sway/keybindings/apps
+include ~/.config/sway/keybindings/movement
+include ~/.config/sway/keybindings/workspaces
+include ~/.config/sway/keybindings/scratchpad
+include ~/.config/sway/keybindings/resizing
+
+include ~/.config/sway/bar/waybar
+
+include /etc/sway/config.d/*
