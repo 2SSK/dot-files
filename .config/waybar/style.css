@@ -1,39 +1,38 @@
+@import "themes/gruvbox.css"; /* Change this import to switch themes */
+
 * {
-  font-family: "JetBrainsMono Nerd Font";
+  font-family: "JetbrainsMono Nerd Font";
   font-size: 16px;
-  font-weight: 800;
+  font-weight: bold;
 }
 
 window#waybar {
-  /* background-color: #1a1b26; */
-  background-color: rgba(26, 27, 38, 0.4);
-  color: #fdf6e3;
+  background-color: @background;
+  color: @foreground;
 }
 
-#clock,
-#battery,
-#cpu,
-#disk,
-#workspaces button,
-#workspaces button:hover,
-#workspaces button.visible,
-#workspaces button.visible:hover,
-#workspaces button.active,
-#workspaces button.active:hover,
-#workspaces button.urgent,
-#window,
-#memory,
-#network,
+#workspaces,
 #scratchpad,
+#disk,
+#cpu,
+#memory,
 #temperature,
+#network,
 #pulseaudio,
-#backlight {
-  background: #24283b;
-  padding: 5px 15px;
-  border-radius: 16px;
+#backlight,
+#battery,
+#clock {
+  padding: 2px 4px;
   margin: 3px;
   margin-top: 0px;
   margin-bottom: 0px;
+}
+
+/* Workspaces Styling */
+#workspaces {
+  padding: 0;
+  margin: 0;
+  margin-right: 5px;
 }
 
 #workspaces button,
@@ -44,75 +43,69 @@ window#waybar {
 #workspaces button.active:hover,
 #workspaces button.urgent {
   padding: 0 6px;
-}
-
-#workspaces button {
-  background: #24283b;
-  color: #fdf6e3;
-}
-
-#workspaces button:hover {
-  background: #24283b;
+  border-radius: 0;
 }
 
 #workspaces button.visible {
-  background: #7aa2f7;
-  color: #1e1e2e;
+  background: @disk;
+  color: @background;
 }
 
+#workspaces button:hover,
 #workspaces button.visible:hover {
-  background: #24283b;
-  color: #fdf6e3;
+  background: @background-alt;
+  color: @foreground;
 }
 
 #workspaces button.urgent {
-  background: #ea6962;
+  background: @critical;
 }
 
-#clock {
-  color: #91d7e3;
+/* Module Specific Colors */
+#scratchpad {
+  color: @scratchpad;
 }
-
-#battery {
-  color: #a6da95;
+#disk {
+  color: @disk;
 }
-
-#battery.warning {
-  color: #f9c74f;
-}
-
-#battery.critical {
-  color: #ea6962;
-}
-
-#backlight {
-  color: #eed49f;
-}
-
 #cpu {
-  color: #bb9af7;
+  color: @cpu;
 }
-
 #memory {
-  color: #859900;
+  color: @memory;
 }
-
-#disk,
 #temperature {
-  color: #e0af68;
+  color: @temperature;
 }
-
-#scratchpad,
 #network {
-  color: #f776ae;
+  color: @network;
 }
-
 #pulseaudio {
-  color: #7aa2f7;
+  color: @pulseaudio;
+}
+#backlight {
+  color: @backlight;
+}
+#battery {
+  color: @battery;
+}
+#clock {
+  color: @clock;
 }
 
-.modules-left,
-.modules-right,
-.modules-center {
-  padding: 5px 0px;
+/* Conditional Colors */
+#network.disconnected {
+  color: @critical;
+}
+#temperature.critical {
+  color: @critical;
+}
+#battery.charging {
+  color: @good;
+}
+#battery.warning {
+  color: @warning;
+}
+#battery.critical {
+  color: @critical;
 }

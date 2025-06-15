@@ -1,0 +1,2 @@
+bindsym $mod+Shift+Return move scratchpad
+bindsym $mod+minus scratchpad show

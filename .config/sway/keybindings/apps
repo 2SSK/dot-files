@@ -1,0 +1,3 @@
+bindsym $mod+b exec brave
+bindsym $alt+b exec firefox
+bindsym $alt+f exec $files

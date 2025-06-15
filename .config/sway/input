@@ -1,0 +1,7 @@
+input type:touchpad {
+    tap enabled
+    natural_scroll enabled
+    dwt enabled
+    middle_emulation enabled
+    scroll_method two_finger
+}
