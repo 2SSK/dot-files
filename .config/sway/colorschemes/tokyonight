@@ -1,0 +1,9 @@
+set $color1 #1a1b26
+set $color2 #7aa2f7
+set $color3 #a9b1d6
+set $color4 #f7768e
+
+client.focused               $color2 $color2 $color1 $color2 $color2
+client.unfocused             $color3 $color1 $color2 $color1 $color1
+client.focused_inactive      $color1 $color1 $color3 $color1 $color1
+client.urgent                $color4 $color4 $color1 $color4 $color4

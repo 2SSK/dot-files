@@ -1,0 +1,38 @@
+# Basics
+bindsym $mod+Return exec $term
+bindsym $alt+Return exec ghostty
+bindsym $mod+q kill
+bindsym $mod+d exec $menu
+bindsym $mod+Shift+r reload
+bindsym $mod+Shift+e exec swaynag -t warning -m 'Do you really want to exit sway?' -B 'Yes, exit sway' 'swaymsg exit'
+floating_modifier $mod normal
+
+# Lock Screen
+bindsym $mod+c exec --no-startup-id ~/.config/sway/swaylock.sh
+
+# Emojis
+bindsym $mod+comma exec smile
+
+# Power Menu
+bindsym $mod+p exec --no-startup-id wlogout
+
+# Switch to prev/next workspace
+bindsym $mod+slash workspace next
+bindsym $mod+period workspace prev
+
+# Audio controls
+bindsym F1 exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym F2 exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym F3 exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+
+# Brightness controls
+bindsym F4 exec brightnessctl set 5%-
+bindsym F5 exec brightnessctl set +5%
+
+# Microphone mute/unmute
+bindsym F9 exec amixer set Capture toggle
+
+# Screenshots
+bindsym F12 exec grimshot save screen ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
+bindsym Shift+F12 exec grimshot save active ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
+bindsym ctrl+Shift+F12 exec grimshot save area ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
