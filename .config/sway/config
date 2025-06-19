@@ -16,8 +16,8 @@ include ~/.config/sway/bar/waybar
 
 include /etc/sway/config.d/*
 
-# Correct swayidle setup: kills old instance, starts new one
-exec_always pkill swayidle; swayidle -w timeout 300 /home/ssk/.local/bin/wallpaper-rotate
+# exec_always swaybg -i /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1366x768.png -m fill
+exec_always --no-startup-id ~/.local/bin/wallpaper-rotate
 
 # Keybinding to manually rotate wallpaper
 bindsym $mod+Shift+w exec --no-startup-id ~/.local/bin/wallpaper-rotate

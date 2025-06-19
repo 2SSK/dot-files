@@ -5,75 +5,57 @@
 
   "modules-left": [
     "sway/workspaces",
-    "sway/scratchpad"
+    "sway/scratchpad",
+    "network#speed"
   ],
-  "modules-right": [
-    "disk",
-    "custom/separator",
-    "cpu",
-    "custom/separator",
-    "memory",
-    "custom/separator",
-    "temperature",
-    "custom/separator",
-    "network",
-    "custom/separator",
-    "pulseaudio",
-    "custom/separator",
-    "backlight",
-    "custom/separator",
-    "battery",
-    "custom/separator",
+  "modules-center": [
     "clock"
   ],
+  "modules-right": [
+    "cpu",
+    "memory",
+    "battery",
+    "pulseaudio",
+    "backlight",
+    "temperature",
+    "network"
+  ],
 
-"custom/separator": {
-  "format": "|"
-},
+  "custom/separator": {
+    "format": "|"
+  },
 
-"sway/workspaces": {
-  "all-outputs": true,
-  "warp-on-scroll": true,
-  "enable-bar-scroll": false,
-  "format": "{icon}",
-  "format-icons": {
-      // "1": "I",
-      // "2": "II",
-      // "3": "III",
-      // "4": "IV",
-      // "5": "V",
-      // "6": "VI",
-      // "7": "VII",
-      // "8": "VIII",
-      // "9": "IX",
-      // "10": "X"
-  }
-},
+  "sway/workspaces": {
+    "all-outputs": true,
+    "warp-on-scroll": true,
+    "enable-bar-scroll": false,
+    "format": "{icon}",
+    "format-icons": {}
+  },
 
   "sway/scratchpad": {
-    "format": "S: {count}",
+    "format": "  {count}",
     "show-empty": false,
-    "format-icons": [ "", " " ],
     "tooltip": true,
     "tooltip-format": "{app}: {title}"
   },
 
   "disk": {
     "interval": 60,
-    "format": "/: {}%",
+    "format": "  {}%",
     "tooltip-format": "{used}/{total}"
   },
 
   "cpu": {
     "interval": 1,
-    "format": "CPU: {}%",
+    "format": "  {}%",
     "tooltip-format": "{usage}%",
     "on-click": "swaymsg exec gnome-system-monitor"
   },
 
   "memory": {
     "interval": 1,
-    "format": "MEM: {}%",
+    "format": "  {}%",
     "tooltip-format": "{used}/{total} GiB",
     "on-click": "swaymsg exec gnome-system-monitor"
   },
@@ -83,29 +65,34 @@
     "tooltip": false,
     "thermal-zone": 2,
     "critical-threshold": 70,
-    "format": "Temp: {temperatureC}°C",
-    "format-critical": "Temp: {temperatureC}°C (Critical!!)"
+    "format": " {temperatureC}°C",
+    "format-critical": " {temperatureC}°C (Critical!!)"
   },
 
   "network": {
-    "format-wifi": "WiFi: {essid}",
-    "format-ethernet": "Eth: {essid}",
-    "format-disconnected": "Disconnected",
+    "format-wifi": "  {essid}",
+    "format-ethernet": "  {essid}",
+    "format-disconnected": "  Disconnected",
     "interval": 5,
     "tooltip-format-wifi": " {bandwidthDownBytes} |  {bandwidthUpBytes}",
     "on-click": "swaymsg exec gnome-control-center network"
   },
 
+  "network#speed": {
+    "format-wifi": " {bandwidthDownBytes} |  {bandwidthUpBytes}",
+    "tooltip": false
+  },
+
   "pulseaudio": {
-    "format": "Vol: {volume}%",
-    "format-muted": "Vol: M",
+    "format": "  {volume}%",
+    "format-muted": " M",
     "tooltip-format": "{desc}"
   },
 
   "backlight": {
     "device": "intel_backlight",
     "scroll-step": 5,
-    "format": "Brt: {percent}%",
+    "format": "  {percent}%",
     "tooltip": false
   },
 
@@ -116,13 +103,13 @@
       "warning": 30,
       "critical": 20
     },
-    "format": "Batt: {capacity}%",
-    "format-charging": "Batt: {capacity}% (Charging)",
-    "format-discharging": "Batt: {capacity}% (Discharging)",
-    "format-critical": "Batt: {capacity}% (Critical!!)",
-    "format-charging-warning": "Batt: {capacity}% (Charging)",
-    "format-charging-critical": "Batt: {capacity}% (Charging)",
-    "format-discharging-critical": "Batt: {capacity}% (critical!!)",
+    "format": "  {capacity}%",
+    "format-charging": " {capacity}%",
+    "format-discharging": "  {capacity}%",
+    "format-critical": "  {capacity}% (Critical!!)",
+    "format-charging-warning": " {capacity}%",
+    "format-charging-critical": " {capacity}%",
+    "format-discharging-critical": "  {capacity}% (critical!!)",
     "tooltip-format": "{time} remaining",
     "tooltip-format-charging": "{time} until full",
     "tooltip-format-discharging": "{time} remaining",
@@ -130,7 +117,7 @@
   },
 
   "clock": {
-    "format": "{:%A, %B %d, %Y %I:%M %p}",
+    "format": "  {:%A, %B %d, %Y %I:%M %p}",
     "tooltip": true,
     "tooltip-format": "<tt>{calendar}</tt>"
   }

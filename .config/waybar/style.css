@@ -27,6 +27,7 @@ window#waybar {
   margin: 3px;
   margin-top: 0px;
   margin-bottom: 0px;
+  border-radius: 8px;
 }
 
 /* Workspaces Styling */
@@ -44,7 +45,6 @@ window#waybar {
 #workspaces button.active:hover,
 #workspaces button.urgent {
   padding: 0 6px;
-  border-radius: 0;
 }
 
 #workspaces button.visible {
@@ -65,69 +65,86 @@ window#waybar {
 /* Module Specific Colors */
 #scratchpad {
   color: @scratchpad;
+  border: 2px solid @scratchpad;
 }
 
 #disk {
   color: @disk;
+  border: 2px solid @disk;
 }
 
 #cpu {
   color: @cpu;
+  border: 2px solid @cpu;
 }
 
 #memory {
   color: @memory;
+  border: 2px solid @memory;
 }
 
 #temperature {
   color: @temperature;
+  border: 2px solid @temperature;
 }
 
 #network {
   color: @network;
+  border: 2px solid @network;
 }
 
 #pulseaudio {
   color: @pulseaudio;
+  border: 2px solid @pulseaudio;
 }
 
 #backlight {
   color: @backlight;
+  border: 2px solid @backlight;
 }
 
 #battery {
   color: @battery;
+  border: 2px solid @battery;
 }
 
 #clock {
   color: @clock;
+  border: 2px solid @clock;
 }
 
 /* Conditional Colors */
 #network.connected {
   color: @good;
+  border: 2px solid @good;
 }
 
 #network.disconnected {
   color: @critical;
+  border: 2px solid @critical;
 }
 
 #temperature.critical {
   color: @critical;
+  border: 2px solid @critical;
 }
 
 #pulseaudio.muted {
   color: @critical;
+  border: 2px solid @critical;
 }
 
 #battery.charging {
   color: @good;
+  border: 2px solid @good;
 }
 
 #battery.warning {
   color: @warning;
+  border: 2px solid @warning;
 }
 
 #battery.critical {
   color: @critical;
+  border: 2px solid @critical;
 }

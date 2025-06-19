@@ -6,4 +6,3 @@ exec --no-startup-id autotiling
 
 # wallpaper
 # exec --no-startup-id waypaper --restore
-exec_always swaybg -i ~/Wallpaper-Bank/default.png -m fill

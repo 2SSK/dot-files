@@ -1,13 +1,9 @@
--- Description: Plugins with minimal configuration
 return {
-	-- copilot
+	-- Copilot
 	{ "github/copilot.vim" },
 
 	-- Vim-move plugin
 	{ "matze/vim-move" },
-
-	-- tmux movement
-	{ "christoomey/vim-tmux-navigator" },
 
 	-- UI enhancement plugin
 	{
@@ -15,25 +11,13 @@ return {
 		event = "VeryLazy",
 	},
 
-	-- Cursor smearing
-	{
-		"sphamba/smear-cursor.nvim",
-		opts = {},
-	},
+	-- Tmux movement
+	{ "christoomey/vim-tmux-navigator" },
 
-	-- 🧘 Zen mode
-	{
-		"folke/zen-mode.nvim",
-	},
+	-- Zen mode
+	{ "folke/zen-mode.nvim" },
 
-	-- screenkey
-	{
-		"NStefan002/screenkey.nvim",
-		lazy = false,
-		version = "*", -- or branch = "main", to use the latest commit
-	},
-
-	-- Colorizer
+	-- Colorizer (Highlight Colors)
 	{
 		"NvChad/nvim-colorizer.lua",
 		opts = {
@@ -43,7 +27,7 @@ return {
 		},
 	},
 
-	-- which key
+	-- Which key
 	{
 		"folke/which-key.nvim",
 		event = "VeryLazy",
@@ -65,16 +49,20 @@ return {
 		},
 	},
 
-	-- Icons picker
+	-- Silicon (Code SnapShot)
 	{
-		"ziontee113/icon-picker.nvim",
+		"michaelrommel/nvim-silicon",
+		lazy = true,
+		cmd = "Silicon",
 		config = function()
-			require("icon-picker").setup({ disable_legacy_commands = true })
-
-			local opts = { noremap = true, silent = true }
-
-			vim.keymap.set("n", "<Leader><Leader>i", "<cmd>IconPickerNormal<cr>", opts)
-			vim.keymap.set("n", "<Leader><Leader>y", "<cmd>IconPickerYank<cr>", opts) --> Yank the selected icon into register
+			require("silicon").setup({
+				font = "JetBrains Mono Nerd Font=34;Noto Color Emoji=34",
+				theme = "Dracula",
+				background = "#94e2d5",
+				window_title = function()
+					return vim.fn.fnamemodify(vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf()), ":t")
+				end,
+			})
 		end,
 	},
 
@@ -98,33 +86,15 @@ return {
 			"rcarriga/nvim-notify",
 		},
 	},
-
-	-- nvim silicon
 	{
-		"michaelrommel/nvim-silicon",
-		lazy = true,
-		cmd = "Silicon",
-		config = function()
-			require("silicon").setup({
-				font = "JetBrains Mono Nerd Font=34;Noto Color Emoji=34",
-				theme = "Dracula",
-				background = "#94e2d5",
-				window_title = function()
-					return vim.fn.fnamemodify(vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf()), ":t")
-				end,
-			})
-		end,
-	},
-
-	-- Are you locked in?
-	{
-		"voltycodes/areyoulockedin.nvim",
-		dependencies = { "nvim-lua/plenary.nvim" },
-		event = "VeryLazy",
-		config = function()
-			require("areyoulockedin").setup({
-				session_key = "b22ee0f9-8084-46e1-a38b-f9cfba774253",
-			})
-		end,
+		{
+			"saecki/crates.nvim",
+			ft = { "rust", "toml" },
+			config = function(_, opts)
+				local crates = require("crates")
+				crates.setup(opts)
+				crates.show()
+			end,
+		},
 	},
 }
