@@ -12,13 +12,13 @@
     "clock"
   ],
   "modules-right": [
+    "pulseaudio",
+    "network",
     "cpu",
     "memory",
-    "battery",
-    "pulseaudio",
-    "backlight",
     "temperature",
-    "network"
+    "backlight",
+    "battery"
   ],
 
   "custom/separator": {
