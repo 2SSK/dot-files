@@ -1,12 +1,13 @@
 return {
-    "folke/tokyonight.nvim",
-    name = "tokyonight",
-    priority = 1000,
-    config = function()
-      local transparent = false
-      require("tokyonight").setup({
-        transparent = transparent
-      })
-      vim.cmd([[colorscheme tokyonight]])
-    end
+	"folke/tokyonight.nvim",
+	name = "tokyonight",
+	priority = 1000,
+	opts = {
+		transparent = false,
+	},
+	config = function()
+		require("tokyonight").setup({
+			vim.cmd([[colorscheme tokyonight]]),
+		})
+	end,
 }

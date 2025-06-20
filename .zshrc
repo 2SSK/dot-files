@@ -139,7 +139,8 @@ alias update='yay -Sy'
 alias upgrade='yay -Syu'
 alias install='yay -S'
 alias remove='yay -Rns'
-alias search='yay -Ss'
+# alias search='yay -Ss'
+alias search="yay -Slq | fzf --multi --preview 'yay -Sii {1}' --preview-window=down:75% | xargs -ro yay -S"
 
 # Directory Navigation Aliases
 alias ..='cd ..'
