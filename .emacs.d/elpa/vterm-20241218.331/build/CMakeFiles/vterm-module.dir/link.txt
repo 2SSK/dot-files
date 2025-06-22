@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -O2 -g -DNDEBUG -Wl,--dependency-file=CMakeFiles/vterm-module.dir/link.d -shared  -o /home/ssk/.emacs.d/elpa/vterm-20241218.331/vterm-module.so "CMakeFiles/vterm-module.dir/vterm-module.c.o" "CMakeFiles/vterm-module.dir/utf8.c.o" "CMakeFiles/vterm-module.dir/elisp.c.o"  /usr/lib/libvterm.so
