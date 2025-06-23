@@ -1,19 +1,33 @@
 {
   "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
   "logo": {
-    "source": "/home/ssk/.config/fastfetch/logos/boy.txt"
+    "source": "~/.config/fastfetch/profiles/baddie-2.png",
+    "height": 12,
+    "width": 25,
+    "padding": {
+      "top": 1,
+      "left": 1,
+      "right": 2,
+      "bottom": 3
+    }
   },
   "display": {
     "separator": " : "
   },
   "modules": [
+    // {
+    //   "type": "title",
+    //   "key": " "
+    // },
     {
       "type": "title",
-      "key": " "
+      "keyWidth": 10,
+      "format": "         {6}{7}{8}"
     },
     {
       "type": "custom",
-      "format": "┌──────────────────────────────────────────┐"
+      // "format": "┌──────────────────────────────────────────┐"
+      "format": " ─────────────────────────── "
     },
     {
       "type": "os",
@@ -25,11 +39,11 @@
       "key": " ",
       "keyColor": "red"
     },
-    {
-      "type": "packages",
-      "key": "󰏗 ",
-      "keyColor": "green"
-    },
+    // {
+    //   "type": "packages",
+    //   "key": "󰏗 ",
+    //   "keyColor": "green"
+    // },
     {
       "type": "display",
       "key": " ",
@@ -88,20 +102,25 @@
     {
       "type": "localip",
       "key": "󰩟 ",
-      "format": "{1} ({4})",
+      "format": "{1} ({4})"
         // "outputColor": "36;1"
     },
     {
       "type": "custom",
-      "format": "└──────────────────────────────────────────┘"
+      // "format": "└──────────────────────────────────────────┘"
+      "format": " ─────────────────────────── "
     },
     //"break",
+    // {
+    //   "type": "colors",
+    //   "paddingLeft": 2,
+    //   "symbol": "circle",
+    //   "height": 4
+    // },
     {
-      "type": "colors",
-      "paddingLeft": 2,
-      "symbol": "circle",
-      "height": 4
+      "type": "custom",
+      "format": "   \u001b[31m  \u001b[32m  \u001b[33m  \u001b[34m  \u001b[35m  \u001b[36m  \u001b[37m  \u001b[90m "
     },
     "break"
-  ]
+      ]
 }

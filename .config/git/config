@@ -98,3 +98,10 @@
 
 [credential]
 	helper = store
+
+# Conditional configurations
+[includeIf "gitdir:~/Projects/Personal/"]
+    path = ~/.config/git/personal.gitconfig
+
+[includeIf "gitdir:~/Projects/Work/"]
+    path = ~/.config/git/work.gitconfig
