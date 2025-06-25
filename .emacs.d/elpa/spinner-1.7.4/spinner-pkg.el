@@ -1,2 +1,0 @@
-;; Generated package description from spinner.el  -*- no-byte-compile: t -*-
-(define-package "spinner" "1.7.4" "Add spinners and progress-bars to the mode-line for ongoing operations" '((emacs "24.3")) :commit "bca794fa6f6b007292cdac9b0a850a3711986db5" :authors '(("Artur Malabarba" . "emacs@endlessparentheses.com")) :maintainer '("Artur Malabarba" . "emacs@endlessparentheses.com") :keywords '("processes" "mode-line") :url "https://github.com/Malabarba/spinner.el")
