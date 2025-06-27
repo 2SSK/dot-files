@@ -6,19 +6,19 @@
   "modules-left": [
     "sway/workspaces",
     "sway/scratchpad",
-    "network#speed"
+    "cpu",
+    "memory"
   ],
   "modules-center": [
     "clock"
   ],
   "modules-right": [
+    "battery",
     "pulseaudio",
-    "network",
-    "cpu",
-    "memory",
-    "temperature",
     "backlight",
-    "battery"
+    "temperature",
+    "network",
+    "network#speed"
   ],
 
   "custom/separator": {
@@ -34,7 +34,7 @@
   },
 
   "sway/scratchpad": {
-    "format": "  {count}",
+    "format": " {count}",
     "show-empty": false,
     "tooltip": true,
     "tooltip-format": "{app}: {title}"
@@ -48,14 +48,14 @@
 
   "cpu": {
     "interval": 1,
-    "format": "  {}%",
+    "format": " {usage}%",
     "tooltip-format": "{usage}%",
     "on-click": "swaymsg exec gnome-system-monitor"
   },
 
   "memory": {
     "interval": 1,
-    "format": "  {}%",
+    "format": " {}%",
     "tooltip-format": "{used}/{total} GiB",
     "on-click": "swaymsg exec gnome-system-monitor"
   },
