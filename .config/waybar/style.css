@@ -2,7 +2,7 @@
 /* Change this import to switch themes */
 
 * {
-  font-family: "JetbrainsMono Nerd Font";
+  font-family: "JetBrainsMono Nerd Font";
   font-size: 16px;
   font-weight: bold;
 }
@@ -12,6 +12,7 @@ window#waybar {
   color: @foreground;
 }
 
+/* === Shared module styles === */
 #workspaces,
 #scratchpad,
 #disk,
@@ -25,16 +26,17 @@ window#waybar {
 #clock {
   padding: 2px 4px;
   margin: 3px;
-  margin-top: 0px;
-  margin-bottom: 0px;
+  margin-top: 0;
+  margin-bottom: 0;
   border-radius: 8px;
 }
 
-/* Workspaces Styling */
+/* === Workspaces === */
 #workspaces {
   padding: 0;
   margin: 0;
   margin-right: 5px;
+  border: 2px solid @foreground-alt;
 }
 
 #workspaces button,
@@ -48,8 +50,9 @@ window#waybar {
 }
 
 #workspaces button.visible {
-  background: @disk;
+  background: @foreground;
   color: @background;
+  border-radius: 2px;
 }
 
 #workspaces button:hover,
@@ -62,7 +65,7 @@ window#waybar {
   background: @critical;
 }
 
-/* Module Specific Colors */
+/* === Module Specific Colors === */
 #scratchpad {
   color: @scratchpad;
   border: 2px solid @scratchpad;
@@ -113,7 +116,7 @@ window#waybar {
   border: 2px solid @clock;
 }
 
-/* Conditional Colors */
+/* === Conditional Styling === */
 #network.connected {
   color: @good;
   border: 2px solid @good;
@@ -144,7 +147,26 @@ window#waybar {
   border: 2px solid @warning;
 }
 
+/* === Battery Critical Animation === */
+@keyframes blink-critical {
+  0% {
+    border-color: @critical;
+    color: @critical;
+  }
+
+  50% {
+    border-color: transparent;
+    color: @background;
+  }
+
+  100% {
+    border-color: @critical;
+    color: @critical;
+  }
+}
+
 #battery.critical {
-  color: @critical;
+  animation: blink-critical 1s infinite;
   border: 2px solid @critical;
+  color: @critical;
 }
