@@ -44,6 +44,7 @@ bindkey '^j' down-line-or-search
 # ==============================
 
 # Basic Aliases
+alias rel='source ~/.zshrc'
 alias mkdir='mkdir -p'
 alias rmf='rm -rf'
 alias cl='clear'
