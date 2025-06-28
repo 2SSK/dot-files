@@ -7,7 +7,8 @@
     "sway/workspaces",
     "sway/scratchpad",
     "cpu",
-    "memory"
+    "memory",
+    "network#speed"
   ],
   "modules-center": [
     "clock"
@@ -17,8 +18,7 @@
     "pulseaudio",
     "backlight",
     "temperature",
-    "network",
-    "network#speed"
+    "network"
   ],
 
   "custom/separator": {
