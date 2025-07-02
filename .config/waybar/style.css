@@ -3,12 +3,13 @@
 
 * {
   font-family: "JetBrainsMono Nerd Font";
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
 }
 
 window#waybar {
-  background-color: @background;
+  background-color: transparent;
+  /* background-color: @background; */
   color: @foreground;
 }
 
@@ -29,6 +30,7 @@ window#waybar {
   margin-top: 0;
   margin-bottom: 0;
   border-radius: 8px;
+  background: @background-alt;
 }
 
 /* === Workspaces === */
