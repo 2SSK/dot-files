@@ -42,3 +42,6 @@ keymap.set("n", "<C-Right>", ":vertical resize +3<CR>")
 -- Copilot suggestions commands
 vim.api.nvim_set_keymap("i", "<C-a>", "copilot#Accept('<CR>')", { expr = true, silent = true, script = true })
 vim.api.nvim_set_keymap("i", "<C-r>", "<Plug>(copilot-dismiss)", { silent = true })
+
+-- Toggle File Explorer
+keymap.set("n", "<leader>ee", ":NvimTreeToggle<CR>", { desc = "Toggle Nvim Tree" })
