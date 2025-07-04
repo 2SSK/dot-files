@@ -1,0 +1,8 @@
+* {
+  al:  #1c1c1cff; /* ALTERNATIVE BACKGROUND */
+  bg:  #131313ff; /* BACKGROUND */
+  se:  #1f1f1fff; /* SELECTED */
+  fg:  #d6dae4ff; /* FOREGROUND */
+  // bd:  #2cc55dff; /* BORDER */
+  bd:  #7aa2f7; /* BORDER */
+}
