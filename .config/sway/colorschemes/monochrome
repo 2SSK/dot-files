@@ -1,7 +1,7 @@
-set $color1 #1c1c1c  # Very dark gray
-set $color2 #3a3a3a  # Medium dark gray
-set $color3 #5e5e5e  # Medium gray
-set $color4 #a8a8a8  # Light gray
+set $color1 #1c1c1c 
+set $color2 #ffffff
+set $color3 #5e5e5e
+set $color4 #a8a8a8
 
 client.focused               $color2 $color2 $color1 $color2 $color2
 client.unfocused             $color3 $color1 $color2 $color1 $color1
