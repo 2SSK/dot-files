@@ -16,6 +16,7 @@ return {
 			pickers = {
 				find_files = {
 					theme = "ivy",
+					hidden = true, -- Show hidden files
 				},
 				oldfiles = {
 					theme = "ivy",
@@ -40,6 +41,19 @@ return {
 			),
 
 			defaults = {
+				file_ignore_patterns = {
+					"node_modules",
+					".git",
+					"dist",
+					"build",
+					"vendor",
+					"%.lock",
+					"%.png",
+					"%.jpg",
+					"%.jpeg",
+					"%.gif",
+					"%.svg",
+				},
 				path_display = { "smart" },
 				mappings = {
 					i = {
