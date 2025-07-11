@@ -1,0 +1,22 @@
+/* Core Colors */
+@define-color background     #1e1e2e; /* Mocha base */
+@define-color background-alt #313244; /* Mocha surface0 */
+@define-color foreground     #cdd6f4; /* Mocha text */
+@define-color foreground-alt #a6adc8; /* Mocha subtext0 */
+
+/* Status Colors */
+@define-color good           #a6e3a1; /* Mocha green */
+@define-color warning        #f9e2af; /* Mocha yellow */
+@define-color critical       #f38ba8; /* Mocha red */
+
+/* Module Colors (All Different and Harmonious) */
+@define-color scratchpad     #b4befe; /* Mocha lavender */
+@define-color disk           #fab387; /* Mocha peach */
+@define-color cpu            #89b4fa; /* Mocha blue */
+@define-color memory         #cba6f7; /* Mocha mauve */
+@define-color temperature    #f38ba8; /* Mocha red */
+@define-color network        #94e2d5; /* Mocha teal */
+@define-color pulseaudio     #eba0ac; /* Mocha maroon */
+@define-color backlight      #f9e2af; /* Mocha yellow */
+@define-color battery        #a6e3a1; /* Mocha green */
+@define-color clock          #89dceb; /* Mocha sky */
