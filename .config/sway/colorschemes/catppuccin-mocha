@@ -1,0 +1,12 @@
+# Catppuccin Mocha Colors for Sway
+set $color1 #cdd6f4  # Catppuccin Mocha text (foreground)
+set $color2 #89b4fa  # Catppuccin Mocha blue (focused accent)
+set $color3 #313244  # Catppuccin Mocha surface0 (unfocused background)
+set $color4 #f38ba8  # Catppuccin Mocha pink (urgent/error)
+
+# Window border colors
+# Format: border background text indicator child_border
+client.focused               $color2 $color2 $color1 $color2 $color2
+client.unfocused             $color3 $color1 $color2 $color1 $color1
+client.focused_inactive      $color1 $color1 $color3 $color1 $color1
+client.urgent                $color4 $color4 $color1 $color4 $color4

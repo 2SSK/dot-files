@@ -52,7 +52,7 @@ Plug 'junegunn/fzf.vim'       " FZF integration
 Plug 'tpope/vim-fugitive'     " Git commands in Vim
 Plug 'airblade/vim-gitgutter' " Show git diff in gutter
 Plug 'preservim/nerdcommenter' " Commenting utility
-Plug 'itchyny/lightline.vim'  " Lightweight statusline
+" Plug 'itchyny/lightline.vim'  " Lightweight statusline
 Plug 'neoclide/coc.nvim', {'branch':'release'}
 Plug 'jiangmiao/auto-pairs'
 Plug 'kana/vim-textobj-user'
