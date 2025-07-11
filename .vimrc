@@ -29,6 +29,7 @@ set mouse=a
 
 inoremap jk <ESC>
 nnoremap <leader>ww :wa!<CR> 
+nnoremap <leader>q :q!<CR> 
 nnoremap <leader>wq :wqa!<CR> 
 nnoremap <leader>ee :NERDTreeToggle<CR> 
 let NERDTreeShowHidden=1
