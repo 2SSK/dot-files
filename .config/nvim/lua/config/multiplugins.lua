@@ -1,7 +1,4 @@
 return {
-	-- Copilot
-	{ "github/copilot.vim" },
-
 	-- Vim-move plugin
 	{ "matze/vim-move" },
 
