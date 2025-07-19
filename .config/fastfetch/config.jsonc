@@ -1,126 +1,96 @@
 {
   "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
-  "logo": {
-    "source": "~/.config/fastfetch/profiles/train.png",
-    "height": 14,
-    "width": 25,
-    "padding": {
-      "top": 0,
-      "left": 1,
-      "right": 2,
-      "bottom": 3
-    }
-  },
+  // "logo": {
+  //   "source": "~/.config/fastfetch/profiles/baddie-2.png",
+  //   "height": 14,
+  //   "width": 25,
+  //   "padding": {
+  //     "top": 1,
+  //     "left": 1,
+  //     "right": 1,
+  //     "bottom": 3
+  //   }
+  // },
   "display": {
-    "separator": " : "
+    "separator": " : ",
+    "color": {
+      "separator": "red",
+    },
+    "constants": [
+      "───────────────────────────────────────────────────────────────────────────",
+      "│\u001b[75C│\u001b[75D"
+      ]
   },
   "modules": [
-    // {
-    //   "type": "title",
-    //   "key": " "
-    // },
     {
-      "type": "title",
-      "keyWidth": 10,
-      "format": "         {6}{7}{8}"
+      "format": "{#1}{#keys}╭{$1}╮\u001b[76D {user-name-colored}{at-symbol-colored}{host-name-colored}   ",
+        "type": "title"
     },
     {
-      "type": "custom",
-      // "format": "┌──────────────────────────────────────────┐"
-      "format": " ─────────────────────────── "
-    },
-    {
-      "type": "os",
-      "key": " ",
-      "keyColor": "red"
-    },
-    {
-      "type": "kernel",
-      "key": " ",
-      "keyColor": "red"
-    },
-    // {
-    //   "type": "packages",
-    //   "key": "󰏗 ",
-    //   "keyColor": "green"
-    // },
-    {
-      "type": "display",
-      "key": " ",
-      "keyColor": "green"
-    },
-    {
-      "type": "wm",
-      "key": " ",
-      "keyColor": "yellow"
-    },
-    {
-      "type": "terminal",
-      "key": " ",
-      "keyColor": "yellow"
-    },
-    {
-      "type": "cpu",
-      "format": "{1}",
-      "key": " ",
-      "keyColor": "blue"
-    },
-    // {
-    //   "type": "gpu",
-    //   "format": "{2}",
-    //   "key": " ",
-    //   "keyColor": "magenta"
-    // },
-    // {
-    //   "type": "gpu",
-    //   "format": "{3}",
-    //   "key": " ",
-    //   "keyColor": "magenta"
-    // },
-    {
-      "type": "memory",
-      "key": "󰍛 ",
-      "keyColor": "cyan"
-    },
-    {
-      "type": "disk",
-      "key": "󰋊 ",
-      "keyColor": "cyan",
-      "format": "{1}/{2} ({3})"
+      "key": "{$2}{#31} kernel   ",
+      "type": "kernel"
     },
     {
       "type": "command",
-      "key": "󱦟 ",
-      "keyColor": "31",
+      "key": "{$2}󱦟 OS Age   ",
       "text": "birth_install=$(stat -c %W /); current=$(date +%s); time_progression=$((current - birth_install)); days_difference=$((time_progression / 86400)); echo $days_difference days"
     },
     {
-      "type": "uptime",
-      "key": "󱫐 ",
-      "keyColor": "red"
+      "key": "{$2}{#32}󰅐 uptime   ",
+      "type": "uptime"
     },
     {
+      "key": "{$2}{#33}{icon} distro   ",
+      "type": "os"
+    },
+    {
+      "key": "{$2}{#34}󰇄 desktop  ",
+      "type": "de"
+    },
+    {
+      "key": "{$2}{#35} term     ",
+      "type": "terminal"
+    },
+    {
+      "key": "{$2}{#36} shell    ",
+      "type": "shell"
+    },
+    {
+      "key": "{$2}{#35}󰍛 cpu      ",
+      "type": "cpu",
+      "showPeCoreCount": true,
+      "temp": false
+    },
+    {
+      "key": "{$2}{#34}󰍛 gpu      ",
+      "type": "gpu"
+    },
+    {
+      "key": "{$2}{#33}󰉉 disk     ",
+      "type": "disk",
+      "folders": "/"
+    },
+    {
+      "key": "{$2}{#32} memory   ",
+      "type": "memory"
+    },
+    {
+      "key": "{$2}{#31}󰩟 network  ",
       "type": "localip",
-      "key": "󰩟 ",
-      "format": "{1} ({4})"
-        // "outputColor": "36;1"
+      "format": "{ipv4} ({ifname})"
     },
     {
-      "type": "custom",
-      // "format": "└──────────────────────────────────────────┘"
-      "format": " ─────────────────────────── "
+      "format": "{#1}{#keys}├{$1}┤",
+      "type": "custom"
     },
-    //"break",
-    // {
-    //   "type": "colors",
-    //   "paddingLeft": 2,
-    //   "symbol": "circle",
-    //   "height": 4
-    // },
     {
-      "type": "custom",
-      "format": "   \u001b[31m  \u001b[32m  \u001b[33m  \u001b[34m  \u001b[35m  \u001b[36m  \u001b[37m  \u001b[90m "
+      "key": "{$2}{#39} colors   ",
+      "type": "colors",
+      "symbol": "circle"
     },
-    "break"
+    {
+      "format": "{#1}{#keys}╰{$1}╯",
+      "type": "custom"
+    }
       ]
 }

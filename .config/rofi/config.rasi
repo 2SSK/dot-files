@@ -180,5 +180,5 @@ configuration {
 */
 }
 
-// @theme "~/.config/rofi/themes/floating.rasi"
-@theme "~/.config/rofi/themes/new.rasi"
+// @theme "~/.config/rofi/themes/new.rasi"
+@theme "~/.config/rofi/themes/sidebar.rasi"
