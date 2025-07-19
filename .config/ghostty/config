@@ -1,12 +1,13 @@
 # Theme
 theme = catppuccin-mocha
+# background-opacity = 0.75
 background-opacity = 1
 
 # Font
 font-family = "JetBrains Mono Nerd Font"
 font-style = bold
 bold-is-bright = true
-font-size = 15
+font-size = 14
 
 # Appearance
 gtk-titlebar = true

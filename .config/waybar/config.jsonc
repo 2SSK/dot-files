@@ -2,14 +2,17 @@
   "layer": "top",
   "position": "top",
   "height": 30,
+  "margin": 5,
 
   "modules-left": [
     "sway/workspaces",
     "hyprland/workspaces",
     "sway/scratchpad",
+    // "sway/window",
+    "disk",
     "cpu",
-    "memory",
-    "network#speed"
+    "memory"
+    // "network#speed"
   ],
   "modules-center": [
     "clock"
@@ -41,9 +44,16 @@
     "tooltip-format": "{app}: {title}"
   },
 
+ "sway/window": {
+    "format": "{app_id}",
+    "separate-outputs": true,
+    "icon":true
+  },
+
   "disk": {
     "interval": 60,
-    "format": "  {}%",
+    "format": " {}%",
+    // "format": "  {free}/{total}",
     "tooltip-format": "{used}/{total}"
   },
 
@@ -72,7 +82,7 @@
 
   "network": {
     "format-wifi": "  {essid}",
-    "format-ethernet": "  {essid}",
+    "format-ethernet": " {essid}",
     "format-disconnected": "  Disconnected",
     "interval": 5,
     "tooltip-format-wifi": " {bandwidthDownBytes} |  {bandwidthUpBytes}",
@@ -93,7 +103,7 @@
   "backlight": {
     "device": "intel_backlight",
     "scroll-step": 5,
-    "format": "  {percent}%",
+    "format": " {percent}%",
     "tooltip": false
   },
 
@@ -104,9 +114,9 @@
       "warning": 30,
       "critical": 20
     },
-    "format": "  {capacity}%",
+    "format": " {capacity}%",
     "format-charging": " {capacity}%",
-    "format-discharging": "  {capacity}%",
+    "format-discharging": " {capacity}%",
     "format-critical": "  {capacity}% (Critical!!)",
     "format-charging-warning": " {capacity}%",
     "format-charging-critical": " {capacity}%",
@@ -118,7 +128,7 @@
   },
 
   "clock": {
-    "format": "  {:%A, %B %d, %Y %I:%M %p}",
+    "format": " {:%A, %B %d, %Y %I:%M %p}",
     "tooltip": true,
     "tooltip-format": "<tt>{calendar}</tt>"
   }

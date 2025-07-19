@@ -8,14 +8,15 @@
 }
 
 window#waybar {
-  /* background-color: transparent; */
-  background-color: @background;
+  background-color: transparent;
+  /* background-color: @background; */
   color: @foreground;
 }
 
 /* === Shared module styles === */
 #workspaces,
 #scratchpad,
+#window,
 #disk,
 #cpu,
 #memory,
@@ -68,7 +69,8 @@ window#waybar {
 }
 
 /* === Module Specific Colors === */
-#scratchpad {
+#scratchpad,
+#window {
   color: @scratchpad;
   border: 2px solid @scratchpad;
 }

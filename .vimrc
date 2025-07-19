@@ -48,7 +48,6 @@ call plug#begin('~/.vim/plugged')
 " Example Plugins
 Plug 'sheerun/vim-polyglot'  " Language packs for syntax highlighting
 Plug 'scrooloose/nerdtree'   " File explorer
-Plug "github/copilot.vim",
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } " Fuzzy finder
 Plug 'junegunn/fzf.vim'       " FZF integration
 Plug 'tpope/vim-fugitive'     " Git commands in Vim
