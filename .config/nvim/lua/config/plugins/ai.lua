@@ -1,6 +1,8 @@
 return {
+	-- Copilot
 	{ "github/copilot.vim" },
 
+	-- Copilot Chat
 	{
 		{
 			"CopilotC-Nvim/CopilotChat.nvim",

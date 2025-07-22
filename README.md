@@ -5,34 +5,31 @@
     - ZSH Config
     - Kitty config
     - Alacritty config
+    - Wezterm config
+    - Ghostty config
     - Rofi config
     - I3 config
     - Polybar config
     - Picom config
-    - Emacs config
-    - Xborders config
+    - Sway config
+    - Waybar config
     - fastfetch config
 
 ---
 
 ## Rice
 
-![rice](./screenshots/rice_ss_1.png)
+![scrcpy](./screenshots/screenshot_2025-07-19_11-21-08.png)
+![rice](./screenshots/screenshot_2025-07-22_09-43-27.png)
 
 ---
 
 ## NVIM Config && Brave
 
-![nvim](./screenshots/brave_nvim_ss.png)
+![nvim](./screenshots/screenshot_2025-07-22_09-42-11.png)
 
 ---
 
-## Emacs
+## Vim
 
-![emacs](./screenshots/emacs_ss.png)
-
----
-
-## Firefox
-
-![firefox](./screenshots/firefox_ss.png)
+## ![vim](./screenshots/screenshot_2025-07-22_09-46-50.png)
