@@ -2,8 +2,9 @@
   "layer": "top",
   "position": "top",
   "height": 30,
-  "margin": 5,
-
+  "margin-top": 5,
+  "margin-left": 5,
+  "margin-right": 5,
   "modules-left": [
     "sway/workspaces",
     "hyprland/workspaces",
@@ -24,11 +25,9 @@
     "temperature",
     "network"
   ],
-
   "custom/separator": {
     "format": "|"
   },
-
   "sway/workspaces": {
     "all-outputs": true,
     "warp-on-scroll": true,
@@ -36,41 +35,35 @@
     "format": "{icon}",
     "format-icons": {}
   },
-
   "sway/scratchpad": {
     "format": " {count}",
     "show-empty": false,
     "tooltip": true,
     "tooltip-format": "{app}: {title}"
   },
-
- "sway/window": {
+  "sway/window": {
     "format": "{app_id}",
     "separate-outputs": true,
-    "icon":true
+    "icon": true
   },
-
   "disk": {
     "interval": 60,
     "format": " {}%",
     // "format": "  {free}/{total}",
     "tooltip-format": "{used}/{total}"
   },
-
   "cpu": {
     "interval": 1,
     "format": " {usage}%",
     "tooltip-format": "{usage}%",
     "on-click": "swaymsg exec gnome-system-monitor"
   },
-
   "memory": {
     "interval": 1,
     "format": " {}%",
     "tooltip-format": "{used}/{total} GiB",
     "on-click": "swaymsg exec gnome-system-monitor"
   },
-
   "temperature": {
     "interval": 5,
     "tooltip": false,
@@ -79,7 +72,6 @@
     "format": " {temperatureC}°C",
     "format-critical": " {temperatureC}°C (Critical!!)"
   },
-
   "network": {
     "format-wifi": "  {essid}",
     "format-ethernet": " {essid}",
@@ -88,25 +80,21 @@
     "tooltip-format-wifi": " {bandwidthDownBytes} |  {bandwidthUpBytes}",
     "on-click": "swaymsg exec gnome-control-center network"
   },
-
   "network#speed": {
     "format-wifi": " {bandwidthDownBytes} |  {bandwidthUpBytes}",
     "tooltip": false
   },
-
   "pulseaudio": {
     "format": "  {volume}%",
     "format-muted": " M",
     "tooltip-format": "{desc}"
   },
-
   "backlight": {
     "device": "intel_backlight",
     "scroll-step": 5,
     "format": " {percent}%",
     "tooltip": false
   },
-
   "battery": {
     "interval": 1,
     "states": {
@@ -126,7 +114,6 @@
     "tooltip-format-discharging": "{time} remaining",
     "on-click": "swaymsg exec gnome-control-center power"
   },
-
   "clock": {
     "format": " {:%A, %B %d, %Y %I:%M %p}",
     "tooltip": true,
