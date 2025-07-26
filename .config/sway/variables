@@ -31,7 +31,7 @@ default_floating_border pixel 2
 # Blur, rounded corners, and shadows
 blur enable
 blur_passes 2
-blur_radius 3
+blur_radius 5
 
 corner_radius 6
 
@@ -41,4 +41,4 @@ shadow_color #111111
 shadow_inactive_color #0000004F
 
 default_dim_inactive 0.1
-for_window [app_id=".*"] opacity 1
+for_window [app_id=".*"] opacity 0.9
