@@ -16,7 +16,7 @@ set $cursor_theme Bibata-Modern-Ice
 seat * xcursor_theme $cursor_theme 24
 
 # Applications
-set $term ghostty
+set $term alacritty
 set $files nautilus
 set $menu --no-startup-id rofi -show drun
 # set $menu --no-startup-id wofi --show drun
@@ -41,4 +41,4 @@ shadow_color #111111
 shadow_inactive_color #0000004F
 
 default_dim_inactive 0.1
-for_window [app_id=".*"] opacity 0.9
+for_window [app_id=".*"] opacity 1
