@@ -39,7 +39,7 @@ nnoremap <leader>pv :Ex<CR>
 set laststatus=2
 
 " Set colorscheme to gruvbox and make it transparent
-colorscheme blue
+colorscheme retrobox
 set background=dark
 
 " Vim-Plug configuration

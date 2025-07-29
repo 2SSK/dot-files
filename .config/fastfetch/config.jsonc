@@ -105,7 +105,6 @@
       "type": "localip",
       "key": "󰩟 ",
       "format": "{1} ({4})"
-      // "outputColor": "36;1"
     },
     // {
     //   "type": "custom",

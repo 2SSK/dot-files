@@ -1,6 +1,6 @@
 # i3 config file (v4)
 
- for_window [class="^.*"] border pixel 4
+ for_window [class="^.*"] border pixel 3
 
 # set mod key (Mod1=<Alt>, Mod4=<Super>)
 set $mod Mod4
@@ -187,10 +187,10 @@ mode "resize" {
         # Pressing right will grow the window’s width.
         # Pressing up will shrink the window’s height.
         # Pressing down will grow the window’s height.
-        bindsym j resize shrink width 10 px or 10 ppt
-        bindsym k resize grow height 10 px or 10 ppt
-        bindsym l resize shrink height 10 px or 10 ppt
-        bindsym semicolon resize grow width 10 px or 10 ppt
+        bindsym h resize shrink width 10 px or 10 ppt
+        bindsym j resize grow height 10 px or 10 ppt
+        bindsym k resize shrink height 10 px or 10 ppt
+        bindsym l resize grow width 10 px or 10 ppt
 
         # same bindings, but for the arrow keys
         bindsym Left resize shrink width 10 px or 10 ppt
@@ -213,20 +213,12 @@ bindsym $mod+c exec "~/.config/i3/lockscreen.sh"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 
-# Color Scheme
-set $background      #990000
-set $background_alt  #373B41
-set $foreground      #e6ebef
-set $primary         #00aaff
-set $primary_alt     #F0C674
-set $secondary       #4c7899
-set $alert           #A54242
-set $border_inactive #222D31
+set $color1 #0d0f20  
+set $color2 #5294e2 
+set $color3 #4e505c
+set $color4 #ff6161
 
-# Colors for window borders, background, text, and indicators.
-#                       border              background          text                 indicator
-client.focused          $primary            $secondary          $foreground          $primary
-client.focused_inactive $secondary          $secondary          $foreground          $secondary
-client.unfocused        $background_alt     $background_alt     $foreground          $background_alt
-client.urgent           $alert              $alert              $foreground          $alert
-
+client.focused               $color2 $color2 $color1 $color2 $color2
+client.unfocused             $color3 $color1 $color2 $color1 $color1
+client.focused_inactive      $color1 $color1 $color3 $color1 $color1
+client.urgent                $color4 $color4 $color1 $color4 $color4
