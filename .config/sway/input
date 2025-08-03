@@ -1,7 +1,22 @@
-input "1267:12932:ASUE1306:00_04F3:3284_Touchpad" {
+input type:touchpad {
     tap enabled
     natural_scroll enabled
     dwt enabled
     middle_emulation enabled
     scroll_method two_finger
+    click_method clickfinger
+}
+
+input "1267:12932:ASUE1306:00_04F3:3284_Touchpad" {
+    tap enabled
+    tap_button_map lrm
+    tap_drag enabled
+    tap_drag_lock enabled
+    accel_profile adaptive
+    accel_speed 0.0
+    natural_scroll enabled
+    scroll_method two_finger
+    dwt enabled
+    middle_emulation enabled
+    click_method clickfinger
 }
