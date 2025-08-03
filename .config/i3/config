@@ -2,6 +2,7 @@
 
  for_window [class="^.*"] border pixel 3
 
+exec_always --no-startup-id feh --bg-scale ~/.config/i3/tokyonight.png
 # set mod key (Mod1=<Alt>, Mod4=<Super>)
 set $mod Mod4
 
@@ -12,7 +13,7 @@ exec_always --no-startup-id setxkbmap -option
 exec --no-startup-id variety --restore
 exec --no-startup-id waypaper --restore
 exec_always --no-startup-id autotiling
-exec_always --no-startup-id xborders
+# exec_always --no-startup-id xborders
 
 # kill any hanging polybar processes
 exec_always killall polybar
@@ -124,6 +125,7 @@ bindsym F9 exec --no-startup-id amixer set Capture toggle
 # Screenshot
 bindsym F12 exec scrot  ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
 bindsym Shift+F12 exec scrot -u ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
+bindsym Ctrl+F12 exec scrot -s ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
 
 # split orientation
 bindsym $mod+z split h;exec notify-send 'tile horizontally'

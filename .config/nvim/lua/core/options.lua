@@ -8,7 +8,7 @@ opt.shiftwidth = 2
 opt.expandtab = true
 opt.autoindent = true
 
-opt.wrap = false
+opt.wrap = true
 
 opt.ignorecase = true
 opt.smartcase = true

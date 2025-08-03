@@ -17,6 +17,7 @@ gtk-wide-tabs = false
 # window-padding-y = 50,0
 # window-padding-x = 50,0
 window-padding-balance = false
+# window-decoration = true
 window-decoration = false
 
 # Other
