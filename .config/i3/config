@@ -6,6 +6,8 @@ exec_always --no-startup-id feh --bg-scale ~/.config/i3/tokyonight.png
 # set mod key (Mod1=<Alt>, Mod4=<Super>)
 set $mod Mod4
 
+
+
 exec --no-startup-id picom --config ~/.config/picom/picom.conf
 exec --no-startup-id xrdb -merge ~/.Xresources
 #exec_always --no-startup-id setxkbmap -option :nocaps
@@ -26,11 +28,17 @@ font pango:JetbrainsMono Nerd Font Bold 12
 # Gaps
 gaps outer 2
 gaps inner 5
-# gaps top   -5
 
 # Start XDG autostart .desktop files using dex. See also
 # https://wiki.archlinux.org/index.php/XDG_Autostart
  exec --no-startup-id dex --autostart --environment i3
+
+# monitor configuration
+# exec --no-startup-id xrandr --output eDP-1-1 --off --output HDMI-1-1 --mode 1920x1080
+# # Set gaps only on workspace 2
+# assign [workspace="2"] $ws2
+# gaps inner 20
+# gaps outer 20
 
 # screen before suspend. Use loginctl lock-session to lock your screen. exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 
@@ -87,10 +95,10 @@ bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
 
 # alternatively, you can use the cursor keys:
-bindsym $mod+Shift+Left move left
+# bindsym $mod+Shift+Left move left
 bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
-bindsym $mod+Shift+Right move right
+# bindsym $mod+Shift+Right move right
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
@@ -136,6 +144,9 @@ bindsym $mod+Shift+space floating toggle
 
 # change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
+
+bindsym $mod+Shift+Right move window to output right
+bindsym $mod+Shift+Left move window to output left
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.

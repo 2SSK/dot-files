@@ -1,10 +1,11 @@
-@define-color background #000000;
-@define-color background-alt #1a1a1a;
-@define-color foreground #ffffff;
+@define-color background #1e1e2e;
+@define-color background-alt #313244;
+@define-color foreground #cdd6f4;
+@define-color foreground-alt #a6adc8;
 
 @define-color warning #ffcc00;
 @define-color critical #ff0000;
-@define-color good #888888;
+@define-color good @forground-alt;
 
 /* Module Colors (All Shades of Grey) */
 @define-color scratchpad #999999;

@@ -2,6 +2,7 @@
   "layer": "top",
   "position": "top",
   "height": 30,
+  "margin": 5,
   "modules-left": [
     "sway/workspaces",
     "hyprland/workspaces",
@@ -20,7 +21,8 @@
     "pulseaudio",
     "backlight",
     "temperature",
-    "network"
+    "network",
+    "bluetooth"
   ],
   "custom/separator": {
     "format": "|"
@@ -31,6 +33,11 @@
     "enable-bar-scroll": false,
     "format": "{icon}",
     "format-icons": {}
+    // "persistent-workspaces": {
+    //   "1": [],
+    //   "2": [],
+    //   "3": []
+    // }
   },
   "sway/scratchpad": {
     "format": " {count}",
@@ -74,12 +81,8 @@
     "format-ethernet": " {essid}",
     "format-disconnected": "  Disconnected",
     "interval": 5,
-    "tooltip-format-wifi": " {bandwidthDownBytes} |  {bandwidthUpBytes}",
+    "tooltip-format-wifi": "{essid} |  {bandwidthDownBytes} |  {bandwidthUpBytes}",
     "on-click": "swaymsg exec gnome-control-center network"
-  },
-  "network#speed": {
-    "format-wifi": " {bandwidthDownBytes} |  {bandwidthUpBytes}",
-    "tooltip": false
   },
   "pulseaudio": {
     "format": "  {volume}%",
@@ -115,5 +118,12 @@
     "format": " {:%A, %B %d, %Y %I:%M %p}",
     "tooltip": true,
     "tooltip-format": "<tt>{calendar}</tt>"
+  },
+  "bluetooth": {
+    "format": "",
+    "format-disabled": "󰂲",
+    "format-connected": "",
+    "tooltip-format": "Device: {device_alias}",
+    "on-click": "blueberry"
   }
 }
