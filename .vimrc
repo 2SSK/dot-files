@@ -157,18 +157,14 @@ syntax on
 
 " Colorscheme
 " colorscheme industry
-colorscheme retrobox
+colorscheme wildcharm
 set background=dark
 " hi Normal ctermbg=NONE guibg=NONE
 " hi NonText ctermbg=NONE guibg=NONE guifg=NONE ctermfg=NONE
 " hi VertSplit guibg=NONE guifg=NONE ctermbg=NONE ctermfg=NONE
 
 " Sync clipboard with OS
-if system('uname -s') == "Darwin\n"
-  set clipboard=unnamed "OSX
-else
-  set clipboard=unnamedplus "Linux
-endif
+set clipboard=unnamedplus "Linux
 
 " True colors
 if !has('gui_running') && &term =~ '\%(screen\|tmux\)'
