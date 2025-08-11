@@ -68,7 +68,7 @@ nnoremap <expr> k v:count == 0 ? 'gk' : 'k'
 nnoremap <expr> j v:count == 0 ? 'gj' : 'j'
 
 " clear highlights
-nnoremap <Esc> :noh<CR>
+nnoremap <leader>nh :noh<CR>
 
 " save file
 nnoremap <leader>w :w<CR>
@@ -131,7 +131,6 @@ nnoremap <leader>lw :set wrap!<CR>
 
 " Press jk fast to exit insert mode
 inoremap jk <ESC>
-inoremap kj <ESC>
 
 " Stay in indent mode
 " vnoremap < <gv
