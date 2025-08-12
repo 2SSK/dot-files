@@ -1,3 +1,4 @@
+
 export ZSH="$HOME/.oh-my-zsh"
 # ZSH_THEME="robbyrussell"
 #
@@ -50,10 +51,28 @@ alias rmf='rm -rf'
 alias cl='clear'
 alias e='exit'
 
-# Editor Aliases
-export EDITOR='nvim'
-export VISUAL='nvim'
-alias vi='nvim'
+#######################################################
+# ZSH Basic Options
+#######################################################
+
+setopt autocd              # change directory just by typing its name
+setopt correct             # auto correct mistakes
+setopt interactivecomments # allow comments in interactive mode
+setopt magicequalsubst     # enable filename expansion for arguments of the form ‘anything=expression’
+setopt nonomatch           # hide error message if there is no match for the pattern
+setopt notify              # report the status of background jobs immediately
+setopt numericglobsort     # sort filenames numerically when it makes sense
+setopt promptsubst         # enable command substitution in prompt
+
+#######################################################
+# Environment Variables
+#######################################################
+export EDITOR=nvim visudo
+export VISUAL=nvim visudo
+export SUDO_EDITOR=nvim
+export FCEDIT=nvim
+export TERMINAL=alacritty
+export BROWSER=com.brave.Browser
 
 # Lazy aliases
 alias lg="lazygit"
@@ -170,13 +189,17 @@ alias disconnect='nmcli device disconnect'
 # ==============================
 
 # History Settings
-HISTFILE=$HOME/.zsh_history
-SAVEHIST=1000
-HISTSIZE=999
-setopt share_history
-setopt hist_expire_dups_first
+HISTSIZE=10000
+HISTFILE=~/.zsh_history
+SAVEHIST=$HISTSIZE
+HISTDUP=erase
+setopt appendhistory
+setopt sharehistory
+setopt hist_ignore_space
+setopt hist_ignore_all_dups
+setopt hist_save_no_dups
 setopt hist_ignore_dups
-setopt hist_verify
+setopt hist_find_no_dups
 
 # FZF Theme Setup
 export FZF_DEFAULT_OPTS="--color=fg:#CBE0F0,bg:#011628,hl:#B388FF,fg+:#CBE0F0,bg+:#143652,hl+:#B388FF,info:#06BCE4,prompt:#2CF9ED,pointer:#2CF9ED,marker:#2CF9ED,spinner:#2CF9ED,header:#2CF9ED"
@@ -187,8 +210,18 @@ export FZF_DEFAULT_OPTS="--color=fg:#CBE0F0,bg:#011628,hl:#B388FF,fg+:#CBE0F0,bg
 eval "$(zoxide init zsh)"
 alias cd='z'
 
+
+export ANDROID_HOME=/home/ssk/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/tools/bin
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+
+
 # Go Path
 export PATH=$PATH:$HOME/go/bin
 
 # Rust Path
 export PATH="$HOME/.cargo/bin:$PATH"
+
+export TERM=xterm-256color
