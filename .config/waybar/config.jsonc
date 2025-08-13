@@ -3,6 +3,7 @@
   "position": "top",
   "height": 30,
   "margin": 5,
+  "output": "eDP-1",
   "modules-left": [
     "sway/workspaces",
     "hyprland/workspaces",

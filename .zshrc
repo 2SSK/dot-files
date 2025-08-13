@@ -72,7 +72,8 @@ export VISUAL=nvim visudo
 export SUDO_EDITOR=nvim
 export FCEDIT=nvim
 export TERMINAL=alacritty
-export BROWSER=com.brave.Browser
+export BROWSER=brave
+alias vi='nvim'
 
 # Lazy aliases
 alias lg="lazygit"
@@ -224,4 +225,9 @@ export PATH=$PATH:$HOME/go/bin
 # Rust Path
 export PATH="$HOME/.cargo/bin:$PATH"
 
+# JAVA17 Path
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
+export PATH=$JAVA_HOME/bin:$PATH
+
 export TERM=xterm-256color
+
