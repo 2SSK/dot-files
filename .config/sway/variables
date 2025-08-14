@@ -31,7 +31,7 @@ default_floating_border pixel 2
 # Blur, rounded corners, and shadows
 blur enable
 blur_passes 2
-blur_radius 5
+blur_radius 3
 
 corner_radius 6
 
