@@ -2,28 +2,31 @@
   "layer": "top",
   "position": "top",
   "height": 30,
-  "margin": 5,
-  "output": "eDP-1",
+  // "margin": 5,
+  // "output": "eDP-1",
   "modules-left": [
-    "sway/workspaces",
-    "hyprland/workspaces",
-    "sway/scratchpad",
     // "sway/window",
-    "disk",
-    "cpu",
-    "memory"
     // "network#speed"
+    "battery",
+    "temperature",
+    "disk",
+    "memory",
+    "cpu"
   ],
   "modules-center": [
-    "clock"
+    "sway/workspaces",
+    "hyprland/workspaces"
   ],
   "modules-right": [
-    "battery",
+    "sway/scratchpad",
+    "custom/separator",
     "pulseaudio",
     "backlight",
-    "temperature",
+    "custom/separator",
     "network",
-    "bluetooth"
+    "custom/separator",
+    // "bluetooth"
+    "clock"
   ],
   "custom/separator": {
     "format": "|"
@@ -33,12 +36,12 @@
     "warp-on-scroll": true,
     "enable-bar-scroll": false,
     "format": "{icon}",
-    "format-icons": {}
-    // "persistent-workspaces": {
-    //   "1": [],
-    //   "2": [],
-    //   "3": []
-    // }
+    "format-icons": {},
+    "persistent-workspaces": {
+      "1": [],
+      "2": [],
+      "3": []
+    }
   },
   "sway/scratchpad": {
     "format": " {count}",
@@ -116,7 +119,8 @@
     "on-click": "swaymsg exec gnome-control-center power"
   },
   "clock": {
-    "format": " {:%A, %B %d, %Y %I:%M %p}",
+    // "format": " {:%A, %B %d, %Y %I:%M %p}",
+    "format": "  {:%a, %b-%d %Y |   %I:%M %p}",
     "tooltip": true,
     "tooltip-format": "<tt>{calendar}</tt>"
   },

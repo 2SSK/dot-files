@@ -1,5 +1,5 @@
 include ~/.config/sway/variables
-include ~/.config/sway/colorschemes/folke
+include ~/.config/sway/colorschemes/nord
 include ~/.config/sway/outputs
 include ~/.config/sway/inputs
 include ~/.config/sway/startup
