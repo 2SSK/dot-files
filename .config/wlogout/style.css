@@ -12,10 +12,14 @@ button {
   margin: 10px;
   border-radius: 15px;
   font-size: 20px;
-  border-color: black;
-  text-decoration-color: #bd93f9;
-  color: #bd93f9;
-  background-color: #1e1e1e;
+  /* border-color: black; */
+  border-color: #2e3440;
+  /* text-decoration-color: #bd93f9; */
+  text-decoration-color: #81a1c1;
+  /* color: #bd93f9; */
+  color: #81a1c1;
+  /* background-color: #1e1e1e; */
+  background-color: #3b4252;
   border-style: solid;
   border-width: 1px;
   background-repeat: no-repeat;
