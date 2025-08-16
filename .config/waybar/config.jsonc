@@ -1,6 +1,6 @@
 {
   "layer": "top",
-  "position": "top",
+  "position": "bottom",
   "height": 30,
   // "margin": 5,
   // "output": "eDP-1",
@@ -19,13 +19,11 @@
   ],
   "modules-right": [
     "sway/scratchpad",
-    "custom/separator",
     "pulseaudio",
     "backlight",
-    "custom/separator",
     "network",
+    "bluetooth",
     "custom/separator",
-    // "bluetooth"
     "clock"
   ],
   "custom/separator": {
@@ -36,12 +34,12 @@
     "warp-on-scroll": true,
     "enable-bar-scroll": false,
     "format": "{icon}",
-    "format-icons": {},
-    "persistent-workspaces": {
-      "1": [],
-      "2": [],
-      "3": []
-    }
+    "format-icons": {}
+    // "persistent-workspaces": {
+    //   "1": [],
+    //   "2": [],
+    //   "3": []
+    // }
   },
   "sway/scratchpad": {
     "format": " {count}",
@@ -81,7 +79,7 @@
     "format-critical": " {temperatureC}°C (Critical!!)"
   },
   "network": {
-    "format-wifi": "  {essid}",
+    "format-wifi": " ",
     "format-ethernet": " {essid}",
     "format-disconnected": "  Disconnected",
     "interval": 5,
