@@ -1,6 +1,7 @@
 # Nord color scheme
 set $color1 #2e3440
 set $color2 #81a1c1 
+# set $color2 #d8dee9 
 set $color3 #3b4252  
 set $color4 #bf616a
 

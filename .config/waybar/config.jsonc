@@ -1,8 +1,9 @@
 {
   "layer": "top",
-  "position": "bottom",
-  "height": 30,
-  // "margin": 5,
+  "position": "top",
+  "height": 10,
+  "margin-left": 5,
+  "margin-right": 5,
   // "output": "eDP-1",
   "modules-left": [
     // "sway/window",
@@ -23,7 +24,7 @@
     "backlight",
     "network",
     "bluetooth",
-    "custom/separator",
+    // "custom/separator",
     "clock"
   ],
   "custom/separator": {
