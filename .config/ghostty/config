@@ -1,7 +1,7 @@
 # Theme
-theme = coolnight
-# background-opacity = 0.75
-background-opacity = 1
+theme = nord
+background-opacity = 0.75
+# background-opacity = 1
 
 # Font
 font-family = "JetBrains Mono Nerd Font"
