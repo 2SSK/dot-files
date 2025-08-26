@@ -39,6 +39,7 @@ window#waybar {
 #workspaces {
   padding: 2;
   margin: 0;
+  margin-top: 2;
   margin-right: 5px;
   border: 2px solid @foreground-alt;
 }
