@@ -34,11 +34,11 @@ gaps inner 5
  exec --no-startup-id dex --autostart --environment i3
 
 # monitor configuration
-exec --no-startup-id xrandr --output eDP-1-1 --off --output HDMI-1-1 --mode 1920x1080
-# Set gaps only on workspace 2
-assign [workspace="2"] $ws2
-gaps inner 20
-gaps outer 20
+# exec --no-startup-id xrandr --output eDP-1-1 --off --output HDMI-1-1 --mode 1920x1080
+# # Set gaps only on workspace 2
+# assign [workspace="2"] $ws2
+# gaps inner 20
+# gaps outer 20
 
 # screen before suspend. Use loginctl lock-session to lock your screen. exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 

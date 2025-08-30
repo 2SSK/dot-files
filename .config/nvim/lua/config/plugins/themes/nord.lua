@@ -17,13 +17,13 @@ return {
 		require("nord").set()
 
 		-- Function to set menu borders to transparent
-		-- local set_menu_border_transparency = function()
-		--   vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'NONE', fg = 'NONE' })
-		--   vim.api.nvim_set_hl(0, 'FloatBorder', { bg = 'NONE', fg = 'NONE' })
-		-- end
+		local set_menu_border_transparency = function()
+			vim.api.nvim_set_hl(0, "NormalFloat", { bg = "NONE", fg = "NONE" })
+			vim.api.nvim_set_hl(0, "FloatBorder", { bg = "NONE", fg = "NONE" })
+		end
 
 		-- Execute the function once after loading the colorscheme
-		-- set_menu_border_transparency()
+		set_menu_border_transparency()
 
 		local bg_transparent = true
 
