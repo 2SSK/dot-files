@@ -1,0 +1,22 @@
+/* Core Colors */
+@define-color background #1a1b26; /* Tokyonight background */
+@define-color background-alt #24283b; /* Slightly lighter background */
+@define-color foreground #c0caf5; /* Default text color */
+@define-color foreground-alt #7aa2f7; /* Accent text color */
+
+/* Status Colors */
+@define-color good #9ece6a; /* Greenish good indicator */
+@define-color warning #f9c74f; /* Eye-catching yellow (can also use #e0af68 from tokyonight palette) */
+@define-color critical #ff5555; /* Bright red for high urgency (chosen to pop strongly) */
+
+/* Module Colors (All Different) */
+@define-color scratchpad #bb9af7; /* Lavender */
+@define-color disk #7aa2f7; /* Blue */
+@define-color cpu #e0af68; /* Orange */
+@define-color memory #9ece6a; /* Green */
+@define-color temperature #f7768e; /* Pink-Red */
+@define-color network #7dcfff; /* Cyan */
+@define-color pulseaudio #73daca; /* Teal */
+@define-color backlight #ff9e64; /* Bright orange from Tokyonight (adds variety) */
+@define-color battery #9ece6a; /* Green */
+@define-color clock #c0caf5; /* Default foreground */

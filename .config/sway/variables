@@ -24,7 +24,7 @@ set $menu --no-startup-id rofi -show drun
 
 # Gaps and Borders
 gaps inner 5
-gaps outer 2
+gaps outer 5
 default_border pixel 3
 default_floating_border pixel 2
 

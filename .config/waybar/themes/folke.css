@@ -1,0 +1,22 @@
+/* Core Colors */
+@define-color background       #1a1b26; /* Dark background */
+@define-color background-alt   #24283b; /* Slightly lighter alt background */
+@define-color foreground       #c0caf5; /* Main text color */
+@define-color foreground-alt   #a9b1d6; /* Muted alt text color */
+
+/* Status Colors */
+@define-color good             #9ece6a; /* TokyoNight green */
+@define-color warning          #e0af68; /* TokyoNight yellow/orange */
+@define-color critical         #f7768e; /* TokyoNight red */
+
+/* Module Colors (All Different and harmonious with TokyoNight palette) */
+@define-color scratchpad       #bb9af7; /* Soft purple */
+@define-color disk             #7aa2f7; /* Light blue */
+@define-color cpu              #f7768e; /* Pinkish red */
+@define-color memory           #7dcfff; /* Sky blue */
+@define-color temperature      #ff9e64; /* Warm orange */
+@define-color network          #73daca; /* Aqua green */
+@define-color pulseaudio       #c0caf5; /* Foreground tone for balance */
+@define-color backlight        #7aa2f7; /* Reuse blue for visual consistency */
+@define-color battery          #9ece6a; /* Green (charging = good) */
+@define-color clock            #bb9af7; /* Matching scratchpad (purple = time block) */

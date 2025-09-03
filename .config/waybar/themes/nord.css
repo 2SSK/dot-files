@@ -1,0 +1,22 @@
+/* Nord Theme */
+
+@define-color background       #2e3440;
+@define-color background-alt   #3b4252;
+@define-color foreground       #d8dee9;
+@define-color foreground-alt   #81a1c1;
+
+@define-color warning          #ebcb8b;
+@define-color critical         #bf616a;
+@define-color good             #a3be8c;
+
+/* Module Colors */
+/* @define-color scratchpad       #b48ead; */
+/* @define-color disk             #81a1c1; */
+/* @define-color cpu              #d08770; */
+/* @define-color memory           #a3be8c; */
+/* @define-color temperature      #bf616a; */
+/* @define-color network          #88c0d0; */
+/* @define-color pulseaudio       #8fbcbb; */
+/* @define-color backlight        #d08770; */
+/* @define-color battery          #a3be8c; */
+/* @define-color clock            #d8dee9; */
