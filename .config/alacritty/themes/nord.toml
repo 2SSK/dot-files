@@ -1,0 +1,40 @@
+# Default colors
+[colors.primary]
+background = '#2e3440' # nord0
+foreground = '#d8dee9' # nord4
+
+# Cursor colors (optional, uncomment if you want)
+#[colors.cursor]
+#cursor = '#d8dee9'
+#text = '#2e3440'
+
+# Normal colors
+[colors.normal]
+black   = '#3b4252' # nord1
+red     = '#bf616a' # nord11
+green   = '#a3be8c' # nord14
+yellow  = '#ebcb8b' # nord13
+blue    = '#81a1c1' # nord9
+magenta = '#b48ead' # nord15
+cyan    = '#88c0d0' # nord8
+white   = '#e5e9f0' # nord6
+
+# Bright colors
+[colors.bright]
+black   = '#4c566a' # nord3
+red     = '#bf616a' # nord11
+green   = '#a3be8c' # nord14
+yellow  = '#ebcb8b' # nord13
+blue    = '#81a1c1' # nord9
+magenta = '#b48ead' # nord15
+cyan    = '#8fbcbb' # nord7
+white   = '#eceff4' # nord7
+
+# Indexed colors
+[[colors.indexed_colors]]
+index = 16
+color = '#d08770' # nord12 (orange)
+
+[[colors.indexed_colors]]
+index = 17
+color = '#5e81ac' # nord10 (frost blue)

@@ -16,7 +16,7 @@ set $cursor_theme Bibata-Modern-Ice
 seat * xcursor_theme $cursor_theme 24
 
 # Applications
-set $term kitty
+set $term alacritty
 set $files nautilus
 set $menu --no-startup-id rofi -show drun
 # set $menu --no-startup-id wofi --show drun
@@ -24,7 +24,7 @@ set $menu --no-startup-id rofi -show drun
 
 # Gaps and Borders
 gaps inner 5
-gaps outer 5
+gaps outer 0
 default_border pixel 3
 default_floating_border pixel 2
 
@@ -33,7 +33,7 @@ blur disable
 blur_passes 3
 blur_radius 3
 
-corner_radius 6
+corner_radius 0
 
 shadows enable
 shadow_offset 5 5
