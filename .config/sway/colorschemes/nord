@@ -6,6 +6,6 @@ set $color3 #3b4252
 set $color4 #bf616a
 
 client.focused               $color2 $color2 $color1 $color2 $color2
-client.unfocused             $color3 $color1 $color2 $color1 $color1
-client.focused_inactive      $color1 $color1 $color3 $color1 $color1
+client.unfocused             $color2 $color1 $color2 $color1 $color1
+client.focused_inactive      $color1 $color1 $color2 $color1 $color1
 client.urgent                $color4 $color4 $color1 $color4 $color4
