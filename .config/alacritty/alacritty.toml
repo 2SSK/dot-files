@@ -21,7 +21,7 @@ save_to_clipboard = true
 [window]
 decorations = "none"
 dynamic_title = true
-opacity = 0.75
+opacity = 0.8
 dynamic_padding = true
 
 # [window.padding]
@@ -41,7 +41,7 @@ command = { program = "paplay", args = ["/usr/share/sounds/freedesktop/stereo/di
 
 live_config_reload = true
 
-import = ["~/.config/alacritty/themes/cyberdream.toml", "~/.config/alacritty/fonts.toml"]
+import = ["~/.config/alacritty/themes/coolnight.toml", "~/.config/alacritty/fonts.toml"]
 
 # [shell]
 # program = "/bin/bash"
