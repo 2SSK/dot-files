@@ -33,7 +33,7 @@ blur disable
 blur_passes 3
 blur_radius 3
 
-corner_radius 0
+corner_radius 4
 
 shadows enable
 shadow_offset 5 5

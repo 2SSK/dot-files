@@ -1,15 +1,15 @@
-@import "themes/nord.css";
+@import "themes/tokyonight.css";
 /* Change this import to switch themes */
 
 * {
   font-family: "JetBrainsMono Nerd Font";
-  font-size: 13px;
+  font-size: 14px;
   font-weight: bold;
 }
 
 window#waybar {
-  /* background-color: transparent; */
-  background-color: @background;
+  background-color: transparent;
+  /* background-color: @background; */
   color: @foreground;
 }
 
@@ -31,16 +31,17 @@ window#waybar {
   margin: 3px;
   margin-top: 2;
   margin-bottom: 2;
-  /* border-radius: 16px; */
-  /* background: @background-alt; */
+  border-radius: 6px;
+  background: @background-alt;
 }
 
 /* === Workspaces === */
 #workspaces {
   padding: 2;
   margin: 0;
+  margin-top: 2;
   margin-right: 5px;
-  /* border: 2px solid @foreground-alt; */
+  border: 2px solid @foreground-alt;
 }
 
 #workspaces button,
@@ -56,7 +57,7 @@ window#waybar {
 #workspaces button.visible {
   background: @foreground;
   color: @background;
-  /* border-radius: 14px; */
+  border-radius: 4px;
   margin: 0 2px;
 }
 
@@ -68,117 +69,113 @@ window#waybar {
 
 #workspaces button.urgent {
   background: @critical;
-  /* border-radius: 14px; */
+  border-radius: 4px;
 }
 
 /* === Module Specific Colors === */
 #bluetooth,
 #scratchpad,
 #window {
-  color: @scratchpad;
-  /* border: 2px solid @scratchpad; */
-}
-
-#bluetooth {
-  font-size: 18px;
+  color: @foreground;
+  border: 2px solid @foreground-alt;
 }
 
 #disk {
-  color: @disk;
-  /* border: 2px solid @disk; */
+  color: @foreground;
+  border: 2px solid @foreground-alt;
 }
 
 #cpu {
-  color: @cpu;
-  /* border: 2px solid @cpu; */
+  color: @foreground;
+  border: 2px solid @foreground-alt;
 }
 
 #memory {
-  color: @memory;
-  /* border: 2px solid @memory; */
+  color: @foreground;
+  border: 2px solid @foreground-alt;
 }
 
 #temperature {
-  color: @temperature;
-  /* border: 2px solid @temperature; */
+  color: @foreground;
+  border: 2px solid @foreground-alt;
 }
 
 #network {
-  color: @network;
-  /* border: 2px solid @network; */
+  color: @foreground;
+  border: 2px solid @foreground-alt;
 }
 
 #pulseaudio {
-  color: @pulseaudio;
-  /* border: 2px solid @pulseaudio; */
+  color: @foreground;
+  border: 2px solid @foreground-alt;
 }
 
 #backlight {
-  color: @backlight;
-  /* border: 2px solid @backlight; */
+  color: @foreground;
+  border: 2px solid @foreground-alt;
 }
 
 #battery {
-  color: @battery;
-  /* border: 2px solid @battery; */
+  color: @foreground;
+  border: 2px solid @foreground-alt;
 }
 
 #clock {
-  color: @clock;
-  /* border: 2px solid @clock; */
+  color: @foreground;
+  border: 2px solid @foreground-alt;
 }
 
 /* === Conditional Styling === */
 #network.connected {
   color: @good;
-  /* border: 2px solid @good; */
+  border: 2px solid @good;
 }
 
 #network.disconnected {
   color: @critical;
-  /* border: 2px solid @critical; */
+  border: 2px solid @critical;
 }
 
 #temperature.critical {
   color: @critical;
-  /* border: 2px solid @critical; */
+  border: 2px solid @critical;
 }
 
 #pulseaudio.muted {
   color: @critical;
-  /* border: 2px solid @critical; */
+  border: 2px solid @critical;
 }
 
 #battery.charging {
   color: @good;
-  /* border: 2px solid @good; */
+  border: 2px solid @good;
 }
 
 #battery.warning {
   color: @warning;
-  /* border: 2px solid @warning; */
+  border: 2px solid @warning;
 }
 
 /* === Battery Critical Animation === */
 @keyframes blink-critical {
   0% {
-    /* border-color: @critical; */
+    border-color: @critical;
     color: @critical;
   }
 
   50% {
-    /* border-color: transparent; */
+    border-color: transparent;
     color: @background;
   }
 
   100% {
-    /* border-color: @critical; */
+    border-color: @critical;
     color: @critical;
   }
 }
 
 #battery.critical {
   animation: blink-critical 1s infinite;
-  /* border: 2px solid @critical; */
+  border: 2px solid @critical;
   color: @critical;
 }
