@@ -2,30 +2,28 @@
   "layer": "top",
   "position": "top",
   "height": 10,
+  "margin-top": 2,
   "margin-left": 5,
   "margin-right": 5,
   // "output": "eDP-1",
   "modules-left": [
+    "sway/workspaces",
     // "sway/window",
-    // "network#speed"
-    "battery",
-    "temperature",
     "disk",
     "memory",
-    "cpu"
+    "cpu",
+    "sway/scratchpad"
   ],
   "modules-center": [
-    "sway/workspaces",
-    "hyprland/workspaces"
+    "clock"
   ],
   "modules-right": [
-    "sway/scratchpad",
+    "battery",
     "pulseaudio",
     "backlight",
+    "temperature",
     "network",
-    "bluetooth",
-    // "custom/separator",
-    "clock"
+    "bluetooth"
   ],
   "custom/separator": {
     "format": "|"
@@ -35,13 +33,25 @@
     "warp-on-scroll": true,
     "enable-bar-scroll": false,
     "format": "{icon}",
-    "format-icons": {}
-    // "persistent-workspaces": {
-    //   "1": [],
-    //   "2": [],
-    //   "3": [],
-    //   "4": []
-    // }
+    "format-icons": {
+      "1": "I",
+      "2": "II",
+      "3": "III",
+      "4": "IV",
+      "5": "V",
+      "6": "VI",
+      "7": "VII",
+      "8": "VIII",
+      "9": "IX",
+      "10": "X"
+    },
+    "persistent-workspaces": {
+      "1": [],
+      "2": [],
+      "3": [],
+      "4": [],
+      "5": []
+    }
   },
   "sway/scratchpad": {
     "format": " {count}",
@@ -81,7 +91,7 @@
     "format-critical": " {temperatureC}°C (Critical!!)"
   },
   "network": {
-    "format-wifi": " ",
+    "format-wifi": "  {essid}",
     "format-ethernet": " {essid}",
     "format-disconnected": "  Disconnected",
     "interval": 5,
@@ -127,7 +137,7 @@
   "bluetooth": {
     "format": "",
     "format-disabled": "󰂲",
-    "format-connected": "",
+    "format-connected": " {device_alias}",
     "tooltip-format": "Device: {device_alias}",
     "on-click": "blueberry"
   }
