@@ -1,0 +1,11 @@
+set $background   #011423
+set $foreground   #CBE0F0
+set $accent       #0FC5ED
+set $alert        #E52E2E
+
+# Window border colors
+# class                 border      background  text        indicator   child_border
+client.focused          $accent     $accent     $background $accent     $accent
+client.unfocused        $foreground $background $foreground $background $background
+client.focused_inactive $background $background $foreground $background $background
+client.urgent           $alert      $alert      $background $alert      $alert
