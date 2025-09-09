@@ -180,5 +180,5 @@ configuration {
 */
 }
 
-@theme "~/.config/rofi/themes/new.rasi"
+@theme "~/.config/rofi/themes/coolnight.rasi"
 // @theme "~/.config/rofi/themes/sidebar.rasi"

@@ -6,10 +6,21 @@
 //   // bd:  #2cc55dff; /* BORDER */
 //   bd:  #7aa2f7; /* BORDER */
 // }
+
+// NORD THEME
+// * {
+// bg: #2e3440;
+// al: #bf616a;
+// se: #3b4252;
+// bd: #81a1c1;
+// fg: #d8dee9;
+// }
+
+// COOLNIGHT THEME
 * {
-bg: #2e3440;
-al: #bf616a;
-se: #3b4252;
-bd: #81a1c1;
-fg: #d8dee9;
+bg: #011423;      // background
+al: #0FC5ED;      // accent / highlight
+se: #033259;      // secondary background
+bd: #0FC5ED;      // border / neutral line
+fg: #CBE0F0;      // foreground (default text)
 }
