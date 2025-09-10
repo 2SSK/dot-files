@@ -7,7 +7,7 @@ fzf apt
 zoxide apt
 ripgrep apt
 vim apt
-neovim snap
+neovim manual
 tmux apt
 btop apt
 
