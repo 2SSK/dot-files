@@ -13,7 +13,7 @@ detect_distro() {
     DISTRO=$ID
     DISTRO_FAMILY=$ID_LIKE
     echo "Distribution ID     : $DISTRO"
-    echo "Distribution Family : $ID_LIKE"
+    echo "Distribution Family : $DISTRO_FAMILY"
 
     if [[ "$DISTRO_FAMILY" == *"arch"* || "$DISTRO" == "arch" ]]; then
       bash "$ARCH_INSTALL_SCRIPT"
@@ -23,10 +23,9 @@ detect_distro() {
       echo "Unsupported Linux distribution: $DISTRO"
       exit 1
     fi
-  fi
-else
-  echo "Cannot detect Linux distribution. /etc/os-release not found."
-  exit 1
+  else
+    echo "Cannot detect Linux distribution. /etc/os-release not found."
+    exit 1
   fi
 }
 
