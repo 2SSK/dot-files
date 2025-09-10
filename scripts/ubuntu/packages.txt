@@ -14,7 +14,7 @@ btop apt
 lazygit snap
 lazydocker snap
 
-docker apt
+docker-io apt
 docker-compose apt
 
 gcc apt

@@ -19,17 +19,10 @@
 
 ## Rice
 
-![scrcpy](./screenshots/screenshot_2025-07-19_11-21-08.png)
-![rice](./screenshots/screenshot_2025-07-22_09-43-27.png)
+![rice](./screenshots/screenshot_2025-09-10_15-26-11.png)
 
 ---
 
-## NVIM Config && Brave
+## NVIM Config
 
-![nvim](./screenshots/screenshot_2025-07-22_09-42-11.png)
-
----
-
-## Vim
-
-## ![vim](./screenshots/screenshot_2025-07-22_09-46-50.png)
+![nvim](./screenshots/screenshot_2025-09-10_15-28-36.png)
