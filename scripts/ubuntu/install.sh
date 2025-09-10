@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-PACKAGES_TO_INSTALL="$(pwd)/packages.txt"
+PACKAGES_TO_INSTALL="$(pwd)/scripts/ubuntu/packages.txt"
 
 echo ""
 echo "Starting Ubuntu installation script..."
