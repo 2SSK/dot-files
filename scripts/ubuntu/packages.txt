@@ -1,6 +1,6 @@
 zsh apt
 stow apt
-starship snap
+starship manual
 eza apt
 bat apt
 fzf apt

@@ -31,7 +31,19 @@ install_packages_ubuntu() {
         fi
         ;;
       manual)
-        echo "⚠ $pkg requires manual installation (not available via apt/snap)."
+        case "$pkg" in
+        starship)
+          if command -v starship &>/dev/null; then
+            echo "starship is already installed."
+          else
+            echo "Installing starship via official script..."
+            curl -sS https://starship.rs/install.sh | sh
+          fi
+          ;;
+        *)
+          echo "⚠ $pkg requires manual installation (not available via apt/snap)."
+          ;;
+        esac
         ;;
       *)
         echo "Unknown source for $pkg. Skipping."
@@ -60,6 +72,9 @@ setup_environment_ubuntu() {
   [ -d "$DOTFILES_DIR" ] && command -v stow &>/dev/null &&
     stow --dir="$DOTFILES_DIR" --target="$HOME" * &&
     echo "Dotfiles stowed."
+
+  # make sure wget and unzip are installed
+  sudo apt-get install -y wget unzip
 
   # JetBrains Mono Nerd Font (manual fallback)
   if fc-list | grep -qi "jetbrainsmono nerd font"; then
