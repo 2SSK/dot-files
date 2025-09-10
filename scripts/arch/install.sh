@@ -2,7 +2,7 @@
 
 set -e
 
-PACKAGES_TO_INSTALL="$(pwd)/packages.txt"
+PACKAGES_TO_INSTALL="$(pwd)/scripts/arch/packages.txt"
 
 echo ""
 echo "Starting installation script..."
