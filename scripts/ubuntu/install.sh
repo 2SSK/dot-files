@@ -56,7 +56,7 @@ setup_environment_ubuntu() {
   fi
 
   # stow dotfiles
-  DOTFILES_DIR="$(realpath ../../)"
+  DOTFILES_DIR="$(pwd)"
   [ -d "$DOTFILES_DIR" ] && command -v stow &>/dev/null &&
     stow --dir="$DOTFILES_DIR" --target="$HOME" * &&
     echo "Dotfiles stowed."
