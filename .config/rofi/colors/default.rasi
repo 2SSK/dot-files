@@ -24,3 +24,12 @@ se: #033259;      // secondary background
 bd: #0FC5ED;      // border / neutral line
 fg: #CBE0F0;      // foreground (default text)
 }
+
+// MOCHA THEME
+* {
+bg: #313244;      // background
+al: #f38ba8;      // accent / highlight
+se: #1e1e2e;      // secondary background
+bd: #cdd6f4;      // border / neutral line
+fg: #cdd6f4;      // foreground (default text)
+}

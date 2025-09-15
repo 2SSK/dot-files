@@ -7,7 +7,7 @@ local themes = {
 	"onedark",
 }
 
-local colorscheme = themes[2]
+local colorscheme = themes[3]
 
 return {
 	require("config.plugins.themes." .. colorscheme),

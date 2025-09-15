@@ -1,4 +1,4 @@
-
+@import "colors/default.rasi"
 /*****----- Configuration -----*****/
 configuration {
 	modi:                       "drun,filebrowser,window"; /*emoji:rofimoji*/
@@ -15,13 +15,12 @@ configuration {
 /*****----- Global Properties -----*****/
 * {
     font:                        "JetBrains Mono Nerd Font 16";
-    background:                  #282839E6;
-    background-alt:              #1e222a;
-    foreground:                  #D9E0EEFF;
-    // selected:                    #458588;
-    selected:                    #81a1c1;
-    active:                      #ABE9B3FF;
-    urgent:                      #F28FADFF;
+    background:                  #313244;
+    background-alt:              #1e1e2e;
+    foreground:                  #cdd6f4;
+    selected:                    #1e1e2e;
+    active:                      #1e1e2e;
+    urgent:                      #f38ba8;
 }
 
 /*****----- Main Window -----*****/
