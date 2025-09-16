@@ -30,6 +30,6 @@ fg: #CBE0F0;      // foreground (default text)
 bg: #313244;      // background
 al: #f38ba8;      // accent / highlight
 se: #1e1e2e;      // secondary background
-bd: #cdd6f4;      // border / neutral line
+bd: #89b4f3;      // border / neutral line
 fg: #cdd6f4;      // foreground (default text)
 }
