@@ -1,7 +1,12 @@
 # Catppuccin Mocha Colors for Sway
-set $color1 #313244 
-set $color2 #a6adc8
-set $color3 #cdd6f4
+# set $color1 #313244 
+# set $color2 #a6adc8
+# set $color3 #cdd6f4
+# set $color4 #f38ba8
+
+set $color1 #1e1e2e 
+set $color2 #89b4f3
+set $color3 #a6adc8
 set $color4 #f38ba8
 
 # Window border colors
