@@ -1,4 +1,4 @@
-@import "themes/tokyonight.css";
+@import "themes/mocha.css";
 /* Change this import to switch themes */
 
 * {
@@ -8,8 +8,8 @@
 }
 
 window#waybar {
-  background-color: transparent;
-  /* background-color: @background; */
+  /* background-color: transparent; */
+  background-color: @background;
   color: @foreground;
 }
 
@@ -17,6 +17,8 @@ window#waybar {
 #workspaces,
 #scratchpad,
 #window,
+#logo,
+#power,
 #disk,
 #cpu,
 #memory,
@@ -26,13 +28,15 @@ window#waybar {
 #pulseaudio,
 #backlight,
 #battery,
-#clock {
+#clock,
+#custom-logo,
+#custom-power {
   padding: 2px 8px;
   margin: 3px;
   margin-top: 2;
   margin-bottom: 2;
   border-radius: 6px;
-  background: @background-alt;
+  /* background: @background-alt; */
 }
 
 /* === Workspaces === */
@@ -41,7 +45,7 @@ window#waybar {
   margin: 0;
   margin-top: 2;
   margin-right: 5px;
-  border: 2px solid @foreground-alt;
+  /* border: 2px solid @foreground-alt; */
 }
 
 #workspaces button,
@@ -52,130 +56,168 @@ window#waybar {
 #workspaces button.active:hover,
 #workspaces button.urgent {
   padding: 0 6px;
+  color: @foreground-alt;
+  background: @background;
+  border-radius: 6px;
 }
 
 #workspaces button.visible {
-  background: @foreground;
+  background: @foreground-alt;
   color: @background;
-  border-radius: 4px;
+  border-radius: 6px;
   margin: 0 2px;
 }
 
 #workspaces button:hover,
 #workspaces button.visible:hover {
-  background: @background-alt;
+  background-color: @background-alt;
   color: @foreground;
 }
 
 #workspaces button.urgent {
   background: @critical;
-  border-radius: 4px;
+  color: @background;
+  border-radius: 6px;
+}
+
+#workspaces button {
+  background-color: @background-alt;
+  margin: 0px 2px;
 }
 
 /* === Module Specific Colors === */
 #bluetooth,
 #scratchpad,
 #window {
-  color: @foreground;
-  border: 2px solid @foreground-alt;
+  background: @scratchpad;
+  color: @background;
+  /* border: 2px solid @scratchpad; */
 }
 
 #disk {
-  color: @foreground;
-  border: 2px solid @foreground-alt;
+  background: @disk;
+  color: @background;
+  /* border: 2px solid @disk; */
 }
 
 #cpu {
-  color: @foreground;
-  border: 2px solid @foreground-alt;
+  background: @cpu;
+  color: @background;
+  /* border: 2px solid @cpu; */
 }
 
 #memory {
-  color: @foreground;
-  border: 2px solid @foreground-alt;
+  background: @memory;
+  color: @background;
+  border: 2px solid @memory;
+}
+
+#custom-logo {
+  color: @temperature;
+  background: @background-alt;
+  padding: 2px 12px;
 }
 
 #temperature {
-  color: @foreground;
-  border: 2px solid @foreground-alt;
+  background: @temperature;
+  color: @background;
+  /* border: 2px solid @temperature; */
 }
 
 #network {
-  color: @foreground;
-  border: 2px solid @foreground-alt;
+  background: @network;
+  color: @background;
+  /* border: 2px solid @network; */
 }
 
 #pulseaudio {
-  color: @foreground;
-  border: 2px solid @foreground-alt;
+  background: @pulseaudio;
+  color: @background;
+  /* border: 2px solid @pulseaudio; */
 }
 
 #backlight {
-  color: @foreground;
-  border: 2px solid @foreground-alt;
+  background: @backlight;
+  color: @background;
+  /* border: 2px solid @backlight; */
+}
+
+#custom-power {
+  background: @temperature;
+  color: @background;
+  padding: 2px 12px;
 }
 
 #battery {
-  color: @foreground;
-  border: 2px solid @foreground-alt;
+  background: @battery;
+  color: @background;
+  /* border: 2px solid @battery; */
 }
 
 #clock {
-  color: @foreground;
-  border: 2px solid @foreground-alt;
+  background: @clock;
+  color: @background;
+  /* border: 2px solid @clock; */
 }
 
 /* === Conditional Styling === */
 #network.connected {
-  color: @good;
-  border: 2px solid @good;
+  background: @good;
+  color: @background;
+  /* border: 2px solid @good; */
 }
 
 #network.disconnected {
-  color: @critical;
-  border: 2px solid @critical;
+  background: @critical;
+  color: @background;
+  /* border: 2px solid @critical; */
 }
 
 #temperature.critical {
-  color: @critical;
-  border: 2px solid @critical;
+  background: @critical;
+  color: @background;
+  /* border: 2px solid @critical; */
 }
 
 #pulseaudio.muted {
-  color: @critical;
-  border: 2px solid @critical;
+  background: @critical;
+  color: @background;
+  /* border: 2px solid @critical; */
 }
 
 #battery.charging {
-  color: @good;
-  border: 2px solid @good;
+  background: @good;
+  color: @background;
+  /* border: 2px solid @good; */
 }
 
 #battery.warning {
-  color: @warning;
-  border: 2px solid @warning;
+  background: @warning;
+  color: @background;
+  /* border: 2px solid @warning; */
 }
 
 /* === Battery Critical Animation === */
 @keyframes blink-critical {
   0% {
-    border-color: @critical;
-    color: @critical;
+    background: @critical;
+    color: @background;
   }
 
   50% {
-    border-color: transparent;
+    background: transparent;
     color: @background;
   }
 
   100% {
-    border-color: @critical;
-    color: @critical;
+    background: @critical;
+    color: @background;
   }
 }
 
 #battery.critical {
   animation: blink-critical 1s infinite;
-  border: 2px solid @critical;
-  color: @critical;
+  /* border: 2px solid @critical; */
+  background: @critical;
+  color: @background;
 }

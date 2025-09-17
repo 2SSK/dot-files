@@ -1,13 +1,15 @@
 {
-  "layer": "top",
+  "layer": "bottom",
   "position": "top",
-  "height": 10,
-  "margin-top": 2,
-  "margin-left": 5,
-  "margin-right": 5,
+  "height": 30,
+  // "margin-top": 2,
+  // "margin-left": 5,
+  // "margin-right": 5,
   // "output": "eDP-1",
   "modules-left": [
+    "custom/logo",
     "sway/workspaces",
+    "hyprland/workspaces",
     // "sway/window",
     "disk",
     "memory",
@@ -23,12 +25,44 @@
     "backlight",
     "temperature",
     "network",
-    "bluetooth"
+    "bluetooth",
+    "custom/power"
   ],
   "custom/separator": {
     "format": "|"
   },
+  "custom/logo": {
+    // "format": "  ",
+    "format": " ",
+    "tooltip": false,
+    "on-click": "rofi -show drun"
+  },
   "sway/workspaces": {
+    "all-outputs": true,
+    "warp-on-scroll": true,
+    "enable-bar-scroll": false,
+    "format": "{icon}",
+    "format-icons": {
+      "1": "I",
+      "2": "II",
+      "3": "III",
+      "4": "IV",
+      "5": "V",
+      "6": "VI",
+      "7": "VII",
+      "8": "VIII",
+      "9": "IX",
+      "10": "X"
+    },
+    "persistent-workspaces": {
+      "1": [],
+      "2": [],
+      "3": [],
+      "4": [],
+      "5": []
+    }
+  },
+  "hyprland/workspaces": {
     "all-outputs": true,
     "warp-on-scroll": true,
     "enable-bar-scroll": false,
@@ -140,5 +174,10 @@
     "format-connected": " {device_alias}",
     "tooltip-format": "Device: {device_alias}",
     "on-click": "blueberry"
+  },
+  "custom/power": {
+    "format": "󰤆",
+    "tooltip": false,
+    "on-click": "wlogout"
   }
 }

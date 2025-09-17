@@ -1,0 +1,23 @@
+/* Core Colors */
+@define-color background #1e1e2e;
+@define-color background-alt #313244;
+@define-color foreground #cdd6f4;
+@define-color foreground-alt #89b4fa;
+
+/* Status Colors */
+@define-color good #a6e3a1;
+@define-color warning #f9e2af;
+@define-color critical #f38ba8;
+
+/* Module Colors (All Different) */
+@define-color scratchpad #cba6f7;
+@define-color disk #eba0ac;
+@define-color cpu #fab387;
+@define-color memory #a6e3a1;
+@define-color temperature #f38ba8;
+@define-color network #89dceb;
+@define-color pulseaudio #94e2d5;
+@define-color backlight #f9e2af;
+@define-color battery #f5c2e7;
+@define-color bluetooth #74c7ec;
+@define-color clock #b4befe;
