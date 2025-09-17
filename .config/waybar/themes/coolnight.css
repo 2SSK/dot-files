@@ -1,0 +1,22 @@
+/* Core Colors */
+@define-color background #011423; /* Coolnight background */
+@define-color background-alt #033259; /* Slightly lighter background */
+@define-color foreground #CBE0F0; /* Default text color */
+@define-color foreground-alt #0FC5ED; /* Accent text color */
+
+/* Status Colors */
+@define-color good #44FFB1; /* Greenish good indicator */
+@define-color warning #FFE073; /* Bright yellow */
+@define-color critical #E52E2E; /* Strong red for urgency */
+
+/* Module Colors (All Different for variety) */
+@define-color scratchpad #A277FF; /* Purple */
+@define-color disk #0FC5ED; /* Blue */
+@define-color cpu #FFE073; /* Yellow */
+@define-color memory #44FFB1; /* Green */
+@define-color temperature #E52E2E; /* Red */
+@define-color network #24EAF7; /* Cyan */
+@define-color pulseaudio #24EAF7; /* Light cyan */
+@define-color backlight #A277FF; /* Purple */
+@define-color battery #44FFB1; /* Green */
+@define-color clock #CBE0F0; /* Foreground */
