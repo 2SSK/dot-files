@@ -10,4 +10,4 @@ exec --no-startup-id waypaper --restore
 # exec_always swaybg -i ~/.config/sway/tokyonight.png -m fill
 
 # Change wallpaper every 5 minutes
-# exec_always bash -c 'while true; do ~/.local/bin/random-wallpaper; sleep 300; done'
+exec_always bash -c 'while true; do ~/.local/bin/random-wallpaper; sleep 300; done'
