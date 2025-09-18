@@ -65,6 +65,9 @@ setopt notify              # report the status of background jobs immediately
 setopt numericglobsort     # sort filenames numerically when it makes sense
 setopt promptsubst         # enable command substitution in prompt
 
+# ----- Bat (better cat) -----
+export BAT_THEME=tokyonight_night
+
 #######################################################
 # Environment Variables
 #######################################################
@@ -219,7 +222,6 @@ export PATH=$PATH:$ANDROID_HOME/tools
 export PATH=$PATH:$ANDROID_HOME/tools/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 
-
 # Go Path
 export PATH=$PATH:$HOME/go/bin
 
@@ -230,5 +232,18 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
 export PATH=$JAVA_HOME/bin:$PATH
 
+# Snap path
+export PATH=$PATH:/snap/bin
+
 export TERM=xterm-256color
 
+
+# pnpm
+export PNPM_HOME="/home/ssk/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+
+
+export PATH="$PATH:/opt/miniconda3/bin"

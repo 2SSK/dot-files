@@ -1,7 +1,7 @@
 # Theme
 theme = catppuccin-mocha
-background-opacity = 0.75
-# background-opacity = 1
+# background-opacity = 0.75
+background-opacity = 1
 
 # Font
 font-family = "JetBrains Mono Nerd Font"
@@ -17,8 +17,7 @@ gtk-wide-tabs = false
 # window-padding-y = 50,0
 # window-padding-x = 50,0
 window-padding-balance = false
-# window-decoration = true
-window-decoration = false
+window-decoration = true
 
 # Other
 mouse-hide-while-typing = true
