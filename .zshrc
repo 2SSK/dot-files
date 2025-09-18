@@ -66,7 +66,7 @@ setopt numericglobsort     # sort filenames numerically when it makes sense
 setopt promptsubst         # enable command substitution in prompt
 
 # ----- Bat (better cat) -----
-export BAT_THEME=tokyonight_night
+export BAT_THEME="Catppuccin Mocha"
 
 #######################################################
 # Environment Variables
