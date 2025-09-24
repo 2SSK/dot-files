@@ -1,7 +1,7 @@
 return {
 	"nvim-telescope/telescope.nvim",
 	tag = "0.1.8",
-	dependecies = {
+	dependencies = {
 		"nvim-lua/plenary.nvim",
 		{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
 	},
@@ -10,12 +10,14 @@ return {
 		local keymap = vim.keymap
 		local actions = require("telescope.actions")
 		local telescope = require("telescope")
+		local builtin = require("telescope.builtin")
 
 		telescope.setup({
 			-- Theme
 			pickers = {
 				find_files = {
 					theme = "ivy",
+					hidden = true, -- Show hidden files
 				},
 				oldfiles = {
 					theme = "ivy",
@@ -40,6 +42,19 @@ return {
 			),
 
 			defaults = {
+				file_ignore_patterns = {
+					"node_modules",
+					".git",
+					"dist",
+					"build",
+					"vendor",
+					"%.lock",
+					"%.png",
+					"%.jpg",
+					"%.jpeg",
+					"%.gif",
+					"%.svg",
+				},
 				path_display = { "smart" },
 				mappings = {
 					i = {
@@ -48,6 +63,15 @@ return {
 					},
 				},
 			},
+
+			-- keymap to fuzzy search in current buffer
+			vim.keymap.set("n", "<leader>/", function()
+				-- You can pass additional configuration to Telescope to change the theme, layout, etc.
+				builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
+					winblend = 10,
+					previewer = false,
+				}))
+			end, { desc = "[/] Fuzzily search in current buffer" }),
 
 			-- Keybind to open config files
 			keymap.set("n", "<leader>en", function()

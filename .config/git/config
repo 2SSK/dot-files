@@ -98,3 +98,19 @@
 
 [credential]
 	helper = store
+
+# Conditional configurations
+[includeIf "gitdir:~/Code/"]
+    path = ~/.config/git/personal.gitconfig
+
+[includeIf "gitdir:~/Work/"]
+    path = ~/.config/git/work.gitconfig
+
+[url "git@github-personal:"]
+    insteadOf = ghp:
+
+[url "git@github-work:"]
+    insteadOf = ghw:
+[alias]
+	fix-remote-personal = !git remote set-url origin $(git remote get-url origin | sed \"s|github.com|github-personal|\")
+	fix-remote-work = !git remote set-url origin $(git remote get-url origin | sed \"s|github.com|github-work|\")

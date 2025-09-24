@@ -1,0 +1,17 @@
+# Catppuccin Mocha Colors for Sway
+# set $color1 #313244 
+# set $color2 #a6adc8
+# set $color3 #cdd6f4
+# set $color4 #f38ba8
+
+set $color1 #1e1e2e 
+set $color2 #89b4f3
+set $color3 #a6adc8
+set $color4 #f38ba8
+
+# Window border colors
+# Format: border background text indicator child_border
+client.focused               $color2 $color2 $color1 $color2 $color2
+client.unfocused             $color3 $color1 $color2 $color1 $color1
+client.focused_inactive      $color1 $color1 $color3 $color1 $color1
+client.urgent                $color4 $color4 $color1 $color4 $color4

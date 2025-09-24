@@ -1,0 +1,35 @@
+// * {
+//   al:  #1c1c1cff; /* ALTERNATIVE BACKGROUND */
+//   bg:  #131313ff; /* BACKGROUND */
+//   se:  #1f1f1fff; /* SELECTED */
+//   fg:  #d6dae4ff; /* FOREGROUND */
+//   // bd:  #2cc55dff; /* BORDER */
+//   bd:  #7aa2f7; /* BORDER */
+// }
+
+// NORD THEME
+// * {
+// bg: #2e3440;
+// al: #bf616a;
+// se: #3b4252;
+// bd: #81a1c1;
+// fg: #d8dee9;
+// }
+
+// COOLNIGHT THEME
+* {
+bg: #011423;      // background
+al: #0FC5ED;      // accent / highlight
+se: #033259;      // secondary background
+bd: #0FC5ED;      // border / neutral line
+fg: #CBE0F0;      // foreground (default text)
+}
+
+// MOCHA THEME
+* {
+bg: #313244;      // background
+al: #f38ba8;      // accent / highlight
+se: #1e1e2e;      // secondary background
+bd: #89b4f3;      // border / neutral line
+fg: #cdd6f4;      // foreground (default text)
+}

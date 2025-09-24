@@ -1,5 +1,5 @@
 include ~/.config/sway/variables
-include ~/.config/sway/colorschemes/gruvbox-material
+include ~/.config/sway/colorschemes/catppuccin-mocha
 include ~/.config/sway/outputs
 include ~/.config/sway/inputs
 include ~/.config/sway/startup
@@ -12,5 +12,9 @@ include ~/.config/sway/keybindings/scratchpad
 include ~/.config/sway/keybindings/resizing
 
 include ~/.config/sway/bar/waybar
+# include ~/.config/sway/bar/swaybar
 
 include /etc/sway/config.d/*
+
+# exec_always swaybg -i /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1366x768.png -m fill
+

@@ -16,12 +16,29 @@ set $cursor_theme Bibata-Modern-Ice
 seat * xcursor_theme $cursor_theme 24
 
 # Applications
-set $term kitty
+set $term ghostty
 set $files nautilus
 set $menu --no-startup-id rofi -show drun
+# set $menu --no-startup-id wofi --show drun
+# set $menu fuzzel
 
 # Gaps and Borders
-gaps inner 2
+gaps inner 10
 gaps outer 10
 default_border pixel 3
-default_floating_border pixel 1
+default_floating_border pixel 2
+
+# Blur, rounded corners, and shadows
+blur enable
+blur_passes 3
+blur_radius 5
+
+corner_radius 12
+
+shadows enable
+shadow_offset 5 5
+shadow_color #111111
+shadow_inactive_color #0000004F
+
+default_dim_inactive 0.1
+for_window [app_id=".*"] opacity 1

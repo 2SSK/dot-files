@@ -1,17 +1,21 @@
 # i3 config file (v4)
 
- for_window [class="^.*"] border pixel 0
+ for_window [class="^.*"] border pixel 3
 
+# exec_always --no-startup-id feh --bg-scale ~/.config/i3/walls/tokyonight.png
 # set mod key (Mod1=<Alt>, Mod4=<Super>)
 set $mod Mod4
+
+
 
 exec --no-startup-id picom --config ~/.config/picom/picom.conf
 exec --no-startup-id xrdb -merge ~/.Xresources
 #exec_always --no-startup-id setxkbmap -option :nocaps
 exec_always --no-startup-id setxkbmap -option 
-# exec --no-startup-id variety
+exec --no-startup-id variety --restore
+exec --no-startup-id waypaper --restore
 exec_always --no-startup-id autotiling
-exec_always --no-startup-id xborders
+# exec_always --no-startup-id xborders
 
 # kill any hanging polybar processes
 exec_always killall polybar
@@ -22,13 +26,19 @@ exec_always --no-startup-id ~/.config/polybar/launch_polybar.sh
 font pango:JetbrainsMono Nerd Font Bold 12
 
 # Gaps
-gaps outer 10
-gaps inner 20
-# gaps top   -5
+gaps outer 2
+gaps inner 5
 
 # Start XDG autostart .desktop files using dex. See also
 # https://wiki.archlinux.org/index.php/XDG_Autostart
  exec --no-startup-id dex --autostart --environment i3
+
+# monitor configuration
+# exec --no-startup-id xrandr --output eDP-1-1 --off --output HDMI-1-1 --mode 1920x1080
+# # Set gaps only on workspace 2
+# assign [workspace="2"] $ws2
+# gaps inner 20
+# gaps outer 20
 
 # screen before suspend. Use loginctl lock-session to lock your screen. exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 
@@ -85,10 +95,10 @@ bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
 
 # alternatively, you can use the cursor keys:
-bindsym $mod+Shift+Left move left
+# bindsym $mod+Shift+Left move left
 bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
-bindsym $mod+Shift+Right move right
+# bindsym $mod+Shift+Right move right
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
@@ -102,7 +112,11 @@ bindsym $mod+e layout toggle split
 bindsym $mod+a focus parent
 
 # focus the child container
-#bindsym $mod+d focus child
+# bindsym $mod+d focus child
+
+# Switch to prev/next workspace
+bindsym $mod+slash workspace next
+bindsym $mod+period workspace prev
 
 # Audio controls using pactl
 bindsym F1 exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
@@ -119,6 +133,7 @@ bindsym F9 exec --no-startup-id amixer set Capture toggle
 # Screenshot
 bindsym F12 exec scrot  ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
 bindsym Shift+F12 exec scrot -u ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
+bindsym Ctrl+F12 exec scrot -s ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
 
 # split orientation
 bindsym $mod+z split h;exec notify-send 'tile horizontally'
@@ -129,6 +144,9 @@ bindsym $mod+Shift+space floating toggle
 
 # change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
+
+bindsym $mod+Shift+Right move window to output right
+bindsym $mod+Shift+Left move window to output left
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
@@ -182,10 +200,10 @@ mode "resize" {
         # Pressing right will grow the window’s width.
         # Pressing up will shrink the window’s height.
         # Pressing down will grow the window’s height.
-        bindsym j resize shrink width 10 px or 10 ppt
-        bindsym k resize grow height 10 px or 10 ppt
-        bindsym l resize shrink height 10 px or 10 ppt
-        bindsym semicolon resize grow width 10 px or 10 ppt
+        bindsym h resize shrink width 10 px or 10 ppt
+        bindsym j resize grow height 10 px or 10 ppt
+        bindsym k resize shrink height 10 px or 10 ppt
+        bindsym l resize grow width 10 px or 10 ppt
 
         # same bindings, but for the arrow keys
         bindsym Left resize shrink width 10 px or 10 ppt
@@ -208,55 +226,19 @@ bindsym $mod+c exec "~/.config/i3/lockscreen.sh"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 
-# set $rosewater #f5e0dc
-# set $flamingo  #f2cdcd
-# set $pink      #f5c2e7
-# set $mauve     #cba6f7
-# set $red       #f38ba8
-# set $maroon    #eba0ac
-# set $peach     #fab387
-# set $yellow    #f9e2af
-# set $green     #a6e3a1
-# set $teal      #94e2d5
-# set $sky       #89dceb
-# set $sapphire  #74c7ec
-# set $blue      #89b4fa
-# set $lavender  #b4befe
-# set $text      #cdd6f4
-# set $subtext1  #bac2de
-# set $subtext0  #a6adc8
-# set $overlay2  #9399b2
-# set $overlay1  #7f849c
-# set $overlay0  #6c7086
-# set $surface2  #585b70
-# set $surface1  #45475a
-# set $surface0  #313244
-# set $base      #1e1e2e
-# set $mantle    #181825
-# set $crust     #11111b
-#
-# # target                 title     bg    text      indicator    border
-# client.focused           $mantle   $mauve $mantle  $mauve     $mauve
-# client.focused_inactive  $overlay0 $base  $text    $mauve     $overlay0
-# client.unfocused         $overlay0 $base  $text    $rosewater $overlay0
-# client.urgent            $peach    $base  $peach   $overlay0  $peach
-# client.placeholder       $overlay0 $base  $text    $overlay0  $overlay0
-# client.background        $base
+# Tokyo Night color scheme
+# set $color1 #0d0f20  
+# set $color2 #5294e2 
+# set $color3 #4e505c
+# set $color4 #ff6161
 
-# Color Scheme
-set $background      #990000
-set $background_alt  #373B41
-set $foreground      #e6ebef
-set $primary         #00aaff
-set $primary_alt     #F0C674
-set $secondary       #4c7899
-set $alert           #A54242
-set $border_inactive #222D31
+# Nord color scheme
+set $color1 #2e3440
+set $color2 #81a1c1 
+set $color3 #3b4252  
+set $color4 #bf616a
 
-# Colors for window borders, background, text, and indicators.
-#                       border              background          text                 indicator
-client.focused          $primary            $secondary          $foreground          $primary
-client.focused_inactive $secondary          $secondary          $foreground          $secondary
-client.unfocused        $background_alt     $background_alt     $foreground          $background_alt
-client.urgent           $alert              $alert              $foreground          $alert
-
+client.focused               $color2 $color2 $color1 $color2 $color2
+client.unfocused             $color3 $color1 $color2 $color1 $color1
+client.focused_inactive      $color1 $color1 $color3 $color1 $color1
+client.urgent                $color4 $color4 $color1 $color4 $color4
