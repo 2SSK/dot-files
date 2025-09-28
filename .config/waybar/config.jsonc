@@ -1,19 +1,19 @@
 {
   "layer": "bottom",
   "position": "top",
-  "height": 30,
-  // "margin-top": 2,
-  // "margin-left": 5,
-  // "margin-right": 5,
+  "height": 25,
+  "margin-top": 5,
+  "margin-left": 20,
+  "margin-right": 20,
   // "output": "eDP-1",
   "modules-left": [
     "custom/logo",
     "sway/workspaces",
     "hyprland/workspaces",
     // "sway/window",
-    "disk",
-    "memory",
-    "cpu",
+    // "disk",
+    // "memory",
+    // "cpu",
     "sway/scratchpad"
   ],
   "modules-center": [
@@ -23,37 +23,42 @@
     "battery",
     "pulseaudio",
     "backlight",
-    "temperature",
-    "network",
-    "bluetooth",
+    // "temperature",
+    "memory",
+    // "network",
+    // "bluetooth",
     "custom/power"
   ],
   "custom/separator": {
     "format": "|"
   },
   "custom/logo": {
-    // "format": "  ",
-    "format": " ",
+    "format": " ",
+    // "format": " ",
     "tooltip": false,
     "on-click": "rofi -show drun"
   },
   "sway/workspaces": {
-    "all-outputs": true,
+    "all-outputs": false,
     "warp-on-scroll": true,
     "enable-bar-scroll": false,
     "format": "{icon}",
     "format-icons": {
-      "1": "I",
-      "2": "II",
-      "3": "III",
-      "4": "IV",
-      "5": "V",
-      "6": "VI",
-      "7": "VII",
-      "8": "VIII",
-      "9": "IX",
-      "10": "X"
+      "focused": "●",
+      "default": " "
     },
+    // "format-icons": {
+    //   "1": "I",
+    //   "2": "II",
+    //   "3": "III",
+    //   "4": "IV",
+    //   "5": "V",
+    //   "6": "VI",
+    //   "7": "VII",
+    //   "8": "VIII",
+    //   "9": "IX",
+    //   "10": "X"
+    // },
     "persistent-workspaces": {
       "1": [],
       "2": [],
@@ -68,16 +73,8 @@
     "enable-bar-scroll": false,
     "format": "{icon}",
     "format-icons": {
-      "1": "I",
-      "2": "II",
-      "3": "III",
-      "4": "IV",
-      "5": "V",
-      "6": "VI",
-      "7": "VII",
-      "8": "VIII",
-      "9": "IX",
-      "10": "X"
+      "active": " ",
+      "inactive": " "
     },
     "persistent-workspaces": {
       "1": [],
@@ -125,7 +122,7 @@
     "format-critical": " {temperatureC}°C (Critical!!)"
   },
   "network": {
-    "format-wifi": "  {essid}",
+    "format-wifi": " ",
     "format-ethernet": " {essid}",
     "format-disconnected": "  Disconnected",
     "interval": 5,
@@ -171,7 +168,8 @@
   "bluetooth": {
     "format": "",
     "format-disabled": "󰂲",
-    "format-connected": " {device_alias}",
+    // "format-connected": " {device_alias}",
+    "format-connected": "",
     "tooltip-format": "Device: {device_alias}",
     "on-click": "blueberry"
   },

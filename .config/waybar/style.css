@@ -1,15 +1,15 @@
 @import "themes/mocha.css";
-/* Change this import to switch themes */
 
+/* Change this import to switch themes */
 * {
   font-family: "JetBrainsMono Nerd Font";
-  font-size: 14px;
+  font-size: 13px;
   font-weight: bold;
 }
 
 window#waybar {
-  /* background-color: transparent; */
-  background-color: @background;
+  background-color: transparent;
+  /* background-color: @background; */
   color: @foreground;
 }
 
@@ -46,6 +46,7 @@ window#waybar {
   margin-top: 2;
   margin-right: 5px;
   /* border: 2px solid @foreground-alt; */
+  background: @background-alt;
 }
 
 #workspaces button,
@@ -57,31 +58,31 @@ window#waybar {
 #workspaces button.urgent {
   padding: 0 6px;
   color: @foreground-alt;
-  background: @background;
+  background: transparent;
   border-radius: 6px;
 }
 
 #workspaces button.visible {
-  background: @foreground-alt;
-  color: @background;
+  /* background: @foreground-alt; */
+  color: @foreground-alt;
   border-radius: 6px;
   margin: 0 2px;
 }
 
 #workspaces button:hover,
 #workspaces button.visible:hover {
-  background-color: @background-alt;
+  /* background-color: @background-alt; */
   color: @foreground;
 }
 
 #workspaces button.urgent {
-  background: @critical;
-  color: @background;
+  color: @critical;
+  /* color: @background; */
   border-radius: 6px;
 }
 
 #workspaces button {
-  background-color: @background-alt;
+  /* background-color: @background-alt; */
   margin: 0px 2px;
 }
 
@@ -143,6 +144,7 @@ window#waybar {
 }
 
 #custom-power {
+  font-weight: 800;
   background: @temperature;
   color: @background;
   padding: 2px 12px;
