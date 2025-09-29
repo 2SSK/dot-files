@@ -1,19 +1,11 @@
 {
   "layer": "bottom",
   "position": "top",
-  "height": 25,
-  "margin-top": 5,
-  "margin-left": 20,
-  "margin-right": 20,
-  // "output": "eDP-1",
+  "height": 30,
   "modules-left": [
     "custom/logo",
     "sway/workspaces",
     "hyprland/workspaces",
-    // "sway/window",
-    // "disk",
-    // "memory",
-    // "cpu",
     "sway/scratchpad"
   ],
   "modules-center": [
@@ -23,42 +15,30 @@
     "battery",
     "pulseaudio",
     "backlight",
-    // "temperature",
     "memory",
-    // "network",
-    // "bluetooth",
     "custom/power"
   ],
-  "custom/separator": {
-    "format": "|"
-  },
   "custom/logo": {
     "format": " ",
-    // "format": " ",
     "tooltip": false,
     "on-click": "rofi -show drun"
   },
   "sway/workspaces": {
-    "all-outputs": false,
-    "warp-on-scroll": true,
-    "enable-bar-scroll": false,
+    "on-click": "activate",
     "format": "{icon}",
     "format-icons": {
-      "focused": "●",
-      "default": " "
+      "default": "",
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "5": "5",
+      "6": "6",
+      "7": "7",
+      "8": "8",
+      "9": "9",
+      "active": "󱓻"
     },
-    // "format-icons": {
-    //   "1": "I",
-    //   "2": "II",
-    //   "3": "III",
-    //   "4": "IV",
-    //   "5": "V",
-    //   "6": "VI",
-    //   "7": "VII",
-    //   "8": "VIII",
-    //   "9": "IX",
-    //   "10": "X"
-    // },
     "persistent-workspaces": {
       "1": [],
       "2": [],
@@ -68,13 +48,20 @@
     }
   },
   "hyprland/workspaces": {
-    "all-outputs": true,
-    "warp-on-scroll": true,
-    "enable-bar-scroll": false,
+    "on-click": "activate",
     "format": "{icon}",
     "format-icons": {
-      "active": " ",
-      "inactive": " "
+      "default": "",
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "5": "5",
+      "6": "6",
+      "7": "7",
+      "8": "8",
+      "9": "9",
+      "active": "󱓻"
     },
     "persistent-workspaces": {
       "1": [],
@@ -90,55 +77,10 @@
     "tooltip": true,
     "tooltip-format": "{app}: {title}"
   },
-  "sway/window": {
-    "format": "{app_id}",
-    "separate-outputs": true,
-    "icon": true
-  },
-  "disk": {
-    "interval": 60,
-    "format": " {}%",
-    // "format": "  {free}/{total}",
-    "tooltip-format": "{used}/{total}"
-  },
-  "cpu": {
-    "interval": 1,
-    "format": " {usage}%",
-    "tooltip-format": "{usage}%",
-    "on-click": "swaymsg exec gnome-system-monitor"
-  },
-  "memory": {
-    "interval": 1,
-    "format": " {}%",
-    "tooltip-format": "{used}/{total} GiB",
-    "on-click": "swaymsg exec gnome-system-monitor"
-  },
-  "temperature": {
-    "interval": 5,
-    "tooltip": false,
-    "thermal-zone": 2,
-    "critical-threshold": 70,
-    "format": " {temperatureC}°C",
-    "format-critical": " {temperatureC}°C (Critical!!)"
-  },
-  "network": {
-    "format-wifi": " ",
-    "format-ethernet": " {essid}",
-    "format-disconnected": "  Disconnected",
-    "interval": 5,
-    "tooltip-format-wifi": "{essid} |  {bandwidthDownBytes} |  {bandwidthUpBytes}",
-    "on-click": "swaymsg exec gnome-control-center network"
-  },
-  "pulseaudio": {
-    "format": "  {volume}%",
-    "format-muted": " M",
-    "tooltip-format": "{desc}"
-  },
-  "backlight": {
-    "device": "intel_backlight",
-    "scroll-step": 5,
-    "format": " {percent}%",
-    "tooltip": false
+  "clock": {
+    "format": "  {:%a, %b-%d %Y |   %I:%M %p}",
+    "tooltip": true,
+    "tooltip-format": "<tt>{calendar}</tt>"
   },
   "battery": {
     "interval": 1,
@@ -159,19 +101,22 @@
     "tooltip-format-discharging": "{time} remaining",
     "on-click": "swaymsg exec gnome-control-center power"
   },
-  "clock": {
-    // "format": " {:%A, %B %d, %Y %I:%M %p}",
-    "format": "  {:%a, %b-%d %Y |   %I:%M %p}",
-    "tooltip": true,
-    "tooltip-format": "<tt>{calendar}</tt>"
+  "pulseaudio": {
+    "format": "  {volume}%",
+    "format-muted": " M",
+    "tooltip-format": "{desc}"
   },
-  "bluetooth": {
-    "format": "",
-    "format-disabled": "󰂲",
-    // "format-connected": " {device_alias}",
-    "format-connected": "",
-    "tooltip-format": "Device: {device_alias}",
-    "on-click": "blueberry"
+  "backlight": {
+    "device": "intel_backlight",
+    "scroll-step": 5,
+    "format": " {percent}%",
+    "tooltip": false
+  },
+  "memory": {
+    "interval": 1,
+    "format": " {}%",
+    "tooltip-format": "{used}/{total} GiB",
+    "on-click": "swaymsg exec gnome-system-monitor"
   },
   "custom/power": {
     "format": "󰤆",
