@@ -78,7 +78,8 @@
     "tooltip-format": "{app}: {title}"
   },
   "clock": {
-    "format": "  {:%a, %b-%d %Y |   %I:%M %p}",
+    // "format": "  {:%a, %b-%d %Y |   %I:%M %p}",
+    "format": "{:%A %I:%M %p}",
     "tooltip": true,
     "tooltip-format": "<tt>{calendar}</tt>"
   },
