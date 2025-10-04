@@ -33,9 +33,9 @@
 
 #workspaces button.urgent {
   color: @critical;
-  font-weight: bold;
 }
 
+#scratchpad,
 #memory,
 #battery,
 #pulseaudio,
@@ -54,6 +54,10 @@ tooltip {
   opacity: 0;
 }
 
+#scratchpad {
+  margin-left: 15px;
+}
+
 #battery.critical {
   color: @critical;
 }
@@ -68,23 +72,19 @@ tooltip {
 
 @keyframes blink-critical {
   0% {
-    background: @critical;
     color: @background;
   }
 
   50% {
-    background: transparent;
-    color: @background;
+    color: @critical;
   }
 
   100% {
-    background: @critical;
     color: @background;
   }
 }
 
 #battery.critical {
   animation: blink-critical 1s infinite;
-  background: @critical;
-  color: @background;
+  color: @critical;
 }
