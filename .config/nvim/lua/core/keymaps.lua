@@ -24,9 +24,6 @@ keymap.set("n", "<S-l>", "<cmd>tabn<CR>")
 keymap.set("n", "<S-h>", "<cmd>tabp<CR>")
 keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>")
 
--- Dismiss Noice Message
-keymap.set("n", "<leader>nd", "<cmd>NoiceDismiss<CR>", { desc = "Dismiss Noice Message" })
-
 -- Zen mode toggle
 keymap.set("n", "<leader>zm", ":ZenMode<CR>")
 

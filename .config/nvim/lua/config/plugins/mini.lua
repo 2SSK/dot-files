@@ -24,6 +24,6 @@ return {
 				synchronize = "s",
 			},
 		})
-		vim.api.nvim_set_keymap("n", "<leader>em", ":lua MiniFiles.open()<CR>", { noremap = true, silent = true })
+		vim.api.nvim_set_keymap("n", "<leader>ee", ":lua MiniFiles.open()<CR>", { noremap = true, silent = true })
 	end,
 }

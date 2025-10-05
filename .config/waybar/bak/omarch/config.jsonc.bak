@@ -4,49 +4,24 @@
   "height": 30,
   "modules-left": [
     "custom/logo",
-    "custom/separator",
-    "disk",
-    "custom/separator",
-    "memory",
-    "custom/separator",
-    "cpu",
+    "sway/workspaces",
+    "hyprland/workspaces",
     "sway/scratchpad"
   ],
   "modules-center": [
-    "sway/workspaces",
-    "hyprland/workspaces"
+    "clock"
   ],
   "modules-right": [
     "battery",
-    "custom/separator",
     "pulseaudio",
-    "custom/separator",
     "backlight",
-    "custom/separator",
-    "clock#date",
-    "custom/separator",
-    "clock",
-    "custom/separator",
+    "memory",
     "custom/power"
   ],
   "custom/logo": {
     "format": " ",
     "tooltip": false,
     "on-click": "rofi -show drun"
-  },
-  "custom/separator": {
-    "format": "|"
-  },
-  "disk": {
-    "interval": 60,
-    "format": " {}%",
-    "tooltip-format": "{used}/{total}"
-  },
-  "cpu": {
-    "interval": 1,
-    "format": " {usage}%",
-    "tooltip-format": "{usage}%",
-    "on-click": "swaymsg exec gnome-system-monitor"
   },
   "sway/workspaces": {
     "on-click": "activate",
@@ -102,17 +77,11 @@
     "tooltip": true,
     "tooltip-format": "{app}: {title}"
   },
-  "clock#date": {
-    "format": " {:%a %b %d}",
-    "tooltip": true,
-    "tooltip-format": "<tt>{calendar}</tt>"
-  },
   "clock": {
     // "format": "  {:%a, %b-%d %Y |   %I:%M %p}",
-    "format": "  {:%I:%M %p}",
+    "format": "{:%A %I:%M %p}",
     "tooltip": true,
-    "tooltip-format": false,
-    "on-click": "swaymsg exec gnome-calendar"
+    "tooltip-format": "<tt>{calendar}</tt>"
   },
   "battery": {
     "interval": 1,
