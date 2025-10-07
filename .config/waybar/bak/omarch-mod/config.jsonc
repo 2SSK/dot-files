@@ -3,8 +3,8 @@
   "position": "top",
   "height": 30,
   "modules-left": [
-    // "custom/logo",
-    // "custom/separator",
+    "custom/logo",
+    "custom/separator",
     "disk",
     "custom/separator",
     "memory",
@@ -20,14 +20,14 @@
     "battery",
     "custom/separator",
     "pulseaudio",
-    // "custom/separator",
-    // "backlight",
+    "custom/separator",
+    "backlight",
     "custom/separator",
     "clock#date",
     "custom/separator",
-    "clock"
-    // "custom/separator",
-    // "custom/power"
+    "clock",
+    "custom/separator",
+    "custom/power"
   ],
   "custom/logo": {
     "format": " ",
