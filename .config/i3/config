@@ -59,7 +59,7 @@ bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 5%-
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec kitty
+bindsym $mod+Return exec ghostty
 
 # Send the terminal to the scratchpad
 bindsym $mod+Shift+Return move scratchpad
