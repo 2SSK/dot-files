@@ -35,4 +35,4 @@ bindsym F9 exec amixer set Capture toggle
 # Screenshots
 bindsym F12 exec grimshot save screen ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
 bindsym Shift+F12 exec grimshot save active ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
-bindsym ctrl+Shift+F12 exec grimshot save area ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
+bindsym ctrl+F12 exec grimshot save area ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png

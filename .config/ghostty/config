@@ -1,6 +1,6 @@
 # Theme
-theme = Catppuccin Mocha
-background-opacity = 0.75
+theme = "tony_tokyonight"
+background-opacity = 0.9
 # background-opacity = 1
 
 # Font
