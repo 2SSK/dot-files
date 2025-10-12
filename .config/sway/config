@@ -1,5 +1,5 @@
 include ~/.config/sway/variables
-include ~/.config/sway/colorschemes/catppuccin-mocha
+include ~/.config/sway/colorschemes/tokyonight
 include ~/.config/sway/outputs
 include ~/.config/sway/inputs
 include ~/.config/sway/startup
