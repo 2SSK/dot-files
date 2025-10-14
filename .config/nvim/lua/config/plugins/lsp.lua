@@ -8,9 +8,7 @@ return {
 	},
 	config = function()
 		-- Import required plugins
-		local lspconfig = require("lspconfig")
 		local cmp_nvim_lsp = require("cmp_nvim_lsp")
-		local util = require("lspconfig/util")
 		local on_attach = require("neodev").on_attach
 
 		-- Enhanced capabilities for autocompletion
@@ -118,7 +116,7 @@ return {
 				capabilities = capabilities,
 				cmd = { "gopls", "serve" },
 				filetypes = { "go", "gomod", "gowork", "gotmpl" },
-				root_dir = util.root_pattern("go.mod", "go.work", ".git"),
+				root_markers = { "go.mod", "go.work", ".git" },
 			},
 			zls = {
 				on_attach = on_attach,
@@ -130,7 +128,7 @@ return {
 				on_attach = on_attach,
 				capabilities = capabilities,
 				filetypes = { "rust" },
-				root_dir = util.root_pattern("Cargo.toml"),
+				root_markers = { "Cargo.toml" },
 				settings = {
 					["rust-analyzer"] = {
 						cargo = {
@@ -143,7 +141,12 @@ return {
 
 		-- Apply server configurations
 		for server, config in pairs(server_configurations) do
-			lspconfig[server].setup(vim.tbl_extend("force", { capabilities = capabilities }, config))
+			vim.lsp.config(server, vim.tbl_extend("force", { capabilities = capabilities }, config))
+		end
+
+		-- Enable the configured servers
+		for server, _ in pairs(server_configurations) do
+			vim.lsp.enable(server)
 		end
 	end,
 }
