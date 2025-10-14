@@ -2,13 +2,16 @@
   "layer": "bottom",
   "position": "top",
   "height": 30,
+  "margin-top": 5,
+  "margin-left": 10,
+  "margin-right": 10,
   "modules-left": [
-    // "custom/logo",
+    "custom/logo",
     // "custom/separator",
     "disk",
-    "custom/separator",
+    // "custom/separator",
     "memory",
-    "custom/separator",
+    // "custom/separator",
     "cpu",
     "sway/scratchpad"
   ],
@@ -18,19 +21,19 @@
   ],
   "modules-right": [
     "battery",
-    "custom/separator",
-    "pulseaudio",
-    "custom/separator",
-    "backlight",
-    "custom/separator",
-    "clock#date",
-    "custom/separator",
-    "clock"
     // "custom/separator",
-    // "custom/power"
+    "pulseaudio",
+    // "custom/separator",
+    "backlight",
+    // "custom/separator",
+    "clock#date",
+    // "custom/separator",
+    "clock",
+    // "custom/separator",
+    "custom/power"
   ],
   "custom/logo": {
-    "format": " ",
+    "format": "",
     "tooltip": false,
     "on-click": "rofi -show drun"
   },
