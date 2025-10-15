@@ -180,5 +180,6 @@ configuration {
 */
 }
 
-@theme "~/.config/rofi/themes/coolnight.rasi"
-// @theme "~/.config/rofi/themes/sidebar_variant.rasi"
+@theme "~/.config/rofi/themes/floating.rasi"
+// @theme "~/.config/rofi/themes/coolnight.rasi"
+// @theme "~/.config/rofi/themes/sidebar.rasi"

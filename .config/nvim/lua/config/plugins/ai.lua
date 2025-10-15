@@ -17,4 +17,39 @@ return {
 			-- See Commands section for default commands if you want to lazy load on them
 		},
 	},
+	-- {
+	-- 	"folke/sidekick.nvim",
+	-- 	opts = {
+	-- 		debug = false,
+	-- 		cli = {
+	-- 			mux = {
+	-- 				-- backend = "zellij",
+	-- 				enabled = true,
+	-- 				create = "terminal",
+	-- 			},
+	-- 			tools = {
+	-- 				debug = {
+	-- 					-- print env and read -p "any key to continue"
+	-- 					cmd = { "bash", "-c", "env | sort | bat -l env" },
+	-- 				},
+	-- 			},
+	-- 		},
+	-- 	},
+	-- 	keys = {
+	-- 		{
+	-- 			"<leader>aa",
+	-- 			function()
+	-- 				require("sidekick.cli").toggle()
+	-- 			end,
+	-- 		},
+	-- 		{
+	-- 			"<c-.>",
+	-- 			function()
+	-- 				require("sidekick.cli").toggle()
+	-- 			end,
+	-- 			desc = "Sidekick Toggle",
+	-- 			mode = { "n", "t", "i", "x" },
+	-- 		},
+	-- 	},
+	-- },
 }
