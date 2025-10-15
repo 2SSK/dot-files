@@ -18,15 +18,22 @@ return {
 		local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
 		for type, icon in pairs(signs) do
 			local hl = "DiagnosticSign" .. type
-			-- vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-			vim.diagnostic.config()
+			vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
 		end
+		vim.diagnostic.config({
+			signs = true,
+			underline = true,
+			update_in_insert = false,
+			virtual_text = true,
+		})
 
 		-- Format on save
 		vim.api.nvim_create_autocmd("BufWritePre", {
 			callback = function(event)
+				local excluded_filetypes = { "markdown", "json", "yaml" }
+				local filetype = vim.bo[event.buf].filetype
 				local client = vim.lsp.get_clients({ bufnr = event.buf })[1]
-				if client and client:supports_method("textDocument/formatting") then
+				if client and client:supports_method("textDocument/formatting") and not vim.tbl_contains(excluded_filetypes, filetype) then
 					vim.lsp.buf.format({ bufnr = event.buf, async = false })
 				end
 			end,

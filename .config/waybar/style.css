@@ -1,7 +1,7 @@
-@import "themes/mocha.css";
+@import "themes/folke.css";
 
 * {
-  background-color: transparent;
+  background-color: @background;
   color: @foreground;
 
   border: none;
@@ -22,11 +22,9 @@
 
 #workspaces button {
   all: initial;
-  padding: 0 8px;
+  padding: 0 6px;
   margin: 0 1.5px;
   min-width: 9px;
-  background-color: @background;
-  border-radius: 6px;
 }
 
 #workspaces button.empty {
@@ -48,11 +46,7 @@
 #custom-logo,
 #custom-power {
   min-width: 12px;
-  /* margin: 0 7.5px; */
-  margin: 0 3px;
-  background-color: @background;
-  padding: 2px 8px;
-  border-radius: 6px;
+  margin: 0 7.5px;
 }
 
 tooltip {
