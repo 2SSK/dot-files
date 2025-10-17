@@ -3,14 +3,14 @@
   "position": "top",
   "height": 30,
   "modules-left": [
-    "clock",
-    "custom/separator",
-    "clock#date",
+    "sway/workspaces",
+    "hyprland/workspaces",
     "sway/scratchpad"
   ],
   "modules-center": [
-    "sway/workspaces",
-    "hyprland/workspaces"
+    "clock#date",
+    "custom/separator",
+    "clock"
   ],
   "modules-right": [
     "cpu",
@@ -35,12 +35,12 @@
   },
   "disk": {
     "interval": 60,
-    "format": "<span color='#ff9e64'>󰋊</span> {percentage_used}%",
+    "format": "󰋊 {percentage_used}%",
     "tooltip-format": "{used}/{total}"
   },
   "cpu": {
     "interval": 1,
-    "format": "<span color='#f7768e'> </span>{usage}%",
+    "format": " {usage}%",
     "tooltip-format": "{usage}%",
     "on-click": "swaymsg exec gnome-system-monitor"
   },
@@ -93,18 +93,18 @@
     }
   },
   "sway/scratchpad": {
-    "format": "<span color='#bb9af7'> </span>{count}",
+    "format": " {count}",
     "show-empty": false,
     "tooltip": true,
     "tooltip-format": "{app}: {title}"
   },
   "clock#date": {
-    "format": "<span color='#80bfff'>󰸗</span> {:%a %b %d}",
+    "format": "󰸗 {:%a %b %d}",
     "tooltip": true,
     "tooltip-format": "<tt>{calendar}</tt>"
   },
   "clock": {
-    "format": "<span color='#9c27b0'>󰥔</span> {:%I:%M %p}",
+    "format": "󰥔 {:%I:%M %p}",
     "tooltip": true,
     "tooltip-format": false,
     "on-click": "swaymsg exec gnome-calendar"
@@ -116,7 +116,7 @@
       "warning": 30,
       "critical": 20
     },
-    "format": "<span color='#4fc3f7'></span> {capacity}%",
+    "format": " {capacity}%",
     "format-charging": " {capacity}%",
     "format-discharging": " {capacity}%",
     "format-critical": "  {capacity}% (Critical!!)",
@@ -129,19 +129,19 @@
     "on-click": "swaymsg exec gnome-control-center power"
   },
   "pulseaudio": {
-    "format": "<span color='#c0cafc'> </span> {volume}%",
+    "format": "  {volume}%",
     "format-muted": " M",
     "tooltip-format": "{desc}"
   },
   "backlight": {
     "device": "intel_backlight",
     "scroll-step": 5,
-    "format": "<span color='#7aa2f7'></span> {percent}%",
+    "format": " {percent}%",
     "tooltip": false
   },
   "memory": {
     "interval": 1,
-    "format": "<span color='#4fc3f7'></span> {}%",
+    "format": " {}%",
     "tooltip-format": "{used}/{total} GiB",
     "on-click": "swaymsg exec gnome-system-monitor"
   },
