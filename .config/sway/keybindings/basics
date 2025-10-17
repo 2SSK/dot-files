@@ -8,7 +8,7 @@ floating_modifier $mod normal
 
 # Lock Screen
 # bindsym $mod+c exec --no-startup-id ~/.config/sway/scripts/swaylock.sh
-bindsym $mod+c exec hyprlock
+# bindsym $mod+c exec hyprlock
 
 # Emojis
 bindsym $mod+comma exec smile

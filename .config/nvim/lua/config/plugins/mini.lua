@@ -18,9 +18,6 @@ return {
 		-- Mini Surround
 		require("mini.surround").setup()
 
-		-- Mini Surround
-		require("mini.comment").setup()
-
 		-- Mini git diff
 		require("mini.diff").setup()
 
