@@ -1,10 +1,12 @@
 {
-  "layer": "bottom",
+  "layer": "top",
   "position": "top",
   "height": 30,
+  "output": "eDP-1",
   "modules-left": [
     "sway/workspaces",
     "hyprland/workspaces",
+    "niri/workspaces",
     "sway/scratchpad"
   ],
   "modules-center": [
@@ -83,6 +85,30 @@
       "8": "8",
       "9": "9",
       "active": "󱓻"
+    },
+    "persistent-workspaces": {
+      "1": [],
+      "2": [],
+      "3": [],
+      "4": [],
+      "5": []
+    }
+  },
+  "niri/workspaces": {
+    "on-click": "activate",
+    "format": "{icon}",
+    "format-icons": {
+      "1": "I",
+      "2": "II",
+      "3": "III",
+      "4": "IV",
+      "5": "V",
+      "6": "VI",
+      "7": "VII",
+      "8": "VIII",
+      "9": "IX",
+      "10": "X",
+      "focused": "󱓻"
     },
     "persistent-workspaces": {
       "1": [],
