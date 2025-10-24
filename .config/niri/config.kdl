@@ -599,6 +599,12 @@ binds {
     // Mod+Space       { switch-layout "next"; }
     // Mod+Shift+Space { switch-layout "prev"; }
 
+    F1 { spawn-sh "pactl set-sink-mute @DEFAULT_SINK@ toggle"; }
+    F2 { spawn-sh "pactl set-sink-volume @DEFAULT_SINK@ -5%"; }
+    F3 { spawn-sh "pactl set-sink-volume @DEFAULT_SINK@ +5%"; }
+    F4 { spawn-sh "brightnessctl set 5%-"; }
+    F5 { spawn-sh "brightnessctl set +5%"; }
+    F9 { spawn-sh "amixer set Capture toggle"; }
     F12 { screenshot-screen; }
     Shift+F12 { screenshot-window; }
     Ctrl+F12 { screenshot; }
