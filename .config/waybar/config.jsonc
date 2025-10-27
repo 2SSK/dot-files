@@ -1,179 +1,185 @@
 {
   "layer": "top",
   "position": "top",
-  "height": 30,
-  "output": "eDP-1",
+  "width": 1300,
+  "height": 32,
+  "margin-top": 2,
   "modules-left": [
-    "sway/workspaces",
     "hyprland/workspaces",
+    "sway/workspaces",
     "niri/workspaces",
-    "sway/scratchpad"
+    "custom/kernel"
   ],
   "modules-center": [
-    "clock#date",
-    "custom/separator",
-    "clock"
+    "clock",
+    "custom/weather"
   ],
   "modules-right": [
-    "cpu",
-    "custom/separator",
-    "memory",
-    "custom/separator",
-    "disk",
-    "custom/separator",
-    "backlight",
-    "custom/separator",
+    // "idle_inhibitor",
     "pulseaudio",
-    "custom/separator",
-    "battery"
+    // "custom/uptime",
+    // "backlight",
+    // "network",
+    "bluetooth",
+    // "cpu",
+    // "memory",
+    "battery",
+    "tray",
+    "custom/power"
   ],
-  "custom/logo": {
-    "format": " ",
-    "tooltip": false,
-    "on-click": "rofi -show drun"
+  "bluetooth": {
+    "format": " {status}",
+    "format-disabled": "󰂲", // an empty format will hide the module
+    "format-connected": "󰂱",
+    "tooltip-format": "{device_alias}",
+    "tooltip-format-connected": " {device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias}",
+    "on-click": "blueberry"
   },
-  "custom/separator": {
-    "format": "|"
-  },
-  "disk": {
-    "interval": 60,
-    "format": "󰋊 {percentage_used}%",
-    "tooltip-format": "{used}/{total}"
-  },
-  "cpu": {
-    "interval": 1,
-    "format": " {usage}%",
-    "tooltip-format": "{usage}%",
-    "on-click": "swaymsg exec gnome-system-monitor"
-  },
-  "sway/workspaces": {
-    "on-click": "activate",
+  "idle_inhibitor": {
     "format": "{icon}",
     "format-icons": {
-      "1": "I",
-      "2": "II",
-      "3": "III",
-      "4": "IV",
-      "5": "V",
-      "6": "VI",
-      "7": "VII",
-      "8": "VIII",
-      "9": "IX",
-      "10": "X",
-      "focused": "󱓻"
-    },
-    "persistent-workspaces": {
-      "1": [],
-      "2": [],
-      "3": [],
-      "4": [],
-      "5": []
+      "activated": "󰈈",
+      "deactivated": "󰈉"
     }
-  },
-  "hyprland/workspaces": {
-    "on-click": "activate",
-    "format": "{icon}",
-    "format-icons": {
-      "default": "",
-      "1": "1",
-      "2": "2",
-      "3": "3",
-      "4": "4",
-      "5": "5",
-      "6": "6",
-      "7": "7",
-      "8": "8",
-      "9": "9",
-      "active": "󱓻"
-    },
-    "persistent-workspaces": {
-      "1": [],
-      "2": [],
-      "3": [],
-      "4": [],
-      "5": []
-    }
-  },
-  "niri/workspaces": {
-    "on-click": "activate",
-    "format": "{icon}",
-    "format-icons": {
-      "1": "I",
-      "2": "II",
-      "3": "III",
-      "4": "IV",
-      "5": "V",
-      "6": "VI",
-      "7": "VII",
-      "8": "VIII",
-      "9": "IX",
-      "10": "X",
-      "focused": "󱓻"
-    },
-    "persistent-workspaces": {
-      "1": [],
-      "2": [],
-      "3": [],
-      "4": [],
-      "5": []
-    }
-  },
-  "sway/scratchpad": {
-    "format": " {count}",
-    "show-empty": false,
-    "tooltip": true,
-    "tooltip-format": "{app}: {title}"
-  },
-  "clock#date": {
-    "format": "󰸗 {:%a %b %d}",
-    "tooltip": true,
-    "tooltip-format": "<tt>{calendar}</tt>"
-  },
-  "clock": {
-    "format": "󰥔 {:%I:%M %p}",
-    "tooltip": true,
-    "tooltip-format": false,
-    "on-click": "swaymsg exec gnome-calendar"
   },
   "battery": {
-    "interval": 1,
     "states": {
-      "good": 80,
+      "good": 95,
       "warning": 30,
       "critical": 20
     },
-    "format": " {capacity}%",
-    "format-charging": " {capacity}%",
-    "format-discharging": " {capacity}%",
-    "format-critical": "  {capacity}% (Critical!!)",
-    "format-charging-warning": " {capacity}%",
-    "format-charging-critical": " {capacity}%",
-    "format-discharging-critical": "  {capacity}% (critical!!)",
-    "tooltip-format": "{time} remaining",
-    "tooltip-format-charging": "{time} until full",
-    "tooltip-format-discharging": "{time} remaining",
-    "on-click": "swaymsg exec gnome-control-center power"
+    "format": "{icon} {capacity}%",
+    "format-charging": " {capacity}%",
+    "format-plugged": " {capacity}%",
+    "format-alt": "{time} {icon}",
+    "format-icons": [
+      "󰂎",
+      "󰁺",
+      "󰁻",
+      "󰁼",
+      "󰁽",
+      "󰁾",
+      "󰁿",
+      "󰂀",
+      "󰂁",
+      "󰂂",
+      "󱈑"
+    ]
   },
-  "pulseaudio": {
-    "format": "  {volume}%",
-    "format-muted": " M",
-    "tooltip-format": "{desc}"
+  "sway/workspaces": {
+    "format": "{name}: {icon}",
+    "format-icons": {
+      "active": "",
+      // "default": ""
+      "default": ""
+    }
   },
-  "backlight": {
-    "device": "intel_backlight",
-    "scroll-step": 5,
-    "format": " {percent}%",
-    "tooltip": false
+  "hyprland/workspaces": {
+    "format": "{name}: {icon}",
+    "format-icons": {
+      "active": "",
+      // "default": ""
+      "default": ""
+    }
+  },
+  "niri/workspaces": {
+    "format": "{name}: {icon}",
+    "format-icons": {
+      "active": "",
+      // "default": ""
+      "default": ""
+    }
+  },
+  "tray": {
+    "icon-size": 16,
+    "spacing": 10
+  },
+  "custom/music": {
+    "format": "  {}",
+    "escape": true,
+    "interval": 5,
+    "tooltip": false,
+    "exec": "playerctl metadata --format='{{ artist }} - {{ title }}'",
+    "on-click": "playerctl play-pause",
+    "max-length": 50
+  },
+  "clock": {
+    // "timezone": "America/Fortaleza",
+    "tooltip-format": "<tt><small>{calendar}</small></tt>",
+    "format": "{:%a,%e %b - %I:%M %p}",
+    "interval": 50
+  },
+  "network": {
+    "format-wifi": "󰤢 {bandwidthDownBits}",
+    "format-ethernet": "󰈀 {bandwidthDownBits}",
+    "format-disconnected": "󰤠 No Network",
+    "format-linked": "{ifname} (No IP) ",
+    "interval": 5,
+    // "tooltip": false
+    "tooltip-format": "{essid} - {ifname} via {gwaddr} ",
+    "on-click-right": "ghostty -e nmtui"
+  },
+  "cpu": {
+    "interval": 1,
+    "format": "  {icon0}{icon1}{icon2}{icon3} {usage:>2}%",
+    "format-icons": [
+      "▁",
+      "▂",
+      "▃",
+      "▄",
+      "▅",
+      "▆",
+      "▇",
+      "█"
+    ]
   },
   "memory": {
-    "interval": 1,
-    "format": " {}%",
-    "tooltip-format": "{used}/{total} GiB",
-    "on-click": "swaymsg exec gnome-system-monitor"
+    "interval": 30,
+    "format": "  {used:0.1f}G/{total:0.1f}G"
+  },
+  "custom/uptime": {
+    "format": "{}",
+    "interval": 1600,
+    "exec": "sh -c '(uptime -p)'"
+  },
+  "pulseaudio": {
+    "format": "{icon} {volume}%",
+    "format-muted": "",
+    "format-icons": {
+      "default": [
+        "",
+        "",
+        " "
+      ]
+    },
+    "on-click": "pavucontrol"
   },
   "custom/power": {
-    "format": "󰤆",
     "tooltip": false,
-    "on-click": "wlogout"
+    "on-click": "wlogout",
+    "format": "⏻"
+  },
+  "custom/docker": {
+    "format": "{}",
+    "return-type": "json",
+    "interval": 10,
+    "exec": "$(pwd)/scripts/docker-stats/docker-stats",
+    "tooltip": true
+  },
+  "custom/weather": {
+    "format": "{}",
+    "tooltip": true,
+    "interval": 1800,
+    "exec": "$(pwd)/scripts/weather-stats/weather-stats",
+    "return-type": "json"
+  },
+  "custom/kernel": {
+    "format": " {}",
+    "tooltip": true,
+    "interval": 0,
+    "exec": "uname -r",
+    "tooltip-format": "KERNEL: {}"
+    // "return-type": "json"
   }
 }
