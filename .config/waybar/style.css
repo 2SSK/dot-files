@@ -1,167 +1,106 @@
-* {
-  font-family: "CommitMono Nerd Font";
-  /* font-family: "Departure Mono"; */
-  font-size: 14px;
-  font-weight: 600;
+@import "themes/tokyonight.css";
 
+* {
+  /* background-color: @background; */
+  color: @foreground;
+
+  border: none;
+  border-radius: 0;
   min-height: 0;
-  padding: 0;
-  margin: 0;
+  font-family: "JetBrainsMono Nerd Font", monospace;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.modules-left {
+  margin-left: 8px;
+}
+
+.modules-right {
+  margin-right: 8px;
 }
 
 #waybar {
-  color: #c6d0f5;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 120px;
-}
-
-#workspaces {
-  transition: all 200ms ease-in-out;
-  margin-left: 1rem;
 }
 
 #workspaces button {
-  transition: all 200ms ease-in-out;
-  padding: 0px 10px;
-  margin: 4px 2px;
-  border-radius: 120px;
+  all: initial;
+  padding: 0 6px;
+  margin: 0 1.5px;
+  min-width: 9px;
 }
 
-#workspaces button.active {
-  transition: all 200ms ease-in-out;
-  color: #191724;
-  background-color: rgba(156, 207, 216, 1);
-  min-width: 30px;
-}
-
-#workspaces button.focused {
-  transition: all 200ms ease-in-out;
-  /* color: #908caa; */
+#workspaces button.empty {
+  opacity: 0.5;
 }
 
 #workspaces button.urgent {
-  transition: all 200ms ease-in-out;
-  color: #eb6f92;
-  /* background: @pine; */
-  /* border-radius: 4px; */
+  color: @critical;
 }
 
-#workspaces button:hover {
-  transition: all 200ms ease-in-out;
-  min-width: 30px;
-  color: #c4a7e7;
-}
-
-#workspaces button:hover {
-  background: #1e1e1e;
-  border: 0px solid transparent;
-}
-
-#custom-music,
-#tray,
-#backlight,
-#clock,
-#battery,
-#pulseaudio,
-#network,
+#scratchpad,
 #cpu,
+#disk,
 #memory,
-#idle_inhibitor,
-#bluetooth,
-#custom-lock,
-#custom-power,
-#custom-weather,
-#custom-uptime,
-#custom-docker,
-#custom-kernel {
-  /* background-color: #101010; */
-  padding: 0rem 1rem;
-  margin: 0px 0;
-}
-
-#clock {
-  color: #8caaee;
-  font-weight: 700;
-  /* border-radius: 5px; */
-}
-
-#custom-weather {
-  color: #8caaee;
-  margin-left: 0.5rem;
-  /* border-radius: 5px; */
-}
-
-#custom-kernel {
-  color: #eb6f92;
-  margin-left: 0.5rem;
-  /* border-radius: 5px; */
-}
-
-#battery {
-  color: #9ccfd8;
-}
-
-#battery.charging {
-  color: #9ccfd8;
-}
-
-#battery.warning:not(.charging) {
-  color: #e78284;
-}
-
-#backlight {
-  color: #e5c890;
-}
-
+#battery,
+#clock,
+#pulseaudio,
 #backlight,
-#battery {
-  /* border-radius: 0; */
+#custom-logo,
+#custom-power {
+  min-width: 12px;
+  margin: 0 7.5px;
 }
 
-#pulseaudio {
-  color: #ea999c;
-  /* border-radius: 5px 0px 0px 5px; */
+tooltip {
+  padding: 2px;
 }
 
-#custom-music {
-  color: #ca9ee6;
-  /* border-radius: 5px; */
-}
-
-#custom-lock {
-  color: #babbf1;
+.hidden {
+  opacity: 0;
 }
 
 #custom-power {
-  margin-right: 1rem;
-  /* border-radius: 0px 5px 5px 0px; */
-  color: #e78284;
+  margin-left: 15px;
 }
 
-#custom-weather.clear {
-  color: #e5c890; /* Sunny yellow */
+#custom-separator {
+  opacity: 0.5;
 }
 
-#custom-weather.cloud {
-  color: #99d1db; /* Light blue */
+#scratchpad {
+  margin-left: 15px;
 }
 
-#custom-weather.rain {
-  color: #8caaee; /* Blue */
+#battery.critical {
+  color: @critical;
 }
 
-#custom-weather.snow {
-  color: #c6d0f5; /* White-ish */
+#battery.warning {
+  color: @warning;
 }
 
-#custom-weather.thunder {
-  color: #ca9ee6; /* Purple */
+#battery.charging {
+  color: @good;
 }
 
-#custom-weather.fog {
-  color: #b0b4bc; /* Gray */
+@keyframes blink-critical {
+  0% {
+    color: @background;
+  }
+
+  50% {
+    color: @critical;
+  }
+
+  100% {
+    color: @background;
+  }
 }
 
-#custom-weather.error {
-  color: #e78284; /* Red */
+#battery.critical {
+  animation: blink-critical 1s infinite;
+  color: @critical;
 }
