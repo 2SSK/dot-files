@@ -66,7 +66,7 @@ input {
 
     // Focus windows and outputs automatically when moving the mouse into them.
     // Setting max-scroll-amount="0%" makes it work only on windows already fully on screen.
-    // focus-follows-mouse max-scroll-amount="0%"
+    focus-follows-mouse max-scroll-amount="0%"
 }
 
 // You can configure outputs by their name, which you can find
@@ -156,10 +156,10 @@ layout {
     // You can change how the focus ring looks.
     focus-ring {
         // Uncomment this line to disable the focus ring.
-        off
+        // off
 
         // How many logical pixels the ring extends out from the windows.
-        width 4
+        width 1.5
 
         // Colors can be set in a variety of ways:
         // - CSS named colors: "red"
@@ -167,9 +167,8 @@ layout {
         // - CSS-like notation: "rgb(255, 127, 0)", rgba(), hsl() and a few others.
 
         // Color of the ring on the active monitor.
-        active-color "#7aa2f7"
-
-        inactive-color "#787c99"
+        active-color "#7fc8ff"
+        inactive-color "#505050"
 
         // You can also use gradients. They take precedence over solid colors.
         // Gradients are rendered the same as CSS linear-gradient(angle, from, to).
@@ -191,13 +190,14 @@ layout {
     border {
         // The settings are the same as for the focus ring.
         // If you enable the border, you probably want to disable the focus ring.
-        // off
+        off
 
-        width 3
-        active-gradient from="#80c8ff" to="#c7ff7f" angle=45
-        inactive-color "#787c99"
-
-        urgent-color "#f7768e"
+        // width 3
+        // active-gradient from="#80c8ff" to="#c7ff7f" angle=45
+        // active-color "#7aa2f7"
+        // inactive-color "#787c99"
+        //
+        // urgent-color "#f7768e"
 
         // Gradients can use a few different interpolation color spaces.
         // For example, this is a pastel rainbow gradient via in="oklch longer hue".
@@ -264,7 +264,8 @@ layout {
 
 // This line starts waybar, a commonly used bar for Wayland compositors.
 spawn-sh-at-startup "waypaper --restore"
-spawn-sh-at-startup "waybar"
+// spawn-sh-at-startup "waybar"
+spawn-at-startup "qs" "-c" "noctalia-shell"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
