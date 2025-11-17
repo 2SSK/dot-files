@@ -1,4 +1,4 @@
-output eDP-1 scale 1.02
+output eDP-1 scale 1.1
 output HDMI-A-1 enable
 output HDMI-A-1 pos 1920 2
 
