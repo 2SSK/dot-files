@@ -14,7 +14,8 @@ floating_modifier $mod normal
 bindsym $mod+comma exec smile
 
 # Power Menu
-bindsym $mod+p exec --no-startup-id wlogout
+# bindsym $mod+p exec --no-startup-id wlogout
+bindsym $mod+p exec --no-startup-id qs -c noctalia-shell ipc call sessionMenu toggle
 
 # Switch to prev/next workspace
 bindsym $mod+slash workspace next

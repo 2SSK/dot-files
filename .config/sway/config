@@ -11,7 +11,7 @@ include ~/.config/sway/keybindings/workspaces
 include ~/.config/sway/keybindings/scratchpad
 include ~/.config/sway/keybindings/resizing
 
-include ~/.config/sway/bar/waybar
+# include ~/.config/sway/bar/waybar
 # include ~/.config/sway/bar/swaybar
 
 include /etc/sway/config.d/*
