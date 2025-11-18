@@ -29,7 +29,7 @@ default_border pixel 3
 default_floating_border pixel 2
 
 # Blur, rounded corners, and shadows
-blur disable
+blur enable
 blur_passes 5
 blur_radius 3
 

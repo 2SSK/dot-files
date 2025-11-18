@@ -32,10 +32,15 @@ return {
 		vim.api.nvim_set_keymap("n", "<leader>ee", ":lua MiniFiles.open()<CR>", { noremap = true, silent = true })
 		vim.api.nvim_set_keymap(
 			"n",
+			"<leader>ef",
+			":lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<CR>",
+			{ noremap = true, silent = true }
+		)
+		vim.api.nvim_set_keymap(
+			"n",
 			"<leader>do",
 			":lua MiniDiff.toggle_overlay()<CR>",
 			{ noremap = true, silent = true }
 		)
-		vim.api.nvim_set_keymap("n", "<leader>ef", ":lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<CR>", { noremap = true, silent = true })
 	end,
 }
