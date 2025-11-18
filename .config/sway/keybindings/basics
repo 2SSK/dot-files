@@ -13,6 +13,9 @@ floating_modifier $mod normal
 # Emojis
 bindsym $mod+comma exec smile
 
+# Toggle noctalia-shell bar
+bindsym $mod+shift+b exec --no-startup-id qs -c noctalia-shell ipc call bar toggle
+
 # Power Menu
 # bindsym $mod+p exec --no-startup-id wlogout
 bindsym $mod+p exec --no-startup-id qs -c noctalia-shell ipc call sessionMenu toggle
