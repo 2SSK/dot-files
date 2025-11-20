@@ -21,7 +21,7 @@
         "volumeStep": 5
     },
     "bar": {
-        "backgroundOpacity": 0,
+        "backgroundOpacity": 1,
         "density": "comfortable",
         "exclusive": true,
         "floating": false,
@@ -90,19 +90,6 @@
             ],
             "right": [
                 {
-                    "displayMode": "alwaysShow",
-                    "id": "Battery",
-                    "warningThreshold": 20
-                },
-                {
-                    "displayMode": "alwaysShow",
-                    "id": "Brightness"
-                },
-                {
-                    "displayMode": "alwaysShow",
-                    "id": "Volume"
-                },
-                {
                     "id": "SystemMonitor",
                     "showCpuTemp": true,
                     "showCpuUsage": true,
@@ -111,6 +98,19 @@
                     "showMemoryUsage": true,
                     "showNetworkStats": false,
                     "usePrimaryColor": true
+                },
+                {
+                    "displayMode": "alwaysShow",
+                    "id": "Volume"
+                },
+                {
+                    "displayMode": "alwaysShow",
+                    "id": "Brightness"
+                },
+                {
+                    "displayMode": "alwaysShow",
+                    "id": "Battery",
+                    "warningThreshold": 20
                 }
             ]
         }
@@ -131,7 +131,7 @@
         "matugenSchemeType": "scheme-tonal-spot",
         "predefinedScheme": "Tokyo Night",
         "schedulingMode": "off",
-        "useWallpaperColors": true
+        "useWallpaperColors": false
     },
     "controlCenter": {
         "cards": [
@@ -363,12 +363,12 @@
             {
                 "directory": "/home/ssk/Wallpaper-Bank",
                 "name": "eDP-1",
-                "wallpaper": "/home/ssk/Wallpaper-Bank/sky_field_flowers_sunset_clouds_green_white.png"
+                "wallpaper": "/home/ssk/Wallpaper-Bank/wallhaven-3q9vmd_3440x1440.png"
             }
         ],
         "overviewEnabled": false,
         "panelPosition": "follow_bar",
-        "randomEnabled": true,
+        "randomEnabled": false,
         "randomIntervalSec": 300,
         "recursiveSearch": false,
         "setWallpaperOnAllMonitors": true,
