@@ -21,21 +21,6 @@ return {
 		-- Mini git diff
 		require("mini.diff").setup()
 
-		-- Mini Files
-		-- require("mini.files").setup({
-		-- 	mappings = {
-		-- 		synchronize = "s",
-		-- 	},
-		-- })
-
-		-- Keybindings
-		-- vim.api.nvim_set_keymap("n", "<leader>ee", ":lua MiniFiles.open()<CR>", { noremap = true, silent = true })
-		-- vim.api.nvim_set_keymap(
-		-- 	"n",
-		-- 	"<leader>ef",
-		-- 	":lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<CR>",
-		-- 	{ noremap = true, silent = true }
-		-- )
 		vim.api.nvim_set_keymap(
 			"n",
 			"<leader>do",

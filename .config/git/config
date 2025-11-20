@@ -114,3 +114,8 @@
 [alias]
 	fix-remote-personal = !git remote set-url origin $(git remote get-url origin | sed \"s|github.com|github-personal|\")
 	fix-remote-work = !git remote set-url origin $(git remote get-url origin | sed \"s|github.com|github-work|\")
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

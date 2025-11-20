@@ -10,7 +10,7 @@
     hv: #9274ca; 
     primary: #444b6a;  // TokyoNight bright black
     ug: #0B2447;
-    font: "Monospace 11";
+    font: "JetBrains Mono Nerd Font Bold 12";
     background-color: @bg;
     //dark: @bg;
     border: 0px;
