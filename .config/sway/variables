@@ -25,8 +25,8 @@ set $menu --no-startup-id rofi -show drun
 # Gaps and Borders
 gaps inner 10
 gaps outer 10
-default_border pixel 3
-default_floating_border pixel 2
+default_border pixel 2
+default_floating_border pixel 0
 
 # Blur, rounded corners, and shadows
 blur enable

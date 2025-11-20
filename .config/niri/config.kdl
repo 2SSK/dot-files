@@ -263,7 +263,7 @@ layout {
 // See the binds section below for more spawn examples.
 
 // This line starts waybar, a commonly used bar for Wayland compositors.
-spawn-sh-at-startup "waypaper --restore"
+// spawn-sh-at-startup "waypaper --restore"
 // spawn-sh-at-startup "waybar"
 spawn-at-startup "qs" "-c" "noctalia-shell"
 

@@ -1,7 +1,6 @@
 # Theme
 theme = "tony_tokyonight"
 background-opacity = 0.9
-# background-opacity = 1
 
 # Font
 font-family = "JetBrains Mono Nerd Font"
@@ -14,8 +13,8 @@ gtk-titlebar = true
 gtk-single-instance = true
 gtk-tabs-location = top
 gtk-wide-tabs = false
-# window-padding-y = 50,0
-# window-padding-x = 50,0
+window-padding-y = 25,25
+window-padding-x = 25,25
 window-padding-balance = false
 window-decoration = false
 
