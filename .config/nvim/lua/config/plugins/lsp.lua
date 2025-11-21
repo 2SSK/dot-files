@@ -33,7 +33,11 @@ return {
 				local excluded_filetypes = { "markdown", "json", "yaml" }
 				local filetype = vim.bo[event.buf].filetype
 				local client = vim.lsp.get_clients({ bufnr = event.buf })[1]
-				if client and client:supports_method("textDocument/formatting") and not vim.tbl_contains(excluded_filetypes, filetype) then
+				if
+					client
+					and client:supports_method("textDocument/formatting")
+					and not vim.tbl_contains(excluded_filetypes, filetype)
+				then
 					vim.lsp.buf.format({ bufnr = event.buf, async = false })
 				end
 			end,
