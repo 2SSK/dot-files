@@ -36,10 +36,8 @@ brave-bin
 nerd-fonts-jetbrains-mono
 
 swayfx
-waybar
 rofi
 grim
 slurp
-hyprlock
-swaylock
 swaybg
+noctalia-shell

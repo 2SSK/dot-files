@@ -180,8 +180,8 @@ alias td='tmux detach'
 alias u='yay -Sy && yay -Syu -y'
 alias i='yay -S'
 alias r='yay -Rns'
-# alias search='yay -Ss'
-alias s="yay -Slq | fzf --multi --preview 'yay -Sii {1}' --preview-window=down:75% | xargs -ro yay -S"
+alias s='yay -Ss'
+# alias s="yay -Slq | fzf --multi --preview 'yay -Sii {1}' --preview-window=down:75% | xargs -ro yay -S"
 
 # Directory Navigation Aliases
 alias ..='cd ..'
@@ -221,9 +221,6 @@ setopt hist_ignore_all_dups
 setopt hist_save_no_dups
 setopt hist_ignore_dups
 setopt hist_find_no_dups
-
-# FZF Theme Setup
-export FZF_DEFAULT_OPTS="--color=fg:#CBE0F0,bg:#011628,hl:#B388FF,fg+:#CBE0F0,bg+:#143652,hl+:#B388FF,info:#06BCE4,prompt:#2CF9ED,pointer:#2CF9ED,marker:#2CF9ED,spinner:#2CF9ED,header:#2CF9ED"
 
 # ==============================
 # Zoxide Initialization
