@@ -23,8 +23,8 @@ set $menu --no-startup-id rofi -show drun
 # set $menu fuzzel
 
 # Gaps and Borders
-gaps inner 10
-gaps outer 10
+gaps inner 5
+gaps outer 5
 default_border pixel 2
 default_floating_border pixel 0
 

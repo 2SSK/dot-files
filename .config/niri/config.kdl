@@ -64,7 +64,7 @@ output "HDMI-A-1" {
 
 layout {
     // Set gaps around windows in logical pixels.
-    gaps 5
+    gaps 16
 
     //   together with the previously focused column.
     center-focused-column "never"
@@ -160,20 +160,41 @@ window-rule {
     match app-id=r#"firefox$"# title="^Picture-in-Picture$"
     open-floating true
 }
+// Block out password managers from screencasts.
+window-rule {
+    match app-id=r#"^org\.keepassxc\.KeePassXC$"#
+    match app-id=r#"^org\.gnome\.World\.Secrets$"#
 
-// Example: block out two password managers from screen capture.
-// (This example rule is commented out with a "/-" in front.)
-// /-window-rule {
-//     match app-id=r#"^org\.keepassxc\.KeePassXC$"#
-//     match app-id=r#"^org\.gnome\.World\.Secrets$"#
-//
-//     block-out-from "screen-capture"
-// }
+    block-out-from "screencast"
+}
+
+// Indicate screencasted windows with red colors.
+window-rule {
+    match is-window-cast-target=true
+
+    focus-ring {
+        active-color "#f38ba8"
+        inactive-color "#7d0d2d"
+    }
+
+    border {
+        inactive-color "#7d0d2d"
+    }
+
+    shadow {
+        color "#7d0d2d70"
+    }
+
+    tab-indicator {
+        active-color "#f38ba8"
+        inactive-color "#7d0d2d"
+    }
+}
 
 // Example: enable rounded corners for all windows.
 // (This example rule is commented out with a "/-" in front.)
 window-rule {
-    geometry-corner-radius 4
+    geometry-corner-radius 12
     clip-to-geometry true
 }
 
