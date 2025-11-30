@@ -180,8 +180,8 @@ alias td='tmux detach'
 alias u='yay -Sy && yay -Syu -y'
 alias i='yay -S'
 alias r='yay -Rns'
-alias s='yay -Ss'
-# alias s="yay -Slq | fzf --multi --preview 'yay -Sii {1}' --preview-window=down:75% | xargs -ro yay -S"
+# alias s='yay -Ss'
+alias s="yay -Slq | fzf --multi --preview 'yay -Sii {1}' --preview-window=down:75% | xargs -ro yay -S"
 
 # Directory Navigation Aliases
 alias ..='cd ..'
