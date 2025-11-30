@@ -16,7 +16,7 @@ set $cursor_theme Bibata-Modern-Ice
 seat * xcursor_theme $cursor_theme 24
 
 # Applications
-set $term ghostty
+set $term kitty
 set $files nautilus
 set $menu --no-startup-id rofi -show drun
 # set $menu --no-startup-id wofi --show drun
@@ -29,7 +29,7 @@ default_border pixel 2
 default_floating_border pixel 0
 
 # Blur, rounded corners, and shadows
-blur disable
+blur enable
 blur_passes 5
 blur_radius 3
 
