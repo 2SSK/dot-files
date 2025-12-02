@@ -11,7 +11,8 @@ floating_modifier $mod normal
 # bindsym $mod+c exec hyprlock
 
 # Emojis
-bindsym $mod+comma exec smile
+# bindsym $mod+comma exec smile
+bindsym $mod+comma exec --no-startup-id qs -c noctalia-shell ipc call launcher emoji
 
 # Toggle noctalia-shell bar
 bindsym $mod+shift+b exec --no-startup-id qs -c noctalia-shell ipc call bar toggle
