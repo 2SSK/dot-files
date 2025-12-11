@@ -18,7 +18,7 @@ rofi_cmd() {
     rofi -dmenu \
         -p "" \
         -mesg "Uptime: $uptime" \
-        -theme "$HOME/.config/rofi/themes/powermenu.rasi"
+        -theme "$HOME/.config/rofi/extensions/powermenu.rasi"
 }
 
 # Pass variables to rofi dmenu
@@ -39,6 +39,9 @@ run_cmd() {
             mpc -q pause
             amixer set Master mute
             systemctl suspend
+            ;;
+          --lock)
+            ~/.config/i3/lockscreen.sh
             ;;
         --logout)
             case "$DESKTOP_SESSION" in
