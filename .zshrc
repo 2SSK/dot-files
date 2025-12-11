@@ -260,3 +260,9 @@ esac
 
 
 export PATH="$PATH:/opt/miniconda3/bin"
+
+# Welcome Message 
+echo -e "\e[1;38;2;122;162;247mWelcome back, $(whoami)!\e[0m"
+echo "Date: $(date +"%A, %B %d, %Y") - $(date +"%T")"
+echo "Uptime: $(uptime -p | sed 's/^up //')"
+echo "Load: $(uptime | awk -F'load average:' '{ print $2 }')"

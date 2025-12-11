@@ -18,9 +18,9 @@ seat * xcursor_theme $cursor_theme 24
 # Applications
 set $term kitty
 set $files nautilus
-set $menu --no-startup-id rofi -show drun
+# set $menu --no-startup-id rofi -show drun
 # set $menu --no-startup-id wofi --show drun
-# set $menu fuzzel
+set $menu --no-startup-id tofi-drun -c ~/.config/tofi/config --drun-launch=true
 
 # Gaps and Borders
 gaps inner 5

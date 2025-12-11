@@ -30,6 +30,9 @@ keymap.set("n", "<leader>zm", ":ZenMode<CR>")
 -- Silicon command
 keymap.set("v", "<leader>ss", ":Silicon<CR>")
 
+-- Markdown preview toggle
+keymap.set("n", "<leader>md", ":MarkdownPreviewToggle<CR>")
+
 -- Resize window commands
 keymap.set("n", "<C-Up>", ":resize -3<CR>")
 keymap.set("n", "<C-Down>", ":resize +3<CR>")
