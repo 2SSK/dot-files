@@ -13,7 +13,7 @@ if [ "$#" -ne 1 ] || { [ "$1" != "work" ] && [ "$1" != "personal" ]; }; then
     exit 1
 fi
 
-echo -e "Switching Git profile to \"\033[1m$1\033[0m\""
+echo -e "Switching Git profile to \033[1;34m$1\033[0m"
 
 # Backup existing keys if they exist
 [ -f "$SSH_DIR/id_rsa" ] && cp "$SSH_DIR/id_rsa" "$SSH_DIR/id_rsa.backup"

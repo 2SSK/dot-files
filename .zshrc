@@ -72,12 +72,12 @@ setopt promptsubst         # enable command substitution in prompt
 eval "$(fzf --zsh)"
 
 # --- setup fzf theme ---
-fg="#CBE0F0"
-bg="#011628"
-bg_highlight="#143652"
-purple="#B388FF"
-blue="#06BCE4"
-cyan="#2CF9ED"
+fg="#a9b1d6"
+bg="#1a1b26"
+bg_highlight="#444b6a"
+purple="#bb9af7"
+blue="#7da6ff"
+cyan="#0db9d7"
 
 
 export FZF_DEFAULT_OPTS="--color=fg:${fg},bg:${bg},hl:${purple},fg+:${fg},bg+:${bg_highlight},hl+:${purple},info:${blue},prompt:${cyan},pointer:${cyan},marker:${cyan},spinner:${cyan},header:${cyan}"
@@ -261,8 +261,11 @@ esac
 
 export PATH="$PATH:/opt/miniconda3/bin"
 
-# Welcome Message 
-echo -e "\e[1;38;2;122;162;247mWelcome back, $(whoami)!\e[0m"
-echo "Date: $(date +"%A, %B %d, %Y") - $(date +"%T")"
-echo "Uptime: $(uptime -p | sed 's/^up //')"
-echo "Load: $(uptime | awk -F'load average:' '{ print $2 }')"
+# Display system info on login (optional - comment out if not wanted)
+if [ -n "$PS1" ]; then
+    echo -e "\033[1;34m=== Welcome back, $USER! ===\033[0m"
+    echo -e "Date: $(date '+%A, %B %d, %Y - %H:%M:%S')"
+    echo -e "Uptime:$(uptime -p | sed 's/up //')"
+    echo -e "Load: $(uptime | awk -F'load average:' '{print $2}')"
+    echo
+fi
