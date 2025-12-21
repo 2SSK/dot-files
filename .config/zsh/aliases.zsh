@@ -100,12 +100,11 @@ fi
 alias y='yazi'
 
 # ==============================
-# System Info Tools
+# Miscellaneous Aliases
 # ==============================
-
-alias nf='neofetch'
-alias ff='fastfetch'
-alias pf='pfetch'
+alias weather='curl wttr.in/orlando?u'
+alias ff='fastfetch || neofetch'
+alias hi='pgrep -x dunst >/dev/null && notify-send "Hi there!" "Welcome to the ${XDG_CURRENT_DESKTOP:-${DESKTOP_SESSION:-$(wmctrl -m 2>/dev/null | grep "Name:" | cut -d" " -f2)}} desktop! 🍃" -i ""'
 
 # ==============================
 # TTY-based Fun Tools
@@ -198,4 +197,4 @@ alias listening='lsof -P -i -n'
 alias g.='cd ~/.config'
 alias gd='cd ~/Downloads'
 alias gD='cd ~/Documents'
-alias gs='cd ~/Pictures/Screenshots'
+alias gS='cd ~/Pictures/Screenshots'
