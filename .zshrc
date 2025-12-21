@@ -1,271 +1,34 @@
-
 export ZSH="$HOME/.oh-my-zsh"
-# ZSH_THEME="robbyrussell"
-#
-# Reevaluate the prompt string each time it's displaying a prompt
-setopt prompt_subst
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
-autoload bashcompinit && bashcompinit
-autoload -Uz compinit
-compinit
-
-eval "$(starship init zsh)"
-export STARSHIP_CONFIG=~/.config/starship/starship.toml
-
-export LANG=en_IN.UTF-8
-export LC_ALL=en_IN.UTF-8
 
 # ==============================
-# Plugins
+# Core Configuration Directory
 # ==============================
-plugins=(
-  git
-  sudo
-  zsh-autosuggestions
-  zsh-syntax-highlighting
-)
+ZSH_CONFIG_DIR="$HOME/.config/zsh"
 
-# Enable plugins and their features.
-# source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#c99e84'
-source $ZSH/oh-my-zsh.sh
+# Create config directory if it doesn't exist
+[[ ! -d "$ZSH_CONFIG_DIR" ]] && mkdir -p "$ZSH_CONFIG_DIR"
 
 # ==============================
-# Key Bindings
-# ==============================
-bindkey '^w' autosuggest-execute
-bindkey '^e' autosuggest-accept
-bindkey '^u' autosuggest-toggle
-bindkey '^l' vi-forward-word
-bindkey '^k' up-line-or-search
-bindkey '^j' down-line-or-search
-bindkey jk vi-cmd-mode
-
-# ==============================
-# Aliases
+# Load Configuration Modules
 # ==============================
 
-# Basic Aliases
-alias rel='source ~/.zshrc'
-alias mkdir='mkdir -p'
-alias rmf='rm -rf'
-alias cl='clear'
-alias e='exit'
+# Source module files
+source_if_exists() {
+    [[ -f "$1" ]] && source "$1"
+}
 
-#######################################################
-# ZSH Basic Options
-#######################################################
+# Load modules in order
+source_if_exists "$ZSH_CONFIG_DIR/options.zsh"      # ZSH options and settings
+source_if_exists "$ZSH_CONFIG_DIR/completion.zsh"   # Completion settings
+source_if_exists "$ZSH_CONFIG_DIR/plugins.zsh"      # Plugin configuration
+source_if_exists "$ZSH_CONFIG_DIR/prompt.zsh"       # Prompt configuration
+source_if_exists "$ZSH_CONFIG_DIR/keybindings.zsh"  # Key bindings
+source_if_exists "$ZSH_CONFIG_DIR/aliases.zsh"      # All aliases
+source_if_exists "$ZSH_CONFIG_DIR/env.zsh"          # Environment variables
+source_if_exists "$ZSH_CONFIG_DIR/paths.zsh"        # PATH configurations
+source_if_exists "$ZSH_CONFIG_DIR/functions.zsh"    # Custom functions
+source_if_exists "$ZSH_CONFIG_DIR/tools.zsh"        # External tools (fzf, zoxide, etc)
+source_if_exists "$ZSH_CONFIG_DIR/welcome.zsh"      # Welcome message
 
-setopt autocd              # change directory just by typing its name
-setopt correct             # auto correct mistakes
-setopt interactivecomments # allow comments in interactive mode
-setopt magicequalsubst     # enable filename expansion for arguments of the form ‘anything=expression’
-setopt nonomatch           # hide error message if there is no match for the pattern
-setopt notify              # report the status of background jobs immediately
-setopt numericglobsort     # sort filenames numerically when it makes sense
-setopt promptsubst         # enable command substitution in prompt
-
-
-# ---- FZF -----
-
-# Set up fzf key bindings and fuzzy completion
-eval "$(fzf --zsh)"
-
-# --- setup fzf theme ---
-fg="#a9b1d6"
-bg="#1a1b26"
-bg_highlight="#444b6a"
-purple="#bb9af7"
-blue="#7da6ff"
-cyan="#0db9d7"
-
-
-export FZF_DEFAULT_OPTS="--color=fg:${fg},bg:${bg},hl:${purple},fg+:${fg},bg+:${bg_highlight},hl+:${purple},info:${blue},prompt:${cyan},pointer:${cyan},marker:${cyan},spinner:${cyan},header:${cyan}"
-
-# ----- Bat (better cat) -----
-export BAT_THEME=tokyonight_night
-
-#######################################################
-# Environment Variables
-#######################################################
-export EDITOR=nvim visudo
-export VISUAL=nvim visudo
-export SUDO_EDITOR=nvim
-export FCEDIT=nvim
-export TERMINAL=alacritty
-export BROWSER=brave
-alias vi='nvim'
-
-# Lazy aliases
-alias lg="lazygit"
-alias ldc="lazydocker"
-
-# Node.js Aliases
-alias nrd='npm run dev'
-alias ys='yarn start'
-alias yd='yarn dev'
-
-# Docker Aliases
-alias dco="docker compose"
-alias dps="docker ps"
-alias dpa="docker ps -a"
-alias di="docker images"
-alias dl="docker ps -l -q"
-alias dx="docker exec -it"
-
-# Git Aliases
-alias gi="git init"
-alias gcl="git clone"
-
-alias gs="git status --short"
-alias gd="git diff"
-alias gds="gd --staged"
-
-alias ga="git add"
-alias gap="git add --patch"
-alias gr="git reset"
-alias gc="git commit"
-
-alias gp="git push"
-alias gu="git pull"
-
-alias gl='git log --graph --all --pretty=format:"%C(magenta)%h %C(white) %an  %ar%C(blue)  %D%n%s%n"'
-alias gb="git branch"
-
-alias gm="git merge"
-alias grb="git rebase"
-
-
-alias gsw="git switch"
-alias update-all-branches="git fetch origin && for branch in \$(git branch | sed 's/^\*//'); do git checkout \$branch && git merge main; done && git checkout main"
-
-# System Management Aliases
-alias off='shutdown -h now'
-
-# Alias for clipboard
-if [ "$WAYLAND_DISPLAY" ]; then
-    alias c='wl-copy'
-    alias v='wl-paste'
-else
-    alias c='xsel --input --clipboard'
-    alias v='xsel --output --clipboard'
-fi
-
-# Yazi Alias
-alias y='yazi'
-
-# Fastfetch and Pfetch Aliases
-alias nf='neofetch'
-alias ff='fastfetch'
-alias pf='pfetch'
-
-# TTY-based Tools
-alias tt='ttyper'
-alias tc='tty-clock -t'
-alias sl='sl --help -F -a'
-alias p='pipes.sh'
-alias cb='cbonsai -liv'
-alias aq='asciiquarium'
-alias cm='cmatrix -abs'
-
-# TMUX Aliases
-alias t='tmux'
-alias tl='tmux ls'
-alias ta='tmux attach -t'
-alias tk='tmux kill-session -t'
-alias tn='tmux new -s'
-alias td='tmux detach'
-
-# Yay Package Manager Aliases
-alias u='yay -Sy && yay -Syu -y'
-alias i='yay -S'
-alias r='yay -Rns'
-# alias s='yay -Ss'
-alias s="yay -Slq | fzf --multi --preview 'yay -Sii {1}' --preview-window=down:75% | xargs -ro yay -S"
-
-# Directory Navigation Aliases
-alias ..='cd ..'
-alias ...='cd ../..'
-alias .3='cd ../../..'
-alias .4='cd ../../../..'
-alias .5='cd ../../../../..'
-
-# Eza (Enhanced ls) Aliases
-alias dir="eza --color=always --git --no-filesize --icons=always --no-time --no-user --no-permissions"
-alias ls="eza --color=always --long --git --no-filesize --icons=always --no-time --no-user --no-permissions"
-alias lsp="eza --color=always --long --git --no-filesize --icons=always --no-time --no-user"
-alias lsa="eza --color=always --long --git --icons=always -b -a --total-size"
-alias l="eza -l --icons --git -a"
-alias lt="eza --tree --level=2 --long --icons --git"
-alias tree="eza --tree --level=3 --icons --git"
-
-# Network Manager Aliases
-alias status='nmcli device status'
-alias list='nmcli device wifi list'
-alias connect='nmcli device wifi connect'
-alias disconnect='nmcli device disconnect'
-
-# ==============================
-# Environment Variables
-# ==============================
-
-# History Settings
-HISTSIZE=10000
-HISTFILE=~/.zsh_history
-SAVEHIST=$HISTSIZE
-HISTDUP=erase
-setopt appendhistory
-setopt sharehistory
-setopt hist_ignore_space
-setopt hist_ignore_all_dups
-setopt hist_save_no_dups
-setopt hist_ignore_dups
-setopt hist_find_no_dups
-
-# ==============================
-# Zoxide Initialization
-# ==============================
-eval "$(zoxide init zsh)"
-alias cd='z'
-
-
-export ANDROID_HOME=/home/ssk/Android/Sdk
-export PATH=$PATH:$ANDROID_HOME/emulator
-export PATH=$PATH:$ANDROID_HOME/tools
-export PATH=$PATH:$ANDROID_HOME/tools/bin
-export PATH=$PATH:$ANDROID_HOME/platform-tools
-
-# Go Path
-export PATH=$PATH:$HOME/go/bin
-
-# Rust Path
-export PATH="$HOME/.cargo/bin:$PATH"
-
-# JAVA17 Path
-export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
-export PATH=$JAVA_HOME/bin:$PATH
-
-# Snap path
-export PATH=$PATH:/snap/bin
-
-export TERM=xterm-256color
-
-
-# pnpm
-export PNPM_HOME="/home/ssk/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-
-
-export PATH="$PATH:/opt/miniconda3/bin"
-
-# Display system info on login (optional - comment out if not wanted)
-if [ -n "$PS1" ]; then
-    echo -e "\033[1;34m=== Welcome back, $USER! ===\033[0m"
-    echo -e "Date: $(date '+%A, %B %d, %Y - %H:%M:%S')"
-    echo -e "Uptime:$(uptime -p | sed 's/up //')"
-    echo -e "Load: $(uptime | awk -F'load average:' '{print $2}')"
-    echo
-fi
+# Load local overrides (gitignored personal settings)
+source_if_exists "$ZSH_CONFIG_DIR/local.zsh"
