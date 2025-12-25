@@ -41,7 +41,7 @@ run_cmd() {
             systemctl suspend
             ;;
           --lock)
-            ~/.config/i3/lockscreen.sh
+            ~/.config/i3/scripts/lockscreen.sh
             ;;
         --logout)
             case "$DESKTOP_SESSION" in
@@ -54,7 +54,7 @@ run_cmd() {
                 dwm)
                     pkill dwm
                     ;;
-                i3)
+                i3|i3wm|"")
                     i3-msg exit
                     ;;
                 plasma)
@@ -75,8 +75,8 @@ case "${chosen}" in
         run_cmd --reboot
         ;;
     "${lock}")
-        if [[ -x "$HOME/.config/i3/lockscreen.sh" ]]; then
-            "$HOME/.config/i3/lockscreen.sh"
+        if [[ -x "$HOME/.config/i3/scripts/lockscreen.sh" ]]; then
+            "$HOME/.config/i3/scripts/lockscreen.sh"
         fi
         # if [[ -x '/usr/bin/betterlockscreen' ]]; then
         #     betterlockscreen -l

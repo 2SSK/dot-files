@@ -1,8 +1,8 @@
 configuration{
-    modi: ["drun", "window", "run"];
+    modi: ["drun", "filebrowser", "window", "run"];
     icon-theme: "Tela-circle-blue-dark";
     show-icons: true;
-    terminal: "ghostty";
+    terminal: "kitty";
     drun-display-format: "{icon} {name}";
     location: 0;
     disable-history: false;
