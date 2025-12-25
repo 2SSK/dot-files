@@ -1,16 +1,11 @@
 general {
   colors = true
-    interval = 1
-    color_good = "#00FF00"
-    color_degraded = "#b58900"
-    color_bad = "#dc322f"
+    interval = 5
 }
 
 order += "battery all"
-order += "volume master"
-order += "cpu_usage"
+order += "disk /"
 order += "memory"
-order += "wireless _first_"
 order += "tztime local"
 
 cpu_usage {
@@ -22,11 +17,11 @@ load {
 }
 
 memory {
-    format = "Mem %used/%total"      
+    format = "   %used / %total "      
 }
 
 disk "/" {
-    format = "/: %used"
+    format = "  : %used / %total "
 }
 
 wireless _first_ {
@@ -40,10 +35,10 @@ ethernet _first_ {
 }
 
 battery all {
-    format = "%status %percentage %remaining"
-    status_chr = "CHR"
-    status_bat = "BAT"
-    status_full = "FULL"
+    format = " %status %percentage "
+    status_chr = " "
+    status_bat = " "
+    status_full = " "
 }
 
 volume master {
@@ -53,5 +48,5 @@ volume master {
 }
 
 tztime local {
-    format = "%Y-%m-%d %I:%M %p"
+    format = "  %a, %b %d - %l:%M %P "
 }
