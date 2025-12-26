@@ -1,42 +1,40 @@
 #!/bin/sh
 
-# Define colors
+# Colors (Tokyonight)
 BLANK='#00000000'
+BG='#1a1b26'
 CLEAR='#ffffff22'
-DEFAULT='#a6e3a1'
-TEXT='#cdd6f4'
-WRONG='#f38ba8'
-VERIFYING='#74c7ec'
-
+DEFAULT='#7aa2f7'
+TEXT='#c0caf5'
+WRONG='#f7768e'
+VERIFYING='#9ece6a'
 
 i3lock \
-  --insidever-color=$CLEAR     \
-  --ringver-color=$VERIFYING   \
+  --color=$BG \
+  --insidever-color=$CLEAR \
+  --ringver-color=$VERIFYING \
   \
-  --insidewrong-color=$CLEAR   \
-  --ringwrong-color=$WRONG     \
+  --insidewrong-color=$CLEAR \
+  --ringwrong-color=$WRONG \
   \
-  --inside-color=$BLANK        \
-  --ring-color=$DEFAULT        \
-  --line-color=$BLANK          \
-  --separator-color=$DEFAULT   \
+  --inside-color=$BLANK \
+  --ring-color=$DEFAULT \
+  --line-color=$BLANK \
+  --separator-color=$DEFAULT \
   \
-  --verif-color=$TEXT          \
-  --wrong-color=$TEXT          \
-  --time-color=$TEXT           \
-  --date-color=$TEXT           \
-  --layout-color=$TEXT         \
-  --keyhl-color=$WRONG         \
-  --bshl-color=$WRONG          \
+  --verif-color=$TEXT \
+  --wrong-color=$TEXT \
+  --time-color=$TEXT \
+  --date-color=$TEXT \
+  --layout-color=$TEXT \
+  --keyhl-color=$WRONG \
+  --bshl-color=$WRONG \
   \
-  --time-size=24               \
-  --date-size=16               \
-  --layout-size=24             \
+  --time-size=24 \
+  --date-size=16 \
+  --layout-size=22 \
   \
-  --screen 1                   \
-  --blur 9                     \
-  --clock                      \
-  --indicator                  \
-  --time-str="%I:%M:%S %p"     \
-  --date-str="%a, %Y-%b-%d"    \
-  --keylayout 1
+  --clock \
+  --indicator \
+  --time-str="%I:%M:%S %p" \
+  --date-str="%a, %b %d" 

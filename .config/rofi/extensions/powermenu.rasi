@@ -19,11 +19,11 @@ configuration {
     textbox-font:                "JetBrainsMono Nerd Font 14";
     element-text-font:           "feather 64";
 
-    background-window:           black/10%;
-    background-normal:           white/5%;
-    background-selected:         white/15%;
-    foreground-normal:           white;
-    foreground-selected:         white;
+    background-window:           rgba(26,27,38,0.7);
+    background-normal:           #24283b;
+    background-selected:         #444b6a;
+    foreground-normal:           #c0caf5;
+    foreground-selected:         #7aa2f7;
 }
 
 /*****----- Main Window -----*****/
