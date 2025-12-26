@@ -3,9 +3,6 @@
 ## Author : Aditya Shakya (adi1090x)
 ## Github : @adi1090x
 
-# CMDs
-uptime="`uptime -p | sed -e 's/up //g'`"
-
 # Options
 shutdown='󰐥'
 reboot='󰜉'
@@ -17,7 +14,6 @@ logout='󰍃'
 rofi_cmd() {
     rofi -dmenu \
         -p "" \
-        -mesg "Uptime: $uptime" \
         -theme "$HOME/.config/rofi/extensions/powermenu.rasi"
 }
 
@@ -79,7 +75,7 @@ case "${chosen}" in
             "$HOME/.config/i3/scripts/lockscreen.sh"
         fi
         # if [[ -x '/usr/bin/betterlockscreen' ]]; then
-        #     betterlockscreen -l
+        #     betterlockscreen -u "$HOME/Wallpaper-Bank/9.jpg" -l
         # elif [[ -x '/usr/bin/i3lock' ]]; then
         #     i3lock
         # fi
