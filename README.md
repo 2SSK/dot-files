@@ -19,10 +19,6 @@
 
 ## Rice
 
-![rice](./screenshots/screenshot_2025-09-10_15-26-11.png)
+![rice](./screenshots/screenshot_2025-12-31_08-54-29.png)
 
 ---
-
-## NVIM Config
-
-![nvim](./screenshots/screenshot_2025-09-10_15-28-36.png)
