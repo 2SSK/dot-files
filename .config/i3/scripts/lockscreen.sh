@@ -10,6 +10,8 @@ WRONG='#f7768e'
 VERIFYING='#9ece6a'
 
 i3lock \
+  --image=/home/ssk/Wallpaper-Bank/heart_original.png \
+  --fill \
   --color=$BG \
   --insidever-color=$CLEAR \
   --ringver-color=$VERIFYING \
