@@ -18,12 +18,14 @@ return {
 		-- Mini Surround
 		require("mini.surround").setup()
 
-		-- Mini Files
-		require("mini.files").setup({
-			mappings = {
-				synchronize = "s",
-			},
-		})
-		vim.api.nvim_set_keymap("n", "<leader>em", ":lua MiniFiles.open()<CR>", { noremap = true, silent = true })
+		-- Mini git diff
+		require("mini.diff").setup()
+
+		vim.api.nvim_set_keymap(
+			"n",
+			"<leader>do",
+			":lua MiniDiff.toggle_overlay()<CR>",
+			{ noremap = true, silent = true }
+		)
 	end,
 }

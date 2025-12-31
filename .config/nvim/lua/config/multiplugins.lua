@@ -24,16 +24,6 @@ return {
 		},
 	},
 
-	-- Which key
-	{
-		"folke/which-key.nvim",
-		event = "VeryLazy",
-		init = function()
-			vim.o.timeout = true
-			vim.o.timeoutlen = 500
-		end,
-	},
-
 	-- Tab bar
 	{
 		"akinsho/bufferline.nvim",
@@ -43,7 +33,7 @@ return {
 			options = {
 				diagnostics = "nvim_lsp",
 				mode = "tabs",
-				-- show_buffer_close_icons = false,
+				show_buffer_close_icons = false,
 			},
 		},
 	},

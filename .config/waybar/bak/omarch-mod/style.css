@@ -1,0 +1,97 @@
+@import "themes/mocha.css";
+
+* {
+  background-color: @background;
+  color: @foreground;
+
+  border: none;
+  border-radius: 0;
+  min-height: 0;
+  font-family: "JetBrainsMono Nerd Font";
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.modules-left {
+  margin-left: 8px;
+}
+
+.modules-right {
+  margin-right: 8px;
+}
+
+#workspaces button {
+  all: initial;
+  padding: 0 6px;
+  margin: 0 1.5px;
+  min-width: 9px;
+}
+
+#workspaces button.empty {
+  opacity: 0.5;
+}
+
+#workspaces button.urgent {
+  color: @critical;
+}
+
+#scratchpad,
+#cpu,
+#disk,
+#memory,
+#battery,
+#clock,
+#pulseaudio,
+#backlight,
+#custom-logo,
+#custom-power {
+  min-width: 12px;
+  margin: 0 7.5px;
+}
+
+tooltip {
+  padding: 2px;
+}
+
+.hidden {
+  opacity: 0;
+}
+
+#custom-separator {
+  opacity: 0.5;
+}
+
+#scratchpad {
+  margin-left: 15px;
+}
+
+#battery.critical {
+  color: @critical;
+}
+
+#battery.warning {
+  color: @warning;
+}
+
+#battery.charging {
+  color: @good;
+}
+
+@keyframes blink-critical {
+  0% {
+    color: @background;
+  }
+
+  50% {
+    color: @critical;
+  }
+
+  100% {
+    color: @background;
+  }
+}
+
+#battery.critical {
+  animation: blink-critical 1s infinite;
+  color: @critical;
+}

@@ -24,14 +24,14 @@ keymap.set("n", "<S-l>", "<cmd>tabn<CR>")
 keymap.set("n", "<S-h>", "<cmd>tabp<CR>")
 keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>")
 
--- Dismiss Noice Message
-keymap.set("n", "<leader>nd", "<cmd>NoiceDismiss<CR>", { desc = "Dismiss Noice Message" })
-
 -- Zen mode toggle
 keymap.set("n", "<leader>zm", ":ZenMode<CR>")
 
 -- Silicon command
 keymap.set("v", "<leader>ss", ":Silicon<CR>")
+
+-- Markdown preview toggle
+keymap.set("n", "<leader>md", ":MarkdownPreviewToggle<CR>")
 
 -- Resize window commands
 keymap.set("n", "<C-Up>", ":resize -3<CR>")
@@ -42,5 +42,4 @@ keymap.set("n", "<C-Right>", ":vertical resize +3<CR>")
 -- Copilot suggestions commands
 vim.api.nvim_set_keymap("i", "<C-a>", "copilot#Accept('<CR>')", { expr = true, silent = true, script = true })
 vim.api.nvim_set_keymap("i", "<C-r>", "<Plug>(copilot-dismiss)", { silent = true })
-keymap.set("n", "<leader>aa", "<cmd>CopilotChatToggle<cr>", { desc = "Toggle Copilot Chat" })
-keymap.set("n", "<leader>chl", "<cmd>CopilotChatReset<cr>")
+keymap.set("n", "<leader>cd", ":Copilot disable")

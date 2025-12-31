@@ -16,24 +16,24 @@ set $cursor_theme Bibata-Modern-Ice
 seat * xcursor_theme $cursor_theme 24
 
 # Applications
-set $term ghostty
+set $term kitty
 set $files nautilus
-set $menu --no-startup-id rofi -show drun
+# set $menu --no-startup-id rofi -show drun
 # set $menu --no-startup-id wofi --show drun
-# set $menu fuzzel
+set $menu --no-startup-id tofi-drun -c ~/.config/tofi/config --drun-launch=true
 
 # Gaps and Borders
-gaps inner 10
-gaps outer 10
-default_border pixel 3
-default_floating_border pixel 2
+gaps inner 5
+gaps outer 5
+default_border pixel 2
+default_floating_border pixel 0
 
 # Blur, rounded corners, and shadows
 blur enable
-blur_passes 3
-blur_radius 5
+blur_passes 5
+blur_radius 3
 
-corner_radius 12
+corner_radius 10
 
 shadows enable
 shadow_offset 5 5

@@ -8,9 +8,7 @@ return {
 	},
 	config = function()
 		-- Import required plugins
-		local lspconfig = require("lspconfig")
 		local cmp_nvim_lsp = require("cmp_nvim_lsp")
-		local util = require("lspconfig/util")
 		local on_attach = require("neodev").on_attach
 
 		-- Enhanced capabilities for autocompletion
@@ -20,15 +18,26 @@ return {
 		local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
 		for type, icon in pairs(signs) do
 			local hl = "DiagnosticSign" .. type
-			-- vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-			vim.diagnostic.config()
+			vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
 		end
+		vim.diagnostic.config({
+			signs = true,
+			underline = true,
+			update_in_insert = false,
+			virtual_text = true,
+		})
 
 		-- Format on save
 		vim.api.nvim_create_autocmd("BufWritePre", {
 			callback = function(event)
+				local excluded_filetypes = { "markdown", "json", "yaml" }
+				local filetype = vim.bo[event.buf].filetype
 				local client = vim.lsp.get_clients({ bufnr = event.buf })[1]
-				if client and client:supports_method("textDocument/formatting") then
+				if
+					client
+					and client:supports_method("textDocument/formatting")
+					and not vim.tbl_contains(excluded_filetypes, filetype)
+				then
 					vim.lsp.buf.format({ bufnr = event.buf, async = false })
 				end
 			end,
@@ -118,7 +127,7 @@ return {
 				capabilities = capabilities,
 				cmd = { "gopls", "serve" },
 				filetypes = { "go", "gomod", "gowork", "gotmpl" },
-				root_dir = util.root_pattern("go.mod", "go.work", ".git"),
+				root_markers = { "go.mod", "go.work", ".git" },
 			},
 			zls = {
 				on_attach = on_attach,
@@ -130,7 +139,7 @@ return {
 				on_attach = on_attach,
 				capabilities = capabilities,
 				filetypes = { "rust" },
-				root_dir = util.root_pattern("Cargo.toml"),
+				root_markers = { "Cargo.toml" },
 				settings = {
 					["rust-analyzer"] = {
 						cargo = {
@@ -143,7 +152,12 @@ return {
 
 		-- Apply server configurations
 		for server, config in pairs(server_configurations) do
-			lspconfig[server].setup(vim.tbl_extend("force", { capabilities = capabilities }, config))
+			vim.lsp.config(server, vim.tbl_extend("force", { capabilities = capabilities }, config))
+		end
+
+		-- Enable the configured servers
+		for server, _ in pairs(server_configurations) do
+			vim.lsp.enable(server)
 		end
 	end,
 }

@@ -79,6 +79,13 @@ return {
 					cwd = vim.fn.stdpath("config"),
 				})
 			end),
+
+			-- keybind to open notes folder
+			keymap.set("n", "<leader>on", function()
+				require("telescope.builtin").find_files({
+					cwd = "~/SSK-Vault",
+				})
+			end),
 		})
 
 		require("config.telescope.multigrep").setup()

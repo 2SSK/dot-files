@@ -41,11 +41,11 @@
       "key": " ",
       "keyColor": "red"
     },
-    // {
-    //   "type": "packages",
-    //   "key": "󰏗 ",
-    //   "keyColor": "green"
-    // },
+    {
+      "type": "packages",
+      "key": "󰏗 ",
+      "keyColor": "green"
+    },
     {
       "type": "display",
       "key": " ",

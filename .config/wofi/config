@@ -1,15 +1,32 @@
+# mode & placement
 show=drun
-width=40%
-height=50%
-prompt=Search...
-normal_window=true
-location=center
-gtk-dark=true
-allow_images=true
-image_size=36
+location=top           
+width=700
+lines=8
+columns=2              
+dynamic_lines=false
+
+# icons
+allow_images=true      
+image_size=36          
+
+# search & UX
+matching=fuzzy
 insensitive=true
-allow_markup=true
-no_actions=true
-orientation=vertical
-halign=fill
-content_halign=fill
+hide_scroll=false
+prompt=
+
+# terminal
+term=foot
+
+# keybinds (vim-ish)
+key_up=Ctrl-k
+key_down=Ctrl-j
+key_left=Ctrl-h
+key_right=Ctrl-l
+key_submit=Return
+key_forward=Tab
+key_backward=Shift-ISO_Left_Tab
+
+# stylesheet
+style=/home/ssk/.config/wofi/style.css

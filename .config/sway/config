@@ -1,5 +1,5 @@
 include ~/.config/sway/variables
-include ~/.config/sway/colorschemes/catppuccin-mocha
+include ~/.config/sway/colorschemes/folke
 include ~/.config/sway/outputs
 include ~/.config/sway/inputs
 include ~/.config/sway/startup
@@ -11,7 +11,7 @@ include ~/.config/sway/keybindings/workspaces
 include ~/.config/sway/keybindings/scratchpad
 include ~/.config/sway/keybindings/resizing
 
-include ~/.config/sway/bar/waybar
+# include ~/.config/sway/bar/waybar
 # include ~/.config/sway/bar/swaybar
 
 include /etc/sway/config.d/*
