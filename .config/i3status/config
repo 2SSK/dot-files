@@ -1,10 +1,11 @@
 general {
   colors = true
-    interval = 5
+  color_good = "#9ece6a"
+  color_degraded = "#e0af68"
+  color_bad = "#f7768e"
 }
 
 order += "battery all"
-order += "disk /"
 order += "memory"
 order += "tztime local"
 
@@ -48,5 +49,5 @@ volume master {
 }
 
 tztime local {
-    format = "  %a, %b %d - %l:%M %P "
+    format = "   %a, %b %d - %l : %M %P "
 }

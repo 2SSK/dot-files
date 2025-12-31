@@ -28,7 +28,6 @@ source_if_exists "$ZSH_CONFIG_DIR/env.zsh"          # Environment variables
 source_if_exists "$ZSH_CONFIG_DIR/paths.zsh"        # PATH configurations
 source_if_exists "$ZSH_CONFIG_DIR/functions.zsh"    # Custom functions
 source_if_exists "$ZSH_CONFIG_DIR/tools.zsh"        # External tools (fzf, zoxide, etc)
-source_if_exists "$ZSH_CONFIG_DIR/welcome.zsh"      # Welcome message
 
 # Load local overrides (gitignored personal settings)
 source_if_exists "$ZSH_CONFIG_DIR/local.zsh"
