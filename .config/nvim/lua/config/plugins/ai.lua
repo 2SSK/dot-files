@@ -43,12 +43,13 @@ return {
 				-- Required for `opts.auto_reload`
 				vim.opt.autoread = true
 			end,
-    -- stylua: ignore
-    keys = {
-      { "<M-;>", mode = { "n", "t" }, function() require("opencode").toggle() end, desc = "Toggle embedded opencode" },
-      { "<M-i>", mode = {"n", "x"}, function() require("opencode").ask("@this: ", { submit = true }) end, desc = "Ask about this" },
-      { "<leader>ap", mode = { "n", "x" }, function() require("opencode").select() end, desc = "Select prompt" },
-    },
+      -- stylua: ignore
+      keys = {
+        { "<leader>ot", mode = { "n", "t" }, function() require("opencode").toggle() end,                               desc = "Toggle embedded opencode" },
+        { "<leader>oa", mode = { "n", "x" }, function() require("opencode").ask("@this: ", { submit = true }) end,      desc = "Ask about this" },
+        { "<leader>oa", mode = { "v" },      function() require("opencode").ask("@selection: ", { submit = true }) end, desc = "Ask about selection" },
+        { "<leader>ap", mode = { "n", "x" }, function() require("opencode").select() end,                               desc = "Select prompt" },
+      },
 		},
 
 		{
