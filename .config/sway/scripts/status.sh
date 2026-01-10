@@ -74,7 +74,7 @@ else
 fi
 
 # Date/Time/Days/Months
-date_time=$(date '+%A, %B %d, %Y %H:%M')
+date_time=$(date '+%a, %b %d - %I:%M %P')
 
 # Combine all info into a single line
-echo "CPU: ${cpu_usage}% | MEM: ${mem_pct}% | WiFi: ${wifi} | Vol: ${volume} | Brt: ${b_pct}% | Batt: ${batt_pct}% (${batt_status}) | ${date_time}"
+echo "batt: ${batt_pct}% (${batt_status}) | cpu: ${cpu_usage}% | mem: ${mem_pct}% | vol: ${volume} | brt: ${b_pct}% | ${date_time}"

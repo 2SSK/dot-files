@@ -7,9 +7,9 @@ exec --no-startup-id autotiling
 # wallpaper
 # exec --no-startup-id waypaper --restore
 # exec --no-startup-id variety --restore
-# exec_always swaybg -i ~/Wallpaper-Bank/silver-surfer.png -m fill
+exec_always swaybg -i ~/Wallpaper-Bank/hannya_original.png -m fill
 
 # Change wallpaper every 5 minutes
 # exec bash -c 'while true; do ~/.config/sway/scripts/random-wallpaper.sh; sleep 300; done'
 
-exec qs -c noctalia-shell
+# exec qs -c noctalia-shell
