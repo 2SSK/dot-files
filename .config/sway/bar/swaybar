@@ -2,10 +2,10 @@ bar {
   position top
     status_command while ~/.config/sway/scripts/status.sh; do sleep 1; done 
     colors {
-        statusline ffffff
-        background 000000
-        inactive_workspace 000000 000000 ffffff
-        focused_workspace ffffff ffffff 000000
-        urgent_workspace ff0000 ff0000 ffffff
+        statusline c0caf5
+        background 1a1b26
+        inactive_workspace 1a1b26 1a1b26 565f89
+        focused_workspace c0caf5 7aa2f7 7aa2f7
+        urgent_workspace 1a1b26 f7768e 1a1b26
     }
 }

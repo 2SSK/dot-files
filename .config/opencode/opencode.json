@@ -9,6 +9,41 @@
     }
   },
   "agent": {},
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "headers": {
+        "CONTEXT7_API_KEY": "{env:CONTEXT7_API_KEY}"
+      },
+      "enabled": true
+    },
+    "postgres": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@henkey/postgres-mcp-server",
+        "--connection-string",
+        "{env:POSTGRES_DATABASE_URI}"
+      ],
+      "enabled": true
+    },
+    "obsidian": {
+      "type": "local",
+      "command": ["sh", "-c", "export $(grep -v '^#' .env | xargs) && uvx mcp-obsidian"],
+      "enabled": true
+    },
+    "filesystem": {
+      "type": "local",
+      "command": [
+        "npx",
+        "@modelcontextprotocol/server-filesystem",
+        "/home/ssk"
+      ],
+      "enabled": true
+    }
+  },
   "keybinds": {
     "messages_page_up": "ctrl+u",
     "messages_page_down": "ctrl+d"

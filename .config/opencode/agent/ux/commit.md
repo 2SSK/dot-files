@@ -1,5 +1,15 @@
 ---
+name: commit
 description: Create well-formatted commits with conventional commit messages and emoji
+mode: subagent
+permission:
+  edit: allow
+  bash: allow
+  webfetch: deny
+tools:
+  write: true
+  edit: true
+  read: true
 ---
 
 # Commit Command

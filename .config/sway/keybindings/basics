@@ -19,7 +19,8 @@ bindsym $mod+shift+b exec --no-startup-id qs -c noctalia-shell ipc call bar togg
 
 # Power Menu
 # bindsym $mod+p exec --no-startup-id wlogout
-bindsym $mod+p exec --no-startup-id qs -c noctalia-shell ipc call sessionMenu toggle
+# bindsym $mod+p exec --no-startup-id qs -c noctalia-shell ipc call sessionMenu toggle
+bindsym $mod+p exec --no-startup-id ~/.config/rofi/powermenu.sh
 
 # Switch to prev/next workspace
 bindsym $mod+slash workspace next
