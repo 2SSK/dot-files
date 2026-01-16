@@ -74,11 +74,6 @@ case "${chosen}" in
         if [[ -x "$HOME/.config/i3/scripts/lockscreen.sh" ]]; then
             "$HOME/.config/i3/scripts/lockscreen.sh"
         fi
-        # if [[ -x '/usr/bin/betterlockscreen' ]]; then
-        #     betterlockscreen -u "$HOME/Wallpaper-Bank/9.jpg" -l
-        # elif [[ -x '/usr/bin/i3lock' ]]; then
-        #     i3lock
-        # fi
         ;;
     "${suspend}")
         run_cmd --suspend

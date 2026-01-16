@@ -1,7 +1,7 @@
 @import "themes/tokyonight.css";
 
 * {
-  /* background-color: @background; */
+  /* background-color: @foreground; */
   color: @foreground;
 
   border: none;
