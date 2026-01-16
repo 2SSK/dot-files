@@ -31,7 +31,11 @@
     },
     "obsidian": {
       "type": "local",
-      "command": ["sh", "-c", "export $(grep -v '^#' .env | xargs) && uvx mcp-obsidian"],
+      "command": [
+        "sh",
+        "-c",
+        "export $(grep -v '^#' .env | xargs) && uvx mcp-obsidian"
+      ],
       "enabled": true
     },
     "filesystem": {

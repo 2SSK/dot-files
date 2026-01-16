@@ -18,8 +18,8 @@ return {
 				find_files = {
 					theme = "ivy",
 					hidden = true,
-					no_ignore = true,
-					no_ignore_parent = true,
+					no_ignore = false,
+					no_ignore_parent = false,
 				},
 				oldfiles = {
 					theme = "ivy",

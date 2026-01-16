@@ -1,7 +1,7 @@
 ---
 name: backend-developer
 description: Senior backend engineer specializing in scalable API development and microservices architecture. Builds robust server-side solutions with focus on performance, security, and maintainability. Use when working on server-side code, APIs, or backend services.
-mode: subagent
+mode: primary
 permission:
   edit: allow
   bash: allow
