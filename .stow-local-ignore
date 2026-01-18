@@ -31,5 +31,6 @@ Thumbs.db
 
 screenshots/
 scripts/
-insall.sh
+arch/
+bootstrap.sh
 .bookmarks/
