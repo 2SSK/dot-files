@@ -1,11 +1,44 @@
 #!/bin/bash
 
+# ============================================================================
+# Arch Linux Package Installer (Lightweight Alternative)
+# ============================================================================
+# This is a simple package installer for Arch Linux.
+# 
+# For a complete setup with dotfiles, themes, and configurations,
+# use the main bootstrap script instead:
+#   ./bootstrap.sh
+#
+# This script is for users who only want to install packages without
+# the full dotfiles setup.
+# ============================================================================
+
 set -e
 
-PACKAGES_TO_INSTALL="$(pwd)/scripts/arch/packages.txt"
+PACKAGES_TO_INSTALL="$(pwd)/arch/packages.txt"
+
+# Check if bootstrap.sh is available
+if [ -f "$(dirname "$0")/../bootstrap.sh" ]; then
+  echo ""
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo "ℹ️  NOTE: For a complete installation with dotfiles and configuration,"
+  echo "   use the main bootstrap script:"
+  echo ""
+  echo "   ./bootstrap.sh"
+  echo ""
+  echo "   This script (arch/install.sh) only installs packages."
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo ""
+  
+  read -p "Continue with package installation only? [y/N]: " response
+  case $response in
+    [Yy]*) ;;
+    *) echo "Installation cancelled. Run ./bootstrap.sh for full setup."; exit 0 ;;
+  esac
+fi
 
 echo ""
-echo "Starting installation script..."
+echo "Starting package installation..."
 echo "-------------------------------"
 
 check_yay_installed() {
