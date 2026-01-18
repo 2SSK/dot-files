@@ -1,0 +1,35 @@
+# Stow local ignore file
+# Files and directories listed here will not be stowed
+
+# Git files
+\.git
+\.gitignore
+\.gitkeep
+
+# Documentation
+README.*
+LICENSE
+*.md
+
+# Editor files
+\.vscode
+\.idea
+*~
+*.swp
+*.swo
+
+# OS files
+\.DS_Store
+Thumbs.db
+
+# Stow itself
+\.stow-local-ignore
+
+# Old structure (before stow migration)
+^bash$
+^vim$
+
+screenshots/
+scripts/
+insall.sh
+.bookmarks/

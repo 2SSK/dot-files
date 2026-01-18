@@ -3,7 +3,7 @@
   "theme": "tokyonight",
   "command": {
     "git": {
-      "agent": "plan",
+      "agent": "build",
       "description": "Creates a git commit message",
       "template": "Create a concise conventional commit message in plain text. Check the staging area for more information. if needed, use dashes as bullets to list multiple changes. Don't capitalize the first character."
     }
