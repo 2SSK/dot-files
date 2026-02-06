@@ -179,17 +179,17 @@ window-rule {
 
     border {
         inactive-color "#7d0d2d"
-    }
+   
 
     shadow {
         color "#7d0d2d70"
     }
 
     tab-indicator {
-        active-color "#f38ba8"
-        inactive-color "#7d0d2d"
+      active-color "#f38ba8"
+      inactive-color "#7d0d2d"
     }
-}
+  }
 
 // Example: enable rounded corners for all windows.
 // (This example rule is commented out with a "/-" in front.)
@@ -203,7 +203,7 @@ binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
-    Mod+Return hotkey-overlay-title="Open a Terminal: ghostty" { spawn "ghostty"; }
+    Mod+Return hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
     Mod+D hotkey-overlay-title="Run an Application: rofi" { spawn "rofi" "-show" "drun"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: hyprlock" { spawn "hyprlock"; }
     Mod+P hotkey-overlay-title="Power Menu: qs sessionMenu" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"; }

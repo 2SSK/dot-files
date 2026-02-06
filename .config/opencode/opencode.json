@@ -1,6 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "theme": "tokyonight",
+  "agent": {},
   "command": {
     "git": {
       "agent": "build",
@@ -8,18 +8,38 @@
       "template": "Create a concise conventional commit message in plain text. Check the staging area for more information. if needed, use dashes as bullets to list multiple changes. Don't capitalize the first character."
     }
   },
-  "agent": {},
+  "keybinds": {
+    "messages_page_down": "ctrl+d",
+    "messages_page_up": "ctrl+u"
+  },
   "mcp": {
     "context7": {
-      "type": "remote",
-      "url": "https://mcp.context7.com/mcp",
+      "enabled": true,
       "headers": {
         "CONTEXT7_API_KEY": "{env:CONTEXT7_API_KEY}"
       },
-      "enabled": true
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+    },
+    "filesystem": {
+      "command": [
+        "npx",
+        "@modelcontextprotocol/server-filesystem",
+        "/home/ssk"
+      ],
+      "enabled": true,
+      "type": "local"
+    },
+    "obsidian": {
+      "command": [
+        "sh",
+        "-c",
+        "export $(grep -v '^#' .env | xargs) \u0026\u0026 uvx mcp-obsidian"
+      ],
+      "enabled": true,
+      "type": "local"
     },
     "postgres": {
-      "type": "local",
       "command": [
         "npx",
         "-y",
@@ -27,29 +47,32 @@
         "--connection-string",
         "{env:POSTGRES_DATABASE_URI}"
       ],
-      "enabled": true
-    },
-    "obsidian": {
-      "type": "local",
-      "command": [
-        "sh",
-        "-c",
-        "export $(grep -v '^#' .env | xargs) && uvx mcp-obsidian"
-      ],
-      "enabled": true
-    },
-    "filesystem": {
-      "type": "local",
-      "command": [
-        "npx",
-        "@modelcontextprotocol/server-filesystem",
-        "/home/ssk"
-      ],
-      "enabled": true
+      "enabled": true,
+      "type": "local"
     }
   },
-  "keybinds": {
-    "messages_page_up": "ctrl+u",
-    "messages_page_down": "ctrl+d"
-  }
+  "plugin": ["opencode-antigravity-auth@beta"],
+  "provider": {
+    "ollama": {
+      "models": {
+        "glm-4.7": {
+          "name": "glm-4.7"
+        },
+        "glm-4.7:cloud": {
+          "_launch": true,
+          "name": "glm-4.7:cloud"
+        },
+        "kimi-k2.5:cloud": {
+          "_launch": true,
+          "name": "kimi-k2.5:cloud"
+        }
+      },
+      "name": "Ollama Cloud",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "https://ollama.com/v1"
+      }
+    }
+  },
+  "theme": "tokyonight"
 }
