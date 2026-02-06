@@ -158,9 +158,19 @@ syntax on
 " colorscheme desert
 colorscheme wildcharm
 set background=dark
-" hi Normal ctermbg=NONE guibg=NONE
-" hi NonText ctermbg=NONE guibg=NONE guifg=NONE ctermfg=NONE
-" hi VertSplit guibg=NONE guifg=NONE ctermbg=NONE ctermfg=NONE
+" ==============================
+" Transparent Background
+" ==============================
+highlight Normal ctermbg=NONE guibg=NONE
+highlight NonText ctermbg=NONE guibg=NONE
+highlight LineNr ctermbg=NONE guibg=NONE
+highlight SignColumn ctermbg=NONE guibg=NONE
+highlight VertSplit ctermbg=NONE guibg=NONE
+highlight StatusLine ctermbg=NONE guibg=NONE
+highlight EndOfBuffer ctermbg=NONE guibg=NONE
+
+" Reapply transparency after colorscheme loads
+autocmd ColorScheme * highlight Normal ctermbg=NONE guibg=NONE
 
 " Sync clipboard with OS
 set clipboard=unnamedplus "Linux
@@ -186,4 +196,3 @@ let g:netrw_winsize = 25
 augroup netrw_setup | au!
     au FileType netrw nmap <buffer> l <CR>
 augroup END
-

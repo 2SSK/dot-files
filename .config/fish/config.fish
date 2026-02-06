@@ -217,3 +217,5 @@ bind \ck up-or-search
 # Down-line-or-search (Ctrl+J)
 bind \cj down-or-search
 
+
+string match -q "$TERM_PROGRAM" "kiro" and . (kiro --locate-shell-integration-path fish)
