@@ -30,15 +30,6 @@
       "enabled": true,
       "type": "local"
     },
-    "obsidian": {
-      "command": [
-        "sh",
-        "-c",
-        "export $(grep -v '^#' .env | xargs) \u0026\u0026 uvx mcp-obsidian"
-      ],
-      "enabled": true,
-      "type": "local"
-    },
     "postgres": {
       "command": [
         "npx",
@@ -76,3 +67,4 @@
   },
   "theme": "tokyonight"
 }
+
