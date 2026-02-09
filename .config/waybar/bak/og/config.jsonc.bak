@@ -133,7 +133,7 @@
   },
   "memory": {
     "interval": 1,
-    "format": " {}%",
+    "format": " {}%",
     "tooltip-format": "{used}/{total} GiB",
     "on-click": "swaymsg exec gnome-system-monitor"
   },

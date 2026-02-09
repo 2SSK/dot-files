@@ -96,7 +96,7 @@ symbol = " "
 symbol = " "
 
 [memory_usage]
-symbol = "󰍛 "
+symbol = " "
 
 [meson]
 symbol = "󰔷 "
