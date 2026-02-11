@@ -10,6 +10,9 @@ floating_modifier $mod normal
 # bindsym $mod+c exec --no-startup-id ~/.config/sway/scripts/swaylock.sh
 # bindsym $mod+c exec hyprlock
 
+# Toggle noctalia-shell wallpaper selector
+bindsym $mod+shift+p exec --no-startup-id qs -c noctalia-shell ipc call wallpaper toggle
+
 # Emojis
 # bindsym $mod+comma exec smile
 bindsym $mod+comma exec --no-startup-id qs -c noctalia-shell ipc call launcher emoji
