@@ -44,5 +44,5 @@ vim.api.nvim_set_keymap("i", "<C-a>", "copilot#Accept('<CR>')", { expr = true, s
 vim.api.nvim_set_keymap("i", "<C-r>", "<Plug>(copilot-dismiss)", { silent = true })
 keymap.set("n", "<leader>cd", ":Copilot disable<CR>")
 
--- Run current file command
+-- DSA commands
 keymap.set("n", "<leader>cr", ":!./run.sh %<CR>")

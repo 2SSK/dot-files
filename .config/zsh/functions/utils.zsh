@@ -58,3 +58,21 @@ calc() {
 path() {
     echo "$PATH" | tr ':' '\n' | nl
 }
+
+# Kill Port
+killport() {
+    if [ -z "$1" ]; then
+        echo "Usage: killport <port>"
+        return 1
+    fi
+    
+    # Find the PID running on the specified port and kill it
+    local pid=$( lsof -t -i :"$1" )
+
+    if [ -n "$pid" ]; then
+        kill -9 "$pid"
+        echo "Killed process $pid running on port $1..."
+    else
+        echo "No process found running on port $1"
+    fi
+}
