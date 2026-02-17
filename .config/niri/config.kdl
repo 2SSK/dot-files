@@ -211,7 +211,7 @@ binds {
     Super+Alt+L hotkey-overlay-title="Lock the Screen: hyprlock" { spawn "hyprlock"; }
     Mod+P hotkey-overlay-title="Power Menu: qs sessionMenu" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"; }
     Mod+Shift+B hotkey-overlay-title="Toggle Bar: qs bar" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "bar" "toggle"; }
-    Mod+Shift+W hotkey-overlay-title="Wallpaper: qs wallpaper" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "wallpaper" "toggle"; }
+    Mod+Shift+P hotkey-overlay-title="Wallpaper: qs wallpaper" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "wallpaper" "toggle"; }
     Mod+Semicolon hotkey-overlay-title="Emoji Picker: qs launcher" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "emoji"; }
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
@@ -472,5 +472,5 @@ binds {
 
     // Powers off the monitors. To turn them back on, do any input like
     // moving the mouse or pressing any other key.
-    Mod+Shift+P { power-off-monitors; }
+    Mod+Shift+W { power-off-monitors; }
 }
