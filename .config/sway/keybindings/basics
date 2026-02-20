@@ -1,5 +1,6 @@
 # Basics
 bindsym $mod+Return exec $term
+bindsym $alt+Return exec kitty
 bindsym $mod+q kill
 bindsym $mod+d exec $menu
 bindsym $mod+Shift+r reload

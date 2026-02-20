@@ -16,7 +16,7 @@ set $cursor_theme Bibata-Modern-Ice
 seat * xcursor_theme $cursor_theme 24
 
 # Applications
-set $term kitty
+set $term alacritty
 set $files nautilus
 # set $menu --no-startup-id rofi -show drun
 # set $menu --no-startup-id wofi --show drun
