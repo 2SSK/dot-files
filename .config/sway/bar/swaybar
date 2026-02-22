@@ -4,8 +4,8 @@ bar {
     colors {
         statusline c0caf5
         background 1a1b26
-        inactive_workspace 1a1b26 1a1b26 565f89
-        focused_workspace c0caf5 7aa2f7 7aa2f7
+        inactive_workspace  565f89 1a1b26 565f89
+        focused_workspace 7aa2f7 7aa2f7 1a1b26 
         urgent_workspace 1a1b26 f7768e 1a1b26
     }
 }
