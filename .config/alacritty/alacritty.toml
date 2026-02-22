@@ -41,8 +41,4 @@ command = { program = "paplay", args = ["/usr/share/sounds/freedesktop/stereo/di
 
 live_config_reload = true
 
-import = ["~/.config/alacritty/themes/tokyonight.toml", "~/.config/alacritty/fonts.toml"]
-
-# [shell]
-# program = "/bin/bash"
-# args = ["-l", "-c", "tmux"]
+import = ["~/.config/alacritty/themes/tokyonight.toml", "~/.config/alacritty/fonts.toml",  "~/.config/alacritty/themes/noctalia.toml"]

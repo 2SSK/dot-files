@@ -1,13 +1,12 @@
 # Theme
 theme = "tokyonight"
-background-opacity = 0.75
-# background-opacity = 1
+background-opacity = 0.9
 
 # Font
 font-family = "JetBrains Mono Nerd Font"
-font-style = semibold
+font-style = Bold
 bold-is-bright = true
-font-size = 14
+font-size = 16
 
 # Appearance
 gtk-titlebar = true

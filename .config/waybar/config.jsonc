@@ -20,8 +20,8 @@
     "cpu",
     "memory",
     "disk",
-    "backlight",
-    "pulseaudio",
+    // "backlight",
+    // "pulseaudio",
     "battery",
     "custom/power"
   ],
@@ -155,7 +155,8 @@
     "on-click": "swaymsg exec gnome-control-center power"
   },
   "pulseaudio": {
-    "format": "  {volume}%",
+    // "format": "  {volume}%",
+    "format": "vol {volume}%",
     "format-muted": " M",
     "tooltip-format": "{desc}"
   },

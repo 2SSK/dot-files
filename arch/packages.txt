@@ -1,0 +1,248 @@
+# ============================================================================
+# DOTFILES PACKAGE LIST
+# ============================================================================
+# Comprehensive package list for Arch Linux with Hyprland + Noctalia Shell
+# Theme: Tokyo Night | Font: JetBrains Mono Nerd Font
+# ============================================================================
+
+# ============================================================================
+# SHELL ENVIRONMENT
+# ============================================================================
+zsh                          # Z Shell
+zsh-completions              # Additional ZSH completions
+stow                         # Symlink farm manager for dotfiles
+starship                     # Fast cross-shell prompt
+
+# ============================================================================
+# MODERN CLI TOOLS (Rust-based replacements)
+# ============================================================================
+eza                          # Modern ls replacement
+bat                          # Cat with syntax highlighting
+fzf                          # Fuzzy finder
+zoxide                       # Smarter cd command
+ripgrep                      # Fast grep alternative (rg)
+fd                           # Fast find alternative
+tokei                        # Code statistics
+du-dust                      # Disk usage analyzer (dust)
+procs                        # Process viewer
+bottom                       # System monitor (btm)
+
+# ============================================================================
+# TERMINAL FILE MANAGERS & SYSTEM MONITORS
+# ============================================================================
+yazi                         # Terminal file manager (TUI)
+btop                         # System monitor
+htop                         # Alternative system monitor
+ncdu                         # NCurses disk usage
+
+# ============================================================================
+# EDITORS
+# ============================================================================
+vim                          # Vi IMproved
+neovim                       # Hyperextensible Vim-based text editor
+nano                         # Simple text editor
+
+# ============================================================================
+# TERMINAL MULTIPLEXER
+# ============================================================================
+tmux                         # Terminal multiplexer
+
+# ============================================================================
+# VERSION CONTROL & DEV TOOLS
+# ============================================================================
+git                          # Distributed version control
+git-delta                    # Better git diff viewer
+lazygit                      # Terminal UI for git
+lazydocker                   # Terminal UI for docker
+github-cli                   # GitHub CLI tool (gh)
+
+# ============================================================================
+# CONTAINERIZATION
+# ============================================================================
+docker                       # Container platform
+docker-compose               # Multi-container orchestration
+docker-buildx                # Docker CLI plugin for BuildKit
+
+# ============================================================================
+# PROGRAMMING LANGUAGES & COMPILERS
+# ============================================================================
+gcc                          # GNU Compiler Collection
+clang                        # C/C++/Objective-C compiler
+make                         # Build automation tool
+cmake                        # Cross-platform build system
+golang                       # Go programming language
+rust                         # Rust programming language
+cargo                        # Rust package manager
+nodejs                       # JavaScript runtime
+npm                          # Node package manager
+yarn                         # Alternative Node package manager
+python                       # Python interpreter
+python-pip                   # Python package installer
+python-pipx                  # Install Python apps in isolated environments
+
+# ============================================================================
+# TERMINAL EMULATORS
+# ============================================================================
+# ghostty                      # Modern terminal emulator
+kitty                        # GPU-based terminal emulator
+# alacritty                    # GPU-accelerated terminal
+# wezterm                      # GPU-accelerated terminal multiplexer
+# foot                         # Fast Wayland terminal
+
+# ============================================================================
+# DEVELOPMENT APPLICATIONS (GUI)
+# ============================================================================
+visual-studio-code-bin       # VS Code (official binary)
+cursor-bin                   # AI-powered code editor
+postman-bin                  # API testing tool
+
+# ============================================================================
+# BROWSERS
+# ============================================================================
+brave-bin                    # Privacy-focused browser
+firefox                      # Mozilla Firefox
+
+# ============================================================================
+# FONTS
+# ============================================================================
+nerd-fonts-jetbrains-mono    # JetBrains Mono with Nerd Font icons
+
+# ============================================================================
+# HYPRLAND WINDOW MANAGER
+# ============================================================================
+hyprland                     # Dynamic tiling Wayland compositor
+# hyprpaper                    # Wallpaper daemon for Hyprland
+# hypridle                     # Idle management daemon
+# hyprlock                     # Screen locker
+# hyprpicker                   # Color picker
+hyprshot                     # Screenshot utility
+# xdg-desktop-portal-hyprland  # Desktop portal implementation
+
+# ============================================================================
+# NOCTALIA SHELL & UI COMPONENTS
+# ============================================================================
+noctalia-shell               # Desktop shell for Hyprland
+# ags                          # Aylur's GTK Shell (dependency for Noctalia)
+# quickshell-git               # Quick shell for Wayland
+
+# ============================================================================
+# WAYLAND ECOSYSTEM
+# ============================================================================
+# wayland                      # Wayland display server protocol
+# wlroots                      # Modular Wayland compositor library
+wl-clipboard                 # Command-line Wayland clipboard utilities
+# wtype                        # xdotool for Wayland
+# wlogout                      # Logout menu for Wayland
+# xdg-desktop-portal           # Desktop integration portal
+# xdg-desktop-portal-gtk       # GTK portal backend
+
+# ============================================================================
+# WAYLAND UTILITIES
+# ============================================================================
+# grim                         # Screenshot tool for Wayland
+# slurp                        # Select region for screenshots
+# swappy                       # Wayland screenshot editor
+# wf-recorder                  # Screen recorder for wlroots
+# waypaper                     # Wallpaper setter with GUI
+# swaybg                       # Wallpaper tool
+
+# ============================================================================
+# ALTERNATIVE BARS & LAUNCHERS (Optional)
+# ============================================================================
+# waybar                       # Customizable Wayland bar
+# rofi-wayland                 # Application launcher (Wayland fork)
+# wofi                         # Wayland launcher
+tofi                         # Tiny launcher for Wayland
+
+# ============================================================================
+# NOTIFICATION & THEMING
+# ============================================================================
+# dunst                        # Lightweight notification daemon
+# mako                         # Lightweight Wayland notification daemon
+libnotify                    # Notification library
+gtk3                         # GTK3 toolkit
+gtk4                         # GTK4 toolkit
+qt5-wayland                  # Qt5 Wayland support
+qt6-wayland                  # Qt6 Wayland support
+qt5ct                        # Qt5 configuration tool
+kvantum                      # SVG-based theme engine
+
+# ============================================================================
+# AUDIO & MULTIMEDIA
+# ============================================================================
+pipewire                     # Low-latency audio/video router
+pipewire-audio               # Audio support for PipeWire
+pipewire-pulse               # PulseAudio replacement
+wireplumber                  # Session/policy manager for PipeWire
+pavucontrol                  # PulseAudio volume control
+pamixer                      # PulseAudio command-line mixer
+playerctl                    # MPRIS media player controller
+mpv                          # Video player
+imv                          # Image viewer for Wayland
+
+# ============================================================================
+# SYSTEM UTILITIES
+# ============================================================================
+brightnessctl                # Brightness control
+networkmanager               # Network connection manager
+nm-connection-editor         # NetworkManager GUI
+bluez                        # Bluetooth protocol stack
+bluez-utils                  # Bluetooth utilities
+polkit                       # Authorization manager
+polkit-gnome                 # GNOME polkit agent
+gnome-keyring                # Password manager
+
+# ============================================================================
+# FILE SYSTEMS & ARCHIVING
+# ============================================================================
+gvfs                         # Virtual filesystem
+gvfs-mtp                     # MTP support (Android devices)
+thunar                       # File manager
+file-roller                  # Archive manager
+unzip                        # Unzip utility
+zip                          # Zip utility
+p7zip                        # 7z archiver
+unrar                        # RAR extractor
+
+# ============================================================================
+# CURSOR & ICON THEMES
+# ============================================================================
+bibata-cursor-theme          # Bibata cursor theme
+papirus-icon-theme           # Papirus icon theme
+breeze-icons                 # Breeze icon theme
+
+# ============================================================================
+# PRODUCTIVITY & UTILITIES
+# ============================================================================
+fastfetch                    # System information tool
+tree                         # Directory tree viewer
+wget                         # Network downloader
+curl                         # Command-line HTTP client
+jq                           # JSON processor
+man-db                       # Manual pages
+tldr                         # Simplified man pages
+trash-cli                    # Trash can for CLI
+
+# ============================================================================
+# FUN CLI TOOLS (Optional)
+# ============================================================================
+cmatrix                      # Matrix screen effect
+cbonsai                      # Bonsai tree generator
+pipes.sh                     # Animated pipes
+sl                           # Steam locomotive
+tty-clock                    # Terminal clock
+ttyper                       # Terminal typing test
+asciiquarium                 # Aquarium in ASCII art
+cava                         # Console audio visualizer
+
+# ============================================================================
+# ADDITIONAL DEV TOOLS
+# ============================================================================
+tokei                        # Code statistics
+hyperfine                    # Benchmarking tool
+speedtest-cli                # Internet speed test
+tldr                         # Simplified man pages
+man-db                       # Manual pages
+strace                       # System call tracer
+lsof                         # List open files
+duf                          # Disk usage utility

@@ -17,7 +17,9 @@ return {
 			pickers = {
 				find_files = {
 					theme = "ivy",
-					hidden = true, -- Show hidden files
+					hidden = true,
+					no_ignore = false,
+					no_ignore_parent = false,
 				},
 				oldfiles = {
 					theme = "ivy",
@@ -78,14 +80,14 @@ return {
 				require("telescope.builtin").find_files({
 					cwd = vim.fn.stdpath("config"),
 				})
-			end),
+			end, { desc = "Open Neovim config files" }),
 
 			-- keybind to open notes folder
 			keymap.set("n", "<leader>on", function()
 				require("telescope.builtin").find_files({
 					cwd = "~/SSK-Vault",
 				})
-			end),
+			end, { desc = "Open Notes folder" }),
 		})
 
 		require("config.telescope.multigrep").setup()
