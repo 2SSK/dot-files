@@ -1,2 +1,4 @@
 bindsym $mod+Shift+Return move scratchpad
 bindsym $mod+minus scratchpad show
+bindsym $mod+n exec ~/.local/bin/toggle-obs-notes
+for_window [title="obs-notes"] move to scratchpad, floating enable, move position center, resize set 80 ppt 60 ppt

@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Toggle a tiny terminal running nvim in ~/SSK-Vault using Sway's scratchpad
+# Requirements: swaymsg, jq, a terminal emulator (alacritty/kitty/foot/gnome-terminal/etc.)
+
+TITLE="obs-notes"
+VAULT="$HOME/SSK-Vault"
+# You can override the terminal by exporting OBS_NOTES_TERM, e.g.:
+# export OBS_NOTES_TERM=kitty
+TERMINAL="${OBS_NOTES_TERM:-alacritty}"
+
+run_cmd() {
+  case "$TERMINAL" in
+    alacritty)
+      exec_cmd="alacritty --title \"$TITLE\" -e sh -lc 'cd \"$VAULT\" && nvim'"
+      ;;
+    kitty)
+      exec_cmd="kitty --title \"$TITLE\" sh -lc 'cd \"$VAULT\" && nvim'"
+      ;;
+    foot)
+      exec_cmd="foot -t \"$TITLE\" -e sh -lc 'cd \"$VAULT\" && nvim'"
+      ;;
+    gnome-terminal)
+      exec_cmd="gnome-terminal --title=\"$TITLE\" -- bash -lc 'cd \"$VAULT\" && nvim'"
+      ;;
+    wezterm)
+      exec_cmd="wezterm start --title \"$TITLE\" -- sh -lc 'cd \"$VAULT\" && nvim'"
+      ;;
+    *)
+      # Generic fallback: try to call terminal with -e or -t, best-effort
+      exec_cmd="$TERMINAL --title \"$TITLE\" -e sh -lc 'cd \"$VAULT\" && nvim'"
+      ;;
+  esac
+  # Start detached so script can exit
+  setsid sh -c "$exec_cmd" >/dev/null 2>&1 &
+
+  # Wait for the window to appear and then move it to scratchpad and set floating/size
+  pid_wait=0
+  for i in {1..15}; do
+    sleep 0.1
+    node=$(swaymsg -t get_tree | jq -r --arg title "$TITLE" '.. | objects | select(.name? == $title) | @json' | head -n1 || true)
+    if [[ -n "$node" && "$node" != "null" ]]; then
+      swaymsg "[title=\"$TITLE\"] move to scratchpad"
+      swaymsg "[title=\"$TITLE\"] floating enable"
+      swaymsg "[title=\"$TITLE\"] move position center"
+      swaymsg "[title=\"$TITLE\"] resize set 80 ppt 60 ppt"
+      pid_wait=1
+      break
+    fi
+  done
+  # if not found, just continue; the for_window rule in config will still catch it if/when it appears
+  return
+}
+
+# Find a node with the given title
+node=$(swaymsg -t get_tree | jq -r --arg title "$TITLE" '.. | objects | select(.name? == $title) | @json' | head -n1 || true)
+
+if [[ -z "$node" || "$node" == "null" ]]; then
+  run_cmd
+  exit 0
+fi
+
+visible=$(jq -r '.visible // false' <<<"$node")
+if [[ "$visible" == "true" ]]; then
+  swaymsg "[title=\"$TITLE\"] move to scratchpad"
+else
+  swaymsg "[title=\"$TITLE\"] scratchpad show"
+fi
