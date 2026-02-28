@@ -7,30 +7,16 @@
 \.gitkeep
 
 # Documentation
-README.*
-LICENSE
-*.md
+README.md
+^LICENSE
+^bootstrap\.sh$
+Makefile
 
-# Editor files
-\.vscode
-\.idea
-*~
-*.swp
-*.swo
+# Local config (runtime data, not meant to be stowed)
+\.bookmarks
+\.config/opencode
+^arch/
 
-# OS files
-\.DS_Store
-Thumbs.db
-
-# Stow itself
-\.stow-local-ignore
-
-# Old structure (before stow migration)
-^bash$
-^vim$
-
-screenshots/
-scripts/
-arch/
-bootstrap.sh
-.bookmarks/
+# Non-config directories
+^screenshots/
+^scripts/
