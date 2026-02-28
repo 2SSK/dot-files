@@ -8,10 +8,6 @@
       "template": "Create a concise conventional commit message in plain text. Check the staging area for more information. if needed, use dashes as bullets to list multiple changes. Don't capitalize the first character."
     }
   },
-  "keybinds": {
-    "messages_page_down": "ctrl+d",
-    "messages_page_up": "ctrl+u"
-  },
   "mcp": {
     "context7": {
       "enabled": true,
@@ -38,8 +34,14 @@
         "--connection-string",
         "{env:POSTGRES_DATABASE_URI}"
       ],
-      "enabled": true,
+      "enabled": false,
       "type": "local"
+    },
+
+    "playwright": {
+      "type": "local",
+      "command": ["npx", "@playwright/mcp@latest"],
+      "enabled": true
     }
   },
   "plugin": ["opencode-antigravity-auth@beta"],
@@ -64,7 +66,5 @@
         "baseURL": "https://ollama.com/v1"
       }
     }
-  },
-  "theme": "tokyonight"
+  }
 }
-
