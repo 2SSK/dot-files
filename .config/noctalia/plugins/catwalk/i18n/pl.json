@@ -1,0 +1,22 @@
+{
+  "panel": {
+    "cpuLabel": "CPU: {usage}%",
+    "title": "Wybieg"
+  },
+  "settings": {
+    "currentThreshold": "Aktualny próg: {value}%",
+    "hideBackground": {
+      "description": "Ukryj tło widżetu pulpitu",
+      "label": "Ukryj tło"
+    },
+    "minimumThreshold": {
+      "description": "Użycie CPU musi przekraczać ten procent, aby kot zaczął biegać",
+      "label": "Minimalny próg użycia CPU"
+    },
+    "title": "Ustawienia Catwalk"
+  },
+  "tooltip": {
+    "running": "Kot jest uruchomiony",
+    "sleeping": "Kot śpi"
+  }
+}

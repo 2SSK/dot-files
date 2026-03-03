@@ -1,0 +1,22 @@
+{
+  "panel": {
+    "cpuLabel": "CPU：{usage}%",
+    "title": "猫步"
+  },
+  "settings": {
+    "currentThreshold": "当前阈值：{value}%",
+    "hideBackground": {
+      "description": "隐藏桌面小部件的背景",
+      "label": "隐藏背景"
+    },
+    "minimumThreshold": {
+      "description": "CPU 使用率必须高于此百分比，猫才能开始跑动。",
+      "label": "最低CPU阈值"
+    },
+    "title": "时装秀场布置"
+  },
+  "tooltip": {
+    "running": "猫在跑",
+    "sleeping": "猫在睡觉"
+  }
+}

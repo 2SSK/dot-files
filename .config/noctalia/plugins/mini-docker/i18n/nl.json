@@ -1,0 +1,16 @@
+{
+  "settings": {
+    "current_value": "Geselecteerd: {value} ms",
+    "default_network_description": "Standaardnetwerk dat gebruikt moet worden bij het uitvoeren van images",
+    "default_network_label": "Standaardnetwerk",
+    "general": "Algemeen",
+    "refresh_interval_description": "Hoe vaak de plugin de containerstatus controleert",
+    "refresh_interval_label": "Vernieuwingsinterval",
+    "title": "Container Manager Instellingen"
+  },
+  "tooltip": {
+    "docker_not_available": "Docker niet beschikbaar",
+    "image_already_running": "Afbeelding draait al in een container.",
+    "running_containers": "Lopende containers: %1"
+  }
+}

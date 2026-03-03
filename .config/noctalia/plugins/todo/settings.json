@@ -1,0 +1,55 @@
+{
+  "pages": [
+    {
+      "id": 0,
+      "name": "General"
+    }
+  ],
+  "current_page_id": 0,
+  "todos": [],
+  "count": 0,
+  "completedCount": 0,
+  "isExpanded": false,
+  "useCustomColors": false,
+  "priorityColors": {
+    "high": {
+      "r": 0.9686274528503418,
+      "g": 0.4627451002597809,
+      "b": 0.5568627715110779,
+      "a": 1,
+      "hsvHue": 0.968999981880188,
+      "hsvSaturation": 0.5222705602645874,
+      "hsvValue": 0.9686274528503418,
+      "hslHue": 0.968999981880188,
+      "hslSaturation": 0.8896620273590088,
+      "hslLightness": 0.7156938910484314,
+      "valid": true
+    },
+    "medium": {
+      "r": 0.47843137383461,
+      "g": 0.6352941393852234,
+      "b": 0.9686274528503418,
+      "a": 1,
+      "hsvHue": 0.6133333444595337,
+      "hsvSaturation": 0.5060654878616333,
+      "hsvValue": 0.9686274528503418,
+      "hslHue": 0.6133333444595337,
+      "hslSaturation": 0.886518657207489,
+      "hslLightness": 0.723537027835846,
+      "valid": true
+    },
+    "low": {
+      "r": 0.6039215922355652,
+      "g": 0.6470588445663452,
+      "b": 0.8078431487083435,
+      "a": 1,
+      "hsvHue": 0.6314166784286499,
+      "hsvSaturation": 0.2524299919605255,
+      "hsvValue": 0.8078431487083435,
+      "hslHue": 0.6314166784286499,
+      "hslSaturation": 0.3466697037220001,
+      "hslLightness": 0.7058823704719543,
+      "valid": true
+    }
+  }
+}

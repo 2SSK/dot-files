@@ -1,0 +1,69 @@
+{
+  "description": "Özelleştirilebilir video ve ses ayarlarıyla donanım hızlandırmalı ekran kaydı",
+  "messages": {
+    "failed-general": "Kaydedici bir hatayla çıktı.",
+    "failed-gpu": "gpu-screen-recorder beklenmedik şekilde çıktı.",
+    "failed-start": "Kayda başlama başarısız oldu.",
+    "no-portals": "Masaüstü portalları çalışmıyor.",
+    "no-portals-desc": "xdg-desktop-portal'ı ve bir compositor portalı başlat (wlr/hyprland/gnome/kde).",
+    "not-installed": "gpu-screen-recorder kurulu değil.",
+    "not-installed-desc": "Ekran kaydı özelliklerini kullanmak için lütfen gpu-screen-recorder'ı kurun.",
+    "saved": "Kayıt kaydedildi.",
+    "start-recording": "Ekran kaydedici (kayda başla)",
+    "started": "Kayıt başladı.",
+    "stop-recording": "Ekran kaydedici (kaydı durdur)",
+    "stopping": "Kaydı durdurma…"
+  },
+  "name": "Ekran Kaydedici",
+  "settings": {
+    "audio": {
+      "audio-sources-both": "Sistem çıktısı + mikrofon girişi",
+      "audio-sources-microphone-input": "Mikrofon girişi",
+      "audio-sources-none": "Ses yok",
+      "audio-sources-system-output": "Sistem çıktısı",
+      "codec": "Ses codec",
+      "codec-desc": "En iyi performans ve en küçük ses boyutu için Opus önerilir",
+      "source": "Ses kaynağı",
+      "source-desc": "Kayıt sırasında yakalanacak ses kaynağı",
+      "title": "Ses Ayarları"
+    },
+    "filename-pattern": {
+      "description": "Tarih/saat kodları kullanan dosya adı deseni (ör. kayit_yyyyMMdd_HHmmss)",
+      "label": "Dosya adı deseni"
+    },
+    "general": {
+      "copy-to-clipboard": "Panoya kopyala",
+      "copy-to-clipboard-description": "Kayıt bittikten sonra dosyayı panoya kopyala.",
+      "output-folder": "Çıktı klasörü",
+      "output-folder-description": "Ekran kayıtlarının kaydedileceği klasör",
+      "show-cursor": "İmleci göster",
+      "show-cursor-description": "Videoda fare imlecini kaydet",
+      "title": "Genel"
+    },
+    "title": "Ekran Kaydedici Ayarları",
+    "video": {
+      "codec": "Video codec",
+      "codec-desc": "h264 en yaygın codec'tir",
+      "color-range": "Renk aralığı",
+      "color-range-desc": "Daha iyi uyumluluk için Sınırlı önerilir",
+      "color-range-full": "Tam",
+      "color-range-limited": "Sınırlı",
+      "frame-rate": "Kare hızı",
+      "frame-rate-desc": "Ekran kayıtları için hedef kare hızı",
+      "quality": "Video kalitesi",
+      "quality-desc": "Daha yüksek kalite daha büyük dosya boyutlarına yol açar",
+      "quality-high": "Yüksek",
+      "quality-medium": "Orta",
+      "quality-ultra": "Ultra",
+      "quality-very-high": "Çok yüksek",
+      "resolution": "Resolution",
+      "resolution-desc": "Limit output resolution. Default uses original screen resolution",
+      "resolution-original": "Default",
+      "source": "Video kaynağı",
+      "source-desc": "Portal önerilir, artefaktlar alırsanız Ekran'ı deneyin",
+      "sources-portal": "Portal",
+      "sources-screen": "Ekran",
+      "title": "Video Ayarları"
+    }
+  }
+}

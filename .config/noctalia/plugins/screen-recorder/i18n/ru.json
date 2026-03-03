@@ -1,0 +1,69 @@
+{
+  "description": "Аппаратно-ускоренная запись экрана с настраиваемыми параметрами видео и аудио",
+  "messages": {
+    "failed-general": "Рекордер завершил работу с ошибкой.",
+    "failed-gpu": "gpu-screen-recorder неожиданно завершил работу.",
+    "failed-start": "Не удалось начать запись.",
+    "no-portals": "Порталы рабочего стола не работают.",
+    "no-portals-desc": "Запустить xdg-desktop-portal и портал композитора (wlr/hyprland/gnome/kde).",
+    "not-installed": "gpu-screen-recorder не установлен.",
+    "not-installed-desc": "Пожалуйста, установите gpu-screen-recorder, чтобы использовать функции записи экрана.",
+    "saved": "Запись сохранена.",
+    "start-recording": "Запись экрана (начать запись)",
+    "started": "Запись началась.",
+    "stop-recording": "Запись экрана (остановить запись)",
+    "stopping": "Остановка записи…"
+  },
+  "name": "Запись Экрана",
+  "settings": {
+    "audio": {
+      "audio-sources-both": "Вывод системы + ввод с микрофона",
+      "audio-sources-microphone-input": "Микрофонный вход",
+      "audio-sources-none": "Нет звука",
+      "audio-sources-system-output": "Вывод системы",
+      "codec": "Аудиокодек",
+      "codec-desc": "Opus рекомендуется для лучшей производительности и наименьшего размера аудио",
+      "source": "Источник аудио",
+      "source-desc": "Источник аудио для захвата во время записи",
+      "title": "Настройки Аудио"
+    },
+    "filename-pattern": {
+      "description": "Шаблон имени файла с использованием кодов даты/времени (например, recording_yyyyMMdd_HHmmss)",
+      "label": "Шаблон имени файла"
+    },
+    "general": {
+      "copy-to-clipboard": "Копировать в буфер обмена",
+      "copy-to-clipboard-description": "Скопировать файл в буфер обмена после завершения записи.",
+      "output-folder": "Папка вывода",
+      "output-folder-description": "Папка, в которую будут сохраняться записи экрана",
+      "show-cursor": "Показать курсор",
+      "show-cursor-description": "Записывать курсор мыши в видео",
+      "title": "Общие"
+    },
+    "title": "Настройки Записи Экрана",
+    "video": {
+      "codec": "Видеокодек",
+      "codec-desc": "h264 является наиболее распространенным кодеком",
+      "color-range": "Цветовой диапазон",
+      "color-range-desc": "Ограниченный рекомендуется для лучшей совместимости",
+      "color-range-full": "Полный",
+      "color-range-limited": "Ограниченный",
+      "frame-rate": "Частота кадров",
+      "frame-rate-desc": "Целевая частота кадров для записи экрана",
+      "quality": "Качество видео",
+      "quality-desc": "Более высокое качество приводит к большим размерам файлов",
+      "quality-high": "Высокий",
+      "quality-medium": "Средний",
+      "quality-ultra": "Ультра",
+      "quality-very-high": "Очень высокий",
+      "resolution": "Resolution",
+      "resolution-desc": "Limit output resolution. Default uses original screen resolution",
+      "resolution-original": "Default",
+      "source": "Источник видео",
+      "source-desc": "Рекомендуется Portal, если появляются артефакты попробуйте Экран",
+      "sources-portal": "Портал",
+      "sources-screen": "Экран",
+      "title": "Настройки Видео"
+    }
+  }
+}

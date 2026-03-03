@@ -1,0 +1,72 @@
+{
+  "description": "Hardware-accelerated screen recording with customizable video and audio settings",
+  "messages": {
+    "failed-general": "Recorder exited with an error.",
+    "failed-gpu": "gpu-screen-recorder exited unexpectedly.",
+    "failed-start": "Failed to start recording.",
+    "no-portals": "Desktop portals not running.",
+    "no-portals-desc": "Start xdg-desktop-portal and a compositor portal (wlr/hyprland/gnome/kde).",
+    "not-installed": "gpu-screen-recorder not installed.",
+    "not-installed-desc": "Please install gpu-screen-recorder to use screen recording features.",
+    "saved": "Recording saved.",
+    "start-recording": "Screen Recorder (start recording)",
+    "started": "Recording started.",
+    "stop-recording": "Screen Recorder (stop recording)",
+    "stopping": "Stopping recording…",
+    "open-file": "Open file"
+  },
+  "name": "Screen Recorder",
+  "settings": {
+    "audio": {
+      "audio-sources-both": "System output + microphone input",
+      "audio-sources-microphone-input": "Microphone input",
+      "audio-sources-none": "No audio",
+      "audio-sources-system-output": "System output",
+      "codec": "Audio codec",
+      "codec-desc": "Opus is recommended for best performance and smallest audio size",
+      "source": "Audio source",
+      "source-desc": "Audio source to capture during recording",
+      "title": "Audio Settings"
+    },
+    "filename-pattern": {
+      "description": "Filename pattern using date/time codes (e.g., recording_yyyyMMdd_HHmmss)",
+      "label": "Filename pattern"
+    },
+    "general": {
+      "copy-to-clipboard": "Copy to clipboard",
+      "copy-to-clipboard-description": "Copy the file to clipboard after recording finishes.",
+      "hide-when-inactive": "Hide when inactive",
+      "hide-when-inactive-description": "Hide the bar indicator when not recording",
+      "output-folder": "Output folder",
+      "output-folder-description": "Folder where screen recordings will be saved",
+      "show-cursor": "Show cursor",
+      "show-cursor-description": "Record mouse cursor in the video",
+      "title": "General"
+    },
+    "title": "Screen Recorder Settings",
+    "video": {
+      "codec": "Video codec",
+      "codec-desc": "h264 is the most common codec",
+      "color-range": "Color range",
+      "color-range-desc": "Limited is recommended for better compatibility",
+      "color-range-full": "Full",
+      "color-range-limited": "Limited",
+      "frame-rate": "Frame rate",
+      "frame-rate-desc": "Target frame rate for screen recordings",
+      "quality": "Video quality",
+      "quality-desc": "Higher quality results in larger file sizes",
+      "quality-high": "High",
+      "quality-medium": "Medium",
+      "quality-ultra": "Ultra",
+      "quality-very-high": "Very high",
+      "resolution": "Resolution",
+      "resolution-desc": "Limit output resolution. Default uses original screen resolution",
+      "resolution-original": "Default",
+      "source": "Video source",
+      "source-desc": "Portal is recommended, if you get artifacts try Screen",
+      "sources-portal": "Portal",
+      "sources-screen": "Screen",
+      "title": "Video Settings"
+    }
+  }
+}

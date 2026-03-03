@@ -1,0 +1,22 @@
+{
+  "panel": {
+    "cpuLabel": "CPU: {usage}%",
+    "title": "Podyum"
+  },
+  "settings": {
+    "currentThreshold": "Mevcut eşik: {value}%",
+    "hideBackground": {
+      "description": "Masaüstü bileşeninin arka planını gizle",
+      "label": "Arka planı gizle"
+    },
+    "minimumThreshold": {
+      "description": "CPU kullanımı, kedinin koşmaya başlaması için bu yüzdeden yüksek olmalıdır.",
+      "label": "Minimum CPU Eşiği"
+    },
+    "title": "Podyum Ayarları"
+  },
+  "tooltip": {
+    "running": "Kedi koşuyor.",
+    "sleeping": "Kedi uyuyor."
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "panel": {
+    "cpuLabel": "CPU: {usage}%",
+    "title": "Catwalk"
+  },
+  "settings": {
+    "currentThreshold": "Umbral actual: {value}%",
+    "hideBackground": {
+      "description": "Ocultar el fondo del widget de escritorio",
+      "label": "Ocultar fondo"
+    },
+    "minimumThreshold": {
+      "description": "El uso de CPU debe estar por encima de este porcentaje para que el gato empiece a correr",
+      "label": "Umbral mínimo de CPU"
+    },
+    "title": "Configuración de Catwalk"
+  },
+  "tooltip": {
+    "running": "El gato está corriendo",
+    "sleeping": "El gato está durmiendo"
+  }
+}

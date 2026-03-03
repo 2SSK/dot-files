@@ -1,0 +1,16 @@
+{
+  "settings": {
+    "current_value": "Kiválasztva: {value} ms",
+    "default_network_description": "Alapértelmezett hálózat a képek futtatásához",
+    "default_network_label": "Alapértelmezett hálózat",
+    "general": "Általános",
+    "refresh_interval_description": "Milyen gyakran ellenőrzi a bővítmény a konténer állapotváltozásait",
+    "refresh_interval_label": "Frissítési időköz",
+    "title": "Konténerkezelő beállításai"
+  },
+  "tooltip": {
+    "docker_not_available": "A Docker nem érhető el",
+    "image_already_running": "A kép már fut egy konténerben",
+    "running_containers": "Futtó konténerek: %1"
+  }
+}

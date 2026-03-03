@@ -1,0 +1,22 @@
+{
+  "panel": {
+    "cpuLabel": "ЦП: {usage}%",
+    "title": "Подіум"
+  },
+  "settings": {
+    "currentThreshold": "Поточний поріг: {value}%",
+    "hideBackground": {
+      "description": "Приховати фон віджета робочого столу",
+      "label": "Приховати фон"
+    },
+    "minimumThreshold": {
+      "description": "Використання ЦП має бути вище цього відсотка, щоб кіт почав бігати.",
+      "label": "Мінімальний поріг ЦП"
+    },
+    "title": "Налаштування подіуму"
+  },
+  "tooltip": {
+    "running": "Кіт біжить",
+    "sleeping": "Кіт спить"
+  }
+}

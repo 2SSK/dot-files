@@ -1,0 +1,69 @@
+{
+  "description": "Enregistrement d'écran accéléré par matériel avec paramètres vidéo et audio personnalisables",
+  "messages": {
+    "failed-general": "L'enregistreur a quitté avec une erreur.",
+    "failed-gpu": "L'enregistreur d'écran GPU s'est arrêté de manière inattendue.",
+    "failed-start": "Échec du démarrage de l'enregistrement.",
+    "no-portals": "Les portails de bureau ne fonctionnent pas.",
+    "no-portals-desc": "Démarrer xdg-desktop-portal et un portail de compositeur (wlr/hyprland/gnome/kde).",
+    "not-installed": "enregistreur d'écran gpu non installé.",
+    "not-installed-desc": "Veuillez installer gpu-screen-recorder pour utiliser les fonctionnalités d'enregistrement d'écran.",
+    "saved": "Enregistrement sauvegardé.",
+    "start-recording": "Enregistreur d'écran (démarrer l'enregistrement)",
+    "started": "Enregistrement démarré.",
+    "stop-recording": "Enregistreur d'écran (arrêter l'enregistrement)",
+    "stopping": "Arrêt de l'enregistrement..."
+  },
+  "name": "Enregistreur d'Écran",
+  "settings": {
+    "audio": {
+      "audio-sources-both": "Sortie système + entrée microphone",
+      "audio-sources-microphone-input": "Entrée microphone",
+      "audio-sources-none": "Pas d'audio",
+      "audio-sources-system-output": "Sortie système",
+      "codec": "Codec audio",
+      "codec-desc": "Opus est recommandé pour les meilleures performances et la plus petite taille audio",
+      "source": "Source audio",
+      "source-desc": "Source audio à capturer pendant l'enregistrement",
+      "title": "Paramètres Audio"
+    },
+    "filename-pattern": {
+      "description": "Modèle de nom de fichier utilisant les codes date/heure (par exemple, recording_yyyyMMdd_HHmmss)",
+      "label": "Modèle de nom de fichier"
+    },
+    "general": {
+      "copy-to-clipboard": "Copier dans le presse-papiers",
+      "copy-to-clipboard-description": "Copier le fichier dans le presse-papiers une fois l'enregistrement terminé.",
+      "output-folder": "Dossier de sortie",
+      "output-folder-description": "Dossier où les enregistrements d'écran seront enregistrés",
+      "show-cursor": "Afficher le curseur",
+      "show-cursor-description": "Enregistrer le curseur de la souris dans la vidéo",
+      "title": "Général"
+    },
+    "title": "Paramètres de l'Enregistreur d'Écran",
+    "video": {
+      "codec": "Codec vidéo",
+      "codec-desc": "h264 est le codec le plus courant",
+      "color-range": "Gamme de couleurs",
+      "color-range-desc": "Limité est recommandé pour une meilleure compatibilité",
+      "color-range-full": "Complet / Plein",
+      "color-range-limited": "Limité(e)",
+      "frame-rate": "Fréquence d'images",
+      "frame-rate-desc": "Fréquence d'images cible pour les enregistrements d'écran",
+      "quality": "Qualité vidéo",
+      "quality-desc": "Une qualité supérieure résulte en des fichiers plus volumineux",
+      "quality-high": "Haut/Haute",
+      "quality-medium": "Moyen",
+      "quality-ultra": "Ultra",
+      "quality-very-high": "Très élevé",
+      "resolution": "Résolution",
+      "resolution-desc": "Limiter la résolution de sortie. Par défaut utilise la résolution d'écran originale",
+      "resolution-original": "Default",
+      "source": "Source vidéo",
+      "source-desc": "Portal est recommandé, si vous obtenez des artefacts essayez Écran",
+      "sources-portal": "Portail",
+      "sources-screen": "Écran",
+      "title": "Paramètres Vidéo"
+    }
+  }
+}

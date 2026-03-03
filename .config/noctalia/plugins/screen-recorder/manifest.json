@@ -1,0 +1,42 @@
+{
+  "id": "screen-recorder",
+  "name": "Screen Recorder",
+  "version": "1.1.7",
+  "minNoctaliaVersion": "3.6.0",
+  "author": "Noctalia Team",
+  "official": true,
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Hardware-accelerated screen recording using gpu-screen-recorder with customizable video and audio settings",
+  "tags": [
+    "Bar",
+    "Utility"
+  ],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "controlCenterWidget": "ControlCenterWidget.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "hideInactive": false,
+      "iconColor": "none",
+      "directory": "",
+      "filenamePattern": "recording_yyyyMMdd_HHmmss",
+      "frameRate": "60",
+      "audioCodec": "opus",
+      "videoCodec": "h264",
+      "quality": "very_high",
+      "colorRange": "limited",
+      "showCursor": true,
+      "copyToClipboard": false,
+      "audioSource": "default_output",
+      "videoSource": "portal",
+      "resolution": "original"
+    }
+  }
+}

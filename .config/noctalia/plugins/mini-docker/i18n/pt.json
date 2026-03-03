@@ -1,0 +1,16 @@
+{
+  "settings": {
+    "current_value": "Selecionado: {value} ms",
+    "default_network_description": "Rede padrão a ser usada ao executar imagens",
+    "default_network_label": "Rede Padrão",
+    "general": "Geral",
+    "refresh_interval_description": "Com que frequência o plugin verifica o status dos contêineres",
+    "refresh_interval_label": "Intervalo de atualização",
+    "title": "Configurações do Gerenciador de Contêineres"
+  },
+  "tooltip": {
+    "docker_not_available": "Docker não disponível",
+    "image_already_running": "Imagem já em execução em um contêiner.",
+    "running_containers": "Contêineres em execução: %1"
+  }
+}

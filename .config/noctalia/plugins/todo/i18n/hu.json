@@ -1,0 +1,49 @@
+{
+  "bar_widget": {
+    "todo_count_plural": "{count} teendő",
+    "todo_count_singular": "{count} teendő"
+  },
+  "desktop_widget": {
+    "empty_state": "Nincsenek teendők",
+    "header_title": "Teendőlista",
+    "items_count": "{active} / {total} elem"
+  },
+  "main": {
+    "added_new_todo": "Új teendő hozzáadva:",
+    "cleared_completed_todos": "Törölve",
+    "completed_todos_suffix": "befejezett teendők",
+    "not_found_suffix": "nem található",
+    "removed_todo": "Eltávolított teendő",
+    "todo_completed": "befejezve",
+    "todo_marked_incomplete": "hiányosként megjelölve",
+    "todo_not_found": "Teendő azonosítóval",
+    "todo_status_changed": "Teendő"
+  },
+  "panel": {
+    "add_todo": {
+      "add_button": "Hozzáadás",
+      "placeholder": "Új teendő hozzáadása..."
+    },
+    "empty_state": {
+      "message": "Nincsenek még teendők"
+    },
+    "header": {
+      "clear_completed_button": "Befejezettek törlése",
+      "title": "Teendőlista"
+    },
+    "todo_item": {
+      "delete_button_tooltip": "Törlés",
+      "edit_button_tooltip": "Szerkesztés"
+    }
+  },
+  "settings": {
+    "background_color": {
+      "description": "A teendő widget háttérszíne",
+      "label": "Háttérszín"
+    },
+    "show_completed": {
+      "description": "A kész teendők megjelenítése a panelen",
+      "label": "Teljesített teendők megjelenítése"
+    }
+  }
+}

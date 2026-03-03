@@ -1,0 +1,16 @@
+{
+  "settings": {
+    "current_value": "Обрано: {value} мс",
+    "default_network_description": "Мережа за замовчуванням для використання під час запуску образів",
+    "default_network_label": "Мережа за замовчуванням",
+    "general": "Загальні",
+    "refresh_interval_description": "Як часто плагін перевіряє статус контейнерів",
+    "refresh_interval_label": "Інтервал оновлення",
+    "title": "Налаштування Менеджера Контейнерів"
+  },
+  "tooltip": {
+    "docker_not_available": "Docker недоступний",
+    "image_already_running": "Зображення вже запущено в контейнері.",
+    "running_containers": "Запущені контейнери: %1"
+  }
+}

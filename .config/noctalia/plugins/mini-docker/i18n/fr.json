@@ -1,0 +1,16 @@
+{
+  "settings": {
+    "current_value": "Sélectionné: {value} ms",
+    "default_network_description": "Réseau par défaut à utiliser lors de l'exécution d'images",
+    "default_network_label": "Réseau par Défaut",
+    "general": "Général",
+    "refresh_interval_description": "À quelle fréquence le plugin vérifie l'état des conteneurs",
+    "refresh_interval_label": "Intervalle de rafraîchissement",
+    "title": "Paramètres du Gestionnaire de Conteneurs"
+  },
+  "tooltip": {
+    "docker_not_available": "Docker non disponible",
+    "image_already_running": "Image déjà en cours d'exécution dans un conteneur",
+    "running_containers": "Conteneurs en cours d'exécution: %1"
+  }
+}

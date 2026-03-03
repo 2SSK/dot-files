@@ -1,0 +1,69 @@
+{
+  "description": "Registrazione dello schermo con accelerazione hardware e impostazioni video e audio personalizzabili",
+  "messages": {
+    "failed-general": "Registratore uscito con un errore.",
+    "failed-gpu": "ضبط الشاشة باستخدام معالج الرسوميات توقف بشكل غير متوقع.",
+    "failed-start": "Nuk arrita të filloj regjistrimin.",
+    "no-portals": "Non è in esecuzione alcun portale desktop.",
+    "no-portals-desc": "Avvia xdg-desktop-portal e un portale compositore (wlr/hyprland/gnome/kde).",
+    "not-installed": "gpu-screen-recorder non è installato.",
+    "not-installed-desc": "Bitte installiere gpu-screen-recorder, um die Bildschirmaufzeichnungsfunktionen zu nutzen.",
+    "saved": "Registrazione salvata.",
+    "start-recording": "P錄影 (開始錄影)",
+    "started": "Aufnahme gestartet.",
+    "stop-recording": "Skjáupptökutæki (hætta upptöku)",
+    "stopping": "Nagpapatigil ng pagrekord..."
+  },
+  "name": "Registratore Schermo",
+  "settings": {
+    "audio": {
+      "audio-sources-both": "Risultato del sistema + ingresso microfono",
+      "audio-sources-microphone-input": "Eingang für Mikrofon",
+      "audio-sources-none": "Léir aon fhuaim",
+      "audio-sources-system-output": "Risultato del sistema",
+      "codec": "Codec audio",
+      "codec-desc": "Opus è consigliato per le migliori prestazioni e dimensioni audio più piccole",
+      "source": "Sorgente audio",
+      "source-desc": "Sorgente audio da catturare durante la registrazione",
+      "title": "Impostazioni Audio"
+    },
+    "filename-pattern": {
+      "description": "Padrone di u nome di u schedariu chì usa i codici di data/ora (per esempiu, recording_yyyyMMdd_HHmmss)",
+      "label": "Modello nome file"
+    },
+    "general": {
+      "copy-to-clipboard": "Copia negli appunti",
+      "copy-to-clipboard-description": "Kopyahin ang file sa clipboard pagkatapos matapos ang pag-record.",
+      "output-folder": "Cartella di output",
+      "output-folder-description": "Cartella dove verranno salvate le registrazioni dello schermo",
+      "show-cursor": "Mostra cursore",
+      "show-cursor-description": "Registra il cursore del mouse nel video",
+      "title": "Generale"
+    },
+    "title": "Impostazioni Registratore Schermo",
+    "video": {
+      "codec": "Codec video",
+      "codec-desc": "h264 è il codec più comune",
+      "color-range": "Gamma colori",
+      "color-range-desc": "Limitato è consigliato per una migliore compatibilità",
+      "color-range-full": "Puno",
+      "color-range-limited": "Limitato",
+      "frame-rate": "Frequenza fotogrammi",
+      "frame-rate-desc": "Frequenza fotogrammi target per le registrazioni dello schermo",
+      "quality": "Qualità video",
+      "quality-desc": "Qualità superiore risulta in file più grandi",
+      "quality-high": "Alta",
+      "quality-medium": "Mezzano",
+      "quality-ultra": "Ultra",
+      "quality-very-high": "Molto alto",
+      "resolution": "Resolution",
+      "resolution-desc": "Limit output resolution. Default uses original screen resolution",
+      "resolution-original": "Default",
+      "source": "Sorgente video",
+      "source-desc": "Portal è consigliato, se si ottengono artefatti prova Schermo",
+      "sources-portal": "Portale",
+      "sources-screen": "Skjerm",
+      "title": "Impostazioni Video"
+    }
+  }
+}
