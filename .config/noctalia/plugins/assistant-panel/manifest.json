@@ -1,0 +1,53 @@
+{
+  "id": "assistant-panel",
+  "name": "Assistant Panel",
+  "version": "2.1.3",
+  "minNoctaliaVersion": "4.1.2",
+  "author": "j-1in",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "AI Chat and Translation panel",
+  "tags": [
+    "Bar",
+    "Panel",
+    "AI",
+    "Productivity",
+    "Network"
+  ],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "panel": "Panel.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "maxHistoryLength": 100,
+      "panelDetached": true,
+      "panelPosition": "right",
+      "panelHeightRatio": 0.85,
+      "panelWidth": 520,
+      "scale": 1,
+      "ai": {
+        "provider": "google",
+        "model": "gemini-2.5-flash",
+        "apiKeys": {},
+        "temperature": 0.7,
+        "systemPrompt": "You are a helpful assistant integrated into a Linux desktop shell. Be concise and helpful.",
+        "maxHistoryLength": 100,
+        "openaiLocal": false,
+        "openaiBaseUrl": "https://api.openai.com/v1/chat/completions"
+      },
+      "translator": {
+        "backend": "google",
+        "sourceLanguage": "auto",
+        "targetLanguage": "en",
+        "realTimeTranslation": true,
+        "deeplApiKey": ""
+      }
+    }
+  }
+}
