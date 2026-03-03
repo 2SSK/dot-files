@@ -1,0 +1,72 @@
+{
+  "description": "具有可自定义视频和音频设置的硬件加速屏幕录制",
+  "messages": {
+    "failed-general": "录制器出错退出。",
+    "failed-gpu": "gpu-screen-recorder 意外退出。",
+    "failed-start": "无法开始录制。",
+    "no-portals": "桌面门户未运行。",
+    "no-portals-desc": "启动 xdg-desktop-portal 和一个合成器门户 (wlr/hyprland/gnome/kde)。",
+    "not-installed": "gpu-screen-recorder 未安装。",
+    "not-installed-desc": "请安装 gpu-screen-recorder 以使用屏幕录制功能。",
+    "saved": "已保存录像。",
+    "start-recording": "屏幕录像（开始录制）",
+    "started": "已开始录制。",
+    "stop-recording": "屏幕录像（停止录制）",
+    "stopping": "停止录制…",
+    "open-file": "打开文件"
+  },
+  "name": "屏幕录制器",
+  "settings": {
+    "audio": {
+      "audio-sources-both": "系统输出 + 麦克风输入",
+      "audio-sources-microphone-input": "麦克风输入",
+      "audio-sources-none": "无音频",
+      "audio-sources-system-output": "系统输出",
+      "codec": "音频编解码器",
+      "codec-desc": "建议使用 Opus 以获得最佳性能和最小音频大小",
+      "source": "音频源",
+      "source-desc": "录制期间要捕获的音频源",
+      "title": "音频设置"
+    },
+    "filename-pattern": {
+      "description": "使用日期/时间代码的文件名模式 (例如，recording_yyyyMMdd_HHmmss)",
+      "label": "文件名模式"
+    },
+    "general": {
+      "copy-to-clipboard": "复制到剪贴板",
+      "copy-to-clipboard-description": "录制结束后将文件复制到剪贴板。",
+      "output-folder": "输出文件夹",
+      "output-folder-description": "屏幕录制将保存到的文件夹",
+      "show-cursor": "显示光标",
+      "show-cursor-description": "在视频中录制鼠标光标",
+      "hide-when-inactive": "非活动时隐藏",
+      "hide-when-inactive-description": "未录制时隐藏栏指示器",
+      "title": "常规"
+    },
+    "title": "屏幕录制器设置",
+    "video": {
+      "codec": "视频编解码器",
+      "codec-desc": "h264 是最常见的编解码器",
+      "color-range": "色彩范围",
+      "color-range-desc": "建议使用“有限”以获得更好的兼容性",
+      "color-range-full": "全范围",
+      "color-range-limited": "有限",
+      "frame-rate": "帧率",
+      "frame-rate-desc": "屏幕录制的目标帧率",
+      "quality": "视频质量",
+      "quality-desc": "更高的质量会导致更大的文件大小",
+      "quality-high": "高",
+      "quality-medium": "中等",
+      "quality-ultra": "极高",
+      "quality-very-high": "非常高",
+      "resolution": "分辨率",
+      "resolution-desc": "限制输出分辨率。默认使用原始屏幕分辨率",
+      "resolution-original": "默认",
+      "source": "视频源",
+      "source-desc": "推荐使用桌面门户 (Portal)，如果出现画面异常请尝试屏幕",
+      "sources-portal": "桌面门户",
+      "sources-screen": "屏幕",
+      "title": "视频设置"
+    }
+  }
+}

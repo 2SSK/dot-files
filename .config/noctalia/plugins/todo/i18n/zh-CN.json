@@ -1,0 +1,86 @@
+{
+  "bar_widget": {
+    "todo_count_plural": "{count} 个待办事项",
+    "todo_count_singular": "{count} 个待办事项"
+  },
+  "desktop_widget": {
+    "empty_state": "暂无待办事项",
+    "header_title": "待办事项列表",
+    "items_count": "{active}/{total} 项"
+  },
+  "main": {
+    "added_new_todo": "已添加新待办事项: ",
+    "cleared_completed_todos": "清除了 ",
+    "completed_todos_suffix": " 个已完成的待办事项",
+    "not_found_suffix": " 的待办事项未找到",
+    "removed_todo": "已删除待办事项",
+    "todo_completed": "已完成",
+    "todo_marked_incomplete": "标记为未完成",
+    "todo_not_found": "ID为 ",
+    "todo_status_changed": "待办事项 "
+  },
+  "settings": {
+    "background_color": {
+      "description": "待办事项小部件的背景颜色",
+      "label": "背景颜色"
+    },
+    "show_completed": {
+      "description": "在面板中显示已完成的待办事项",
+      "label": "显示已完成的待办事项"
+    },
+    "custom_priority_colors": {
+      "description": "启用自定义优先级颜色",
+      "label": "使用自定义优先级颜色"
+    },
+    "pages": {
+      "add_button": "添加页面",
+      "placeholder": "输入新页面名称",
+      "label": "管理页面",
+      "delete_button_tooltip": "删除",
+      "rename_button_tooltip": "重命名",
+      "confirm_delete_title": "确认删除",
+      "confirm_delete_message": "确定要删除页面 '{pageName}' 吗？\n\n该页面中的所有待办事项将转移到第一页。",
+      "cannot_delete_last": "无法删除最后一页",
+      "name_exists": "页面名称已存在",
+      "empty_name": "页面名称不能为空"
+    },
+    "priority_colors": {
+      "label": "优先级颜色",
+      "low_label": "低优先级：",
+      "medium_label": "中优先级：",
+      "high_label": "高优先级："
+    }
+  },
+  "panel": {
+    "add_todo": {
+      "add_button": "添加",
+      "placeholder": "输入新的待办事项..."
+    },
+    "empty_state": {
+      "message": "暂无待办事项"
+    },
+    "header": {
+      "clear_completed_button": "清除已完成",
+      "title": "待办事项列表"
+    },
+    "todo_item": {
+      "delete_button_tooltip": "删除",
+      "edit_button_tooltip": "编辑"
+    },
+    "todo_details": {
+      "title": "待办事项详情",
+      "label_title": "标题：",
+      "label_status": "状态：",
+      "status_completed": "已完成",
+      "status_pending": "待处理",
+      "label_created": "创建时间：",
+      "label_priority": "优先级：",
+      "label_page": "页面：",
+      "label_details": "详情：",
+      "button_add_details": "添加",
+      "button_edit_details": "编辑",
+      "button_save": "保存",
+      "button_cancel": "取消"
+    }
+  }
+}

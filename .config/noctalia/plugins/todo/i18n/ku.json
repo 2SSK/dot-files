@@ -1,0 +1,49 @@
+{
+  "bar_widget": {
+    "todo_count_plural": "{count} hemû",
+    "todo_count_singular": "{count} karên ku bên kirin"
+  },
+  "desktop_widget": {
+    "empty_state": "Tu karin tune ne",
+    "header_title": "Lîsteya Kirinan",
+    "items_count": "{active} ji {total} tiştan"
+  },
+  "main": {
+    "added_new_todo": "Min todo ya zêde kir:",
+    "cleared_completed_todos": "Paqijkirin",
+    "completed_todos_suffix": "hemû karên hatine kirin",
+    "not_found_suffix": "nehatiya dîtin",
+    "removed_todo": "Tiştê ku diviyabû bihata kirin hate rakirin",
+    "todo_completed": "qedîya",
+    "todo_marked_incomplete": "hatiye nîşankirin wekî ne temam",
+    "todo_not_found": "Hemû bi ID",
+    "todo_status_changed": "Hemû"
+  },
+  "panel": {
+    "add_todo": {
+      "add_button": "Zêde bike",
+      "placeholder": "Tiştekî nû yê todo binivîse..."
+    },
+    "empty_state": {
+      "message": "Heta ni tiştên todo tune ne"
+    },
+    "header": {
+      "clear_completed_button": "Paqijkirina Temamkirî",
+      "title": "Lîsteya Kirinan"
+    },
+    "todo_item": {
+      "delete_button_tooltip": "Jêbirke",
+      "edit_button_tooltip": "Sererastkirin"
+    }
+  },
+  "settings": {
+    "background_color": {
+      "description": "Rengê paşî yê wîceta todo",
+      "label": "Rengê Paşxaneyê"
+    },
+    "show_completed": {
+      "description": "Tiştên todo yên temambûyî di panelê de nîşan bide",
+      "label": "Karên Temamkirî Nîşan Bide"
+    }
+  }
+}

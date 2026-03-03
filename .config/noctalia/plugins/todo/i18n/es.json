@@ -1,0 +1,49 @@
+{
+  "bar_widget": {
+    "todo_count_plural": "{count} todos",
+    "todo_count_singular": "{count} tarea pendiente"
+  },
+  "desktop_widget": {
+    "empty_state": "Sin tareas pendientes.",
+    "header_title": "Lista de tareas",
+    "items_count": "{active} de {total} artículos"
+  },
+  "main": {
+    "added_new_todo": "Se agregó una nueva tarea:",
+    "cleared_completed_todos": "Despejado",
+    "completed_todos_suffix": "Tareas completadas",
+    "not_found_suffix": "no encontrado",
+    "removed_todo": "Elemento de tarea pendiente eliminado",
+    "todo_completed": "completado",
+    "todo_marked_incomplete": "marcado como incompleto",
+    "todo_not_found": "Tarea con ID",
+    "todo_status_changed": "Todo"
+  },
+  "panel": {
+    "add_todo": {
+      "add_button": "Añadir",
+      "placeholder": "Introduce un nuevo elemento de tarea..."
+    },
+    "empty_state": {
+      "message": "Aún no hay elementos."
+    },
+    "header": {
+      "clear_completed_button": "Borrar completado",
+      "title": "Lista de tareas"
+    },
+    "todo_item": {
+      "delete_button_tooltip": "Borrar",
+      "edit_button_tooltip": "Editar"
+    }
+  },
+  "settings": {
+    "background_color": {
+      "description": "Color de fondo del widget de tareas pendientes",
+      "label": "Color de fondo"
+    },
+    "show_completed": {
+      "description": "Mostrar los elementos de la lista de tareas completados en el panel.",
+      "label": "Mostrar tareas completadas"
+    }
+  }
+}

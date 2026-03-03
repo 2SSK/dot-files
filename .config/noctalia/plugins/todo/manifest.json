@@ -1,0 +1,45 @@
+{
+  "id": "todo",
+  "name": "Todo List",
+  "version": "1.9.4",
+  "minNoctaliaVersion": "3.7.1",
+  "author": "lonerOrz <lonerOrz@qq.com>",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "A simple todo list manager plugin for Noctalia Shell.",
+  "tags": ["Bar", "Desktop", "Panel", "Productivity"],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "desktopWidget": "DesktopWidget.qml",
+    "panel": "Panel.qml",
+    "settings": "Settings.qml",
+    "controlCenterWidget": "ControlCenterWidget.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "todos": [],
+      "pages": [
+        {
+          "id": 0,
+          "name": "General"
+        }
+      ],
+      "current_page_id": 0,
+      "count": 0,
+      "completedCount": 0,
+      "showCompleted": true,
+      "showBackground": true,
+      "isExpanded": false,
+      "useCustomColors": false,
+      "priorityColors": {
+        "high": "#f44336",
+        "medium": "#2196f3",
+        "low": "#9e9e9e"
+      }
+    }
+  }
+}

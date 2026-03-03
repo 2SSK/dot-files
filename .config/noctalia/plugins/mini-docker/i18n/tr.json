@@ -1,0 +1,16 @@
+{
+  "settings": {
+    "current_value": "Seçildi: {value} ms",
+    "default_network_description": "Görüntüleri çalıştırırken kullanılacak varsayılan ağ",
+    "default_network_label": "Varsayılan Ağ",
+    "general": "Genel",
+    "refresh_interval_description": "Eklenti konteyner durumunu ne sıklıkta kontrol eder",
+    "refresh_interval_label": "Yenileme Aralığı",
+    "title": "Konteyner Yöneticisi Ayarları"
+  },
+  "tooltip": {
+    "docker_not_available": "Docker mevcut değil",
+    "image_already_running": "Görüntü zaten bir konteynerde çalışıyor.",
+    "running_containers": "Çalışan konteynerler: %1"
+  }
+}

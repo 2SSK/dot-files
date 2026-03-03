@@ -1,0 +1,69 @@
+{
+  "description": "Gravação de tela acelerada por hardware com configurações personalizáveis de vídeo e áudio",
+  "messages": {
+    "failed-general": "O gravador foi encerrado com um erro.",
+    "failed-gpu": "gpu-screen-recorder foi encerrado inesperadamente.",
+    "failed-start": "Falha ao iniciar a gravação.",
+    "no-portals": "Portais de desktop não estão em execução.",
+    "no-portals-desc": "Inicie o xdg-desktop-portal e um portal compositor (wlr/hyprland/gnome/kde).",
+    "not-installed": "gpu-screen-recorder não instalado.",
+    "not-installed-desc": "Por favor, instale o gpu-screen-recorder para usar os recursos de gravação de tela.",
+    "saved": "Gravação salva.",
+    "start-recording": "Gravador de tela (iniciar gravação)",
+    "started": "Gravação iniciada.",
+    "stop-recording": "Gravador de tela (parar gravação)",
+    "stopping": "Parando a gravação..."
+  },
+  "name": "Gravador de Tela",
+  "settings": {
+    "audio": {
+      "audio-sources-both": "Saída do sistema + entrada do microfone",
+      "audio-sources-microphone-input": "Entrada de microfone",
+      "audio-sources-none": "Sem áudio",
+      "audio-sources-system-output": "Saída do sistema",
+      "codec": "Codec de áudio",
+      "codec-desc": "Opus é recomendado para melhor desempenho e menor tamanho de áudio",
+      "source": "Fonte de áudio",
+      "source-desc": "Fonte de áudio para capturar durante a gravação",
+      "title": "Configurações de Áudio"
+    },
+    "filename-pattern": {
+      "description": "Padrão de nome de arquivo usando códigos de data/hora (por exemplo, recording_yyyyMMdd_HHmmss)",
+      "label": "Padrão de nome de arquivo"
+    },
+    "general": {
+      "copy-to-clipboard": "Copiar para área de transferência",
+      "copy-to-clipboard-description": "Copiar o arquivo para a área de transferência após a gravação terminar.",
+      "output-folder": "Pasta de saída",
+      "output-folder-description": "Pasta onde as gravações de tela serão salvas",
+      "show-cursor": "Mostrar cursor",
+      "show-cursor-description": "Gravar o cursor do mouse no vídeo",
+      "title": "Geral"
+    },
+    "title": "Configurações do Gravador de Tela",
+    "video": {
+      "codec": "Codec de vídeo",
+      "codec-desc": "h264 é o codec mais comum",
+      "color-range": "Faixa de cores",
+      "color-range-desc": "Limitado é recomendado para melhor compatibilidade",
+      "color-range-full": "Completo",
+      "color-range-limited": "Limitado",
+      "frame-rate": "Taxa de quadros",
+      "frame-rate-desc": "Taxa de quadros alvo para gravações de tela",
+      "quality": "Qualidade de vídeo",
+      "quality-desc": "Maior qualidade resulta em arquivos maiores",
+      "quality-high": "Alto(a)",
+      "quality-medium": "Médio",
+      "quality-ultra": "Ultra",
+      "quality-very-high": "Muito alto/altíssima/elevadíssimo(a)",
+      "resolution": "Resolution",
+      "resolution-desc": "Limit output resolution. Default uses original screen resolution",
+      "resolution-original": "Default",
+      "source": "Fonte de vídeo",
+      "source-desc": "Portal é recomendado, se obtiver artefatos tente Tela",
+      "sources-portal": "Portal",
+      "sources-screen": "Tela",
+      "title": "Configurações de Vídeo"
+    }
+  }
+}

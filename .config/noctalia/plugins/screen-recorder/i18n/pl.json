@@ -1,0 +1,69 @@
+{
+  "description": "Nagrywanie ekranu z akceleracją sprzętową z możliwością dostosowania ustawień wideo i audio",
+  "messages": {
+    "failed-general": "Rejestrator zakończył pracę z błędem.",
+    "failed-gpu": "Rejestrator ekranu GPU zakończył pracę nieoczekiwanie.",
+    "failed-start": "Nie udało się rozpocząć nagrywania.",
+    "no-portals": "Portale pulpitu nie działają.",
+    "no-portals-desc": "Uruchom xdg-desktop-portal i portal kompozytora (wlr/hyprland/gnome/kde).",
+    "not-installed": "gpu-screen-recorder nie jest zainstalowany.",
+    "not-installed-desc": "Zainstaluj gpu-screen-recorder, aby korzystać z funkcji nagrywania ekranu.",
+    "saved": "Nagranie zapisane.",
+    "start-recording": "Rejestrator ekranu (rozpocznij nagrywanie)",
+    "started": "Rozpoczęto nagrywanie.",
+    "stop-recording": "Rejestrator ekranu (zatrzymaj nagrywanie)",
+    "stopping": "Zatrzymywanie nagrywania…"
+  },
+  "name": "Rejestrator ekranu",
+  "settings": {
+    "audio": {
+      "audio-sources-both": "Wyjście systemowe + wejście mikrofonu",
+      "audio-sources-microphone-input": "Wejście mikrofonu",
+      "audio-sources-none": "Brak dźwięku",
+      "audio-sources-system-output": "Wyjście systemowe",
+      "codec": "Kodek audio",
+      "codec-desc": "Opus jest zalecany dla najlepszej wydajności i najmniejszego rozmiaru dźwięku",
+      "source": "Źródło dźwięku",
+      "source-desc": "Źródło dźwięku do przechwytywania podczas nagrywania",
+      "title": "Ustawienia audio"
+    },
+    "filename-pattern": {
+      "description": "Wzorzec nazwy pliku używający kodów daty/czasu (np. nagranie_rrrrMMdd_HHmmss)",
+      "label": "Wzorzec nazwy pliku"
+    },
+    "general": {
+      "copy-to-clipboard": "Kopiuj do schowka",
+      "copy-to-clipboard-description": "Kopiuj plik do schowka po zakończeniu nagrywania.",
+      "output-folder": "Folder wyjściowy",
+      "output-folder-description": "Folder, w którym będą zapisywane nagrania ekranu",
+      "show-cursor": "Pokaż kursor",
+      "show-cursor-description": "Nagrywaj kursor myszy na filmie",
+      "title": "Ogólne"
+    },
+    "title": "Ustawienia rejestratora ekranu",
+    "video": {
+      "codec": "Kodek wideo",
+      "codec-desc": "h264 to najpopularniejszy kodek",
+      "color-range": "Zakres kolorów",
+      "color-range-desc": "Zalecane jest \"Ograniczone\" dla lepszej kompatybilności",
+      "color-range-full": "Pełny",
+      "color-range-limited": "Ograniczone",
+      "frame-rate": "Liczba klatek na sekundę",
+      "frame-rate-desc": "Docelowa liczba klatek na sekundę dla nagrań ekranu",
+      "quality": "Jakość wideo",
+      "quality-desc": "Wyższa jakość skutkuje większymi rozmiarami plików",
+      "quality-high": "Wysoki",
+      "quality-medium": "Średni",
+      "quality-ultra": "Bardzo",
+      "quality-very-high": "Bardzo wysoki",
+      "resolution": "Resolution",
+      "resolution-desc": "Limit output resolution. Default uses original screen resolution",
+      "resolution-original": "Default",
+      "source": "Źródło wideo",
+      "source-desc": "Zalecany jest Portal, jeśli występują artefakty, spróbuj opcji Ekran",
+      "sources-portal": "Portal",
+      "sources-screen": "Ekran",
+      "title": "Ustawienia wideo"
+    }
+  }
+}

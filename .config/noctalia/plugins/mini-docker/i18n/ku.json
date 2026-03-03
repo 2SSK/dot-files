@@ -1,0 +1,16 @@
+{
+  "settings": {
+    "current_value": "Hilbijartî: {value} ms",
+    "default_network_description": "Tora şebekeya ku dema wêneyan dimeşîne were bikar anîn",
+    "default_network_label": "Tora Şebekeyî",
+    "general": "Giştî",
+    "refresh_interval_description": "Plugin çiqas caran guherînên rewşa konteynerê kontrol dike",
+    "refresh_interval_label": "Demê Nûkirinê",
+    "title": "Mîhengên Birêvebirê Konteyner"
+  },
+  "tooltip": {
+    "docker_not_available": "Docker tune tune peyda bibe",
+    "image_already_running": "Wêne jixwe di konteynirekê de dimeşe",
+    "running_containers": "Konteynerên ku dimeşin: %1"
+  }
+}

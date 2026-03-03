@@ -1,0 +1,69 @@
+{
+  "description": "Hardware-versnelde schermopname met aanpasbare video- en audio-instellingen",
+  "messages": {
+    "failed-general": "Recorder is afgesloten met een fout.",
+    "failed-gpu": "gpu-screen-recorder is onverwachts afgesloten.",
+    "failed-start": "Opname starten mislukt.",
+    "no-portals": "Desktop portals werken niet.",
+    "no-portals-desc": "Start xdg-desktop-portal en een compositor portaal (wlr/hyprland/gnome/kde).",
+    "not-installed": "gpu-screen-recorder niet geïnstalleerd.",
+    "not-installed-desc": "Installeer gpu-screen-recorder om schermopnamefuncties te gebruiken.",
+    "saved": "Opname opgeslagen.",
+    "start-recording": "Schermrecorder (opname starten)",
+    "started": "Opname gestart.",
+    "stop-recording": "Schermrecorder (opname stoppen)",
+    "stopping": "Opname stoppen…"
+  },
+  "name": "Schermrecorder",
+  "settings": {
+    "audio": {
+      "audio-sources-both": "Systeemuitvoer + microfooningang",
+      "audio-sources-microphone-input": "Microfooningang",
+      "audio-sources-none": "Geen audio",
+      "audio-sources-system-output": "Systeemuitvoer",
+      "codec": "Audio-codec",
+      "codec-desc": "Opus wordt aanbevolen voor beste prestaties en kleinste audiogrootte",
+      "source": "Audiobron",
+      "source-desc": "Audiobron om tijdens opname vast te leggen",
+      "title": "Audio-instellingen"
+    },
+    "filename-pattern": {
+      "description": "Bestandsnaam patroon met datum/tijd codes (bijv. recording_yyyyMMdd_HHmmss)",
+      "label": "Bestandsnaam patroon"
+    },
+    "general": {
+      "copy-to-clipboard": "Kopiëren naar klembord",
+      "copy-to-clipboard-description": "Kopieer het bestand naar het klembord nadat de opname is voltooid.",
+      "output-folder": "Uitvoermap",
+      "output-folder-description": "Map waar schermopnames worden opgeslagen",
+      "show-cursor": "Cursor tonen",
+      "show-cursor-description": "Muiscursor in de video opnemen",
+      "title": "Algemeen"
+    },
+    "title": "Schermrecorder Instellingen",
+    "video": {
+      "codec": "Video-codec",
+      "codec-desc": "h264 is de meest voorkomende codec",
+      "color-range": "Kleurbereik",
+      "color-range-desc": "Beperkt wordt aanbevolen voor betere compatibiliteit",
+      "color-range-full": "Volledig",
+      "color-range-limited": "Beperkt",
+      "frame-rate": "Framesnelheid",
+      "frame-rate-desc": "Doelframesnelheid voor schermopnames",
+      "quality": "Videokwaliteit",
+      "quality-desc": "Hogere kwaliteit resulteert in grotere bestanden",
+      "quality-high": "Hoog",
+      "quality-medium": "Medium",
+      "quality-ultra": "Ultra",
+      "quality-very-high": "Zeer hoog",
+      "resolution": "Resolution",
+      "resolution-desc": "Limit output resolution. Default uses original screen resolution",
+      "resolution-original": "Default",
+      "source": "Videobron",
+      "source-desc": "Portal wordt aanbevolen, probeer Scherm als u artefacten krijgt",
+      "sources-portal": "Portaal",
+      "sources-screen": "Scherm",
+      "title": "Video-instellingen"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "settings": {
+    "current_value": "Ausgewählt: {value} ms",
+    "default_network_description": "Default network to use when running images",
+    "default_network_label": "Default Network",
+    "general": "Allgemein",
+    "refresh_interval_description": "Wie oft das Plugin den Containerstatus überprüft",
+    "refresh_interval_label": "Aktualisierungsintervall",
+    "title": "Container Manager Einstellungen"
+  },
+  "tooltip": {
+    "docker_not_available": "Docker nicht verfügbar",
+    "image_already_running": "Image already running in a container",
+    "running_containers": "Laufende Container: %1"
+  }
+}

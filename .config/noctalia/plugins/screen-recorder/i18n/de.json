@@ -1,0 +1,72 @@
+{
+  "description": "Hardwarebeschleunigte Bildschirmaufnahme mit anpassbaren Video- und Audioeinstellungen",
+  "messages": {
+    "failed-general": "Der Recorder wurde mit einem Fehler beendet.",
+    "failed-gpu": "gpu-screen-recorder wurde unerwartet beendet.",
+    "failed-start": "Aufnahme konnte nicht gestartet werden.",
+    "no-portals": "Desktop-Portale laufen nicht.",
+    "no-portals-desc": "Starte xdg-desktop-portal und ein Compositor-Portal (wlr/hyprland/gnome/kde).",
+    "not-installed": "gpu-screen-recorder ist nicht installiert.",
+    "not-installed-desc": "Bitte installieren Sie gpu-screen-recorder, um die Bildschirmaufzeichnungsfunktionen zu nutzen.",
+    "saved": "Aufnahme gespeichert.",
+    "start-recording": "Bildschirmaufnahme (Aufnahme starten)",
+    "started": "Aufnahme gestartet.",
+    "stop-recording": "Bildschirmaufnahme (Aufnahme stoppen)",
+    "stopping": "Aufnahme stoppen…",
+    "open-file": "Datei öffnen"
+  },
+  "name": "Bildschirmrekorder",
+  "settings": {
+    "audio": {
+      "audio-sources-both": "Systemausgabe + Mikrofoneingang",
+      "audio-sources-microphone-input": "Mikrofoneingang",
+      "audio-sources-none": "Kein Audio",
+      "audio-sources-system-output": "Systemausgabe",
+      "codec": "Audio-Codec",
+      "codec-desc": "Opus wird für beste Leistung und kleinste Audiogröße empfohlen",
+      "source": "Audioquelle",
+      "source-desc": "Audioquelle, die während der Aufnahme aufgenommen werden soll",
+      "title": "Audioeinstellungen"
+    },
+    "filename-pattern": {
+      "description": "Dateimuster mit Datums-/Zeitcodes (z. B. aufnahme_yyyyMMdd_HHmmss)",
+      "label": "Dateimuster"
+    },
+    "general": {
+      "copy-to-clipboard": "In die Zwischenablage kopieren",
+      "copy-to-clipboard-description": "Kopiere die Datei nach Abschluss der Aufnahme in die Zwischenablage.",
+      "hide-when-inactive": "Bei Inaktivität ausblenden",
+      "hide-when-inactive-description": "Widget in Statusleiste ausblenden, wenn keine Aufnahme stattfindet",
+      "output-folder": "Ausgabeordner",
+      "output-folder-description": "Ordner, in dem Bildschirmaufnahmen gespeichert werden",
+      "show-cursor": "Cursor anzeigen",
+      "show-cursor-description": "Mauszeiger im Video aufnehmen",
+      "title": "Allgemein"
+    },
+    "title": "Bildschirmrekorder-Einstellungen",
+    "video": {
+      "codec": "Video-Codec",
+      "codec-desc": "h264 ist der gängigste Codec",
+      "color-range": "Farbbereich",
+      "color-range-desc": "Begrenzt wird für bessere Kompatibilität empfohlen",
+      "color-range-full": "Vollständig",
+      "color-range-limited": "Begrenzt",
+      "frame-rate": "Bildrate",
+      "frame-rate-desc": "Ziel-Bildrate für Bildschirmaufnahmen",
+      "quality": "Videoqualität",
+      "quality-desc": "Höhere Qualität führt zu größeren Dateien",
+      "quality-high": "Hoch",
+      "quality-medium": "Mittel",
+      "quality-ultra": "Ultra",
+      "quality-very-high": "Sehr hoch",
+      "resolution": "Auflösung",
+      "resolution-desc": "Ausgabeauflösung begrenzen. Standard verwendet Originalbildschirmauflösung",
+      "resolution-original": "Standard",
+      "source": "Videoquelle",
+      "source-desc": "Portal wird empfohlen, bei Artefakten versuchen Sie Bildschirm",
+      "sources-portal": "Portal",
+      "sources-screen": "Bildschirm",
+      "title": "Videoeinstellungen"
+    }
+  }
+}

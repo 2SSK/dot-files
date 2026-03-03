@@ -1,0 +1,69 @@
+{
+  "description": "Hardveresen gyorsított képernyőfelvétel testreszabható videó- és hangbeállításokkal",
+  "messages": {
+    "failed-general": "A rögzítő hibával kilépett.",
+    "failed-gpu": "A gpu-screen-recorder váratlanul leállt.",
+    "failed-start": "A felvétel indítása sikertelen.",
+    "no-portals": "Az asztali portálok nem futnak.",
+    "no-portals-desc": "xdg-desktop-portal és egy kompozitor portál (wlr/hyprland/gnome/kde) indítása.",
+    "not-installed": "A gpu-screen-recorder nincs telepítve.",
+    "not-installed-desc": "Kérlek, telepítsd a gpu-screen-recorder alkalmazást a képernyőfelvétel funkciók használatához.",
+    "saved": "A felvétel mentve.",
+    "start-recording": "Képernyőrögzítő (felvétel indítása)",
+    "started": "A felvétel elindult.",
+    "stop-recording": "Képernyőfelvevő (felvétel leállítása)",
+    "stopping": "A felvétel leállítása…"
+  },
+  "name": "Képernyőfelvevő",
+  "settings": {
+    "audio": {
+      "audio-sources-both": "Rendszerkimenet + mikrofonbemenet",
+      "audio-sources-microphone-input": "Mikrofon bemenet",
+      "audio-sources-none": "Nincs hang",
+      "audio-sources-system-output": "Rendszerkimenet",
+      "codec": "Audió kodek",
+      "codec-desc": "Az Opus ajánlott a legjobb teljesítmény és a legkisebb hangméret érdekében",
+      "source": "Hangforrás",
+      "source-desc": "Hangrögzítés során rögzítendő hangforrás",
+      "title": "Hangbeállítások"
+    },
+    "filename-pattern": {
+      "description": "Fájlnév minta dátum/idő kódokkal (pl. recording_yyyyMMdd_HHmmss)",
+      "label": "Fájlnév minta"
+    },
+    "general": {
+      "copy-to-clipboard": "Másolás a vágólapra",
+      "copy-to-clipboard-description": "A felvétel befejezése után másolja a fájlt a vágólapra.",
+      "output-folder": "Kimeneti mappa",
+      "output-folder-description": "Mappa, ahová a képernyőfelvételek mentésre kerülnek",
+      "show-cursor": "Kurzor megjelenítése",
+      "show-cursor-description": "Egérkurzor rögzítése a videóban",
+      "title": "Általános"
+    },
+    "title": "Képernyőrögzítő beállítások",
+    "video": {
+      "codec": "Videó kodek",
+      "codec-desc": "a h264 a legelterjedtebb kodek",
+      "color-range": "Színtartomány",
+      "color-range-desc": "A korlátozott ajánlott a jobb kompatibilitás érdekében",
+      "color-range-full": "Teljes",
+      "color-range-limited": "Korlátozott",
+      "frame-rate": "Képkockasebesség",
+      "frame-rate-desc": "Képernyőfelvételek célzott képkockasebessége",
+      "quality": "Videóminőség",
+      "quality-desc": "A jobb minőség nagyobb fájlméretet eredményez",
+      "quality-high": "Magas",
+      "quality-medium": "Közepes",
+      "quality-ultra": "Ultra",
+      "quality-very-high": "Nagyon magas",
+      "resolution": "Resolution",
+      "resolution-desc": "Limit output resolution. Default uses original screen resolution",
+      "resolution-original": "Default",
+      "source": "Videóforrás",
+      "source-desc": "A Portal ajánlott, ha hibákat tapasztalsz, próbáld a Screen-t",
+      "sources-portal": "Portál",
+      "sources-screen": "Képernyő",
+      "title": "Videóbeállítások"
+    }
+  }
+}

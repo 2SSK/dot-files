@@ -1,0 +1,16 @@
+{
+  "settings": {
+    "current_value": "選択済み: {value} ms",
+    "default_network_description": "イメージの実行時に使用するデフォルトネットワーク",
+    "default_network_label": "デフォルトネットワーク",
+    "general": "一般",
+    "refresh_interval_description": "プラグインがコンテナの状態をチェックする頻度",
+    "refresh_interval_label": "更新間隔",
+    "title": "コンテナマネージャー設定"
+  },
+  "tooltip": {
+    "docker_not_available": "Dockerが利用できません",
+    "image_already_running": "イメージはすでにコンテナ内で実行されています。",
+    "running_containers": "実行中のコンテナ: %1"
+  }
+}

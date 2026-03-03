@@ -1,0 +1,22 @@
+{
+  "panel": {
+    "cpuLabel": "CPU: {usage}%",
+    "title": "Sétasáv"
+  },
+  "settings": {
+    "currentThreshold": "Aktuális küszöbérték: {value}%",
+    "hideBackground": {
+      "description": "Asztali widget hátterének elrejtése",
+      "label": "Háttér elrejtése"
+    },
+    "minimumThreshold": {
+      "description": "A processzorhasználatnak e fölött a százalék felett kell lennie, hogy a macska futni kezdjen",
+      "label": "Minimum CPU Küszöbérték"
+    },
+    "title": "Catwalk beállítások"
+  },
+  "tooltip": {
+    "running": "A Noctalia fut.",
+    "sleeping": "A macska alszik"
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "description": "Апаратно-прискорений запис екрану з налаштовуваними параметрами відео та аудіо",
+  "messages": {
+    "failed-general": "Рекордер завершив роботу з помилкою.",
+    "failed-gpu": "gpu-screen-recorder несподівано завершив роботу.",
+    "failed-start": "Не вдалося почати запис.",
+    "no-portals": "Настільні портали не працюють.",
+    "no-portals-desc": "Запустити xdg-desktop-portal та портал композитора (wlr/hyprland/gnome/kde).",
+    "not-installed": "gpu-screen-recorder не встановлено.",
+    "not-installed-desc": "Будь ласка, встановіть gpu-screen-recorder, щоб використовувати функції запису екрана.",
+    "saved": "Запис збережено.",
+    "start-recording": "Запис екрана (почати запис)",
+    "started": "Запис розпочато.",
+    "stop-recording": "Запис екрана (зупинити запис)",
+    "stopping": "Зупинка запису…"
+  },
+  "name": "Записувач Екрану",
+  "settings": {
+    "audio": {
+      "audio-sources-both": "Вивід системи + вхід мікрофона",
+      "audio-sources-microphone-input": "Мікрофонний вхід",
+      "audio-sources-none": "Немає аудіо",
+      "audio-sources-system-output": "Вивід системи",
+      "codec": "Аудіокодек",
+      "codec-desc": "Opus рекомендується для найкращої продуктивності та найменшого розміру аудіо",
+      "source": "Джерело аудіо",
+      "source-desc": "Джерело аудіо для захоплення під час запису",
+      "title": "Налаштування Аудіо"
+    },
+    "filename-pattern": {
+      "description": "Шаблон імені файлу з використанням кодів дати/часу (наприклад, recording_yyyyMMdd_HHmmss)",
+      "label": "Шаблон імені файлу"
+    },
+    "general": {
+      "copy-to-clipboard": "Копіювати до буфера обміну",
+      "copy-to-clipboard-description": "Копіювати файл у буфер обміну після завершення запису.",
+      "output-folder": "Папка виводу",
+      "output-folder-description": "Папка, де зберігатимуться записи екрану",
+      "show-cursor": "Показати курсор",
+      "show-cursor-description": "Записувати курсор миші у відео",
+      "title": "Загальні"
+    },
+    "title": "Налаштування Записувача Екрану",
+    "video": {
+      "codec": "Відеокодек",
+      "codec-desc": "h264 є найпоширенішим кодеком",
+      "color-range": "Кольоровий діапазон",
+      "color-range-desc": "Обмежений рекомендується для кращої сумісності",
+      "color-range-full": "Повний",
+      "color-range-limited": "Обмежений",
+      "frame-rate": "Частота кадрів",
+      "frame-rate-desc": "Цільова частота кадрів для запису екрану",
+      "quality": "Якість відео",
+      "quality-desc": "Вища якість призводить до більших розмірів файлів",
+      "quality-high": "Високий",
+      "quality-medium": "Середній",
+      "quality-ultra": "Ультра",
+      "quality-very-high": "Дуже високий",
+      "resolution": "Resolution",
+      "resolution-desc": "Limit output resolution. Default uses original screen resolution",
+      "resolution-original": "Default",
+      "source": "Джерело відео",
+      "source-desc": "Рекомендується Portal, якщо з'являються артефакти спробуйте Екран",
+      "sources-portal": "Портал",
+      "sources-screen": "Екран",
+      "title": "Налаштування Відео"
+    }
+  }
+}

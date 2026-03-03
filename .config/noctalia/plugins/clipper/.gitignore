@@ -1,0 +1,16 @@
+# Backup files
+*.backup
+*.bak
+*.tmp
+
+# Runtime files
+pinned.json
+settings.json
+
+# Build artifacts
+*.qmlc
+
+# Development scripts
+i18n/all_languages.sh
+# User notecards - personal data
+notecards/*.json

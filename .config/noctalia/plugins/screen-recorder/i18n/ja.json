@@ -1,0 +1,72 @@
+{
+  "description": "カスタマイズ可能なビデオおよびオーディオ設定を備えたハードウェアアクセラレーション対応の画面録画",
+  "messages": {
+    "failed-general": "レコーダーがエラーで終了しました。",
+    "failed-gpu": "gpu-screen-recorder が予期せず終了しました。",
+    "failed-start": "録画を開始できませんでした。",
+    "no-portals": "デスクトップポータルが実行されていません。",
+    "no-portals-desc": "xdg-desktop-portalとコンポジターポータル (wlr/hyprland/gnome/kde) を起動します。",
+    "not-installed": "gpu-screen-recorder がインストールされていません。",
+    "not-installed-desc": "画面録画機能を使用するには、gpu-screen-recorderをインストールしてください。",
+    "saved": "録画を保存しました。",
+    "start-recording": "画面録画（開始）",
+    "started": "録画を開始しました。",
+    "stop-recording": "画面録画（停止）",
+    "stopping": "録画を停止しています…",
+    "open-file": "ファイルを開く"
+  },
+  "name": "画面レコーダー",
+  "settings": {
+    "audio": {
+      "audio-sources-both": "システム出力 ＋ マイク入力",
+      "audio-sources-microphone-input": "マイク入力",
+      "audio-sources-none": "音声なし",
+      "audio-sources-system-output": "システム出力",
+      "codec": "オーディオコーデック",
+      "codec-desc": "最高のパフォーマンスと最小のオーディオサイズにはOpusが推奨されます",
+      "source": "オーディオソース",
+      "source-desc": "録画中にキャプチャされるオーディオソース",
+      "title": "オーディオ設定"
+    },
+    "filename-pattern": {
+      "description": "日付/時刻コードを使用したファイル名のパターン（例：recording_yyyyMMdd_HHmmss）",
+      "label": "ファイル名のパターン"
+    },
+    "general": {
+      "copy-to-clipboard": "クリップボードにコピー",
+      "copy-to-clipboard-description": "録画終了後、ファイルをクリップボードにコピーする",
+      "hide-when-inactive": "非アクティブ時に非表示",
+      "hide-when-inactive-description": "録画していないときはウィジェットを隠す",
+      "output-folder": "出力フォルダー",
+      "output-folder-description": "画面録画が保存されるフォルダー",
+      "show-cursor": "カーソルを表示",
+      "show-cursor-description": "録画にマウスカーソルを記録する",
+      "title": "全般"
+    },
+    "title": "画面レコーダー設定",
+    "video": {
+      "codec": "ビデオコーデック",
+      "codec-desc": "h264は最も一般的なコーデックです",
+      "color-range": "色範囲",
+      "color-range-desc": "互換性を高めるため、限定が推奨されます",
+      "color-range-full": "フル",
+      "color-range-limited": "限定",
+      "frame-rate": "フレームレート",
+      "frame-rate-desc": "画面録画の目標フレームレート",
+      "quality": "ビデオ品質",
+      "quality-desc": "品質が高いほど、ファイルサイズが大きくなります",
+      "quality-high": "高",
+      "quality-medium": "中",
+      "quality-ultra": "最高",
+      "quality-very-high": "超高",
+      "resolution": "解像度",
+      "resolution-desc": "出力解像度を制限します。デフォルトでは元の画面解像度が使用されます",
+      "resolution-original": "デフォルト",
+      "source": "ビデオソース",
+      "source-desc": "ポータルが推奨されます。アーティファクトが発生する場合は「スクリーン」を試してください",
+      "sources-portal": "ポータル",
+      "sources-screen": "スクリーン",
+      "title": "ビデオ設定"
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "bar_widget": {
+    "todo_count_plural": "{count} compiti",
+    "todo_count_singular": "{count} compito"
+  },
+  "desktop_widget": {
+    "empty_state": "Nessun compito",
+    "header_title": "Elenco dei compiti",
+    "items_count": "{active} di {total} elementi"
+  },
+  "main": {
+    "added_new_todo": "Aggiunto nuovo compito: ",
+    "cleared_completed_todos": "Cancellato ",
+    "completed_todos_suffix": " compiti completati",
+    "not_found_suffix": " non trovato",
+    "removed_todo": "Elemento rimosso",
+    "todo_completed": "completato",
+    "todo_marked_incomplete": "segnato come incompleto",
+    "todo_not_found": "Compito con ID ",
+    "todo_status_changed": "Compito "
+  },
+  "panel": {
+    "add_todo": {
+      "add_button": "Aggiungi",
+      "placeholder": "Inserisci un nuovo compito..."
+    },
+    "empty_state": {
+      "message": "Ancora nessun compito"
+    },
+    "header": {
+      "clear_completed_button": "Cancella completati",
+      "title": "Lista dei compiti"
+    },
+    "todo_item": {
+      "delete_button_tooltip": "Elimina",
+      "edit_button_tooltip": "Modifica"
+    }
+  },
+  "settings": {
+    "background_color": {
+      "description": "Colore di sfondo del widget dei compiti",
+      "label": "Colore di sfondo"
+    },
+    "show_completed": {
+      "description": "Visualizza i compiti completati nel pannello",
+      "label": "Mostra compiti completati"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "settings": {
+    "current_value": "已选择: {value} 毫秒",
+    "default_network_description": "运行镜像时使用的默认网络",
+    "default_network_label": "默认网络",
+    "general": "通用",
+    "refresh_interval_description": "插件检查容器状态的频率",
+    "refresh_interval_label": "刷新间隔",
+    "title": "容器管理器设置"
+  },
+  "tooltip": {
+    "docker_not_available": "Docker 不可用",
+    "image_already_running": "镜像已经在容器中运行。",
+    "running_containers": "运行中的容器: %1"
+  }
+}

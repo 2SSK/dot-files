@@ -1,0 +1,16 @@
+{
+  "settings": {
+    "current_value": "Wybrano: {value} ms",
+    "default_network_description": "Domyślna sieć do użycia podczas uruchamiania obrazów",
+    "default_network_label": "Domyślna Sieć",
+    "general": "Ogólne",
+    "refresh_interval_description": "Jak często wtyczka sprawdza zmiany stanu kontenera",
+    "refresh_interval_label": "Interwał odświeżania",
+    "title": "Ustawienia Menedżera Kontenerów"
+  },
+  "tooltip": {
+    "docker_not_available": "Docker niedostępny",
+    "image_already_running": "Obraz jest już uruchomiony w kontenerze",
+    "running_containers": "Uruchomione kontenery: %1"
+  }
+}

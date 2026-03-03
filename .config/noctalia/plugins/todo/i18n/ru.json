@@ -1,0 +1,49 @@
+{
+  "bar_widget": {
+    "todo_count_plural": "{count} задач",
+    "todo_count_singular": "{count} задача"
+  },
+  "desktop_widget": {
+    "empty_state": "Нет задач",
+    "header_title": "Список дел",
+    "items_count": "{active} из {total} элементов"
+  },
+  "main": {
+    "added_new_todo": "Добавлено новое дело:",
+    "cleared_completed_todos": "Очищено",
+    "completed_todos_suffix": "Завершенные задачи",
+    "not_found_suffix": "не найдено",
+    "removed_todo": "Удалённая задача",
+    "todo_completed": "завершено",
+    "todo_marked_incomplete": "Отмечено как незавершённое.",
+    "todo_not_found": "Задача с ID",
+    "todo_status_changed": "Дела"
+  },
+  "panel": {
+    "add_todo": {
+      "add_button": "Добавить",
+      "placeholder": "Введите новую задачу..."
+    },
+    "empty_state": {
+      "message": "Пока нет задач"
+    },
+    "header": {
+      "clear_completed_button": "Очистить завершенные",
+      "title": "Список дел"
+    },
+    "todo_item": {
+      "delete_button_tooltip": "Удалить",
+      "edit_button_tooltip": "Редактировать"
+    }
+  },
+  "settings": {
+    "background_color": {
+      "description": "Цвет фона виджета задач",
+      "label": "Цвет фона"
+    },
+    "show_completed": {
+      "description": "Отображать завершенные задачи в панели.",
+      "label": "Показать завершенные задачи"
+    }
+  }
+}

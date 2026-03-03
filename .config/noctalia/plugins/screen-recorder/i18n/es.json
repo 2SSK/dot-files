@@ -1,0 +1,69 @@
+{
+  "description": "Grabación de pantalla acelerada por hardware con configuración personalizable de video y audio",
+  "messages": {
+    "failed-general": "El grabador salió con un error.",
+    "failed-gpu": "gpu-screen-recorder se cerró inesperadamente.",
+    "failed-start": "No se pudo iniciar la grabación.",
+    "no-portals": "Portales de escritorio no están en ejecución.",
+    "no-portals-desc": "Inicia xdg-desktop-portal y un portal de compositor (wlr/hyprland/gnome/kde).",
+    "not-installed": "gpu-screen-recorder no está instalado.",
+    "not-installed-desc": "Por favor, instale gpu-screen-recorder para usar las funciones de grabación de pantalla.",
+    "saved": "Grabación guardada.",
+    "start-recording": "Grabador de pantalla (empezar a grabar)",
+    "started": "Grabación iniciada.",
+    "stop-recording": "Grabador de pantalla (detener grabación)",
+    "stopping": "Deteniendo la grabación…"
+  },
+  "name": "Grabadora de Pantalla",
+  "settings": {
+    "audio": {
+      "audio-sources-both": "Salida del sistema + entrada de micrófono",
+      "audio-sources-microphone-input": "Entrada de micrófono",
+      "audio-sources-none": "Sin audio",
+      "audio-sources-system-output": "Salida del sistema",
+      "codec": "Códec de audio",
+      "codec-desc": "Opus se recomienda para mejor rendimiento y tamaño de audio más pequeño",
+      "source": "Fuente de audio",
+      "source-desc": "Fuente de audio para capturar durante la grabación",
+      "title": "Configuración de Audio"
+    },
+    "filename-pattern": {
+      "description": "Patrón de nombre de archivo usando códigos de fecha/hora (p. ej., recording_yyyyMMdd_HHmmss)",
+      "label": "Patrón de nombre de archivo"
+    },
+    "general": {
+      "copy-to-clipboard": "Copiar al portapapeles",
+      "copy-to-clipboard-description": "Copia el archivo al portapapeles después de que termine la grabación.",
+      "output-folder": "Carpeta de salida",
+      "output-folder-description": "Carpeta donde se guardarán las grabaciones de pantalla",
+      "show-cursor": "Mostrar cursor",
+      "show-cursor-description": "Grabar el cursor del ratón en el video",
+      "title": "General"
+    },
+    "title": "Configuración de Grabadora de Pantalla",
+    "video": {
+      "codec": "Códec de video",
+      "codec-desc": "h264 es el códec más común",
+      "color-range": "Rango de color",
+      "color-range-desc": "Limitado se recomienda para mejor compatibilidad",
+      "color-range-full": "Completo",
+      "color-range-limited": "Limitado",
+      "frame-rate": "Tasa de fotogramas",
+      "frame-rate-desc": "Tasa de fotogramas objetivo para grabaciones de pantalla",
+      "quality": "Calidad de video",
+      "quality-desc": "Mayor calidad resulta en archivos más grandes",
+      "quality-high": "Alto",
+      "quality-medium": "Mediano",
+      "quality-ultra": "Ultra",
+      "quality-very-high": "Muy alto",
+      "resolution": "Resolución",
+      "resolution-desc": "Limitar resolución de salida. Predeterminado usa resolución de pantalla original",
+      "resolution-original": "Default",
+      "source": "Fuente de video",
+      "source-desc": "Se recomienda Portal, si obtiene artefactos intente Pantalla",
+      "sources-portal": "Portal",
+      "sources-screen": "Pantalla",
+      "title": "Configuración de Video"
+    }
+  }
+}

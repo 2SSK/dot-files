@@ -1,0 +1,69 @@
+{
+  "description": "Qeydkirina dîmenderê ya bi lezkerdana hardware bi mîhengên vîdyo û deng ên xwerû",
+  "messages": {
+    "failed-general": "Qeydker bi xeletî derket.",
+    "failed-gpu": "Qeydkerê dîmenderê GPU bi awayekî nediyar derket.",
+    "failed-start": "Dest pê kirina qeydê bi ser neket.",
+    "no-portals": "Portalên sermaseyê naxebitin.",
+    "no-portals-desc": "Xdg-desktop-portal û portalekî komposîtorê (wlr/hyprland/gnome/kde) bide destpêkirin.",
+    "not-installed": "gpu-screen-recorder nehati hati saz kirin.",
+    "not-installed-desc": "Ji bo bikaranîna taybetmendiyên tomarkirina dîmenderê, ji kerema xwe gpu-screen-recorder saz bikin.",
+    "saved": "Tomar qeyd kirin.",
+    "start-recording": "Qeydkerê ekranê (dest bi qeydkirinê bike)",
+    "started": "Qeydkirin dest pê kir.",
+    "stop-recording": "Tomarkera dîmenderê (tomarkirinê bide sekinandin)",
+    "stopping": "Qeydkirin radiweste…"
+  },
+  "name": "Qeydkerê Ekranê",
+  "settings": {
+    "audio": {
+      "audio-sources-both": "Derçûna pergalê + têketina mîkrofonê",
+      "audio-sources-microphone-input": "Ketina mîkrofonê",
+      "audio-sources-none": "Ti dengê tune",
+      "audio-sources-system-output": "Derçûna pergalê",
+      "codec": "Kodêkê deng",
+      "codec-desc": "Opus ji bo performansa herî baş û mezinahiya dengî ya herî biçûk tê pêşniyar kirin",
+      "source": "Çavkanîya deng",
+      "source-desc": "Çavkanîya dengî ya ku di dema qeydkirinê de were girtin",
+      "title": "Mîhengên Deng"
+    },
+    "filename-pattern": {
+      "description": "Şiklê navê pelê ku kodên dîrok/dem bikar tîne (mînak, recording_yyyyMMdd_HHmmss)",
+      "label": "Nimûneya navê pelê"
+    },
+    "general": {
+      "copy-to-clipboard": "Kopyayî ser clipboardê bike",
+      "copy-to-clipboard-description": "Piştî qedandina tomarkirinê pelê kopî klîpbordê bike.",
+      "output-folder": "Cilda peldanka ya derketinê",
+      "output-folder-description": "Cihê ku tomarên ekranê dê lê bên tomarkirin",
+      "show-cursor": "Nîşan bide mişk",
+      "show-cursor-description": "Qeydê nîşankerê mişkê di vîdeoyê de",
+      "title": "Giştî"
+    },
+    "title": "Mîhengên Qeydkerê Dîmenderê",
+    "video": {
+      "codec": "Kodêka vîdyoyî",
+      "codec-desc": "h264 kodêka herî berbelav e",
+      "color-range": "Rêza rengan",
+      "color-range-desc": "Bi sînorkirî ji bo lihevkirina baştir tê pêşniyarkirin",
+      "color-range-full": "Tije",
+      "color-range-limited": "Sînorkirî",
+      "frame-rate": "Rêjeya çarçoveyê",
+      "frame-rate-desc": "Rêjeya çarçoveya hedefê ji bo qeydên ekranê",
+      "quality": "Kalîteya vîdyoyê",
+      "quality-desc": "Encamên bi kalîte bilindtir dibin sedema mezinahiyên pelan ên mezintir",
+      "quality-high": "Bilind",
+      "quality-medium": "Navîn",
+      "quality-ultra": "Ultra",
+      "quality-very-high": "Zaf bilind",
+      "resolution": "Resolution",
+      "resolution-desc": "Limit output resolution. Default uses original screen resolution",
+      "resolution-original": "Default",
+      "source": "Çavkanîya vîdyoyê",
+      "source-desc": "Portal tê pêşniyarkirin, eger tu artefaktan bibînî Screen biceribîne",
+      "sources-portal": "Portal",
+      "sources-screen": "Dîmende",
+      "title": "Mîhengên Vîdeoyê"
+    }
+  }
+}
