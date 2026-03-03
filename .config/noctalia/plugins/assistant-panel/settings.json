@@ -1,0 +1,26 @@
+{
+  "ai": {
+    "provider": "google",
+    "models": {},
+    "apiKeys": {
+      "google": "AIzaSyAh829sT4i4adLReSIDdUrR0BG5j9mUEps"
+    },
+    "temperature": 0.7,
+    "systemPrompt": "You are a helpful assistant integrated into a Linux desktop shell. Be concise and helpful.",
+    "openaiLocal": false,
+    "openaiBaseUrl": "https://api.openai.com/v1/chat/completions",
+    "model": ""
+  },
+  "translator": {
+    "backend": "google",
+    "deeplApiKey": "",
+    "realTimeTranslation": true
+  },
+  "maxHistoryLength": 100,
+  "panelDetached": true,
+  "panelPosition": "right",
+  "panelHeightRatio": 0.85,
+  "panelWidth": 520,
+  "attachmentStyle": "connected",
+  "scale": 1
+}
