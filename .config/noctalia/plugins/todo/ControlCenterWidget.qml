@@ -23,7 +23,7 @@ NIconButtonHot {
 
   onClicked: {
     if (pluginApi) {
-      pluginApi.togglePanel(screen, this);
+      pluginApi.togglePanel(screen);
     }
   }
 
