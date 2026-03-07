@@ -3,6 +3,9 @@
     "todo_count_plural": "{count} todos",
     "todo_count_singular": "{count} todo"
   },
+  "actions": {
+    "widget_settings": "Settings"
+  },
   "desktop_widget": {
     "empty_state": "No to-dos",
     "header_title": "To-Do List",
@@ -30,7 +33,19 @@
     "error_update_failed": "Failed to update todo",
     "error_remove_failed": "Failed to remove todo",
     "error_rename_failed": "Failed to rename page",
-    "error_delete_failed": "Failed to delete page"
+    "error_delete_failed": "Failed to delete page",
+    "exported_todos": "Exported to ",
+    "export_failed": "Failed to export todos",
+    "export_title": "Todo List",
+    "export_page_header": "📁 {pageName}",
+    "export_active_section": "○ Active ({count})",
+    "export_completed_section": "✓ Completed ({count})",
+    "export_priority": "Priority",
+    "export_created": "Created",
+    "export_details": "Details",
+    "priority_high": "High",
+    "priority_medium": "Medium",
+    "priority_low": "Low"
   },
   "panel": {
     "add_todo": {
@@ -42,6 +57,7 @@
     },
     "header": {
       "clear_completed_button": "Clear Completed",
+      "export_button": "Export",
       "title": "Todo List"
     },
     "todo_details": {
@@ -76,6 +92,22 @@
     "custom_priority_colors": {
       "label": "Use Custom Priority Colors",
       "description": "Enable to customize priority colors"
+    },
+    "export_path": {
+      "label": "Export Path",
+      "description": "Directory for exported todo files",
+      "placeholder": "e.g. ~/Documents",
+      "select_folder": "Select Folder"
+    },
+    "export_format": {
+      "label": "Export Format",
+      "description": "File format for exported todos",
+      "markdown": "Markdown",
+      "json": "JSON"
+    },
+    "export_empty_sections": {
+      "label": "Show Empty Sections",
+      "description": "Show empty Active/Completed sections and pages when exporting"
     },
     "priority_colors": {
       "label": "Priority Colors",

@@ -14,10 +14,15 @@ ColumnLayout {
   property bool valueShowBackground: pluginApi?.pluginSettings?.showBackground !== undefined ? pluginApi.pluginSettings.showBackground : pluginApi?.manifest?.metadata?.defaultSettings?.showBackground
 
   // Priority color properties
-  property bool valueUseCustomColors: pluginApi?.pluginSettings?.useCustomColors !== undefined ? pluginApi.pluginSettings.useCustomColors : false
+  property bool valueUseCustomColors: pluginApi?.pluginSettings?.useCustomColors !== undefined ? pluginApi.pluginSettings.useCustomColors : pluginApi?.manifest?.metadata?.defaultSettings?.useCustomColors
   property color valueHighPriorityColor: (pluginApi?.pluginSettings?.priorityColors?.high) || (pluginApi?.manifest?.metadata?.defaultSettings?.priorityColors?.high) || Color.mError.toString()
   property color valueMediumPriorityColor: (pluginApi?.pluginSettings?.priorityColors?.medium) || (pluginApi?.manifest?.metadata?.defaultSettings?.priorityColors?.medium) || Color.mPrimary.toString()
   property color valueLowPriorityColor: (pluginApi?.pluginSettings?.priorityColors?.low) || (pluginApi?.manifest?.metadata?.defaultSettings?.priorityColors?.low) || Color.mOnSurfaceVariant.toString()
+
+  // Export path property
+  property string valueExportPath: pluginApi?.pluginSettings?.exportPath !== undefined ? pluginApi?.pluginSettings?.exportPath : pluginApi?.manifest?.metadata?.defaultSettings?.exportPath
+  property string valueExportFormat: pluginApi?.pluginSettings?.exportFormat !== undefined ? pluginApi?.pluginSettings?.exportFormat : pluginApi?.manifest?.metadata?.defaultSettings?.exportFormat
+  property bool valueExportEmptySections: pluginApi?.pluginSettings?.exportEmptySections !== undefined ? pluginApi.pluginSettings.exportEmptySections : pluginApi?.manifest?.metadata?.defaultSettings?.exportEmptySections
 
   // Reference to Main.qml instance for centralized data management
   readonly property var mainInstance: pluginApi?.mainInstance
@@ -124,6 +129,74 @@ ColumnLayout {
         onColorSelected: function (color) {
           root.valueLowPriorityColor = color;
         }
+      }
+    }
+  }
+
+  // Export path setting
+  NTextInputButton {
+    Layout.fillWidth: true
+    label: pluginApi.tr("settings.export_path.label")
+    description: pluginApi.tr("settings.export_path.description")
+    placeholderText: pluginApi.tr("settings.export_path.placeholder")
+    text: root.valueExportPath
+    buttonIcon: "folder-open"
+    buttonTooltip: pluginApi.tr("settings.export_path.select_folder")
+    onInputEditingFinished: root.valueExportPath = text
+    onButtonClicked: folderPicker.openFilePicker()
+  }
+
+  // Export format setting
+  NComboBox {
+    Layout.fillWidth: true
+    label: pluginApi.tr("settings.export_format.label")
+    description: pluginApi.tr("settings.export_format.description")
+    model: [
+      {
+        key: "markdown",
+        name: pluginApi.tr("settings.export_format.markdown")
+      },
+      {
+        key: "json",
+        name: pluginApi.tr("settings.export_format.json")
+      }
+    ]
+    currentKey: root.valueExportFormat
+    onSelected: function (key) {
+      root.valueExportFormat = key;
+      if (mainInstance && mainInstance.pluginApi) {
+        mainInstance.pluginApi.pluginSettings.exportFormat = key;
+        mainInstance.pluginApi.saveSettings();
+      }
+    }
+  }
+
+  // Export empty sections setting
+  NToggle {
+    Layout.fillWidth: true
+    label: pluginApi.tr("settings.export_empty_sections.label")
+    description: pluginApi.tr("settings.export_empty_sections.description")
+    checked: root.valueExportEmptySections
+    onToggled: function (checked) {
+      root.valueExportEmptySections = checked;
+      if (mainInstance && mainInstance.pluginApi) {
+        mainInstance.pluginApi.pluginSettings.exportEmptySections = checked;
+        mainInstance.pluginApi.saveSettings();
+      }
+    }
+  }
+
+  // Folder picker for selecting export path
+  NFilePicker {
+    id: folderPicker
+    selectionMode: "folders"
+    title: pluginApi.tr("settings.export_path.label")
+    initialPath: root.valueExportPath
+    onAccepted: function (paths) {
+      if (paths.length > 0) {
+        root.valueExportPath = paths[0];
+        mainInstance.pluginApi.pluginSettings.exportPath = paths[0];
+        mainInstance.pluginApi.saveSettings();
       }
     }
   }

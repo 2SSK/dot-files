@@ -108,6 +108,17 @@ Item {
             }
 
             NButton {
+              text: pluginApi?.tr("panel.header.export_button")
+              icon: "download"
+              fontSize: Style.fontSizeS
+              onClicked: {
+                if (mainInstance) {
+                  mainInstance.doExportTodos();
+                }
+              }
+            }
+
+            NButton {
               enabled: (pluginApi.pluginSettings.completedCount > 0)
               text: pluginApi?.tr("panel.header.clear_completed_button")
               icon: "trash"

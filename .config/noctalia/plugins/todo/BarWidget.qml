@@ -104,19 +104,14 @@ Item {
     hoverEnabled: true
     cursorShape: Qt.PointingHandCursor
 
-    onPressed: function (mouse) {
-      if (mouse.button === Qt.RightButton) {
-        // Open settings on right click
-        if (pluginApi && pluginApi.manifest) {
-          Logger.i("Todo", "Opening plugin settings");
-          BarService.openPluginSettings(root.screen, pluginApi.manifest);
-        }
-      } else if (mouse.button === Qt.LeftButton) {
-        // Open panel on left click
+    onClicked: function (mouse) {
+      if (mouse.button === Qt.LeftButton) {
         if (pluginApi) {
           Logger.i("Todo", "Opening Todo panel");
-          pluginApi.openPanel(root.screen);
+          pluginApi.openPanel(root.screen, this);
         }
+      } else if (mouse.button === Qt.RightButton) {
+        PanelService.showContextMenu(contextMenu, root, screen);
       }
     }
     onEntered: {
@@ -126,6 +121,28 @@ Item {
     }
     onExited: {
       TooltipService.hide();
+    }
+  }
+
+  // Right-click context menu
+  NPopupContextMenu {
+    id: contextMenu
+
+    model: [
+      {
+        "label": pluginApi?.tr("actions.widget_settings") || "Settings",
+        "action": "widget-settings",
+        "icon": "settings"
+      },
+    ]
+
+    onTriggered: action => {
+      contextMenu.close();
+      PanelService.closeContextMenu(screen);
+
+      if (action === "widget-settings") {
+        BarService.openPluginSettings(screen, pluginApi.manifest);
+      }
     }
   }
 }

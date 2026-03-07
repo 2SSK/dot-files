@@ -1,4 +1,5 @@
 import QtQuick
+import Quickshell
 import Quickshell.Io
 import qs.Commons
 import qs.Services.UI
@@ -7,6 +8,21 @@ Item {
   property var pluginApi: null
   property var rawTodos: []
   property var rawPages: []
+  property string currentExportPath: ""
+
+  // Process for exporting todos
+  Process {
+    id: exportProcess
+    running: false
+    onExited: function (code) {
+      if (code === 0) {
+        var displayPath = currentExportPath.replace(Quickshell.env("HOME"), "~");
+        ToastService.showNotice(pluginApi.tr("main.exported_todos") + displayPath);
+      } else {
+        ToastService.showError(pluginApi.tr("main.export_failed"));
+      }
+    }
+  }
 
   // ============================================
   // Initialization
@@ -37,6 +53,18 @@ Item {
         pluginApi.pluginSettings.isExpanded = false;
       if (pluginApi.pluginSettings.useCustomColors === undefined)
         pluginApi.pluginSettings.useCustomColors = false;
+
+      // Initialize export path
+      if (!pluginApi.pluginSettings.exportPath)
+        pluginApi.pluginSettings.exportPath = "~/Documents";
+
+      // Initialize export format
+      if (!pluginApi.pluginSettings.exportFormat)
+        pluginApi.pluginSettings.exportFormat = "markdown";
+
+      // Initialize export empty sections setting
+      if (pluginApi.pluginSettings.exportEmptySections === undefined)
+        pluginApi.pluginSettings.exportEmptySections = false;
 
       // Initialize priority colors
       if (!pluginApi.pluginSettings.priorityColors) {
@@ -143,7 +171,7 @@ Item {
     }
 
     function addTodoDefault(text: string) {
-      addTodo(text, "medium", pluginApi?.pluginSettings?.current_page_id || 0);
+      addTodo(text, "medium", pluginApi.pluginSettings.current_page_id);
     }
 
     // Todo Update Operations
@@ -252,6 +280,11 @@ Item {
       } else {
         ToastService.showError(pluginApi.tr("main.error_delete_failed"));
       }
+    }
+
+    // Export
+    function exportTodos() {
+      doExportTodos();
     }
   }
 
@@ -534,5 +567,174 @@ Item {
   // Calculate completed count
   function calculateCompletedCount() {
     return rawTodos.filter(t => t.completed).length;
+  }
+
+  // Export todos to markdown file
+  function doExportTodos() {
+    if (!pluginApi) {
+      return;
+    }
+    var format = pluginApi.pluginSettings.exportFormat;
+    var content;
+    var fileExtension;
+
+    if (format === "json") {
+      content = JSON.stringify(rawTodos, null, 2);
+      fileExtension = ".json";
+    } else {
+      content = generateExportMarkdown();
+      fileExtension = ".md";
+    }
+
+    exportTodosToFile(content, fileExtension);
+  }
+
+  // Export todos to file
+  function exportTodosToFile(content, fileExtension) {
+    try {
+      var timestamp = new Date().toISOString().split("T")[0];
+      var timeSuffix = new Date().toISOString().replace(/[:.]/g, "-").split("T")[1];
+      var fileName = "todo_" + timestamp + "_" + timeSuffix + fileExtension;
+
+      // Get export path from settings, default to ~/Documents
+      var exportPath = pluginApi.pluginSettings.exportPath;
+      exportPath = exportPath.replace("~", Quickshell.env("HOME"));
+
+      // Ensure path ends without slash
+      if (exportPath.endsWith("/")) {
+        exportPath = exportPath.slice(0, -1);
+      }
+
+      var filePath = exportPath + "/" + fileName;
+
+      // Write file using printf for better handling of long content
+      var base64 = Qt.btoa(content);
+      currentExportPath = filePath;
+      exportProcess.command = ["sh", "-c", `printf '%s' "${base64}" | base64 -d > "${filePath}"`];
+      exportProcess.running = true;
+    } catch (e) {
+      Logger.e("Todo", "Export error: " + e);
+      ToastService.showError(pluginApi.tr("main.export_failed"));
+    }
+  }
+
+  // Generate markdown content from todos
+  function generateExportMarkdown() {
+    var lines = [];
+    var INDENT = "  ";
+    var ITEM_PREFIX = "- ";
+    var SUB_ITEM_PREFIX = INDENT + "- ";
+    var DETAIL_PREFIX = INDENT + INDENT + "- ";
+    var showEmptySections = pluginApi.pluginSettings.exportEmptySections;
+
+    // Calculate statistics
+    var totalCount = rawTodos.length;
+    var activeCount = rawTodos.filter(function(t) { return !t.completed; }).length;
+    var completedCount = totalCount - activeCount;
+    var exportDate = new Date().toISOString();
+
+    // Header with YAML front matter
+    lines.push("---");
+    lines.push("export_date: " + exportDate);
+    lines.push("total: " + totalCount);
+    lines.push("active: " + activeCount);
+    lines.push("completed: " + completedCount);
+    lines.push("---");
+    lines.push("");
+    lines.push("# " + pluginApi.tr("main.export_title"));
+    lines.push("");
+
+    // Process each page
+    for (var p = 0; p < rawPages.length; p++) {
+      var page = rawPages[p];
+      var pageId = page.id;
+      var pageName = page.name;
+
+      // Get todos for this page
+      var pageTodos = rawTodos.filter(function (t) {
+        return t.pageId === pageId;
+      });
+      var activeTodos = pageTodos.filter(function (t) {
+        return !t.completed;
+      });
+      var completedTodos = pageTodos.filter(function (t) {
+        return t.completed;
+      });
+
+      // Skip page if no todos and not showing empty sections
+      if (!showEmptySections && pageTodos.length === 0) {
+        continue;
+      }
+
+      // Page header
+      var pageHeader = pluginApi.tr("main.export_page_header").replace("{pageName}", pageName);
+      lines.push("## " + pageHeader);
+      lines.push("");
+
+      // Render active todos
+      if (activeTodos.length > 0 || showEmptySections) {
+        var activeSection = pluginApi.tr("main.export_active_section").replace("{count}", activeTodos.length);
+        lines.push("### " + activeSection);
+        lines.push("");
+        renderTodoList(lines, activeTodos, false, INDENT, ITEM_PREFIX, SUB_ITEM_PREFIX, DETAIL_PREFIX);
+      }
+
+      // Render completed todos
+      if (completedTodos.length > 0 || showEmptySections) {
+        var completedSection = pluginApi.tr("main.export_completed_section").replace("{count}", completedTodos.length);
+        lines.push("### " + completedSection);
+        lines.push("");
+        renderTodoList(lines, completedTodos, true, INDENT, ITEM_PREFIX, SUB_ITEM_PREFIX, DETAIL_PREFIX);
+      }
+
+      // Page separator
+      lines.push("---");
+      lines.push("");
+    }
+
+    return lines.join("\n");
+  }
+
+  // Render a list of todos
+  function renderTodoList(lines, todos, completed, indent, itemPrefix, subItemPrefix, detailPrefix) {
+    var checkbox = completed ? "[x]" : "[ ]";
+
+    for (var i = 0; i < todos.length; i++) {
+      var todo = todos[i];
+      var priorityLabel = getPriorityLabel(todo.priority);
+
+      lines.push(itemPrefix + checkbox + " " + todo.text);
+      lines.push(subItemPrefix + pluginApi.tr("main.export_priority") + ": " + priorityLabel);
+
+      // Created date
+      if (todo.createdAt) {
+        var createdDate = todo.createdAt.split("T")[0];
+        lines.push(subItemPrefix + pluginApi.tr("main.export_created") + ": " + createdDate);
+      }
+
+      // Details - use list format
+      if (todo.details && todo.details.trim()) {
+        lines.push(subItemPrefix + pluginApi.tr("main.export_details") + ":");
+        var detailsLines = todo.details.trim().split("\n");
+        for (var d = 0; d < detailsLines.length; d++) {
+          lines.push(detailPrefix + detailsLines[d]);
+        }
+      }
+      lines.push("");
+    }
+  }
+
+  // Get priority label (text only)
+  function getPriorityLabel(priority) {
+    switch (priority) {
+    case "high":
+      return pluginApi.tr("main.priority_high");
+    case "medium":
+      return pluginApi.tr("main.priority_medium");
+    case "low":
+      return pluginApi.tr("main.priority_low");
+    default:
+      return pluginApi.tr("main.priority_medium");
+    }
   }
 }
