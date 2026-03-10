@@ -4,6 +4,9 @@ xwayland force
 # autotiling
 exec --no-startup-id autotiling
 
+# Voxtype voice typing
+exec_always --no-startup-id voxtype
+
 # wallpaper
 # exec --no-startup-id waypaper --restore
 # exec --no-startup-id variety --restore
