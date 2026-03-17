@@ -12,7 +12,8 @@
     "start-recording": "Запись экрана (начать запись)",
     "started": "Запись началась.",
     "stop-recording": "Запись экрана (остановить запись)",
-    "stopping": "Остановка записи…"
+    "stopping": "Остановка записи…",
+    "monitor-not-found": "Could not detect the monitor under cursor."
   },
   "name": "Запись Экрана",
   "settings": {
@@ -49,7 +50,10 @@
       "color-range-full": "Полный",
       "color-range-limited": "Ограниченный",
       "frame-rate": "Частота кадров",
+      "frame-rate-custom": "Пользовательская",
       "frame-rate-desc": "Целевая частота кадров для записи экрана",
+      "custom-frame-rate": "Пользовательская частота кадров",
+      "custom-frame-rate-desc": "Введите пользовательское значение частоты кадров (FPS)",
       "quality": "Качество видео",
       "quality-desc": "Более высокое качество приводит к большим размерам файлов",
       "quality-high": "Высокий",
@@ -63,7 +67,8 @@
       "source-desc": "Рекомендуется Portal, если появляются артефакты попробуйте Экран",
       "sources-portal": "Портал",
       "sources-screen": "Экран",
-      "title": "Настройки Видео"
+      "title": "Настройки Видео",
+      "sources-focused-monitor": "Focused monitor (Hyprland)"
     }
   }
 }

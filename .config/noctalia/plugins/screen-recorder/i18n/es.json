@@ -12,7 +12,8 @@
     "start-recording": "Grabador de pantalla (empezar a grabar)",
     "started": "Grabación iniciada.",
     "stop-recording": "Grabador de pantalla (detener grabación)",
-    "stopping": "Deteniendo la grabación…"
+    "stopping": "Deteniendo la grabación…",
+    "monitor-not-found": "Could not detect the monitor under cursor."
   },
   "name": "Grabadora de Pantalla",
   "settings": {
@@ -49,7 +50,10 @@
       "color-range-full": "Completo",
       "color-range-limited": "Limitado",
       "frame-rate": "Tasa de fotogramas",
+      "frame-rate-custom": "Personalizado",
       "frame-rate-desc": "Tasa de fotogramas objetivo para grabaciones de pantalla",
+      "custom-frame-rate": "Tasa de fotogramas personalizada",
+      "custom-frame-rate-desc": "Ingrese un valor de tasa de fotogramas personalizado (FPS)",
       "quality": "Calidad de video",
       "quality-desc": "Mayor calidad resulta en archivos más grandes",
       "quality-high": "Alto",
@@ -63,7 +67,8 @@
       "source-desc": "Se recomienda Portal, si obtiene artefactos intente Pantalla",
       "sources-portal": "Portal",
       "sources-screen": "Pantalla",
-      "title": "Configuración de Video"
+      "title": "Configuración de Video",
+      "sources-focused-monitor": "Focused monitor (Hyprland)"
     }
   }
 }

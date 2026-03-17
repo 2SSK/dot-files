@@ -181,3 +181,7 @@ fsc() {
         systemctl status "${unit}"
     fi
 }
+
+gstat() {
+  git status --porcelain | awk '{print $2}' | fzf -m --preview 'bat --style=numbers --color=always {}' | xargs nvim -p
+}

@@ -1,7 +1,7 @@
 {
   "id": "screen-recorder",
   "name": "Screen Recorder",
-  "version": "1.1.7",
+  "version": "1.2.0",
   "minNoctaliaVersion": "3.6.0",
   "author": "Noctalia Team",
   "official": true,

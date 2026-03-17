@@ -12,7 +12,8 @@
     "start-recording": "Qeydkerê ekranê (dest bi qeydkirinê bike)",
     "started": "Qeydkirin dest pê kir.",
     "stop-recording": "Tomarkera dîmenderê (tomarkirinê bide sekinandin)",
-    "stopping": "Qeydkirin radiweste…"
+    "stopping": "Qeydkirin radiweste…",
+    "monitor-not-found": "Could not detect the monitor under cursor."
   },
   "name": "Qeydkerê Ekranê",
   "settings": {
@@ -49,7 +50,10 @@
       "color-range-full": "Tije",
       "color-range-limited": "Sînorkirî",
       "frame-rate": "Rêjeya çarçoveyê",
+      "frame-rate-custom": "Kesane",
       "frame-rate-desc": "Rêjeya çarçoveya hedefê ji bo qeydên ekranê",
+      "custom-frame-rate": "Rêjeya çarçoveya kesane",
+      "custom-frame-rate-desc": "Nirxek rêjeya çarçoveya kesane binivîse (FPS)",
       "quality": "Kalîteya vîdyoyê",
       "quality-desc": "Encamên bi kalîte bilindtir dibin sedema mezinahiyên pelan ên mezintir",
       "quality-high": "Bilind",
@@ -63,7 +67,8 @@
       "source-desc": "Portal tê pêşniyarkirin, eger tu artefaktan bibînî Screen biceribîne",
       "sources-portal": "Portal",
       "sources-screen": "Dîmende",
-      "title": "Mîhengên Vîdeoyê"
+      "title": "Mîhengên Vîdeoyê",
+      "sources-focused-monitor": "Focused monitor (Hyprland)"
     }
   }
 }

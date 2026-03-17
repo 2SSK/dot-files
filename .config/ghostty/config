@@ -6,7 +6,7 @@ background-opacity = 0.9
 font-family = "JetBrains Mono Nerd Font"
 font-style = Bold
 bold-is-bright = true
-font-size = 16
+font-size = 13
 
 # Appearance
 gtk-titlebar = true
