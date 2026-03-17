@@ -13,7 +13,8 @@
     "started": "Recording started.",
     "stop-recording": "Screen Recorder (stop recording)",
     "stopping": "Stopping recording…",
-    "open-file": "Open file"
+    "open-file": "Open file",
+    "monitor-not-found": "Could not detect the monitor under cursor."
   },
   "name": "Screen Recorder",
   "settings": {
@@ -52,7 +53,10 @@
       "color-range-full": "Full",
       "color-range-limited": "Limited",
       "frame-rate": "Frame rate",
+      "frame-rate-custom": "Custom",
       "frame-rate-desc": "Target frame rate for screen recordings",
+      "custom-frame-rate": "Custom frame rate",
+      "custom-frame-rate-desc": "Enter a custom frame rate value (FPS)",
       "quality": "Video quality",
       "quality-desc": "Higher quality results in larger file sizes",
       "quality-high": "High",
@@ -66,6 +70,7 @@
       "source-desc": "Portal is recommended, if you get artifacts try Screen",
       "sources-portal": "Portal",
       "sources-screen": "Screen",
+      "sources-focused-monitor": "Focused monitor (Hyprland)",
       "title": "Video Settings"
     }
   }

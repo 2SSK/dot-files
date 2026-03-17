@@ -3,7 +3,7 @@
     "provider": "google",
     "models": {},
     "apiKeys": {
-      "google": "AIzaSyAh829sT4i4adLReSIDdUrR0BG5j9mUEps"
+      "google": "AIzaSyCS0rMMUFog2Y37RBUGcUXrlwfFbVrWpxs"
     },
     "temperature": 0.7,
     "systemPrompt": "You are a helpful assistant integrated into a Linux desktop shell. Be concise and helpful.",

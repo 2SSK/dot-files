@@ -1,0 +1,17 @@
+{
+  "hideInactive": false,
+  "iconColor": "none",
+  "directory": "/home/ssk/Videos/Screencasts",
+  "filenamePattern": "recording_yyyyMMdd_HHmmss",
+  "frameRate": "60",
+  "customFrameRate": "60",
+  "audioCodec": "opus",
+  "videoCodec": "h264",
+  "quality": "very_high",
+  "colorRange": "limited",
+  "showCursor": true,
+  "copyToClipboard": false,
+  "audioSource": "default_output",
+  "videoSource": "portal",
+  "resolution": "original"
+}

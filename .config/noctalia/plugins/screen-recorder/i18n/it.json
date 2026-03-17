@@ -12,7 +12,8 @@
     "start-recording": "P錄影 (開始錄影)",
     "started": "Aufnahme gestartet.",
     "stop-recording": "Skjáupptökutæki (hætta upptöku)",
-    "stopping": "Nagpapatigil ng pagrekord..."
+    "stopping": "Nagpapatigil ng pagrekord...",
+    "monitor-not-found": "Could not detect the monitor under cursor."
   },
   "name": "Registratore Schermo",
   "settings": {
@@ -49,7 +50,10 @@
       "color-range-full": "Puno",
       "color-range-limited": "Limitato",
       "frame-rate": "Frequenza fotogrammi",
+      "frame-rate-custom": "Personalizzato",
       "frame-rate-desc": "Frequenza fotogrammi target per le registrazioni dello schermo",
+      "custom-frame-rate": "Frequenza fotogrammi personalizzata",
+      "custom-frame-rate-desc": "Inserisci un valore personalizzato di frequenza fotogrammi (FPS)",
       "quality": "Qualità video",
       "quality-desc": "Qualità superiore risulta in file più grandi",
       "quality-high": "Alta",
@@ -63,7 +67,8 @@
       "source-desc": "Portal è consigliato, se si ottengono artefatti prova Schermo",
       "sources-portal": "Portale",
       "sources-screen": "Skjerm",
-      "title": "Impostazioni Video"
+      "title": "Impostazioni Video",
+      "sources-focused-monitor": "Focused monitor (Hyprland)"
     }
   }
 }

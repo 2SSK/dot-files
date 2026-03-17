@@ -12,7 +12,8 @@
     "start-recording": "Ekran kaydedici (kayda başla)",
     "started": "Kayıt başladı.",
     "stop-recording": "Ekran kaydedici (kaydı durdur)",
-    "stopping": "Kaydı durdurma…"
+    "stopping": "Kaydı durdurma…",
+    "monitor-not-found": "Could not detect the monitor under cursor."
   },
   "name": "Ekran Kaydedici",
   "settings": {
@@ -49,7 +50,10 @@
       "color-range-full": "Tam",
       "color-range-limited": "Sınırlı",
       "frame-rate": "Kare hızı",
+      "frame-rate-custom": "Özel",
       "frame-rate-desc": "Ekran kayıtları için hedef kare hızı",
+      "custom-frame-rate": "Özel kare hızı",
+      "custom-frame-rate-desc": "Özel bir kare hızı değeri girin (FPS)",
       "quality": "Video kalitesi",
       "quality-desc": "Daha yüksek kalite daha büyük dosya boyutlarına yol açar",
       "quality-high": "Yüksek",
@@ -63,7 +67,8 @@
       "source-desc": "Portal önerilir, artefaktlar alırsanız Ekran'ı deneyin",
       "sources-portal": "Portal",
       "sources-screen": "Ekran",
-      "title": "Video Ayarları"
+      "title": "Video Ayarları",
+      "sources-focused-monitor": "Focused monitor (Hyprland)"
     }
   }
 }

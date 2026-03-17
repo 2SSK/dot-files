@@ -13,7 +13,8 @@
     "started": "Aufnahme gestartet.",
     "stop-recording": "Bildschirmaufnahme (Aufnahme stoppen)",
     "stopping": "Aufnahme stoppen…",
-    "open-file": "Datei öffnen"
+    "open-file": "Datei öffnen",
+    "monitor-not-found": "Could not detect the monitor under cursor."
   },
   "name": "Bildschirmrekorder",
   "settings": {
@@ -52,7 +53,10 @@
       "color-range-full": "Vollständig",
       "color-range-limited": "Begrenzt",
       "frame-rate": "Bildrate",
+      "frame-rate-custom": "Benutzerdefiniert",
       "frame-rate-desc": "Ziel-Bildrate für Bildschirmaufnahmen",
+      "custom-frame-rate": "Benutzerdefinierte Bildrate",
+      "custom-frame-rate-desc": "Geben Sie einen benutzerdefinierten Bildratenwert ein (FPS)",
       "quality": "Videoqualität",
       "quality-desc": "Höhere Qualität führt zu größeren Dateien",
       "quality-high": "Hoch",
@@ -66,7 +70,8 @@
       "source-desc": "Portal wird empfohlen, bei Artefakten versuchen Sie Bildschirm",
       "sources-portal": "Portal",
       "sources-screen": "Bildschirm",
-      "title": "Videoeinstellungen"
+      "title": "Videoeinstellungen",
+      "sources-focused-monitor": "Focused monitor (Hyprland)"
     }
   }
 }

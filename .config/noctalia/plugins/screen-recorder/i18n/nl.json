@@ -12,7 +12,8 @@
     "start-recording": "Schermrecorder (opname starten)",
     "started": "Opname gestart.",
     "stop-recording": "Schermrecorder (opname stoppen)",
-    "stopping": "Opname stoppen…"
+    "stopping": "Opname stoppen…",
+    "monitor-not-found": "Could not detect the monitor under cursor."
   },
   "name": "Schermrecorder",
   "settings": {
@@ -49,7 +50,10 @@
       "color-range-full": "Volledig",
       "color-range-limited": "Beperkt",
       "frame-rate": "Framesnelheid",
+      "frame-rate-custom": "Aangepast",
       "frame-rate-desc": "Doelframesnelheid voor schermopnames",
+      "custom-frame-rate": "Aangepaste framesnelheid",
+      "custom-frame-rate-desc": "Voer een aangepaste framesnelheid in (FPS)",
       "quality": "Videokwaliteit",
       "quality-desc": "Hogere kwaliteit resulteert in grotere bestanden",
       "quality-high": "Hoog",
@@ -63,7 +67,8 @@
       "source-desc": "Portal wordt aanbevolen, probeer Scherm als u artefacten krijgt",
       "sources-portal": "Portaal",
       "sources-screen": "Scherm",
-      "title": "Video-instellingen"
+      "title": "Video-instellingen",
+      "sources-focused-monitor": "Focused monitor (Hyprland)"
     }
   }
 }

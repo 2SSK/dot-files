@@ -13,7 +13,8 @@
     "started": "録画を開始しました。",
     "stop-recording": "画面録画（停止）",
     "stopping": "録画を停止しています…",
-    "open-file": "ファイルを開く"
+    "open-file": "ファイルを開く",
+    "monitor-not-found": "Could not detect the monitor under cursor."
   },
   "name": "画面レコーダー",
   "settings": {
@@ -52,7 +53,10 @@
       "color-range-full": "フル",
       "color-range-limited": "限定",
       "frame-rate": "フレームレート",
+      "frame-rate-custom": "カスタム",
       "frame-rate-desc": "画面録画の目標フレームレート",
+      "custom-frame-rate": "カスタムフレームレート",
+      "custom-frame-rate-desc": "カスタムフレームレート値を入力してください（FPS）",
       "quality": "ビデオ品質",
       "quality-desc": "品質が高いほど、ファイルサイズが大きくなります",
       "quality-high": "高",
@@ -66,7 +70,8 @@
       "source-desc": "ポータルが推奨されます。アーティファクトが発生する場合は「スクリーン」を試してください",
       "sources-portal": "ポータル",
       "sources-screen": "スクリーン",
-      "title": "ビデオ設定"
+      "title": "ビデオ設定",
+      "sources-focused-monitor": "Focused monitor (Hyprland)"
     }
   }
 }

@@ -12,7 +12,8 @@
     "start-recording": "Képernyőrögzítő (felvétel indítása)",
     "started": "A felvétel elindult.",
     "stop-recording": "Képernyőfelvevő (felvétel leállítása)",
-    "stopping": "A felvétel leállítása…"
+    "stopping": "A felvétel leállítása…",
+    "monitor-not-found": "Could not detect the monitor under cursor."
   },
   "name": "Képernyőfelvevő",
   "settings": {
@@ -49,7 +50,10 @@
       "color-range-full": "Teljes",
       "color-range-limited": "Korlátozott",
       "frame-rate": "Képkockasebesség",
+      "frame-rate-custom": "Egyéni",
       "frame-rate-desc": "Képernyőfelvételek célzott képkockasebessége",
+      "custom-frame-rate": "Egyéni képkockasebesség",
+      "custom-frame-rate-desc": "Adjon meg egyéni képkockasebesség értéket (FPS)",
       "quality": "Videóminőség",
       "quality-desc": "A jobb minőség nagyobb fájlméretet eredményez",
       "quality-high": "Magas",
@@ -63,7 +67,8 @@
       "source-desc": "A Portal ajánlott, ha hibákat tapasztalsz, próbáld a Screen-t",
       "sources-portal": "Portál",
       "sources-screen": "Képernyő",
-      "title": "Videóbeállítások"
+      "title": "Videóbeállítások",
+      "sources-focused-monitor": "Focused monitor (Hyprland)"
     }
   }
 }

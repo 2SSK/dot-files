@@ -12,7 +12,8 @@
     "start-recording": "Rejestrator ekranu (rozpocznij nagrywanie)",
     "started": "Rozpoczęto nagrywanie.",
     "stop-recording": "Rejestrator ekranu (zatrzymaj nagrywanie)",
-    "stopping": "Zatrzymywanie nagrywania…"
+    "stopping": "Zatrzymywanie nagrywania…",
+    "monitor-not-found": "Could not detect the monitor under cursor."
   },
   "name": "Rejestrator ekranu",
   "settings": {
@@ -49,7 +50,10 @@
       "color-range-full": "Pełny",
       "color-range-limited": "Ograniczone",
       "frame-rate": "Liczba klatek na sekundę",
+      "frame-rate-custom": "Niestandardowa",
       "frame-rate-desc": "Docelowa liczba klatek na sekundę dla nagrań ekranu",
+      "custom-frame-rate": "Niestandardowa liczba klatek",
+      "custom-frame-rate-desc": "Wprowadź niestandardową liczbę klatek na sekundę (FPS)",
       "quality": "Jakość wideo",
       "quality-desc": "Wyższa jakość skutkuje większymi rozmiarami plików",
       "quality-high": "Wysoki",
@@ -63,7 +67,8 @@
       "source-desc": "Zalecany jest Portal, jeśli występują artefakty, spróbuj opcji Ekran",
       "sources-portal": "Portal",
       "sources-screen": "Ekran",
-      "title": "Ustawienia wideo"
+      "title": "Ustawienia wideo",
+      "sources-focused-monitor": "Focused monitor (Hyprland)"
     }
   }
 }

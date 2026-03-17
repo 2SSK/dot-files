@@ -1,9 +1,11 @@
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
+import Quickshell.Io
 import qs.Commons
 import qs.Widgets
 import qs.Services.UI
+import qs.Services.Compositor
 
 ColumnLayout {
     id: root
@@ -11,80 +13,56 @@ ColumnLayout {
 
     property var pluginApi: null
 
-    property bool editHideInactive:
-        pluginApi?.pluginSettings?.hideInactive ??
-        pluginApi?.manifest?.metadata?.defaultSettings?.hideInactive ??
-        false
+    property bool editHideInactive: pluginApi?.pluginSettings?.hideInactive ?? pluginApi?.manifest?.metadata?.defaultSettings?.hideInactive ?? false
 
-    property string editIconColor:
-        pluginApi?.pluginSettings?.iconColor ??
-        pluginApi?.manifest?.metadata?.defaultSettings?.iconColor ??
-        "none"
+    property string editIconColor: pluginApi?.pluginSettings?.iconColor ?? pluginApi?.manifest?.metadata?.defaultSettings?.iconColor ?? "none"
 
-    property string editDirectory: 
-        pluginApi?.pluginSettings?.directory || 
-        pluginApi?.manifest?.metadata?.defaultSettings?.directory || 
-        ""
+    property string editDirectory: pluginApi?.pluginSettings?.directory || pluginApi?.manifest?.metadata?.defaultSettings?.directory || ""
 
-    property string editFilenamePattern: 
-        pluginApi?.pluginSettings?.filenamePattern || 
-        pluginApi?.manifest?.metadata?.defaultSettings?.filenamePattern || 
-        "recording_yyyyMMdd_HHmmss"
+    property string editFilenamePattern: pluginApi?.pluginSettings?.filenamePattern || pluginApi?.manifest?.metadata?.defaultSettings?.filenamePattern || "recording_yyyyMMdd_HHmmss"
+
+    // Migrate legacy frame rates to "custom"
+    readonly property var _validFrameRates: ["30", "60", "120", "custom"]
+    readonly property string _rawFrameRate:
+        pluginApi?.pluginSettings?.frameRate ||
+        pluginApi?.manifest?.metadata?.defaultSettings?.frameRate ||
+        "60"
 
     property string editFrameRate: 
-        pluginApi?.pluginSettings?.frameRate || 
-        pluginApi?.manifest?.metadata?.defaultSettings?.frameRate || 
-        "60"
+        _validFrameRates.includes(_rawFrameRate) ? _rawFrameRate : "custom"
+
+    property string editCustomFrameRate: 
+        _validFrameRates.includes(_rawFrameRate)
+            ? (pluginApi?.pluginSettings?.customFrameRate ||
+               pluginApi?.manifest?.metadata?.defaultSettings?.customFrameRate ||
+               "60")
+            : _rawFrameRate
 
     property string editAudioCodec: 
         pluginApi?.pluginSettings?.audioCodec || 
         pluginApi?.manifest?.metadata?.defaultSettings?.audioCodec || 
         "opus"
 
-    property string editVideoCodec: 
-        pluginApi?.pluginSettings?.videoCodec || 
-        pluginApi?.manifest?.metadata?.defaultSettings?.videoCodec || 
-        "h264"
+    property string editVideoCodec: pluginApi?.pluginSettings?.videoCodec || pluginApi?.manifest?.metadata?.defaultSettings?.videoCodec || "h264"
 
-    property string editQuality: 
-        pluginApi?.pluginSettings?.quality || 
-        pluginApi?.manifest?.metadata?.defaultSettings?.quality || 
-        "very_high"
+    property string editQuality: pluginApi?.pluginSettings?.quality || pluginApi?.manifest?.metadata?.defaultSettings?.quality || "very_high"
 
-    property string editColorRange: 
-        pluginApi?.pluginSettings?.colorRange || 
-        pluginApi?.manifest?.metadata?.defaultSettings?.colorRange || 
-        "limited"
+    property string editColorRange: pluginApi?.pluginSettings?.colorRange || pluginApi?.manifest?.metadata?.defaultSettings?.colorRange || "limited"
 
-    property bool editShowCursor: 
-        pluginApi?.pluginSettings?.showCursor ?? 
-        pluginApi?.manifest?.metadata?.defaultSettings?.showCursor ?? 
-        true
+    property bool editShowCursor: pluginApi?.pluginSettings?.showCursor ?? pluginApi?.manifest?.metadata?.defaultSettings?.showCursor ?? true
 
-    property bool editCopyToClipboard: 
-        pluginApi?.pluginSettings?.copyToClipboard ?? 
-        pluginApi?.manifest?.metadata?.defaultSettings?.copyToClipboard ?? 
-        false
+    property bool editCopyToClipboard: pluginApi?.pluginSettings?.copyToClipboard ?? pluginApi?.manifest?.metadata?.defaultSettings?.copyToClipboard ?? false
 
-    property string editAudioSource: 
-        pluginApi?.pluginSettings?.audioSource || 
-        pluginApi?.manifest?.metadata?.defaultSettings?.audioSource || 
-        "default_output"
+    property string editAudioSource: pluginApi?.pluginSettings?.audioSource || pluginApi?.manifest?.metadata?.defaultSettings?.audioSource || "default_output"
 
-    property string editVideoSource: 
-        pluginApi?.pluginSettings?.videoSource || 
-        pluginApi?.manifest?.metadata?.defaultSettings?.videoSource || 
-        "portal"
+    property string editVideoSource: pluginApi?.pluginSettings?.videoSource || pluginApi?.manifest?.metadata?.defaultSettings?.videoSource || "portal"
 
-    property string editResolution:
-        pluginApi?.pluginSettings?.resolution ||
-        pluginApi?.manifest?.metadata?.defaultSettings?.resolution ||
-        "original"
+    property string editResolution: pluginApi?.pluginSettings?.resolution || pluginApi?.manifest?.metadata?.defaultSettings?.resolution || "original"
 
     function saveSettings() {
         if (!pluginApi) {
-            Logger.e("ScreenRecorder", "Cannot save: pluginApi is null")
-            return
+            Logger.e("ScreenRecorder", "Cannot save: pluginApi is null");
+            return;
         }
 
         pluginApi.pluginSettings.hideInactive = root.editHideInactive
@@ -92,6 +70,7 @@ ColumnLayout {
         pluginApi.pluginSettings.directory = root.editDirectory
         pluginApi.pluginSettings.filenamePattern = root.editFilenamePattern
         pluginApi.pluginSettings.frameRate = root.editFrameRate
+        pluginApi.pluginSettings.customFrameRate = root.editCustomFrameRate
         pluginApi.pluginSettings.audioCodec = root.editAudioCodec
         pluginApi.pluginSettings.videoCodec = root.editVideoCodec
         pluginApi.pluginSettings.quality = root.editQuality
@@ -102,9 +81,9 @@ ColumnLayout {
         pluginApi.pluginSettings.videoSource = root.editVideoSource
         pluginApi.pluginSettings.resolution = root.editResolution
 
-        pluginApi.saveSettings()
+        pluginApi.saveSettings();
 
-        Logger.i("ScreenRecorder", "Settings saved successfully")
+        Logger.i("ScreenRecorder", "Settings saved successfully");
     }
     // Icon Color
     NComboBox {
@@ -181,16 +160,25 @@ ColumnLayout {
         NComboBox {
             label: pluginApi.tr("settings.video.source")
             description: pluginApi.tr("settings.video.source-desc")
-            model: [
-                {
-                    "key": "portal",
-                    "name": pluginApi.tr("settings.video.sources-portal")
-                },
-                {
-                    "key": "screen",
-                    "name": pluginApi.tr("settings.video.sources-screen")
+            model: {
+                let options = [
+                    {
+                        "key": "portal",
+                        "name": pluginApi.tr("settings.video.sources-portal")
+                    },
+                    {
+                        "key": "screen",
+                        "name": pluginApi.tr("settings.video.sources-screen")
+                    }
+                ];
+                if (CompositorService.isHyprland) {
+                    options.push({
+                        "key": "focused-monitor",
+                        "name": pluginApi.tr("settings.video.sources-focused-monitor")
+                    });
                 }
-            ]
+                return options;
+            }
             currentKey: root.editVideoSource
             onSelected: key => root.editVideoSource = key
             defaultValue: pluginApi?.manifest?.metadata?.defaultSettings?.videoSource || "portal"
@@ -202,22 +190,6 @@ ColumnLayout {
             description: pluginApi.tr("settings.video.frame-rate-desc")
             model: [
                 {
-                    "key": "5",
-                    "name": "5 FPS"
-                },
-                {
-                    "key": "10",
-                    "name": "10 FPS"
-                },
-                {
-                    "key": "15",
-                    "name": "15 FPS"
-                },
-                {
-                    "key": "20",
-                    "name": "20 FPS"
-                },
-                {
                     "key": "30",
                     "name": "30 FPS"
                 },
@@ -226,29 +198,37 @@ ColumnLayout {
                     "name": "60 FPS"
                 },
                 {
-                    "key": "100",
-                    "name": "100 FPS"
-                },
-                {
                     "key": "120",
                     "name": "120 FPS"
                 },
                 {
-                    "key": "144",
-                    "name": "144 FPS"
-                },
-                {
-                    "key": "165",
-                    "name": "165 FPS"
-                },
-                {
-                    "key": "240",
-                    "name": "240 FPS"
+                    "key": "custom",
+                    "name": pluginApi.tr("settings.video.frame-rate-custom")
                 }
             ]
             currentKey: root.editFrameRate
             onSelected: key => root.editFrameRate = key
             defaultValue: pluginApi?.manifest?.metadata?.defaultSettings?.frameRate || "60"
+        }
+
+        // Custom Frame Rate
+        NTextInput {
+            visible: root.editFrameRate === "custom"
+            label: pluginApi.tr("settings.video.custom-frame-rate")
+            description: pluginApi.tr("settings.video.custom-frame-rate-desc")
+            placeholderText: "60"
+            text: root.editCustomFrameRate
+            onTextChanged: {
+                // Only allow numeric values
+                var numeric = text.replace(/[^0-9]/g, '')
+                if (numeric !== text) {
+                    text = numeric
+                }
+                if (numeric) {
+                    root.editCustomFrameRate = numeric
+                }
+            }
+            Layout.fillWidth: true
         }
 
         // Video Quality
@@ -284,25 +264,46 @@ ColumnLayout {
             description: pluginApi.tr("settings.video.codec-desc")
             model: {
                 let options = [
-                    {"key": "h264", "name": "H264"},
-                    {"key": "hevc", "name": "HEVC"},
-                    {"key": "av1", "name": "AV1"},
-                    {"key": "vp8", "name": "VP8"},
-                    {"key": "vp9", "name": "VP9"}
-                ]
-                // Only add HDR options if source is 'screen'
-                if (root.editVideoSource === "screen") {
-                    options.push({"key": "hevc_hdr", "name": "HEVC HDR"})
-                    options.push({"key": "av1_hdr", "name": "AV1 HDR"})
+                    {
+                        "key": "h264",
+                        "name": "H264"
+                    },
+                    {
+                        "key": "hevc",
+                        "name": "HEVC"
+                    },
+                    {
+                        "key": "av1",
+                        "name": "AV1"
+                    },
+                    {
+                        "key": "vp8",
+                        "name": "VP8"
+                    },
+                    {
+                        "key": "vp9",
+                        "name": "VP9"
+                    }
+                ];
+                // Only add HDR options if source is 'screen' or 'focused-monitor'
+                if (root.editVideoSource === "screen" || root.editVideoSource === "focused-monitor") {
+                    options.push({
+                        "key": "hevc_hdr",
+                        "name": "HEVC HDR"
+                    });
+                    options.push({
+                        "key": "av1_hdr",
+                        "name": "AV1 HDR"
+                    });
                 }
-                return options
+                return options;
             }
             currentKey: root.editVideoCodec
             onSelected: key => {
-                root.editVideoCodec = key
+                root.editVideoCodec = key;
                 // If an HDR codec is selected, change the colorRange to full
                 if (key.includes("_hdr")) {
-                    root.editColorRange = "full"
+                    root.editColorRange = "full";
                 }
             }
             defaultValue: pluginApi?.manifest?.metadata?.defaultSettings?.videoCodec || "h264"
@@ -310,8 +311,8 @@ ColumnLayout {
             Connections {
                 target: root
                 function onEditVideoSourceChanged() {
-                    if (root.editVideoSource !== "screen" && (root.editVideoCodec === "av1_hdr" || root.editVideoCodec === "hevc_hdr")) {
-                        root.editVideoCodec = "h264"
+                    if (root.editVideoSource !== "screen" && root.editVideoSource !== "focused-monitor" && (root.editVideoCodec === "av1_hdr" || root.editVideoCodec === "hevc_hdr")) {
+                        root.editVideoCodec = "h264";
                     }
                 }
             }
@@ -435,7 +436,7 @@ ColumnLayout {
         initialPath: root.editDirectory || Quickshell.env("HOME") + "/Videos"
         onAccepted: paths => {
             if (paths.length > 0) {
-                root.editDirectory = paths[0]
+                root.editDirectory = paths[0];
             }
         }
     }

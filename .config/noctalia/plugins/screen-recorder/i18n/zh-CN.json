@@ -13,7 +13,8 @@
     "started": "已开始录制。",
     "stop-recording": "屏幕录像（停止录制）",
     "stopping": "停止录制…",
-    "open-file": "打开文件"
+    "open-file": "打开文件",
+    "monitor-not-found": "Could not detect the monitor under cursor."
   },
   "name": "屏幕录制器",
   "settings": {
@@ -52,7 +53,10 @@
       "color-range-full": "全范围",
       "color-range-limited": "有限",
       "frame-rate": "帧率",
+      "frame-rate-custom": "自定义",
       "frame-rate-desc": "屏幕录制的目标帧率",
+      "custom-frame-rate": "自定义帧率",
+      "custom-frame-rate-desc": "输入自定义帧率值（FPS）",
       "quality": "视频质量",
       "quality-desc": "更高的质量会导致更大的文件大小",
       "quality-high": "高",
@@ -66,7 +70,8 @@
       "source-desc": "推荐使用桌面门户 (Portal)，如果出现画面异常请尝试屏幕",
       "sources-portal": "桌面门户",
       "sources-screen": "屏幕",
-      "title": "视频设置"
+      "title": "视频设置",
+      "sources-focused-monitor": "Focused monitor (Hyprland)"
     }
   }
 }
