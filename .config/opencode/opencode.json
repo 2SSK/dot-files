@@ -42,29 +42,34 @@
       "type": "local",
       "command": ["npx", "@playwright/mcp@latest"],
       "enabled": true
-    }
-  },
-  "plugin": ["opencode-antigravity-auth@beta"],
-  "provider": {
-    "ollama": {
-      "models": {
-        "glm-4.7": {
-          "name": "glm-4.7"
-        },
-        "glm-4.7:cloud": {
-          "_launch": true,
-          "name": "glm-4.7:cloud"
-        },
-        "kimi-k2.5:cloud": {
-          "_launch": true,
-          "name": "kimi-k2.5:cloud"
-        }
+    },
+    "supabase": {
+      "type": "remote",
+      "url": "https://mcp.supabase.com/mcp?project_ref=llkyvmrsadrwiawbfcyt",
+      "enabled": true
+    },
+    "prometheus": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "-p",
+        "@wkronmiller/prometheus-mcp-server",
+        "prometheus-mcp-server"
+      ],
+      "environment": {
+        "PROMETHEUS_URL": "{env:PROMETHEUS_URL}"
       },
-      "name": "Ollama Cloud",
-      "npm": "@ai-sdk/openai-compatible",
-      "options": {
-        "baseURL": "https://ollama.com/v1"
-      }
+      "enabled": true
+    },
+    "grafana": {
+      "type": "local",
+      "command": ["uvx", "mcp-grafana"],
+      "environment": {
+        "GRAFANA_URL": "{env:GRAFANA_URL}",
+        "GRAFANA_SERVICE_ACCOUNT_TOKEN": "{env:GRAFANA_TOKEN}"
+      },
+      "enabled": true
     }
   }
 }

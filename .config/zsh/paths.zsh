@@ -40,3 +40,7 @@ esac
 
 # Miniconda
 export PATH="$PATH:/opt/miniconda3/bin"
+
+# spicetify 
+export PATH=$PATH:~/.spicetify
+export PATH=$HOME/.local/bin:$PATH
