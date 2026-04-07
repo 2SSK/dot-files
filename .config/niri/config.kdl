@@ -81,7 +81,8 @@ layout {
 
     // You can change how the focus ring looks.
     focus-ring {
-        width 1.5
+
+        width 0.5
 
         // Color of the ring on the active monitor.
         active-color "#7fc8ff"
@@ -211,6 +212,7 @@ binds {
     Super+Alt+L hotkey-overlay-title="Lock the Screen: hyprlock" { spawn "hyprlock"; }
     Mod+P hotkey-overlay-title="Power Menu: qs sessionMenu" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"; }
     Mod+Shift+B hotkey-overlay-title="Toggle Bar: qs bar" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "bar" "toggle"; }
+    Mod+Shift+c hotkey-overlay-title="Toggle Clipboard" { spawn "qs " "-c" "noctalia-shell" "ipc" "call" "plugin:clipper" "toggle"; }
     Mod+Shift+P hotkey-overlay-title="Wallpaper: qs wallpaper" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "wallpaper" "toggle"; }
     Mod+Semicolon hotkey-overlay-title="Emoji Picker: qs launcher" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "emoji"; }
 
@@ -474,3 +476,6 @@ binds {
     // moving the mouse or pressing any other key.
     Mod+Shift+W { power-off-monitors; }
 }
+
+include "./noctalia.kdl"
+
