@@ -217,7 +217,7 @@ Item {
     }
 
     if (requiresKey && (!apiKey || apiKey.trim() === "")) {
-      root.errorMessage = pluginApi?.tr("errors.noApiKey") || "Please configure your API key in settings";
+      root.errorMessage = pluginApi?.tr("errors.noApiKey");
       Logger.e("AssistantPanel", "sendMessage: missing API key");
       ToastService.showError(root.errorMessage);
       return;
@@ -402,7 +402,7 @@ Item {
 
       if (exitCode !== 0 && root.currentResponse === "") {
         if (root.errorMessage === "") {
-          root.errorMessage = pluginApi?.tr("errors.requestFailed") || "Request failed";
+          root.errorMessage = pluginApi?.tr("errors.requestFailed");
         }
         return;
       }
@@ -489,9 +489,9 @@ Item {
       if (exitCode !== 0 && root.currentResponse === "") {
         if (root.errorMessage === "") {
           if (provider === Constants.Providers.OPENAI_COMPATIBLE && openaiLocal) {
-            root.errorMessage = pluginApi?.tr("errors.localNotRunning") || "Local inference server is not reachable. Please check your configuration and ensure it is running.";
+            root.errorMessage = pluginApi?.tr("errors.localNotRunning");
           } else {
-            root.errorMessage = pluginApi?.tr("errors.requestFailed") || "Request failed";
+            root.errorMessage = pluginApi?.tr("errors.requestFailed");
           }
         }
         return;
@@ -569,7 +569,7 @@ Item {
     onExited: function (exitCode, exitStatus) {
       if (exitCode !== 0) {
         root.isTranslating = false;
-        root.translationError = pluginApi?.tr("errors.translationFailed") || "Translation failed";
+        root.translationError = pluginApi?.tr("errors.translationFailed");
       }
     }
   }
@@ -585,7 +585,7 @@ Item {
 
     if (commandData.error) {
       root.isTranslating = false;
-      root.translationError = pluginApi?.tr("errors.noDeeplKey") || commandData.error;
+      root.translationError = pluginApi?.tr("errors.noDeeplKey");
       return;
     }
 
@@ -599,9 +599,9 @@ Item {
     if (result.error) {
       // Map known internal error strings to translated ones if needed, otherwise show as is
       if (result.error === "Empty response")
-        root.translationError = pluginApi?.tr("errors.emptyResponse") || "Empty response";
+        root.translationError = pluginApi?.tr("errors.emptyResponse");
       else if (result.error === "Failed to parse response")
-        root.translationError = pluginApi?.tr("errors.parseError") || "Failed to parse response";
+        root.translationError = pluginApi?.tr("errors.parseError");
       else
         root.translationError = result.error;
     } else if (result.text) {
@@ -642,13 +642,13 @@ Item {
     function send(message: string) {
       if (message && message.trim() !== "") {
         root.sendMessage(message);
-        ToastService.showNotice(pluginApi?.tr("toast.messageSent") || "Message sent");
+        ToastService.showNotice(pluginApi?.tr("toast.messageSent"));
       }
     }
 
     function clear() {
       root.clearMessages();
-      ToastService.showNotice(pluginApi?.tr("toast.historyCleared") || "Chat history cleared");
+      ToastService.showNotice(pluginApi?.tr("toast.historyCleared"));
     }
 
     function translateText(text: string, targetLang: string) {
@@ -661,7 +661,7 @@ Item {
       if (pluginApi && root.providers[providerName]) {
         pluginApi.pluginSettings.ai.provider = providerName;
         pluginApi.saveSettings();
-        ToastService.showNotice((pluginApi?.tr("toast.providerChanged") || "Provider changed to") + " " + root.providers[providerName].name);
+        ToastService.showNotice(pluginApi?.tr("toast.providerChanged") + " " + root.providers[providerName].name);
       }
     }
 
@@ -679,7 +679,7 @@ Item {
           pluginApi.pluginSettings.ai.models = {};
         }
         pluginApi.saveSettings();
-        ToastService.showNotice((pluginApi?.tr("toast.modelChanged") || "Model changed to") + " " + modelName);
+        ToastService.showNotice(pluginApi?.tr("toast.modelChanged") + " " + modelName);
       }
     }
   }

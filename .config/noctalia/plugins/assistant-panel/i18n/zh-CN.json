@@ -1,7 +1,6 @@
 {
   "widget": {
     "title": "AI",
-    "generating": "...",
     "tooltipTitle": "AI助手面板",
     "noApiKey": "在设置中配置API密钥",
     "provider": "提供商",

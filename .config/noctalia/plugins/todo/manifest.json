@@ -1,7 +1,7 @@
 {
   "id": "todo",
   "name": "Todo List",
-  "version": "1.9.7",
+  "version": "1.9.8",
   "minNoctaliaVersion": "3.7.1",
   "author": "lonerOrz <lonerOrz@qq.com>",
   "license": "MIT",

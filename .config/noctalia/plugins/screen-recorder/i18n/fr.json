@@ -13,7 +13,16 @@
     "started": "Enregistrement démarré.",
     "stop-recording": "Enregistreur d'écran (arrêter l'enregistrement)",
     "stopping": "Arrêt de l'enregistrement...",
-    "monitor-not-found": "Impossible de détecter l'écran sous le curseur."
+    "open-file": "Ouvrir le fichier",
+    "monitor-not-found": "Impossible de détecter l'écran sous le curseur.",
+    "replay-saved": "Replay enregistré.",
+    "replay-started": "Tampon de replay démarré.",
+    "replay-stopped": "Tampon de replay arrêté.",
+    "replay-failed": "Échec du démarrage du tampon de replay.",
+    "replay-active": "Enregistreur d'écran (replay actif)",
+    "save-replay": "Enregistrer le tampon de replay",
+    "start-replay": "Démarrer le tampon de replay",
+    "stop-replay": "Arrêter le tampon de replay"
   },
   "name": "Enregistreur d'Écran",
   "settings": {
@@ -35,11 +44,27 @@
     "general": {
       "copy-to-clipboard": "Copier dans le presse-papiers",
       "copy-to-clipboard-description": "Copier le fichier dans le presse-papiers une fois l'enregistrement terminé.",
+      "hide-when-inactive": "Masquer lorsqu'inactif",
+      "hide-when-inactive-description": "Masquer l'indicateur de la barre lorsqu'il n'y a pas d'enregistrement",
       "output-folder": "Dossier de sortie",
       "output-folder-description": "Dossier où les enregistrements d'écran seront enregistrés",
+      "restore-portal-session": "Restaurer la session du portail",
+      "restore-portal-session-description": "Restaurer automatiquement la session du portail précédente pour les enregistrements ultérieurs (désactive l'invite de sélection)",
       "show-cursor": "Afficher le curseur",
       "show-cursor-description": "Enregistrer le curseur de la souris dans la vidéo",
       "title": "Général"
+    },
+    "replay": {
+      "enable": "Activer le tampon de replay",
+      "enable-desc": "Conserver un tampon roulant de l'activité récente de l'écran qui peut être enregistré à la demande",
+      "duration": "Durée du replay",
+      "duration-desc": "Longueur du tampon de replay en secondes",
+      "custom-duration": "Durée de replay personnalisée",
+      "custom-duration-desc": "Saisissez une durée de tampon de replay personnalisée en secondes",
+      "storage": "Stockage du replay",
+      "storage-desc": "Où stocker le tampon de replay",
+      "storage-ram": "RAM (recommandé)",
+      "storage-disk": "Disque"
     },
     "title": "Paramètres de l'Enregistreur d'Écran",
     "video": {

@@ -1,10 +1,13 @@
 # Clipper - Advanced Clipboard Manager for Noctalia Shell
 
-**Version 2.0.0** - A powerful clipboard history manager with persistent pinned items, NoteCards sticky notes, and seamless ToDo integration.
+**Version 2.3.0** - A powerful clipboard history manager with persistent pinned items, NoteCards sticky notes, seamless ToDo integration and auto-paste.
 
 ![Clipboard Preview](Assets/clipboard-preview.png)
 
 ## ✨ Features
+
+### ⚙️ Control Center Shortcut
+- **Control Center Shortcut**: Access Clipper in Control Center shortcut instead to save widget spaces in your bar
 
 ### 📋 Clipboard Management
 - **Unlimited History**: Access your entire clipboard history powered by `cliphist`
@@ -42,6 +45,12 @@ Seamless integration with Noctalia ToDo plugin:
 - **Three Color Properties**: Background, Separator, Foreground (text/icons)
 - **Live Preview**: See changes instantly in settings panel
 - **Reset to Defaults**: One-click restore to default theme
+
+- ### ⚡ Auto-Paste
+- **Toggle in Settings → Auto-Paste**: After selecting a clipboard item, content is automatically pasted into the focused window
+- **Right-Click Only mode**: Left-click copies normally; right-click copies and pastes
+- **Paste Delay slider**: Tune the delay (100–1000 ms) for compositor focus timing
+- Requires `wtype` (`sudo pacman -S wtype`); settings show a warning when not installed
 
 ## 🎬 Video Demonstrations
 
@@ -259,21 +268,23 @@ pkill -9 wl-paste; wl-paste --watch cliphist store &
 
 See [CHANGELOG.md](CHANGELOG.md) for detailed version history.
 
-### v2.0.0 (2026-02-05) - Current Release
-**Major Features:**
-- ✨ NoteCards sticky notes system
-- ✨ Selection-to-NoteCard functionality
-- ✨ Selection-to-ToDo with page selector
-- ✨ Universal SelectionContextMenu component
-- ✨ Individual JSON storage for notecards
-- ✨ 16 languages with 100% translation coverage
+### v2.2.0 (2026-03-11) - Current Release
+
+**Bug Fixes:**
+- 🐞 Clear All Notes doesn't clear notes when reopen plugin panel fix
+- 🐞 Square Panel Corners at the bottom corners fix
+- 🐞 Export a Note multiple times and not deleting it fix
+- 🐞 Wait until user press Apply button to apply the settings
+- 🐞 clicking the NoteCards panel would close the plugin panel even when the Close Button was enabled. The panel now only closes on background click when the Close Button is disabled.
 
 **Improvements:**
-- 🔧 Fixed all memory leaks (timer, process, connection cleanup)
-- 🔧 Immutable data patterns throughout codebase
-- 🔧 Proper type handling (pageId as int, not string)
-- 🔧 Active selector routing for context menus
-- 🎨 Enhanced visual customization
+- 🎨 Panel will now attach to bar instead of being separate
+- 🎨 Decrease panel Width and Height for a cleaner look
+- 🎨 Added a separator between Note Card and Pinned Itemnhanced visual customization
+- 🎨 Move Panel Close Button to the top right corner instead of being next to Open Plugin Settings
+- 🎨 Added active ring, badge counts for filter buttons
+- 🔧 Remaps keybindings using Alt + 1 to 8 instead of Alt + 0 to 7
+- 🔧 Mouse Wheel Scroll left and right clipboards support
 
 **Technical:**
 - 📦 Zero console.log statements in production

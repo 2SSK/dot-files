@@ -14,7 +14,15 @@
     "stop-recording": "屏幕录像（停止录制）",
     "stopping": "停止录制…",
     "open-file": "打开文件",
-    "monitor-not-found": "Could not detect the monitor under cursor."
+    "monitor-not-found": "无法检测到光标下的显示器。",
+    "replay-saved": "回放已保存。",
+    "replay-started": "回放缓冲已启动。",
+    "replay-stopped": "回放缓冲已停止。",
+    "replay-failed": "启动回放缓冲失败。",
+    "replay-active": "屏幕录像机（回放活动中）",
+    "save-replay": "保存回放缓冲",
+    "start-replay": "启动回放缓冲",
+    "stop-replay": "停止回放缓冲"
   },
   "name": "屏幕录制器",
   "settings": {
@@ -37,12 +45,26 @@
       "copy-to-clipboard": "复制到剪贴板",
       "copy-to-clipboard-description": "录制结束后将文件复制到剪贴板。",
       "output-folder": "输出文件夹",
-      "output-folder-description": "屏幕录制将保存到的文件夹",
+      "output-folder-description": "屏幕录像保存的文件夹",
+      "restore-portal-session": "恢复门户会话",
+      "restore-portal-session-description": "自动恢复之前的门户会话以用于后续录制（禁用选择提示）",
       "show-cursor": "显示光标",
       "show-cursor-description": "在视频中录制鼠标光标",
       "hide-when-inactive": "非活动时隐藏",
       "hide-when-inactive-description": "未录制时隐藏栏指示器",
       "title": "常规"
+    },
+    "replay": {
+      "enable": "启用回放缓冲",
+      "enable-desc": "保持最近屏幕活动的滚动缓冲，可根据需要保存",
+      "duration": "回放时长",
+      "duration-desc": "回放缓冲的长度（秒）",
+      "custom-duration": "自定义回放时长",
+      "custom-duration-desc": "输入自定义回放缓冲时长（秒）",
+      "storage": "回放存储",
+      "storage-desc": "回放缓冲存储位置",
+      "storage-ram": "内存 (推荐)",
+      "storage-disk": "磁盘"
     },
     "title": "屏幕录制器设置",
     "video": {

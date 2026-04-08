@@ -13,6 +13,8 @@ NIconButton {
     property ShellScreen screen
     property string widgetId: ""
     property string section: ""
+    property int sectionWidgetIndex: -1
+    property int sectionWidgetsCount: 0
 
     // Bar positioning properties
     readonly property string screenName: screen ? screen.name : ""
@@ -33,7 +35,7 @@ NIconButton {
     readonly property string iconColorKey: cfg.iconColor ?? defaults.iconColor ?? "none"
     readonly property color iconColor: Color.resolveColorKey(iconColorKey)
 
-    readonly property bool shouldShow: !hideInactive || (mainInstance?.isRecording ?? false) || (mainInstance?.isPending ?? false)
+    readonly property bool shouldShow: !hideInactive || (mainInstance?.isRecording ?? false) || (mainInstance?.isPending ?? false) || (mainInstance?.isReplaying ?? false)
 
     visible: true
     opacity: shouldShow ? 1.0 : 0.0
@@ -59,8 +61,8 @@ NIconButton {
     baseSize: root.capsuleHeight
     applyUiScale: false
     customRadius: Style.radiusL
-    colorBg: (mainInstance?.isRecording || mainInstance?.isPending) ? Color.mPrimary : Style.capsuleColor
-    colorFg: (mainInstance?.isRecording || mainInstance?.isPending) ? Color.mOnPrimary : root.iconColor
+    colorBg: (mainInstance?.isRecording || mainInstance?.isPending) ? Color.mPrimary : (mainInstance?.isReplaying ? Qt.alpha(Color.mSecondary, 0.25) : Style.capsuleColor)
+    colorFg: (mainInstance?.isRecording || mainInstance?.isPending) ? Color.mOnPrimary : (mainInstance?.isReplaying ? Color.mSecondary : root.iconColor)
     colorBorder: "transparent"
     colorBorderHover: "transparent"
     border.color: Style.capsuleBorderColor
@@ -92,13 +94,39 @@ NIconButton {
     NPopupContextMenu {
         id: contextMenu
 
-        model: [
-            {
+        model: {
+            var items = [];
+
+            // Replay controls (only when replay is enabled)
+            if (mainInstance?.replayEnabled) {
+                if (mainInstance?.isReplaying) {
+                    items.push({
+                        "label": pluginApi.tr("messages.save-replay"),
+                        "action": "save-replay",
+                        "icon": "device-floppy"
+                    });
+                    items.push({
+                        "label": pluginApi.tr("messages.stop-replay"),
+                        "action": "stop-replay",
+                        "icon": "stop"
+                    });
+                } else {
+                    items.push({
+                        "label": pluginApi.tr("messages.start-replay"),
+                        "action": "start-replay",
+                        "icon": "player-play"
+                    });
+                }
+            }
+
+            items.push({
                 "label": I18n.tr("actions.widget-settings"),
                 "action": "widget-settings",
                 "icon": "settings"
-            },
-        ]
+            });
+
+            return items;
+        }
 
         onTriggered: action => {
             contextMenu.close();
@@ -106,6 +134,12 @@ NIconButton {
 
             if (action === "widget-settings") {
                 BarService.openPluginSettings(screen, pluginApi.manifest);
+            } else if (action === "start-replay" && mainInstance) {
+                mainInstance.startReplay();
+            } else if (action === "stop-replay" && mainInstance) {
+                mainInstance.stopReplay();
+            } else if (action === "save-replay" && mainInstance) {
+                mainInstance.saveReplay();
             }
         }
     }

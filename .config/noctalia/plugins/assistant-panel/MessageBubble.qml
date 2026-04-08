@@ -222,7 +222,7 @@ Item {
             spacing: Style.marginS
 
             NButton {
-              text: pluginApi?.tr("chat.save") || "Save"
+              text: pluginApi?.tr("chat.save")
               backgroundColor: Color.mPrimary
               textColor: Color.mOnPrimary
               hoverColor: Qt.lighter(Color.mPrimary, 1.2)
@@ -236,7 +236,7 @@ Item {
             }
 
             NButton {
-              text: pluginApi?.tr("chat.cancel") || "Cancel"
+              text: pluginApi?.tr("chat.cancel")
               backgroundColor: Color.mSurface
               textColor: Color.mOnSurface
               hoverColor: Qt.lighter(Color.mSurface, 1.3)

@@ -14,7 +14,15 @@
     "stop-recording": "画面録画（停止）",
     "stopping": "録画を停止しています…",
     "open-file": "ファイルを開く",
-    "monitor-not-found": "Could not detect the monitor under cursor."
+    "monitor-not-found": "カーソル下のモニターを検出できませんでした。",
+    "replay-saved": "リプレイが保存されました。",
+    "replay-started": "リプレイバッファが開始されました。",
+    "replay-stopped": "リプレイバッファが停止されました。",
+    "replay-failed": "リプレイバッファの開始に失敗しました。",
+    "replay-active": "スクリーンレコーダー (リプレイ有効)",
+    "save-replay": "リプレイバッファを保存",
+    "start-replay": "リプレイバッファを開始",
+    "stop-replay": "リプレイバッファを停止"
   },
   "name": "画面レコーダー",
   "settings": {
@@ -40,9 +48,23 @@
       "hide-when-inactive-description": "録画していないときはウィジェットを隠す",
       "output-folder": "出力フォルダー",
       "output-folder-description": "画面録画が保存されるフォルダー",
+      "restore-portal-session": "ポータルセッションを復元する",
+      "restore-portal-session-description": "以降の録画のために前のポータルセッションを自動的に復元します（選択プロンプトを無効にします）",
       "show-cursor": "カーソルを表示",
       "show-cursor-description": "録画にマウスカーソルを記録する",
       "title": "全般"
+    },
+    "replay": {
+      "enable": "リプレイバッファを有効にする",
+      "enable-desc": "最近の画面アクティビティのローリングバッファを保持し、必要に応じて保存できるようにします",
+      "duration": "リプレイ時間",
+      "duration-desc": "リプレイバッファの長さ（秒）",
+      "custom-duration": "カスタムリプレイ時間",
+      "custom-duration-desc": "カスタムリプレイバッファの時間を秒単位で入力してください",
+      "storage": "リプレイストレージ",
+      "storage-desc": "リプレイバッファの保存先",
+      "storage-ram": "RAM (推奨)",
+      "storage-disk": "ディスク"
     },
     "title": "画面レコーダー設定",
     "video": {

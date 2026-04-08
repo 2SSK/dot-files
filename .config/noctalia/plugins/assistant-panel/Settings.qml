@@ -60,7 +60,7 @@ ColumnLayout {
   // Panel Settings Section
   // ==================
   NText {
-    text: pluginApi?.tr("settings.panelSection") || "Panel Settings"
+    text: pluginApi?.tr("settings.panelSection")
     pointSize: Style.fontSizeM
     font.weight: Font.Bold
     color: Color.mOnSurface
@@ -68,8 +68,8 @@ ColumnLayout {
 
   NToggle {
     Layout.fillWidth: true
-    label: pluginApi?.tr("settings.panelDetached") || "Detached Panel"
-    description: pluginApi?.tr("settings.panelDetachedDesc") || "Show panel as a detached floating window"
+    label: pluginApi?.tr("settings.panelDetached")
+    description: pluginApi?.tr("settings.panelDetachedDesc")
     checked: root.editPanelDetached
     onToggled: function (checked) {
       root.editPanelDetached = checked;
@@ -91,37 +91,37 @@ ColumnLayout {
 
   NComboBox {
     Layout.fillWidth: true
-    label: pluginApi?.tr("settings.panelPosition") || "Panel Position"
-    description: pluginApi?.tr("settings.panelPositionDesc") || "Default screen edge for the panel"
+    label: pluginApi?.tr("settings.panelPosition")
+    description: pluginApi?.tr("settings.panelPositionDesc")
     model: root.editPanelDetached ? [
       {
         "key": "left",
-        "name": pluginApi?.tr("settings.panelPositionLeft") || "Left"
+        "name": pluginApi?.tr("settings.panelPositionLeft")
       },
       {
         "key": "center",
-        "name": pluginApi?.tr("settings.panelPositionCenter") || "Center"
+        "name": pluginApi?.tr("settings.panelPositionCenter")
       },
       {
         "key": "right",
-        "name": pluginApi?.tr("settings.panelPositionRight") || "Right"
+        "name": pluginApi?.tr("settings.panelPositionRight")
       }
     ] : [
       {
         "key": "left",
-        "name": pluginApi?.tr("settings.panelPositionLeft") || "Left"
+        "name": pluginApi?.tr("settings.panelPositionLeft")
       },
       {
         "key": "top",
-        "name": pluginApi?.tr("settings.panelPositionTop") || "Top"
+        "name": pluginApi?.tr("settings.panelPositionTop")
       },
       {
         "key": "bottom",
-        "name": pluginApi?.tr("settings.panelPositionBottom") || "Bottom"
+        "name": pluginApi?.tr("settings.panelPositionBottom")
       },
       {
         "key": "right",
-        "name": pluginApi?.tr("settings.panelPositionRight") || "Right"
+        "name": pluginApi?.tr("settings.panelPositionRight")
       }
     ]
     currentKey: root.editPanelPosition
@@ -134,16 +134,16 @@ ColumnLayout {
   NComboBox {
     Layout.fillWidth: true
     visible: !root.editPanelDetached
-    label: pluginApi?.tr("settings.attachmentStyle") || "Attachment Style"
-    description: pluginApi?.tr("settings.attachmentStyleDesc") || "How the panel attaches to the side"
+    label: pluginApi?.tr("settings.attachmentStyle")
+    description: pluginApi?.tr("settings.attachmentStyleDesc")
     model: [
       {
         "key": "connected",
-        "name": pluginApi?.tr("settings.attachConnected") || "Connected to Bar"
+        "name": pluginApi?.tr("settings.attachConnected")
       },
       {
         "key": "floating",
-        "name": pluginApi?.tr("settings.attachFloating") || "Floating (Drawer)"
+        "name": pluginApi?.tr("settings.attachFloating")
       }
     ]
     currentKey: root.editAttachmentStyle
@@ -157,8 +157,8 @@ ColumnLayout {
     Layout.fillWidth: true
     spacing: Style.marginS
     NLabel {
-      label: (pluginApi?.tr("settings.panelHeightRatio") || "Panel Height Ratio") + ": " + (root.editPanelHeightRatio * 100).toFixed(0) + "%"
-      description: pluginApi?.tr("settings.panelHeightRatioDesc") || "How much of the screen height the panel should use (detached mode)"
+      label: pluginApi?.tr("settings.panelHeightRatio") + ": " + (root.editPanelHeightRatio * 100).toFixed(0) + "%"
+      description: pluginApi?.tr("settings.panelHeightRatioDesc")
     }
     NSlider {
       Layout.fillWidth: true
@@ -169,8 +169,8 @@ ColumnLayout {
       onValueChanged: root.editPanelHeightRatio = value
     }
     NLabel {
-      label: (pluginApi?.tr("settings.panelWidth") || "Panel Width") + ": " + root.editPanelWidth + "px"
-      description: pluginApi?.tr("settings.panelWidthDesc") || "Width of the panel in pixels (detached mode)"
+      label: pluginApi?.tr("settings.panelWidth") + ": " + root.editPanelWidth + "px"
+      description: pluginApi?.tr("settings.panelWidthDesc")
     }
     NSlider {
       Layout.fillWidth: true
@@ -181,8 +181,8 @@ ColumnLayout {
       onValueChanged: root.editPanelWidth = value
     }
     NLabel {
-      label: (pluginApi?.tr("settings.uiScale") || "UI Scale") + ": " + (root.editScale * 100).toFixed(0) + "%"
-      description: pluginApi?.tr("settings.uiScaleDesc") || "Scale factor for plugin UI elements (1 = 100%)"
+      label: pluginApi?.tr("settings.uiScale") + ": " + (root.editScale * 100).toFixed(0) + "%"
+      description: pluginApi?.tr("settings.uiScaleDesc")
     }
     NSlider {
       Layout.fillWidth: true
@@ -228,7 +228,7 @@ ColumnLayout {
   // AI Settings Section
   // ==================
   NText {
-    text: pluginApi?.tr("settings.aiSection") || "AI Chat Settings"
+    text: pluginApi?.tr("settings.aiSection")
     pointSize: Style.fontSizeM
     font.weight: Font.Bold
     color: Color.mOnSurface
@@ -237,8 +237,8 @@ ColumnLayout {
   // Provider selection
   NComboBox {
     Layout.fillWidth: true
-    label: pluginApi?.tr("settings.provider") || "AI Provider"
-    description: pluginApi?.tr("settings.providerDesc") || "Select your preferred AI provider"
+    label: pluginApi?.tr("settings.provider")
+    description: pluginApi?.tr("settings.providerDesc")
     model: [
       {
         "key": Constants.Providers.GOOGLE,
@@ -264,8 +264,8 @@ ColumnLayout {
 
     NToggle {
       Layout.fillWidth: true
-      label: pluginApi?.tr("settings.local") || "Local"
-      description: pluginApi?.tr("settings.localDesc") || "Use a local inference server (e.g. Ollama, LM Studio)"
+      label: pluginApi?.tr("settings.local")
+      description: pluginApi?.tr("settings.localDesc")
       checked: root.editOpenAiLocal
       onToggled: function (checked) {
         root.editOpenAiLocal = checked;
@@ -276,8 +276,8 @@ ColumnLayout {
     NTextInput {
       Layout.fillWidth: true
       visible: true
-      label: pluginApi?.tr("settings.baseUrl") || "Base URL"
-      description: pluginApi?.tr("settings.baseUrlDesc") || "API Endpoint URL"
+      label: pluginApi?.tr("settings.baseUrl")
+      description: pluginApi?.tr("settings.baseUrlDesc")
       text: root.editOpenAiBaseUrl
       placeholderText: "https://api.openai.com/v1/chat/completions"
       onTextChanged: root.editOpenAiBaseUrl = text
@@ -287,7 +287,7 @@ ColumnLayout {
     NText {
       Layout.fillWidth: true
       visible: true
-      text: (pluginApi?.tr("settings.baseUrlNote") || "Note: This plugin does not currently support the new OpenAI responses API. Go to ") + "https://platform.openai.com/docs/api-reference/chat/create" + (pluginApi?.tr("settings.moreInfo") || " for more Info.")
+      text: pluginApi?.tr("settings.baseUrlNote") + "https://platform.openai.com/docs/api-reference/chat/create" + pluginApi?.tr("settings.moreInfo")
       color: Color.mOnSurfaceVariant
       pointSize: Style.fontSizeXS
       wrapMode: Text.Wrap
@@ -298,10 +298,10 @@ ColumnLayout {
   // Model selection
   NTextInput {
     Layout.fillWidth: true
-    label: pluginApi?.tr("settings.model") || "Model"
-    description: pluginApi?.tr("settings.modelDesc") || "Specify the AI model to use (leave blank for default)"
+    label: pluginApi?.tr("settings.model")
+    description: pluginApi?.tr("settings.modelDesc")
     text: root.editModel
-    onEditingFinished: function () {
+    onTextChanged: {
       var modelText = (text || "").trim();
       var defaultModel = providers[root.editProvider]?.defaultModel || "";
       // Only save custom values, not empty or default
@@ -327,22 +327,22 @@ ColumnLayout {
         return false;
       return providers[root.editProvider]?.requiresKey ?? true;
     }
-    label: pluginApi?.tr("settings.apiKey") || "API Key"
+    label: pluginApi?.tr("settings.apiKey")
     description: {
       if (root.apiKeyManagedByEnv) {
-        return pluginApi?.tr("settings.apiKeyManagedByEnv") || "Managed via environment variable";
+        return pluginApi?.tr("settings.apiKeyManagedByEnv");
       }
       var provider = providers[root.editProvider];
       if (provider && provider.keyUrl) {
-        return (pluginApi?.tr("settings.apiKeyDesc") || "Get your API key from") + ": " + provider.keyUrl;
+        return (pluginApi?.tr("settings.apiKeyDesc")) + ": " + provider.keyUrl;
       }
       return "";
     }
-    placeholderText: root.apiKeyManagedByEnv ? (pluginApi?.tr("settings.apiKeyEnvPlaceholder") || "Set via environment variable") : (pluginApi?.tr("settings.apiKeyPlaceholder") || "Enter your API key...")
+    placeholderText: root.apiKeyManagedByEnv ? pluginApi?.tr("settings.apiKeyEnvPlaceholder") : pluginApi?.tr("settings.apiKeyPlaceholder")
     text: root.apiKeyManagedByEnv ? "" : root.editApiKey
     enabled: !root.apiKeyManagedByEnv
     inputMethodHints: Qt.ImhHiddenText
-    onEditingFinished: function () {
+    onTextChanged: {
       if (!root.apiKeyManagedByEnv) {
         root.editApiKeys = Object.assign({}, root.editApiKeys, {
           [root.editProvider]: text
@@ -357,8 +357,8 @@ ColumnLayout {
     spacing: Style.marginS
 
     NLabel {
-      label: (pluginApi?.tr("settings.temperature") || "Temperature") + ": " + root.editTemperature.toFixed(1)
-      description: pluginApi?.tr("settings.temperatureDesc") || "Controls randomness (0 = focused, 2 = creative)"
+      label: pluginApi?.tr("settings.temperature") + ": " + root.editTemperature.toFixed(1)
+      description: pluginApi?.tr("settings.temperatureDesc")
     }
 
     NSlider {
@@ -377,8 +377,8 @@ ColumnLayout {
     spacing: Style.marginS
 
     NLabel {
-      label: pluginApi?.tr("settings.systemPrompt") || "System Prompt"
-      description: pluginApi?.tr("settings.systemPromptDesc") || "Instructions for how the AI should behave"
+      label: pluginApi?.tr("settings.systemPrompt")
+      description: pluginApi?.tr("settings.systemPromptDesc")
     }
 
     Rectangle {
@@ -393,7 +393,7 @@ ColumnLayout {
         anchors.fill: parent
         anchors.margins: Style.marginS
         text: root.editSystemPrompt
-        placeholderText: pluginApi?.tr("settings.systemPromptPlaceholder") || "You are a helpful assistant..."
+        placeholderText: pluginApi?.tr("settings.systemPromptPlaceholder")
         placeholderTextColor: Color.mOnSurfaceVariant
         color: Color.mOnSurface
         font.pointSize: Style.fontSizeS
@@ -410,8 +410,8 @@ ColumnLayout {
     spacing: Style.marginS
 
     NLabel {
-      label: (pluginApi?.tr("settings.maxHistory") || "Max History Length") + ": " + root.editMaxHistoryLength
-      description: pluginApi?.tr("settings.maxHistoryDesc") || "Maximum number of messages to keep in history"
+      label: (pluginApi?.tr("settings.maxHistory")) + ": " + root.editMaxHistoryLength
+      description: pluginApi?.tr("settings.maxHistoryDesc")
     }
 
     NSlider {
@@ -434,7 +434,7 @@ ColumnLayout {
   // Translator Settings Section
   // ==================
   NText {
-    text: pluginApi?.tr("settings.translatorSection") || "Translator Settings"
+    text: pluginApi?.tr("settings.translatorSection")
     pointSize: Style.fontSizeM
     font.weight: Font.Bold
     color: Color.mOnSurface
@@ -443,8 +443,8 @@ ColumnLayout {
   // Translator backend
   NComboBox {
     Layout.fillWidth: true
-    label: pluginApi?.tr("settings.translatorBackend") || "Translation Service"
-    description: pluginApi?.tr("settings.translatorBackendDesc") || "Select translation provider"
+    label: pluginApi?.tr("settings.translatorBackend")
+    description: pluginApi?.tr("settings.translatorBackendDesc")
     model: [
       {
         "key": "google",
@@ -466,9 +466,9 @@ ColumnLayout {
   NTextInput {
     Layout.fillWidth: true
     visible: root.editTranslatorBackend === "deepl"
-    label: pluginApi?.tr("settings.deeplApiKey") || "DeepL API Key"
-    description: root.deeplApiKeyManagedByEnv ? (pluginApi?.tr("settings.apiKeyManagedByEnv") || "Managed via environment variable") : (pluginApi?.tr("settings.deeplApiKeyDesc") || "Get your API key from: https://www.deepl.com/pro-api")
-    placeholderText: root.deeplApiKeyManagedByEnv ? (pluginApi?.tr("settings.apiKeyEnvPlaceholder") || "Set via environment variable") : (pluginApi?.tr("settings.apiKeyPlaceholder") || "Enter your API key...")
+    label: pluginApi?.tr("settings.deeplApiKey")
+    description: root.deeplApiKeyManagedByEnv ? (pluginApi?.tr("settings.apiKeyManagedByEnv")) : (pluginApi?.tr("settings.deeplApiKeyDesc"))
+    placeholderText: root.deeplApiKeyManagedByEnv ? (pluginApi?.tr("settings.apiKeyEnvPlaceholder")) : (pluginApi?.tr("settings.apiKeyPlaceholder"))
     text: root.deeplApiKeyManagedByEnv ? "" : root.editDeeplApiKey
     enabled: !root.deeplApiKeyManagedByEnv
     inputMethodHints: Qt.ImhHiddenText
@@ -482,8 +482,8 @@ ColumnLayout {
   // Real-time translation toggle
   NToggle {
     Layout.fillWidth: true
-    label: pluginApi?.tr("settings.realTimeTranslation") || "Real-time Translation"
-    description: pluginApi?.tr("settings.realTimeTranslationDesc") || "Translate automatically as you type"
+    label: pluginApi?.tr("settings.realTimeTranslation")
+    description: pluginApi?.tr("settings.realTimeTranslationDesc")
     checked: root.editRealTimeTranslation
     onToggled: function (checked) {
       root.editRealTimeTranslation = checked;
@@ -494,7 +494,7 @@ ColumnLayout {
   // Save function called by the settings dialog
   function saveSettings() {
     // Sync model for current provider before saving
-    var modelInput = root.children.find(child => child && child.label === (pluginApi?.tr("settings.model") || "Model"));
+    var modelInput = root.children.find(child => child && child.label === (pluginApi?.tr("settings.model")));
     if (modelInput && modelInput.text !== undefined) {
       var modelText = (modelInput.text || "").trim();
       var defaultModel = providers[root.editProvider]?.defaultModel || "";
@@ -511,7 +511,7 @@ ColumnLayout {
       }
     }
     // Sync API key for current provider
-    var apiKeyInput = root.children.find(child => child && child.label === (pluginApi?.tr("settings.apiKey") || "API Key"));
+    var apiKeyInput = root.children.find(child => child && child.label === (pluginApi?.tr("settings.apiKey")));
     if (apiKeyInput && apiKeyInput.text !== undefined && !root.apiKeyManagedByEnv) {
       root.editApiKeys = Object.assign({}, root.editApiKeys, {
         [root.editProvider]: apiKeyInput.text

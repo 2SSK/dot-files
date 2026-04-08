@@ -1,4 +1,5 @@
 {
+  "todos": [],
   "pages": [
     {
       "id": 0,
@@ -6,9 +7,10 @@
     }
   ],
   "current_page_id": 0,
-  "todos": [],
   "count": 0,
   "completedCount": 0,
+  "showCompleted": true,
+  "showBackground": true,
   "isExpanded": false,
   "useCustomColors": false,
   "priorityColors": {

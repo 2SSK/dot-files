@@ -32,75 +32,75 @@ Item {
   readonly property var languages: [
     {
       "code": "auto",
-      "name": pluginApi?.tr("languages.auto") || "Auto Detect"
+      "name": pluginApi?.tr("languages.auto")
     },
     {
       "code": "en",
-      "name": pluginApi?.tr("languages.en") || "English"
+      "name": pluginApi?.tr("languages.en")
     },
     {
       "code": "es",
-      "name": pluginApi?.tr("languages.es") || "Spanish"
+      "name": pluginApi?.tr("languages.es")
     },
     {
       "code": "fr",
-      "name": pluginApi?.tr("languages.fr") || "French"
+      "name": pluginApi?.tr("languages.fr")
     },
     {
       "code": "de",
-      "name": pluginApi?.tr("languages.de") || "German"
+      "name": pluginApi?.tr("languages.de")
     },
     {
       "code": "it",
-      "name": pluginApi?.tr("languages.it") || "Italian"
+      "name": pluginApi?.tr("languages.it")
     },
     {
       "code": "pt",
-      "name": pluginApi?.tr("languages.pt") || "Portuguese"
+      "name": pluginApi?.tr("languages.pt")
     },
     {
       "code": "ru",
-      "name": pluginApi?.tr("languages.ru") || "Russian"
+      "name": pluginApi?.tr("languages.ru")
     },
     {
       "code": "ja",
-      "name": pluginApi?.tr("languages.ja") || "Japanese"
+      "name": pluginApi?.tr("languages.ja")
     },
     {
       "code": "ko",
-      "name": pluginApi?.tr("languages.ko") || "Korean"
+      "name": pluginApi?.tr("languages.ko")
     },
     {
       "code": "zh",
-      "name": pluginApi?.tr("languages.zh") || "Chinese"
+      "name": pluginApi?.tr("languages.zh")
     },
     {
       "code": "ar",
-      "name": pluginApi?.tr("languages.ar") || "Arabic"
+      "name": pluginApi?.tr("languages.ar")
     },
     {
       "code": "hi",
-      "name": pluginApi?.tr("languages.hi") || "Hindi"
+      "name": pluginApi?.tr("languages.hi")
     },
     {
       "code": "nl",
-      "name": pluginApi?.tr("languages.nl") || "Dutch"
+      "name": pluginApi?.tr("languages.nl")
     },
     {
       "code": "pl",
-      "name": pluginApi?.tr("languages.pl") || "Polish"
+      "name": pluginApi?.tr("languages.pl")
     },
     {
       "code": "tr",
-      "name": pluginApi?.tr("languages.tr") || "Turkish"
+      "name": pluginApi?.tr("languages.tr")
     },
     {
       "code": "uk",
-      "name": pluginApi?.tr("languages.uk") || "Ukrainian"
+      "name": pluginApi?.tr("languages.uk")
     },
     {
       "code": "vi",
-      "name": pluginApi?.tr("languages.vi") || "Vietnamese"
+      "name": pluginApi?.tr("languages.vi")
     }
   ]
 
@@ -133,7 +133,7 @@ Item {
       }
 
       NText {
-        text: pluginApi?.tr("translator.title") || "Translator"
+        text: pluginApi?.tr("translator.title")
         color: Color.mOnSurface
         pointSize: Style.fontSizeM
         applyUiScale: false
@@ -173,7 +173,7 @@ Item {
       // Source language
       LanguageSelector {
         Layout.fillWidth: true
-        label: pluginApi?.tr("translator.from") || "From"
+        label: pluginApi?.tr("translator.from")
         languages: root.languages
         currentCode: sourceLanguage
         showAuto: true
@@ -193,7 +193,7 @@ Item {
       NIconButton {
         icon: "arrows-exchange"
         colorFg: Color.mOnSurfaceVariant
-        tooltipText: pluginApi?.tr("translator.swap") || "Swap languages"
+        tooltipText: pluginApi?.tr("translator.swap")
         enabled: sourceLanguage !== "auto"
         opacity: enabled ? 1.0 : 0.5
         onClicked: {
@@ -214,7 +214,7 @@ Item {
       // Target language
       LanguageSelector {
         Layout.fillWidth: true
-        label: pluginApi?.tr("translator.to") || "To"
+        label: pluginApi?.tr("translator.to")
         languages: root.languages.filter(function (l) {
           return l.code !== "auto";
         })
@@ -252,7 +252,7 @@ Item {
 
           TextArea {
             id: inputField
-            placeholderText: pluginApi?.tr("translator.inputPlaceholder") || "Enter text to translate..."
+            placeholderText: pluginApi?.tr("translator.inputPlaceholder")
             placeholderTextColor: Color.mOnSurfaceVariant
             color: Color.mOnSurface
             font.pointSize: Style.fontSizeM
@@ -294,7 +294,7 @@ Item {
           NIconButton {
             icon: "clipboard"
             colorFg: Color.mOnSurfaceVariant
-            tooltipText: pluginApi?.tr("translator.paste") || "Paste"
+            tooltipText: pluginApi?.tr("translator.paste")
             onClicked: {
               inputField.text = Quickshell.clipboardText;
             }
@@ -303,7 +303,7 @@ Item {
           NIconButton {
             icon: "x"
             colorFg: Color.mOnSurfaceVariant
-            tooltipText: pluginApi?.tr("translator.clear") || "Clear"
+            tooltipText: pluginApi?.tr("translator.clear")
             enabled: inputField.text.length > 0
             opacity: enabled ? 1.0 : 0.5
             onClicked: {
@@ -312,7 +312,7 @@ Item {
           }
 
           NButton {
-            text: pluginApi?.tr("translator.translate") || "Translate"
+            text: pluginApi?.tr("translator.translate")
             icon: "language"
             enabled: inputField.text.trim() !== "" && !isTranslating
             visible: !realTimeTranslation
@@ -372,7 +372,7 @@ Item {
           TextArea {
             id: outputField
             text: translatedText
-            placeholderText: pluginApi?.tr("translator.outputPlaceholder") || "Translation will appear here..."
+            placeholderText: pluginApi?.tr("translator.outputPlaceholder")
             placeholderTextColor: Color.mOnSurfaceVariant
             color: Color.mOnSurface
             font.pointSize: Style.fontSizeM
@@ -416,19 +416,19 @@ Item {
           NIconButton {
             icon: "copy"
             colorFg: Color.mOnSurfaceVariant
-            tooltipText: pluginApi?.tr("translator.copy") || "Copy"
+            tooltipText: pluginApi?.tr("translator.copy")
             enabled: translatedText.trim() !== ""
             opacity: enabled ? 1.0 : 0.5
             onClicked: {
               Quickshell.clipboardText = translatedText;
-              ToastService.showNotice(pluginApi?.tr("toast.copied") || "Copied to clipboard");
+              ToastService.showNotice(pluginApi?.tr("toast.copied"));
             }
           }
 
           NIconButton {
             icon: "external-link"
             colorFg: Color.mOnSurfaceVariant
-            tooltipText: pluginApi?.tr("translator.search") || "Search"
+            tooltipText: pluginApi?.tr("translator.search")
             enabled: translatedText.trim() !== ""
             opacity: enabled ? 1.0 : 0.5
             onClicked: {

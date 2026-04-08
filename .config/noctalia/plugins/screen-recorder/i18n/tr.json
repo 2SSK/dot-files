@@ -13,7 +13,15 @@
     "started": "Kayıt başladı.",
     "stop-recording": "Ekran kaydedici (kaydı durdur)",
     "stopping": "Kaydı durdurma…",
-    "monitor-not-found": "Could not detect the monitor under cursor."
+    "monitor-not-found": "İmleç altındaki monitör algılanamadı.",
+    "replay-saved": "Tekrar kaydedildi.",
+    "replay-started": "Tekrar arabelleği başlatıldı.",
+    "replay-stopped": "Tekrar arabelleği durduruldu.",
+    "replay-failed": "Tekrar arabelleği başlatılamadı.",
+    "replay-active": "Ekran Kaydedici (tekrar etkin)",
+    "save-replay": "Tekrar arabelleğini kaydet",
+    "start-replay": "Tekrar arabelleğini başlat",
+    "stop-replay": "Tekrar arabelleğini durdur"
   },
   "name": "Ekran Kaydedici",
   "settings": {
@@ -37,9 +45,23 @@
       "copy-to-clipboard-description": "Kayıt bittikten sonra dosyayı panoya kopyala.",
       "output-folder": "Çıktı klasörü",
       "output-folder-description": "Ekran kayıtlarının kaydedileceği klasör",
+      "restore-portal-session": "Portal oturumunu geri yükle",
+      "restore-portal-session-description": "Sonraki kayıtlar için önceki portal oturumunu otomatik olarak geri yükle (seçim penceresini devre dışı bırakır)",
       "show-cursor": "İmleci göster",
       "show-cursor-description": "Videoda fare imlecini kaydet",
       "title": "Genel"
+    },
+    "replay": {
+      "enable": "Tekrar arabelleğini etkinleştir",
+      "enable-desc": "İsteğe bağlı olarak kaydedilebilen son ekran etkinliğinin döngüsel bir arabelleğini tutun",
+      "duration": "Tekrar süresi",
+      "duration-desc": "Saniye cinsinden tekrar arabelleğinin uzunluğu",
+      "custom-duration": "Özel tekrar süresi",
+      "custom-duration-desc": "Saniye cinsinden özel bir tekrar arabelleği süresi girin",
+      "storage": "Tekrar depolama",
+      "storage-desc": "Tekrar arabelleğinin nerede saklanacağı",
+      "storage-ram": "RAM (önerilir)",
+      "storage-disk": "Disk"
     },
     "title": "Ekran Kaydedici Ayarları",
     "video": {

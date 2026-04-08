@@ -13,7 +13,15 @@
     "started": "Rozpoczęto nagrywanie.",
     "stop-recording": "Rejestrator ekranu (zatrzymaj nagrywanie)",
     "stopping": "Zatrzymywanie nagrywania…",
-    "monitor-not-found": "Could not detect the monitor under cursor."
+    "monitor-not-found": "Nie udało się wykryć monitora pod kursorem.",
+    "replay-saved": "Powtórka zapisana.",
+    "replay-started": "Bufor powtórki uruchomiony.",
+    "replay-stopped": "Bufor powtórki zatrzymany.",
+    "replay-failed": "Nie udało się uruchomić bufora powtórki.",
+    "replay-active": "Rejestrator ekranu (powtórka aktywna)",
+    "save-replay": "Zapisz bufor powtórki",
+    "start-replay": "Uruchom bufor powtórki",
+    "stop-replay": "Zatrzymaj bufor powtórki"
   },
   "name": "Rejestrator ekranu",
   "settings": {
@@ -37,9 +45,23 @@
       "copy-to-clipboard-description": "Kopiuj plik do schowka po zakończeniu nagrywania.",
       "output-folder": "Folder wyjściowy",
       "output-folder-description": "Folder, w którym będą zapisywane nagrania ekranu",
+      "restore-portal-session": "Przywróć sesję portalu",
+      "restore-portal-session-description": "Automatycznie przywracaj poprzednią sesję portalu dla kolejnych nagrań (wyłącza monit o wybór)",
       "show-cursor": "Pokaż kursor",
       "show-cursor-description": "Nagrywaj kursor myszy na filmie",
       "title": "Ogólne"
+    },
+    "replay": {
+      "enable": "Włącz bufor powtórki",
+      "enable-desc": "Utrzymuj bufor cykliczny ostatniej aktywności ekranu, który można zapisać na żądanie",
+      "duration": "Czas trwania powtórki",
+      "duration-desc": "Długość bufora powtórki w sekundach",
+      "custom-duration": "Niestandardowy czas trwania powtórki",
+      "custom-duration-desc": "Wprowadź niestandardowy czas trwania bufora powtórki w sekundach",
+      "storage": "Przechowywanie powtórki",
+      "storage-desc": "Gdzie przechowywać bufor powtórki",
+      "storage-ram": "RAM (zalecane)",
+      "storage-disk": "Dysk"
     },
     "title": "Ustawienia rejestratora ekranu",
     "video": {

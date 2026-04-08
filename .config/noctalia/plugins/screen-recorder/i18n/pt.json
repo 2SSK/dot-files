@@ -13,7 +13,15 @@
     "started": "Gravação iniciada.",
     "stop-recording": "Gravador de tela (parar gravação)",
     "stopping": "Parando a gravação...",
-    "monitor-not-found": "Could not detect the monitor under cursor."
+    "monitor-not-found": "Não foi possível detetar o monitor sob o cursor.",
+    "replay-saved": "Replay salvo.",
+    "replay-started": "Buffer de replay iniciado.",
+    "replay-stopped": "Buffer de replay parado.",
+    "replay-failed": "Falha ao iniciar o buffer de replay.",
+    "replay-active": "Gravador de ecrã (replay ativo)",
+    "save-replay": "Salvar buffer de replay",
+    "start-replay": "Iniciar buffer de replay",
+    "stop-replay": "Parar buffer de replay"
   },
   "name": "Gravador de Tela",
   "settings": {
@@ -37,9 +45,23 @@
       "copy-to-clipboard-description": "Copiar o arquivo para a área de transferência após a gravação terminar.",
       "output-folder": "Pasta de saída",
       "output-folder-description": "Pasta onde as gravações de tela serão salvas",
+      "restore-portal-session": "Restaurar sessão do portal",
+      "restore-portal-session-description": "Restaurar automaticamente a sessão anterior do portal para gravações subsequentes (desativa o aviso de seleção)",
       "show-cursor": "Mostrar cursor",
       "show-cursor-description": "Gravar o cursor do mouse no vídeo",
       "title": "Geral"
+    },
+    "replay": {
+      "enable": "Ativar buffer de replay",
+      "enable-desc": "Manter um buffer rotativo da atividade recente do ecrã que pode ser salvo sob demanda",
+      "duration": "Duração do replay",
+      "duration-desc": "Comprimento do buffer de replay em segundos",
+      "custom-duration": "Duração de replay personalizada",
+      "custom-duration-desc": "Insira uma duração de buffer de replay personalizada em segundos",
+      "storage": "Armazenamento do replay",
+      "storage-desc": "Onde armazenar o buffer de replay",
+      "storage-ram": "RAM (recomendado)",
+      "storage-disk": "Disco"
     },
     "title": "Configurações do Gravador de Tela",
     "video": {

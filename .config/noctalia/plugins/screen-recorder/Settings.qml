@@ -59,12 +59,38 @@ ColumnLayout {
 
     property string editResolution: pluginApi?.pluginSettings?.resolution || pluginApi?.manifest?.metadata?.defaultSettings?.resolution || "original"
 
+    property bool editRestorePortalSession: pluginApi?.pluginSettings?.restorePortalSession ?? pluginApi?.manifest?.metadata?.defaultSettings?.restorePortalSession ?? false
+
+    // Replay settings
+    property bool editReplayEnabled: pluginApi?.pluginSettings?.replayEnabled ?? pluginApi?.manifest?.metadata?.defaultSettings?.replayEnabled ?? false
+
+    readonly property var _validReplayDurations: ["15", "30", "60", "120", "300", "custom"]
+    readonly property string _rawReplayDuration:
+        pluginApi?.pluginSettings?.replayDuration ||
+        pluginApi?.manifest?.metadata?.defaultSettings?.replayDuration ||
+        "30"
+
+    property string editReplayDuration:
+        _validReplayDurations.includes(_rawReplayDuration) ? _rawReplayDuration : "custom"
+
+    property string editCustomReplayDuration:
+        _validReplayDurations.includes(_rawReplayDuration)
+            ? (pluginApi?.pluginSettings?.customReplayDuration ||
+               pluginApi?.manifest?.metadata?.defaultSettings?.customReplayDuration ||
+               "30")
+            : _rawReplayDuration
+
+    property string editReplayStorage: pluginApi?.pluginSettings?.replayStorage || pluginApi?.manifest?.metadata?.defaultSettings?.replayStorage || "ram"
+
+
+
     function saveSettings() {
-        if (!pluginApi) {
-            Logger.e("ScreenRecorder", "Cannot save: pluginApi is null");
+        if (!pluginApi || !pluginApi.pluginSettings) {
+            Logger.e("ScreenRecorder", "Cannot save: pluginApi or pluginSettings is null");
             return;
         }
 
+        // Core settings
         pluginApi.pluginSettings.hideInactive = root.editHideInactive
         pluginApi.pluginSettings.iconColor = root.editIconColor
         pluginApi.pluginSettings.directory = root.editDirectory
@@ -80,6 +106,14 @@ ColumnLayout {
         pluginApi.pluginSettings.audioSource = root.editAudioSource
         pluginApi.pluginSettings.videoSource = root.editVideoSource
         pluginApi.pluginSettings.resolution = root.editResolution
+        pluginApi.pluginSettings.restorePortalSession = root.editRestorePortalSession
+
+        // Replay settings
+        pluginApi.pluginSettings.replayEnabled = root.editReplayEnabled
+        pluginApi.pluginSettings.replayDuration = root.editReplayDuration
+        pluginApi.pluginSettings.customReplayDuration = root.editCustomReplayDuration
+        pluginApi.pluginSettings.replayStorage = root.editReplayStorage
+
 
         pluginApi.saveSettings();
 
@@ -125,7 +159,7 @@ ColumnLayout {
         label: pluginApi.tr("settings.general.show-cursor")
         description: pluginApi.tr("settings.general.show-cursor-description")
         checked: root.editShowCursor
-        onToggled: root.editShowCursor = checked
+        onToggled: c => root.editShowCursor = c
         defaultValue: pluginApi?.manifest?.metadata?.defaultSettings?.showCursor ?? true
     }
 
@@ -134,7 +168,7 @@ ColumnLayout {
         label: pluginApi.tr("settings.general.copy-to-clipboard")
         description: pluginApi.tr("settings.general.copy-to-clipboard-description")
         checked: root.editCopyToClipboard
-        onToggled: root.editCopyToClipboard = checked
+        onToggled: c => root.editCopyToClipboard = c
         defaultValue: pluginApi?.manifest?.metadata?.defaultSettings?.copyToClipboard ?? false
     }
 
@@ -143,8 +177,83 @@ ColumnLayout {
         label: pluginApi.tr("settings.general.hide-when-inactive")
         description: pluginApi.tr("settings.general.hide-when-inactive-description")
         checked: root.editHideInactive
-        onToggled: root.editHideInactive = checked
+        onToggled: c => root.editHideInactive = c
         defaultValue: pluginApi?.manifest?.metadata?.defaultSettings?.hideInactive ?? false
+    }
+
+    // Restore Portal Session
+    NToggle {
+        label: pluginApi.tr("settings.general.restore-portal-session")
+        description: pluginApi.tr("settings.general.restore-portal-session-description")
+        checked: root.editRestorePortalSession
+        onToggled: c => root.editRestorePortalSession = c
+        defaultValue: pluginApi?.manifest?.metadata?.defaultSettings?.restorePortalSession ?? false
+    }
+
+    NDivider {
+        Layout.fillWidth: true
+    }
+
+    // Replay Settings
+    ColumnLayout {
+        spacing: Style.marginL
+        Layout.fillWidth: true
+
+        NToggle {
+            label: pluginApi.tr("settings.replay.enable")
+            description: pluginApi.tr("settings.replay.enable-desc")
+            checked: root.editReplayEnabled
+            onToggled: c => root.editReplayEnabled = c
+            defaultValue: pluginApi?.manifest?.metadata?.defaultSettings?.replayEnabled ?? false
+        }
+
+        NComboBox {
+            visible: root.editReplayEnabled
+            label: pluginApi.tr("settings.replay.duration")
+            description: pluginApi.tr("settings.replay.duration-desc")
+            model: [
+                { "key": "15", "name": "15s" },
+                { "key": "30", "name": "30s" },
+                { "key": "60", "name": "60s" },
+                { "key": "120", "name": "2 min" },
+                { "key": "300", "name": "5 min" },
+                { "key": "custom", "name": pluginApi.tr("settings.video.frame-rate-custom") }
+            ]
+            currentKey: root.editReplayDuration
+            onSelected: key => root.editReplayDuration = key
+            defaultValue: pluginApi?.manifest?.metadata?.defaultSettings?.replayDuration || "30"
+        }
+
+        NTextInput {
+            visible: root.editReplayEnabled && root.editReplayDuration === "custom"
+            label: pluginApi.tr("settings.replay.custom-duration")
+            description: pluginApi.tr("settings.replay.custom-duration-desc")
+            placeholderText: "30"
+            text: root.editCustomReplayDuration
+            onTextChanged: {
+                var numeric = text.replace(/[^0-9]/g, '')
+                if (numeric !== text) {
+                    text = numeric
+                }
+                if (numeric) {
+                    root.editCustomReplayDuration = numeric
+                }
+            }
+            Layout.fillWidth: true
+        }
+
+        NComboBox {
+            visible: root.editReplayEnabled
+            label: pluginApi.tr("settings.replay.storage")
+            description: pluginApi.tr("settings.replay.storage-desc")
+            model: [
+                { "key": "ram", "name": pluginApi.tr("settings.replay.storage-ram") },
+                { "key": "disk", "name": pluginApi.tr("settings.replay.storage-disk") }
+            ]
+            currentKey: root.editReplayStorage
+            onSelected: key => root.editReplayStorage = key
+            defaultValue: pluginApi?.manifest?.metadata?.defaultSettings?.replayStorage || "ram"
+        }
     }
 
     NDivider {
