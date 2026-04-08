@@ -23,14 +23,16 @@ Rectangle {
     // Content type detection
     readonly property bool isImage: clipboardItem && clipboardItem.isImage
     readonly property bool isColor: {
-        if (isImage || !preview) return false;
+        if (isImage || !preview)
+            return false;
         const trimmed = preview.trim();
         return /^#[A-Fa-f0-9]{6}$/.test(trimmed) || /^#[A-Fa-f0-9]{3}$/.test(trimmed) || /^[A-Fa-f0-9]{6}$/.test(trimmed) || /^rgba?\(.*\)$/i.test(trimmed);
     }
     readonly property bool isLink: !isImage && !isColor && preview && /^https?:\/\//.test(preview.trim())
     readonly property bool isCode: !isImage && !isColor && !isLink && preview && (preview.includes("function") || preview.includes("import ") || preview.includes("const ") || preview.includes("let ") || preview.includes("var ") || preview.includes("class ") || preview.includes("def ") || preview.includes("return ") || /^[\{\[\(<]/.test(preview.trim()))
     readonly property bool isEmoji: {
-        if (isImage || isColor || isLink || isCode || !preview) return false;
+        if (isImage || isColor || isLink || isCode || !preview)
+            return false;
         const trimmed = preview.trim();
         return trimmed.length <= 4 && trimmed.charCodeAt(0) > 255;
     }
@@ -39,15 +41,19 @@ Rectangle {
 
     // Helper to safely access Color singleton
     function getColor(propName, fallback) {
-        if (typeof Color !== "undefined" && Color[propName]) return Color[propName];
+        if (typeof Color !== "undefined" && Color[propName])
+            return Color[propName];
         return fallback;
     }
 
     readonly property string colorValue: {
-        if (!isColor || !preview) return "";
+        if (!isColor || !preview)
+            return "";
         const trimmed = preview.trim();
-        if (/^#[A-Fa-f0-9]{3,6}$/.test(trimmed)) return trimmed;
-        if (/^[A-Fa-f0-9]{6}$/.test(trimmed)) return "#" + trimmed;
+        if (/^#[A-Fa-f0-9]{3,6}$/.test(trimmed))
+            return trimmed;
+        if (/^[A-Fa-f0-9]{6}$/.test(trimmed))
+            return "#" + trimmed;
         return trimmed;
     }
 
@@ -56,13 +62,41 @@ Rectangle {
 
     // Default colors per card type
     readonly property var defaultCardColors: {
-        "Text": { bg: "mOutline", separator: "mSurface", fg: "mOnSurface" },
-        "Image": { bg: "mTertiary", separator: "mSurface", fg: "mOnTertiary" },
-        "Link": { bg: "mPrimary", separator: "mSurface", fg: "mOnPrimary" },
-        "Code": { bg: "mSecondary", separator: "mSurface", fg: "mOnSecondary" },
-        "Color": { bg: "mSecondary", separator: "mSurface", fg: "mOnSecondary" },
-        "Emoji": { bg: "mHover", separator: "mSurface", fg: "mOnHover" },
-        "File": { bg: "mError", separator: "mSurface", fg: "mOnError" }
+        "Text": {
+            bg: "mOutline",
+            separator: "mSurface",
+            fg: "mOnSurface"
+        },
+        "Image": {
+            bg: "mTertiary",
+            separator: "mSurface",
+            fg: "mOnTertiary"
+        },
+        "Link": {
+            bg: "mPrimary",
+            separator: "mSurface",
+            fg: "mOnPrimary"
+        },
+        "Code": {
+            bg: "mSecondary",
+            separator: "mSurface",
+            fg: "mOnSecondary"
+        },
+        "Color": {
+            bg: "mSecondary",
+            separator: "mSurface",
+            fg: "mOnSecondary"
+        },
+        "Emoji": {
+            bg: "mHover",
+            separator: "mSurface",
+            fg: "mOnHover"
+        },
+        "File": {
+            bg: "mError",
+            separator: "mSurface",
+            fg: "mOnError"
+        }
     }
 
     // Get color setting for current card type
@@ -93,6 +127,7 @@ Rectangle {
     signal deleteClicked
     signal addToTodoClicked
     signal pinClicked
+    signal rightClicked
     property bool selected: false
     property bool enableTodoIntegration: false
     property bool isPinned: false
@@ -104,7 +139,12 @@ Rectangle {
     function getTodoPages() {
         const todoApi = PluginService.getPluginAPI("todo");
         if (!todoApi || !todoApi.pluginSettings || !todoApi.pluginSettings.pages) {
-            return [{ id: 0, name: "General" }];
+            return [
+                {
+                    id: 0,
+                    name: "General"
+                }
+            ];
         }
         return todoApi.pluginSettings.pages;
     }
@@ -203,7 +243,6 @@ Rectangle {
             bottomLeftRadius: 0
             bottomRightRadius: 0
 
-
             RowLayout {
                 id: headerContent
                 anchors.left: parent.left
@@ -211,9 +250,19 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.margins: 8
                 spacing: 8
-                NIcon { icon: root.typeIcon; pointSize: 13; color: root.accentFgColor }
-                NText { text: root.typeLabel; color: root.accentFgColor; font.bold: true }
-                Item { Layout.fillWidth: true }
+                NIcon {
+                    icon: root.typeIcon
+                    pointSize: 13
+                    color: root.accentFgColor
+                }
+                NText {
+                    text: root.typeLabel
+                    color: root.accentFgColor
+                    font.bold: true
+                }
+                Item {
+                    Layout.fillWidth: true
+                }
                 NIconButton {
                     id: todoButton
                     visible: root.enableTodoIntegration && !root.isImage
@@ -221,7 +270,7 @@ Rectangle {
                     tooltipText: pluginApi?.tr("card.add-todo") || "Add to ToDo"
                     colorFg: root.accentFgColor
                     colorBg: "transparent"
-                    colorBgHover: Qt.rgba(0,0,0,0.1)
+                    colorBgHover: Qt.rgba(0, 0, 0, 0.1)
                     colorBorder: "transparent"
                     colorBorderHover: "transparent"
                     onClicked: {
@@ -249,7 +298,7 @@ Rectangle {
                     tooltipText: pluginApi?.tr("card.pin") || "Pin"
                     colorFg: root.accentFgColor
                     colorBg: "transparent"
-                    colorBgHover: Qt.rgba(0,0,0,0.1)
+                    colorBgHover: Qt.rgba(0, 0, 0, 0.1)
                     colorBorder: "transparent"
                     colorBorderHover: "transparent"
                     onClicked: root.pinClicked()
@@ -259,13 +308,24 @@ Rectangle {
                     tooltipText: pluginApi?.tr("card.delete") || "Delete"
                     colorFg: root.accentFgColor
                     colorBg: "transparent"
-                    colorBgHover: Qt.rgba(0,0,0,0.1)
+                    colorBgHover: Qt.rgba(0, 0, 0, 0.1)
                     colorBorder: "transparent"
                     colorBorderHover: "transparent"
                     onClicked: root.deleteClicked()
                 }
             }
-            MouseArea { anchors.fill: parent; z: -1; onClicked: root.clicked() }
+            MouseArea {
+                anchors.fill: parent
+                z: -1
+                acceptedButtons: Qt.LeftButton | Qt.RightButton
+                onClicked: mouse => {
+                    if (mouse.button === Qt.RightButton) {
+                        root.rightClicked()
+                    } else {
+                        root.clicked()
+                    }
+                }
+            }
         }
 
         Rectangle {
@@ -274,9 +334,18 @@ Rectangle {
             height: 1
             gradient: Gradient {
                 orientation: Gradient.Horizontal
-                GradientStop { position: 0.0; color: "transparent" }
-                GradientStop { position: 0.5; color: root.separatorColor }
-                GradientStop { position: 1.0; color: "transparent" }
+                GradientStop {
+                    position: 0.0
+                    color: "transparent"
+                }
+                GradientStop {
+                    position: 0.5
+                    color: root.separatorColor
+                }
+                GradientStop {
+                    position: 1.0
+                    color: "transparent"
+                }
             }
         }
 
@@ -285,7 +354,19 @@ Rectangle {
             Layout.fillHeight: true
             Layout.margins: 8
             clip: true
-            MouseArea { id: mouseArea; anchors.fill: parent; hoverEnabled: true; onClicked: root.clicked() }
+            MouseArea {
+                id: mouseArea
+                anchors.fill: parent
+                hoverEnabled: true
+                acceptedButtons: Qt.LeftButton | Qt.RightButton
+                onClicked: mouse => {
+                    if (mouse.button === Qt.RightButton) {
+                        root.rightClicked()
+                    } else {
+                        root.clicked()
+                    }
+                }
+            }
 
             Rectangle {
                 visible: root.isColor

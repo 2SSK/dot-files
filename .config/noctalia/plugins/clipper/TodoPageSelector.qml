@@ -36,8 +36,7 @@ QtObject {
         if (selectionMenu) {
             const menuItems = buildMenuModel();
             selectionMenu.show(menuItems);
-        } else {
-        }
+        } else {}
     }
 
     function handleItemSelected(action) {

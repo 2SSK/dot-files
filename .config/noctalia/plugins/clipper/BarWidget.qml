@@ -11,8 +11,10 @@ NIconButton {
     property ShellScreen screen
     property string widgetId: ""
     property string section: ""
+    property int sectionWidgetIndex: -1
+    property int sectionWidgetsCount: 0
 
-    icon: "clipboard"
+    icon: "clipboard-data"
     tooltipText: pluginApi?.tr("bar.tooltip") || "Clipboard History"
     tooltipDirection: BarService.getTooltipDirection(screen?.name)
     baseSize: Style.getCapsuleHeightForScreen(screen?.name)
@@ -63,7 +65,7 @@ NIconButton {
 
     onClicked: {
         if (pluginApi?.openPanel) {
-            pluginApi.openPanel(screen);
+            pluginApi.openPanel(screen, this);
         }
     }
 

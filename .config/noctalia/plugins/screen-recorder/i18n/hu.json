@@ -13,7 +13,15 @@
     "started": "A felvétel elindult.",
     "stop-recording": "Képernyőfelvevő (felvétel leállítása)",
     "stopping": "A felvétel leállítása…",
-    "monitor-not-found": "Could not detect the monitor under cursor."
+    "monitor-not-found": "Nem sikerült felismerni a kurzor alatti monitort.",
+    "replay-saved": "Replay elmentve.",
+    "replay-started": "Replay puffer elindítva.",
+    "replay-stopped": "Replay puffer leállítva.",
+    "replay-failed": "Nem sikerült elindítani a replay puffert.",
+    "replay-active": "Képernyőrögzítő (replay aktív)",
+    "save-replay": "Replay puffer mentése",
+    "start-replay": "Replay puffer indítása",
+    "stop-replay": "Replay puffer leállítása"
   },
   "name": "Képernyőfelvevő",
   "settings": {
@@ -36,10 +44,24 @@
       "copy-to-clipboard": "Másolás a vágólapra",
       "copy-to-clipboard-description": "A felvétel befejezése után másolja a fájlt a vágólapra.",
       "output-folder": "Kimeneti mappa",
-      "output-folder-description": "Mappa, ahová a képernyőfelvételek mentésre kerülnek",
+      "output-folder-description": "A mappa, ahová a képernyőfelvételek mentésre kerülnek",
+      "restore-portal-session": "Portál munkamenet visszaállítása",
+      "restore-portal-session-description": "Az előző portál munkamenet automatikus visszaállítása a következő felvételekhez (kikapcsolja a választóablakot)",
       "show-cursor": "Kurzor megjelenítése",
       "show-cursor-description": "Egérkurzor rögzítése a videóban",
       "title": "Általános"
+    },
+    "replay": {
+      "enable": "Replay puffer engedélyezése",
+      "enable-desc": "Tartson egy gördülő puffert a legutóbbi képernyőaktivitásról, amely igény szerint elmenthető",
+      "duration": "Replay időtartama",
+      "duration-desc": "A replay puffer hossza másodpercben",
+      "custom-duration": "Egyéni replay időtartam",
+      "custom-duration-desc": "Adjon meg egy egyéni replay puffer időtartamot másodpercben",
+      "storage": "Replay tároló",
+      "storage-desc": "Hol tárolja a replay puffert",
+      "storage-ram": "RAM (ajánlott)",
+      "storage-disk": "Lemez"
     },
     "title": "Képernyőrögzítő beállítások",
     "video": {

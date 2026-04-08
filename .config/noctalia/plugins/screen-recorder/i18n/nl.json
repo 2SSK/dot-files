@@ -13,7 +13,15 @@
     "started": "Opname gestart.",
     "stop-recording": "Schermrecorder (opname stoppen)",
     "stopping": "Opname stoppen…",
-    "monitor-not-found": "Could not detect the monitor under cursor."
+    "monitor-not-found": "Kon de monitor onder de cursor niet detecteren.",
+    "replay-saved": "Replay opgeslagen.",
+    "replay-started": "Replay-buffer gestart.",
+    "replay-stopped": "Replay-buffer gestopt.",
+    "replay-failed": "Fout bij starten van replay-buffer.",
+    "replay-active": "Schermrecorder (replay actief)",
+    "save-replay": "Replay-buffer opslaan",
+    "start-replay": "Replay-buffer starten",
+    "stop-replay": "Replay-buffer stoppen"
   },
   "name": "Schermrecorder",
   "settings": {
@@ -37,9 +45,23 @@
       "copy-to-clipboard-description": "Kopieer het bestand naar het klembord nadat de opname is voltooid.",
       "output-folder": "Uitvoermap",
       "output-folder-description": "Map waar schermopnames worden opgeslagen",
+      "restore-portal-session": "Portalsessie herstellen",
+      "restore-portal-session-description": "Herstel automatisch de vorige portalsessie voor volgende opnamen (schakelt het selectievenster uit)",
       "show-cursor": "Cursor tonen",
       "show-cursor-description": "Muiscursor in de video opnemen",
       "title": "Algemeen"
+    },
+    "replay": {
+      "enable": "Replay-buffer inschakelen",
+      "enable-desc": "Een rollende buffer van recente schermactiviteit bijhouden die op verzoek kan worden opgeslagen",
+      "duration": "Replay-duur",
+      "duration-desc": "Lengte van de replay-buffer in seconden",
+      "custom-duration": "Aangepaste replay-duur",
+      "custom-duration-desc": "Voer een aangepaste replay-bufferduur in seconden in",
+      "storage": "Replay-opslag",
+      "storage-desc": "Waar de replay-buffer moet worden opgeslagen",
+      "storage-ram": "RAM (aanbevolen)",
+      "storage-disk": "Schijf"
     },
     "title": "Schermrecorder Instellingen",
     "video": {

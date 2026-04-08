@@ -14,7 +14,15 @@
     "stop-recording": "Bildschirmaufnahme (Aufnahme stoppen)",
     "stopping": "Aufnahme stoppen…",
     "open-file": "Datei öffnen",
-    "monitor-not-found": "Could not detect the monitor under cursor."
+    "monitor-not-found": "Could not detect the monitor under cursor.",
+    "replay-saved": "Replay gespeichert.",
+    "replay-started": "Replay-Puffer gestartet.",
+    "replay-stopped": "Replay-Puffer gestoppt.",
+    "replay-failed": "Fehler beim Starten des Replay-Puffers.",
+    "replay-active": "Bildschirmaufnahme (Replay aktiv)",
+    "save-replay": "Replay-Puffer speichern",
+    "start-replay": "Replay-Puffer starten",
+    "stop-replay": "Replay-Puffer stoppen"
   },
   "name": "Bildschirmrekorder",
   "settings": {
@@ -40,9 +48,23 @@
       "hide-when-inactive-description": "Widget in Statusleiste ausblenden, wenn keine Aufnahme stattfindet",
       "output-folder": "Ausgabeordner",
       "output-folder-description": "Ordner, in dem Bildschirmaufnahmen gespeichert werden",
+      "restore-portal-session": "Portal-Sitzung wiederherstellen",
+      "restore-portal-session-description": "Stellt die vorherige Portal-Sitzung für nachfolgende Aufnahmen automatisch wieder her (deaktiviert die Auswahlaufforderung)",
       "show-cursor": "Cursor anzeigen",
       "show-cursor-description": "Mauszeiger im Video aufnehmen",
       "title": "Allgemein"
+    },
+    "replay": {
+      "enable": "Replay-Puffer aktivieren",
+      "enable-desc": "Ein rollender Puffer der letzten Bildschirmaktivität beibehalten, der bei Bedarf gespeichert werden kann",
+      "duration": "Replay-Dauer",
+      "duration-desc": "Länge des Replay-Puffers in Sekunden",
+      "custom-duration": "Benutzerdefinierte Replay-Dauer",
+      "custom-duration-desc": "Geben Sie eine benutzerdefinierte Replay-Puffer-Dauer in Sekunden ein",
+      "storage": "Replay-Speicher",
+      "storage-desc": "Wo der Replay-Puffer gespeichert werden soll",
+      "storage-ram": "RAM (empfohlen)",
+      "storage-disk": "Festplatte"
     },
     "title": "Bildschirmrekorder-Einstellungen",
     "video": {

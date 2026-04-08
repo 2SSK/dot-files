@@ -168,7 +168,7 @@ Item {
 
               TabButton {
                 icon: "sparkles"
-                label: pluginApi?.tr("tabs.ai") || "AI Chat"
+                label: pluginApi?.tr("tabs.ai")
                 isActive: root.activeTab === "ai"
                 onClicked: {
                   root.activeTab = "ai";
@@ -181,7 +181,7 @@ Item {
 
               TabButton {
                 icon: "language"
-                label: pluginApi?.tr("tabs.translator") || "Translator"
+                label: pluginApi?.tr("tabs.translator")
                 isActive: root.activeTab === "translator"
                 onClicked: {
                   root.activeTab = "translator";

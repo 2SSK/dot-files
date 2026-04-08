@@ -13,7 +13,15 @@
     "started": "Aufnahme gestartet.",
     "stop-recording": "Skjáupptökutæki (hætta upptöku)",
     "stopping": "Nagpapatigil ng pagrekord...",
-    "monitor-not-found": "Could not detect the monitor under cursor."
+    "monitor-not-found": "Impossibile rilevare il monitor sotto il cursore.",
+    "replay-saved": "Replay salvato.",
+    "replay-started": "Buffer di replay avviato.",
+    "replay-stopped": "Buffer di replay interrotto.",
+    "replay-failed": "Impossibile avviare il buffer di replay.",
+    "replay-active": "Registratore schermo (replay attivo)",
+    "save-replay": "Salva buffer di replay",
+    "start-replay": "Avvia buffer di replay",
+    "stop-replay": "Interrompi buffer di replay"
   },
   "name": "Registratore Schermo",
   "settings": {
@@ -37,9 +45,23 @@
       "copy-to-clipboard-description": "Kopyahin ang file sa clipboard pagkatapos matapos ang pag-record.",
       "output-folder": "Cartella di output",
       "output-folder-description": "Cartella dove verranno salvate le registrazioni dello schermo",
+      "restore-portal-session": "Restore portal session",
+      "restore-portal-session-description": "Automatically restore the previous portal session for subsequent recordings (disables the selection prompt)",
       "show-cursor": "Mostra cursore",
       "show-cursor-description": "Registra il cursore del mouse nel video",
       "title": "Generale"
+    },
+    "replay": {
+      "enable": "Abilita buffer di replay",
+      "enable-desc": "Mantiene un buffer ciclico dell'attività recente dello schermo che può essere salvato a richiesta",
+      "duration": "Durata replay",
+      "duration-desc": "Lunghezza del buffer di replay in secondi",
+      "custom-duration": "Durata replay personalizzata",
+      "custom-duration-desc": "Inserisci una durata personalizzata del buffer di replay in secondi",
+      "storage": "Archiviazione replay",
+      "storage-desc": "Dove archiviare il buffer di replay",
+      "storage-ram": "RAM (consigliato)",
+      "storage-disk": "Disco"
     },
     "title": "Impostazioni Registratore Schermo",
     "video": {

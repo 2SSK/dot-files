@@ -24,11 +24,11 @@ Item {
     // Background MouseArea - ALWAYS closes panel on click
     MouseArea {
         anchors.fill: parent
-        z: -1  // Behind everything
+        z: -1
 
         onClicked: {
-            // Close panel when clicking on background
-            if (root.pluginApi && root.screen) {
+            const closeButtonOn = root.pluginApi?.pluginSettings?.showCloseButton ?? false;
+            if (!closeButtonOn && root.pluginApi && root.screen) {
                 root.pluginApi.closePanel(root.screen);
             }
         }
@@ -39,8 +39,7 @@ Item {
         anchors.centerIn: parent
         width: 400
         height: 200
-        visible: !(root.pluginApi && root.pluginApi.mainInstance && root.pluginApi.mainInstance.noteCards) ||
-                 root.pluginApi.mainInstance.noteCards.length === 0
+        visible: !(root.pluginApi && root.pluginApi.mainInstance && root.pluginApi.mainInstance.noteCards) || root.pluginApi.mainInstance.noteCards.length === 0
 
         ColumnLayout {
             anchors.centerIn: parent
@@ -98,7 +97,10 @@ Item {
         if (root.pluginApi && root.pluginApi.mainInstance) {
             const notes = root.pluginApi.mainInstance.noteCards || [];
             for (let i = 0; i < notes.length; i++) {
-                noteCardsModel.append({"noteData": notes[i], "noteIdx": i});
+                noteCardsModel.append({
+                    "noteData": notes[i],
+                    "noteIdx": i
+                });
             }
             lastRevision = root.pluginApi.mainInstance.noteCardsRevision || 0;
         }
@@ -215,5 +217,4 @@ Item {
         revisionTimer.stop();
         noteCardsModel.clear();
     }
-
 }

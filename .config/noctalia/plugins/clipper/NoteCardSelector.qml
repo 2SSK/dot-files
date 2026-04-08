@@ -11,7 +11,7 @@ QtObject {
     property var selectionMenu: null
 
     signal noteSelected(string noteId, string noteTitle)
-    signal createNewNote()
+    signal createNewNote
 
     function buildMenuModel() {
         const model = [];

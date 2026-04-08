@@ -14,7 +14,15 @@
     "stop-recording": "Screen Recorder (stop recording)",
     "stopping": "Stopping recording…",
     "open-file": "Open file",
-    "monitor-not-found": "Could not detect the monitor under cursor."
+    "monitor-not-found": "Could not detect the monitor under cursor.",
+    "replay-saved": "Replay saved.",
+    "replay-started": "Replay buffer started.",
+    "replay-stopped": "Replay buffer stopped.",
+    "replay-failed": "Failed to start replay buffer.",
+    "replay-active": "Screen Recorder (replay active)",
+    "save-replay": "Save replay buffer",
+    "start-replay": "Start replay buffer",
+    "stop-replay": "Stop replay buffer"
   },
   "name": "Screen Recorder",
   "settings": {
@@ -40,9 +48,23 @@
       "hide-when-inactive-description": "Hide the bar indicator when not recording",
       "output-folder": "Output folder",
       "output-folder-description": "Folder where screen recordings will be saved",
+      "restore-portal-session": "Restore portal session",
+      "restore-portal-session-description": "Automatically restore the previous portal session for subsequent recordings (disables the selection prompt)",
       "show-cursor": "Show cursor",
       "show-cursor-description": "Record mouse cursor in the video",
       "title": "General"
+    },
+    "replay": {
+      "enable": "Enable replay buffer",
+      "enable-desc": "Keep a rolling buffer of recent screen activity that can be saved on demand",
+      "duration": "Replay duration",
+      "duration-desc": "Length of the replay buffer in seconds",
+      "custom-duration": "Custom replay duration",
+      "custom-duration-desc": "Enter a custom replay buffer duration in seconds",
+      "storage": "Replay storage",
+      "storage-desc": "Where to store the replay buffer",
+      "storage-ram": "RAM (recommended)",
+      "storage-disk": "Disk"
     },
     "title": "Screen Recorder Settings",
     "video": {

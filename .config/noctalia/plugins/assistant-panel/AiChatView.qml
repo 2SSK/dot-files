@@ -72,7 +72,7 @@ Item {
       // Text-based clear history control matching translator backend text
       NText {
         id: clearHistoryText
-        text: pluginApi?.tr("chat.clearHistory") || "Clear history"
+        text: pluginApi?.tr("chat.clearHistory")
         property bool enabledClear: messages.length > 0 && !isGenerating
         property bool hovered: false
         color: clearHistoryText.enabledClear ? (clearHistoryText.hovered ? Color.mOnSurface : Color.mOnSurfaceVariant) : Color.mOnSurfaceVariant
@@ -125,7 +125,7 @@ Item {
 
           NText {
             Layout.alignment: Qt.AlignHCenter
-            text: pluginApi?.tr("chat.emptyTitle") || "Start a conversation"
+            text: pluginApi?.tr("chat.emptyTitle")
             color: Color.mOnSurfaceVariant
             pointSize: Style.fontSizeM
             applyUiScale: false
@@ -134,7 +134,7 @@ Item {
 
           NText {
             Layout.alignment: Qt.AlignHCenter
-            text: pluginApi?.tr("chat.emptyHint") || "Type a message below to begin"
+            text: pluginApi?.tr("chat.emptyHint")
             color: Color.mOnSurfaceVariant
             pointSize: Style.fontSizeS
             applyUiScale: false
@@ -229,7 +229,7 @@ Item {
               }
               onCopyRequested: function (text) {
                 Quickshell.clipboardText = text;
-                ToastService.showNotice(pluginApi?.tr("toast.copied") || "Copied to clipboard");
+                ToastService.showNotice(pluginApi?.tr("toast.copied"));
               }
             }
           }
@@ -344,7 +344,7 @@ Item {
           TextArea {
             id: inputField
             text: initialInputText
-            placeholderText: pluginApi?.tr("chat.placeholder") || "Type a message..."
+            placeholderText: pluginApi?.tr("chat.placeholder")
             placeholderTextColor: Color.mOnSurfaceVariant
             color: Color.mOnSurface
             font.pointSize: Style.fontSizeM
@@ -400,7 +400,7 @@ Item {
           icon: isGenerating ? "player-stop" : "send"
           colorFg: isGenerating ? Color.mError : (inputField.text.trim() !== "" ? Color.mPrimary : Color.mOnSurfaceVariant)
           enabled: isGenerating || inputField.text.trim() !== ""
-          tooltipText: isGenerating ? (pluginApi?.tr("chat.stop") || "Stop generation") : (pluginApi?.tr("chat.send") || "Send")
+          tooltipText: isGenerating ? pluginApi?.tr("chat.stop") : pluginApi?.tr("chat.send")
           onClicked: {
             if (isGenerating) {
               if (mainInstance)

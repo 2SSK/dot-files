@@ -1,7 +1,6 @@
 {
   "widget": {
     "title": "AI",
-    "generating": "...",
     "tooltipTitle": "Assistant Panel",
     "noApiKey": "Configure API key in settings",
     "provider": "Provider",

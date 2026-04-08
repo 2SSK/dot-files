@@ -16,6 +16,8 @@ Item {
   property ShellScreen screen
   property string widgetId: ""
   property string section: ""
+  property int sectionWidgetIndex: -1
+  property int sectionWidgetsCount: 0
 
   // Access main instance for state
   readonly property var mainInstance: pluginApi?.mainInstance
@@ -137,17 +139,17 @@ Item {
 
     model: [
       {
-        "label": pluginApi?.tr("menu.openPanel") || "Open Panel",
+        "label": pluginApi?.tr("menu.openPanel"),
         "action": "open",
         "icon": "external-link"
       },
       {
-        "label": pluginApi?.tr("menu.clearHistory") || "Clear History",
+        "label": pluginApi?.tr("menu.clearHistory"),
         "action": "clear",
         "icon": "trash"
       },
       {
-        "label": pluginApi?.tr("menu.settings") || "Settings",
+        "label": pluginApi?.tr("menu.settings"),
         "action": "settings",
         "icon": "settings"
       }
@@ -162,7 +164,7 @@ Item {
       } else if (action === "clear") {
         if (mainInstance) {
           mainInstance.clearMessages();
-          ToastService.showNotice(pluginApi?.tr("toast.historyCleared") || "Chat history cleared");
+          ToastService.showNotice(pluginApi?.tr("toast.historyCleared"));
         }
       } else if (action === "settings") {
         BarService.openPluginSettings(screen, pluginApi.manifest);
@@ -171,27 +173,27 @@ Item {
   }
 
   function buildTooltip() {
-    var tooltip = pluginApi?.tr("widget.tooltipTitle") || "AI Assistant";
+    var tooltip = pluginApi?.tr("widget.tooltipTitle");
 
     if (!hasApiKey) {
-      tooltip += "\n" + (pluginApi?.tr("widget.noApiKey") || "Configure API key in settings");
+      tooltip += "\n" + (pluginApi?.tr("widget.noApiKey"));
       return tooltip;
     }
 
     var provider = pluginApi?.pluginSettings?.ai?.provider || Constants.Providers.GOOGLE;
     var providerName = mainInstance?.providers?.[provider]?.name || provider;
 
-    tooltip += "\n" + (pluginApi?.tr("widget.provider") || "Provider") + ": " + providerName;
+    tooltip += "\n" + (pluginApi?.tr("widget.provider")) + ": " + providerName;
 
     if (messageCount > 0) {
-      tooltip += "\n" + (pluginApi?.tr("widget.messages") || "Messages") + ": " + messageCount;
+      tooltip += "\n" + (pluginApi?.tr("widget.messages")) + ": " + messageCount;
     }
 
     if (isGenerating) {
-      tooltip += "\n" + (pluginApi?.tr("widget.generating") || "Generating response...");
+      tooltip += "\n...";
     }
 
-    tooltip += "\n\n" + (pluginApi?.tr("widget.rightClickHint") || "Right-click for options");
+    tooltip += "\n\n" + (pluginApi?.tr("widget.rightClickHint"));
 
     return tooltip;
   }

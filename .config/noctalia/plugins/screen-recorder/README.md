@@ -5,6 +5,7 @@ Hardware-accelerated screen recording for Noctalia using [gpu-screen-recorder](h
 ## Features
 
 - Hardware-accelerated screen recording
+- **Replay buffer** — continuously capture and save the last N seconds on demand
 - Customizable video codecs (H264, HEVC, AV1, VP8, VP9, HDR variants)
 - Audio recording with multiple sources (system output, microphone, both, or none)
 - Adjustable frame rates (30-240 FPS)
@@ -53,6 +54,12 @@ Configure the plugin through the settings panel:
 - **Show Cursor**: Include mouse cursor in recording
 - **Copy to Clipboard**: Automatically copy file after recording
 
+#### Replay
+
+- **Enable Replay Buffer**: Toggle the replay buffer feature on/off
+- **Replay Duration**: Buffer length (15s, 30s, 60s, 2 min, 5 min, or custom)
+- **Replay Storage**: Store buffer in RAM (faster, recommended) or Disk
+
 ### IPC Commands
 
 Control the screen recorder via IPC for keybindings or scripts:
@@ -66,6 +73,18 @@ qs -c noctalia-shell ipc call plugin:screen-recorder start
 
 # Explicitly stop recording
 qs -c noctalia-shell ipc call plugin:screen-recorder stop
+
+# Start the replay buffer
+qs -c noctalia-shell ipc call plugin:screen-recorder startReplay
+
+# Save the replay buffer (last N seconds)
+qs -c noctalia-shell ipc call plugin:screen-recorder saveReplay
+
+# Stop the replay buffer
+qs -c noctalia-shell ipc call plugin:screen-recorder stopReplay
+
+# Toggle replay buffer on/off
+qs -c noctalia-shell ipc call plugin:screen-recorder toggleReplay
 ```
 
 ## Video Codecs
