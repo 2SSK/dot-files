@@ -46,3 +46,14 @@ keymap.set("n", "<leader>cd", ":Copilot disable<CR>")
 
 -- DSA commands
 keymap.set("n", "<leader>cr", ":!./run.sh %<CR>")
+
+-- Vim pack commands
+keymap.set("n", "<leader>pu", function()
+	vim.pack.update()
+end, { desc = "vimpack update" })
+keymap.set("n", "<leader>pr", function()
+	vim.pack.update(nil, { target = "lockfile", force = true })
+end, { desc = "vimpack to lockfile versions" })
+keymap.set("n", "<leader>pi", function()
+	vim.pack.update(nil, { offline = true })
+end, { desc = "vimpack offline update" })

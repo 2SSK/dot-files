@@ -11,11 +11,14 @@ require("mini.pairs").setup()
 
 require("mini.surround").setup()
 
--- Setup mini.diff with proper function reference
-local diff = require("mini.diff")
-diff.setup()
+require("mini.diff").setup()
 
--- Keymap using vim.keymap.set instead
 vim.keymap.set("n", "<leader>do", function()
-	require("mini.diff").toggle_overlay()
+	local diff = require("mini.diff")
+	local buf = vim.api.nvim_get_current_buf()
+	if not diff.get_buf_data(buf) then
+		diff.enable(buf)
+	end
+	diff.toggle_overlay(buf)
 end, { desc = "Toggle diff overlay" })
+
