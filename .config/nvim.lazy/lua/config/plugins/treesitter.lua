@@ -1,75 +1,86 @@
 return {
 	"nvim-treesitter/nvim-treesitter",
-	commit = "e356917",
 	build = ":TSUpdate",
+	dependencies = {
+		"nvim-treesitter/nvim-treesitter-textobjects",
+	},
 	config = function()
-		require("nvim-treesitter.configs").setup({
+		require("nvim-treesitter").setup({
 			ensure_installed = {
-				-- Common programming languages
+				"bash",
 				"c",
-				"cpp",
+				"lua",
+				"vim",
+				"vimdoc",
+				"query",
+				"regex",
 				"python",
-				"java",
 				"javascript",
 				"typescript",
+				"tsx",
 				"go",
 				"rust",
-				"lua",
-				"bash",
+				"cpp",
+				"java",
+				"ruby",
+				"php",
+				"elixir",
+				"haskell",
+				"scala",
 				"html",
 				"css",
 				"json",
 				"yaml",
-
-				-- Web development
-				"vue",
-				"svelte",
+				"toml",
 				"markdown",
 				"markdown_inline",
+				"vue",
+				"svelte",
 				"graphql",
-				"tsx",
-
-				-- Data formats
-				"toml",
+				"dockerfile",
+				"cmake",
+				"make",
 				"ini",
-				"csv",
 				"xml",
 				"sql",
-
-				-- System configuration
-				"dockerfile",
-				"make",
-				"cmake",
-
-				-- Scripting
+				"csv",
 				"perl",
-				"ruby",
-				"php",
-				"elixir",
 				"fish",
-
-				-- Others
-				"vim",
-				"regex",
-				"query",
-				"haskell",
-				"scala",
+				"luadoc",
+				"diff",
+				"zig",
 			},
-			auto_install = false,
+			auto_install = true,
 			highlight = {
 				enable = true,
-				disable = function(lang, buf)
-					local max_filesize = 100 * 1024
-					local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-					if ok and stats and stats.size > max_filesize then
-						return true
-					end
-					-- Fix: Disable Lua treesitter highlighting
-					if lang == "lua" then
-						return true
-					end
-				end,
-				additional_vim_regex_highlighting = false,
+				additional_vim_regex_highlighting = { "ruby" },
+			},
+			indent = { enable = true, disable = { "ruby" } },
+			incremental_selection = {
+				enable = true,
+				keymaps = {
+					init_selection = "<M-space>",
+					node_incremental = "<M-space>",
+					scope_incremental = false,
+					node_decremental = "<Backspace>",
+				},
+			},
+			textobjects = {
+				select = {
+					enable = true,
+					lookahead = true,
+					keymaps = {
+						["af"] = "@function.outer",
+						["if"] = "@function.inner",
+						["ac"] = "@class.outer",
+						["ic"] = "@class.inner",
+					},
+				},
+				swap = {
+					enable = true,
+					swap_next = { ["<leader>xs"] = "@parameter.inner" },
+					swap_previous = { ["<leader>xS"] = "@parameter.inner" },
+				},
 			},
 		})
 	end,

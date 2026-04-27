@@ -39,10 +39,16 @@ keymap.set("n", "<C-Down>", ":resize +3<CR>")
 keymap.set("n", "<C-Left>", ":vertical resize -3<CR>")
 keymap.set("n", "<C-Right>", ":vertical resize +3<CR>")
 
--- Copilot suggestions commands
-vim.api.nvim_set_keymap("i", "<C-a>", "copilot#Accept('<CR>')", { expr = true, silent = true, script = true })
-vim.api.nvim_set_keymap("i", "<C-r>", "<Plug>(copilot-dismiss)", { silent = true })
-keymap.set("n", "<leader>cd", ":Copilot disable<CR>")
+-- Copilot.lua suggestions commands (copilot.vim keymaps updated)
+-- Accept suggestion with Ctrl+a
+vim.api.nvim_set_keymap("i", "<C-a>", "<cmd>CopilotSuggestionAccept<CR>", { silent = true })
+-- Accept suggestion with Tab (alternative)
+vim.api.nvim_set_keymap("i", "<Tab>", "copilot#Accept()", { expr = true, silent = true })
+-- Dismiss suggestion with Ctrl+r
+vim.api.nvim_set_keymap("i", "<C-r>", "<cmd>CopilotSuggestionDismiss<CR>", { silent = true })
+-- Toggle copilot
+keymap.set("n", "<leader>cd", ":Copilot enable<CR>")
+keymap.set("n", "<leader>ce", ":Copilot disable<CR>")
 
 -- DSA commands
 keymap.set("n", "<leader>cr", ":!./run.sh %<CR>")

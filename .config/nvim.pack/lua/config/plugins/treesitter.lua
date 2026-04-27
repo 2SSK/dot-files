@@ -37,7 +37,12 @@ local function enable_treesitter(bufnr)
 		elseif filetype == "javascriptreact" then
 			lang = "jsx"
 		end
-		vim.treesitter.start(bufnr, lang)
+		
+		-- Check if parser is installed before trying to start
+		local parser_ok, parser = pcall(vim.treesitter.get_parser, bufnr, lang)
+		if parser_ok and parser then
+			vim.treesitter.start(bufnr, lang)
+		end
 	end
 end
 

@@ -1,12 +1,29 @@
 return {
 	"nvim-telescope/telescope.nvim",
-	tag = "0.1.8",
+	branch = "master",
 	dependencies = {
 		"nvim-lua/plenary.nvim",
 		{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
 	},
 
 	config = function()
+		-- Fix for treesitter API compatibility with older telescope
+		-- The ft_to_lang function was moved in newer nvim-treesitter versions
+		pcall(function()
+			local lang = require("vim.treesitter.language")
+			if lang and not lang.ft2lang then
+				lang.ft2lang = function(filetype)
+					local map = {
+						["vimdoc"] = "vim",
+						["vue"] = "html",
+						["typescriptreact"] = "tsx",
+						["javascriptreact"] = "tsx",
+					}
+					return map[filetype] or filetype
+				end
+			end
+		end)
+
 		local keymap = vim.keymap
 		local actions = require("telescope.actions")
 		local telescope = require("telescope")
