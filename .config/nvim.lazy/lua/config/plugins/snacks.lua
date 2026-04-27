@@ -1,6 +1,9 @@
 return {
 	"folke/snacks.nvim",
 	opts = {
+		indent = {
+			enabled = true,
+		},
 		picker = {
 			reverse = false,
 			sources = {
@@ -15,6 +18,20 @@ return {
 					git_status = true,
 				},
 			},
+			layout = {
+				preset = "ivy",
+				ivy = {
+					style = "vim", -- Uses vim's default UI styling
+				},
+			},
+		},
+		-- Style settings for borders and UI
+		styles = {
+			notification = "vim",
+		},
+		-- Visual settings
+		visual = {
+			cursorline = false, -- Disable cursorline highlights in picker
 		},
 	},
 

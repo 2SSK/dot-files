@@ -30,4 +30,9 @@ require("lazy").setup({
     enabled = false,
     notify = false, -- get a notification when changes are found
   },
+  ui = {
+    -- Use Tokyo Night colors for the UI
+    border = "rounded",
+    backdrop = 100,
+  },
 })

@@ -9,6 +9,18 @@ return {
 	config = function()
 		-- Import required plugins
 		local cmp_nvim_lsp = require("cmp_nvim_lsp")
+
+		-- Setup neodev first for better lua language server
+		require("neodev").setup({
+			library = {
+				enabled = true,
+				-- Only load essential runtime files, not all plugins
+				runtime = true,
+				types = true,
+				plugins = false, -- Don't load all plugin runtime files - saves memory
+			},
+		})
+
 		local on_attach = require("neodev").on_attach
 
 		-- Enhanced capabilities for autocompletion
@@ -72,14 +84,64 @@ return {
 		-- LSP server configurations
 		local server_configurations = {
 			lua_ls = {
+				-- Use mason-installed lua_ls (faster and managed by mason)
+				cmd = { vim.fn.stdpath("data") .. "/mason/bin/lua-language-server" },
+				root_markers = { ".git", "init.lua", "lua/" },
 				settings = {
 					Lua = {
-						diagnostics = { globals = { "vim" } },
-						completion = { callSnippet = "Replace" },
+						runtime = {
+							version = "LuaJIT",
+						},
+						diagnostics = {
+							globals = { "vim" },
+						},
+						workspace = {
+							checkThirdParty = false,
+						},
+						hints = {
+							enable = false,
+						},
+						completion = {
+							callSnippet = "Replace",
+						},
+						telemetry = {
+							enable = false,
+						},
+						-- Performance optimizations for memory
+						misc = {
+							-- Limit the number of cached files
+							param = 25,
+						},
 					},
 				},
 			},
+			clangd = {
+				on_attach = on_attach,
+				capabilities = capabilities,
+				init_options = { clangdFileStatus = true },
+				filetypes = { "c", "cpp", "objc", "objcpp" },
+			},
+			pyright = {
+				on_attach = on_attach,
+				capabilities = capabilities,
+				filetypes = { "python" },
+			},
+			ts_ls = {
+				on_attach = on_attach,
+				capabilities = capabilities,
+				filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+			},
+			tailwindcss = {
+				on_attach = on_attach,
+				capabilities = capabilities,
+			},
+			svelte = {
+				on_attach = on_attach,
+				capabilities = capabilities,
+			},
 			emmet_ls = {
+				on_attach = on_attach,
+				capabilities = capabilities,
 				filetypes = {
 					"html",
 					"css",
@@ -90,38 +152,9 @@ return {
 					"svelte",
 				},
 			},
-			clangd = {
-				init_options = { clangdFileStatus = true },
-				filetypes = { "c", "cpp", "objc", "objcpp" },
-			},
-			pyright = {
-				on_attach = on_attach,
-				capabilities = capabilities,
-				filetypes = { "python" },
-			},
-			-- pylint = {
-			-- 	on_attach = on_attach,
-			-- 	capabilities = capabilities,
-			-- 	filetypes = { "python" },
-			-- },
-			ts_ls = {
-				filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
-			},
-			tailwindcss = {
-				on_attach = on_attach,
-				capabilities = capabilities,
-			},
-			svelte = {
-				on_attach = function(client, bufnr)
-					vim.api.nvim_create_autocmd("BufWritePost", {
-						pattern = { "*.js", "*.ts" },
-						callback = function(ctx)
-							client.notify("$/onDidChangeTsOrJsFile", { uri = ctx.match })
-						end,
-					})
-				end,
-			},
 			graphql = {
+				on_attach = on_attach,
+				capabilities = capabilities,
 				filetypes = { "graphql", "gql", "svelte", "typescriptreact", "javascriptreact" },
 			},
 			gopls = {

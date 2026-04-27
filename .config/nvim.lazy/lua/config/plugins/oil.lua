@@ -11,6 +11,13 @@ return {
 			view_options = {
 				show_hidden = true,
 			},
+			-- Add borders to oil windows
+			float = {
+				border = "rounded",
+			},
+			preview = {
+				border = "rounded",
+			},
 		})
 
 		-- Open parent directory in current window
