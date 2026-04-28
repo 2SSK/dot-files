@@ -42,8 +42,6 @@ keymap.set("n", "<C-Right>", ":vertical resize +3<CR>")
 -- Copilot.lua suggestions commands (copilot.vim keymaps updated)
 -- Accept suggestion with Ctrl+a
 vim.api.nvim_set_keymap("i", "<C-a>", "<cmd>CopilotSuggestionAccept<CR>", { silent = true })
--- Accept suggestion with Tab (alternative)
-vim.api.nvim_set_keymap("i", "<Tab>", "copilot#Accept()", { expr = true, silent = true })
 -- Dismiss suggestion with Ctrl+r
 vim.api.nvim_set_keymap("i", "<C-r>", "<cmd>CopilotSuggestionDismiss<CR>", { silent = true })
 -- Toggle copilot
