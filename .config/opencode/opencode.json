@@ -46,7 +46,7 @@
     "supabase": {
       "type": "remote",
       "url": "https://mcp.supabase.com/mcp?project_ref=llkyvmrsadrwiawbfcyt",
-      "enabled": true
+      "enabled": false
     },
     "prometheus": {
       "type": "local",
@@ -70,6 +70,14 @@
         "GRAFANA_SERVICE_ACCOUNT_TOKEN": "{env:GRAFANA_TOKEN}"
       },
       "enabled": true
+    },
+    "superset": {
+      "type": "remote",
+      "url": "http://20.244.81.6/mcp",
+      "enabled": true,
+      "headers": {
+        "X-API-Key": "ecavo_admin-api-key"
+      }
     }
   }
 }

@@ -3,4 +3,6 @@ bindsym $alt+b exec firefox
 bindsym $alt+f exec $files
 bindsym $mod+v exec voxtype
 
+bindsym $mod+Shift+t exec qs -c noctalia-shell ipc call plugin:todo togglePanel
+
 bindsym $mod+Shift+c exec qs -c noctalia-shell ipc call plugin:clipper toggle
