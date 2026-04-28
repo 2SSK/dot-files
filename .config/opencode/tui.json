@@ -1,8 +1,9 @@
 {
   "$schema": "https://opencode.ai/tui.json",
-  "theme": "tokyonight",
+  "theme": "system",
   "keybinds": {
     "messages_page_down": "ctrl+d",
     "messages_page_up": "ctrl+u"
   }
 }
+
