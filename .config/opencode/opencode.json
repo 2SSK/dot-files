@@ -4,8 +4,7 @@
   "command": {
     "git": {
       "agent": "build",
-      "description": "Creates a git commit message",
-      "template": "Create a concise conventional commit message in plain text. Check the staging area for more information. if needed, use dashes as bullets to list multiple changes. Don't capitalize the first character."
+      "template": "Create a concise conventional commit message. Check the staging area for changes. Use imperative mood with feat/fix/docs/refactor/chore prefix. First line ≤72 characters."
     }
   },
   "mcp": {
@@ -37,7 +36,6 @@
       "enabled": false,
       "type": "local"
     },
-
     "playwright": {
       "type": "local",
       "command": ["npx", "@playwright/mcp@latest"],
@@ -73,11 +71,17 @@
     },
     "superset": {
       "type": "remote",
-      "url": "http://20.244.81.6/mcp",
+      "url": "https://analytics.amoga.io/mcp",
       "enabled": true,
       "headers": {
-        "X-API-Key": "ecavo_admin-api-key"
+        "X-API-Key": "admin-api-key"
       }
+    },
+    "docker": {
+      "type": "local",
+      "command": ["npx", "-y", "docker-mcp-server"],
+      "enabled": false
     }
-  }
+  },
+  "autoupdate": true
 }
