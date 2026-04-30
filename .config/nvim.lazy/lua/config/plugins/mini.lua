@@ -17,15 +17,5 @@ return {
 
 		-- Mini Surround
 		require("mini.surround").setup()
-
-		-- Mini git diff
-		require("mini.diff").setup()
-
-		vim.api.nvim_set_keymap(
-			"n",
-			"<leader>do",
-			":lua MiniDiff.toggle_overlay()<CR>",
-			{ noremap = true, silent = true }
-		)
 	end,
 }

@@ -1,6 +1,6 @@
 # Basics
 bindsym $mod+Return exec $term
-bindsym $alt+Return exec alacritty
+bindsym $mod+t exec alacritty
 bindsym $mod+q kill
 bindsym $mod+d exec $menu
 bindsym $mod+Shift+r reload
