@@ -11,7 +11,14 @@ return {
 			vim.keymap.set("n", "<leader>gb", ":Git blame<CR>", { desc = "Git blame" })
 			vim.keymap.set("n", "<leader>gd", ":Gdiffsplit<CR>", { desc = "Git diff split" })
 			vim.keymap.set("n", "<leader>gD", ":Gvdiffsplit!<CR>", { desc = "Git vertical diff split (3-way)" })
-			vim.keymap.set("n", "<leader>gm", ":G mergetool<CR>", { desc = "Git mergetool" })
+			vim.keymap.set("n", "<leader>dt", function()
+				-- Toggle between file and diff view
+				if vim.wo.diff then
+					vim.cmd("diffoff")
+				else
+					vim.cmd("Git diff --no-ext-diff")
+				end
+			end, { desc = "Toggle diff (fugitive)" })
 
 			-- Git conflict resolution keybindings
 			vim.keymap.set("n", "]c", function()
