@@ -47,6 +47,9 @@ vim.api.nvim_set_keymap("i", "<C-r>", "<cmd>CopilotSuggestionDismiss<CR>", { sil
 -- Toggle copilot
 keymap.set("n", "<leader>cd", ":Copilot enable<CR>")
 keymap.set("n", "<leader>ce", ":Copilot disable<CR>")
+-- Copilot chat commands
+vim.keymap.set("n", "<leader>aa", "<cmd>CopilotChatToggle<cr>", { desc = "Toggle Copilot Chat" })
+vim.keymap.set("n", "<leader>chl", "<cmd>CopilotChatReset<cr>")
 
 -- DSA commands
 keymap.set("n", "<leader>cr", ":!./run.sh %<CR>")

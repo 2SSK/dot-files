@@ -139,6 +139,13 @@ hotkey-overlay {
 // The path is formatted with strftime(3) to give you the screenshot date and time.
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
+blur {
+    passes 3
+    offset 3
+    noise 0.02
+    saturation 1.5
+}
+
 // Animation settings.
 // The wiki explains how to configure individual animations:
 // https://yalter.github.io/niri/Configuration:-Animations
@@ -157,6 +164,13 @@ animations {
 window-rule {
     match app-id=r#"^org\.wezfurlong\.wezterm$"#
     default-column-width {}
+}
+
+window-rule {
+    match app-id=r#"^Alacritty$"#
+    background-effect {
+        blur true
+    }
 }
 
 // Open the Firefox picture-in-picture player as floating by default.
@@ -208,11 +222,13 @@ binds {
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+Return hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
+    Mod+T hotkey-overlay-title="Open a Terminal: alacritty" { spawn "alacritty"; }
     Mod+D hotkey-overlay-title="Run an Application: rofi" { spawn "rofi" "-show" "drun"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: hyprlock" { spawn "hyprlock"; }
     Mod+P hotkey-overlay-title="Power Menu: qs sessionMenu" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"; }
     Mod+Shift+B hotkey-overlay-title="Toggle Bar: qs bar" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "bar" "toggle"; }
     Mod+Shift+c hotkey-overlay-title="Toggle Clipboard" { spawn "qs " "-c" "noctalia-shell" "ipc" "call" "plugin:clipper" "toggle"; }
+    Mod+Shift+T hotkey-overlay-title="Toggle Todo" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "plugin:todo" "togglePanel"; }
     Mod+Shift+P hotkey-overlay-title="Wallpaper: qs wallpaper" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "wallpaper" "toggle"; }
     Mod+Semicolon hotkey-overlay-title="Emoji Picker: qs launcher" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "emoji"; }
 
@@ -475,6 +491,13 @@ binds {
     // Powers off the monitors. To turn them back on, do any input like
     // moving the mouse or pressing any other key.
     Mod+Shift+W { power-off-monitors; }
+}
+
+layer-rule {
+    match namespace=r#"^(launcher|fuzzel|rofi)$"#
+    background-effect {
+        blur true
+    }
 }
 
 include "./noctalia.kdl"

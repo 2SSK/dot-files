@@ -23,6 +23,7 @@ A comprehensive, production-ready dotfiles repository for **Arch Linux** featuri
 ## ✨ Features
 
 ### 🎨 **Visual Environment**
+
 - **Window Manager**: Hyprland (Dynamic tiling Wayland compositor)
 - **Desktop Shell**: Noctalia Shell (Modern, feature-rich shell)
 - **Color Scheme**: Tokyo Night (Consistent across all applications)
@@ -31,12 +32,14 @@ A comprehensive, production-ready dotfiles repository for **Arch Linux** featuri
 - **Icons**: Papirus + Font Awesome
 
 ### 💻 **Terminal Setup**
+
 - **Shell**: ZSH with Oh My Zsh
 - **Prompt**: Starship (Fast, customizable)
 - **Multiplexer**: tmux with custom Tokyo Night theme
 - **Emulators**: Ghostty, Kitty, Alacritty, WezTerm, Foot
 
 ### 🛠️ **Development Tools**
+
 - **Editor**: Neovim (Extensive Lua configuration with LSP, Treesitter, Telescope)
 - **Version Control**: Git + Lazygit + GitHub CLI
 - **Languages**: Go, Rust, Node.js, Python, C/C++
@@ -44,16 +47,17 @@ A comprehensive, production-ready dotfiles repository for **Arch Linux** featuri
 - **IDEs**: VS Code, Cursor
 
 ### 🔧 **Modern CLI Tools** (Rust-based)
-| Traditional | Modern Alternative | Purpose |
-|------------|-------------------|---------|
-| `ls` | `eza` | Enhanced file listing |
-| `cat` | `bat` | Syntax highlighting |
-| `cd` | `zoxide` | Smarter directory navigation |
-| `find` | `fd` | Fast file finder |
-| `grep` | `ripgrep` | Lightning-fast search |
-| `top` | `btop` | System monitor |
-| `du` | `dust` | Disk usage analyzer |
-| File explorer | `yazi` | Terminal file manager |
+
+| Traditional   | Modern Alternative | Purpose                      |
+| ------------- | ------------------ | ---------------------------- |
+| `ls`          | `eza`              | Enhanced file listing        |
+| `cat`         | `bat`              | Syntax highlighting          |
+| `cd`          | `zoxide`           | Smarter directory navigation |
+| `find`        | `fd`               | Fast file finder             |
+| `grep`        | `ripgrep`          | Lightning-fast search        |
+| `top`         | `btop`             | System monitor               |
+| `du`          | `dust`             | Disk usage analyzer          |
+| File explorer | `yazi`             | Terminal file manager        |
 
 ---
 
@@ -70,7 +74,7 @@ A comprehensive, production-ready dotfiles repository for **Arch Linux** featuri
 **Status Bars**: Waybar, Polybar  
 **Launchers**: Rofi, Tofi, Wofi  
 **Notifications**: Dunst, Mako  
-**Lock Screens**: Hyprlock, Swaylock, Betterlockscreen  
+**Lock Screens**: Hyprlock, Swaylock, Betterlockscreen
 
 </details>
 
@@ -78,6 +82,7 @@ A comprehensive, production-ready dotfiles repository for **Arch Linux** featuri
 <summary><b>🐚 Shell Configuration</b></summary>
 
 **Modular ZSH Setup** (`.config/zsh/`):
+
 - `options.zsh` - ZSH options and behavior
 - `completion.zsh` - Completion settings
 - `plugins.zsh` - Oh My Zsh plugins
@@ -89,6 +94,7 @@ A comprehensive, production-ready dotfiles repository for **Arch Linux** featuri
 - `tools.zsh` - FZF, Zoxide integrations
 
 **Plugins**:
+
 - zsh-autosuggestions (Fish-like suggestions)
 - zsh-syntax-highlighting (Command validation)
 
@@ -100,6 +106,7 @@ A comprehensive, production-ready dotfiles repository for **Arch Linux** featuri
 **Plugin Manager**: lazy.nvim
 
 **Key Plugins**:
+
 - **LSP**: Mason, nvim-lspconfig (Language servers)
 - **Completion**: nvim-cmp (Auto-completion)
 - **Syntax**: Treesitter (Syntax highlighting)
@@ -113,6 +120,7 @@ A comprehensive, production-ready dotfiles repository for **Arch Linux** featuri
 - **Productivity**: Harpoon, Zen Mode, Which-key
 
 **Features**:
+
 - Tokyo Night color scheme
 - LSP-powered code intelligence
 - Git integration in editor
@@ -125,6 +133,7 @@ A comprehensive, production-ready dotfiles repository for **Arch Linux** featuri
 <summary><b>🖼️ Terminal Emulators</b></summary>
 
 All configured with:
+
 - JetBrains Mono Nerd Font
 - Tokyo Night colors
 - GPU acceleration
@@ -148,7 +157,7 @@ Available: Ghostty, Kitty, Alacritty, WezTerm, Foot
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/dot-files.git ~/.dotfiles
+git clone https://github.com/2SSK/dot-files.git ~/.dotfiles
 cd ~/.dotfiles
 
 # Run the installation
@@ -160,23 +169,27 @@ cd ~/.dotfiles
 ### Installation Options
 
 **Full Installation** (Recommended):
+
 ```bash
 ./bootstrap.sh
 ```
 
 **Packages Only** (Lightweight):
+
 ```bash
 ./arch/install.sh
 # Only installs packages from packages.txt without dotfiles
 ```
 
 **Custom Installation** (Choose components):
+
 ```bash
 ./bootstrap.sh
 # Then select option 2 from the menu
 ```
 
 **Skip Specific Components**:
+
 ```bash
 ./bootstrap.sh --no-packages    # Skip package installation
 ./bootstrap.sh --no-dotfiles    # Skip dotfiles setup
@@ -201,29 +214,35 @@ cd ~/.dotfiles
 ## 📚 Post-Installation
 
 ### 1. Restart Your System
+
 ```bash
 reboot
 ```
 
 ### 2. Select Hyprland from Display Manager
+
 Login and choose "Hyprland" session
 
 ### 3. Launch Terminal
+
 Default terminal: Ghostty (or kitty, alacritty)
 
 ### 4. Initialize Neovim Plugins
+
 ```bash
 nvim
 # Lazy.nvim will auto-install plugins on first launch
 ```
 
 ### 5. Configure Git
+
 ```bash
 git config --global user.name "Your Name"
 git config --global user.email "your.email@example.com"
 ```
 
 ### 6. Generate SSH Keys (if needed)
+
 ```bash
 ssh-keygen -t ed25519 -C "your.email@example.com"
 ```
@@ -234,43 +253,43 @@ ssh-keygen -t ed25519 -C "your.email@example.com"
 
 ### Hyprland
 
-| Keybind | Action |
-|---------|--------|
-| `Super + Enter` | Launch terminal |
-| `Super + Q` | Close window |
-| `Super + Space` | Toggle floating |
-| `Super + F` | Fullscreen |
-| `Super + [1-9]` | Switch workspace |
-| `Super + Shift + [1-9]` | Move to workspace |
-| `Super + P` | Session menu (power/lock) |
-| `Super + Shift + B` | Toggle bar |
-| `F12` | Screenshot (full screen) |
-| `Ctrl + F12` | Screenshot (region) |
-| `Shift + F12` | Screenshot (window) |
+| Keybind                 | Action                    |
+| ----------------------- | ------------------------- |
+| `Super + Enter`         | Launch terminal           |
+| `Super + Q`             | Close window              |
+| `Super + Space`         | Toggle floating           |
+| `Super + F`             | Fullscreen                |
+| `Super + [1-9]`         | Switch workspace          |
+| `Super + Shift + [1-9]` | Move to workspace         |
+| `Super + P`             | Session menu (power/lock) |
+| `Super + Shift + B`     | Toggle bar                |
+| `F12`                   | Screenshot (full screen)  |
+| `Ctrl + F12`            | Screenshot (region)       |
+| `Shift + F12`           | Screenshot (window)       |
 
 ### Tmux
 
-| Keybind | Action |
-|---------|--------|
-| `` ` `` | Prefix key (instead of Ctrl+B) |
-| `` ` c`` | New window |
-| `` ` [0-9]`` | Switch window |
-| `` ` %`` | Split vertical |
-| `` ` "`` | Split horizontal |
-| `` ` h/j/k/l`` | Navigate panes (Vim-style) |
+| Keybind        | Action                         |
+| -------------- | ------------------------------ |
+| `` ` ``        | Prefix key (instead of Ctrl+B) |
+| `` ` c``       | New window                     |
+| `` ` [0-9]``   | Switch window                  |
+| `` ` %``       | Split vertical                 |
+| `` ` "``       | Split horizontal               |
+| `` ` h/j/k/l`` | Navigate panes (Vim-style)     |
 
 ### Neovim (Leader: Space)
 
-| Keybind | Action |
-|---------|--------|
-| `Space + ff` | Find files |
-| `Space + fg` | Live grep |
-| `Space + fb` | Find buffers |
-| `Space + e` | Toggle file explorer |
-| `Space + lg` | Open Lazygit |
-| `Space + /` | Toggle comment |
-| `gd` | Go to definition |
-| `K` | Hover documentation |
+| Keybind      | Action               |
+| ------------ | -------------------- |
+| `Space + ff` | Find files           |
+| `Space + fg` | Live grep            |
+| `Space + fb` | Find buffers         |
+| `Space + e`  | Toggle file explorer |
+| `Space + lg` | Open Lazygit         |
+| `Space + /`  | Toggle comment       |
+| `gd`         | Go to definition     |
+| `K`          | Hover documentation  |
 
 ---
 
@@ -279,6 +298,7 @@ ssh-keygen -t ed25519 -C "your.email@example.com"
 ### Changing Theme Colors
 
 Edit respective config files:
+
 - **Hyprland**: [.config/hypr/hyprland.conf](.config/hypr/hyprland.conf)
 - **Neovim**: [.config/nvim/lua/config/plugins/colorscheme.lua](.config/nvim/lua/config/plugins/colorscheme.lua)
 - **Tmux**: [.tmux.conf](.tmux.conf)
@@ -287,6 +307,7 @@ Edit respective config files:
 ### Adding More Packages
 
 Edit [arch/packages.txt](arch/packages.txt) and run:
+
 ```bash
 cd ~/.dotfiles
 ./bootstrap.sh --no-dotfiles --no-shell --no-nvim --no-hyprland --no-themes
@@ -303,6 +324,7 @@ Create `~/.config/zsh/local.zsh` for personal shell settings (gitignored).
 ### Git Profile Switcher
 
 Switch between work and personal Git accounts:
+
 ```bash
 # Switch to work profile
 ./scripts/git-switch.sh work
@@ -314,6 +336,7 @@ Switch between work and personal Git accounts:
 ### Screen Recorder
 
 Record your screen with optional audio:
+
 ```bash
 ./scripts/record_screen.sh
 ```
@@ -357,6 +380,7 @@ Record your screen with optional audio:
 ## 🔍 Troubleshooting
 
 ### Neovim plugins not loading
+
 ```bash
 # Remove and reinstall
 rm -rf ~/.local/share/nvim
@@ -364,18 +388,21 @@ nvim
 ```
 
 ### Hyprland not starting
+
 ```bash
 # Check logs
 cat /tmp/hypr/$(ls -t /tmp/hypr/ | head -n 1)/hyprland.log
 ```
 
 ### Fonts not displaying correctly
+
 ```bash
 # Rebuild font cache
 fc-cache -fv
 ```
 
 ### Stow conflicts
+
 ```bash
 # Backup and remove conflicting files
 mv ~/.zshrc ~/.zshrc.backup
@@ -388,6 +415,7 @@ stow --restow .
 ## 🤝 Contributing
 
 Contributions are welcome! Feel free to:
+
 - Report bugs
 - Suggest features
 - Submit pull requests
