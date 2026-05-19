@@ -16,51 +16,7 @@ input {
     focus-follows-mouse max-scroll-amount="0%"
 }
 
-workspace "1" {
-    open-on-output "eDP-1"
-}
-workspace "4" {
-    open-on-output "eDP-1"
-}
-workspace "5" {
-    open-on-output "eDP-1"
-}
-workspace "6" {
-    open-on-output "eDP-1"
-}
-workspace "7" {
-    open-on-output "eDP-1"
-}
-workspace "8" {
-    open-on-output "eDP-1"
-}
-workspace "2" {
-    open-on-output "HDMI-A-1"
-}
-workspace "3" {
-    open-on-output "HDMI-A-1"
-}
-workspace "9" {
-    open-on-output "HDMI-A-1"
-}
-workspace "10" {
-    open-on-output "HDMI-A-1"
-}
-
-output "eDP-1" {
-    mode "1920x1080@120.030"
-
-    scale 1.1
-
-    transform "normal"
-
-    position x=0 y=0
-}
-
-output "HDMI-A-1" {
-    // Position it to the right of eDP-1
-    position x=1920 y=2
-}
+include "./outputs.kdl"
 
 layout {
     // Set gaps around windows in logical pixels.
