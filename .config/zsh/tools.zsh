@@ -22,7 +22,7 @@ purple="#bb9af7"
 blue="#7da6ff"
 cyan="#0db9d7"
 
-export FZF_DEFAULT_OPTS="--color=fg:${fg},bg:${bg},hl:${purple},fg+:${fg},bg+:${bg_highlight},hl+:${purple},info:${blue},prompt:${cyan},pointer:${cyan},marker:${cyan},spinner:${cyan},header:${cyan}"
+export FZF_DEFAULT_OPTS="--color=fg:${fg},bg+:-1,hl:${purple},fg+:${fg},bg+:${bg_highlight},hl+:${purple},info:${blue},prompt:${cyan},pointer:${cyan},marker:${cyan},spinner:${cyan},header:${cyan}"
 
 
 # Preview for files (use bat if available)
@@ -185,3 +185,10 @@ fsc() {
 gstat() {
   git status --porcelain | awk '{print $2}' | fzf -m --preview 'bat --style=numbers --color=always {}' | xargs nvim -p
 }
+
+# Automatically attach to tmux session if not already inside one
+# if command -v tmux >/dev/null 2>&1; then
+#   if [ -z "$TMUX" ]; then
+#     tmux attach -t main || tmux new -s main
+#   fi
+# fi

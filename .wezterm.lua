@@ -21,7 +21,7 @@ config.colors = {
 
 -- config.window_padding = { left = 50, right = 50, top = 50, bottom = 50 }
 
-config.window_background_opacity = 0.9
+config.window_background_opacity = 0.75
 config.macos_window_background_blur = 10
 
 config.window_close_confirmation = "NeverPrompt"
