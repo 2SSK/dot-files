@@ -1,6 +1,9 @@
 # Startup Applications
 xwayland force
 
+# Start sway session target (required for xdg-desktop-portal)
+exec_always systemctl --user start sway-session.target
+
 # autotiling
 exec --no-startup-id autotiling
 
