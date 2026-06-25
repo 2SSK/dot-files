@@ -36,9 +36,9 @@ blur_radius 5
 corner_radius 20
 
 shadows enable
-shadow_offset 10 10
-shadow_color #111111
-shadow_inactive_color #0000004F
+shadow_offset 2 2
+shadow_color #7aa2f7
+shadow_inactive_color #586691
 
 default_dim_inactive 0.1
 for_window [app_id=".*"] opacity 1

@@ -17,5 +17,12 @@ return {
 
 		-- Mini Surround
 		require("mini.surround").setup()
+
+		-- Mini Diff
+		require("mini.diff").setup()
+
+		vim.keymap.set("n", "<leader>do", function()
+			MiniDiff.toggle_overlay(0)
+		end, { desc = "Toggle diff overlay" })
 	end,
 }
