@@ -4,7 +4,7 @@
 
 set encoding=UTF-8
 set spelllang=en_us,de_de,es_es
-set nohlsearch " Disable highlight on search
+"set nohlsearch " Disable highlight on search
 set number " Enable line numbers
 set mouse=a " Enable mouse mode
 set breakindent " Enable break indent
