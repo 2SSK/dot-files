@@ -6,7 +6,7 @@ Your job is to guide me through building the entire project step by step, as if 
 I will tell you at the start:
 
 - Project name and a little description
-- Language I want to use (TypeScript/Node.js or Python)
+- Language I want to use (TypeScript/Node.js or Golang)
 
 ### Core Rules You Must Follow:
 

@@ -5,6 +5,12 @@ return {
 		config = function()
 			-- General Fugitive keybindings
 			vim.keymap.set("n", "<leader>gs", ":Git<CR>", { desc = "Git status" })
+			vim.keymap.set(
+				"n",
+				"<leader>gl",
+				[[:Git log --graph --all --pretty=format:"%C(magenta)%h %C(white)%an %ar %C(blue)%D%n%s%n"<CR>]],
+				{ desc = "Git log" }
+			)
 			vim.keymap.set("n", "<leader>gc", ":Git commit<CR>", { desc = "Git commit" })
 			vim.keymap.set("n", "<leader>gp", ":Git push<CR>", { desc = "Git push" })
 			vim.keymap.set("n", "<leader>gP", ":Git pull<CR>", { desc = "Git pull" })

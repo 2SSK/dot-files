@@ -54,4 +54,9 @@ return {
 			})
 		end,
 	},
+
+	-- Fidget (LSP Progress)
+	{
+		"j-hui/fidget.nvim",
+	},
 }
