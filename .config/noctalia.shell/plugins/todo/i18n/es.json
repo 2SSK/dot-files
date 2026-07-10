@@ -1,0 +1,139 @@
+{
+  "bar_widget": {
+    "todo_count_plural": "{count} todos",
+    "todo_count_singular": "{count} tarea pendiente"
+  },
+  "actions": {
+    "widget_settings": "Configuración"
+  },
+  "desktop_widget": {
+    "empty_state": "Sin tareas pendientes.",
+    "header_title": "Lista de tareas",
+    "items_count": "{active} de {total} elementos"
+  },
+  "main": {
+    "added_new_todo": "Se agregó una nueva tarea:",
+    "cleared_completed_todos": "Tareas completadas eliminadas",
+    "cleared_all_todos": "Todas las tareas eliminadas",
+    "completed_todos_suffix": "Tareas completadas",
+    "not_found_suffix": "no encontrado",
+    "removed_todo": "Tarea eliminada",
+    "todo_completed": "completado",
+    "todo_marked_incomplete": "marcado como incompleto",
+    "todo_not_found": "Tarea con ID",
+    "todo_status_changed": "Tarea",
+    "updated_todo": "Tarea actualizada",
+    "updated_todo_priority": "Prioridad de la tarea actualizada",
+    "error": "Error",
+    "error_text_empty": "El texto de la tarea no puede estar vacío",
+    "error_invalid_priority": "La prioridad debe ser alta, media o baja",
+    "error_page_not_found": "Página no encontrada",
+    "error_todo_not_found": "Tarea no encontrada",
+    "error_create_failed": "No se pudo crear la tarea",
+    "error_update_failed": "No se pudo actualizar la tarea",
+    "error_remove_failed": "No se pudo eliminar la tarea",
+    "error_rename_failed": "No se pudo renombrar la página",
+    "error_delete_failed": "No se pudo eliminar la página",
+    "exported_todos": "Exportado a ",
+    "export_failed": "No se pudieron exportar las tareas",
+    "export_title": "Lista de tareas",
+    "export_page_header": "📁 {pageName}",
+    "export_active_section": "○ Activas ({count})",
+    "export_completed_section": "✓ Completadas ({count})",
+    "export_priority": "Prioridad",
+    "export_created": "Creado",
+    "export_details": "Detalles",
+    "priority_high": "Alta",
+    "priority_medium": "Media",
+    "priority_low": "Baja"
+  },
+  "panel": {
+    "add_todo": {
+      "add_button": "Añadir",
+      "placeholder": "Introduce un nuevo elemento de tarea..."
+    },
+    "empty_state": {
+      "message": "Aún no hay elementos."
+    },
+    "header": {
+      "clear_completed_button": "Borrar completadas",
+      "export_button": "Exportar",
+      "title": "Lista de tareas"
+    },
+    "todo_details": {
+      "title": "Detalles de la tarea",
+      "label_title": "Título: ",
+      "label_status": "Estado: ",
+      "status_completed": "Completada",
+      "status_pending": "Pendiente",
+      "label_created": "Creado: ",
+      "label_priority": "Prioridad: ",
+      "label_page": "Página:",
+      "label_details": "Detalles:",
+      "button_add_details": "Añadir",
+      "button_edit_details": "Modificar",
+      "button_save": "Guardar",
+      "button_cancel": "Cancelar",
+      "copy_details_button_tooltip": "Copiar",
+      "copied_details": "Detalles copiados al portapapeles"
+    },
+    "todo_item": {
+      "delete_button_tooltip": "Borrar",
+      "edit_button_tooltip": "Editar",
+      "copy_button_tooltip": "Copiar",
+      "copied": "Copiado al portapapeles"
+    }
+  },
+  "settings": {
+    "background_color": {
+      "description": "Color de fondo del widget de tareas",
+      "label": "Color de fondo"
+    },
+    "show_completed": {
+      "description": "Mostrar las tareas completadas en el panel",
+      "label": "Mostrar tareas completadas"
+    },
+    "custom_priority_colors": {
+      "label": "Usar colores de prioridad personalizados",
+      "description": "Activa para personalizar los colores de prioridad"
+    },
+    "export_path": {
+      "label": "Ruta de exportación",
+      "description": "Directorio para exportar las tareas",
+      "placeholder": "p. ej. ~/Documentos",
+      "select_folder": "Seleccionar carpeta"
+    },
+    "export_format": {
+      "label": "Formato de exportación",
+      "description": "Formato de archivo para las tareas exportadas",
+      "markdown": "Markdown",
+      "json": "JSON"
+    },
+    "export_empty_sections": {
+      "label": "Mostrar secciones vacías",
+      "description": "Mostrar secciones y páginas vacías en Activas/Completadas al exportar"
+    },
+    "priority_colors": {
+      "label": "Colores de prioridad",
+      "high_label": "Prioridad alta:",
+      "medium_label": "Prioridad media:",
+      "low_label": "Prioridad baja:"
+    },
+    "pages": {
+      "label": "Gestionar páginas",
+      "placeholder": "Introduce el nombre de la nueva página",
+      "add_button": "Añadir página",
+      "empty_name": "El nombre de la página no puede estar vacío",
+      "name_exists": "El nombre de la página ya existe",
+      "cannot_delete_default": "No se puede eliminar la página predeterminada",
+      "cannot_delete_last": "No se puede eliminar la última página",
+      "confirm_delete_title": "Confirmar eliminación",
+      "confirm_delete_message": "¿Seguro que quieres eliminar la página '{pageName}'?\n\nTodas las tareas de esta página se transferirán a la primera página.",
+      "rename_button_tooltip": "Renombrar",
+      "delete_button_tooltip": "Eliminar",
+      "added_page": "Página añadida: ",
+      "deleted_page": "Página eliminada",
+      "renamed_page": "Página renombrada"
+    }
+  }
+}

@@ -102,9 +102,9 @@ alias y='yazi'
 # ==============================
 # Miscellaneous Aliases
 # ==============================
-alias weather='curl wttr.in/orlando?u'
+alias weather='curl wttr.in/bengaluru?u'
 alias ff='fastfetch || neofetch'
-alias hi='pgrep -x dunst >/dev/null && notify-send "Hi there!" "Welcome to the ${XDG_CURRENT_DESKTOP:-${DESKTOP_SESSION:-$(wmctrl -m 2>/dev/null | grep "Name:" | cut -d" " -f2)}} desktop! 🍃" -i ""'
+alias yo='pgrep -x dunst >/dev/null && notify-send "Hi there!" "Welcome to the ${XDG_CURRENT_DESKTOP:-${DESKTOP_SESSION:-$(wmctrl -m 2>/dev/null | grep "Name:" | cut -d" " -f2)}} desktop! 🍃" -i ""'
 
 # ==============================
 # TTY-based Fun Tools

@@ -1,0 +1,139 @@
+{
+  "bar_widget": {
+    "todo_count_plural": "{count} taken",
+    "todo_count_singular": "{count} taak"
+  },
+  "actions": {
+    "widget_settings": "Instellingen"
+  },
+  "desktop_widget": {
+    "empty_state": "Geen taken",
+    "header_title": "Takenlijst",
+    "items_count": "{active} van {total} items"
+  },
+  "main": {
+    "added_new_todo": "Nieuwe taak toegevoegd:",
+    "cleared_completed_todos": "Vrijgegeven",
+    "cleared_all_todos": "Alle taken gewist",
+    "completed_todos_suffix": "voltooide taken",
+    "not_found_suffix": "niet gevonden",
+    "removed_todo": "Todo-item verwijderd",
+    "todo_completed": "voltooid",
+    "todo_marked_incomplete": "gemarkeerd als onvolledig",
+    "todo_not_found": "Taak met ID",
+    "todo_status_changed": "Te doen",
+    "updated_todo": "Taak bijgewerkt",
+    "updated_todo_priority": "Taakprioriteit bijgewerkt",
+    "error": "Fout",
+    "error_text_empty": "Tekst van taak mag niet leeg zijn",
+    "error_invalid_priority": "Prioriteit moet hoog, middel of laag zijn",
+    "error_page_not_found": "Pagina niet gevonden",
+    "error_todo_not_found": "Taak niet gevonden",
+    "error_create_failed": "Aanmaken van taak mislukt",
+    "error_update_failed": "Bijwerken van taak mislukt",
+    "error_remove_failed": "Verwijderen van taak mislukt",
+    "error_rename_failed": "Hernoemen van pagina mislukt",
+    "error_delete_failed": "Verwijderen van pagina mislukt",
+    "exported_todos": "Geëxporteerd naar ",
+    "export_failed": "Exporteren van taken mislukt",
+    "export_title": "Takenlijst",
+    "export_page_header": "📁 {pageName}",
+    "export_active_section": "○ Actief ({count})",
+    "export_completed_section": "✓ Voltooid ({count})",
+    "export_priority": "Prioriteit",
+    "export_created": "Aangemaakt",
+    "export_details": "Details",
+    "priority_high": "Hoog",
+    "priority_medium": "Middel",
+    "priority_low": "Laag"
+  },
+  "panel": {
+    "add_todo": {
+      "add_button": "Toevoegen",
+      "placeholder": "Voer een nieuw todo-item in..."
+    },
+    "empty_state": {
+      "message": "Nog geen taken."
+    },
+    "header": {
+      "clear_completed_button": "Voltooid wissen",
+      "export_button": "Exporteren",
+      "title": "Takenlijst"
+    },
+    "todo_details": {
+      "title": "Taakdetails",
+      "label_title": "Titel: ",
+      "label_status": "Status: ",
+      "status_completed": "Voltooid",
+      "status_pending": "In behandeling",
+      "label_created": "Aangemaakt: ",
+      "label_priority": "Prioriteit: ",
+      "label_page": "Pagina:",
+      "label_details": "Details:",
+      "button_add_details": "Toevoegen",
+      "button_edit_details": "Bewerken",
+      "button_save": "Opslaan",
+      "button_cancel": "Annuleren",
+      "copy_details_button_tooltip": "Kopiëren",
+      "copied_details": "Details naar klembord gekopieerd"
+    },
+    "todo_item": {
+      "delete_button_tooltip": "Verwijderen",
+      "edit_button_tooltip": "Bewerken",
+      "copy_button_tooltip": "Kopiëren",
+      "copied": "Naar klembord gekopieerd"
+    }
+  },
+  "settings": {
+    "background_color": {
+      "description": "Achtergrondkleur van de todo-widget",
+      "label": "Achtergrondkleur"
+    },
+    "show_completed": {
+      "description": "Toon voltooide taken in het paneel",
+      "label": "Toon voltooide taken"
+    },
+    "custom_priority_colors": {
+      "label": "Aangepaste prioriteitskleuren gebruiken",
+      "description": "Inschakelen om prioriteitskleuren aan te passen"
+    },
+    "export_path": {
+      "label": "Exportpad",
+      "description": "Map voor geëxporteerde taken",
+      "placeholder": "bijv. ~/Documenten",
+      "select_folder": "Map selecteren"
+    },
+    "export_format": {
+      "label": "Exportformaat",
+      "description": "Bestandsformaat voor geëxporteerde taken",
+      "markdown": "Markdown",
+      "json": "JSON"
+    },
+    "export_empty_sections": {
+      "label": "Lege secties tonen",
+      "description": "Toon lege Actief/Voltooid secties en pagina's bij exporteren"
+    },
+    "priority_colors": {
+      "label": "Prioriteitskleuren",
+      "high_label": "Hoge prioriteit:",
+      "medium_label": "Middelmatige prioriteit:",
+      "low_label": "Lage prioriteit:"
+    },
+    "pages": {
+      "label": "Pagina's beheren",
+      "placeholder": "Voer nieuwe paginanaam in",
+      "add_button": "Pagina toevoegen",
+      "empty_name": "Paginanaam mag niet leeg zijn",
+      "name_exists": "Paginanaam bestaat al",
+      "cannot_delete_default": "Standaardpagina kan niet worden verwijderd",
+      "cannot_delete_last": "Laatste pagina kan niet worden verwijderd",
+      "confirm_delete_title": "Verwijderen bevestigen",
+      "confirm_delete_message": "Weet je zeker dat je de pagina '{pageName}' wilt verwijderen?\n\nAlle taken op deze pagina worden naar de eerste pagina verplaatst.",
+      "rename_button_tooltip": "Hernoemen",
+      "delete_button_tooltip": "Verwijderen",
+      "added_page": "Pagina toegevoegd: ",
+      "deleted_page": "Pagina verwijderd",
+      "renamed_page": "Pagina hernoemd"
+    }
+  }
+}

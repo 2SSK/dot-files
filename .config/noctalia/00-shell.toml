@@ -1,0 +1,82 @@
+[shell]
+ui_scale = 1.0
+corner_radius_scale = 1.0
+font_family = "JetBrainsMono Nerd Font Mono"
+time_format = "{:%H:%M}"
+date_format = "%A, %x"
+animations = true
+telemetry_enabled = false
+password_style = "default"
+settings_show_advanced = false
+middle_click_opens_widget_settings = true
+show_location = true
+clipboard_enabled = true
+clipboard_history_max_entries = 100
+clipboard_auto_paste = "auto"
+shared_gl_context = true
+avatar_path = "~/Pictures/Saved/anime-pfp.jpg"
+
+[shell.animation]
+enabled = true
+speed = 1.0
+
+[shell.shadow]
+direction = "bottom_right"
+alpha = 0.55
+
+[shell.panel]
+transparency_mode = "glass"
+borders = true
+shadow = true
+launcher_placement = "centered"
+clipboard_placement = "centered"
+control_center_placement = "attached"
+wallpaper_placement = "attached"
+session_placement = "attached"
+open_near_click_control_center = false
+open_near_click_launcher = false
+open_near_click_clipboard = false
+open_near_click_wallpaper = false
+open_near_click_session = false
+
+[shell.mpris]
+blacklist = []
+
+[shell.screenshot]
+save_to_file = true
+directory = ""
+filename_pattern = "recording_%Y%m%d_%H%M%S"
+copy_to_clipboard = false
+freeze_screen = false
+confirm_region = false
+pipe_to_command = false
+pipe_command = ""
+
+[keybinds]
+validate = ["return", "kp_enter", "space"]
+cancel = ["escape"]
+left = ["left"]
+right = ["right"]
+up = ["up"]
+down = ["down"]
+tab_next = ["tab"]
+tab_previous = ["shift+iso_left_tab"]
+
+[lockscreen]
+enabled = true
+blurred_desktop = false
+blur_intensity = 0.0
+tint_intensity = 0.0
+
+[backdrop]
+enabled = true
+blur_intensity = 0.8
+tint_intensity = 0.5
+
+[system.monitor]
+enabled = true
+cpu_poll_seconds = 2.0
+gpu_poll_seconds = 5.0
+memory_poll_seconds = 2.0
+network_poll_seconds = 3.0
+disk_poll_seconds = 10.0

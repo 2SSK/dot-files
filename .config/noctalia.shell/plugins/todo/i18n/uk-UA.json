@@ -1,0 +1,139 @@
+{
+  "bar_widget": {
+    "todo_count_plural": "{count} завдань",
+    "todo_count_singular": "{count} завдання"
+  },
+  "actions": {
+    "widget_settings": "Налаштування"
+  },
+  "desktop_widget": {
+    "empty_state": "Немає завдань",
+    "header_title": "Список справ",
+    "items_count": "{active} з {total} елементів"
+  },
+  "main": {
+    "added_new_todo": "Додано нову задачу:",
+    "cleared_completed_todos": "Очищено",
+    "cleared_all_todos": "Усі завдання очищено",
+    "completed_todos_suffix": "завершені завдання",
+    "not_found_suffix": "не знайдено",
+    "removed_todo": "Видалено пункт зі списку справ",
+    "todo_completed": "завершено",
+    "todo_marked_incomplete": "позначено як незавершене",
+    "todo_not_found": "Завдання з ID",
+    "todo_status_changed": "Список справ",
+    "updated_todo": "Завдання оновлено",
+    "updated_todo_priority": "Пріоритет завдання оновлено",
+    "error": "Помилка",
+    "error_text_empty": "Текст завдання не може бути порожнім",
+    "error_invalid_priority": "Пріоритет має бути високим, середнім або низьким",
+    "error_page_not_found": "Сторінку не знайдено",
+    "error_todo_not_found": "Завдання не знайдено",
+    "error_create_failed": "Не вдалося створити завдання",
+    "error_update_failed": "Не вдалося оновити завдання",
+    "error_remove_failed": "Не вдалося видалити завдання",
+    "error_rename_failed": "Не вдалося перейменувати сторінку",
+    "error_delete_failed": "Не вдалося видалити сторінку",
+    "exported_todos": "Експортовано до ",
+    "export_failed": "Не вдалося експортувати завдання",
+    "export_title": "Список справ",
+    "export_page_header": "📁 {pageName}",
+    "export_active_section": "○ Активні ({count})",
+    "export_completed_section": "✓ Завершені ({count})",
+    "export_priority": "Пріоритет",
+    "export_created": "Створено",
+    "export_details": "Деталі",
+    "priority_high": "Високий",
+    "priority_medium": "Середній",
+    "priority_low": "Низький"
+  },
+  "panel": {
+    "add_todo": {
+      "add_button": "Додати",
+      "placeholder": "Введіть новий пункт списку справ..."
+    },
+    "empty_state": {
+      "message": "Поки що немає завдань"
+    },
+    "header": {
+      "clear_completed_button": "Очистити завершені",
+      "export_button": "Експорт",
+      "title": "Список справ"
+    },
+    "todo_details": {
+      "title": "Деталі задачі",
+      "label_title": "Заголовок: ",
+      "label_status": "Статус: ",
+      "status_completed": "Завершено",
+      "status_pending": "В очікуванні",
+      "label_created": "Створено: ",
+      "label_priority": "Пріоритет: ",
+      "label_page": "Сторінка:",
+      "label_details": "Деталі:",
+      "button_add_details": "Додати",
+      "button_edit_details": "Редагувати",
+      "button_save": "Зберегти",
+      "button_cancel": "Скасувати",
+      "copy_details_button_tooltip": "Копіювати",
+      "copied_details": "Деталі скопійовано у буфер обміну"
+    },
+    "todo_item": {
+      "delete_button_tooltip": "Видалити",
+      "edit_button_tooltip": "Редагувати",
+      "copy_button_tooltip": "Копіювати",
+      "copied": "Скопійовано у буфер обміну"
+    }
+  },
+  "settings": {
+    "background_color": {
+      "description": "Колір фону віджета задач",
+      "label": "Колір фону"
+    },
+    "show_completed": {
+      "description": "Відображати виконані завдання в панелі",
+      "label": "Показати завершені завдання"
+    },
+    "custom_priority_colors": {
+      "label": "Використовувати власні кольори пріоритетів",
+      "description": "Увімкніть для налаштування кольорів пріоритетів"
+    },
+    "export_path": {
+      "label": "Шлях експорту",
+      "description": "Каталог для експортованих завдань",
+      "placeholder": "наприклад, ~/Documents",
+      "select_folder": "Обрати папку"
+    },
+    "export_format": {
+      "label": "Формат експорту",
+      "description": "Формат файлу для експорту завдань",
+      "markdown": "Markdown",
+      "json": "JSON"
+    },
+    "export_empty_sections": {
+      "label": "Показувати порожні розділи",
+      "description": "Показувати порожні розділи Активні/Завершені та сторінки під час експорту"
+    },
+    "priority_colors": {
+      "label": "Кольори пріоритетів",
+      "high_label": "Високий пріоритет:",
+      "medium_label": "Середній пріоритет:",
+      "low_label": "Низький пріоритет:"
+    },
+    "pages": {
+      "label": "Керування сторінками",
+      "placeholder": "Введіть назву нової сторінки",
+      "add_button": "Додати сторінку",
+      "empty_name": "Назва сторінки не може бути порожньою",
+      "name_exists": "Сторінка з такою назвою вже існує",
+      "cannot_delete_default": "Не можна видалити сторінку за замовчуванням",
+      "cannot_delete_last": "Не можна видалити останню сторінку",
+      "confirm_delete_title": "Підтвердження видалення",
+      "confirm_delete_message": "Ви впевнені, що хочете видалити сторінку '{pageName}'?\n\nУсі завдання з цієї сторінки будуть перенесені на першу сторінку.",
+      "rename_button_tooltip": "Перейменувати",
+      "delete_button_tooltip": "Видалити",
+      "added_page": "Сторінку додано: ",
+      "deleted_page": "Сторінку видалено",
+      "renamed_page": "Сторінку перейменовано"
+    }
+  }
+}

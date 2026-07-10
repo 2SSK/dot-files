@@ -1,0 +1,139 @@
+{
+  "bar_widget": {
+    "todo_count_plural": "{count} teendő",
+    "todo_count_singular": "{count} teendő"
+  },
+  "actions": {
+    "widget_settings": "Beállítások"
+  },
+  "desktop_widget": {
+    "empty_state": "Nincsenek teendők",
+    "header_title": "Teendőlista",
+    "items_count": "{active} / {total} elem"
+  },
+  "main": {
+    "added_new_todo": "Új teendő hozzáadva:",
+    "cleared_completed_todos": "Törölve",
+    "cleared_all_todos": "Minden teendő törölve",
+    "completed_todos_suffix": "befejezett teendők",
+    "not_found_suffix": "nem található",
+    "removed_todo": "Eltávolított teendő",
+    "todo_completed": "befejezve",
+    "todo_marked_incomplete": "hiányosként megjelölve",
+    "todo_not_found": "Teendő azonosítóval",
+    "todo_status_changed": "Teendő",
+    "updated_todo": "Teendő frissítve",
+    "updated_todo_priority": "Teendő prioritása frissítve",
+    "error": "Hiba",
+    "error_text_empty": "A teendő szövege nem lehet üres",
+    "error_invalid_priority": "A prioritás csak magas, közepes vagy alacsony lehet",
+    "error_page_not_found": "Az oldal nem található",
+    "error_todo_not_found": "A teendő nem található",
+    "error_create_failed": "A teendő létrehozása sikertelen",
+    "error_update_failed": "A teendő frissítése sikertelen",
+    "error_remove_failed": "A teendő eltávolítása sikertelen",
+    "error_rename_failed": "Az oldal átnevezése sikertelen",
+    "error_delete_failed": "Az oldal törlése sikertelen",
+    "exported_todos": "Exportálva ide: ",
+    "export_failed": "A teendők exportálása sikertelen",
+    "export_title": "Teendőlista",
+    "export_page_header": "📁 {pageName}",
+    "export_active_section": "○ Aktív ({count})",
+    "export_completed_section": "✓ Befejezett ({count})",
+    "export_priority": "Prioritás",
+    "export_created": "Létrehozva",
+    "export_details": "Részletek",
+    "priority_high": "Magas",
+    "priority_medium": "Közepes",
+    "priority_low": "Alacsony"
+  },
+  "panel": {
+    "add_todo": {
+      "add_button": "Hozzáadás",
+      "placeholder": "Új teendő hozzáadása..."
+    },
+    "empty_state": {
+      "message": "Nincsenek még teendők"
+    },
+    "header": {
+      "clear_completed_button": "Befejezettek törlése",
+      "export_button": "Exportálás",
+      "title": "Teendőlista"
+    },
+    "todo_details": {
+      "title": "Teendő részletei",
+      "label_title": "Cím: ",
+      "label_status": "Állapot: ",
+      "status_completed": "Befejezve",
+      "status_pending": "Függőben",
+      "label_created": "Létrehozva: ",
+      "label_priority": "Prioritás: ",
+      "label_page": "Oldal:",
+      "label_details": "Részletek:",
+      "button_add_details": "Hozzáadás",
+      "button_edit_details": "Szerkesztés",
+      "button_save": "Mentés",
+      "button_cancel": "Mégse",
+      "copy_details_button_tooltip": "Másolás",
+      "copied_details": "Részletek a vágólapra másolva"
+    },
+    "todo_item": {
+      "delete_button_tooltip": "Törlés",
+      "edit_button_tooltip": "Szerkesztés",
+      "copy_button_tooltip": "Másolás",
+      "copied": "A vágólapra másolva"
+    }
+  },
+  "settings": {
+    "background_color": {
+      "description": "A teendő widget háttérszíne",
+      "label": "Háttérszín"
+    },
+    "show_completed": {
+      "description": "A kész teendők megjelenítése a panelen",
+      "label": "Teljesített teendők megjelenítése"
+    },
+    "custom_priority_colors": {
+      "label": "Egyéni prioritásszínek használata",
+      "description": "Engedélyezd a prioritásszínek testreszabásához"
+    },
+    "export_path": {
+      "label": "Exportálási útvonal",
+      "description": "A teendők exportálásának könyvtára",
+      "placeholder": "pl. ~/Documents",
+      "select_folder": "Mappa kiválasztása"
+    },
+    "export_format": {
+      "label": "Exportálási formátum",
+      "description": "A teendők exportálásának fájlformátuma",
+      "markdown": "Markdown",
+      "json": "JSON"
+    },
+    "export_empty_sections": {
+      "label": "Üres szakaszok megjelenítése",
+      "description": "Üres aktív/befejezett szakaszok és oldalak megjelenítése exportáláskor"
+    },
+    "priority_colors": {
+      "label": "Prioritásszínek",
+      "high_label": "Magas prioritás:",
+      "medium_label": "Közepes prioritás:",
+      "low_label": "Alacsony prioritás:"
+    },
+    "pages": {
+      "label": "Oldalak kezelése",
+      "placeholder": "Új oldal neve",
+      "add_button": "Oldal hozzáadása",
+      "empty_name": "Az oldal neve nem lehet üres",
+      "name_exists": "Ez az oldalnév már létezik",
+      "cannot_delete_default": "Az alapértelmezett oldal nem törölhető",
+      "cannot_delete_last": "Az utolsó oldal nem törölhető",
+      "confirm_delete_title": "Törlés megerősítése",
+      "confirm_delete_message": "Biztosan törölni szeretnéd a(z) '{pageName}' oldalt?\n\nAz összes teendő átkerül az első oldalra.",
+      "rename_button_tooltip": "Átnevezés",
+      "delete_button_tooltip": "Törlés",
+      "added_page": "Oldal hozzáadva: ",
+      "deleted_page": "Oldal törölve",
+      "renamed_page": "Oldal átnevezve"
+    }
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "bar_widget": {
+    "todo_count_plural": "{count} задач",
+    "todo_count_singular": "{count} задача"
+  },
+  "desktop_widget": {
+    "empty_state": "Нет задач",
+    "header_title": "Список дел",
+    "items_count": "{active} из {total} элементов"
+  },
+  "main": {
+    "added_new_todo": "Добавлено новое дело:",
+    "cleared_completed_todos": "Очищено",
+    "cleared_all_todos": "Все задачи очищены",
+    "completed_todos_suffix": "Завершенные задачи",
+    "not_found_suffix": "не найдено",
+    "removed_todo": "Удалённая задача",
+    "todo_completed": "завершено",
+    "todo_marked_incomplete": "Отмечено как незавершённое.",
+    "todo_not_found": "Задача с ID",
+    "todo_status_changed": "Дела",
+    "updated_todo": "Задача обновлена",
+    "updated_todo_priority": "Приоритет задачи обновлён",
+    "error": "Ошибка",
+    "error_text_empty": "Текст задачи не может быть пустым",
+    "error_invalid_priority": "Приоритет должен быть высоким, средним или низким",
+    "error_page_not_found": "Страница не найдена",
+    "error_todo_not_found": "Задача не найдена",
+    "error_create_failed": "Не удалось создать задачу",
+    "error_update_failed": "Не удалось обновить задачу",
+    "error_remove_failed": "Не удалось удалить задачу",
+    "error_rename_failed": "Не удалось переименовать страницу",
+    "error_delete_failed": "Не удалось удалить страницу",
+    "exported_todos": "Экспортировано в ",
+    "export_failed": "Не удалось экспортировать задачи",
+    "export_title": "Список дел",
+    "export_page_header": "📁 {pageName}",
+    "export_active_section": "○ Активные ({count})",
+    "export_completed_section": "✓ Завершённые ({count})",
+    "export_priority": "Приоритет",
+    "export_created": "Создано",
+    "export_details": "Детали",
+    "priority_high": "Высокий",
+    "priority_medium": "Средний",
+    "priority_low": "Низкий"
+  },
+  "panel": {
+    "add_todo": {
+      "add_button": "Добавить",
+      "placeholder": "Введите новую задачу..."
+    },
+    "empty_state": {
+      "message": "Пока нет задач"
+    },
+    "header": {
+      "clear_completed_button": "Очистить завершенные",
+      "export_button": "Экспорт",
+      "title": "Список дел"
+    },
+    "todo_details": {
+      "title": "Детали задачи",
+      "label_title": "Заголовок: ",
+      "label_status": "Статус: ",
+      "status_completed": "Завершено",
+      "status_pending": "В ожидании",
+      "label_created": "Создано: ",
+      "label_priority": "Приоритет: ",
+      "label_page": "Страница:",
+      "label_details": "Детали:",
+      "button_add_details": "Добавить",
+      "button_edit_details": "Редактировать",
+      "button_save": "Сохранить",
+      "button_cancel": "Отмена",
+      "copy_details_button_tooltip": "Копировать",
+      "copied_details": "Подробности скопированы в буфер обмена"
+    },
+    "todo_item": {
+      "delete_button_tooltip": "Удалить",
+      "edit_button_tooltip": "Редактировать",
+      "copy_button_tooltip": "Копировать",
+      "copied": "Скопировано в буфер обмена"
+    }
+  },
+  "settings": {
+    "background_color": {
+      "description": "Цвет фона виджета задач",
+      "label": "Цвет фона"
+    },
+    "show_completed": {
+      "description": "Отображать завершенные задачи в панели.",
+      "label": "Показать завершенные задачи"
+    },
+    "custom_priority_colors": {
+      "label": "Использовать пользовательские цвета приоритетов",
+      "description": "Включите, чтобы настроить цвета приоритетов"
+    },
+    "export_path": {
+      "label": "Путь экспорта",
+      "description": "Папка для экспортированных задач",
+      "placeholder": "например, ~/Documents",
+      "select_folder": "Выбрать папку"
+    },
+    "export_format": {
+      "label": "Формат экспорта",
+      "description": "Формат файла для экспорта задач",
+      "markdown": "Markdown",
+      "json": "JSON"
+    },
+    "export_empty_sections": {
+      "label": "Показывать пустые разделы",
+      "description": "Показывать пустые разделы Активные/Завершённые и страницы при экспорте"
+    },
+    "priority_colors": {
+      "label": "Цвета приоритетов",
+      "high_label": "Высокий приоритет:",
+      "medium_label": "Средний приоритет:",
+      "low_label": "Низкий приоритет:"
+    },
+    "pages": {
+      "label": "Управление страницами",
+      "placeholder": "Введите название новой страницы",
+      "add_button": "Добавить страницу",
+      "empty_name": "Название страницы не может быть пустым",
+      "name_exists": "Страница с таким именем уже существует",
+      "cannot_delete_default": "Нельзя удалить страницу по умолчанию",
+      "cannot_delete_last": "Нельзя удалить последнюю страницу",
+      "confirm_delete_title": "Подтвердите удаление",
+      "confirm_delete_message": "Вы уверены, что хотите удалить страницу '{pageName}'?\n\nВсе задачи с этой страницы будут перенесены на первую страницу.",
+      "rename_button_tooltip": "Переименовать",
+      "delete_button_tooltip": "Удалить",
+      "added_page": "Страница добавлена: ",
+      "deleted_page": "Страница удалена",
+      "renamed_page": "Страница переименована"
+    }
+  }
+}
