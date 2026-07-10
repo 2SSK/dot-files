@@ -1,0 +1,139 @@
+{
+  "bar_widget": {
+    "todo_count_plural": "{count} 件のToDo",
+    "todo_count_singular": "{count} 件のToDo"
+  },
+  "actions": {
+    "widget_settings": "設定"
+  },
+  "desktop_widget": {
+    "empty_state": "未完了のタスクはありません。",
+    "header_title": "やることリスト",
+    "items_count": "{active} / {total} 件"
+  },
+  "main": {
+    "added_new_todo": "新しいToDoを追加しました: ",
+    "cleared_completed_todos": "クリアしました",
+    "cleared_all_todos": "すべてのToDoを削除しました",
+    "completed_todos_suffix": "完了したToDo",
+    "not_found_suffix": "見つかりません",
+    "removed_todo": "ToDo項目を削除しました",
+    "todo_completed": "完了",
+    "todo_marked_incomplete": "未完了としてマークされました",
+    "todo_not_found": "ID のToDo",
+    "todo_status_changed": "ToDo",
+    "updated_todo": "ToDoを更新しました",
+    "updated_todo_priority": "ToDoの優先度を更新しました",
+    "error": "エラー",
+    "error_text_empty": "ToDoの内容は空にできません",
+    "error_invalid_priority": "優先度は高・中・低のいずれかである必要があります",
+    "error_page_not_found": "ページが見つかりません",
+    "error_todo_not_found": "ToDoが見つかりません",
+    "error_create_failed": "ToDoの作成に失敗しました",
+    "error_update_failed": "ToDoの更新に失敗しました",
+    "error_remove_failed": "ToDoの削除に失敗しました",
+    "error_rename_failed": "ページ名の変更に失敗しました",
+    "error_delete_failed": "ページの削除に失敗しました",
+    "exported_todos": "次にエクスポートしました: ",
+    "export_failed": "ToDoのエクスポートに失敗しました",
+    "export_title": "やることリスト",
+    "export_page_header": "📁 {pageName}",
+    "export_active_section": "○ アクティブ ({count})",
+    "export_completed_section": "✓ 完了 ({count})",
+    "export_priority": "優先度",
+    "export_created": "作成日",
+    "export_details": "詳細",
+    "priority_high": "高",
+    "priority_medium": "中",
+    "priority_low": "低"
+  },
+  "panel": {
+    "add_todo": {
+      "add_button": "追加",
+      "placeholder": "新しいToDoを入力..."
+    },
+    "empty_state": {
+      "message": "まだタスクはありません"
+    },
+    "header": {
+      "clear_completed_button": "完了をクリア",
+      "export_button": "エクスポート",
+      "title": "やることリスト"
+    },
+    "todo_details": {
+      "title": "ToDo詳細",
+      "label_title": "タイトル: ",
+      "label_status": "ステータス: ",
+      "status_completed": "完了",
+      "status_pending": "未完了",
+      "label_created": "作成日: ",
+      "label_priority": "優先度: ",
+      "label_page": "ページ:",
+      "label_details": "詳細:",
+      "button_add_details": "追加",
+      "button_edit_details": "編集",
+      "button_save": "保存",
+      "button_cancel": "キャンセル",
+      "copy_details_button_tooltip": "コピー",
+      "copied_details": "詳細をクリップボードにコピーしました"
+    },
+    "todo_item": {
+      "delete_button_tooltip": "削除",
+      "edit_button_tooltip": "編集",
+      "copy_button_tooltip": "コピー",
+      "copied": "クリップボードにコピーしました"
+    }
+  },
+  "settings": {
+    "background_color": {
+      "description": "ToDoウィジェットの背景色",
+      "label": "背景色"
+    },
+    "show_completed": {
+      "description": "パネルに完了したToDo項目を表示する",
+      "label": "完了したToDoを表示"
+    },
+    "custom_priority_colors": {
+      "label": "優先度のカスタムカラーを使用",
+      "description": "有効にすると優先度の色をカスタマイズできます"
+    },
+    "export_path": {
+      "label": "エクスポート先",
+      "description": "ToDoエクスポートファイルの保存先フォルダ",
+      "placeholder": "例: ~/Documents",
+      "select_folder": "フォルダを選択"
+    },
+    "export_format": {
+      "label": "エクスポート形式",
+      "description": "エクスポートするファイル形式",
+      "markdown": "Markdown",
+      "json": "JSON"
+    },
+    "export_empty_sections": {
+      "label": "空のセクションを表示",
+      "description": "エクスポート時に空のアクティブ／完了セクションやページも表示します"
+    },
+    "priority_colors": {
+      "label": "優先度カラー",
+      "high_label": "高優先度:",
+      "medium_label": "中優先度:",
+      "low_label": "低優先度:"
+    },
+    "pages": {
+      "label": "ページ管理",
+      "placeholder": "新しいページ名を入力",
+      "add_button": "ページ追加",
+      "empty_name": "ページ名は空にできません",
+      "name_exists": "このページ名は既に存在します",
+      "cannot_delete_default": "デフォルトページは削除できません",
+      "cannot_delete_last": "最後のページは削除できません",
+      "confirm_delete_title": "削除の確認",
+      "confirm_delete_message": "ページ「{pageName}」を削除してもよろしいですか？\n\nこのページのToDoはすべて最初のページに移動されます。",
+      "rename_button_tooltip": "名前変更",
+      "delete_button_tooltip": "削除",
+      "added_page": "ページを追加しました: ",
+      "deleted_page": "ページを削除しました",
+      "renamed_page": "ページ名を変更しました"
+    }
+  }
+}

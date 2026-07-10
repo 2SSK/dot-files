@@ -12,18 +12,18 @@ floating_modifier $mod normal
 # bindsym $mod+c exec hyprlock
 
 # Toggle noctalia-shell wallpaper selector
-bindsym $mod+shift+p exec --no-startup-id qs -c noctalia-shell ipc call wallpaper toggle
+bindsym $mod+shift+p exec --no-startup-id noctalia msg panel-toggle wallpaper
 
 # Emojis
 # bindsym $mod+comma exec smile
-bindsym $mod+comma exec --no-startup-id qs -c noctalia-shell ipc call launcher emoji
+bindsym $mod+comma exec --no-startup-id noctalia msg panel-toggle launcher
 
 # Toggle noctalia-shell bar
-bindsym $mod+shift+b exec --no-startup-id qs -c noctalia-shell ipc call bar toggle
+bindsym $mod+shift+b exec --no-startup-id noctalia msg bar-toggle
 
 # Power Menu
 # bindsym $mod+p exec --no-startup-id wlogout
-bindsym $mod+p exec --no-startup-id qs -c noctalia-shell ipc call sessionMenu toggle
+bindsym $mod+p exec --no-startup-id noctalia msg panel-toggle session
 # bindsym $mod+p exec --no-startup-id ~/.config/rofi/powermenu.sh
 
 # Switch to prev/next workspace

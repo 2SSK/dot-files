@@ -1,0 +1,139 @@
+{
+  "bar_widget": {
+    "todo_count_plural": "{count} yapılacaklar",
+    "todo_count_singular": "{count} yapılacak iş"
+  },
+  "actions": {
+    "widget_settings": "Ayarlar"
+  },
+  "desktop_widget": {
+    "empty_state": "Yapılacaklar yok.",
+    "header_title": "Yapılacaklar Listesi",
+    "items_count": "{active} / {total} öğe"
+  },
+  "main": {
+    "added_new_todo": "Yeni yapılacaklar eklendi:",
+    "cleared_completed_todos": "Temizlendi",
+    "cleared_all_todos": "Tüm yapılacaklar temizlendi",
+    "completed_todos_suffix": "tamamlanmış yapılacaklar",
+    "not_found_suffix": "bulunamadı",
+    "removed_todo": "Yapılacaklar listesinden kaldırılan öğe",
+    "todo_completed": "tamamlandı",
+    "todo_marked_incomplete": "eksik olarak işaretlendi",
+    "todo_not_found": "Kimlikli yapılacaklar",
+    "todo_status_changed": "Yapılacaklar",
+    "updated_todo": "Yapılacak güncellendi",
+    "updated_todo_priority": "Yapılacak önceliği güncellendi",
+    "error": "Hata",
+    "error_text_empty": "Yapılacak metni boş olamaz",
+    "error_invalid_priority": "Öncelik yüksek, orta veya düşük olmalıdır",
+    "error_page_not_found": "Sayfa bulunamadı",
+    "error_todo_not_found": "Yapılacak bulunamadı",
+    "error_create_failed": "Yapılacak oluşturulamadı",
+    "error_update_failed": "Yapılacak güncellenemedi",
+    "error_remove_failed": "Yapılacak kaldırılamadı",
+    "error_rename_failed": "Sayfa yeniden adlandırılamadı",
+    "error_delete_failed": "Sayfa silinemedi",
+    "exported_todos": "Şuraya dışa aktarıldı: ",
+    "export_failed": "Yapılacaklar dışa aktarılamadı",
+    "export_title": "Yapılacaklar Listesi",
+    "export_page_header": "📁 {pageName}",
+    "export_active_section": "○ Aktif ({count})",
+    "export_completed_section": "✓ Tamamlanan ({count})",
+    "export_priority": "Öncelik",
+    "export_created": "Oluşturulma",
+    "export_details": "Ayrıntılar",
+    "priority_high": "Yüksek",
+    "priority_medium": "Orta",
+    "priority_low": "Düşük"
+  },
+  "panel": {
+    "add_todo": {
+      "add_button": "Ekle",
+      "placeholder": "Yeni bir yapılacaklar öğesi girin..."
+    },
+    "empty_state": {
+      "message": "Henüz yapılacak bir şey yok."
+    },
+    "header": {
+      "clear_completed_button": "Tamamlananları Temizle",
+      "export_button": "Dışa Aktar",
+      "title": "Yapılacaklar Listesi"
+    },
+    "todo_details": {
+      "title": "Yapılacak detayları",
+      "label_title": "Başlık: ",
+      "label_status": "Durum: ",
+      "status_completed": "Tamamlandı",
+      "status_pending": "Beklemede",
+      "label_created": "Oluşturuldu: ",
+      "label_priority": "Öncelik: ",
+      "label_page": "Sayfa:",
+      "label_details": "Ayrıntılar:",
+      "button_add_details": "Ekle",
+      "button_edit_details": "Düzenle",
+      "button_save": "Kaydet",
+      "button_cancel": "İptal",
+      "copy_details_button_tooltip": "Kopyala",
+      "copied_details": "Ayrıntılar panoya kopyalandı"
+    },
+    "todo_item": {
+      "delete_button_tooltip": "Sil",
+      "edit_button_tooltip": "Düzenle",
+      "copy_button_tooltip": "Kopyala",
+      "copied": "Panoya kopyalandı"
+    }
+  },
+  "settings": {
+    "background_color": {
+      "description": "Yapılacaklar widget'ının arka plan rengi",
+      "label": "Arka Plan Rengi"
+    },
+    "show_completed": {
+      "description": "Tamamlanan yapılacaklar öğelerini panelde görüntüle",
+      "label": "Tamamlanan Yapılacakları Göster"
+    },
+    "custom_priority_colors": {
+      "label": "Özel öncelik renklerini kullan",
+      "description": "Öncelik renklerini özelleştirmek için etkinleştir"
+    },
+    "export_path": {
+      "label": "Dışa aktarma yolu",
+      "description": "Dışa aktarılan yapılacaklar için klasör",
+      "placeholder": "örn. ~/Documents",
+      "select_folder": "Klasör seç"
+    },
+    "export_format": {
+      "label": "Dışa aktarma formatı",
+      "description": "Yapılacaklar için dosya formatı",
+      "markdown": "Markdown",
+      "json": "JSON"
+    },
+    "export_empty_sections": {
+      "label": "Boş bölümleri göster",
+      "description": "Dışa aktarırken boş Aktif/Tamamlanan bölümleri ve sayfaları göster"
+    },
+    "priority_colors": {
+      "label": "Öncelik renkleri",
+      "high_label": "Yüksek öncelik:",
+      "medium_label": "Orta öncelik:",
+      "low_label": "Düşük öncelik:"
+    },
+    "pages": {
+      "label": "Sayfaları yönet",
+      "placeholder": "Yeni sayfa adı girin",
+      "add_button": "Sayfa ekle",
+      "empty_name": "Sayfa adı boş olamaz",
+      "name_exists": "Bu isimde bir sayfa zaten var",
+      "cannot_delete_default": "Varsayılan sayfa silinemez",
+      "cannot_delete_last": "Son sayfa silinemez",
+      "confirm_delete_title": "Silme işlemini onayla",
+      "confirm_delete_message": "'{pageName}' sayfasını silmek istediğinizden emin misiniz?\n\nBu sayfadaki tüm yapılacaklar ilk sayfaya taşınacaktır.",
+      "rename_button_tooltip": "Yeniden adlandır",
+      "delete_button_tooltip": "Sil",
+      "added_page": "Sayfa eklendi: ",
+      "deleted_page": "Sayfa silindi",
+      "renamed_page": "Sayfa yeniden adlandırıldı"
+    }
+  }
+}

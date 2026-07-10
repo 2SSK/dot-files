@@ -8,15 +8,22 @@ return {
 			vim.keymap.set(
 				"n",
 				"<leader>gl",
-				[[:Git log --graph --all --pretty=format:"%C(magenta)%h %C(white)%an %ar %C(blue)%D%n%s%n"<CR>]],
+				[[<Cmd>Git log --graph --all --pretty=format:"%C(magenta)%h %C(white)%an %ar %C(blue)%D%n%s%n"<CR>]],
 				{ desc = "Git log" }
 			)
 			vim.keymap.set("n", "<leader>gc", ":Git commit<CR>", { desc = "Git commit" })
 			vim.keymap.set("n", "<leader>gp", ":Git push<CR>", { desc = "Git push" })
 			vim.keymap.set("n", "<leader>gP", ":Git pull<CR>", { desc = "Git pull" })
 			vim.keymap.set("n", "<leader>gb", ":Git blame<CR>", { desc = "Git blame" })
-			vim.keymap.set("n", "<leader>gd", ":Gdiffsplit<CR>", { desc = "Git diff split" })
 			vim.keymap.set("n", "<leader>gD", ":Gvdiffsplit!<CR>", { desc = "Git vertical diff split (3-way)" })
+			vim.keymap.set("n", "<leader>gd", function()
+				if vim.wo.diff then
+					vim.cmd("windo diffoff")
+					vim.cmd("only") -- close the extra diff window
+				else
+					vim.cmd("Gvdiffsplit")
+				end
+			end, { desc = "Toggle Git vertical diff" })
 			vim.keymap.set("n", "<leader>dt", function()
 				-- Toggle between file and diff view
 				if vim.wo.diff then

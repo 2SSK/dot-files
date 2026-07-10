@@ -1,0 +1,139 @@
+{
+  "bar_widget": {
+    "todo_count_plural": "{count} tâches",
+    "todo_count_singular": "{count} tâche"
+  },
+  "actions": {
+    "widget_settings": "Paramètres"
+  },
+  "desktop_widget": {
+    "empty_state": "Aucune tâche",
+    "header_title": "Liste de tâches",
+    "items_count": "{active} sur {total} éléments"
+  },
+  "main": {
+    "added_new_todo": "Nouvelle tâche ajoutée : ",
+    "cleared_completed_todos": "Tâches terminées supprimées",
+    "cleared_all_todos": "Toutes les tâches supprimées",
+    "completed_todos_suffix": " tâches terminées",
+    "not_found_suffix": " non trouvé",
+    "removed_todo": "Tâche supprimée",
+    "todo_completed": "terminée",
+    "todo_marked_incomplete": "marquée comme incomplète",
+    "todo_not_found": "Tâche avec l'ID ",
+    "todo_status_changed": "Tâche ",
+    "updated_todo": "Tâche mise à jour",
+    "updated_todo_priority": "Priorité de la tâche mise à jour",
+    "error": "Erreur",
+    "error_text_empty": "Le texte de la tâche ne peut pas être vide",
+    "error_invalid_priority": "La priorité doit être haute, moyenne ou basse",
+    "error_page_not_found": "Page non trouvée",
+    "error_todo_not_found": "Tâche non trouvée",
+    "error_create_failed": "Échec de la création de la tâche",
+    "error_update_failed": "Échec de la mise à jour de la tâche",
+    "error_remove_failed": "Échec de la suppression de la tâche",
+    "error_rename_failed": "Échec du renommage de la page",
+    "error_delete_failed": "Échec de la suppression de la page",
+    "exported_todos": "Exporté vers ",
+    "export_failed": "Échec de l'exportation des tâches",
+    "export_title": "Liste de tâches",
+    "export_page_header": "📁 {pageName}",
+    "export_active_section": "○ Actives ({count})",
+    "export_completed_section": "✓ Terminées ({count})",
+    "export_priority": "Priorité",
+    "export_created": "Créé le",
+    "export_details": "Détails",
+    "priority_high": "Haute",
+    "priority_medium": "Moyenne",
+    "priority_low": "Basse"
+  },
+  "panel": {
+    "add_todo": {
+      "add_button": "Ajouter",
+      "placeholder": "Entrez une nouvelle tâche..."
+    },
+    "empty_state": {
+      "message": "Aucune tâche pour le moment"
+    },
+    "header": {
+      "clear_completed_button": "Supprimer les terminées",
+      "export_button": "Exporter",
+      "title": "Liste de tâches"
+    },
+    "todo_details": {
+      "title": "Détails de la tâche",
+      "label_title": "Titre : ",
+      "label_status": "Statut : ",
+      "status_completed": "Terminée",
+      "status_pending": "En attente",
+      "label_created": "Créé le : ",
+      "label_priority": "Priorité : ",
+      "label_page": "Page :",
+      "label_details": "Détails :",
+      "button_add_details": "Ajouter",
+      "button_edit_details": "Modifier",
+      "button_save": "Enregistrer",
+      "button_cancel": "Annuler",
+      "copy_details_button_tooltip": "Copier",
+      "copied_details": "Détails copiés dans le presse-papiers"
+    },
+    "todo_item": {
+      "delete_button_tooltip": "Supprimer",
+      "edit_button_tooltip": "Modifier",
+      "copy_button_tooltip": "Copier",
+      "copied": "Copié dans le presse-papiers"
+    }
+  },
+  "settings": {
+    "background_color": {
+      "description": "Couleur de fond du widget de tâches",
+      "label": "Couleur de fond"
+    },
+    "show_completed": {
+      "description": "Afficher les tâches terminées dans le panneau",
+      "label": "Afficher les tâches terminées"
+    },
+    "custom_priority_colors": {
+      "label": "Utiliser des couleurs de priorité personnalisées",
+      "description": "Activer pour personnaliser les couleurs de priorité"
+    },
+    "export_path": {
+      "label": "Chemin d'exportation",
+      "description": "Dossier pour les fichiers de tâches exportés",
+      "placeholder": "ex. : ~/Documents",
+      "select_folder": "Sélectionner un dossier"
+    },
+    "export_format": {
+      "label": "Format d'exportation",
+      "description": "Format de fichier pour les tâches exportées",
+      "markdown": "Markdown",
+      "json": "JSON"
+    },
+    "export_empty_sections": {
+      "label": "Afficher les sections vides",
+      "description": "Afficher les sections Actives/Terminées et les pages vides lors de l'exportation"
+    },
+    "priority_colors": {
+      "label": "Couleurs de priorité",
+      "high_label": "Priorité haute :",
+      "medium_label": "Priorité moyenne :",
+      "low_label": "Priorité basse :"
+    },
+    "pages": {
+      "label": "Gérer les pages",
+      "placeholder": "Entrez le nom de la nouvelle page",
+      "add_button": "Ajouter une page",
+      "empty_name": "Le nom de la page ne peut pas être vide",
+      "name_exists": "Ce nom de page existe déjà",
+      "cannot_delete_default": "Impossible de supprimer la page par défaut",
+      "cannot_delete_last": "Impossible de supprimer la dernière page",
+      "confirm_delete_title": "Confirmer la suppression",
+      "confirm_delete_message": "Êtes-vous sûr de vouloir supprimer la page '{pageName}' ?\n\nToutes les tâches de cette page seront transférées vers la première page.",
+      "rename_button_tooltip": "Renommer",
+      "delete_button_tooltip": "Supprimer",
+      "added_page": "Page ajoutée : ",
+      "deleted_page": "Page supprimée",
+      "renamed_page": "Page renommée"
+    }
+  }
+}

@@ -3,6 +3,7 @@ bindsym $alt+b exec firefox
 bindsym $alt+f exec $files
 bindsym $mod+v exec voxtype
 
-bindsym $mod+Shift+t exec qs -c noctalia-shell ipc call plugin:todo togglePanel
-
-bindsym $mod+Shift+c exec qs -c noctalia-shell ipc call plugin:clipper toggle
+bindsym $mod+Shift+t exec noctalia msg panel-toggle noctalia/notes:panel
+bindsym $mod+Shift+c exec noctalia msg panel-toggle clipboard
+bindsym $mod+Shift+s exec noctalia msg settings-toggle
+bindsym $mod+Escape exec noctalia msg panel-toggle control-center

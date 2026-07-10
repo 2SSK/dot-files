@@ -1,0 +1,46 @@
+{
+  "id": "clipper",
+  "name": "Clipper",
+  "version": "2.4.4",
+  "minNoctaliaVersion": "4.1.2",
+  "author": "blackbartblues",
+  "contributors": [
+    "rscipher001",
+    "neyfua"
+  ],
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Advanced clipboard manager with history, search, keyboard navigation, ToDo integration, pinned items, notecards/sticky notes, and selection-to-notecard feature. Fully translated with comprehensive i18n support.",
+  "tags": [
+    "Utility",
+    "Bar",
+    "Panel"
+  ],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "panel": "Panel.qml",
+    "settings": "Settings.qml",
+    "controlCenterWidget": "ControlCenterWidget.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "enableTodoIntegration": false,
+      "pincardsEnabled": true,
+      "notecardsEnabled": true,
+      "showCloseButton": true,
+      "fullscreenMode": false,
+      "hidePanelBackground": false,
+      "autoPaste": false,
+      "autoPasteOnRightClick": false,
+      "autoPasteDelay": 300,
+      "panelWidth": 1450,
+      "panelHeight": 0,
+      "cardColors": {},
+      "customColors": {}
+    }
+  }
+}

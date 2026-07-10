@@ -1,0 +1,139 @@
+{
+  "bar_widget": {
+    "todo_count_plural": "{count} compiti",
+    "todo_count_singular": "{count} compito"
+  },
+  "actions": {
+    "widget_settings": "Impostazioni"
+  },
+  "desktop_widget": {
+    "empty_state": "Nessun compito",
+    "header_title": "Elenco dei compiti",
+    "items_count": "{active} di {total} elementi"
+  },
+  "main": {
+    "added_new_todo": "Aggiunto nuovo compito: ",
+    "cleared_completed_todos": "Cancellato ",
+    "cleared_all_todos": "Tutti i compiti cancellati",
+    "completed_todos_suffix": " compiti completati",
+    "not_found_suffix": " non trovato",
+    "removed_todo": "Elemento rimosso",
+    "todo_completed": "completato",
+    "todo_marked_incomplete": "segnato come incompleto",
+    "todo_not_found": "Compito con ID ",
+    "todo_status_changed": "Compito ",
+    "updated_todo": "Compito aggiornato",
+    "updated_todo_priority": "Priorità del compito aggiornata",
+    "error": "Errore",
+    "error_text_empty": "Il testo del compito non può essere vuoto",
+    "error_invalid_priority": "La priorità deve essere alta, media o bassa",
+    "error_page_not_found": "Pagina non trovata",
+    "error_todo_not_found": "Compito non trovato",
+    "error_create_failed": "Creazione del compito fallita",
+    "error_update_failed": "Aggiornamento del compito fallito",
+    "error_remove_failed": "Rimozione del compito fallita",
+    "error_rename_failed": "Rinomina della pagina fallita",
+    "error_delete_failed": "Eliminazione della pagina fallita",
+    "exported_todos": "Esportato in ",
+    "export_failed": "Esportazione dei compiti fallita",
+    "export_title": "Elenco dei compiti",
+    "export_page_header": "📁 {pageName}",
+    "export_active_section": "○ Attivi ({count})",
+    "export_completed_section": "✓ Completati ({count})",
+    "export_priority": "Priorità",
+    "export_created": "Creato",
+    "export_details": "Dettagli",
+    "priority_high": "Alta",
+    "priority_medium": "Media",
+    "priority_low": "Bassa"
+  },
+  "panel": {
+    "add_todo": {
+      "add_button": "Aggiungi",
+      "placeholder": "Inserisci un nuovo compito..."
+    },
+    "empty_state": {
+      "message": "Ancora nessun compito"
+    },
+    "header": {
+      "clear_completed_button": "Cancella completati",
+      "export_button": "Esporta",
+      "title": "Lista dei compiti"
+    },
+    "todo_details": {
+      "title": "Dettagli del compito",
+      "label_title": "Titolo: ",
+      "label_status": "Stato: ",
+      "status_completed": "Completato",
+      "status_pending": "In attesa",
+      "label_created": "Creato: ",
+      "label_priority": "Priorità: ",
+      "label_page": "Pagina:",
+      "label_details": "Dettagli:",
+      "button_add_details": "Aggiungi",
+      "button_edit_details": "Modifica",
+      "button_save": "Salva",
+      "button_cancel": "Annulla",
+      "copy_details_button_tooltip": "Copia",
+      "copied_details": "Dettagli copiati negli appunti"
+    },
+    "todo_item": {
+      "delete_button_tooltip": "Elimina",
+      "edit_button_tooltip": "Modifica",
+      "copy_button_tooltip": "Copia",
+      "copied": "Copiato negli appunti"
+    }
+  },
+  "settings": {
+    "background_color": {
+      "description": "Colore di sfondo del widget dei compiti",
+      "label": "Colore di sfondo"
+    },
+    "show_completed": {
+      "description": "Visualizza i compiti completati nel pannello",
+      "label": "Mostra compiti completati"
+    },
+    "custom_priority_colors": {
+      "label": "Usa colori di priorità personalizzati",
+      "description": "Abilita per personalizzare i colori delle priorità"
+    },
+    "export_path": {
+      "label": "Percorso di esportazione",
+      "description": "Directory per i file esportati dei compiti",
+      "placeholder": "es. ~/Documenti",
+      "select_folder": "Seleziona cartella"
+    },
+    "export_format": {
+      "label": "Formato di esportazione",
+      "description": "Formato file per i compiti esportati",
+      "markdown": "Markdown",
+      "json": "JSON"
+    },
+    "export_empty_sections": {
+      "label": "Mostra sezioni vuote",
+      "description": "Mostra sezioni e pagine vuote Attivi/Completati durante l'esportazione"
+    },
+    "priority_colors": {
+      "label": "Colori priorità",
+      "high_label": "Alta priorità:",
+      "medium_label": "Media priorità:",
+      "low_label": "Bassa priorità:"
+    },
+    "pages": {
+      "label": "Gestisci pagine",
+      "placeholder": "Inserisci il nome della nuova pagina",
+      "add_button": "Aggiungi pagina",
+      "empty_name": "Il nome della pagina non può essere vuoto",
+      "name_exists": "Il nome della pagina esiste già",
+      "cannot_delete_default": "Impossibile eliminare la pagina predefinita",
+      "cannot_delete_last": "Impossibile eliminare l'ultima pagina",
+      "confirm_delete_title": "Conferma eliminazione",
+      "confirm_delete_message": "Sei sicuro di voler eliminare la pagina '{pageName}'?\n\nTutti i compiti in questa pagina verranno trasferiti alla prima pagina.",
+      "rename_button_tooltip": "Rinomina",
+      "delete_button_tooltip": "Elimina",
+      "added_page": "Pagina aggiunta: ",
+      "deleted_page": "Pagina eliminata",
+      "renamed_page": "Pagina rinominata"
+    }
+  }
+}

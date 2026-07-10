@@ -1,0 +1,139 @@
+{
+  "bar_widget": {
+    "todo_count_plural": "{count} zadań do zrobienia",
+    "todo_count_singular": "{count} zadanie do wykonania\n{count} zadania do wykonania-plural"
+  },
+  "actions": {
+    "widget_settings": "Ustawienia"
+  },
+  "desktop_widget": {
+    "empty_state": "Brak zadań",
+    "header_title": "Lista zadań",
+    "items_count": "{active} z {total} elementów"
+  },
+  "main": {
+    "added_new_todo": "Dodano nowe zadanie:",
+    "cleared_completed_todos": "Wyczyszczono",
+    "cleared_all_todos": "Wyczyszczono wszystkie zadania",
+    "completed_todos_suffix": "ukończone zadania",
+    "not_found_suffix": "nie znaleziono",
+    "removed_todo": "Usunięto zadanie z listy zadań",
+    "todo_completed": "ukończono",
+    "todo_marked_incomplete": "oznaczone jako niekompletne",
+    "todo_not_found": "Zadanie z ID",
+    "todo_status_changed": "Wszystko",
+    "updated_todo": "Zadanie zaktualizowane",
+    "updated_todo_priority": "Priorytet zadania zaktualizowany",
+    "error": "Błąd",
+    "error_text_empty": "Tekst zadania nie może być pusty",
+    "error_invalid_priority": "Priorytet musi być wysoki, średni lub niski",
+    "error_page_not_found": "Strona nie znaleziona",
+    "error_todo_not_found": "Zadanie nie znalezione",
+    "error_create_failed": "Nie udało się utworzyć zadania",
+    "error_update_failed": "Nie udało się zaktualizować zadania",
+    "error_remove_failed": "Nie udało się usunąć zadania",
+    "error_rename_failed": "Nie udało się zmienić nazwy strony",
+    "error_delete_failed": "Nie udało się usunąć strony",
+    "exported_todos": "Wyeksportowano do ",
+    "export_failed": "Nie udało się wyeksportować zadań",
+    "export_title": "Lista zadań",
+    "export_page_header": "📁 {pageName}",
+    "export_active_section": "○ Aktywne ({count})",
+    "export_completed_section": "✓ Ukończone ({count})",
+    "export_priority": "Priorytet",
+    "export_created": "Utworzono",
+    "export_details": "Szczegóły",
+    "priority_high": "Wysoki",
+    "priority_medium": "Średni",
+    "priority_low": "Niski"
+  },
+  "panel": {
+    "add_todo": {
+      "add_button": "Dodaj",
+      "placeholder": "Wprowadź nowe zadanie do wykonania..."
+    },
+    "empty_state": {
+      "message": "Brak jeszcze elementów do zrobienia"
+    },
+    "header": {
+      "clear_completed_button": "Wyczyść ukończone",
+      "export_button": "Eksportuj",
+      "title": "Lista zadań"
+    },
+    "todo_details": {
+      "title": "Szczegóły zadania",
+      "label_title": "Tytuł: ",
+      "label_status": "Status: ",
+      "status_completed": "Ukończone",
+      "status_pending": "Oczekujące",
+      "label_created": "Utworzono: ",
+      "label_priority": "Priorytet: ",
+      "label_page": "Strona:",
+      "label_details": "Szczegóły:",
+      "button_add_details": "Dodaj",
+      "button_edit_details": "Edytuj",
+      "button_save": "Zapisz",
+      "button_cancel": "Anuluj",
+      "copy_details_button_tooltip": "Kopiuj",
+      "copied_details": "Szczegóły skopiowane do schowka"
+    },
+    "todo_item": {
+      "delete_button_tooltip": "Usuń",
+      "edit_button_tooltip": "Edytuj",
+      "copy_button_tooltip": "Kopiuj",
+      "copied": "Skopiowano do schowka"
+    }
+  },
+  "settings": {
+    "background_color": {
+      "description": "Kolor tła widżetu todo",
+      "label": "Kolor tła"
+    },
+    "show_completed": {
+      "description": "Wyświetlaj ukończone zadania na panelu",
+      "label": "Pokaż ukończone zadania"
+    },
+    "custom_priority_colors": {
+      "label": "Użyj niestandardowych kolorów priorytetu",
+      "description": "Włącz, aby dostosować kolory priorytetów"
+    },
+    "export_path": {
+      "label": "Ścieżka eksportu",
+      "description": "Katalog dla wyeksportowanych zadań",
+      "placeholder": "np. ~/Documents",
+      "select_folder": "Wybierz folder"
+    },
+    "export_format": {
+      "label": "Format eksportu",
+      "description": "Format pliku dla eksportowanych zadań",
+      "markdown": "Markdown",
+      "json": "JSON"
+    },
+    "export_empty_sections": {
+      "label": "Pokaż puste sekcje",
+      "description": "Pokazuj puste sekcje Aktywne/Ukończone i strony podczas eksportu"
+    },
+    "priority_colors": {
+      "label": "Kolory priorytetów",
+      "high_label": "Wysoki priorytet:",
+      "medium_label": "Średni priorytet:",
+      "low_label": "Niski priorytet:"
+    },
+    "pages": {
+      "label": "Zarządzaj stronami",
+      "placeholder": "Wprowadź nazwę nowej strony",
+      "add_button": "Dodaj stronę",
+      "empty_name": "Nazwa strony nie może być pusta",
+      "name_exists": "Nazwa strony już istnieje",
+      "cannot_delete_default": "Nie można usunąć strony domyślnej",
+      "cannot_delete_last": "Nie można usunąć ostatniej strony",
+      "confirm_delete_title": "Potwierdź usunięcie",
+      "confirm_delete_message": "Czy na pewno chcesz usunąć stronę '{pageName}'?\n\nWszystkie zadania z tej strony zostaną przeniesione na pierwszą stronę.",
+      "rename_button_tooltip": "Zmień nazwę",
+      "delete_button_tooltip": "Usuń",
+      "added_page": "Dodano stronę: ",
+      "deleted_page": "Usunięto stronę",
+      "renamed_page": "Zmieniono nazwę strony"
+    }
+  }
+}

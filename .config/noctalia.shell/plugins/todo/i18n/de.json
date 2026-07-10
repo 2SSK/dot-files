@@ -1,0 +1,139 @@
+{
+  "bar_widget": {
+    "todo_count_plural": "{count} Aufgaben",
+    "todo_count_singular": "{count} Aufgabe"
+  },
+  "actions": {
+    "widget_settings": "Einstellungen"
+  },
+  "desktop_widget": {
+    "empty_state": "Keine Aufgaben",
+    "header_title": "Aufgabenliste",
+    "items_count": "{active} von {total} Einträgen"
+  },
+  "main": {
+    "added_new_todo": "Neues Todo hinzugefügt:",
+    "cleared_completed_todos": "Abgeschlossene Aufgaben gelöscht",
+    "cleared_all_todos": "Alle Aufgaben gelöscht",
+    "completed_todos_suffix": "Erledigte Aufgaben",
+    "not_found_suffix": "nicht gefunden",
+    "removed_todo": "Aufgabe entfernt",
+    "todo_completed": "abgeschlossen",
+    "todo_marked_incomplete": "als unvollständig markiert",
+    "todo_not_found": "Aufgabe mit ID",
+    "todo_status_changed": "Aufgaben",
+    "updated_todo": "Aufgabe aktualisiert",
+    "updated_todo_priority": "Aufgabenpriorität aktualisiert",
+    "error": "Fehler",
+    "error_text_empty": "Aufgabentext kann nicht leer sein",
+    "error_invalid_priority": "Priorität muss Hoch, Mittel oder Niedrig sein",
+    "error_page_not_found": "Seite nicht gefunden",
+    "error_todo_not_found": "Aufgabe nicht gefunden",
+    "error_create_failed": "Aufgabe konnte nicht erstellt werden",
+    "error_update_failed": "Aufgabe konnte nicht aktualisiert werden",
+    "error_remove_failed": "Aufgabe konnte nicht entfernt werden",
+    "error_rename_failed": "Seite konnte nicht umbenannt werden",
+    "error_delete_failed": "Seite konnte nicht gelöscht werden",
+    "exported_todos": "Exportiert nach ",
+    "export_failed": "Aufgaben konnten nicht exportiert werden",
+    "export_title": "Aufgabenliste",
+    "export_page_header": "📁 {pageName}",
+    "export_active_section": "○ Aktiv ({count})",
+    "export_completed_section": "✓ Erledigt ({count})",
+    "export_priority": "Priorität",
+    "export_created": "Erstellt",
+    "export_details": "Details",
+    "priority_high": "Hoch",
+    "priority_medium": "Mittel",
+    "priority_low": "Niedrig"
+  },
+  "panel": {
+    "add_todo": {
+      "add_button": "Hinzufügen",
+      "placeholder": "Gib eine neue Aufgabe ein..."
+    },
+    "empty_state": {
+      "message": "Noch keine To-Do-Elemente vorhanden."
+    },
+    "header": {
+      "clear_completed_button": "Abgeschlossene löschen",
+      "export_button": "Exportieren",
+      "title": "Aufgabenliste"
+    },
+    "todo_details": {
+      "title": "Aufgabendetails",
+      "label_title": "Titel: ",
+      "label_status": "Status: ",
+      "status_completed": "Abgeschlossen",
+      "status_pending": "Ausstehend",
+      "label_created": "Erstellt: ",
+      "label_priority": "Priorität: ",
+      "label_page": "Seite:",
+      "label_details": "Details:",
+      "button_add_details": "Hinzufügen",
+      "button_edit_details": "Bearbeiten",
+      "button_save": "Speichern",
+      "button_cancel": "Abbrechen",
+      "copy_details_button_tooltip": "Kopieren",
+      "copied_details": "Details in Zwischenablage kopiert"
+    },
+    "todo_item": {
+      "delete_button_tooltip": "Löschen",
+      "edit_button_tooltip": "Bearbeiten",
+      "copy_button_tooltip": "Kopieren",
+      "copied": "In Zwischenablage kopiert"
+    }
+  },
+  "settings": {
+    "background_color": {
+      "description": "Hintergrundfarbe des Todo-Widgets",
+      "label": "Hintergrundfarbe"
+    },
+    "show_completed": {
+      "description": "Erledigte Aufgaben im Panel anzeigen",
+      "label": "Zeige erledigte Todos"
+    },
+    "custom_priority_colors": {
+      "label": "Eigene Farben für Prioritäten verwenden",
+      "description": "Aktivieren, um die Prioritätsfarben anzupassen"
+    },
+    "export_path": {
+      "label": "Exportpfad",
+      "description": "Verzeichnis für exportierte Aufgabenlisten",
+      "placeholder": "z.B. ~/Documents",
+      "select_folder": "Ordner auswählen"
+    },
+    "export_format": {
+      "label": "Ausgabeformat",
+      "description": "Dateiformat für exportierte Aufgaben",
+      "markdown": "Markdown",
+      "json": "JSON"
+    },
+    "export_empty_sections": {
+      "label": "Leere Abschnitte anzeigen",
+      "description": "Beim Exportieren leere Abschnitte und Seiten unter „Aktiv“ und „Abgeschlossen“ anzeigen"
+    },
+    "priority_colors": {
+      "label": "Prioritätsfarben",
+      "high_label": "Hohe Priorität:",
+      "medium_label": "Mittlere Priorität:",
+      "low_label": "Niedrige Priorität:"
+    },
+    "pages": {
+      "label": "Seiten verwalten",
+      "placeholder": "Neuen Seitennamen eingeben",
+      "add_button": "Seite hinzufügen",
+      "empty_name": "Name der Seite kann nicht leer sein",
+      "name_exists": "Name der Seite existiert bereits",
+      "cannot_delete_default": "Standardseite kann nicht gelöscht werden",
+      "cannot_delete_last": "Letzte Seite kann nicht gelöscht werden",
+      "confirm_delete_title": "Löschen bestätigen",
+      "confirm_delete_message": "Möchtest du die Seite '{pageName}' wirklich löschen?\n\nAlle Aufgaben auf dieser Seite werden auf die erste Seite übertragen.",
+      "rename_button_tooltip": "Umbenennen",
+      "delete_button_tooltip": "Löschen",
+      "added_page": "Seite hinzugefügt: ",
+      "deleted_page": "Seite gelöscht",
+      "renamed_page": "Seite umbenannt"
+    }
+  }
+}

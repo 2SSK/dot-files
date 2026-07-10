@@ -18,4 +18,5 @@ exec_always --no-startup-id voxtype
 # Keep persistent clipboard history
 exec_always --no-startup-id wl-paste --watch cliphist store
 
-exec qs -c noctalia-shell
+# exec qs -c noctalia-shell
+exec noctalia

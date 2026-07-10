@@ -64,15 +64,15 @@
       "type": "local",
       "command": ["uvx", "mcp-grafana"],
       "environment": {
-        "GRAFANA_URL": "{env:GRAFANA_URL}",
-        "GRAFANA_SERVICE_ACCOUNT_TOKEN": "{env:GRAFANA_TOKEN}"
+        "GRAFANA_URL": "https://grafana.amoga.app",
+        "GRAFANA_SERVICE_ACCOUNT_TOKEN": ""
       },
       "enabled": true
     },
     "superset": {
       "type": "remote",
       "url": "https://analytics.amoga.io/mcp",
-      "enabled": true,
+      "enabled": false,
       "headers": {
         "X-API-Key": "admin-api-key"
       }

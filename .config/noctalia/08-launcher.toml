@@ -1,0 +1,7 @@
+[shell.launcher]
+categories = true
+show_icons = true
+compact = false
+app_grid = false
+session_search = true
+sort_by_usage = true

@@ -1,0 +1,139 @@
+{
+  "bar_widget": {
+    "todo_count_plural": "{count} kar",
+    "todo_count_singular": "{count} kar"
+  },
+  "actions": {
+    "widget_settings": "Mîheng"
+  },
+  "desktop_widget": {
+    "empty_state": "Tu kar tune ne",
+    "header_title": "Lîsteya Karan",
+    "items_count": "{active} ji {total} tiştan"
+  },
+  "main": {
+    "added_new_todo": "Karê nû hate zêdekirin: ",
+    "cleared_completed_todos": "Hat paqij kirin",
+    "cleared_all_todos": "Hemû kar hatin paqij kirin",
+    "completed_todos_suffix": "karên temamkirî",
+    "not_found_suffix": "nehat dîtin",
+    "removed_todo": "Kar hate rakirin",
+    "todo_completed": "temam",
+    "todo_marked_incomplete": "wekî ne temam hate nîşankirin",
+    "todo_not_found": "Kar bi ID",
+    "todo_status_changed": "Kar",
+    "updated_todo": "Kar hate nûkirin",
+    "updated_todo_priority": "Pêşîya karê hate nûkirin",
+    "error": "Çewtî",
+    "error_text_empty": "Nivîsa karê vala nabe",
+    "error_invalid_priority": "Pêşî divê bilind, navîn an nizim be",
+    "error_page_not_found": "Rûpel nehat dîtin",
+    "error_todo_not_found": "Kar nehat dîtin",
+    "error_create_failed": "Afirandina karê bi ser neket",
+    "error_update_failed": "Nûkirina karê bi ser neket",
+    "error_remove_failed": "Rakirin karê bi ser neket",
+    "error_rename_failed": "Navê rûpelê guherandin bi ser neket",
+    "error_delete_failed": "Jêbirina rûpelê bi ser neket",
+    "exported_todos": "Hat şandin bo: ",
+    "export_failed": "Şandina karan bi ser neket",
+    "export_title": "Lîsteya Karan",
+    "export_page_header": "📁 {pageName}",
+    "export_active_section": "○ Çalak ({count})",
+    "export_completed_section": "✓ Temam ({count})",
+    "export_priority": "Pêşî",
+    "export_created": "Afirandin",
+    "export_details": "Hûrgulî",
+    "priority_high": "Bilind",
+    "priority_medium": "Navîn",
+    "priority_low": "Nizim"
+  },
+  "panel": {
+    "add_todo": {
+      "add_button": "Zêde bike",
+      "placeholder": "Karê nû binivîse..."
+    },
+    "empty_state": {
+      "message": "Hêj tu kar tune ne"
+    },
+    "header": {
+      "clear_completed_button": "Temamkirî paqij bike",
+      "export_button": "Şandin",
+      "title": "Lîsteya Karan"
+    },
+    "todo_details": {
+      "title": "Hûrguliyên Karê",
+      "label_title": "Sernav: ",
+      "label_status": "Rewş: ",
+      "status_completed": "Temam",
+      "status_pending": "Li benda ye",
+      "label_created": "Afirandin: ",
+      "label_priority": "Pêşî: ",
+      "label_page": "Rûpel:",
+      "label_details": "Hûrgulî:",
+      "button_add_details": "Zêde bike",
+      "button_edit_details": "Sererast bike",
+      "button_save": "Tomar bike",
+      "button_cancel": "Betal",
+      "copy_details_button_tooltip": "Kopî bike",
+      "copied_details": "Hûrgulî hatin kopîkirin"
+    },
+    "todo_item": {
+      "delete_button_tooltip": "Jê bibe",
+      "edit_button_tooltip": "Sererast bike",
+      "copy_button_tooltip": "Kopî bike",
+      "copied": "Hat kopîkirin"
+    }
+  },
+  "settings": {
+    "background_color": {
+      "description": "Rengê paşxaneyê ya wîceta karan",
+      "label": "Rengê paşxaneyê"
+    },
+    "show_completed": {
+      "description": "Karên temamkirî di panelê de nîşan bide",
+      "label": "Karên temamkirî nîşan bide"
+    },
+    "custom_priority_colors": {
+      "label": "Rengên pêşî yên taybet bikar bîne",
+      "description": "Çalak bike da ku rengên pêşî biguherî"
+    },
+    "export_path": {
+      "label": "Rêça şandinê",
+      "description": "Peldanka ku karên tê de têne şandin",
+      "placeholder": "mînak: ~/Documents",
+      "select_folder": "Peldankê hilbijêre"
+    },
+    "export_format": {
+      "label": "Formata şandinê",
+      "description": "Formata pelê ji bo karên şandî",
+      "markdown": "Markdown",
+      "json": "JSON"
+    },
+    "export_empty_sections": {
+      "label": "Beşên vala nîşan bide",
+      "description": "Dema şandinê beşên çalak/temam û rûpelên vala nîşan bide"
+    },
+    "priority_colors": {
+      "label": "Rengên pêşî",
+      "high_label": "Pêşî bilind:",
+      "medium_label": "Pêşî navîn:",
+      "low_label": "Pêşî nizim:"
+    },
+    "pages": {
+      "label": "Rûpelan rêvebirin",
+      "placeholder": "Navê rûpelê nû binivîse",
+      "add_button": "Rûpel zêde bike",
+      "empty_name": "Navê rûpelê vala nabe",
+      "name_exists": "Ev nav jixwe heye",
+      "cannot_delete_default": "Rûpelê bingehîn nayê jêbirin",
+      "cannot_delete_last": "Rûpelê dawî nayê jêbirin",
+      "confirm_delete_title": "Jêbirinê piştrast bike",
+      "confirm_delete_message": "Tu dixwazî rûpelê '{pageName}' jê bibî?\n\nHemû karên vê rûpelê dê werin veguhestin rûpela yekem.",
+      "rename_button_tooltip": "Nav biguherîne",
+      "delete_button_tooltip": "Jê bibe",
+      "added_page": "Rûpel hate zêdekirin: ",
+      "deleted_page": "Rûpel hate jêbirin",
+      "renamed_page": "Navê rûpelê hate guherandin"
+    }
+  }
+}

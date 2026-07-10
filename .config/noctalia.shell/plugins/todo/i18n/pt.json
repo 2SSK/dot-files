@@ -1,0 +1,139 @@
+{
+  "bar_widget": {
+    "todo_count_plural": "{count} tarefas",
+    "todo_count_singular": "{count} tarefa(s)"
+  },
+  "actions": {
+    "widget_settings": "Configurações"
+  },
+  "desktop_widget": {
+    "empty_state": "Sem tarefas pendentes.",
+    "header_title": "Lista de Tarefas",
+    "items_count": "{active} de {total} itens"
+  },
+  "main": {
+    "added_new_todo": "Adicionado novo afazer:",
+    "cleared_completed_todos": "Liberado",
+    "cleared_all_todos": "Todas as tarefas foram removidas",
+    "completed_todos_suffix": "Tarefas concluídas",
+    "not_found_suffix": "não encontrado",
+    "removed_todo": "Item da lista de tarefas removido",
+    "todo_completed": "concluído",
+    "todo_marked_incomplete": "marcado como incompleto",
+    "todo_not_found": "Tarefa com ID",
+    "todo_status_changed": "Tudo",
+    "updated_todo": "Tarefa atualizada",
+    "updated_todo_priority": "Prioridade da tarefa atualizada",
+    "error": "Erro",
+    "error_text_empty": "O texto da tarefa não pode estar vazio",
+    "error_invalid_priority": "A prioridade deve ser alta, média ou baixa",
+    "error_page_not_found": "Página não encontrada",
+    "error_todo_not_found": "Tarefa não encontrada",
+    "error_create_failed": "Falha ao criar tarefa",
+    "error_update_failed": "Falha ao atualizar tarefa",
+    "error_remove_failed": "Falha ao remover tarefa",
+    "error_rename_failed": "Falha ao renomear página",
+    "error_delete_failed": "Falha ao excluir página",
+    "exported_todos": "Exportado para ",
+    "export_failed": "Falha ao exportar tarefas",
+    "export_title": "Lista de Tarefas",
+    "export_page_header": "📁 {pageName}",
+    "export_active_section": "○ Ativas ({count})",
+    "export_completed_section": "✓ Concluídas ({count})",
+    "export_priority": "Prioridade",
+    "export_created": "Criado",
+    "export_details": "Detalhes",
+    "priority_high": "Alta",
+    "priority_medium": "Média",
+    "priority_low": "Baixa"
+  },
+  "panel": {
+    "add_todo": {
+      "add_button": "Adicionar",
+      "placeholder": "Insira um novo item da lista de tarefas..."
+    },
+    "empty_state": {
+      "message": "Nenhum item de afazeres ainda."
+    },
+    "header": {
+      "clear_completed_button": "Limpar Concluídos",
+      "export_button": "Exportar",
+      "title": "Lista de Tarefas"
+    },
+    "todo_details": {
+      "title": "Detalhes da tarefa",
+      "label_title": "Título: ",
+      "label_status": "Status: ",
+      "status_completed": "Concluída",
+      "status_pending": "Pendente",
+      "label_created": "Criado: ",
+      "label_priority": "Prioridade: ",
+      "label_page": "Página:",
+      "label_details": "Detalhes:",
+      "button_add_details": "Adicionar",
+      "button_edit_details": "Editar",
+      "button_save": "Salvar",
+      "button_cancel": "Cancelar",
+      "copy_details_button_tooltip": "Copiar",
+      "copied_details": "Detalhes copiados para a área de transferência"
+    },
+    "todo_item": {
+      "delete_button_tooltip": "Apagar",
+      "edit_button_tooltip": "Editar",
+      "copy_button_tooltip": "Copiar",
+      "copied": "Copiado para a área de transferência"
+    }
+  },
+  "settings": {
+    "background_color": {
+      "description": "Cor de fundo do widget de tarefas",
+      "label": "Cor de fundo"
+    },
+    "show_completed": {
+      "description": "Exibir itens de tarefa concluídos no painel",
+      "label": "Mostrar To-dos Concluídos"
+    },
+    "custom_priority_colors": {
+      "label": "Usar cores de prioridade personalizadas",
+      "description": "Ativar para personalizar as cores de prioridade"
+    },
+    "export_path": {
+      "label": "Caminho de exportação",
+      "description": "Diretório para arquivos de tarefas exportados",
+      "placeholder": "ex: ~/Documents",
+      "select_folder": "Selecionar pasta"
+    },
+    "export_format": {
+      "label": "Formato de exportação",
+      "description": "Formato de arquivo para tarefas exportadas",
+      "markdown": "Markdown",
+      "json": "JSON"
+    },
+    "export_empty_sections": {
+      "label": "Mostrar seções vazias",
+      "description": "Mostrar seções Ativas/Concluídas vazias e páginas ao exportar"
+    },
+    "priority_colors": {
+      "label": "Cores de prioridade",
+      "high_label": "Alta prioridade:",
+      "medium_label": "Média prioridade:",
+      "low_label": "Baixa prioridade:"
+    },
+    "pages": {
+      "label": "Gerenciar páginas",
+      "placeholder": "Insira o nome de uma nova página",
+      "add_button": "Adicionar página",
+      "empty_name": "O nome da página não pode estar vazio",
+      "name_exists": "O nome da página já existe",
+      "cannot_delete_default": "Não é possível excluir a página padrão",
+      "cannot_delete_last": "Não é possível excluir a última página",
+      "confirm_delete_title": "Confirmar exclusão",
+      "confirm_delete_message": "Tem certeza de que deseja excluir a página '{pageName}'?\n\nTodas as tarefas desta página serão transferidas para a primeira página.",
+      "rename_button_tooltip": "Renomear",
+      "delete_button_tooltip": "Excluir",
+      "added_page": "Página adicionada: ",
+      "deleted_page": "Página excluída",
+      "renamed_page": "Página renomeada"
+    }
+  }
+}
