@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__context7__*",
+      "mcp__filesystem__*",
+      "mcp__playwright__*",
+      "mcp__prometheus__*",
+      "mcp__grafana__*",
+      "mcp__superset__*"
+    ]
+  }
+}
