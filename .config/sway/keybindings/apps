@@ -3,7 +3,8 @@ bindsym $alt+b exec firefox
 bindsym $alt+f exec $files
 bindsym $mod+v exec voxtype
 
-bindsym $mod+Shift+t exec noctalia msg panel-toggle noctalia/notes:panel
+bindsym $mod+Shift+t exec noctalia msg panel-toggle 2SSK/todoist:panel
+bindsym $mod+Shift+n exec noctalia msg panel-toggle noctalia/notes:panel
 bindsym $mod+Shift+c exec noctalia msg panel-toggle clipboard
 bindsym $mod+Shift+s exec noctalia msg settings-toggle
 bindsym $mod+Escape exec noctalia msg panel-toggle control-center
