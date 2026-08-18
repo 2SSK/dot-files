@@ -8,5 +8,9 @@
       "mcp__grafana__*",
       "mcp__superset__*"
     ]
+  },
+  "attribution": {
+    "commit": "",
+    "pr": ""
   }
 }

@@ -26,6 +26,7 @@ return {
 				{ "<leader>f", group = "Find" },
 				{ "<leader>G", group = "Git" },
 				{ "<leader>g", group = "Gitsigns" },
+				{ "<leader>o", group = "Obsidian" },
 				{ "<leader>R", group = "Replace" },
 				{ "<leader>l", group = "LSP" },
 				{ "<leader>c", group = "LSP (Trouble)" },

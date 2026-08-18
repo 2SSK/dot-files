@@ -1,8 +1,0 @@
-[plugins]
-enabled = ["noctalia/screen_recorder"]
-
-[[plugins.source]]
-name = "official"
-kind = "git"
-location = "https://github.com/noctalia-dev/official-plugins"
-auto_update = false

@@ -98,13 +98,6 @@ return {
 					cwd = vim.fn.stdpath("config"),
 				})
 			end, { desc = "Open Neovim config files" }),
-
-			-- keybind to open notes folder
-			keymap.set("n", "<leader>on", function()
-				require("telescope.builtin").find_files({
-					cwd = "~/SSK-Vault",
-				})
-			end, { desc = "Open Notes folder" }),
 		})
 
 		require("config.telescope.multigrep").setup()
