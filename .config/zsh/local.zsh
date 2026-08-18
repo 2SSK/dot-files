@@ -113,6 +113,69 @@ servers() {
     echo
 }
 
+fl() {
+    if [[ -z "$KEY_VAULT" ]]; then
+        echo "Error: KEY_VAULT is not set"
+        return 1
+    fi
+    local CSV="$KEY_VAULT/servers.csv"
+    if [[ ! -f "$CSV" ]]; then
+        echo "Error: servers.csv not found in $KEY_VAULT"
+        return 1
+    fi
+
+    local GREP_CMD="grep"
+    command -v ggrep >/dev/null 2>&1 && GREP_CMD="ggrep"
+
+    local name
+    name=$(
+        tail -n +2 "$CSV" | while IFS=, read -r n k i u id c; do
+            n=$(echo "$n" | xargs)
+            [[ -z "$n" ]] && continue
+            echo "$n"
+        done | sort |
+        fzf --prompt="SSH> " \
+            --preview="grep -m1 '^{},' \"$CSV\" | awk -F, '{printf \"Name: %s\\nKey:  %s\\nIP:   %s\\nUser: %s\\nId:   %s\\nDesc: %s\\n\", \$1, \$2, \$3, \$4, \$5, \$6}'" \
+            --preview-window=right:40%
+    )
+
+    if [[ -z "$name" ]]; then
+        return 1
+    fi
+
+    local server_info
+    server_info=$($GREP_CMD -m1 "^$name," "$CSV")
+    if [[ -z "$server_info" ]]; then
+        echo "Error: Server '$name' not found"
+        return 1
+    fi
+
+    local key ip user identifier comment
+    key=$(echo "$server_info" | cut -d, -f2 | xargs)
+    ip=$(echo "$server_info" | cut -d, -f3 | xargs)
+    user=$(echo "$server_info" | cut -d, -f4 | xargs)
+    identifier=$(echo "$server_info" | cut -d, -f5 | xargs)
+    comment=$(echo "$server_info" | cut -d, -f6 | xargs)
+
+    local key_path="$KEY_VAULT/$key"
+    if [[ ! -f "$key_path" ]]; then
+        echo "Error: SSH key not found: $key_path"
+        return 1
+    fi
+
+    echo "Connecting to $name ($user@$ip)"
+    echo "Identifier: $identifier"
+    echo "Description: $comment"
+    echo "Using key: $key"
+    echo
+
+    if ssh-add -l 2>/dev/null | grep -q "$(basename "$key")"; then
+        ssh "$user@$ip"
+    else
+        ssh -i "$key_path" "$user@$ip"
+    fi
+}
+
 # ==============================
 # Rsync Deployment Helper
 # ==============================
@@ -264,3 +327,5 @@ rnstart() {
   echo "⚡ Starting Expo..."
   npx expo start --clear
 }
+
+

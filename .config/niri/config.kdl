@@ -76,7 +76,7 @@ layout {
 
 // spawn-sh-at-startup "waypaper --restore"
 // spawn-sh-at-startup "waybar"
-spawn-at-startup "qs" "-c" "noctalia-shell"
+spawn-at-startup "noctalia"
 
 // Ensure environment is imported for portals
 spawn-sh-at-startup "systemctl --user import-environment XDG_CURRENT_DESKTOP WAYLAND_DISPLAY && systemctl --user restart xdg-desktop-portal xdg-desktop-portal-wlr"
@@ -179,14 +179,16 @@ binds {
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+Return hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
     Mod+T hotkey-overlay-title="Open a Terminal: alacritty" { spawn "alacritty"; }
-    Mod+D hotkey-overlay-title="Run an Application: rofi" { spawn "rofi" "-show" "drun"; }
+    Mod+D hotkey-overlay-title="Run an Application: tofi" { spawn-sh "tofi-drun -c ~/.config/tofi/config --drun-launch=true"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: hyprlock" { spawn "hyprlock"; }
-    Mod+P hotkey-overlay-title="Power Menu: qs sessionMenu" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"; }
-    Mod+Shift+B hotkey-overlay-title="Toggle Bar: qs bar" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "bar" "toggle"; }
-    Mod+Shift+c hotkey-overlay-title="Toggle Clipboard" { spawn "qs " "-c" "noctalia-shell" "ipc" "call" "plugin:clipper" "toggle"; }
-    Mod+Shift+T hotkey-overlay-title="Toggle Todo" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "plugin:todo" "togglePanel"; }
-    Mod+Shift+P hotkey-overlay-title="Wallpaper: qs wallpaper" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "wallpaper" "toggle"; }
-    Mod+Semicolon hotkey-overlay-title="Emoji Picker: qs launcher" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "emoji"; }
+    Mod+P hotkey-overlay-title="Power Menu" { spawn "noctalia" "msg" "panel-toggle" "session"; }
+    Mod+Shift+B hotkey-overlay-title="Toggle Bar" { spawn "noctalia" "msg" "bar-toggle"; }
+    Mod+Shift+c hotkey-overlay-title="Toggle Clipboard" { spawn "noctalia" "msg" "panel-toggle" "clipboard"; }
+    Mod+Shift+T hotkey-overlay-title="Toggle Todo" { spawn "noctalia" "msg" "panel-toggle" "2SSK/todoist:panel"; }
+    Mod+Shift+N hotkey-overlay-title="Toggle Notes" { spawn "noctalia" "msg" "panel-toggle" "noctalia/notes:panel"; }
+    Mod+Shift+S hotkey-overlay-title="Settings" { spawn "noctalia" "msg" "settings-toggle"; }
+    Mod+Shift+P hotkey-overlay-title="Wallpaper" { spawn "noctalia" "msg" "panel-toggle" "wallpaper"; }
+    Mod+Semicolon hotkey-overlay-title="Emoji Picker" { spawn "noctalia" "msg" "panel-toggle" "launcher"; }
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.
@@ -450,7 +452,7 @@ binds {
 }
 
 layer-rule {
-    match namespace=r#"^(launcher|fuzzel|rofi)$"#
+    match namespace=r#"^(launcher|fuzzel|tofi)$"#
     background-effect {
         blur true
     }
