@@ -1,20 +1,20 @@
 # Theme
 theme = "tokyonight"
-background-opacity = 0.9
+background-opacity = 0.75
 
 # Font
 font-family = "JetBrains Mono Nerd Font"
-font-style = Bold
+font-style = SemiBold
 bold-is-bright = true
-font-size = 13
+font-size = 12
 
 # Appearance
 gtk-titlebar = true
 gtk-single-instance = true
 gtk-tabs-location = top
 gtk-wide-tabs = false
-window-padding-y = 25,25
-window-padding-x = 25,25
+ window-padding-y = 25,25
+ window-padding-x = 25,25
 window-padding-balance = false
 window-decoration = false
 
