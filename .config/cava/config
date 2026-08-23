@@ -120,6 +120,7 @@ source = auto
 ; sdl_y= -1
 
 [color]
+theme = "noctalia"
 
 # Colors can be one of seven predefined: black, blue, cyan, green, magenta, red, white, yellow.
 # Or defined by hex code '#xxxxxx' (hex code must be within ''). User defined colors requires
@@ -140,6 +141,7 @@ source = auto
 # In the [color] section
 
 [color]
+theme = "noctalia"
 
 gradient = 1
 
