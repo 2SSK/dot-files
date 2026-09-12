@@ -16,51 +16,7 @@ input {
     focus-follows-mouse max-scroll-amount="0%"
 }
 
-workspace "1" {
-    open-on-output "eDP-1"
-}
-workspace "4" {
-    open-on-output "eDP-1"
-}
-workspace "5" {
-    open-on-output "eDP-1"
-}
-workspace "6" {
-    open-on-output "eDP-1"
-}
-workspace "7" {
-    open-on-output "eDP-1"
-}
-workspace "8" {
-    open-on-output "eDP-1"
-}
-workspace "2" {
-    open-on-output "HDMI-A-1"
-}
-workspace "3" {
-    open-on-output "HDMI-A-1"
-}
-workspace "9" {
-    open-on-output "HDMI-A-1"
-}
-workspace "10" {
-    open-on-output "HDMI-A-1"
-}
-
-output "eDP-1" {
-    mode "1920x1080@120.030"
-
-    scale 1.1
-
-    transform "normal"
-
-    position x=0 y=0
-}
-
-output "HDMI-A-1" {
-    // Position it to the right of eDP-1
-    position x=1920 y=2
-}
+include "./outputs.kdl"
 
 layout {
     // Set gaps around windows in logical pixels.
@@ -81,7 +37,8 @@ layout {
 
     // You can change how the focus ring looks.
     focus-ring {
-        width 1.5
+
+        width 0.5
 
         // Color of the ring on the active monitor.
         active-color "#7fc8ff"
@@ -119,7 +76,7 @@ layout {
 
 // spawn-sh-at-startup "waypaper --restore"
 // spawn-sh-at-startup "waybar"
-spawn-at-startup "qs" "-c" "noctalia-shell"
+spawn-at-startup "noctalia"
 
 // Ensure environment is imported for portals
 spawn-sh-at-startup "systemctl --user import-environment XDG_CURRENT_DESKTOP WAYLAND_DISPLAY && systemctl --user restart xdg-desktop-portal xdg-desktop-portal-wlr"
@@ -137,6 +94,13 @@ hotkey-overlay {
 // A ~ at the front will be expanded to the home directory.
 // The path is formatted with strftime(3) to give you the screenshot date and time.
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+
+blur {
+    passes 3
+    offset 3
+    noise 0.02
+    saturation 1.5
+}
 
 // Animation settings.
 // The wiki explains how to configure individual animations:
@@ -156,6 +120,13 @@ animations {
 window-rule {
     match app-id=r#"^org\.wezfurlong\.wezterm$"#
     default-column-width {}
+}
+
+window-rule {
+    match app-id=r#"^Alacritty$"#
+    background-effect {
+        blur true
+    }
 }
 
 // Open the Firefox picture-in-picture player as floating by default.
@@ -207,12 +178,17 @@ binds {
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+Return hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
-    Mod+D hotkey-overlay-title="Run an Application: rofi" { spawn "rofi" "-show" "drun"; }
+    Mod+T hotkey-overlay-title="Open a Terminal: alacritty" { spawn "alacritty"; }
+    Mod+D hotkey-overlay-title="Run an Application: tofi" { spawn-sh "tofi-drun -c ~/.config/tofi/config --drun-launch=true"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: hyprlock" { spawn "hyprlock"; }
-    Mod+P hotkey-overlay-title="Power Menu: qs sessionMenu" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"; }
-    Mod+Shift+B hotkey-overlay-title="Toggle Bar: qs bar" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "bar" "toggle"; }
-    Mod+Shift+P hotkey-overlay-title="Wallpaper: qs wallpaper" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "wallpaper" "toggle"; }
-    Mod+Semicolon hotkey-overlay-title="Emoji Picker: qs launcher" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "emoji"; }
+    Mod+P hotkey-overlay-title="Power Menu" { spawn "noctalia" "msg" "panel-toggle" "session"; }
+    Mod+Shift+B hotkey-overlay-title="Toggle Bar" { spawn "noctalia" "msg" "bar-toggle"; }
+    Mod+Shift+c hotkey-overlay-title="Toggle Clipboard" { spawn "noctalia" "msg" "panel-toggle" "clipboard"; }
+    Mod+Shift+T hotkey-overlay-title="Toggle Todo" { spawn "noctalia" "msg" "panel-toggle" "2SSK/todoist:panel"; }
+    Mod+Shift+N hotkey-overlay-title="Toggle Notes" { spawn "noctalia" "msg" "panel-toggle" "noctalia/notes:panel"; }
+    Mod+Shift+S hotkey-overlay-title="Settings" { spawn "noctalia" "msg" "settings-toggle"; }
+    Mod+Shift+P hotkey-overlay-title="Wallpaper" { spawn "noctalia" "msg" "panel-toggle" "wallpaper"; }
+    Mod+Semicolon hotkey-overlay-title="Emoji Picker" { spawn "noctalia" "msg" "panel-toggle" "launcher"; }
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.
@@ -474,3 +450,13 @@ binds {
     // moving the mouse or pressing any other key.
     Mod+Shift+W { power-off-monitors; }
 }
+
+layer-rule {
+    match namespace=r#"^(launcher|fuzzel|tofi)$"#
+    background-effect {
+        blur true
+    }
+}
+
+include "./noctalia.kdl"
+

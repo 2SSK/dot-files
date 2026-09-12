@@ -98,6 +98,7 @@
 
 [credential]
 	helper = store
+	useHttpPath = true
 
 # Conditional configurations
 [includeIf "gitdir:~/Code/"]

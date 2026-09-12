@@ -1,0 +1,29 @@
+# each worktree opens as a seperate session as opposed to windows
+mode: session
+# don't add dagent icons to tmux windows
+status_format: false
+# enable nerd fonts, duh
+nerdfont: true
+# default agent
+agent: opencode
+
+window_prefix: "{project} 󰘬 "
+
+# agent based branch name creation, workmux add -A
+auto_name:
+  model: "opencode/deepseek-v4-flash"
+  system_prompt: >
+    Generate a kebab-case git branch name with an appropriate prefix. Output
+    only the name. Max 50 chars.
+  background: true # Always run in background when using --auto-name
+
+# default window layout
+windows:
+  - name: editor
+    panes:
+      - command: nvim
+        focus: true
+  - name: server
+  - name: agent
+    panes:
+      - command: opencode
