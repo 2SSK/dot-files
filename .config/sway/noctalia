@@ -6,7 +6,7 @@ set $error              #f7768e
 set $surface            #1a1b26
 set $on_surface         #c0caf5
 set $on_surface_variant #9aa5ce
-set $outline            #586691
+set $outline            #5d6682
 
 ## Window Colours
 # class                 border    backgr.   text                indicator  child_border
