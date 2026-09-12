@@ -11,7 +11,7 @@ return {
 			notes_subdir = "03-Work",
 			daily_notes = {
 				folder = "01-Daily",
-				date_format = "YYYY-MM-DD",
+				date_format = "%Y/%m/%d",
 				template = "04-Templates/Daily.md",
 			},
 			templates = {

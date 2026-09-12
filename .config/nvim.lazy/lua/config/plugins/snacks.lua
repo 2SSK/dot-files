@@ -2,7 +2,7 @@ return {
 	"folke/snacks.nvim",
 	opts = {
 		indent = {
-			enabled = false,
+			enabled = true,
 		},
 		picker = {
 			reverse = false,
@@ -14,6 +14,7 @@ return {
 				-- explorer (snacks picker)
 				explorer = {
 					hidden = true,
+					ignored = true,
 					layout = { preset = "sidebar", layout = { position = "right", width = 50 } },
 					git_status = true,
 				},

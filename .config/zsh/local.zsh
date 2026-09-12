@@ -176,6 +176,107 @@ fl() {
     fi
 }
 
+runon () {
+	setopt local_options no_monitor
+
+	if [[ $# -lt 2 ]]
+	then
+		echo "Usage:"
+		echo "  runon <server> [server ...] <command>"
+		echo "  runon --all <command>"
+		echo
+		echo "Examples:"
+		echo "  runon worker4 'uptime'"
+		echo "  runon worker1n worker2n worker3n 'df -h'"
+		echo "  runon --all 'hostname'"
+		return 1
+	fi
+
+	if [[ -z "$KEY_VAULT" ]]
+	then
+		echo "Error: KEY_VAULT is not set"
+		return 1
+	fi
+
+	local CSV="$KEY_VAULT/servers.csv"
+	local command
+	local -a servers_to_run
+	local server_info
+	local server key ip user key_path
+
+	if [[ ! -f "$CSV" ]]
+	then
+		echo "Error: servers.csv not found in $KEY_VAULT"
+		return 1
+	fi
+
+	if [[ "$1" == "--all" ]]
+	then
+		shift
+		command="$*"
+
+		while IFS=, read -r server key ip user identifier comment
+		do
+			server=$(echo "$server" | xargs)
+			[[ -z "$server" ]] && continue
+			servers_to_run+=("$server")
+		done < <(tail -n +2 "$CSV")
+	else
+		while [[ $# -gt 1 ]]
+		do
+			servers_to_run+=("$1")
+			shift
+		done
+
+		command="$1"
+	fi
+
+	for server in "${servers_to_run[@]}"
+	do
+		server_info=$(grep -m1 "^${server}," "$CSV")
+
+		if [[ -z "$server_info" ]]
+		then
+			echo "[$server] NOT FOUND"
+			continue
+		fi
+
+		key=$(echo "$server_info" | cut -d, -f2 | xargs)
+		ip=$(echo "$server_info" | cut -d, -f3 | xargs)
+		user=$(echo "$server_info" | cut -d, -f4 | xargs)
+
+		key_path="$KEY_VAULT/$key"
+
+		if [[ ! -f "$key_path" ]]
+		then
+			echo "[$server] KEY NOT FOUND: $key_path"
+			continue
+		fi
+
+		(
+			echo "========== $server =========="
+
+			ssh -n \
+				-i "$key_path" \
+				-o ConnectTimeout=5 \
+				-o BatchMode=yes \
+				-o StrictHostKeyChecking=no \
+				"$user@$ip" "$command"
+
+			rc=$?
+
+			if [[ $rc -ne 0 ]]
+			then
+				echo "[$server] FAILED (exit $rc)"
+			else
+				echo "[$server] SUCCESS"
+			fi
+		) &
+	done
+
+	wait
+}
+
 # ==============================
 # Rsync Deployment Helper
 # ==============================
