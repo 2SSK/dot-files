@@ -92,14 +92,14 @@ history expansions like `!!` are shown for confirmation before they run.
 | Colour | `grep`, `diff`, `ip`, `dir`, `vdir` use their built-in colours |
 | Git | `gs` status, `gd` diff, `gds` staged diff, `ga` add, `gap` add patch, `gc` commit, `gp` push, `gu` pull, `gb` branch, `gsw` switch, `gm` merge, `grb` rebase, `gr` reset, `gcl` clone, `gl` log graph |
 | Docker | `dco` compose, `dps` ps, `dpa` ps -a, `dx` exec -it |
-| Tools | `vi` nvim, `t` tmux, `y` yazi, `lg` lazygit, `ldc` lazydocker, `ff` fastfetch, `top`/`btop` btop with the desktop theme |
+| Tools | `vi` nvim, `t` tmux, `y` yazi, `lg` lazygit, `ldc` lazydocker, `ff` fastfetch, `top` btop |
 | Shell | `cl` clear, `e` exit, `rel` restart the shell, `nrd` npm run dev |
 
 ## Colours
 
-Starship, fzf, autosuggestions, `ls` and bat use the terminal's 16 ANSI colours, so they
-follow the desktop theme that kitty and foot load from
-`~/.local/state/desktop/theme/`. btop gets its own theme file rendered from the same palette.
+Starship, fzf, autosuggestions, `ls`, bat and btop (TTY theme, transparent background) use
+the terminal's 16 ANSI colours, so they follow the central desktop theme that kitty and foot
+load. See [theme.md](theme.md).
 
 ## Maintenance
 
