@@ -3,6 +3,7 @@
 \.gitignore
 \.gitmodules
 \.stowrc
+__pycache__
 .*\.md
 ^/LICENSE
 ^/vm
