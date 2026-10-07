@@ -9,5 +9,6 @@ __pycache__
 ^/vm
 ^/packages
 ^/tests
+^/docs
 ^/setup\.sh
 ^/\.github
