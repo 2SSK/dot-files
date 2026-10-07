@@ -19,4 +19,5 @@ lazydocker                  @lazydocker                 @lazydocker
 yazi                        @yazi                       @yazi
 cava                        cava                        cava
 fastfetch                   fastfetch                   fastfetch
+btop                        btop                        btop
 pgcli                       pgcli                       pgcli
