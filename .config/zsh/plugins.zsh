@@ -5,7 +5,11 @@ ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
 
 zstyle ':fzf-tab:*' switch-group '<' '>'
-zstyle ':fzf-tab:complete:(cd|z|ls|ll|la):*' fzf-preview 'ls -1A --color=always $realpath'
+if (( $+commands[eza] )); then
+	zstyle ':fzf-tab:complete:(cd|z|ls|ll|la|lt):*' fzf-preview 'eza -1a --icons --color=always --group-directories-first $realpath'
+else
+	zstyle ':fzf-tab:complete:(cd|z|ls|ll|la):*' fzf-preview 'ls -1A --color=always $realpath'
+fi
 
 # Syntax highlighting must be last: it wraps every widget defined before it
 for _plugin in fzf-tab zsh-autosuggestions zsh-syntax-highlighting; do

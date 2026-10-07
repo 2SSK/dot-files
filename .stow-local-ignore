@@ -3,10 +3,12 @@
 \.gitignore
 \.gitmodules
 \.stowrc
+__pycache__
 .*\.md
 ^/LICENSE
 ^/vm
 ^/packages
 ^/tests
+^/docs
 ^/setup\.sh
 ^/\.github

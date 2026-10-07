@@ -1,62 +1,95 @@
-# Prompt for bash and zsh. ANSI colour names only, so it follows the terminal theme.
+# Two-line prompt for bash and zsh: context on top, a clean line to type on.
+# ANSI colour names only, so it follows the terminal theme.
 "$schema" = "https://starship.rs/config-schema.json"
 scan_timeout = 200 # ms; the default 30 is too tight for large dirs like ~
+
+format = """
+$username$hostname$directory$git_branch$git_state$git_status\
+$fill\
+$python$nodejs$golang$rust$lua$java$c$docker_context$cmd_duration
+$shell$character"""
+
+[username] # only over ssh or as root
+format = "[$user]($style)@"
+style_user = "bold yellow"
+style_root = "bold red"
+
+[hostname]
+format = "[$hostname]($style) "
+style = "bold yellow"
+
+[directory]
+style = "bold blue"
+read_only = " 󰌾"
+truncation_length = 4
+truncate_to_repo = false
+truncation_symbol = "…/"
+
+[git_branch]
+format = "[$symbol$branch]($style) "
+symbol = " "
+style = "purple"
+
+[git_state]
+style = "bold red"
+
+[git_status]
+format = "([$all_status$ahead_behind]($style) )"
+style = "yellow"
+conflicted = "=${count} "
+stashed = "*${count} "
+deleted = "✘${count} "
+renamed = "»${count} "
+modified = "!${count} "
+staged = "+${count} "
+untracked = "?${count} "
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+
+[fill]
+symbol = " "
+
+[cmd_duration]
+format = " [took $duration]($style)"
+style = "dimmed"
+min_time = 2000
 
 [character]
 success_symbol = "[❯](bold green)"
 error_symbol = "[❯](bold red)"
-vimcmd_symbol = "[❮](bold yellow)"
+vimcmd_symbol = "[❮](bold green)"
 
 [shell] # marks bash; zsh is the default and shows nothing
 disabled = false
+format = "[$indicator]($style)"
 zsh_indicator = ""
 bash_indicator = "bash "
 style = "dimmed blue"
 
-[cmd_duration]
-min_time = 2000
-
-[git_status]
-untracked = '[ $count](bold yellow) '
-staged = '[ $count](bold green) '
-stashed = "[ ](cyan) "
-deleted = '[ $count](bold red) '
-modified= '[ $count](bold blue) '
-behind = '[ ](bold purple) '
-ahead = '[ ](bold purple) '
-format = '([$all_status$ahead_behind]($style))'
-
-[git_metrics]
-disabled = false
-
-# Nerd Font symbols
-[directory]
-read_only = " 󰌾"
-
-[git_branch]
-symbol = " "
-
-[c]
-symbol = " "
-
-[docker_context]
-symbol = " "
-
-[golang]
-symbol = " "
-
-[java]
-symbol = " "
-
-[lua]
-detect_folders = []
-symbol = " "
-
-[nodejs]
-symbol = " "
-
+# Languages: symbol + version, only inside a project of that kind
 [python]
+format = " [$symbol$version]($style)"
 symbol = " "
-
+[nodejs]
+format = " [$symbol$version]($style)"
+symbol = " "
+[golang]
+format = " [$symbol$version]($style)"
+symbol = " "
 [rust]
+format = " [$symbol$version]($style)"
 symbol = " "
+[lua]
+format = " [$symbol$version]($style)"
+symbol = " "
+detect_folders = []
+[java]
+format = " [$symbol$version]($style)"
+symbol = " "
+[c]
+format = " [$symbol$version]($style)"
+symbol = " "
+[docker_context]
+format = " [$symbol$context]($style)"
+symbol = " "
