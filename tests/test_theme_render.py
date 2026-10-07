@@ -61,7 +61,7 @@ class Render(unittest.TestCase):
         self.assertEqual(palette["ui"]["bg"], "#eff1f5")
         self.assertEqual(len(palette["ansi"]), 16)
         self.assertEqual(sorted(p.name for p in self.state.iterdir()),
-                         ["current", "foot.ini", "kitty.conf", "palette.json"])
+                         ["btop.theme", "current", "foot.ini", "kitty.conf", "palette.json"])
 
     def test_unknown_family_or_mode(self):
         with self.assertRaises(tr.ThemeError):
@@ -75,7 +75,7 @@ class Render(unittest.TestCase):
                 with self.subTest(family=family, mode=mode):
                     state = Path(tempfile.mkdtemp())
                     tr.render(family, mode, state)
-                    for name in ("kitty.conf", "foot.ini"):
+                    for name in tr.TARGETS:
                         got = (state / name).read_text()
                         golden = GOLDEN / f"{family}-{mode}" / name
                         if os.environ.get("UPDATE_GOLDEN"):

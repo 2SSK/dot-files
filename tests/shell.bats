@@ -42,3 +42,10 @@ setup() {
 	run sh -c '. "$HOME/.config/shell/env.sh"; . "$HOME/.config/shell/env.sh"; echo "$PATH"'
 	[ "$(tr ':' '\n' <<<"$output" | grep -cx "$HOME/.local/bin")" -eq 1 ]
 }
+
+@test "top opens btop with the rendered theme" {
+	run zsh -i -c 'alias top btop'
+	[[ $output == *"top=btop"* ]]
+	# shellcheck disable=SC2016 # matching the literal alias text
+	[[ $output == *'btop --themes-dir "$XDG_STATE_HOME/desktop/theme"'* ]]
+}
