@@ -59,3 +59,10 @@ setup() {
 	run "$REPO/setup.sh" --wm kde
 	[ "$status" -eq 2 ]
 }
+
+@test "a foreign link as the last symlink found doesn't abort setup" {
+	ln -s /etc/hostname "$HOME/only-foreign"
+	run "$REPO/setup.sh" -y --no-packages
+	[ "$status" -eq 0 ]
+	[ -L "$HOME/.config/i3/config" ]
+}

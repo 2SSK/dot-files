@@ -1,0 +1,62 @@
+# Prompt for bash and zsh. ANSI colour names only, so it follows the terminal theme.
+"$schema" = "https://starship.rs/config-schema.json"
+scan_timeout = 200 # ms; the default 30 is too tight for large dirs like ~
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+vimcmd_symbol = "[❮](bold yellow)"
+
+[shell] # marks bash; zsh is the default and shows nothing
+disabled = false
+zsh_indicator = ""
+bash_indicator = "bash "
+style = "dimmed blue"
+
+[cmd_duration]
+min_time = 2000
+
+[git_status]
+untracked = '[ $count](bold yellow) '
+staged = '[ $count](bold green) '
+stashed = "[ ](cyan) "
+deleted = '[ $count](bold red) '
+modified= '[ $count](bold blue) '
+behind = '[ ](bold purple) '
+ahead = '[ ](bold purple) '
+format = '([$all_status$ahead_behind]($style))'
+
+[git_metrics]
+disabled = false
+
+# Nerd Font symbols
+[directory]
+read_only = " 󰌾"
+
+[git_branch]
+symbol = " "
+
+[c]
+symbol = " "
+
+[docker_context]
+symbol = " "
+
+[golang]
+symbol = " "
+
+[java]
+symbol = " "
+
+[lua]
+detect_folders = []
+symbol = " "
+
+[nodejs]
+symbol = " "
+
+[python]
+symbol = " "
+
+[rust]
+symbol = " "
