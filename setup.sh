@@ -1,0 +1,153 @@
+#!/usr/bin/env bash
+# Set up this machine from the repo: packages, submodules, stow into $HOME, login shell.
+# Asks first, changes nothing until confirmed, and is safe to re-run.
+set -euo pipefail
+
+repo="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# shellcheck source-path=SCRIPTDIR source=.local/lib/desktop/ui.sh
+source "$repo/.local/lib/desktop/ui.sh"
+
+usage() {
+	cat <<EOF
+usage: setup.sh [-y] [--wm both|i3|sway] [--dev] [--no-packages]
+
+  -y, --yes       accept the defaults without asking (both WMs, back up existing configs)
+  --wm WM         window manager(s) to install packages for
+  --dev           also install lint/test tools
+  --no-packages   skip package installation
+EOF
+}
+
+assume_yes=0
+
+confirm() { # <question> <default y|n>
+	local reply hint='y/N'
+	[[ $2 == y ]] && hint='Y/n'
+	if ((assume_yes)); then [[ $2 == y ]] && return 0 || return 1; fi
+	read -rp "${cyan}?${reset} $1 ${dim}[$hint]${reset} " reply
+	[[ ${reply:-$2} == [yY]* ]]
+}
+
+choose() { # <question> <option...>; first option is the default, prints the choice
+	local q=$1 reply i
+	shift
+	if ((assume_yes)); then echo "${1%% *}" && return; fi
+	printf '%s?%s %s\n' "$cyan" "$reset" "$q" >&2
+	for i in $(seq $#); do printf '  %s%d)%s %s\n' "$bold" "$i" "$reset" "${!i}" >&2; done
+	while read -rp "  choice ${dim}[1]${reset} " reply; do
+		reply=${reply:-1}
+		[[ $reply =~ ^[0-9]+$ ]] && ((reply >= 1 && reply <= $#)) && echo "${!reply%% *}" && return
+	done
+	exit 1
+}
+
+# Paths (relative to $HOME) where a real file or foreign link blocks a stow link.
+conflicts() {
+	(cd "$repo" && stow -n . 2>&1 || true) | sed -n 's/.* over existing target \(.*\) since .*/\1/p'
+}
+
+# stow -R keeps links to files that were deleted or newly ignored, so drop every
+# link into the repo and let stow recreate the ones that still belong.
+prune_links() {
+	local link
+	while IFS= read -r -d '' link; do
+		[[ $(readlink -m "$link") == "$repo"/* ]] && rm "$link"
+	done < <(find "$HOME" -xdev \( -path "$repo" -o -path "$HOME/.cache" \) -prune -o -type l -print0)
+}
+
+main() {
+	local wm='' dev=0 packages=1
+	while (($#)); do
+		case $1 in
+		-h | --help) usage && exit 0 ;;
+		-y | --yes) assume_yes=1 ;;
+		--wm)
+			[[ ${2:-} =~ ^(both|i3|sway)$ ]] || { usage >&2 && exit 2; }
+			wm=$2 && shift
+			;;
+		--dev) dev=1 ;;
+		--no-packages) packages=0 ;;
+		*) usage >&2 && exit 2 ;;
+		esac
+		shift
+	done
+	((EUID != 0)) || fail 'run as your user; sudo is used where needed'
+	((assume_yes)) || [[ -t 0 ]] || fail 'not a terminal; pass -y to accept the defaults' 2
+
+	printf '%sdesktop setup%s %s%s%s\n' "$bold" "$reset" "$dim" "$repo" "$reset"
+
+	# --- Ask ---
+	local -a found=()
+	mapfile -t found < <(conflicts)
+	local policy=none backup=''
+	if ((${#found[@]})); then
+		step "Existing configs that would be replaced (${#found[@]})"
+		printf "  ${dim}~/%s${reset}\n" "${found[@]}"
+		policy="$(choose 'What should happen to them?' 'backup  move them to ~/.local/state/desktop/backup' \
+			'overwrite  delete them' 'abort')"
+		[[ $policy != abort ]] || exit 0
+		backup="${XDG_STATE_HOME:-$HOME/.local/state}/desktop/backup/$(date +%Y%m%d-%H%M%S)"
+	fi
+
+	local -a layers=()
+	if ((packages)); then
+		[[ -n $wm ]] || wm="$(choose 'Window manager?' 'both  i3 (X11) and SwayFX (Wayland)' 'i3  X11 only' 'sway  Wayland only')"
+		layers=(base)
+		confirm 'Install terminal tools (zsh, tmux, neovim, fzf, lazygit, ...)?' y && layers+=(cli)
+		[[ $wm == sway ]] || layers+=(x11)
+		[[ $wm == i3 ]] || layers+=(wayland)
+		if ((dev)) || confirm 'Install lint/test tools (bats, shellcheck, shfmt)?' n; then layers+=(dev); fi
+	fi
+
+	local shell=0
+	if [[ $(getent passwd "$USER" | cut -d: -f7) != */zsh ]] && confirm 'Make zsh your login shell?' y; then shell=1; fi
+
+	# --- Confirm ---
+	step 'Plan'
+	row 'Packages' "$( ((packages)) && echo "${layers[*]}" || echo skip)"
+	row 'Existing files' "$(case $policy in none) echo none ;; backup) echo "${#found[@]} → $backup" ;; *) echo "${#found[@]} deleted" ;; esac)"
+	row 'Stow' "$repo → $HOME"
+	row 'Login shell' "$( ((shell)) && echo zsh || echo unchanged)"
+	echo
+	confirm 'Proceed?' y || exit 0
+
+	# --- Apply ---
+	if ((packages)); then
+		step 'Installing packages'
+		"$repo/packages/install.sh" "${layers[@]}"
+		ok "installed: ${layers[*]}"
+	fi
+
+	if [[ -f $repo/.gitmodules ]]; then
+		step 'Updating submodules'
+		git -C "$repo" submodule update --init --recursive
+		ok 'submodules up to date'
+	fi
+
+	step 'Linking configs'
+	local rel
+	for rel in "${found[@]}"; do
+		if [[ $policy == backup ]]; then
+			mkdir -p "$backup/$(dirname "$rel")"
+			mv "$HOME/$rel" "$backup/$rel"
+		else
+			rm -rf -- "${HOME:?}/$rel"
+		fi
+	done
+	((${#found[@]} == 0)) || warn "$policy: ${#found[@]} existing file(s)"
+	prune_links
+	(cd "$repo" && stow .) # target and --no-folding come from .stowrc
+	ok "stowed into $HOME"
+
+	if ((shell)); then
+		step 'Login shell'
+		command -v zsh >/dev/null || fail 'zsh is not installed'
+		sudo chsh -s "$(command -v zsh)" "$USER"
+		ok 'zsh is your login shell (from next login)'
+	fi
+
+	printf '\n%s✓ Done.%s\n' "$green$bold" "$reset"
+}
+
+main "$@"

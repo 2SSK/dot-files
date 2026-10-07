@@ -1,7 +1,12 @@
 # Not stowed into $HOME (stow regexes; a leading / anchors at the repo root)
 \.git
 \.gitignore
+\.gitmodules
 \.stowrc
-^/README\.md
+.*\.md
 ^/LICENSE
 ^/vm
+^/packages
+^/tests
+^/setup\.sh
+^/\.github
