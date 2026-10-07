@@ -1,22 +1,7 @@
-# Stow local ignore file
-# Files and directories listed here will not be stowed
-
-# Git files
+# Not stowed into $HOME (stow regexes; a leading / anchors at the repo root)
 \.git
 \.gitignore
-\.gitkeep
-
-# Documentation
-README.md
-^LICENSE
-^bootstrap\.sh$
-Makefile
-
-# Local config (runtime data, not meant to be stowed)
-\.bookmarks
-\.config/opencode
-^arch/
-
-# Non-config directories
-^screenshots/
-^scripts/
+\.stowrc
+^/README\.md
+^/LICENSE
+^/vm
