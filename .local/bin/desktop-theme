@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+# Select the central desktop theme (~/.local/state/desktop/theme) and reload what uses it.
+set -euo pipefail
+
+lib="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")/../lib/desktop" && pwd)"
+# shellcheck source-path=SCRIPTDIR/../.. source=.local/lib/desktop/log.sh
+source "$lib/log.sh"
+
+themes="$lib/../../share/desktop/themes"
+state="${XDG_STATE_HOME:-$HOME/.local/state}/desktop/theme"
+
+usage() {
+	cat <<'EOF'
+usage: desktop-theme set <family> [--mode dark|light]
+       desktop-theme mode dark|light|toggle
+       desktop-theme list
+       desktop-theme current
+EOF
+}
+
+current() { # prints "<family> <mode>"; tokyonight dark until a theme is set
+	local family=tokyonight mode=dark
+	# shellcheck disable=SC1091 # family=/mode= written by theme_render.py
+	[[ -r $state/current ]] && source "$state/current"
+	echo "$family $mode"
+}
+
+apply() { # <family> <mode>
+	python3 "$lib/theme_render.py" render "$1" "$2"
+	# Reload running consumers; foot can only switch dark/light live
+	pkill -USR1 -x kitty || true
+	if [[ $2 == dark ]]; then pkill -USR1 -x foot || true; else pkill -USR2 -x foot || true; fi
+	log_info theme family="$1" mode="$2"
+}
+
+main() {
+	local family mode
+	read -r family mode < <(current)
+	case ${1:-} in
+	set)
+		[[ -n ${2:-} ]] || { usage >&2 && exit 2; }
+		family=$2
+		if [[ ${3:-} == --mode ]]; then
+			[[ ${4:-} =~ ^(dark|light)$ ]] || { usage >&2 && exit 2; }
+			mode=$4
+		elif [[ -n ${3:-} ]]; then
+			usage >&2 && exit 2
+		fi
+		apply "$family" "$mode"
+		;;
+	mode)
+		case ${2:-} in
+		dark | light) mode=$2 ;;
+		toggle) [[ $mode == dark ]] && mode=light || mode=dark ;;
+		*) usage >&2 && exit 2 ;;
+		esac
+		apply "$family" "$mode"
+		;;
+	list)
+		local f name
+		for f in "$themes"/*.toml; do
+			name="$(basename "$f" .toml)"
+			if [[ $name == "$family" ]]; then echo "* $name"; else echo "  $name"; fi
+		done
+		;;
+	current) echo "$family $mode" ;;
+	-h | --help) usage ;;
+	*) usage >&2 && exit 2 ;;
+	esac
+}
+
+main "$@"
