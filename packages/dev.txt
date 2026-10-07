@@ -1,0 +1,6 @@
+# Lint and test tooling (opt-in: install.sh dev). Columns: arch  debian(+ubuntu)  fedora
+bats                        bats                        bats
+bats-support                bats-support                @bats-helpers
+bats-assert                 bats-assert                 @bats-helpers
+shellcheck                  shellcheck                  ShellCheck
+shfmt                       shfmt                       shfmt

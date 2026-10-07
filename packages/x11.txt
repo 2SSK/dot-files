@@ -1,0 +1,15 @@
+# i3 / Xorg session. Columns: arch  debian(+ubuntu)  fedora (format: see base.txt)
+i3-wm                       i3-wm                       i3
+i3status                    i3status                    i3status
+dmenu                       suckless-tools              dmenu
+picom                       picom                       picom
+feh                         feh                         feh
+maim                        maim                        maim
+slop                        slop                        slop
+xclip                       xclip                       xclip
+xss-lock                    xss-lock                    xss-lock
+aur:i3lock-color            @i3lock-color               @i3lock-color
+xsettingsd                  xsettingsd                  xsettingsd
+dex                         dex                         dex-autostart
+xorg-xset                   x11-xserver-utils           xset
+xorg-xrandr                 x11-xserver-utils           xrandr

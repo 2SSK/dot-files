@@ -1,0 +1,19 @@
+# Desktop core, both sessions. Columns: arch  debian(+ubuntu)  fedora
+#   name      distro package       aur:name  AUR (arch only)
+#   @name     packages/extra/<name>.sh       -  not needed on that distro
+quickshell                  @quickshell                 @quickshell
+kitty                       kitty                       kitty
+copyq                       copyq                       copyq
+libnotify                   libnotify-bin               libnotify
+wireplumber                 wireplumber                 wireplumber
+brightnessctl               brightnessctl               brightnessctl
+playerctl                   playerctl                   playerctl
+gpu-screen-recorder         @gpu-screen-recorder        @gpu-screen-recorder
+imagemagick                 imagemagick                 ImageMagick
+inter-font                  fonts-inter                 rsms-inter-fonts
+ttf-jetbrains-mono-nerd     @nerd-font                  @nerd-font
+adw-gtk-theme               @adw-gtk3                   adw-gtk3-theme
+qt5ct                       qt5ct                       qt5ct
+qt6ct                       qt6ct                       qt6ct
+tela-circle-icon-theme-blue @tela-circle                @tela-circle
+aur:bibata-cursor-theme-bin @bibata                     @bibata
