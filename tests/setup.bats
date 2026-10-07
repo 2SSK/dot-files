@@ -4,6 +4,7 @@
 setup() {
 	REPO="$(cd "$BATS_TEST_DIRNAME/.." && pwd)"
 	export HOME="$BATS_TEST_TMPDIR/home"
+	unset XDG_STATE_HOME XDG_CONFIG_HOME XDG_CACHE_HOME XDG_DATA_HOME
 	mkdir -p "$HOME"
 }
 
@@ -65,4 +66,14 @@ setup() {
 	run "$REPO/setup.sh" -y --no-packages
 	[ "$status" -eq 0 ]
 	[ -L "$HOME/.config/i3/config" ]
+}
+
+@test "renders the default theme, then keeps the current one" {
+	run "$REPO/setup.sh" -y --no-packages
+	[ "$status" -eq 0 ]
+	[ "$(cat "$HOME/.local/state/desktop/theme/current")" = "$(printf 'family=tokyonight\nmode=dark')" ]
+	python3 "$REPO/.local/lib/desktop/theme_render.py" render gruvbox light
+	"$REPO/setup.sh" -y --no-packages
+	grep -q '^family=gruvbox$' "$HOME/.local/state/desktop/theme/current"
+	grep -q '^initial-color-theme=light$' "$HOME/.local/state/desktop/theme/foot.ini"
 }

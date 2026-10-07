@@ -108,6 +108,10 @@ main() {
 	row 'Packages' "$( ((packages)) && echo "${layers[*]} + shell plugins" || echo skip)"
 	row 'Existing files' "$(case $policy in none) echo none ;; backup) echo "${#found[@]} → $backup" ;; *) echo "${#found[@]} deleted" ;; esac)"
 	row 'Stow' "$repo → $HOME"
+	local theme_state="${XDG_STATE_HOME:-$HOME/.local/state}/desktop/theme/current" family=tokyonight mode=dark
+	# shellcheck disable=SC1090 # family=/mode= lines written by theme_render.py
+	[[ -r $theme_state ]] && source "$theme_state"
+	row 'Theme' "$family $mode"
 	row 'Login shell' "$( ((shell)) && echo zsh || echo unchanged)"
 	echo
 	confirm 'Proceed?' y || exit 0
@@ -142,6 +146,14 @@ main() {
 	prune_links
 	(cd "$repo" && stow .) # target and --no-folding come from .stowrc
 	ok "stowed into $HOME"
+
+	step 'Theme'
+	if command -v python3 >/dev/null; then
+		python3 "$repo/.local/lib/desktop/theme_render.py" render "$family" "$mode"
+		ok "rendered $family $mode into ${theme_state%/*}"
+	else
+		warn 'python3 missing; theme not rendered'
+	fi
 
 	if ((shell)); then
 		step 'Login shell'

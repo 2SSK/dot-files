@@ -10,6 +10,7 @@ export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
 export EDITOR=nvim VISUAL=nvim SUDO_EDITOR=nvim
 export TERMINAL=kitty
 export PAGER=less LESS='-R --mouse' MANPAGER='nvim +Man!'
+export BAT_THEME=ansi # follows the terminal palette
 export PNPM_HOME="$XDG_DATA_HOME/pnpm"
 
 # Prepend existing dirs once; machine-specific paths belong in local.zsh / local.bash
