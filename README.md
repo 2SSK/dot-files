@@ -1,6 +1,6 @@
-# dot-files (v2)
+# dot-files (rewrite)
 
-Fresh start: only the stock i3 config so far. Everything else gets written and tested here, in the test VM first (`vm/`, git-ignored).
+Fresh start on the `rewrite` branch (worktree `~/Dotfiles`): only the stock i3 config so far. Everything else gets written and tested here, in the test VM first (`vm/`, git-ignored). The live desktop stays on `main` in `~/dot-files` until cutover.
 
 ```sh
 cd ~/Dotfiles
