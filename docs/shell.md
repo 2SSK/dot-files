@@ -88,7 +88,7 @@ history expansions like `!!` are shown for confirmation before they run.
 
 | Group | Aliases |
 | --- | --- |
-| Files | `ls`, `ll`, `la` (coloured, directories first); `cp`, `mv`, `rm` ask before overwriting; `mkdir` creates parents |
+| Files | `ls`, `ll` (long, with git status), `la` (all), `lt` (tree, 2 levels): [eza](https://eza.rocks) with icons, directories first; plain coloured `ls` when eza is missing. `cp`, `mv`, `rm` ask before overwriting; `mkdir` creates parents |
 | Colour | `grep`, `diff`, `ip`, `dir`, `vdir` use their built-in colours |
 | Git | `gs` status, `gd` diff, `gds` staged diff, `ga` add, `gap` add patch, `gc` commit, `gp` push, `gu` pull, `gb` branch, `gsw` switch, `gm` merge, `grb` rebase, `gr` reset, `gcl` clone, `gl` log graph |
 | Docker | `dco` compose, `dps` ps, `dpa` ps -a, `dx` exec -it |

@@ -50,3 +50,19 @@ setup() {
 	run zsh -i -c 'alias top'
 	[ "$output" = "top=btop" ]
 }
+
+@test "ls uses eza when it is installed" {
+	printf '#!/bin/sh\n' >"$BATS_FILE_TMPDIR/bin/eza" && chmod +x "$BATS_FILE_TMPDIR/bin/eza"
+	PATH="$BATS_FILE_TMPDIR/bin:/usr/bin:/bin" run zsh -i -c 'alias ls ll lt'
+	rm "$BATS_FILE_TMPDIR/bin/eza"
+	[[ ${lines[0]} == "ls='eza --group-directories-first --icons=auto'" ]]
+	[[ ${lines[1]} == "ll='ls -l --git'" ]]
+	[[ ${lines[2]} == "lt='ls --tree --level=2'" ]]
+}
+
+@test "ls falls back to coloured GNU ls without eza" {
+	mkdir -p "$BATS_FILE_TMPDIR/noeza"
+	for tool in zsh ls dircolors; do ln -sf "$(command -v "$tool")" "$BATS_FILE_TMPDIR/noeza/$tool"; done
+	PATH="$BATS_FILE_TMPDIR/noeza" run zsh -i -c 'alias ls'
+	[ "$output" = "ls='ls --color=auto --group-directories-first -h'" ]
+}

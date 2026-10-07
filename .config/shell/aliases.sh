@@ -1,9 +1,14 @@
 # shellcheck shell=bash
 # Aliases shared by bash and zsh.
 
-# Colour from the tools' own defaults (LS_COLORS comes from dircolors, see tools)
-alias ls='ls --color=auto --group-directories-first -h'
-alias ll='ls -l' la='ls -lA'
+# eza when installed (icons, git column, tree), else coloured GNU ls; both use LS_COLORS
+if command -v eza >/dev/null; then
+	alias ls='eza --group-directories-first --icons=auto'
+	alias ll='ls -l --git' la='ll -a' lt='ls --tree --level=2'
+else
+	alias ls='ls --color=auto --group-directories-first -h'
+	alias ll='ls -l' la='ls -lA'
+fi
 alias dir='dir --color=auto' vdir='vdir --color=auto'
 alias grep='grep --color=auto' diff='diff --color=auto' ip='ip -color=auto'
 
