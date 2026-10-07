@@ -15,7 +15,7 @@ usage: setup.sh [-y] [--wm both|i3|sway] [--dev] [--no-packages]
   -y, --yes       accept the defaults without asking (both WMs, back up existing configs)
   --wm WM         window manager(s) to install packages for
   --dev           also install lint/test tools
-  --no-packages   skip package installation
+  --no-packages   skip packages and shell plugins
 EOF
 }
 
@@ -105,7 +105,7 @@ main() {
 
 	# --- Confirm ---
 	step 'Plan'
-	row 'Packages' "$( ((packages)) && echo "${layers[*]}" || echo skip)"
+	row 'Packages' "$( ((packages)) && echo "${layers[*]} + shell plugins" || echo skip)"
 	row 'Existing files' "$(case $policy in none) echo none ;; backup) echo "${#found[@]} → $backup" ;; *) echo "${#found[@]} deleted" ;; esac)"
 	row 'Stow' "$repo → $HOME"
 	row 'Login shell' "$( ((shell)) && echo zsh || echo unchanged)"
@@ -117,6 +117,9 @@ main() {
 		step 'Installing packages'
 		"$repo/packages/install.sh" "${layers[@]}"
 		ok "installed: ${layers[*]}"
+		step 'Installing shell plugins'
+		"$repo/packages/plugins.sh"
+		ok 'zsh and bash plugins at their pinned tags'
 	fi
 
 	if [[ -f $repo/.gitmodules ]]; then
