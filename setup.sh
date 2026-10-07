@@ -52,7 +52,7 @@ conflicts() {
 prune_links() {
 	local link
 	while IFS= read -r -d '' link; do
-		[[ $(readlink -m "$link") == "$repo"/* ]] && rm "$link"
+		if [[ $(readlink -m "$link") == "$repo"/* ]]; then rm "$link"; fi
 	done < <(find "$HOME" -xdev \( -path "$repo" -o -path "$HOME/.cache" \) -prune -o -type l -print0)
 }
 
