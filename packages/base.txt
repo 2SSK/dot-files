@@ -12,6 +12,7 @@ gpu-screen-recorder         @gpu-screen-recorder        @gpu-screen-recorder
 imagemagick                 imagemagick                 ImageMagick
 inter-font                  fonts-inter                 rsms-inter-fonts
 ttf-jetbrains-mono-nerd     @nerd-font                  @nerd-font
+noto-fonts-emoji            fonts-noto-color-emoji      google-noto-color-emoji-fonts
 adw-gtk-theme               @adw-gtk3                   adw-gtk3-theme
 qt5ct                       qt5ct                       qt5ct
 qt6ct                       qt6ct                       qt6ct
