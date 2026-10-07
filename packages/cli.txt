@@ -1,0 +1,20 @@
+# Terminal and tools. Columns: arch  debian(+ubuntu)  fedora (format: see base.txt)
+zsh                         zsh                         zsh
+tmux                        tmux                        tmux
+neovim                      neovim                      neovim
+git                         git                         git
+stow                        stow                        stow
+jq                          jq                          jq
+python                      python3                     python3
+fd                          fd-find                     fd-find
+fzf                         fzf                         fzf
+ripgrep                     ripgrep                     ripgrep
+bat                         bat                         bat
+zoxide                      zoxide                      zoxide
+starship                    starship                    @starship
+lazygit                     lazygit                     @lazygit
+lazydocker                  @lazydocker                 @lazydocker
+yazi                        @yazi                       @yazi
+cava                        cava                        cava
+fastfetch                   fastfetch                   fastfetch
+pgcli                       pgcli                       pgcli
