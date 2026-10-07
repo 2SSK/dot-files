@@ -10,7 +10,7 @@ alias grep='grep --color=auto' diff='diff --color=auto' ip='ip -color=auto'
 alias cp='cp -iv' mv='mv -iv' rm='rm -Iv' mkdir='mkdir -pv'
 alias cl='clear' e='exit' rel='exec $SHELL'
 alias vi='nvim' t='tmux' y='yazi' lg='lazygit' ldc='lazydocker' ff='fastfetch'
-alias btop='btop --themes-dir "$XDG_STATE_HOME/desktop/theme"' top='btop' # theme from theme_render.py
+alias top='btop'
 
 alias gs='git status --short' gd='git diff' gds='git diff --staged'
 alias ga='git add' gap='git add --patch' gc='git commit' gp='git push' gu='git pull'

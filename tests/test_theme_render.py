@@ -61,7 +61,7 @@ class Render(unittest.TestCase):
         self.assertEqual(palette["ui"]["bg"], "#eff1f5")
         self.assertEqual(len(palette["ansi"]), 16)
         self.assertEqual(sorted(p.name for p in self.state.iterdir()),
-                         ["btop.theme", "current", "foot.ini", "kitty.conf", "palette.json"])
+                         ["current", "foot.ini", "kitty.conf", "palette.json"])
 
     def test_unknown_family_or_mode(self):
         with self.assertRaises(tr.ThemeError):

@@ -4,6 +4,9 @@
 setup_file() {
 	export HOME="$BATS_FILE_TMPDIR/home"
 	mkdir -p "$HOME"
+	mkdir -p "$BATS_FILE_TMPDIR/bin" # fake pkill: never signal the developer's terminals
+	printf '#!/bin/sh\n' >"$BATS_FILE_TMPDIR/bin/pkill" && chmod +x "$BATS_FILE_TMPDIR/bin/pkill"
+	export PATH="$BATS_FILE_TMPDIR/bin:$PATH"
 	"$BATS_TEST_DIRNAME/../setup.sh" -y --no-packages >/dev/null
 }
 
@@ -43,9 +46,7 @@ setup() {
 	[ "$(tr ':' '\n' <<<"$output" | grep -cx "$HOME/.local/bin")" -eq 1 ]
 }
 
-@test "top opens btop with the rendered theme" {
-	run zsh -i -c 'alias top btop'
-	[[ $output == *"top=btop"* ]]
-	# shellcheck disable=SC2016 # matching the literal alias text
-	[[ $output == *'btop --themes-dir "$XDG_STATE_HOME/desktop/theme"'* ]]
+@test "top opens btop" {
+	run zsh -i -c 'alias top'
+	[ "$output" = "top=btop" ]
 }
