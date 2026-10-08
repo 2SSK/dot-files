@@ -54,6 +54,52 @@ setup() {
 	grep -q "usermod -aG docker $USER" "$CALLS"
 }
 
+grub_fakes() { # a palette, /etc/default/grub, and fake font/image/grub tools
+	export XDG_STATE_HOME="$BATS_TEST_TMPDIR/state"
+	mkdir -p "$XDG_STATE_HOME/desktop/theme" "$SYSTEM_ROOT/etc/default" "$SYSTEM_ROOT/boot/grub"
+	echo '{"ui": {"bg": "#1a1b26", "fg": "#c0caf5", "fg_muted": "#737aa2", "surface": "#292e42"}}' \
+		>"$XDG_STATE_HOME/desktop/theme/palette.json"
+	printf 'GRUB_TIMEOUT=5\n#GRUB_THEME="/boot/grub/themes/starfield/theme.txt"\nGRUB_GFXMODE=auto' \
+		>"$SYSTEM_ROOT/etc/default/grub" # no final newline, like a hand-edited file
+	local bin="$BATS_TEST_TMPDIR/bin"
+	printf '#!/bin/sh\necho "/fonts/Inter.ttc:0"\n' >"$bin/fc-match"
+	# shellcheck disable=SC2016 # expands when the fake runs
+	printf '#!/bin/sh\nwhile [ $# -gt 1 ]; do [ "$1" = -o ] && out=$2; shift; done\nprintf "FILE\\0\\0\\0\\4PFF2NAME\\0\\0\\0\\23Desktop Regular 26\\0" >"$out"\n' >"$bin/grub-mkfont"
+	# shellcheck disable=SC2016
+	printf '#!/bin/sh\nfor out; do :; done\nout=${out#PNG32:}\nfor i in 0 1 2 3 4 5 6 7 8; do echo "$i" >"$(printf "$out" "$i")"; done\n' >"$bin/magick"
+	# shellcheck disable=SC2016
+	printf '#!/bin/sh\necho "grub-mkconfig $*" >>"$CALLS"\n' >"$bin/grub-mkconfig"
+	chmod +x "$bin"/*
+}
+
+@test "grub: installs the theme, points GRUB at it and regenerates the config once" {
+	grub_fakes
+	run "$SYSTEM" grub
+	[ "$status" -eq 0 ]
+	theme="$SYSTEM_ROOT/boot/grub/themes/desktop"
+	grep -q 'desktop-color: "#1a1b26"' "$theme/theme.txt"
+	grep -q 'item_font = "Desktop Regular 26"' "$theme/theme.txt"
+	[ -f "$theme/select_nw.png" ] && [ -f "$theme/select_c.png" ] && [ -f "$theme/menu.pf2" ]
+	grep -qx 'GRUB_THEME="/boot/grub/themes/desktop/theme.txt"' "$SYSTEM_ROOT/etc/default/grub"
+	grep -qx 'GRUB_GFXMODE=auto' "$SYSTEM_ROOT/etc/default/grub"
+	grep -qx 'GRUB_TERMINAL_OUTPUT="gfxterm"' "$SYSTEM_ROOT/etc/default/grub"
+	grep -q "grub-mkconfig -o $SYSTEM_ROOT/boot/grub/grub.cfg" "$CALLS"
+	rm "$CALLS"
+	run "$SYSTEM" grub
+	[[ $output == *"already in place"* ]]
+	[ ! -e "$CALLS" ]
+}
+
+@test "grub: leaves a serial console alone" {
+	grub_fakes
+	printf '\nGRUB_TERMINAL="serial console"\n' >>"$SYSTEM_ROOT/etc/default/grub"
+	run "$SYSTEM" grub
+	[ "$status" -eq 0 ]
+	[[ $output == *"event=grub_serial"* ]]
+	run grep -q GRUB_TERMINAL_OUTPUT "$SYSTEM_ROOT/etc/default/grub"
+	[ "$status" -eq 1 ]
+}
+
 @test "unknown part is a usage error" {
 	run "$SYSTEM" bogus
 	[ "$status" -eq 2 ]
