@@ -7,7 +7,8 @@ set $menu rofi -show drun
 
 # --- Look: no title bars, a thin theme-coloured border, gaps (picom rounds and shadows) ---
 include ~/.local/state/desktop/theme/i3.conf
-font pango:Inter Semibold 10
+font pango:Inter Medium 10
+title_align center
 default_border pixel 2
 default_floating_border pixel 2
 hide_edge_borders none
@@ -108,5 +109,6 @@ bindsym $mod+Shift+e exec i3-nagbar -t warning -m 'Exit i3?' -B 'Exit' 'i3-msg e
 # Wallpaper: the one picked last (~/.local/state/desktop/wallpaper links to it), else the default
 exec_always --no-startup-id feh --bg-fill ~/.local/state/desktop/wallpaper 2>/dev/null || feh --bg-fill ~/.local/share/desktop/wallpapers/cat-mocha-lavender_19.jpg
 exec --no-startup-id picom
+exec --no-startup-id autotiling # splits along the longer side of the focused window
 exec --no-startup-id xrdb -merge ~/.Xresources
 exec --no-startup-id dex --autostart --environment i3
