@@ -25,7 +25,7 @@ ANSI = tuple(f"c{i}" for i in range(16))
 # Templates rendered from the active variant; foot.ini gets both variants (live mode switch)
 TARGETS = ("kitty.conf", "foot.ini", "st.Xresources", "cava", "tmux.conf", "git.conf", "lazygit.yml",
            "lazydocker/config.yml", "pspg/pspgconf", "pspg/.pspg_theme_desktop", "rmpc.ron", "nvim.lua",
-           "silicon.tmTheme", "vim.vim", "opencode/themes/desktop.json")
+           "silicon.tmTheme", "vim.vim", "opencode/themes/desktop.json", "i3.conf")
 
 
 class ThemeError(Exception):

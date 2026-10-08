@@ -62,7 +62,7 @@ class Render(unittest.TestCase):
         self.assertEqual(palette["ui"]["bg"], "#eff1f5")
         self.assertEqual(len(palette["ansi"]), 16)
         self.assertEqual(sorted(p.name for p in self.state.iterdir()),
-                         ["cava", "current", "foot.ini", "git.conf", "kitty.conf", "lazydocker", "lazygit.yml",
+                         ["cava", "current", "foot.ini", "git.conf", "i3.conf", "kitty.conf", "lazydocker", "lazygit.yml",
                           "nvim.lua", "opencode", "palette.json", "pspg", "rmpc.ron", "silicon.tmTheme", "st.Xresources",
                           "tmux.conf", "vim.vim"])
 

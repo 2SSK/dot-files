@@ -34,6 +34,8 @@ apply() { # <family> <mode>
 	pkill -USR1 -x nvim || true # config/theme.lua re-applies the colourscheme
 	# the whole config: it sources the theme, then re-runs the plugins (continuum hooks status-right)
 	if tmux info >/dev/null 2>&1; then tmux source-file "${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf" || true; fi
+	# i3 re-reads its config, which includes the theme's colours (sway sets I3SOCK too: skip it)
+	if [[ -z ${SWAYSOCK:-} ]] && i3-msg -t get_version >/dev/null 2>&1; then i3-msg -q reload || true; fi
 	# st reads colours from the X resource database (its reload patch re-reads it on SIGUSR1)
 	if [[ -n ${DISPLAY:-} && -r $HOME/.Xresources ]] && command -v xrdb >/dev/null; then
 		xrdb -merge "$HOME/.Xresources" && pkill -USR1 -x st || true
