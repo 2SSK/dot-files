@@ -3,6 +3,8 @@ zsh                         zsh                         zsh
 tmux                        tmux                        tmux
 neovim                      neovim                      neovim
 git                         git                         git
+git-delta                   git-delta                   git-delta
+git-lfs                     git-lfs                     git-lfs
 make                        make                        make
 gawk                        gawk                        gawk
 stow                        stow                        stow

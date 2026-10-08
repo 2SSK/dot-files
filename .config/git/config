@@ -1,0 +1,111 @@
+# Identity and machine-specific settings stay untracked:
+#   local.gitconfig    default [user], credential helper, internal hosts
+#   personal.gitconfig / work.gitconfig    [user] for ~/Code/ and ~/Work/
+[include]
+	path = ~/.config/git/local.gitconfig
+[includeIf "gitdir:~/Code/"]
+	path = ~/.config/git/personal.gitconfig
+[includeIf "gitdir:~/Work/"]
+	path = ~/.config/git/work.gitconfig
+
+[init]
+	defaultBranch = main
+[core]
+	autocrlf = input
+	compression = 9
+	fsync = none
+	whitespace = error
+	pager = delta
+[commit]
+	gpgSign = false
+	template = ~/.config/git/template
+[advice]
+	addEmptyPathspec = false
+	pushNonFastForward = false
+	statusHints = false
+
+[status]
+	branch = true
+	short = true
+	showStash = true
+	showUntrackedFiles = all
+[log]
+	abbrevCommit = true
+	graphColors = blue,yellow,cyan,magenta,green,red
+[blame]
+	coloring = highlightRecent
+	date = relative
+[diff]
+	context = 3
+	renames = copies
+	interHunkContext = 10
+	colorMoved = default
+[merge]
+	conflictstyle = zdiff3
+[rerere]
+	enabled = true
+[push]
+	autoSetupRemote = true
+	default = current
+[pull]
+	rebase = true
+[rebase]
+	autoStash = true
+[submodule]
+	fetchJobs = 16
+[pager]
+	branch = false
+
+# delta: diffs with syntax highlighting in the terminal's ANSI colours (follows the theme)
+[interactive]
+	diffFilter = delta --color-only
+	singlekey = true
+[delta]
+	navigate = true
+	line-numbers = true
+	syntax-theme = ansi
+	file-style = blue bold
+	hunk-header-style = magenta
+	minus-style = red
+	minus-emph-style = red reverse
+	plus-style = green
+	plus-emph-style = green reverse
+	line-numbers-minus-style = red
+	line-numbers-plus-style = green
+	line-numbers-zero-style = brightblack
+
+[color "blame"]
+	highlightRecent = black bold,1 year ago,white,1 month ago,default,7 days ago,blue
+[color "branch"]
+	current = magenta
+	local = default
+	remote = yellow
+	upstream = green
+	plain = blue
+[color "diff"]
+	meta = black bold
+	frag = magenta
+	context = white
+	whitespace = yellow reverse
+[color "decorate"]
+	HEAD = red
+	branch = blue
+	tag = yellow
+	remoteBranch = magenta
+
+# gh:user/repo, and ghp:/ghw: for the personal and work SSH host aliases
+[url "https://github.com/"]
+	insteadOf = gh:
+[url "git@github-personal:"]
+	insteadOf = ghp:
+[url "git@github-work:"]
+	insteadOf = ghw:
+[alias]
+	fix-remote-personal = !git remote set-url origin $(git remote get-url origin | sed \"s|github.com|github-personal|\")
+	fix-remote-work = !git remote set-url origin $(git remote get-url origin | sed \"s|github.com|github-work|\")
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
