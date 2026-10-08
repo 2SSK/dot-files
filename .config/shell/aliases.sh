@@ -14,7 +14,7 @@ alias grep='grep --color=auto' diff='diff --color=auto' ip='ip -color=auto'
 
 alias cp='cp -iv' mv='mv -iv' rm='rm -Iv' mkdir='mkdir -pv'
 alias cl='clear' e='exit' rel='exec $SHELL'
-alias vi='nvim' t='tmux' y='yazi' lg='lazygit' ldc='lazydocker' ff='fastfetch'
+alias vi='nvim' t='tmux' lg='lazygit' ldc='lazydocker' ff='fastfetch'
 alias top='btop'
 
 alias gs='git status --short' gd='git diff' gds='git diff --staged'

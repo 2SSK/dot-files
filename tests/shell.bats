@@ -28,7 +28,7 @@ setup() {
 }
 
 @test "zsh loads shared aliases and functions" {
-	run zsh -i -c 'alias gs; whence -w fkill frg fgl fdex cached_init'
+	run zsh -i -c 'alias gs; whence -w y fkill frg fgl fdex cached_init'
 	[ "$status" -eq 0 ]
 	[[ $output == *"git status --short"* ]]
 }
