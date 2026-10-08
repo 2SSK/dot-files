@@ -3,8 +3,8 @@
 Config: `~/.config/tmux/tmux.conf`. The prefix is **`` ` ``** (backtick); press it twice
 to type a literal backtick.
 
-The status bar is minimal and sits at the top: the session name on the left (with `●`
-while the prefix is held) and the windows centred, the current one bold in the theme's
+The status bar is minimal and sits at the top, everything on the left: the session name (with
+`●` while the prefix is held), then the windows, the current one bold in the theme's
 primary colour and the rest muted. Colours come from the desktop theme
 (`~/.local/state/desktop/theme/tmux.conf`), and `theme` re-applies them to a
 running tmux.
