@@ -1,7 +1,9 @@
-# Virtual machines through virt-manager (libvirt, QEMU, virtiofs shared folders).
+# Virtual machines through virt-manager and vm (libvirt, QEMU, virtiofs shared folders).
 # Columns: arch  debian(+ubuntu)  fedora (format: see base.txt)
 qemu-desktop                qemu-system-x86             qemu-kvm
 libvirt                     libvirt-daemon-system       libvirt
 virt-manager                virt-manager                virt-manager
+virt-install                virtinst                    virt-install
+libosinfo                   libosinfo-bin               libosinfo
 virtiofsd                   virtiofsd                   virtiofsd
 dnsmasq                     dnsmasq-base                dnsmasq

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# System-level setup (sudo): the memory safety net, docker and the GRUB theme. Installs
+# System-level setup (sudo): the memory safety net, libvirt, docker and the GRUB theme. Installs
 # the tracked files under system/ into / and enables services; a no-op when everything is already
 # in place.
-# usage: system.sh memory|docker|grub
+# usage: system.sh memory|libvirt|docker|grub
 set -euo pipefail
 
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -31,6 +31,43 @@ memory() {
 	sudo systemctl start systemd-zram-setup@zram0.service
 	sudo sysctl --quiet --load "$root/etc/sysctl.d/99-zram.conf" 2>/dev/null || true
 	sudo systemctl enable --now systemd-oomd.service
+}
+
+libvirt() {
+	# The daemons (per-driver sockets on Arch and Fedora, the monolithic libvirtd on Debian/Ubuntu)
+	local unit units=(libvirtd.socket)
+	systemctl list-unit-files virtqemud.socket >/dev/null 2>&1 &&
+		units=(virtqemud.socket virtnetworkd.socket virtstoraged.socket virtnodedevd.socket)
+	for unit in "${units[@]}"; do
+		systemctl is-enabled --quiet "$unit" 2>/dev/null && systemctl is-active --quiet "$unit" && continue
+		sudo systemctl enable --now "$unit"
+		changed=1
+	done
+	# The NAT network VMs get their address from, started now and at every boot
+	local info
+	info="$(sudo virsh -c qemu:///system net-info default 2>/dev/null)" || die no_default_network
+	if ! grep -qE '^Autostart: +yes' <<<"$info"; then
+		sudo virsh -c qemu:///system net-autostart default >/dev/null
+		changed=1
+	fi
+	if ! grep -qE '^Active: +yes' <<<"$info"; then
+		sudo virsh -c qemu:///system net-start default >/dev/null
+		changed=1
+	fi
+	# firewalld rejects the VMs' DHCP and DNS unless the bridge is in libvirt's zone; libvirt only
+	# adds it at runtime, which a firewalld reload forgets
+	if systemctl is-active --quiet firewalld 2>/dev/null &&
+		[[ $(sudo firewall-cmd --permanent --get-zone-of-interface=virbr0 2>/dev/null) != libvirt ]]; then
+		sudo firewall-cmd --quiet --permanent --zone=libvirt --add-interface=virbr0
+		sudo firewall-cmd --quiet --reload
+		changed=1
+	fi
+	# virsh and vm without sudo
+	if ! id -nG "$USER" | tr ' ' '\n' | grep -qx libvirt; then
+		sudo usermod -aG libvirt "$USER"
+		log_warn relogin msg='added to the libvirt group; takes effect at the next login'
+		changed=1
+	fi
 }
 
 docker_daemon() {
@@ -154,8 +191,9 @@ n = int.from_bytes(d[i:i + 4], "big"); print(d[i + 4:i + 4 + n].rstrip(b"\\0").d
 
 case ${1:-} in
 memory) memory ;;
+libvirt) libvirt ;;
 docker) docker_daemon ;;
 grub) grub_theme ;;
-*) echo 'usage: system.sh memory|docker|grub' >&2 && exit 2 ;;
+*) echo 'usage: system.sh memory|libvirt|docker|grub' >&2 && exit 2 ;;
 esac
 if ((changed)); then log_info system part="$1"; else echo "$1: already in place"; fi

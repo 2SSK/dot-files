@@ -6,10 +6,11 @@ VMs run on libvirt's system connection (`qemu:///system`), so every one shows up
 
 ## Once per laptop
 
-```sh
-sudo systemctl enable --now virtqemud.socket virtstoraged.socket virtnodedevd.socket virtnetworkd.socket
-sudo virsh net-start default && sudo virsh net-autostart default
-```
+`setup.sh` does this when you pick the `vm` layer; on its own it's `packages/system.sh libvirt`
+(sudo, safe to re-run). It enables libvirt's daemons, starts the `default` NAT network and sets it
+to start at boot, adds you to the `libvirt` group, and, when firewalld runs, puts the network's
+bridge `virbr0` into firewalld's `libvirt` zone. Without that zone a VM gets no address: it waits
+at boot for a network that never comes (firewalld drops its DHCP request).
 
 ## vm
 

@@ -117,7 +117,7 @@ main() {
 	fi
 
 	local -a layers=()
-	local distro='' safety=0 docker=0
+	local distro='' vm=0 safety=0 docker=0
 	if ((packages)); then
 		distro="$("$repo/packages/install.sh" --distro)"
 		step "Packages for $distro"
@@ -129,7 +129,7 @@ main() {
 		show_layer 'cli (terminal tools)' cli
 		if confirm 'Install the terminal tools?' y; then layers+=(cli); fi
 		show_layer 'vm (virtual machines: libvirt, virt-manager)' vm
-		if confirm 'Install the virtual machine tools?' y; then layers+=(vm); fi
+		if confirm 'Install the virtual machine tools?' y; then layers+=(vm) && vm=1; fi
 		show_layer 'dev (go, gopls, clangd, pnpm, docker, lint and test tools)' dev
 		if ((dev)) || confirm 'Install the development tools?' n; then layers+=(dev) && docker=1; fi
 	fi
@@ -149,6 +149,7 @@ main() {
 	[[ $distro != arch ]] || row '' 'includes a full system upgrade (pacman -Syu), as Arch requires'
 	local system=()
 	((safety)) && system+=('memory safety net (zram, systemd-oomd)')
+	((vm)) && system+=('libvirt services, default network, firewall zone, libvirt group')
 	((docker)) && system+=('docker service + docker group')
 	((${#system[@]} == 0)) || row 'System (sudo)' "$(printf '%s; ' "${system[@]}" | sed 's/; $//')"
 	row 'Existing files' "$(case $policy in none) echo none ;; backup) echo "${#found[@]} → $backup" ;; *) echo "${#found[@]} deleted" ;; esac)"
@@ -169,9 +170,10 @@ main() {
 		"$repo/packages/plugins.sh"
 		ok 'zsh and bash plugins at their pinned tags'
 		enable_services
-		if ((safety || docker)); then
+		if ((safety || vm || docker)); then
 			step 'System'
 			((safety == 0)) || "$repo/packages/system.sh" memory
+			((vm == 0)) || "$repo/packages/system.sh" libvirt
 			((docker == 0)) || "$repo/packages/system.sh" docker
 			ok 'system configured'
 		fi

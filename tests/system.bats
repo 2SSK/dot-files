@@ -33,6 +33,47 @@ setup() {
 	[ ! -e "$CALLS" ]
 }
 
+libvirt_fakes() { # <state>: "broken" (nothing set up) or "ok" (everything in place)
+	local bin="$BATS_TEST_TMPDIR/bin" ok=1
+	[ "$1" = ok ] || ok=0
+	# shellcheck disable=SC2016 # the fakes expand $* and friends when they run
+	{
+		printf '#!/bin/sh\necho "systemctl $*" >>"$CALLS"\n'
+		printf 'case "$1" in is-enabled|is-active) [ "$2" = --quiet ] && [ "$3" = firewalld ] && exit 0; exit %s ;; esac\n' $((1 - ok))
+	} >"$bin/systemctl"
+	# shellcheck disable=SC2016
+	printf '#!/bin/sh\necho "virsh $*" >>"$CALLS"\ncase "$*" in *net-info*) printf "Active:         %s\\nAutostart:      %s\\n" ;; esac\n' \
+		"$( ((ok)) && echo yes || echo no)" "$( ((ok)) && echo yes || echo no)" >"$bin/virsh"
+	# shellcheck disable=SC2016
+	printf '#!/bin/sh\necho "firewall-cmd $*" >>"$CALLS"\ncase "$*" in *get-zone-of-interface*) echo %s ;; esac\n' \
+		"$( ((ok)) && echo libvirt || echo 'no zone')" >"$bin/firewall-cmd"
+	# shellcheck disable=SC2016
+	printf '#!/bin/sh\necho "$USER wheel%s"\n' "$( ((ok)) && echo ' libvirt')" >"$bin/id"
+	chmod +x "$bin"/*
+}
+
+@test "libvirt: enables the daemons, the default network, the firewall zone and the group" {
+	libvirt_fakes broken
+	run "$SYSTEM" libvirt
+	[ "$status" -eq 0 ]
+	grep -q 'systemctl enable --now virtqemud.socket' "$CALLS"
+	grep -q 'systemctl enable --now virtnetworkd.socket' "$CALLS"
+	grep -q 'virsh -c qemu:///system net-autostart default' "$CALLS"
+	grep -q 'virsh -c qemu:///system net-start default' "$CALLS"
+	grep -q 'firewall-cmd --quiet --permanent --zone=libvirt --add-interface=virbr0' "$CALLS"
+	grep -q 'firewall-cmd --quiet --reload' "$CALLS"
+	grep -q "usermod -aG libvirt $USER" "$CALLS"
+}
+
+@test "libvirt: changes nothing when everything is in place" {
+	libvirt_fakes ok
+	run "$SYSTEM" libvirt
+	[ "$status" -eq 0 ]
+	[[ $output == *"already in place"* ]]
+	run grep -E 'enable --now|net-autostart|net-start|add-interface|usermod' "$CALLS"
+	[ "$status" -eq 1 ]
+}
+
 @test "docker: enables the socket and adds the user to the docker group once" {
 	printf '#!/bin/sh\necho "$USER wheel"\n' >"$BATS_TEST_TMPDIR/bin/id" # not in the docker group yet
 	chmod +x "$BATS_TEST_TMPDIR/bin/id"
