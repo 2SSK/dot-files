@@ -18,7 +18,8 @@ desktop-theme mode toggle                   # dark ⇄ light (also: mode dark|li
 | tokyonight *(default)* | night | day |
 | catppuccin | mocha | latte |
 | gruvbox | dark | light |
-| rose-pine | main | dawn |
+| rosepine | main | dawn |
+| eink | grey ink on charcoal | dark ink on grey paper; for black-and-white wallpapers |
 
 Palette values are copied from each project's official ports, with attribution in
 `~/.local/share/desktop/themes/<family>.toml`. Every variant passes WCAG AA contrast
