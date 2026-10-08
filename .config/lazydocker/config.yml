@@ -1,8 +1,0 @@
-# lazydocker: ANSI colour names, so it follows the central theme.
-gui:
-  theme:
-    activeBorderColor: [blue, bold]
-    inactiveBorderColor: [default]
-    selectedLineBgColor: [default]
-    optionsTextColor: [blue]
-  returnImmediately: true
