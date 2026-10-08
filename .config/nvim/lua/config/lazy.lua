@@ -16,8 +16,21 @@ end
 -- Put lazy into the runtimepath for neovim
 vim.opt.rtp:prepend(lazypath)
 
+-- The tracked lockfile pins plugin versions. In a read-only checkout (the test VM's share),
+-- lazy.nvim keeps its own copy in the state dir, seeded from the tracked one.
+local lockfile = vim.fn.stdpath("config") .. "/lazy-lock.json"
+if vim.fn.filewritable(lockfile) ~= 1 then
+	local copy = vim.fn.stdpath("state") .. "/lazy-lock.json"
+	if vim.fn.filereadable(copy) == 0 then
+		vim.fn.mkdir(vim.fn.fnamemodify(copy, ":h"), "p")
+		vim.fn.writefile(vim.fn.readfile(lockfile), copy)
+	end
+	lockfile = copy
+end
+
 -- Setup lazy.nvim
 require("lazy").setup({
+	lockfile = lockfile,
 	spec = {
 		-- Import all other plugins
 		{ import = "config.plugins" },

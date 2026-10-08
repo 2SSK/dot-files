@@ -1,47 +1,8 @@
+-- Small plugins that need little or no configuration
 return {
-	-- Vim-move plugin
-	{ "matze/vim-move" },
-
-	-- UI enhancement plugin
-	{
-		"stevearc/dressing.nvim",
-		event = "VeryLazy",
-	},
-
-	-- Tmux movement
-	{ "christoomey/vim-tmux-navigator" },
-
-	-- Zen mode
-	{ "folke/zen-mode.nvim" },
-
-	-- Colorizer (Highlight Colors)
-	{
-		"NvChad/nvim-colorizer.lua",
-		opts = {
-			user_default_options = {
-				tailwind = true,
-			},
-		},
-	},
-
-	-- Tab bar
-	{
-		"akinsho/bufferline.nvim",
-		dependencies = { "nvim-tree/nvim-web-devicons" },
-		version = "*",
-		opts = {
-			options = {
-				diagnostics = "nvim_lsp",
-				mode = "tabs",
-				show_buffer_close_icons = false,
-			},
-		},
-	},
-
-	-- Silicon (Code SnapShot)
+	{ "christoomey/vim-tmux-navigator" }, -- Ctrl+h/j/k/l across nvim splits and tmux panes
 	{
 		"michaelrommel/nvim-silicon",
-		lazy = true,
 		cmd = "Silicon",
 		config = function()
 			require("silicon").setup({
@@ -54,13 +15,6 @@ return {
 			})
 		end,
 	},
-
-	-- Fidget (LSP Progress)
-	{
-		"j-hui/fidget.nvim",
-	},
-
-	-- Tiny cmdline
 	{
 		"rachartier/tiny-cmdline.nvim",
 		init = function()

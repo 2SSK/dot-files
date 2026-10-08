@@ -1,87 +1,30 @@
+-- nvim-treesitter (main branch): installs parsers (needs the tree-sitter CLI) and turns on
+-- highlighting, indentation and folding per buffer. Visual-mode an/in (built into nvim 0.12)
+-- grow and shrink the selection by syntax node.
+local parsers = {
+	"bash", "c", "cpp", "css", "diff", "dockerfile", "go", "graphql", "html", "java", "javascript",
+	"json", "lua", "luadoc", "make", "markdown", "markdown_inline", "python", "query", "regex",
+	"rust", "sql", "svelte", "toml", "tsx", "typescript", "vim", "vimdoc", "yaml", "zig",
+}
+
 return {
 	"nvim-treesitter/nvim-treesitter",
+	branch = "main",
+	lazy = false,
 	build = ":TSUpdate",
-	dependencies = {
-		"nvim-treesitter/nvim-treesitter-textobjects",
-	},
+	dependencies = { { "nvim-treesitter/nvim-treesitter-textobjects", branch = "main" } }, -- queries for mini.ai
 	config = function()
-		require("nvim-treesitter").setup({
-			ensure_installed = {
-				"bash",
-				"c",
-				"lua",
-				"vim",
-				"vimdoc",
-				"query",
-				"regex",
-				"python",
-				"javascript",
-				"typescript",
-				"tsx",
-				"go",
-				"rust",
-				"cpp",
-				"java",
-				"ruby",
-				"php",
-				"elixir",
-				"haskell",
-				"scala",
-				"html",
-				"css",
-				"json",
-				"yaml",
-				"toml",
-				"markdown",
-				"markdown_inline",
-				"vue",
-				"svelte",
-				"graphql",
-				"dockerfile",
-				"cmake",
-				"make",
-				"ini",
-				"xml",
-				"sql",
-				"csv",
-				"perl",
-				"fish",
-				"luadoc",
-				"diff",
-				"zig",
-			},
-			auto_install = true,
-			highlight = {
-				enable = true,
-				additional_vim_regex_highlighting = { "ruby" },
-			},
-			indent = { enable = true, disable = { "ruby" } },
-			incremental_selection = {
-				enable = true,
-				keymaps = {
-					init_selection = "<M-space>",
-					node_incremental = "<M-space>",
-					scope_incremental = false,
-					node_decremental = "<Backspace>",
-				},
-			},
-			textobjects = {
-				select = {
-					enable = true,
-					lookahead = true,
-					keymaps = {
-						["af"] = "@function.outer",
-						["if"] = "@function.inner",
-						["ac"] = "@class.outer",
-						["ic"] = "@class.inner",
-					},
-				},
-				swap = {
-					enable = true,
-					swap_next = { ["<leader>xs"] = "@parameter.inner" },
-					swap_previous = { ["<leader>xS"] = "@parameter.inner" },
-				},
-			},
+		require("nvim-treesitter").install(parsers) -- missing ones only, in the background
+		vim.api.nvim_create_autocmd("FileType", {
+			group = vim.api.nvim_create_augroup("treesitter-start", { clear = true }),
+			callback = function(event)
+				if not pcall(vim.treesitter.start, event.buf) then
+					return -- no parser for this filetype
+				end
+				vim.bo[event.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+				vim.wo.foldmethod = "expr"
+				vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+			end,
 		})
 	end,
 }

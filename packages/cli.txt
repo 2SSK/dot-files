@@ -6,6 +6,8 @@ git                         git                         git
 git-delta                   git-delta                   git-delta
 git-lfs                     git-lfs                     git-lfs
 make                        make                        make
+gcc                         gcc                         gcc
+tree-sitter-cli             @tree-sitter-cli            @tree-sitter-cli
 stow                        stow                        stow
 jq                          jq                          jq
 python                      python3                     python3

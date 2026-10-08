@@ -25,3 +25,8 @@ opt.clipboard:append("unnamedplus")
 
 opt.splitright = true
 opt.splitbelow = true
+
+-- Folding: by LSP or treesitter (set per buffer), everything open by default
+vim.o.foldlevel = 99
+vim.o.foldlevelstart = 99
+vim.o.foldcolumn = "0"
