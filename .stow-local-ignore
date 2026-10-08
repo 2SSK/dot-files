@@ -8,6 +8,7 @@ __pycache__
 ^/LICENSE
 ^/vm
 ^/packages
+^/system
 ^/tests
 ^/docs
 ^/setup\.sh

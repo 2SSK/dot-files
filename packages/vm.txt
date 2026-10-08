@@ -1,0 +1,9 @@
+# Virtual machines: libvirt, virt-manager and virt-install (used by desktop-vm).
+# Columns: arch  debian(+ubuntu)  fedora (format: see base.txt)
+qemu-desktop                qemu-system-x86             qemu-kvm
+libvirt                     libvirt-daemon-system       libvirt
+virt-manager                virt-manager                virt-manager
+virt-install                virtinst                    virt-install
+virtiofsd                   virtiofsd                   virtiofsd
+dnsmasq                     dnsmasq-base                dnsmasq
+libisoburn                  xorriso                     xorriso

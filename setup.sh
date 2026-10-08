@@ -117,7 +117,7 @@ main() {
 	fi
 
 	local -a layers=()
-	local distro=''
+	local distro='' vm=0 safety=0
 	if ((packages)); then
 		distro="$("$repo/packages/install.sh" --distro)"
 		step "Packages for $distro"
@@ -128,12 +128,20 @@ main() {
 		if [[ $wm != i3 ]]; then show_layer 'wayland (SwayFX)' wayland && layers+=(wayland); fi
 		show_layer 'cli (terminal tools)' cli
 		if confirm 'Install the terminal tools?' y; then layers+=(cli); fi
+		show_layer 'vm (virtual machines: libvirt, virt-manager, desktop-vm)' vm
+		if confirm 'Install the virtual machine tools?' y; then layers+=(vm) && vm=1; fi
 		if ((dev)); then
 			show_layer 'dev (lint and test tools)' dev && layers+=(dev)
 		else
 			show_layer 'dev (lint and test tools)' dev
 			if confirm 'Install the lint and test tools?' n; then layers+=(dev); fi
 		fi
+	fi
+
+	if ((packages)); then
+		printf '  %s%s%s\n' "$dim" 'zram compresses little-used memory instead of killing apps when RAM fills up;' "$reset"
+		printf '  %s%s%s\n' "$dim" 'systemd-oomd stops only the runaway app before the desktop freezes.' "$reset"
+		if confirm 'Turn on the memory safety net (zram + systemd-oomd)?' y; then safety=1; fi
 	fi
 
 	local shell=0
@@ -143,6 +151,10 @@ main() {
 	step 'Plan'
 	row 'Packages' "$( ((packages)) && echo "${layers[*]} + shell plugins" || echo skip)"
 	[[ $distro != arch ]] || row '' 'includes a full system upgrade (pacman -Syu), as Arch requires'
+	local system=()
+	((safety)) && system+=('memory safety net (zram, systemd-oomd)')
+	((vm)) && system+=('libvirt service + default network')
+	((${#system[@]} == 0)) || row 'System (sudo)' "$(printf '%s; ' "${system[@]}" | sed 's/; $//')"
 	row 'Existing files' "$(case $policy in none) echo none ;; backup) echo "${#found[@]} → $backup" ;; *) echo "${#found[@]} deleted" ;; esac)"
 	row 'Stow' "$repo → $HOME"
 	local family mode
@@ -161,6 +173,12 @@ main() {
 		"$repo/packages/plugins.sh"
 		ok 'zsh and bash plugins at their pinned tags'
 		enable_services
+		if ((safety || vm)); then
+			step 'System'
+			((safety == 0)) || "$repo/packages/system.sh" memory
+			((vm == 0)) || "$repo/packages/system.sh" libvirt
+			ok 'system configured'
+		fi
 	fi
 
 	if [[ -f $repo/.gitmodules ]]; then
