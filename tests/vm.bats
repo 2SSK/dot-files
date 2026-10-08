@@ -84,6 +84,7 @@ vi_args() { grep '^virt-install' "$CALLS"; }
 	run grep -q secret "$CALLS.user-data"
 	[ "$status" -eq 1 ]
 	grep -q 'dotfiles, /home/tester/dotfiles, virtiofs' "$CALLS.user-data"
+	grep -q '/etc/udev/rules.d/50-x-resize.rules' "$CALLS.user-data" # the display follows the window
 }
 
 @test "an installer ISO gets a display and no cloud-init" {

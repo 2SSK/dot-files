@@ -166,6 +166,23 @@ user_data() { # <name> <spec>: cloud-init config
 		echo 'mounts:'
 		while read -r tag; do echo "  - [$tag, /home/$user/$tag, virtiofs, \"defaults,nofail\", \"0\", \"0\"]"; done <<<"$mounts"
 	fi
+	if [[ $gui == true ]]; then
+		# virtio-gpu reports the window size as a display change; X needs xrandr to follow it
+		cat <<-'EOF'
+			write_files:
+			  - path: /usr/local/bin/x-resize
+			    permissions: '0755'
+			    content: |
+			      #!/bin/sh
+			      for xauth in /home/*/.Xauthority; do
+			        user=$(stat -c %U "$xauth")
+			        DISPLAY=:0 XAUTHORITY="$xauth" runuser -u "$user" -- xrandr --output Virtual-1 --auto >/dev/null 2>&1 && exit 0
+			      done
+			  - path: /etc/udev/rules.d/50-x-resize.rules
+			    content: |
+			      ACTION=="change", SUBSYSTEM=="drm", KERNEL=="card[0-9]*", RUN+="/usr/local/bin/x-resize"
+		EOF
+	fi
 	echo 'runcmd:'
 	echo '  - [systemctl, enable, --now, qemu-guest-agent]'
 }
