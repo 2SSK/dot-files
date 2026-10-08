@@ -24,6 +24,7 @@ function M.setup()
 				"Normal", "NormalNC", "NormalFloat", "FloatBorder", "SignColumn", "FoldColumn", "EndOfBuffer",
 				"LineNr", "LineNrAbove", "LineNrBelow", "CursorLineNr", "TabLine", "TabLineFill",
 				"StatusLine", "StatusLineNC",
+				"Pmenu", "PmenuExtra", "PmenuKind", "PmenuSbar", -- completion menu (blink.cmp links here)
 			}) do
 				local hl = vim.api.nvim_get_hl(0, { name = group, link = false })
 				hl.bg = nil
