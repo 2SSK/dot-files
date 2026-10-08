@@ -1,47 +1,89 @@
 #!/usr/bin/env bash
-# vm: create and run cloud-image VMs on libvirt's system connection, so they show up in
-# virt-manager. Anything vm doesn't know goes to virsh.
+# vm: virtual machines from cloud images, on libvirt's system connection so virt-manager shows them.
+# Layout: settings, help, helpers, images, first boot, commands, dispatch.
 set -euo pipefail
 
-lib="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")/../lib/desktop" && pwd)"
+here="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # shellcheck source-path=SCRIPTDIR/../.. source=.local/lib/desktop/log.sh
-source "$lib/log.sh"
+source "$here/../lib/desktop/log.sh"
 
-uri="${LIBVIRT_DEFAULT_URI:-qemu:///system}"
+# --- Settings ---
+
+uri=qemu:///system
 cache="${XDG_CACHE_HOME:-$HOME/.cache}/vm"
 reserve_mib=2048 # what a running VM must leave free for the laptop
 
-usage() {
-	cat <<EOF
-usage: vm create <name> [options]   create a VM and start it
-         --image <image>            arch (default), debian[:13], ubuntu[:26.04], fedora[:44],
-                                    or any cloud-image URL or file
-         --cpus <n>                 default 2
-         --mem <size>               default 4G
-         --disk <size>              default 30G
-         --share <dir>[:tag[:rw]]   mount a laptop folder at ~/<tag> (default: its name),
-                                    read-only unless :rw; repeatable
-         --gui                      display with 3D acceleration (default: serial console)
-         --desktop                  --gui plus i3, sway and sddm (and quickshell on arch)
-         --pkgs "<pkg> ..."         more packages to install at first boot
-         --force                    start even if the laptop keeps under 2 GiB free
-       vm start <name> [--force]    start it and open its window
-       vm stop <name> [--force]     shut down (--force: pull the plug)
-       vm console <name>            its window in virt-manager, or the serial console
-       vm list                      every VM and its state
-       vm snap <name> [label]       snapshot (VM must be off)
-       vm revert <name> <label>     go back to a snapshot
-       vm rm <name> [-y]            delete the VM and its disk
-       vm <virsh command> ...       anything else runs as virsh -c $uri ...
+# --- Help ---
 
-The login is your user name with a password asked at create (VM_PASSWORD skips the prompt).
-EOF
+usage() {
+	cat <<-'EOF'
+		vm — virtual machines, shown in virt-manager
+
+		  vm create <name> [options]   new VM, started and opened
+		  vm start  <name>             start it and open its window
+		  vm open   <name>             open its window (or serial console)
+		  vm stop   <name> [--force]   shut down (--force: pull the plug)
+		  vm list                      all VMs with state and IP
+		  vm snap   <name> [label]     snapshot (VM must be off)
+		  vm snaps  <name>             list its snapshots
+		  vm revert <name> <label>     back to a snapshot
+		  vm rm     <name> [-y]        delete the VM and its disk
+
+		  vm help <command>            details, e.g. vm help create
+		  vm guide                     the full guide
+	EOF
 }
+
+help_for() { # <command>
+	case $1 in
+	create)
+		cat <<-'EOF'
+			vm create <name> [options]
+
+			  --image <image>            arch [default], debian[:13], ubuntu[:26.04], fedora[:44],
+			                             or any cloud-image URL or file
+			  --cpus <n>                 [2]
+			  --mem <size>               [4G]
+			  --disk <size>              [30G]
+			  --share <dir>[:tag][:rw]   laptop folder at ~/<tag> in the VM (tag: the folder's name),
+			                             read-only unless :rw; repeatable
+			  --desktop                  i3 + sway + login screen (quickshell on arch); includes --gui
+			  --gui                      a window instead of a serial console
+			  --pkgs "<a b>"             more packages, in the distro's names
+			  --force                    even if the laptop would keep under 2 GiB free
+
+			Asks for the password of your user in the VM (VM_PASSWORD skips the prompt).
+			First boot installs the packages: give it a few minutes.
+
+			  vm create rice --desktop --share ~/dev/dot-files-rewrite:dot-files
+			  vm create srv --image debian:12 --mem 2G
+		EOF
+		;;
+	start) echo 'vm start <name> [--force]   start it (--force: even when memory is low) and open its window' ;;
+	open) echo 'vm open <name>   its window in virt-manager, or the serial console (Ctrl+] leaves)' ;;
+	stop) echo 'vm stop <name> [--force]   shut down cleanly; --force cuts the power' ;;
+	list) echo 'vm list   every VM with its state, and its IP while running' ;;
+	snap) echo 'vm snap <name> [label]   snapshot a shut-off VM (label: the date and time)' ;;
+	snaps) echo 'vm snaps <name>   its snapshots, oldest first' ;;
+	revert) echo 'vm revert <name> <label>   return to a snapshot (see vm snaps)' ;;
+	rm) echo 'vm rm <name> [-y]   delete the VM, its disk and snapshots (-y: no question)' ;;
+	*) usage ;;
+	esac
+}
+
+guide() {
+	local doc="$here/../../docs/vm.md"
+	[[ -r $doc ]] || die no_guide path="$doc"
+	if command -v glow >/dev/null; then glow -p "$doc"; else "${PAGER:-less}" "$doc"; fi
+}
+
+# --- Helpers ---
 
 v() { virsh -q -c "$uri" "$@"; }
 exists() { v dominfo "$1" >/dev/null 2>&1; }
-need_vm() { exists "${1:?usage: vm <command> <name>}" || die no_vm name="$1"; }
+need_vm() { exists "${1:?usage: vm <command> <name>}" || die no_vm name="$1" msg='see: vm list'; }
 running() { [[ $(v domstate "$1") == running ]]; }
+ip_of() { v domifaddr "$1" --source lease 2>/dev/null | awk '$3 == "ipv4" { sub(/\/.*/, "", $4); print $4; exit }'; }
 
 mib() { # 2G, 1536M, 2048 -> MiB
 	local bytes
@@ -56,6 +98,17 @@ guard_memory() { # <MiB> <force>: keep the laptop responsive
 	((avail - $1 >= reserve_mib || $2)) ||
 		die low_memory need_mib="$1" available_mib="$avail" msg='close some apps, use a smaller --mem, or pass --force'
 }
+
+rendernode() { # the first GPU QEMU can render with (virgl doesn't run on the NVIDIA driver)
+	local node driver
+	for node in /dev/dri/renderD*; do
+		[[ -e $node ]] || continue
+		driver="$(readlink -f "/sys/class/drm/${node##*/}/device/driver")"
+		[[ ${driver##*/} == nvidia ]] || { echo "$node" && return; }
+	done
+}
+
+# --- Images ---
 
 resolve() { # <image>: prints "<url or file> <distro> <osinfo id>"
 	local distro=${1%%:*} ver file dir
@@ -82,7 +135,7 @@ resolve() { # <image>: prints "<url or file> <distro> <osinfo id>"
 		;;
 	http://* | https://*) echo "$1 other linux2024" ;;
 	*)
-		[[ -f $1 ]] || die unknown_image image="$1" msg='see: vm --help'
+		[[ -f $1 ]] || die unknown_image image="$1" msg='see: vm help create'
 		echo "$(readlink -f "$1") other linux2024"
 		;;
 	esac
@@ -116,6 +169,8 @@ base_volume() { # <url or file>: kept once in the default pool, which every VM's
 	echo "$dir/$name"
 }
 
+# --- First boot (cloud-init) ---
+
 desktop_pkgs() { # <distro>
 	case $1 in
 	arch) echo i3-wm sway sddm kitty foot quickshell ;;
@@ -124,7 +179,7 @@ desktop_pkgs() { # <distro>
 	esac
 }
 
-user_data() { # <name> <hash> <desktop> <tags> <packages...>
+user_data() { # <name> <password hash> <desktop 0|1> <share tags> <packages...>
 	local name=$1 hash=$2 desktop=$3 tags=$4 tag
 	shift 4
 	cat <<-EOF
@@ -153,19 +208,14 @@ user_data() { # <name> <hash> <desktop> <tags> <packages...>
 	fi
 }
 
-rendernode() { # the first GPU QEMU can render with (virgl doesn't run on the NVIDIA driver)
-	local node driver
-	for node in /dev/dri/renderD*; do
-		[[ -e $node ]] || continue
-		driver="$(readlink -f "/sys/class/drm/${node##*/}/device/driver")"
-		[[ ${driver##*/} == nvidia ]] || { echo "$node" && return; }
-	done
-}
+# --- Commands ---
 
-create() {
-	local name=${1:?usage: vm create <name> [options]} image=arch cpus=2 mem=4G disk=30G gui=0 desktop=0 force=0
-	local shares=() pkgs=(qemu-guest-agent) extra=() tags='' share
+cmd_create() {
+	local name=${1:-}
+	[[ -n $name && $name != -* ]] || { help_for create >&2 && exit 2; }
 	shift
+	local image=arch cpus=2 mem=4G disk=30G gui=0 desktop=0 force=0
+	local shares=() pkgs=(qemu-guest-agent) extra=() tags='' share
 	while (($#)); do
 		case $1 in
 		--image | --cpus | --mem | --disk | --share | --pkgs) [[ $# -ge 2 ]] || die missing_value option="$1" ;;&
@@ -178,12 +228,14 @@ create() {
 		--gui) gui=1 ;;
 		--desktop) gui=1 desktop=1 ;;
 		--force) force=1 ;;
-		*) usage >&2 && exit 2 ;;
+		*) help_for create >&2 && exit 2 ;;
 		esac
 		shift
 	done
 	! exists "$name" || die vm_exists name="$name" msg="vm start $name"
-	local mem_mib resolved url distro os base
+
+	# Image, size and packages
+	local mem_mib resolved url distro os
 	mem_mib="$(mib "$mem")"
 	guard_memory "$mem_mib" "$force"
 	resolved="$(resolve "$image")"
@@ -195,8 +247,10 @@ create() {
 	((gui)) && pkgs+=(spice-vdagent)
 
 	# shellcheck disable=SC2054 # virt-install sub-options are comma-separated on purpose
-	local args=(--name "$name" --memory "$mem_mib" --vcpus "$cpus" --osinfo "$(osinfo "$os")" --import
-		--network network=default,model=virtio --noautoconsole)
+	local args=(--connect "$uri" --name "$name" --memory "$mem_mib" --vcpus "$cpus" --osinfo "$(osinfo "$os")"
+		--import --network network=default,model=virtio --noautoconsole)
+
+	# Shared folders (virtiofs needs shared memory)
 	local dir tag mode
 	for share in "${shares[@]}"; do
 		IFS=: read -r dir tag mode <<<"$share"
@@ -204,11 +258,12 @@ create() {
 		[[ -d $dir ]] || die no_share_dir path="$dir"
 		dir="$(readlink -f "$dir")" tag=${tag:-${dir##*/}}
 		tags+=" $tag"
-		# shellcheck disable=SC2054
 		args+=(--filesystem "source.dir=$dir,target.dir=$tag,driver.type=virtiofs$([[ $mode == rw ]] || echo ,readonly=on)")
 	done
 	# shellcheck disable=SC2054
 	((${#shares[@]})) && args+=(--memorybacking source.type=memfd,access.mode=shared)
+
+	# Display: 3D on a GPU QEMU can use, else plain; or none (serial console)
 	if ((gui)); then
 		local node
 		node="$(rendernode)"
@@ -225,8 +280,8 @@ create() {
 		args+=(--graphics none --console pty,target.type=serial)
 	fi
 
-	local password hash seed
-	password="${VM_PASSWORD:-}"
+	# Login and first boot
+	local password=${VM_PASSWORD:-} hash seed base
 	if [[ -z $password ]]; then
 		read -rsp "password for $USER in $name: " password && echo >&2
 		[[ -n $password ]] || die no_password
@@ -236,16 +291,27 @@ create() {
 	# shellcheck disable=SC2064 # expand now: seed is local and gone by exit time
 	trap "rm -f -- ${seed@Q}" EXIT
 	user_data "$name" "$hash" "$desktop" "$tags" "${pkgs[@]}" >"$seed"
+
+	# Disk: a thin copy on top of the distro's base image
 	base="$(base_volume "$url")"
 	args+=(--cloud-init "user-data=$seed" --disk "size=$(($(mib "$disk") / 1024)),backing_store=$base,format=qcow2,bus=virtio")
 
-	virt-install --connect "$uri" "${args[@]}"
+	virt-install "${args[@]}" >/dev/null
 	log_info created name="$name" msg='first boot installs packages; give it a few minutes'
-	if ((gui)); then console "$name"; else echo "log in: vm console $name"; fi
+	if ((gui)); then cmd_open "$name"; else echo "log in: vm open $name"; fi
 }
 
-console() {
-	need_vm "$1"
+cmd_start() {
+	need_vm "${1:-}"
+	if ! running "$1"; then
+		guard_memory "$(v dominfo "$1" | awk '/^Max memory/ { print int($3 / 1024) }')" "$([[ ${2:-} == --force ]] && echo 1 || echo 0)"
+		v start "$1" >/dev/null
+	fi
+	cmd_open "$1"
+}
+
+cmd_open() {
+	need_vm "${1:-}"
 	if v dumpxml "$1" | grep -q "<graphics type='spice'"; then
 		setsid -f virt-manager --connect "$uri" --show-domain-console "$1" >/dev/null 2>&1
 	else
@@ -253,40 +319,47 @@ console() {
 	fi
 }
 
-main() {
-	local cmd=${1:-}
-	shift || true
-	case $cmd in
-	create) create "$@" ;;
-	start)
-		need_vm "${1:-}"
-		if ! running "$1"; then
-			guard_memory "$(v dominfo "$1" | awk '/^Max memory/ { print int($3 / 1024) }')" "$([[ ${2:-} == --force ]] && echo 1 || echo 0)"
-			v start "$1"
-		fi
-		console "$1"
-		;;
-	stop) need_vm "${1:-}" && if [[ ${2:-} == --force ]]; then v destroy "$1"; else v shutdown "$1"; fi ;;
-	console) console "${1:-}" ;;
-	list) virsh -c "$uri" list --all ;;
-	snap)
-		need_vm "${1:-}"
-		! running "$1" || die vm_running name="$1" msg="shared folders can't be snapshotted live: vm stop $1"
-		v snapshot-create-as "$1" "${2:-$(date +%F-%H%M)}"
-		;;
-	revert) need_vm "${1:-}" && v snapshot-revert "$1" "${2:?usage: vm revert <name> <label>}" ;;
-	rm)
-		need_vm "${1:-}"
-		if [[ ${2:-} != -y ]]; then
-			read -rp "delete $1 and its disk? [y/N] " reply
-			[[ $reply == [yY]* ]] || exit 0
-		fi
-		v destroy "$1" >/dev/null 2>&1 || true
-		v undefine "$1" --remove-all-storage --snapshots-metadata
-		;;
-	'' | -h | --help) usage ;;
-	*) exec virsh -c "$uri" "$cmd" "$@" ;;
-	esac
+cmd_stop() {
+	need_vm "${1:-}"
+	if [[ ${2:-} == --force ]]; then v destroy "$1" >/dev/null; else v shutdown "$1" >/dev/null; fi
 }
 
-main "$@"
+cmd_list() {
+	local name state
+	while read -r name; do
+		[[ -n $name ]] || continue
+		state="$(v domstate "$name")"
+		printf '%-16s %-10s %s\n' "$name" "$state" "$([[ $state == running ]] && ip_of "$name")"
+	done < <(v list --all --name)
+}
+
+cmd_snap() {
+	need_vm "${1:-}"
+	! running "$1" || die vm_running name="$1" msg="shared folders can't be snapshotted live: vm stop $1"
+	v snapshot-create-as "$1" "${2:-$(date +%F-%H%M)}"
+}
+
+cmd_snaps() { need_vm "${1:-}" && v snapshot-list "$1" --name; }
+
+cmd_revert() { need_vm "${1:-}" && v snapshot-revert "$1" "${2:?usage: vm revert <name> <label>}"; }
+
+cmd_rm() {
+	need_vm "${1:-}"
+	if [[ ${2:-} != -y ]]; then
+		read -rp "delete $1 and its disk? [y/N] " reply
+		[[ $reply == [yY]* ]] || exit 0
+	fi
+	v destroy "$1" >/dev/null 2>&1 || true
+	v undefine "$1" --remove-all-storage --snapshots-metadata >/dev/null
+}
+
+# --- Dispatch ---
+
+cmd=${1:-help}
+shift || true
+case $cmd in
+create | start | open | stop | list | snap | snaps | revert | rm) "cmd_$cmd" "$@" ;;
+help | -h | --help) help_for "${1:-}" ;;
+guide) guide ;;
+*) log_error unknown_command command="$cmd" && usage >&2 && exit 2 ;;
+esac

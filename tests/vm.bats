@@ -37,7 +37,7 @@ vi_args() { grep '^virt-install' "$CALLS"; }
 	run "$VM" create box
 	[ "$status" -eq 0 ]
 	[[ $(calls) == *"curl "*"/images/latest/Arch-Linux-x86_64-cloudimg.qcow2"* ]]
-	[[ $(vi_args) == *"--name box --memory 4096 --vcpus 2 --osinfo archlinux --import"* ]]
+	[[ $(vi_args) == *"--connect qemu:///system --name box --memory 4096 --vcpus 2 --osinfo archlinux --import"* ]]
 	[[ $(vi_args) == *"size=30,backing_store=/pool/vm-base-Arch-Linux-x86_64-cloudimg.qcow2"* ]]
 	[[ $(vi_args) == *"--graphics none"* && $(vi_args) != *"--filesystem"* ]]
 	grep -q 'name: tester' "$CALLS.user-data"
@@ -137,13 +137,34 @@ vi_args() { grep '^virt-install' "$CALLS"; }
 	[[ $output == *"event=no_vm"* ]]
 }
 
-@test "anything else goes to virsh on the system connection" {
-	run "$VM" snapshot-list box
-	[[ $(calls) == *"virsh -c qemu:///system snapshot-list box"* ]]
+@test "list: name, state, and the IP while running" {
+	# shellcheck disable=SC2016
+	printf '#!/bin/sh\ncase "$*" in *"list --all --name"*) printf "rice\\nsrv\\n" ;; *"domstate rice"*) echo running ;; *domstate*) echo "shut off" ;; *domifaddr*) printf " vnet0  52:54:00:aa:bb:cc  ipv4  192.168.122.50/24\\n" ;; esac\n' >"$BATS_TEST_TMPDIR/bin/virsh"
+	run "$VM" list
+	[ "$status" -eq 0 ]
+	[[ ${lines[0]} == "rice "*"running "*"192.168.122.50" ]]
+	[[ ${lines[1]} == "srv "*"shut off"* ]]
 }
 
-@test "--help exits 0" {
-	run "$VM" --help
+@test "snaps lists snapshot names" {
+	VM_EXISTS=1 run "$VM" snaps box
+	[[ $(calls) == *"snapshot-list box --name"* ]]
+}
+
+@test "help: short by default, details per command" {
+	run "$VM"
 	[ "$status" -eq 0 ]
-	[[ $output == *"vm create <name>"* ]]
+	[[ $output == *"vm help <command>"* && $output != *"--image"* ]]
+	[ "${#lines[@]}" -lt 20 ]
+	run "$VM" help create
+	[[ $output == *"--share <dir>[:tag][:rw]"* ]]
+	run "$VM" help stop
+	[[ $output == *"--force cuts the power"* ]]
+}
+
+@test "an unknown command is a usage error, not virsh" {
+	run "$VM" snapshot-list box
+	[ "$status" -eq 2 ]
+	[[ $output == *"event=unknown_command"* && $output == *"vm create <name>"* ]]
+	[ ! -e "$CALLS" ] # virsh never ran
 }

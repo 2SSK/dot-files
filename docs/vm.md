@@ -17,15 +17,19 @@ at boot for a network that never comes (firewalld drops its DHCP request).
 ```sh
 vm create rice --desktop --share ~/dev/dot-files-rewrite:dot-files   # the Quickshell test VM
 vm create srv --image debian:13 --mem 2G                             # a server, serial console
-vm list                     # every VM and its state
+vm list                     # every VM: state, and IP while running
 vm start rice               # start it and open its window
-vm console srv              # window (display VMs) or serial console (Ctrl+] leaves)
+vm open srv                 # window (display VMs) or serial console (Ctrl+] leaves)
 vm stop rice                # shut down; --force pulls the plug
 vm snap rice clean          # snapshot (shut it down first)
+vm snaps rice               # its snapshots
 vm revert rice clean        # back to that snapshot
 vm rm rice                  # delete the VM and its disk
-vm snapshot-list rice       # anything else goes to virsh on the system connection
+vm help create              # every option of a command; plain `vm` lists the commands
+vm guide                    # this page
 ```
+
+For anything else, use virsh on the same connection: `virsh -c qemu:///system <command>`.
 
 `create` asks for the password of your user in the VM (with passwordless sudo); only its hash
 reaches the VM. First boot upgrades and installs packages, so give it a few minutes.
@@ -43,7 +47,7 @@ reaches the VM. First boot upgrades and installs packages, so give it a few minu
 Each distro's image is downloaded once into the `default` pool (`/var/lib/libvirt/images`,
 `vm-base-*`); a VM's disk is a thin copy on top, so `create` is quick after the first time.
 To pick up a newer image, delete its base volume once no VM uses it:
-`vm vol-delete --pool default vm-base-<file>`.
+`virsh -c qemu:///system vol-delete --pool default vm-base-<file>`.
 
 Snapshots need the VM shut down: libvirt can't snapshot a running VM with shared folders.
 
