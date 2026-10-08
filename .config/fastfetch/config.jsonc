@@ -1,9 +1,11 @@
-// fastfetch: the distro's small logo and only the essentials. ANSI colours follow the theme.
+// fastfetch: the Saturn logo and only the essentials. ANSI colours follow the theme.
 {
   "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
   "logo": {
-    "type": "small",
-    "padding": { "top": 1, "left": 2, "right": 4 }
+    "type": "file",
+    "source": "~/.config/fastfetch/saturn.txt",
+    "color": { "1": "blue" },
+    "padding": { "top": 0, "left": 2, "right": 4 }
   },
   "display": {
     "separator": "  ",
