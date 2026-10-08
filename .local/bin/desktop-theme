@@ -30,6 +30,7 @@ apply() { # <family> <mode>
 	# Reload running consumers; foot can only switch dark/light live
 	pkill -USR1 -x kitty || true
 	if [[ $2 == dark ]]; then pkill -USR1 -x foot || true; else pkill -USR2 -x foot || true; fi
+	pkill -USR2 -x cava || true # reload colours only
 	# st reads colours from the X resource database (its reload patch re-reads it on SIGUSR1)
 	if [[ -n ${DISPLAY:-} && -r $HOME/.Xresources ]] && command -v xrdb >/dev/null; then
 		xrdb -merge "$HOME/.Xresources" && pkill -USR1 -x st || true

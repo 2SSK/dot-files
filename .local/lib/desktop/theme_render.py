@@ -23,7 +23,7 @@ ROLES = ("bg", "bg_alt", "surface", "overlay", "fg", "fg_muted", "primary", "on_
          "accent", "success", "warning", "error", "border", "border_active", "selection")
 ANSI = tuple(f"c{i}" for i in range(16))
 # Templates rendered from the active variant; foot.ini gets both variants (live mode switch)
-TARGETS = ("kitty.conf", "foot.ini", "st.Xresources")
+TARGETS = ("kitty.conf", "foot.ini", "st.Xresources", "cava")
 
 
 class ThemeError(Exception):

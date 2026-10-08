@@ -23,6 +23,7 @@ signals() { cat "$BATS_TEST_TMPDIR/signals"; }
 	[ "$(cat "$STATE/current")" = "$(printf 'family=catppuccin\nmode=light')" ]
 	[[ $(signals) == *"pkill -USR1 -x kitty"* ]]
 	[[ $(signals) == *"pkill -USR2 -x foot"* ]]
+	[[ $(signals) == *"pkill -USR2 -x cava"* ]]
 	[[ $(signals) != *"xrdb"* ]] # no X display: st is left alone
 }
 
