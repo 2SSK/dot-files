@@ -40,7 +40,7 @@ vi_args() { grep '^virt-install' "$CALLS"; }
 	[[ $(vi_args) == *"--connect qemu:///system --name box --memory 4096 --vcpus 2 --osinfo archlinux --import"* ]]
 	[[ $(vi_args) == *"--channel unix,target.type=virtio,target.name=org.qemu.guest_agent.0"* ]]
 	[[ $(vi_args) == *"size=30,backing_store=/pool/vm-base-Arch-Linux-x86_64-cloudimg.qcow2"* ]]
-	[[ $(vi_args) == *"--graphics none"* && $(vi_args) != *"--filesystem"* ]]
+	[[ $(vi_args) == *"--graphics none --video model.type=virtio"* && $(vi_args) != *"--filesystem"* ]] # Debian's GRUB needs a video card
 	grep -q 'name: tester' "$CALLS.user-data"
 	grep -qE 'passwd: "[$]6[$]' "$CALLS.user-data"
 	run grep -q secret "$CALLS.user-data" # only the hash reaches the VM
@@ -117,10 +117,12 @@ vi_args() { grep '^virt-install' "$CALLS"; }
 	export VM_EXISTS=1
 	run "$VM" start box
 	[[ $(calls) == *"virsh -q -c qemu:///system start box"* && $(calls) == *"--show-domain-console box"* ]]
-	run "$VM" stop box
+	VM_STATE=running run "$VM" stop box
 	[[ $(calls) == *"shutdown box"* ]]
-	run "$VM" stop box --force
+	VM_STATE=running run "$VM" stop box --force
 	[[ $(calls) == *"destroy box"* ]]
+	run "$VM" stop box
+	[[ $output == "box is already off" ]]
 	run "$VM" snap box clean
 	[[ $(calls) == *"snapshot-create-as box clean"* ]]
 	run "$VM" revert box clean
@@ -130,7 +132,7 @@ vi_args() { grep '^virt-install' "$CALLS"; }
 }
 
 @test "console logs in on the serial console" {
-	VM_EXISTS=1 run "$VM" console box
+	VM_EXISTS=1 VM_STATE=running run "$VM" console box
 	[ "$status" -eq 0 ]
 	[[ $(calls) == *"virsh -c qemu:///system console box"* ]]
 }
@@ -139,6 +141,22 @@ vi_args() { grep '^virt-install' "$CALLS"; }
 	VM_EXISTS=1 VM_STATE=running run "$VM" snap box
 	[ "$status" -eq 1 ]
 	[[ $output == *"event=vm_running"* ]]
+}
+
+@test "missing or wrong arguments are usage errors with that command's help" {
+	for args in "snaps" "start" "rm" "revert box" "stop box --forse" "rm box --yes" "start box -f" "list box" "snap box -x"; do
+		# shellcheck disable=SC2086 # word-split on purpose
+		VM_EXISTS=1 run "$VM" $args
+		[ "$status" -eq 2 ] || { echo "vm $args: status $status" && false; }
+		[[ $output == "vm ${args%% *}"* ]] || { echo "vm $args: $output" && false; }
+	done
+	[ ! -e "$CALLS" ] || ! grep -qE 'shutdown|destroy|undefine|start box|snapshot' "$CALLS"
+}
+
+@test "console needs the VM running" {
+	VM_EXISTS=1 run "$VM" console box
+	[ "$status" -eq 1 ]
+	[[ $output == *"event=vm_off"* ]]
 }
 
 @test "a missing VM is an error" {
@@ -156,9 +174,12 @@ vi_args() { grep '^virt-install' "$CALLS"; }
 	[[ ${lines[1]} == "srv "*"shut off"* ]]
 }
 
-@test "snaps lists snapshot names" {
-	VM_EXISTS=1 run "$VM" snaps box
-	[[ $(calls) == *"snapshot-list box --name"* ]]
+@test "snaps lists snapshots oldest first, with when they were taken" {
+	# shellcheck disable=SC2016
+	printf '#!/bin/sh\necho "virsh $*" >>"$CALLS"\ncase "$*" in *dominfo*) ;; *snapshot-list*) printf " b   2026-10-08 20:23:11 +0530   shutoff\\n a   2026-10-07 09:00:00 +0530   shutoff\\n" ;; esac\n' >"$BATS_TEST_TMPDIR/bin/virsh"
+	run "$VM" snaps box
+	[ "${lines[0]}" = "a                        2026-10-07 09:00" ]
+	[ "${lines[1]}" = "b                        2026-10-08 20:23" ]
 }
 
 @test "help: short by default, details per command" {

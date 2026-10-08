@@ -84,7 +84,11 @@ guide() {
 
 v() { virsh -q -c "$uri" "$@"; }
 exists() { v dominfo "$1" >/dev/null 2>&1; }
-need_vm() { exists "${1:?usage: vm <command> <name>}" || die no_vm name="$1" msg='see: vm list'; }
+usage_error() { help_for "$cmd" >&2 && exit 2; } # the running command's help
+need_vm() { # <name>: missing is a usage error, unknown an error
+	[[ -n ${1:-} && $1 != -* ]] || usage_error
+	exists "$1" || die no_vm name="$1" msg='see: vm list'
+}
 running() { [[ $(v domstate "$1") == running ]]; }
 ip_of() { v domifaddr "$1" --source lease 2>/dev/null | awk '$3 == "ipv4" { sub(/\/.*/, "", $4); print $4; exit }'; }
 
@@ -182,9 +186,36 @@ desktop_pkgs() { # <distro>
 	esac
 }
 
-user_data() { # <name> <password hash> <desktop 0|1> <share tags> <packages...>
-	local name=$1 hash=$2 desktop=$3 tags=$4 tag
-	shift 4
+x_resize() {
+	# virt-manager reports its window size as a display change (virtio-gpu). Wayland compositors
+	# follow it; an X session needs xrandr on every change (udev) and once at login (sddm runs
+	# xinitrc.d). Both redraw the wallpaper (feh's ~/.fehbg) at the new size.
+	cat <<-'EOF'
+		write_files:
+		  - path: /usr/local/bin/x-resize
+		    permissions: '0755'
+		    content: |
+		      #!/bin/sh
+		      for xauth in /home/*/.Xauthority; do
+		        user=$(stat -c %U "$xauth") home=$(dirname "$xauth")
+		        DISPLAY=:0 XAUTHORITY="$xauth" runuser -u "$user" -- xrandr --output Virtual-1 --auto >/dev/null 2>&1 || continue
+		        [ -x "$home/.fehbg" ] && DISPLAY=:0 XAUTHORITY="$xauth" runuser -u "$user" -- "$home/.fehbg" >/dev/null 2>&1
+		        exit 0
+		      done
+		  - path: /etc/udev/rules.d/50-x-resize.rules
+		    content: |
+		      ACTION=="change", SUBSYSTEM=="drm", KERNEL=="card[0-9]*", RUN+="/usr/local/bin/x-resize"
+		  - path: /etc/X11/xinit/xinitrc.d/50-x-resize.sh
+		    permissions: '0755'
+		    content: |
+		      xrandr --output Virtual-1 --auto >/dev/null 2>&1
+		      [ -x "$HOME/.fehbg" ] && "$HOME/.fehbg" >/dev/null 2>&1 &
+	EOF
+}
+
+user_data() { # <name> <password hash> <gui 0|1> <desktop 0|1> <share tags> <packages...>
+	local name=$1 hash=$2 gui=$3 desktop=$4 tags=$5 tag
+	shift 5
 	cat <<-EOF
 		#cloud-config
 		hostname: $name
@@ -199,6 +230,7 @@ user_data() { # <name> <password hash> <desktop 0|1> <share tags> <packages...>
 		package_upgrade: true
 		packages: [$(printf '%s\n' "$@" | paste -sd, | sed 's/,/, /g')]
 	EOF
+	((gui)) && x_resize
 	echo 'runcmd:'
 	echo '  - [systemctl, enable, --now, qemu-guest-agent]'
 	# Shares mount here, not with cloud-init's mounts module: that runs before the user exists and
@@ -284,8 +316,9 @@ cmd_create() {
 		fi
 		args+=(--channel spicevmc --sound ich9)
 	else
+		# No window, but still a video card: Debian's GRUB resets the VM when there is none
 		# shellcheck disable=SC2054
-		args+=(--graphics none --console pty,target.type=serial)
+		args+=(--graphics none --video model.type=virtio --console pty,target.type=serial)
 	fi
 
 	# Login and first boot
@@ -298,7 +331,7 @@ cmd_create() {
 	seed="$(mktemp)"
 	# shellcheck disable=SC2064 # expand now: seed is local and gone by exit time
 	trap "rm -f -- ${seed@Q}" EXIT
-	user_data "$name" "$hash" "$desktop" "$tags" "${pkgs[@]}" >"$seed"
+	user_data "$name" "$hash" "$gui" "$desktop" "$tags" "${pkgs[@]}" >"$seed"
 
 	# Disk: a thin copy on top of the distro's base image
 	base="$(base_volume "$url")"
@@ -309,10 +342,18 @@ cmd_create() {
 	if ((gui)); then cmd_open "$name"; else echo "log in: vm open $name"; fi
 }
 
+flag() { # <allowed flag> <arg>: 1 when given, 0 when absent; anything else is a usage error
+	[[ -z ${2:-} ]] && echo 0 && return
+	[[ $2 == "$1" ]] || usage_error
+	echo 1
+}
+
 cmd_start() {
 	need_vm "${1:-}"
+	local force
+	force="$(flag --force "${2:-}")"
 	if ! running "$1"; then
-		guard_memory "$(v dominfo "$1" | awk '/^Max memory/ { print int($3 / 1024) }')" "$([[ ${2:-} == --force ]] && echo 1 || echo 0)"
+		guard_memory "$(v dominfo "$1" | awk '/^Max memory/ { print int($3 / 1024) }')" "$force"
 		v start "$1" >/dev/null
 	fi
 	cmd_open "$1"
@@ -327,14 +368,22 @@ cmd_open() {
 	fi
 }
 
-cmd_console() { need_vm "${1:-}" && exec virsh -c "$uri" console "$1"; }
+cmd_console() {
+	need_vm "${1:-}"
+	running "$1" || die vm_off name="$1" msg="vm start $1"
+	exec virsh -c "$uri" console "$1"
+}
 
 cmd_stop() {
 	need_vm "${1:-}"
-	if [[ ${2:-} == --force ]]; then v destroy "$1" >/dev/null; else v shutdown "$1" >/dev/null; fi
+	local force
+	force="$(flag --force "${2:-}")"
+	running "$1" || { echo "$1 is already off" && return; }
+	if ((force)); then v destroy "$1" >/dev/null; else v shutdown "$1" >/dev/null; fi
 }
 
 cmd_list() {
+	[[ $# -eq 0 ]] || usage_error
 	local name state
 	while read -r name; do
 		[[ -n $name ]] || continue
@@ -345,22 +394,37 @@ cmd_list() {
 
 cmd_snap() {
 	need_vm "${1:-}"
+	[[ ${2:-} != -* ]] || usage_error
 	! running "$1" || die vm_running name="$1" msg="shared folders can't be snapshotted live: vm stop $1"
-	v snapshot-create-as "$1" "${2:-$(date +%F-%H%M)}"
+	local label=${2:-$(date +%F-%H%M)}
+	v snapshot-create-as "$1" "$label" >/dev/null
+	echo "snapshot $label of $1"
 }
 
-cmd_snaps() { need_vm "${1:-}" && v snapshot-list "$1" --name; }
+cmd_snaps() { # oldest first: name, then when it was taken
+	need_vm "${1:-}"
+	v snapshot-list "$1" | sort -k2,3 | awk '{ printf "%-24s %s %s\n", $1, $2, substr($3, 1, 5) }'
+}
 
-cmd_revert() { need_vm "${1:-}" && v snapshot-revert "$1" "${2:?usage: vm revert <name> <label>}"; }
+cmd_revert() {
+	need_vm "${1:-}"
+	[[ -n ${2:-} ]] || usage_error
+	v snapshot-info "$1" "$2" >/dev/null 2>&1 || die no_snapshot name="$1" label="$2" msg="see: vm snaps $1"
+	v snapshot-revert "$1" "$2"
+	echo "$1 is back at $2"
+}
 
 cmd_rm() {
 	need_vm "${1:-}"
-	if [[ ${2:-} != -y ]]; then
+	local yes
+	yes="$(flag -y "${2:-}")"
+	if ((!yes)); then
 		read -rp "delete $1 and its disk? [y/N] " reply
 		[[ $reply == [yY]* ]] || exit 0
 	fi
 	v destroy "$1" >/dev/null 2>&1 || true
 	v undefine "$1" --remove-all-storage --snapshots-metadata >/dev/null
+	echo "deleted $1"
 }
 
 # --- Dispatch ---

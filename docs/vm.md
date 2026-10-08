@@ -40,7 +40,7 @@ reaches the VM. First boot upgrades and installs packages, so give it a few minu
 | `--image` | `arch` | `arch`, `debian[:13]`, `ubuntu[:26.04]`, `fedora[:44]`, or any cloud-image URL or file |
 | `--cpus`, `--mem`, `--disk` | 2, 4G, 30G | Size |
 | `--share <dir>[:tag[:rw]]` | | Laptop folder mounted at `~/<tag>` over virtiofs (tag defaults to the folder's name); read-only unless `:rw`. Repeatable |
-| `--gui` | off | Spice display with 3D acceleration on the Intel GPU (virgl); without it, a serial console |
+| `--gui` | off | Spice display with 3D acceleration on the Intel GPU (virgl), sized to the window; without it, a serial console |
 | `--desktop` | off | `--gui` plus i3, sway, sddm, kitty, foot (and quickshell on Arch); the login screen preselects i3 |
 | `--pkgs "a b"` | | More packages, in the distro's names |
 | `--force` | | Start even if the laptop would keep under 2 GiB free |
@@ -62,7 +62,10 @@ experiment goes wrong.
 
 ## virt-manager
 
-- **Full window**: View → Scale Display → *Auto resize VM with window*.
+- **Full window**: View → Scale Display → *Auto resize VM with window*. The window size reaches the
+  VM as a display change; sway follows it by itself, and in an X session (i3) a udev rule that
+  `vm create --gui` installs runs `xrandr --auto` on every change, plus once at login, and redraws
+  the wallpaper. Black bars beside the picture mean the VM was created without them.
 - **Keyboard**: click into the VM to type; every key, Super included, then goes to the VM.
   **Ctrl_L + Alt_L** gives it back to the laptop.
 - **Black screen with `--gui`**: the VM's 3D path failed. In its details, turn off OpenGL under
