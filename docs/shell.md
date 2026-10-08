@@ -22,18 +22,8 @@ zsh plugins are pinned to release tags in `packages/plugins.txt` and installed b
 
 ## Prompt
 
-```
-~/Dotfiles  rewrite !2 ?1                                     took 3s
-❯
-```
-
-- Line 1: directory, git branch and status, language versions inside a project, and how
-  long the last command took (over 2 s).
-- Line 2: `❯` green, red after a failed command, `❮` in vim normal mode.
-- `user@host` appears only over SSH or as root; `bash` is shown when running bash.
-
-Git status symbols: `!` modified, `+` staged, `?` untracked, `✘` deleted, `»` renamed,
-`*` stashed, `=` conflicted, `⇡`/`⇣` ahead/behind.
+`~/.config/starship.toml` is the original starship config, kept as it was. It carries its own
+`noctalia` colour palette, so the prompt keeps those colours whatever the desktop theme is.
 
 ## Keys
 
