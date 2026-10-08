@@ -8,4 +8,11 @@ return {
 		base08 = "#d20f39", base09 = "#fe640b", base0A = "#df8e1d", base0B = "#40a02b",
 		base0C = "#179299", base0D = "#1e66f5", base0E = "#8839ef", base0F = "#d20f39",
 	},
+	-- the theme's roles, for UI that base16 can't express (borders, which-key, lualine)
+	ui = {
+		bg = "#eff1f5", fg = "#4c4f69", fg_muted = "#6c6f85", surface = "#ccd0da", overlay = "#bcc0cc",
+		primary = "#1e66f5", on_primary = "#eff1f5", secondary = "#8839ef", accent = "#fe640b",
+		success = "#40a02b", warning = "#df8e1d", error = "#d20f39",
+		border = "#bcc0cc", border_active = "#1e66f5", selection = "#acb0be",
+	},
 }

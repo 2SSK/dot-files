@@ -16,6 +16,7 @@ return {
 			},
 		},
 		win = {
+			border = "rounded",
 			height = {
 				max = math.huge,
 			},

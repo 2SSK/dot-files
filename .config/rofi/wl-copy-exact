@@ -1,0 +1,141 @@
+#!/usr/bin/env python3
+"""Put stdin on the Wayland clipboard under exactly the MIME types given.
+
+    printf 'file:///home/me/a.pdf\\r\\n' | wl-copy-exact text/uri-list
+
+wl-copy cannot do this for a text/* type: it always adds text/plain (and
+TEXT, STRING, UTF8_STRING) next to it. An offer of text/uri-list *and*
+text/plain reads as "a line of text" to an app that prefers text over files,
+which then pastes the URI instead of attaching the file.
+
+Speaks the data-control protocol directly (ext-data-control-v1, or the older
+wlr one — same opcodes), so it needs no focus and no dependencies. Like
+wl-copy it forks once the selection is set and serves pastes in the
+background until another copy replaces it.
+"""
+
+import os
+import socket
+import struct
+import sys
+
+MANAGERS = ("ext_data_control_manager_v1", "zwlr_data_control_manager_v1")
+
+# Object ids, in the order they are created: a client must allocate them
+# consecutively, and the two sync callbacks take their turn in between.
+DISPLAY, REGISTRY, SYNC_GLOBALS, MANAGER, SEAT, SOURCE, DEVICE, SYNC_SET = range(1, 9)
+
+
+def string(text):
+    data = text.encode() + b"\0"
+    return struct.pack("<I", len(data)) + data + b"\0" * (-len(data) % 4)
+
+
+def request(sock, obj, opcode, body=b""):
+    sock.sendall(struct.pack("<IHH", obj, opcode, 8 + len(body)) + body)
+
+
+class Connection:
+    def __init__(self):
+        runtime = os.environ.get("XDG_RUNTIME_DIR", "")
+        name = os.environ.get("WAYLAND_DISPLAY", "wayland-0")
+        self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+        self.sock.connect(name if os.path.isabs(name) else os.path.join(runtime, name))
+        self.buffer = b""
+        self.fds = []
+
+    def events(self):
+        """Yield (object, opcode, body) for every complete event, forever."""
+        while True:
+            data, ancillary, _, _ = self.sock.recvmsg(65536, socket.CMSG_SPACE(64 * 4))
+            if not data:
+                raise SystemExit("wl-copy-exact: compositor closed the connection")
+            for level, kind, payload in ancillary:
+                if level == socket.SOL_SOCKET and kind == socket.SCM_RIGHTS:
+                    count = len(payload) // 4
+                    self.fds.extend(struct.unpack(f"<{count}i", payload[: count * 4]))
+            self.buffer += data
+            while len(self.buffer) >= 8:
+                obj, opcode, size = struct.unpack("<IHH", self.buffer[:8])
+                if len(self.buffer) < size:
+                    break
+                body, self.buffer = self.buffer[8:size], self.buffer[size:]
+                yield obj, opcode, body
+
+    def roundtrip(self, callback, handle):
+        """wl_display.sync, feeding every event until its done to handle()."""
+        request(self.sock, DISPLAY, 0, struct.pack("<I", callback))
+        for obj, opcode, body in self.events():
+            if obj == callback:
+                return
+            handle(obj, opcode, body)
+
+
+def fail_on_error(obj, opcode, body):
+    if obj == DISPLAY and opcode == 0:  # wl_display.error
+        length = struct.unpack("<I", body[8:12])[0]
+        raise SystemExit("wl-copy-exact: " + body[12 : 12 + length - 1].decode(errors="replace"))
+
+
+def main():
+    types = sys.argv[1:]
+    if not types:
+        raise SystemExit("usage: wl-copy-exact MIME-TYPE... < data")
+    payload = sys.stdin.buffer.read()
+
+    conn = Connection()
+    sock = conn.sock
+    found = {}  # interface -> (name, version)
+
+    def on_global(obj, opcode, body):
+        fail_on_error(obj, opcode, body)
+        if obj == REGISTRY and opcode == 0:  # wl_registry.global
+            name, length = struct.unpack("<II", body[:8])
+            interface = body[8 : 8 + length - 1].decode()
+            version = struct.unpack("<I", body[8 + length + (-length % 4) :][:4])[0]
+            found[interface] = (name, version)
+
+    request(sock, DISPLAY, 1, struct.pack("<I", REGISTRY))  # wl_display.get_registry
+    conn.roundtrip(SYNC_GLOBALS, on_global)
+
+    manager = next((m for m in MANAGERS if m in found), None)
+    if manager is None or "wl_seat" not in found:
+        raise SystemExit("wl-copy-exact: compositor has no data-control protocol")
+
+    def bind(interface, new_id):  # wl_registry.bind, at version 1
+        name = found[interface][0]
+        request(sock, REGISTRY, 0, struct.pack("<I", name) + string(interface) + struct.pack("<II", 1, new_id))
+
+    bind(manager, MANAGER)
+    bind("wl_seat", SEAT)
+    request(sock, MANAGER, 0, struct.pack("<I", SOURCE))  # create_data_source
+    for mime in types:
+        request(sock, SOURCE, 0, string(mime))  # offer
+    request(sock, MANAGER, 1, struct.pack("<II", DEVICE, SEAT))  # get_data_device
+    request(sock, DEVICE, 0, struct.pack("<I", SOURCE))  # set_selection
+    conn.roundtrip(SYNC_SET, fail_on_error)
+
+    # The selection is ours: let the caller go and keep serving it.
+    if os.fork() != 0:
+        os._exit(0)
+    os.setsid()
+    null = os.open(os.devnull, os.O_RDWR)
+    for fd in (0, 1, 2):
+        os.dup2(null, fd)
+
+    for obj, opcode, body in conn.events():
+        if obj != SOURCE:
+            continue
+        if opcode == 1:  # cancelled: another copy took over
+            return
+        if opcode == 0 and conn.fds:  # send(mime_type, fd)
+            fd = conn.fds.pop(0)
+            try:
+                with os.fdopen(fd, "wb") as out:
+                    out.write(payload)
+            except OSError:
+                pass  # the reader went away mid-paste
+
+
+if __name__ == "__main__":
+    main()

@@ -8,4 +8,11 @@ return {
 		base08 = "$error", base09 = "$accent", base0A = "$warning", base0B = "$success",
 		base0C = "$c6", base0D = "$primary", base0E = "$secondary", base0F = "$c9",
 	},
+	-- the theme's roles, for UI that base16 can't express (borders, which-key, lualine)
+	ui = {
+		bg = "$bg", fg = "$fg", fg_muted = "$fg_muted", surface = "$surface", overlay = "$overlay",
+		primary = "$primary", on_primary = "$on_primary", secondary = "$secondary", accent = "$accent",
+		success = "$success", warning = "$warning", error = "$error",
+		border = "$border", border_active = "$border_active", selection = "$selection",
+	},
 }

@@ -1,0 +1,4 @@
+client.focused               #4c7899 #285577 #ffffff #2e9ef4 #285577
+client.unfocused             #333333 #222222 #888888 #292d2e #222222
+client.focused_inactive      #5f676a #222222 #ffffff #484e50 #222222
+client.urgent                #900000 #900000 #ffffff #900000 #900000

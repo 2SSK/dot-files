@@ -15,22 +15,21 @@ return {
 		require("mason-lspconfig").setup({
 			ensure_installed = {
 				"copilot",
+				"ts_ls",
 				"pyright",
 				"html",
 				"zls",
 				"cssls",
 				"tailwindcss",
-				"svelte",
 				"lua_ls",
 				"graphql",
 				"emmet_ls",
 				"prismals",
 				"clangd",
-				"gopls",
 			},
 		})
 		require("mason-tool-installer").setup({
-			ensure_installed = { "prettier", "stylua", "delve" },
+			ensure_installed = { "prettier", "stylua" },
 		})
 	end,
 }

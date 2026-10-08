@@ -5,6 +5,7 @@ bats-assert                 bats-assert                 @bats-helpers
 shellcheck                  shellcheck                  ShellCheck
 shfmt                       shfmt                       shfmt
 go                          golang-go                   golang
+gopls                       gopls                       golang-x-tools-gopls
 clang                       clangd                      clang-tools-extra
 pnpm                        @pnpm                       @pnpm
 docker                      docker.io                   moby-engine

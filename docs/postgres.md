@@ -20,28 +20,17 @@ pgcli postgres://user@host:5432/dbname
 
 ### To a VM
 
-From inside the VM (`vm ssh <name>`) both work as above. From the laptop, forward the port
-over SSH:
+From inside the VM both work as above. From the laptop, forward the port over SSH (in the
+background; "Connection refused" on the local port means no tunnel is running):
 
 ```bash
-vm tunnel web 5432          # VMs from vms.json: localhost:5432 -> web:5432
-vm tunnel web 5432 5433     # pick another local port if 5432 is taken
+ssh -fN -L 5433:localhost:5432 user@<vm-ip>
 pgcli postgres://user@localhost:5433/dbname
+pkill -f 'L 5433:localhost'    # close the tunnel
 ```
-
-For rice-vm (user session, SSH on port 2222), in the background:
-
-```bash
-ssh -fN -o StrictHostKeyChecking=accept-new -L 5433:localhost:5432 \
-	-p 2222 -i ~/.local/share/dotfiles-vm/id_ed25519 ssk@127.0.0.1
-pgcli postgres://ssk@localhost:5433/demo
-pkill -f 'L 5433:localhost'    # close the tunnel (it also ends when the VM stops)
-```
-
-"Connection refused" on the local port means no tunnel is running.
 
 Through the tunnel Postgres sees a TCP connection, so the role needs a password
-(`ALTER ROLE ssk PASSWORD '…'`); socket logins inside the VM don't.
+(`ALTER ROLE user PASSWORD '…'`); socket logins inside the VM don't.
 
 ## Keys
 
