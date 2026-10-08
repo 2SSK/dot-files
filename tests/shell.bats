@@ -66,3 +66,14 @@ setup() {
 	PATH="$BATS_FILE_TMPDIR/noeza" run zsh -i -c 'alias ls'
 	[ "$output" = "ls='ls --color=auto --group-directories-first -h'" ]
 }
+
+@test "ssh connects as xterm-256color from terminals servers rarely know" {
+	printf '#!/bin/sh\necho "$TERM"\n' >"$BATS_FILE_TMPDIR/bin/ssh" && chmod +x "$BATS_FILE_TMPDIR/bin/ssh"
+	run env TERM=xterm-kitty zsh -i -c 'ssh host'
+	[ "${lines[-1]}" = xterm-256color ]
+	run env TERM=foot bash -ic 'ssh host'
+	[ "${lines[-1]}" = xterm-256color ]
+	run env TERM=tmux-256color zsh -i -c 'ssh host' # widely known: passed through
+	[ "${lines[-1]}" = tmux-256color ]
+	rm "$BATS_FILE_TMPDIR/bin/ssh"
+}

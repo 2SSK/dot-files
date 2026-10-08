@@ -70,3 +70,12 @@ with_secrets() {
 }
 claude() { with_secrets command claude "$@"; }
 opencode() { with_secrets command opencode "$@"; }
+
+# Servers rarely have the terminfo of kitty, foot or st ("unknown terminal type", broken clear and
+# keys), so ssh from those connects as xterm-256color; the local terminal keeps its own TERM
+ssh() {
+	case $TERM in
+	xterm-kitty | foot | foot-extra | st-256color) TERM=xterm-256color command ssh "$@" ;;
+	*) command ssh "$@" ;;
+	esac
+}
