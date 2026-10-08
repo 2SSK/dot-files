@@ -1,12 +1,13 @@
-# Rajput: an original palette for this desktop. Dark is a Rajput miniature at night: deep indigo ink,
-# sandstone-ivory text, gold leaf and turmeric, vermilion (sindoor), peacock teal, mehendi green.
-# Light is Indian watercolour on handmade paper: ivory paper, sepia ink, terracotta and peacock washes,
-# ochre. Muted on purpose; every text colour meets WCAG AA on its background.
+# Kesari (saffron): an original palette for this desktop, inspired by Rajput art. Dark is a Rajput
+# miniature at night: deep indigo ink, sandstone-ivory text, gold leaf and turmeric, vermilion
+# (sindoor), peacock teal, mehendi green. Light is Indian watercolour on handmade paper: ivory paper,
+# sepia ink, terracotta and peacock washes, ochre. Muted on purpose; every text colour meets WCAG AA
+# on its background.
 # Source: this repository  License: MIT
 
 [meta]
-family = "rajput"
-name = "Rajput"
+family = "kesari"
+name = "Kesari"
 source = "this repository"
 license = "MIT"
 
