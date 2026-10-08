@@ -25,6 +25,29 @@ current() { # prints "<family> <mode>"; tokyonight dark until a theme is set
 	echo "$family $mode"
 }
 
+# What uses the theme, one row per app: the rendered file; where the app needs a link to it under
+# ~/.config (- when the app includes the state file itself); how a running app reloads (- when it
+# can't). Adding an app: a template in share/desktop/templates and a row here.
+#   tmux: the whole config, so plugins (continuum hooks status-right) re-apply after the theme
+#   i3: skipped under sway, which sets I3SOCK too;  st: its reload patch re-reads X resources
+consumers() {
+	cat <<'EOF'
+kitty.conf       -                  pkill -USR1 -x kitty
+foot.ini         -                  pkill -$([[ $mode == dark ]] && echo USR1 || echo USR2) -x foot
+cava             -                  pkill -USR2 -x cava
+nvim.lua         -                  pkill -USR1 -x nvim
+tmux.conf        -                  tmux info && tmux source-file "${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf"
+i3.conf          -                  [[ -z ${SWAYSOCK:-} ]] && i3-msg -t get_version && i3-msg -q reload
+picom.conf       -                  pkill -USR1 -x picom
+xsettingsd.conf  -                  pkill -HUP -x xsettingsd
+st.Xresources    -                  [[ -n ${DISPLAY:-} && -r $HOME/.Xresources ]] && xrdb -merge "$HOME/.Xresources" && pkill -USR1 -x st
+gtk-3.0.css      gtk-3.0/gtk.css    -
+gtk-4.0.css      gtk-4.0/gtk.css    gtk_settings
+qt5ct.conf       qt5ct/qt5ct.conf   -
+qt6ct.conf       qt6ct/qt6ct.conf   -
+EOF
+}
+
 link_config() { # <path under ~/.config> <rendered file>: apps that only read a fixed path get a link
 	local dest="${XDG_CONFIG_HOME:-$HOME/.config}/$1" src="$state/$2"
 	[[ -L $dest && $(readlink "$dest") == "$src" ]] && return 0
@@ -38,15 +61,13 @@ link_config() { # <path under ~/.config> <rendered file>: apps that only read a 
 	ln -s "$src" "$dest"
 }
 
-gtk_settings() { # <mode>: what GTK on Wayland and libadwaita read (X11 GTK reads xsettingsd)
-	command -v gsettings >/dev/null || return 0
-	local schema=org.gnome.desktop.interface
-	gsettings list-schemas 2>/dev/null | grep -qx "$schema" || return 0
-	local dark=0
-	[[ $1 == dark ]] && dark=1
+gtk_settings() { # what GTK on Wayland and libadwaita read (GTK on X11 reads xsettingsd)
+	local schema=org.gnome.desktop.interface dark=0
+	gsettings list-schemas | grep -qx "$schema" || return 0
+	[[ $mode == dark ]] && dark=1
 	gsettings set "$schema" color-scheme "$( ((dark)) && echo prefer-dark || echo prefer-light)"
 	gsettings set "$schema" gtk-theme "$( ((dark)) && echo adw-gtk3-dark || echo adw-gtk3)"
-	gsettings set "$schema" icon-theme "Tela-circle-blue-$1"
+	gsettings set "$schema" icon-theme "Tela-circle-blue-$mode"
 	gsettings set "$schema" cursor-theme Bibata-Modern-Ice
 	gsettings set "$schema" cursor-size 24
 	gsettings set "$schema" font-name 'Inter 11'
@@ -54,28 +75,14 @@ gtk_settings() { # <mode>: what GTK on Wayland and libadwaita read (X11 GTK read
 }
 
 apply() { # <family> <mode>
-	python3 "$lib/theme_render.py" render "$1" "$2"
-	link_config gtk-3.0/gtk.css gtk-3.0.css
-	link_config gtk-4.0/gtk.css gtk-4.0.css
-	link_config qt5ct/qt5ct.conf qt5ct.conf
-	link_config qt6ct/qt6ct.conf qt6ct.conf
-	gtk_settings "$2" || log_warn gsettings_failed msg='no session bus? GTK on Wayland keeps its old settings'
-	# Reload running consumers; foot can only switch dark/light live
-	pkill -USR1 -x kitty || true
-	if [[ $2 == dark ]]; then pkill -USR1 -x foot || true; else pkill -USR2 -x foot || true; fi
-	pkill -USR2 -x cava || true # reload colours only
-	pkill -USR1 -x nvim || true # config/theme.lua re-applies the colourscheme
-	# the whole config: it sources the theme, then re-runs the plugins (continuum hooks status-right)
-	if tmux info >/dev/null 2>&1; then tmux source-file "${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf" || true; fi
-	# i3 re-reads its config, which includes the theme's colours (sway sets I3SOCK too: skip it)
-	if [[ -z ${SWAYSOCK:-} ]] && i3-msg -t get_version >/dev/null 2>&1; then i3-msg -q reload || true; fi
-	pkill -USR1 -x picom || true    # re-reads its rendered config (shadow colours)
-	pkill -HUP -x xsettingsd || true # icons follow dark/light
-	# st reads colours from the X resource database (its reload patch re-reads it on SIGUSR1)
-	if [[ -n ${DISPLAY:-} && -r $HOME/.Xresources ]] && command -v xrdb >/dev/null; then
-		xrdb -merge "$HOME/.Xresources" && pkill -USR1 -x st || true
-	fi
-	log_info theme family="$1" mode="$2"
+	local mode=$2 file link reload
+	python3 "$lib/theme_render.py" render "$1" "$mode"
+	while read -r file link reload; do
+		[[ $link == - ]] || link_config "$link" "$file"
+		[[ $reload == - ]] || (eval "$reload") >/dev/null 2>&1 & # in parallel; "not running" is fine
+	done < <(consumers)
+	wait
+	log_info theme family="$1" mode="$mode"
 }
 
 main() {

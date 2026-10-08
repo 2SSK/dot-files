@@ -46,6 +46,17 @@ Palette values are copied from each project's official ports, with attribution i
 | Qt 5 / Qt 6 | `QT_QPA_PLATFORMTHEME=qt5ct` (qt6ct answers to it too); `~/.config/qt{5,6}ct/qt{5,6}ct.conf` link to rendered configs: Fusion, the rendered `qt-colors.conf`, Tela icons, Inter | On app restart |
 | Quickshell, sway borders | `palette.json` and further templates | Coming in later stages |
 
+## How a switch works
+
+`theme` renders every file in `~/.local/share/desktop/templates/` into a fresh directory, then swaps
+`~/.local/state/desktop/theme` (a symlink) to it in one step, so apps see the old theme or the new
+one, never a mix. A request identical to the current theme (same palette, templates and mode) keeps
+the current render. Then every app in the table at the top of `~/.local/bin/theme` reloads, all at
+once; apps that only read a fixed path under `~/.config` get a link to their rendered file.
+
+**Adding an app:** a template in `templates/`, and a row in that table (rendered file, link or `-`,
+reload command or `-`).
+
 ## Files
 
 | Path | Contents |

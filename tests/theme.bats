@@ -133,3 +133,21 @@ signals() { cat "$BATS_TEST_TMPDIR/signals"; }
 	[[ $(signals) == *"color-scheme prefer-dark"* && $(signals) == *"gtk-theme adw-gtk3-dark"* ]]
 	[[ $(signals) == *"pkill -HUP -x xsettingsd"* ]]
 }
+
+@test "every app in the consumers table uses a file the renderer produces" {
+	"$THEME" set tokyonight
+	local file
+	while read -r file _; do
+		[ -f "$STATE/$file" ] || { echo "no rendered $file" && false; }
+	done < <(sed -n "/^consumers() {/,/^}/{/^[a-z0-9]/p}" "$THEME" | grep -v '^consumers')
+}
+
+@test "a switch swaps the whole theme at once" {
+	"$THEME" set tokyonight
+	[ -L "$STATE" ]
+	local first
+	first="$(readlink -f "$STATE")"
+	"$THEME" set gruvbox
+	[ "$(readlink -f "$STATE")" != "$first" ]
+	[ ! -e "$first" ] # the previous render is gone
+}

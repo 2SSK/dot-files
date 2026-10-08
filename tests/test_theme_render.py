@@ -1,12 +1,12 @@
-"""theme_render.py: palette lint, rendering and golden output for every shipped variant.
+"""theme_render.py: palette lint, rendering, the atomic switch, and golden output.
 
+Goldens hold one variant (tokyonight dark) of every template; every other variant must render too.
 Run: python3 -m unittest discover -s tests
 Refresh goldens after an intended change: UPDATE_GOLDEN=1 python3 -m unittest discover -s tests
 """
 
 import json
 import os
-import re
 import subprocess
 import sys
 import tempfile
@@ -17,7 +17,7 @@ REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO / ".local/lib/desktop"))
 import theme_render as tr  # noqa: E402
 
-GOLDEN = REPO / "tests/golden/theme"
+GOLDEN = REPO / "tests/golden/theme/tokyonight-dark"
 FAMILIES = sorted(p.stem for p in tr.THEMES.glob("*.toml"))
 
 
@@ -51,7 +51,7 @@ class Lint(unittest.TestCase):
 
 class Render(unittest.TestCase):
     def setUp(self):
-        self.state = Path(tempfile.mkdtemp())
+        self.state = Path(tempfile.mkdtemp()) / "theme"
 
     def test_writes_state_files(self):
         tr.render("catppuccin", "light", self.state)
@@ -61,15 +61,41 @@ class Render(unittest.TestCase):
         self.assertEqual(palette["mode"], "light")
         self.assertEqual(palette["ui"]["bg"], "#eff1f5")
         self.assertEqual(len(palette["ansi"]), 16)
-        # every target (top-level name), the palette and the marker; nothing else
-        expected = {t.split("/")[0] for t in tr.TARGETS} | {"palette.json", "current"}
+        # every template (top-level name), the palette and the marker; nothing else
+        expected = {t.split("/")[0] for t in tr.targets()} | {"palette.json", "current", ".fingerprint"}
         self.assertEqual(sorted(p.name for p in self.state.iterdir()), sorted(expected))
 
-    def test_removes_outputs_of_dropped_targets(self):
-        self.state.mkdir(parents=True, exist_ok=True)
-        (self.state / "btop.theme").write_text("stale")
+    def test_templates_dir_is_the_target_list(self):
+        self.assertIn("kitty.conf", tr.targets())
+        self.assertIn("pspg/.pspg_theme_desktop", tr.targets())  # hidden and nested files count too
+        self.assertEqual(len(tr.targets()), sum(1 for p in tr.TEMPLATES.rglob("*") if p.is_file()))
+
+    def test_switch_is_one_symlink_swap_and_old_renders_go(self):
         tr.render("tokyonight", "dark", self.state)
+        first = self.state.resolve()
+        (self.state / "btop.theme").write_text("stale")  # an output no template makes any more
+        tr.render("gruvbox", "light", self.state)
+        self.assertTrue(self.state.is_symlink())
+        self.assertNotEqual(self.state.resolve(), first)
+        self.assertFalse(first.exists())
         self.assertFalse((self.state / "btop.theme").exists())
+        siblings = [p.name for p in self.state.parent.iterdir() if p.is_dir() and not p.is_symlink()]
+        self.assertEqual(siblings, [self.state.resolve().name])  # only the live render remains
+
+    def test_an_unchanged_request_keeps_the_current_render(self):
+        tr.render("rosepine", "dark", self.state)
+        live = self.state.resolve()
+        tr.render("rosepine", "dark", self.state)
+        self.assertEqual(self.state.resolve(), live)  # nothing re-rendered
+        tr.render("rosepine", "light", self.state)
+        self.assertNotEqual(self.state.resolve(), live)
+
+    def test_a_plain_state_directory_from_before_is_replaced(self):
+        self.state.mkdir(parents=True)
+        (self.state / "kitty.conf").write_text("old")
+        tr.render("tokyonight", "dark", self.state)
+        self.assertTrue(self.state.is_symlink())
+        self.assertNotEqual((self.state / "kitty.conf").read_text(), "old")
 
     def test_nvim_gets_the_palette_as_base16(self):
         tr.render("rosepine", "light", self.state)
@@ -103,20 +129,24 @@ class Render(unittest.TestCase):
             tr.render("tokyonight", "dim", self.state)
 
     def test_golden_output(self):
+        tr.render("tokyonight", "dark", self.state)
+        for name in tr.targets():
+            with self.subTest(target=name):
+                got = (self.state / name).read_text().replace(str(self.state), "<state>")
+                golden = GOLDEN / name.replace("/", "-")
+                if os.environ.get("UPDATE_GOLDEN"):
+                    golden.parent.mkdir(parents=True, exist_ok=True)
+                    golden.write_text(got)
+                self.assertEqual(got, golden.read_text(), f"{golden} differs")
+        stale = {p.name for p in GOLDEN.iterdir()} - {t.replace("/", "-") for t in tr.targets()}
+        self.assertEqual(stale, set(), "goldens of templates that no longer exist")
+
+    def test_every_variant_renders(self):
         for family in FAMILIES:
             for mode in tr.MODES:
                 with self.subTest(family=family, mode=mode):
-                    state = Path(tempfile.mkdtemp())
-                    tr.render(family, mode, state)
-                    for name in tr.TARGETS:
-                        got = (state / name).read_text().replace(str(state), "<state>")  # the run's temp dir
-                        golden = GOLDEN / f"{family}-{mode}" / name.replace("/", "-")
-                        if os.environ.get("UPDATE_GOLDEN"):
-                            golden.parent.mkdir(parents=True, exist_ok=True)
-                            golden.write_text(got)
-                        self.assertEqual(got, golden.read_text(), f"{golden} differs")
-                        names = "|".join(tr.variables(tr.load(family), family, mode))
-                        self.assertIsNone(re.search(rf"\$({names})\b", got), "unfilled template placeholder")
+                    tr.render(family, mode, self.state)  # a missing placeholder raises KeyError
+                    self.assertEqual((self.state / "current").read_text(), f"family={family}\nmode={mode}\n")
 
 
 class Cli(unittest.TestCase):
@@ -135,6 +165,7 @@ class Cli(unittest.TestCase):
         result = self.run_cli("render", "gruvbox", "dark", XDG_STATE_HOME=state)
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertTrue((Path(state) / "desktop/theme/kitty.conf").is_file())
+        self.assertTrue((Path(state) / "desktop/theme").is_symlink())
 
 
 if __name__ == "__main__":
