@@ -1,0 +1,439 @@
+#!/usr/bin/env bash
+# vm: virtual machines from cloud images, on libvirt's system connection so virt-manager shows them.
+# Layout: settings, help, helpers, images, first boot, commands, dispatch.
+set -euo pipefail
+
+here="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
+# shellcheck source-path=SCRIPTDIR/../.. source=.local/lib/desktop/log.sh
+source "$here/../lib/desktop/log.sh"
+
+# --- Settings ---
+
+uri=qemu:///system
+cache="${XDG_CACHE_HOME:-$HOME/.cache}/vm"
+reserve_mib=2048 # what a running VM must leave free for the laptop
+
+# --- Help ---
+
+usage() {
+	cat <<-'EOF'
+		vm — virtual machines, shown in virt-manager
+
+		  vm create  <name> [options]  new VM, started and opened
+		  vm start   <name>            start it and open its window
+		  vm open    <name>            open its window (or serial console)
+		  vm console <name>            log in on its serial console (Ctrl+] leaves)
+		  vm stop    <name> [--force]  shut down (--force: pull the plug)
+		  vm list                      all VMs with state and IP
+		  vm snap    <name> [label]    snapshot (VM must be off)
+		  vm snaps   <name>            list its snapshots
+		  vm revert  <name> <label>    back to a snapshot
+		  vm rm      <name> [-y]       delete the VM and its disk
+
+		  vm help    <command>         details, e.g. vm help create
+		  vm guide                     the full guide
+	EOF
+}
+
+help_for() { # <command>
+	case $1 in
+	create)
+		cat <<-'EOF'
+			vm create <name> [options]
+
+			  --image <image>            arch [default], debian[:13], ubuntu[:26.04], fedora[:44],
+			                             or any cloud-image URL or file
+			  --cpus <n>                 [2]
+			  --mem <size>               [4G]
+			  --disk <size>              [30G]
+			  --share <dir>[:tag][:rw]   laptop folder at ~/<tag> in the VM (tag: the folder's name),
+			                             read-only unless :rw; repeatable
+			  --desktop                  i3 + sway + login screen with i3 preselected (quickshell on arch);
+			                             includes --gui
+			  --gui                      a window instead of a serial console
+			  --pkgs "<a b>"             more packages, in the distro's names
+			  --force                    even if the laptop would keep under 2 GiB free
+
+			Asks for the password of your user in the VM (VM_PASSWORD skips the prompt).
+			First boot installs the packages: give it a few minutes.
+
+			  vm create rice --desktop --share ~/dev/dot-files-rewrite:dot-files
+			  vm create srv --image debian:12 --mem 2G
+		EOF
+		;;
+	start) echo 'vm start <name> [--force]   start it (--force: even when memory is low) and open its window' ;;
+	open) echo 'vm open <name>   its window in virt-manager, or the serial console (Ctrl+] leaves)' ;;
+	console) echo 'vm console <name>   a login on its serial console in this terminal, even when it has a window (Ctrl+] leaves)' ;;
+	stop) echo 'vm stop <name> [--force]   shut down cleanly; --force cuts the power' ;;
+	list) echo 'vm list   every VM with its state, and its IP while running' ;;
+	snap) echo 'vm snap <name> [label]   snapshot a shut-off VM (label: the date and time)' ;;
+	snaps) echo 'vm snaps <name>   its snapshots, oldest first' ;;
+	revert) echo 'vm revert <name> <label>   return to a snapshot (see vm snaps)' ;;
+	rm) echo 'vm rm <name> [-y]   delete the VM, its disk and snapshots (-y: no question)' ;;
+	*) usage ;;
+	esac
+}
+
+guide() {
+	local doc="$here/../../docs/vm.md"
+	[[ -r $doc ]] || die no_guide path="$doc"
+	if command -v glow >/dev/null; then glow -p "$doc"; else "${PAGER:-less}" "$doc"; fi
+}
+
+# --- Helpers ---
+
+v() { virsh -q -c "$uri" "$@"; }
+exists() { v dominfo "$1" >/dev/null 2>&1; }
+usage_error() { help_for "$cmd" >&2 && exit 2; } # the running command's help
+need_vm() { # <name>: missing is a usage error, unknown an error
+	[[ -n ${1:-} && $1 != -* ]] || usage_error
+	exists "$1" || die no_vm name="$1" msg='see: vm list'
+}
+running() { [[ $(v domstate "$1") == running ]]; }
+ip_of() { v domifaddr "$1" --source lease 2>/dev/null | awk '$3 == "ipv4" { sub(/\/.*/, "", $4); print $4; exit }'; }
+
+mib() { # 2G, 1536M, 2048 -> MiB
+	local bytes
+	bytes="$(numfmt --from=iec "${1^^}" 2>/dev/null)" || die bad_size value="$1"
+	[[ $1 =~ [A-Za-z]$ ]] || bytes=$((bytes * 1048576))
+	echo $((bytes / 1048576))
+}
+
+guard_memory() { # <MiB> <force>: keep the laptop responsive
+	local avail
+	avail="$(awk '/^MemAvailable:/ { print int($2 / 1024) }' "${VM_MEMINFO:-/proc/meminfo}")"
+	((avail - $1 >= reserve_mib || $2)) ||
+		die low_memory need_mib="$1" available_mib="$avail" msg='close some apps, use a smaller --mem, or pass --force'
+}
+
+rendernode() { # the first GPU QEMU can render with (virgl doesn't run on the NVIDIA driver)
+	local node driver
+	for node in /dev/dri/renderD*; do
+		[[ -e $node ]] || continue
+		driver="$(readlink -f "/sys/class/drm/${node##*/}/device/driver")"
+		[[ ${driver##*/} == nvidia ]] || { echo "$node" && return; }
+	done
+}
+
+# --- Images ---
+
+resolve() { # <image>: prints "<url or file> <distro> <osinfo id>"
+	local distro=${1%%:*} ver file dir
+	ver=${1#"$distro"} ver=${ver#:}
+	case $distro in
+	arch) echo "https://geo.mirror.pkgbuild.com/images/latest/Arch-Linux-x86_64-cloudimg.qcow2 arch archlinux" ;;
+	debian)
+		ver=${ver:-13}
+		local -A codes=([11]=bullseye [12]=bookworm [13]=trixie [14]=forky)
+		[[ -n ${codes[$ver]:-} ]] || die unknown_version image="$1"
+		# generic, not genericcloud: that kernel has no display drivers
+		echo "https://cloud.debian.org/images/cloud/${codes[$ver]}/latest/debian-$ver-generic-amd64.qcow2 debian debian$ver"
+		;;
+	ubuntu)
+		ver=${ver:-26.04}
+		echo "https://cloud-images.ubuntu.com/releases/$ver/release/ubuntu-$ver-server-cloudimg-amd64.img ubuntu ubuntu$ver"
+		;;
+	fedora)
+		ver=${ver:-44}
+		dir="https://download.fedoraproject.org/pub/fedora/linux/releases/$ver/Cloud/x86_64/images/"
+		file="$(curl -fsL "$dir" | grep -oE "Fedora-Cloud-Base-Generic-$ver-[0-9.]+\.x86_64\.qcow2" | head -1)" || true
+		[[ -n $file ]] || die unknown_version image="$1"
+		echo "$dir$file fedora fedora$ver"
+		;;
+	http://* | https://*) echo "$1 other linux2024" ;;
+	*)
+		[[ -f $1 ]] || die unknown_image image="$1" msg='see: vm help create'
+		echo "$(readlink -f "$1") other linux2024"
+		;;
+	esac
+}
+
+osinfo() { # use the id when libvirt knows it, else a generic modern Linux
+	osinfo-query os "short-id=$1" 2>/dev/null | grep -q " $1 " && echo "$1" || echo linux2024
+}
+
+base_volume() { # <url or file>: kept once in the default pool, which every VM's disk sits on; prints its path
+	local name="vm-base-${1##*/}" file=$1 dir
+	[[ $name == *.qcow2 ]] || name="${name%.*}.qcow2" # cloud .img files are qcow2 too
+	if ! v pool-info default >/dev/null 2>&1; then
+		v pool-define-as default dir --target /var/lib/libvirt/images >/dev/null
+		v pool-build default >/dev/null
+		v pool-autostart default >/dev/null
+	fi
+	v pool-start default >/dev/null 2>&1 || true
+	if ! v vol-info --pool default "$name" >/dev/null 2>&1; then
+		if [[ $1 == http* ]]; then # download only what the pool lacks, and drop it once uploaded
+			file="$cache/${1##*/}"
+			mkdir -p "$cache"
+			log_info download url="$1"
+			curl -fL --progress-bar -o "$file" "$1"
+		fi
+		v vol-create-as default "$name" "$(stat -c %s "$file")" --format qcow2 >/dev/null
+		v vol-upload --pool default "$name" "$file"
+		[[ $file == "$cache"/* ]] && rm -f -- "$file"
+	fi
+	dir="$(v pool-dumpxml default | sed -n 's|.*<path>\(.*\)</path>.*|\1|p')"
+	echo "$dir/$name"
+}
+
+# --- First boot (cloud-init) ---
+
+desktop_pkgs() { # <distro>
+	case $1 in
+	arch) echo i3-wm sway sddm kitty foot quickshell ;;
+	debian | ubuntu | fedora) echo i3 sway sddm kitty foot ;;
+	*) log_error unsupported msg='--desktop needs arch, debian, ubuntu or fedora' && exit 3 ;;
+	esac
+}
+
+x_resize() {
+	# virt-manager reports its window size as a display change (virtio-gpu). Wayland compositors
+	# follow it; an X session needs xrandr on every change (udev) and once at login (sddm runs
+	# xinitrc.d). Both redraw the wallpaper (feh's ~/.fehbg) at the new size.
+	cat <<-'EOF'
+		write_files:
+		  - path: /usr/local/bin/x-resize
+		    permissions: '0755'
+		    content: |
+		      #!/bin/sh
+		      for xauth in /home/*/.Xauthority; do
+		        user=$(stat -c %U "$xauth") home=$(dirname "$xauth")
+		        DISPLAY=:0 XAUTHORITY="$xauth" runuser -u "$user" -- xrandr --output Virtual-1 --auto >/dev/null 2>&1 || continue
+		        [ -x "$home/.fehbg" ] && DISPLAY=:0 XAUTHORITY="$xauth" runuser -u "$user" -- "$home/.fehbg" >/dev/null 2>&1
+		        exit 0
+		      done
+		  - path: /etc/udev/rules.d/50-x-resize.rules
+		    content: |
+		      ACTION=="change", SUBSYSTEM=="drm", KERNEL=="card[0-9]*", RUN+="/usr/local/bin/x-resize"
+		  - path: /etc/X11/xinit/xinitrc.d/50-x-resize.sh
+		    permissions: '0755'
+		    content: |
+		      xrandr --output Virtual-1 --auto >/dev/null 2>&1
+		      [ -x "$HOME/.fehbg" ] && "$HOME/.fehbg" >/dev/null 2>&1 &
+	EOF
+}
+
+user_data() { # <name> <password hash> <gui 0|1> <desktop 0|1> <share tags> <packages...>
+	local name=$1 hash=$2 gui=$3 desktop=$4 tags=$5 tag
+	shift 5
+	cat <<-EOF
+		#cloud-config
+		hostname: $name
+		users:
+		  - name: $USER
+		    sudo: ALL=(ALL) NOPASSWD:ALL
+		    shell: /bin/bash
+		    lock_passwd: false
+		    passwd: "$hash"
+		ssh_pwauth: false
+		package_update: true
+		package_upgrade: true
+		packages: [$(printf '%s\n' "$@" | paste -sd, | sed 's/,/, /g')]
+	EOF
+	((gui)) && x_resize
+	echo 'runcmd:'
+	echo '  - [systemctl, enable, --now, qemu-guest-agent]'
+	# Shares mount here, not with cloud-init's mounts module: that runs before the user exists and
+	# would leave the home folder owned by root
+	for tag in $tags; do
+		echo "  - [sh, -c, 'mkdir -p /home/$USER/$tag && echo \"$tag /home/$USER/$tag virtiofs defaults,nofail 0 0\" >>/etc/fstab && mount /home/$USER/$tag']"
+	done
+	((desktop)) || return 0
+	# The desktop: the login screen with i3 preselected, at boot and right away
+	cat <<-EOF
+		  - [sh, -c, 'printf "[Last]\\\\nSession=/usr/share/xsessions/i3.desktop\\\\nUser=$USER\\\\n" >/var/lib/sddm/state.conf && chown sddm: /var/lib/sddm/state.conf']
+		  - [systemctl, set-default, graphical.target]
+		  - [systemctl, enable, --now, sddm]
+	EOF
+}
+
+# --- Commands ---
+
+cmd_create() {
+	local name=${1:-}
+	[[ -n $name && $name != -* ]] || { help_for create >&2 && exit 2; }
+	shift
+	local image=arch cpus=2 mem=4G disk=30G gui=0 desktop=0 force=0
+	local shares=() pkgs=(qemu-guest-agent) extra=() tags='' share
+	while (($#)); do
+		case $1 in
+		--image | --cpus | --mem | --disk | --share | --pkgs) [[ $# -ge 2 ]] || die missing_value option="$1" ;;&
+		--image) image=$2 && shift ;;
+		--cpus) cpus=$2 && shift ;;
+		--mem) mem=$2 && shift ;;
+		--disk) disk=$2 && shift ;;
+		--share) shares+=("$2") && shift ;;
+		--pkgs) read -ra extra <<<"$2" && pkgs+=("${extra[@]}") && shift ;;
+		--gui) gui=1 ;;
+		--desktop) gui=1 desktop=1 ;;
+		--force) force=1 ;;
+		*) help_for create >&2 && exit 2 ;;
+		esac
+		shift
+	done
+	! exists "$name" || die vm_exists name="$name" msg="vm start $name"
+
+	# Image, size and packages
+	local mem_mib resolved url distro os
+	mem_mib="$(mib "$mem")"
+	guard_memory "$mem_mib" "$force"
+	resolved="$(resolve "$image")"
+	read -r url distro os <<<"$resolved"
+	if ((desktop)); then
+		resolved="$(desktop_pkgs "$distro")"
+		read -ra extra <<<"$resolved" && pkgs+=("${extra[@]}")
+	fi
+	((gui)) && pkgs+=(spice-vdagent)
+
+	# shellcheck disable=SC2054 # virt-install sub-options are comma-separated on purpose
+	local args=(--connect "$uri" --name "$name" --memory "$mem_mib" --vcpus "$cpus" --osinfo "$(osinfo "$os")"
+		--import --network network=default,model=virtio --noautoconsole
+		--channel unix,target.type=virtio,target.name=org.qemu.guest_agent.0)
+
+	# Shared folders (virtiofs needs shared memory)
+	local dir tag mode
+	for share in "${shares[@]}"; do
+		IFS=: read -r dir tag mode <<<"$share"
+		[[ $dir == "~"* ]] && dir="$HOME${dir:1}"
+		[[ -d $dir ]] || die no_share_dir path="$dir"
+		dir="$(readlink -f "$dir")" tag=${tag:-${dir##*/}}
+		tags+=" $tag"
+		args+=(--filesystem "source.dir=$dir,target.dir=$tag,driver.type=virtiofs$([[ $mode == rw ]] || echo ,readonly=on)")
+	done
+	# shellcheck disable=SC2054
+	((${#shares[@]})) && args+=(--memorybacking source.type=memfd,access.mode=shared)
+
+	# Display: 3D on a GPU QEMU can use, else plain; or none (serial console)
+	if ((gui)); then
+		local node
+		node="$(rendernode)"
+		if [[ -n $node ]]; then
+			# shellcheck disable=SC2054
+			args+=(--graphics "spice,listen=none,gl.enable=yes,gl.rendernode=$node"
+				--video model.type=virtio,model.acceleration.accel3d=yes)
+		else
+			args+=(--graphics spice --video virtio)
+		fi
+		args+=(--channel spicevmc --sound ich9)
+	else
+		# No window, but still a video card: Debian's GRUB resets the VM when there is none
+		# shellcheck disable=SC2054
+		args+=(--graphics none --video model.type=virtio --console pty,target.type=serial)
+	fi
+
+	# Login and first boot
+	local password=${VM_PASSWORD:-} hash seed base
+	if [[ -z $password ]]; then
+		read -rsp "password for $USER in $name: " password && echo >&2
+		[[ -n $password ]] || die no_password
+	fi
+	hash="$(openssl passwd -6 -stdin <<<"$password")"
+	seed="$(mktemp)"
+	# shellcheck disable=SC2064 # expand now: seed is local and gone by exit time
+	trap "rm -f -- ${seed@Q}" EXIT
+	user_data "$name" "$hash" "$gui" "$desktop" "$tags" "${pkgs[@]}" >"$seed"
+
+	# Disk: a thin copy on top of the distro's base image
+	base="$(base_volume "$url")"
+	args+=(--cloud-init "user-data=$seed" --disk "size=$(($(mib "$disk") / 1024)),backing_store=$base,format=qcow2,bus=virtio")
+
+	virt-install "${args[@]}" >/dev/null
+	log_info created name="$name" msg='first boot installs packages; give it a few minutes'
+	if ((gui)); then cmd_open "$name"; else echo "log in: vm open $name"; fi
+}
+
+flag() { # <allowed flag> <arg>: 1 when given, 0 when absent; anything else is a usage error
+	[[ -z ${2:-} ]] && echo 0 && return
+	[[ $2 == "$1" ]] || usage_error
+	echo 1
+}
+
+cmd_start() {
+	need_vm "${1:-}"
+	local force
+	force="$(flag --force "${2:-}")"
+	if ! running "$1"; then
+		guard_memory "$(v dominfo "$1" | awk '/^Max memory/ { print int($3 / 1024) }')" "$force"
+		v start "$1" >/dev/null
+	fi
+	cmd_open "$1"
+}
+
+cmd_open() {
+	need_vm "${1:-}"
+	if v dumpxml "$1" | grep -q "<graphics type='spice'"; then
+		setsid -f virt-manager --connect "$uri" --show-domain-console "$1" >/dev/null 2>&1
+	else
+		exec virsh -c "$uri" console "$1"
+	fi
+}
+
+cmd_console() {
+	need_vm "${1:-}"
+	running "$1" || die vm_off name="$1" msg="vm start $1"
+	exec virsh -c "$uri" console "$1"
+}
+
+cmd_stop() {
+	need_vm "${1:-}"
+	local force
+	force="$(flag --force "${2:-}")"
+	running "$1" || { echo "$1 is already off" && return; }
+	if ((force)); then v destroy "$1" >/dev/null; else v shutdown "$1" >/dev/null; fi
+}
+
+cmd_list() {
+	[[ $# -eq 0 ]] || usage_error
+	local name state
+	while read -r name; do
+		[[ -n $name ]] || continue
+		state="$(v domstate "$name")"
+		printf '%-16s %-10s %s\n' "$name" "$state" "$([[ $state == running ]] && ip_of "$name")"
+	done < <(v list --all --name)
+}
+
+cmd_snap() {
+	need_vm "${1:-}"
+	[[ ${2:-} != -* ]] || usage_error
+	! running "$1" || die vm_running name="$1" msg="shared folders can't be snapshotted live: vm stop $1"
+	local label=${2:-$(date +%F-%H%M)}
+	v snapshot-create-as "$1" "$label" >/dev/null
+	echo "snapshot $label of $1"
+}
+
+cmd_snaps() { # oldest first: name, then when it was taken
+	need_vm "${1:-}"
+	v snapshot-list "$1" | sort -k2,3 | awk '{ printf "%-24s %s %s\n", $1, $2, substr($3, 1, 5) }'
+}
+
+cmd_revert() {
+	need_vm "${1:-}"
+	[[ -n ${2:-} ]] || usage_error
+	v snapshot-info "$1" "$2" >/dev/null 2>&1 || die no_snapshot name="$1" label="$2" msg="see: vm snaps $1"
+	v snapshot-revert "$1" "$2"
+	echo "$1 is back at $2"
+}
+
+cmd_rm() {
+	need_vm "${1:-}"
+	local yes
+	yes="$(flag -y "${2:-}")"
+	if ((!yes)); then
+		read -rp "delete $1 and its disk? [y/N] " reply
+		[[ $reply == [yY]* ]] || exit 0
+	fi
+	v destroy "$1" >/dev/null 2>&1 || true
+	v undefine "$1" --remove-all-storage --snapshots-metadata >/dev/null
+	echo "deleted $1"
+}
+
+# --- Dispatch ---
+
+cmd=${1:-help}
+shift || true
+case $cmd in
+create | start | open | console | stop | list | snap | snaps | revert | rm) "cmd_$cmd" "$@" ;;
+help | -h | --help) help_for "${1:-}" ;;
+guide) guide ;;
+*) log_error unknown_command command="$cmd" && usage >&2 && exit 2 ;;
+esac
