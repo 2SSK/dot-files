@@ -51,8 +51,12 @@ libvirt() {
 		changed=1
 	fi
 	if ! grep -qE '^Active: +yes' <<<"$info"; then
-		sudo virsh -c qemu:///system net-start default >/dev/null
-		changed=1
+		local err
+		if err="$(sudo virsh -c qemu:///system net-start default 2>&1 >/dev/null)"; then
+			changed=1
+		else # e.g. inside a VM whose own network already uses 192.168.122.0/24; VMs still work elsewhere
+			log_warn network_not_started msg="${err//$'\n'/ }"
+		fi
 	fi
 	# firewalld rejects the VMs' DHCP and DNS unless the bridge is in libvirt's zone; libvirt only
 	# adds it at runtime, which a firewalld reload forgets

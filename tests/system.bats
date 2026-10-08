@@ -65,6 +65,16 @@ libvirt_fakes() { # <state>: "broken" (nothing set up) or "ok" (everything in pl
 	grep -q "usermod -aG libvirt $USER" "$CALLS"
 }
 
+@test "libvirt: a network that can't start is a warning, not a failure" {
+	libvirt_fakes broken
+	# shellcheck disable=SC2016
+	printf '#!/bin/sh\necho "virsh $*" >>"$CALLS"\ncase "$*" in *net-info*) printf "Active: no\\nAutostart: yes\\n" ;; *net-start*) echo "error: Network is already in use by interface eth0" >&2; exit 1 ;; esac\n' >"$BATS_TEST_TMPDIR/bin/virsh"
+	run "$SYSTEM" libvirt
+	[ "$status" -eq 0 ]
+	[[ $output == *"event=network_not_started"*"already in use by interface eth0"* ]]
+	grep -q "usermod -aG libvirt $USER" "$CALLS" # the rest still ran
+}
+
 @test "libvirt: changes nothing when everything is in place" {
 	libvirt_fakes ok
 	run "$SYSTEM" libvirt
