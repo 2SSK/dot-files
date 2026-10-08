@@ -158,7 +158,7 @@ main() {
 	row 'Existing files' "$(case $policy in none) echo none ;; backup) echo "${#found[@]} → $backup" ;; *) echo "${#found[@]} deleted" ;; esac)"
 	row 'Stow' "$repo → $HOME"
 	local family mode
-	read -r family mode < <("$repo/.local/bin/desktop-theme" current)
+	read -r family mode < <("$repo/.local/bin/theme" current)
 	row 'Theme' "$family $mode"
 	row 'Login shell' "$( ((shell)) && echo zsh || echo unchanged)"
 	echo
@@ -204,8 +204,8 @@ main() {
 
 	step 'Theme'
 	if command -v python3 >/dev/null; then
-		"$repo/.local/bin/desktop-theme" set "$family" --mode "$mode"
-		ok "$family $mode (change it with: desktop-theme set <family>)"
+		"$repo/.local/bin/theme" set "$family" --mode "$mode"
+		ok "$family $mode (change it with: theme set <family>)"
 	else
 		warn 'python3 missing; theme not rendered'
 	fi

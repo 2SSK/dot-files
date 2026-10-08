@@ -1,8 +1,8 @@
 #!/usr/bin/env bats
-# desktop-music with fake mpc and rmpc that record what would happen.
+# music with fake mpc and rmpc that record what would happen.
 
 setup() {
-	MUSIC="$BATS_TEST_DIRNAME/../.local/bin/desktop-music"
+	MUSIC="$BATS_TEST_DIRNAME/../.local/bin/music"
 	export HOME="$BATS_TEST_TMPDIR/home" CALLS="$BATS_TEST_TMPDIR/calls"
 	mkdir -p "$HOME/Music/90s" "$BATS_TEST_TMPDIR/bin"
 	for tool in mpc rmpc; do

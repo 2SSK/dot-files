@@ -4,11 +4,11 @@ One central theme drives every app. Selecting a theme renders it once into
 `~/.local/state/desktop/theme/`, and everything reads from there.
 
 ```sh
-desktop-theme list                          # families; * marks the current one
-desktop-theme current                       # e.g. "tokyonight dark"
-desktop-theme set catppuccin                # switch family, keep the mode
-desktop-theme set gruvbox --mode light      # switch family and mode
-desktop-theme mode toggle                   # dark ⇄ light (also: mode dark|light)
+theme list                          # families; * marks the current one
+theme current                       # e.g. "tokyonight dark"
+theme set catppuccin                # switch family, keep the mode
+theme set gruvbox --mode light      # switch family and mode
+theme mode toggle                   # dark ⇄ light (also: mode dark|light)
 ```
 
 ## Families

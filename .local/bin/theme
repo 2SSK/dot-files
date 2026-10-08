@@ -11,10 +11,10 @@ state="${XDG_STATE_HOME:-$HOME/.local/state}/desktop/theme"
 
 usage() {
 	cat <<'EOF'
-usage: desktop-theme set <family> [--mode dark|light]
-       desktop-theme mode dark|light|toggle
-       desktop-theme list
-       desktop-theme current
+usage: theme set <family> [--mode dark|light]
+       theme mode dark|light|toggle
+       theme list
+       theme current
 EOF
 }
 
