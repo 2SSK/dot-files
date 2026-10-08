@@ -23,6 +23,7 @@ function M.setup()
 			for _, group in ipairs({
 				"Normal", "NormalNC", "NormalFloat", "FloatBorder", "SignColumn", "FoldColumn", "EndOfBuffer",
 				"LineNr", "LineNrAbove", "LineNrBelow", "CursorLineNr", "TabLine", "TabLineFill",
+				"StatusLine", "StatusLineNC",
 			}) do
 				local hl = vim.api.nvim_get_hl(0, { name = group, link = false })
 				hl.bg = nil

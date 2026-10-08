@@ -31,3 +31,6 @@ btop                        btop                        btop
 pgcli                       pgcli                       pgcli
 aur:pspg                    pspg                        pspg
 ttyper                      @ttyper                     @ttyper
+uv                          @uv                         uv
+aur:claude-code             @claude-code                @claude-code
+aur:opencode-bin            @opencode                   @opencode

@@ -130,7 +130,7 @@ main() {
 		if confirm 'Install the terminal tools?' y; then layers+=(cli); fi
 		show_layer 'vm (virtual machines: libvirt, virt-manager, vm)' vm
 		if confirm 'Install the virtual machine tools?' y; then layers+=(vm) && vm=1; fi
-		show_layer 'dev (go, clangd, pnpm, docker, claude, opencode, lint and test tools)' dev
+		show_layer 'dev (go, gopls, clangd, pnpm, docker, lint and test tools)' dev
 		if ((dev)) || confirm 'Install the development tools?' n; then layers+=(dev) && docker=1; fi
 	fi
 

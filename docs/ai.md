@@ -1,7 +1,8 @@
 # Claude Code and opencode
 
-Both are installed by the `dev` layer (Arch: AUR `claude-code`, `opencode-bin`; elsewhere the
-pinned npm releases in `~/.local`). They share skills, MCP servers and secrets.
+Both are installed by the `cli` layer (Arch: AUR `claude-code`, `opencode-bin`; elsewhere the
+pinned npm releases in `~/.local`), with `uv` for the Grafana MCP server. They share skills,
+MCP servers and secrets.
 
 | Path | Purpose |
 | --- | --- |
@@ -37,7 +38,7 @@ starts the binary directly (`timeout claude`, a script) bypasses the function: w
 | context7 (library docs) | ✓ | ✓ | `CONTEXT7_API_KEY` |
 | playwright (browser) | ✓ | ✓ | |
 | prometheus | ✓ | ✓ | `PROMETHEUS_URL` |
-| grafana | ✓ | ✓ | `GRAFANA_URL`, `GRAFANA_SERVICE_ACCOUNT_TOKEN`, `uvx` (dev layer) |
+| grafana | ✓ | ✓ | `GRAFANA_URL`, `GRAFANA_SERVICE_ACCOUNT_TOKEN`, `uvx` |
 | superset | ✓ | ✓ | `SUPERSET_MCP_URL`, `SUPERSET_API_KEY` |
 | supabase | | ✓ | `SUPABASE_MCP_URL` |
 | postgres, docker | | off | `POSTGRES_DATABASE_URI` |
@@ -48,7 +49,7 @@ them and names any variable missing from `secrets.env`. opencode reads `opencode
 
 ## New machine
 
-1. `setup.sh` with the `dev` layer installs both tools, `uv` and node.
+1. `setup.sh` (the `cli` layer) installs both tools, `uv` and node.
 2. `cp ~/.config/secrets.env.example ~/.config/secrets.env && chmod 600 ~/.config/secrets.env`,
    then fill it in.
 3. `mcp-sync`, then log in: `claude` (`/login`) and `opencode auth login`.

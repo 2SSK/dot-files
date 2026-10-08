@@ -12,10 +12,10 @@ return {
 			vim.diagnostic.config({
 				signs = {
 					text = {
-						[vim.diagnostic.severity.ERROR] = " ",
-						[vim.diagnostic.severity.WARN] = " ",
-						[vim.diagnostic.severity.HINT] = "󰠠 ",
-						[vim.diagnostic.severity.INFO] = " ",
+						[vim.diagnostic.severity.ERROR] = "\u{f057} ",
+						[vim.diagnostic.severity.WARN] = "\u{f071} ",
+						[vim.diagnostic.severity.HINT] = "\u{f0820} ",
+						[vim.diagnostic.severity.INFO] = "\u{f05a} ",
 					},
 				},
 				underline = true,
@@ -84,17 +84,18 @@ return {
 					},
 				},
 				clangd = {
+					-- the encoding copilot-language-server uses, so nvim doesn't warn about mixed encodings
+					capabilities = { offsetEncoding = { "utf-16" } },
 					init_options = { clangdFileStatus = true },
 					filetypes = { "c", "cpp", "objc", "objcpp" },
 				},
 				pyright = { filetypes = { "python" } },
 				ts_ls = { filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" } },
 				tailwindcss = {},
-				svelte = {},
 				emmet_ls = {
-					filetypes = { "html", "css", "javascript", "javascriptreact", "typescript", "typescriptreact", "svelte" },
+					filetypes = { "html", "css", "javascript", "javascriptreact", "typescript", "typescriptreact" },
 				},
-				graphql = { filetypes = { "graphql", "gql", "svelte", "typescriptreact", "javascriptreact" } },
+				graphql = { filetypes = { "graphql", "gql", "typescriptreact", "javascriptreact" } },
 				gopls = {
 					cmd = { "gopls", "serve" },
 					filetypes = { "go", "gomod", "gowork", "gotmpl" },
@@ -108,10 +109,15 @@ return {
 				},
 			}
 
+			-- Mason installs the others; these come with their toolchain (dev package layer) and start
+			-- only where it's installed
+			local from_system = { gopls = true, rust_analyzer = true }
 			local capabilities = require("blink.cmp").get_lsp_capabilities()
 			for server, config in pairs(servers) do
-				vim.lsp.config(server, vim.tbl_extend("force", { capabilities = capabilities }, config))
-				vim.lsp.enable(server)
+				vim.lsp.config(server, vim.tbl_deep_extend("force", { capabilities = capabilities }, config))
+				if not from_system[server] or vim.fn.executable(vim.lsp.config[server].cmd[1]) == 1 then
+					vim.lsp.enable(server)
+				end
 			end
 		end,
 	},

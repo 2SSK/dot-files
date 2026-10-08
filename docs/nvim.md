@@ -45,8 +45,8 @@ once a second.
 - TODO/FIXME/HACK/NOTE highlighted; hex colours shown in their colour.
 
 **Code**
-- LSP: Lua, Python, TS/JS, Go, C/C++, Rust, Zig, Svelte, Tailwind, GraphQL, HTML/CSS, Emmet,
-  Copilot. Mason installs the servers.
+- LSP: Lua, Python, TS/JS, C/C++, Zig, Tailwind, GraphQL, HTML/CSS, Emmet, Copilot (Mason
+  installs these), plus Go (`gopls`) and Rust (`rust-analyzer`) when their toolchain is installed.
 - Format on save (prettier, stylua, black + isort, beautysh), linting (nvim-lint).
 - Treesitter highlighting, indentation and folding for 30 languages; folds start open.
 

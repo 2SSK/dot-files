@@ -3,7 +3,7 @@
 local parsers = {
 	"bash", "c", "cpp", "css", "diff", "dockerfile", "go", "graphql", "html", "java", "javascript",
 	"json", "lua", "luadoc", "make", "markdown", "markdown_inline", "python", "query", "regex",
-	"rust", "sql", "svelte", "toml", "tsx", "typescript", "vim", "vimdoc", "yaml", "zig",
+	"rust", "sql", "toml", "tsx", "typescript", "vim", "vimdoc", "yaml", "zig",
 }
 
 return {
