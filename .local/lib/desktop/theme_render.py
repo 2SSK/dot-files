@@ -26,7 +26,8 @@ ANSI = tuple(f"c{i}" for i in range(16))
 TARGETS = ("kitty.conf", "foot.ini", "st.Xresources", "cava", "tmux.conf", "git.conf", "lazygit.yml",
            "lazydocker/config.yml", "pspg/pspgconf", "pspg/.pspg_theme_desktop", "rmpc.ron", "nvim.lua",
            "silicon.tmTheme", "vim.vim", "opencode/themes/desktop.json", "i3.conf",
-           "picom.conf", "xsettingsd.conf")
+           "picom.conf", "picom/round-top.glsl",
+           "picom/round-bottom.glsl", "xsettingsd.conf")
 
 
 class ThemeError(Exception):
