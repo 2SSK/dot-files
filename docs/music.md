@@ -21,21 +21,25 @@ Folders also show up in the Library tab, so any folder can be queued directly.
 
 | Key | Action |
 | --- | --- |
-| `1` `2` `3` `4` / `F` | Queue (with album art), Playlists, Library, Artists / Search |
+| `1`–`5` / `F` | Queue (with album art), Playlists, Library, Artists, Search / Search |
 | `Tab` / `Shift+Tab` | Next / previous tab |
-| `p` | Play / pause; `s` stop |
+| `p` / `s` | Play or pause / stop |
 | `>` / `<` | Next / previous track |
 | `f` / `b` | Seek forward / back |
 | `.` / `,` | Volume up / down |
-| `z` `x` `c` `v` | Repeat, random, consume, single |
-| `j` `k` `h` `l`, `g` / `G` | Move, enter / leave a folder, top / bottom |
-| `Ctrl+u` / `Ctrl+d` | Half page up / down |
-| `/` then `n` / `N` | Search in the list, next / previous match |
-| `Enter` | Play the track |
-| `a` / `A` | Add the item / everything to the queue (in the Queue tab: add the track to a playlist) |
-| `Space` | Select; `Shift+J` / `Shift+K` move the selection |
+| `z` `x` `c` `v` | Toggle repeat, random, consume, single |
+| `j` `k`, `h` `l` | Move down / up, leave / enter a folder |
+| `gg` / `G`, `Ctrl+d` / `Ctrl+b` / `Ctrl+f` | Top / bottom, half page down / page up / page down |
+| `/` then `n` / `N` | Find in the list, next / previous match |
+| `Enter` | Play the track (Queue) or open the item |
+| `a` / `A` | Add the item / everything shown to the queue |
+| `Space` | Select; `J` / `K` move the selection |
 | `d` / `D` | Remove from the queue / clear the queue |
-| `Ctrl+s` | Save the queue as a new playlist |
+| `X` / `C` | Shuffle the queue / jump to the playing track |
+| `R` | Add random songs |
+| `Ctrl+s` `s` | Save the queue as a playlist |
+| `Ctrl+z` | Menu for the item (e.g. add a track to a playlist) |
+| `Ctrl+u` | Refresh the library after adding music |
 | `?` | All keys |
 | `q` | Quit (mpd keeps playing) |
 
