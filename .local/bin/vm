@@ -214,7 +214,7 @@ create() {
 		node="$(rendernode)"
 		if [[ -n $node ]]; then
 			# shellcheck disable=SC2054
-			args+=(--graphics "spice,listen.type=none,gl.enable=yes,gl.rendernode=$node"
+			args+=(--graphics "spice,listen=none,gl.enable=yes,gl.rendernode=$node"
 				--video model.type=virtio,model.acceleration.accel3d=yes)
 		else
 			args+=(--graphics spice --video virtio)
