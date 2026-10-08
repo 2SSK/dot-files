@@ -39,6 +39,8 @@ Palette values are copied from each project's official ports, with attribution i
 | starship, fzf, zsh autosuggestions, `ls`, bat, btop, yazi, fastfetch, pgcli | The terminal's 16 ANSI colours | With the terminal |
 | cava | `cava` alias loads the rendered config (gradient from the ANSI colours) | Live (SIGUSR2) |
 | i3 window borders | `include` of the rendered `i3.conf` | Live (`i3-msg reload`) |
+| picom (i3): shadow colours | Started with the rendered `picom.conf` | Live (SIGUSR1) |
+| GTK icons, cursor, fonts (X11) | xsettingsd reads the rendered `xsettingsd.conf`: Tela-circle-blue dark/light, Bibata-Modern-Ice | Live (SIGHUP) |
 | Quickshell, sway borders, GTK, Qt | `palette.json` and further templates | Coming in later stages |
 
 ## Files
@@ -49,7 +51,7 @@ Palette values are copied from each project's official ports, with attribution i
 | `~/.local/share/desktop/templates/` | One template per rendered target |
 | `~/.local/state/desktop/theme/current` | `family=` and `mode=` of the active theme |
 | `~/.local/state/desktop/theme/palette.json` | Active variant for apps that read JSON |
-| `~/.local/state/desktop/theme/` `kitty.conf`, `foot.ini`, `i3.conf`, `st.Xresources`, `cava`, `tmux.conf`, `git.conf`, `lazygit.yml`, `lazydocker/`, `pspg/`, `rmpc.ron`, `nvim.lua`, `vim.vim`, `silicon.tmTheme` | Rendered configs |
+| `~/.local/state/desktop/theme/` `kitty.conf`, `foot.ini`, `i3.conf`, `picom.conf`, `xsettingsd.conf`, `st.Xresources`, `cava`, `tmux.conf`, `git.conf`, `lazygit.yml`, `lazydocker/`, `pspg/`, `rmpc.ron`, `nvim.lua`, `vim.vim`, `silicon.tmTheme` | Rendered configs |
 
 ## Fonts
 

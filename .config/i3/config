@@ -1,117 +1,17 @@
-# i3 (X11). Colours come from the desktop theme; the bar, notifications, OSD, lock and power menu
-# come from the Quickshell shell and the desktop-* commands, so nothing here draws them.
+# i3 (X11). The bar, notifications, OSD, lock and power menu come from the Quickshell shell and the
+# desktop-* commands, so nothing here draws them. Colours come from the desktop theme.
+#   conf.d/look.conf        theme colours, fonts, borders, gaps, floating windows
+#   conf.d/keys.conf        apps, focus, moving, layouts, scratchpad, i3 itself
+#   conf.d/workspaces.conf  switching and moving between workspaces
+#   conf.d/resize.conf      the resize mode
+#   conf.d/autostart.conf   wallpaper, compositor, settings daemon, autotiling
 
 set $mod Mod4
 set $term kitty
 set $menu rofi -show drun
 
-# --- Look: no title bars, a thin theme-coloured border, gaps (picom rounds and shadows) ---
-include ~/.local/state/desktop/theme/i3.conf
-# Titles in Inter; icons in titles fall back to the Nerd Font
-font pango:Inter, JetBrainsMono Nerd Font Medium 11
-title_align center
-default_border pixel 2
-default_floating_border pixel 2
-hide_edge_borders none
-gaps inner 10
-gaps outer 2
-for_window [window_role="pop-up|dialog|bubble"] floating enable
-
-# --- Behaviour ---
-floating_modifier $mod
-focus_follows_mouse yes
-focus_on_window_activation smart
-
-# --- Apps ---
-bindsym $mod+Return exec $term
-bindsym $mod+d exec --no-startup-id $menu
-bindsym $mod+Tab exec --no-startup-id rofi -show window
-bindsym $mod+q kill
-
-# --- Focus and move (vim keys or arrows) ---
-bindsym $mod+h focus left
-bindsym $mod+j focus down
-bindsym $mod+k focus up
-bindsym $mod+l focus right
-bindsym $mod+Left focus left
-bindsym $mod+Down focus down
-bindsym $mod+Up focus up
-bindsym $mod+Right focus right
-bindsym $mod+Shift+h move left
-bindsym $mod+Shift+j move down
-bindsym $mod+Shift+k move up
-bindsym $mod+Shift+l move right
-bindsym $mod+Shift+Down move down
-bindsym $mod+Shift+Up move up
-bindsym $mod+Shift+Left move window to output left
-bindsym $mod+Shift+Right move window to output right
-
-# --- Layout ---
-bindsym $mod+f fullscreen toggle
-bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
-bindsym $mod+z split h
-bindsym $mod+v split v
-bindsym $mod+a focus parent
-bindsym $mod+Shift+space floating toggle
-bindsym $mod+space focus mode_toggle
-
-# --- Scratchpad ---
-bindsym $mod+Shift+Return move scratchpad
-bindsym $mod+minus scratchpad show
-
-# --- Workspaces ---
-bindsym $mod+1 workspace number 1
-bindsym $mod+2 workspace number 2
-bindsym $mod+3 workspace number 3
-bindsym $mod+4 workspace number 4
-bindsym $mod+5 workspace number 5
-bindsym $mod+6 workspace number 6
-bindsym $mod+7 workspace number 7
-bindsym $mod+8 workspace number 8
-bindsym $mod+9 workspace number 9
-bindsym $mod+0 workspace number 10
-bindsym $mod+Shift+1 move container to workspace number 1
-bindsym $mod+Shift+2 move container to workspace number 2
-bindsym $mod+Shift+3 move container to workspace number 3
-bindsym $mod+Shift+4 move container to workspace number 4
-bindsym $mod+Shift+5 move container to workspace number 5
-bindsym $mod+Shift+6 move container to workspace number 6
-bindsym $mod+Shift+7 move container to workspace number 7
-bindsym $mod+Shift+8 move container to workspace number 8
-bindsym $mod+Shift+9 move container to workspace number 9
-bindsym $mod+Shift+0 move container to workspace number 10
-bindsym $mod+slash workspace next
-bindsym $mod+period workspace prev
-
-# --- Resize: $mod+r, then h/j/k/l or arrows; Enter or Escape leaves ---
-mode "resize" {
-	bindsym h resize shrink width 10 px or 5 ppt
-	bindsym j resize grow height 10 px or 5 ppt
-	bindsym k resize shrink height 10 px or 5 ppt
-	bindsym l resize grow width 10 px or 5 ppt
-	bindsym Left resize shrink width 10 px or 5 ppt
-	bindsym Down resize grow height 10 px or 5 ppt
-	bindsym Up resize shrink height 10 px or 5 ppt
-	bindsym Right resize grow width 10 px or 5 ppt
-	bindsym Return mode "default"
-	bindsym Escape mode "default"
-	bindsym $mod+r mode "default"
-}
-bindsym $mod+r mode "resize"
-
-# --- i3 itself ---
-bindsym $mod+Shift+c reload
-bindsym $mod+Shift+r restart
-bindsym $mod+Shift+e exec i3-nagbar -t warning -m 'Exit i3?' -B 'Exit' 'i3-msg exit'
-
-# --- Start ---
-# Wallpaper: the one picked last (~/.local/state/desktop/wallpaper links to it), else the default
-exec_always --no-startup-id feh --bg-fill ~/.local/state/desktop/wallpaper 2>/dev/null || feh --bg-fill ~/.local/share/desktop/wallpapers/cat-mocha-lavender_19.jpg
-# picom and autotiling also come back on $mod+Shift+r; picom falls back to xrender (no blur) where
-# OpenGL isn't available, e.g. a VM without 3D
-exec_always --no-startup-id pgrep -x picom >/dev/null || picom || picom --backend xrender
-exec_always --no-startup-id pgrep -x autotiling >/dev/null || autotiling # splits along the longer side
-exec --no-startup-id xrdb -merge ~/.Xresources
-exec --no-startup-id dex --autostart --environment i3
+include ~/.config/i3/conf.d/look.conf
+include ~/.config/i3/conf.d/keys.conf
+include ~/.config/i3/conf.d/workspaces.conf
+include ~/.config/i3/conf.d/resize.conf
+include ~/.config/i3/conf.d/autostart.conf

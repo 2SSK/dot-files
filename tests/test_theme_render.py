@@ -63,8 +63,8 @@ class Render(unittest.TestCase):
         self.assertEqual(len(palette["ansi"]), 16)
         self.assertEqual(sorted(p.name for p in self.state.iterdir()),
                          ["cava", "current", "foot.ini", "git.conf", "i3.conf", "kitty.conf", "lazydocker", "lazygit.yml",
-                          "nvim.lua", "opencode", "palette.json", "pspg", "rmpc.ron", "silicon.tmTheme", "st.Xresources",
-                          "tmux.conf", "vim.vim"])
+                          "nvim.lua", "opencode", "palette.json", "picom.conf", "pspg", "rmpc.ron", "silicon.tmTheme",
+                          "st.Xresources", "tmux.conf", "vim.vim", "xsettingsd.conf"])
 
     def test_removes_outputs_of_dropped_targets(self):
         self.state.mkdir(parents=True, exist_ok=True)
