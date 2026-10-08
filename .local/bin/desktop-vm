@@ -1,0 +1,260 @@
+#!/usr/bin/env bash
+# Create and manage VMs on the system libvirt connection: official cloud images set up by
+# cloud-init (your user, your SSH key), or any installer ISO. VMs also show in virt-manager.
+set -euo pipefail
+
+lib="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")/../lib/desktop" && pwd)"
+# shellcheck source-path=SCRIPTDIR/../.. source=.local/lib/desktop/log.sh
+source "$lib/log.sh"
+
+uri="${LIBVIRT_DEFAULT_URI:-qemu:///system}"
+cache="${XDG_CACHE_HOME:-$HOME/.cache}/desktop-vm"
+reserve_mib=2048 # what a running VM must leave free for the laptop
+
+declare -A image_url=(
+	[ubuntu]=https://cloud-images.ubuntu.com/releases/26.04/release/ubuntu-26.04-server-cloudimg-amd64.img
+	[debian]=https://cloud.debian.org/images/cloud/trixie/latest/debian-13-genericcloud-amd64.qcow2
+	[fedora]=https://download.fedoraproject.org/pub/fedora/linux/releases/44/Cloud/x86_64/images/Fedora-Cloud-Base-Generic-44-1.7.x86_64.qcow2
+	[arch]=https://geo.mirror.pkgbuild.com/images/latest/Arch-Linux-x86_64-cloudimg.qcow2
+)
+declare -A image_os=([ubuntu]=ubuntu26.04 [debian]=debian13 [fedora]=fedora44 [arch]=archlinux)
+
+usage() {
+	cat <<'EOF'
+usage: desktop-vm create <name> [--image ubuntu|debian|fedora|arch|<url>|<file>] [--iso <file>]
+                         [--server|--gui] [--cpus 2] [--mem 2G] [--disk 20G]
+                         [--share <dir>[:<tag>][:ro]] [--force]
+       desktop-vm list | ip <name> | ssh <name> [command] | console <name>
+       desktop-vm start <name> [--force] | stop <name> | delete <name> [-y]
+
+Cloud images get your user with passwordless sudo and your ~/.ssh/*.pub keys; --share
+mounts a laptop folder at ~/<tag> in the VM (virtiofs). An --iso is installed by hand in
+virt-manager. A VM is refused when it would leave the laptop under 2 GiB of free memory.
+EOF
+}
+
+v() { virsh -q -c "$uri" "$@"; }
+exists() { v dominfo "$1" >/dev/null 2>&1; }
+need_vm() { exists "$1" || die no_vm name="$1"; }
+
+mib() { # 2G, 1536M, 2048 -> MiB
+	local bytes
+	bytes="$(numfmt --from=iec "${1^^}" 2>/dev/null)" || { usage >&2 && exit 2; }
+	[[ $1 =~ [A-Za-z]$ ]] || bytes=$((bytes * 1048576))
+	echo $((bytes / 1048576))
+}
+
+guard_memory() { # <MiB> <force>: keep the laptop responsive
+	local avail
+	avail="$(awk '/^MemAvailable:/ { print int($2 / 1024) }' "${DESKTOP_VM_MEMINFO:-/proc/meminfo}")"
+	((avail - $1 >= reserve_mib || $2)) ||
+		die low_memory need_mib="$1" available_mib="$avail" msg='close some apps, use a smaller --mem, or pass --force'
+}
+
+fetch() { # <image name|url|file>: prints a local path
+	local src=$1 file
+	if [[ -n ${image_url[$src]:-} ]]; then src=${image_url[$src]}; fi
+	case $src in
+	http://* | https://*)
+		file="$cache/images/${src##*/}"
+		if [[ ! -s $file ]]; then
+			mkdir -p "${file%/*}"
+			log_info download url="$src"
+			curl -fL --progress-bar -o "$file.part" "$src"
+			mv "$file.part" "$file"
+		fi
+		echo "$file"
+		;;
+	*)
+		[[ -f $src ]] || { usage >&2 && exit 2; }
+		readlink -f "$src"
+		;;
+	esac
+}
+
+pool_path() { # the default storage pool, created on first use
+	if ! v pool-info default >/dev/null 2>&1; then
+		v pool-define-as default dir --target /var/lib/libvirt/images >/dev/null
+		v pool-build default >/dev/null
+		v pool-autostart default >/dev/null
+	fi
+	v pool-start default >/dev/null 2>&1 || true
+	v pool-dumpxml default | sed -n 's|.*<path>\(.*\)</path>.*|\1|p'
+}
+
+base_volume() { # <local image>: uploads it into the pool once, prints the volume path
+	local name="desktop-vm-base-${1##*/}" dir
+	[[ $name == *.qcow2 ]] || name="${name%.*}.qcow2" # cloud .img files are qcow2 too
+	dir="$(pool_path)"
+	if ! v vol-info --pool default "$name" >/dev/null 2>&1; then
+		v vol-create-as default "$name" "$(stat -c %s "$1")" --format qcow2 >/dev/null
+		v vol-upload --pool default "$name" "$1"
+	fi
+	echo "$dir/$name"
+}
+
+user_data() { # <name> <gui> <share tag or empty>: cloud-init config, printed
+	local keys=() key
+	for key in "$HOME"/.ssh/*.pub; do [[ -r $key ]] && keys+=("$(<"$key")"); done
+	((${#keys[@]})) || die no_ssh_key msg='create one first: ssh-keygen -t ed25519'
+	echo '#cloud-config'
+	echo "hostname: $1"
+	echo 'users:'
+	echo "  - name: $USER"
+	echo '    sudo: ALL=(ALL) NOPASSWD:ALL'
+	echo '    shell: /bin/bash'
+	echo '    ssh_authorized_keys:'
+	for key in "${keys[@]}"; do echo "      - $key"; done
+	echo 'ssh_pwauth: false'
+	echo 'package_update: true'
+	echo 'packages: [qemu-guest-agent'"$( (($2)) && echo ', spice-vdagent')"']'
+	if [[ -n $3 ]]; then
+		echo 'mounts:'
+		echo "  - [$3, /home/$USER/$3, virtiofs, \"defaults,nofail\", \"0\", \"0\"]"
+	fi
+	echo 'runcmd:'
+	echo '  - [systemctl, enable, --now, qemu-guest-agent]'
+}
+
+ip() { v domifaddr "$1" --source lease 2>/dev/null | awk '$3 == "ipv4" { sub(/\/.*/, "", $4); print $4; exit }'; }
+
+wait_ssh() { # <name>: until the VM answers on port 22 (about 3 minutes at most)
+	local addr
+	for _ in $(seq 90); do
+		addr="$(ip "$1")"
+		[[ -n $addr ]] && timeout 2 bash -c ">/dev/tcp/$addr/22" 2>/dev/null && return 0
+		sleep 2
+	done
+	log_warn ssh_not_ready name="$1" msg='still booting; try desktop-vm ssh later'
+}
+
+create() {
+	local name=${1:-} image=ubuntu iso='' gui=0 cpus=2 mem=2G disk=20G share='' force=0
+	[[ -n $name && $name != -* ]] || { usage >&2 && exit 2; }
+	shift
+	while (($#)); do
+		case $1 in
+		--image) image=${2:?} && shift ;;
+		--iso) iso=${2:?} && shift ;;
+		--gui) gui=1 ;;
+		--server) gui=0 ;;
+		--cpus) cpus=${2:?} && shift ;;
+		--mem) mem=${2:?} && shift ;;
+		--disk) disk=${2:?} && shift ;;
+		--share) share=${2:?} && shift ;;
+		--force) force=1 ;;
+		*) usage >&2 && exit 2 ;;
+		esac
+		shift
+	done
+	if [[ -z $iso && -z ${image_url[$image]:-} && $image != http*://* && ! -f $image ]]; then
+		usage >&2 && exit 2
+	fi
+	! exists "$name" || die vm_exists name="$name"
+	local mem_mib disk_gb
+	mem_mib="$(mib "$mem")"
+	disk_gb=$(($(mib "$disk") / 1024))
+	guard_memory "$mem_mib" "$force"
+
+	# shellcheck disable=SC2054 # virt-install sub-options are comma-separated on purpose
+	local args=(--name "$name" --memory "$mem_mib" --vcpus "$cpus" --network network=default,model=virtio --noautoconsole)
+	if [[ -n $share ]]; then
+		local dir=${share%%:*} rest tag ro=''
+		rest=${share#"$dir"}
+		tag=${rest#:} && tag=${tag%%:*}
+		[[ -n $tag ]] || tag="$(basename "$dir")"
+		[[ $share == *:ro ]] && ro=',readonly=on'
+		[[ -d $dir ]] || die no_share_dir path="$dir"
+		# shellcheck disable=SC2054
+		args+=(--memorybacking source.type=memfd,access.mode=shared
+			--filesystem "source.dir=$(readlink -f "$dir"),target.dir=$tag,driver.type=virtiofs$ro")
+		share=$tag
+	fi
+
+	if [[ -n $iso ]]; then
+		[[ -f $iso ]] || die no_iso path="$iso"
+		# shellcheck disable=SC2054
+		args+=(--cdrom "$(readlink -f "$iso")" --osinfo detect=on,require=off --disk "size=$disk_gb,format=qcow2"
+			--graphics spice --video virtio --channel spicevmc)
+	else
+		local base seed
+		base="$(base_volume "$(fetch "$image")")"
+		seed="$(mktemp)"
+		# shellcheck disable=SC2064 # expand now: seed is local and gone by exit time
+		trap "rm -f -- ${seed@Q}" EXIT
+		user_data "$name" "$gui" "$share" >"$seed"
+		args+=(--import --osinfo "${image_os[$image]:-linux2024}" --cloud-init "user-data=$seed"
+			--disk "size=$disk_gb,backing_store=$base,format=qcow2,bus=virtio")
+		if ((gui)); then
+			args+=(--graphics spice --video virtio --channel spicevmc --sound ich9)
+		else
+			# shellcheck disable=SC2054
+			args+=(--graphics none --console pty,target.type=serial)
+		fi
+	fi
+
+	virt-install "${args[@]}"
+	log_info created name="$name"
+	if [[ -n $iso ]]; then
+		echo "install it in the console: desktop-vm console $name"
+	elif [[ ${DESKTOP_VM_WAIT:-1} != 0 ]]; then
+		wait_ssh "$name"
+		echo "ready: desktop-vm ssh $name"
+	fi
+}
+
+list() {
+	local name state
+	printf '%-20s %-12s %s\n' NAME STATE IP
+	while read -r name; do
+		[[ -n $name ]] || continue
+		state="$(v domstate "$name")"
+		printf '%-20s %-12s %s\n' "$name" "$state" "$( [[ $state == running ]] && ip "$name")"
+	done < <(v list --all --name)
+}
+
+main() {
+	local cmd=${1:-}
+	shift || true
+	case $cmd in
+	create) create "$@" ;;
+	list) list ;;
+	ip) need_vm "${1:?}" && ip "$1" ;;
+	ssh)
+		need_vm "${1:?}"
+		local addr
+		addr="$(ip "$1")"
+		[[ -n $addr ]] || die no_ip name="$1" msg='is it running? desktop-vm start '"$1"
+		shift
+		mkdir -p "$cache"
+		exec ssh -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile="$cache/known_hosts" "$USER@$addr" "$@"
+		;;
+	console)
+		need_vm "${1:?}"
+		if v dumpxml "$1" | grep -q '<graphics'; then
+			setsid -f virt-manager --connect "$uri" --show-domain-console "$1" >/dev/null 2>&1
+		else
+			exec virsh -c "$uri" console "$1"
+		fi
+		;;
+	start)
+		need_vm "${1:?}"
+		guard_memory "$(v dominfo "$1" | awk '/^Max memory/ { print int($3 / 1024) }')" "$([[ ${2:-} == --force ]] && echo 1 || echo 0)"
+		v start "$1"
+		;;
+	stop) need_vm "${1:?}" && v shutdown "$1" ;;
+	delete)
+		need_vm "${1:?}"
+		if [[ ${2:-} != -y ]]; then
+			read -rp "delete $1 and its disk? [y/N] " reply
+			[[ $reply == [yY]* ]] || exit 0
+		fi
+		v destroy "$1" >/dev/null 2>&1 || true
+		v undefine "$1" --remove-all-storage
+		;;
+	-h | --help) usage ;;
+	*) usage >&2 && exit 2 ;;
+	esac
+}
+
+main "$@"
