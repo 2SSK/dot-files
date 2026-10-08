@@ -52,11 +52,11 @@ All normal vim motions and edits work on the command line (`w`, `b`, `0`, `$`, `
 
 | Key | Action |
 | --- | --- |
-| `Ctrl+k` / `Ctrl+j`, `↑` / `↓` | Search history for lines starting with what you typed |
+| `Ctrl+p` / `Ctrl+n`, `↑` / `↓` | Search history for lines starting with what you typed |
 | `Ctrl+r` | Fuzzy-search all history (fzf) |
 | `Ctrl+e` | Accept the grey suggestion |
 | `Ctrl+w` | Accept the suggestion and run it |
-| `Ctrl+l` | Accept the next word of the suggestion *(zsh)* |
+| `Alt+l` | Accept the next word of the suggestion |
 | `Ctrl+u` | Turn suggestions on or off *(zsh)* |
 
 History is shared between open zsh sessions, deduplicated, and stored in
@@ -74,6 +74,9 @@ history expansions like `!!` are shown for confirmation before they run.
 | `cdi` | Pick a directory interactively (zoxide) |
 | `<dir>` | Typing a directory name alone enters it |
 | `Alt+s` | Toggle `sudo` in front of the line; on an empty line, use the previous command *(zsh)* |
+
+`Ctrl+h/j/k/l` are reserved for moving between tmux panes and nvim splits
+([tmux.md](tmux.md)).
 
 ## Functions
 

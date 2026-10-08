@@ -10,5 +10,9 @@ _ble_keys() {
 }
 blehook/eval-after-load keymap_vi _ble_keys
 
-# Ctrl+e accepts the suggestion (ble default); Ctrl+w accepts and runs it, like zsh
+# Like zsh: Ctrl+e accepts the suggestion (ble default), Alt+l accepts the next word, Ctrl+w
+# accepts and runs it; Ctrl+p/n search history by prefix (Ctrl+h/j/k/l belong to tmux)
 ble-bind -m auto_complete -f C-w auto_complete/accept-line
+ble-bind -m auto_complete -f M-l 'auto_complete/@end insert-cword'
+ble-bind -m vi_imap -f C-p history-search-backward
+ble-bind -m vi_imap -f C-n history-search-forward
