@@ -1,6 +1,20 @@
-# <type>(<scope>)!: <summary, imperative, 72 characters at most>
+
+# ── commit ──────────────────────────────────────────────────────────────
 #
-# <body: what changed and why>
+#   type(scope)!: summary                     imperative, under 72 chars
 #
-# Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert
-# A breaking change: add ! after the type, or a "BREAKING CHANGE:" footer
+#   body                                      what changed and why
+#
+#   footer                                    Refs #123 · BREAKING CHANGE:
+#
+# ── types ───────────────────────────────────────────────────────────────
+#
+#   feat      a new feature            perf      a performance gain
+#   fix       a bug fix                test      tests only
+#   docs      documentation only       build     build system or packages
+#   style     formatting, no logic     ci        CI configuration
+#   refactor  neither fix nor feature  chore     maintenance
+#   revert    undo an earlier commit
+#
+#   !  after type(scope) marks a breaking change
+#
