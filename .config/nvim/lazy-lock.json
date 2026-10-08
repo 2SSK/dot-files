@@ -1,6 +1,6 @@
 {
   "auto-session": { "branch": "main", "commit": "c8e6139a2e52a38101fecaba6014d7dd75489044" },
-  "blink.cmp": { "branch": "main", "commit": "8219b58f1c11a2fb1644d3c7116c509fa8348ec0" },
+  "blink.cmp": { "branch": "main", "commit": "78336bc89ee5365633bcf754d93df01678b5c08f" },
   "bufferline.nvim": { "branch": "main", "commit": "655133c3b4c3e5e05ec549b9f8cc2894ac6f51b3" },
   "conform.nvim": { "branch": "master", "commit": "016802de402556da54c36bd7359b441266b01cdd" },
   "friendly-snippets": { "branch": "main", "commit": "6cd7280adead7f586db6fccbd15d2cac7e2188b9" },
