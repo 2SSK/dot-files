@@ -48,7 +48,7 @@ Palette values are copied from each project's official ports, with attribution i
 | `~/.local/share/desktop/templates/` | One template per rendered target |
 | `~/.local/state/desktop/theme/current` | `family=` and `mode=` of the active theme |
 | `~/.local/state/desktop/theme/palette.json` | Active variant for apps that read JSON |
-| `~/.local/state/desktop/theme/` `kitty.conf`, `foot.ini`, `st.Xresources`, `cava`, `tmux.conf`, `git.conf`, `lazygit.yml`, `lazydocker/` | Rendered configs |
+| `~/.local/state/desktop/theme/` `kitty.conf`, `foot.ini`, `st.Xresources`, `cava`, `tmux.conf`, `git.conf`, `lazygit.yml`, `lazydocker/`, `pspg/`, `rmpc.ron`, `nvim.lua`, `vim.vim`, `silicon.tmTheme` | Rendered configs |
 
 ## Fonts
 
@@ -61,3 +61,12 @@ kitty is the main terminal on both sessions. The backups are foot on Wayland and
 st is built from the pinned 0.9.3 release with the
 [xresources-with-reload-signal](https://st.suckless.org/patches/xresources-with-reload-signal/)
 patch (`packages/extra/st.sh`), and reads its font, padding and colours from `~/.Xresources`.
+
+## Boot menu (GRUB)
+
+`packages/system.sh grub` (sudo) installs a minimal GRUB theme built from the active palette:
+the theme's background colour, a centred column of entries in Inter, the selected one on a
+rounded pill, and one hint line with the countdown. It sets `GRUB_THEME` and graphical output
+in `/etc/default/grub` (the original is kept as `grub.pre-desktop`; a serial console is left
+alone) and regenerates `grub.cfg` (`grub-mkconfig`, `update-grub` or `grub2-mkconfig`).
+GRUB can't follow the theme live: run it again after `theme set` to update the colours.

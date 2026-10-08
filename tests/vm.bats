@@ -135,6 +135,14 @@ vi_args() { grep '^virt-install' "$CALLS"; }
 	[[ $(calls) == *"ssh "*"tester@192.168.122.50"* ]]
 }
 
+@test "tunnel forwards a VM port to the laptop" {
+	VM_EXISTS=1 run "$VM" tunnel web 5432
+	[ "$status" -eq 0 ]
+	[[ $(calls) == *"ssh "*"-N -L 5432:localhost:5432 $USER@192.168.122.50"* ]]
+	VM_EXISTS=1 run "$VM" tunnel rice 5432 5433
+	[[ $(calls) == *"-N -L 5433:localhost:5432 tester@192.168.122.50"* ]]
+}
+
 @test "anything else goes to virsh on the system connection" {
 	run "$VM" snapshot-list web
 	[[ $(calls) == *"virsh -c qemu:///system snapshot-list web"* ]]

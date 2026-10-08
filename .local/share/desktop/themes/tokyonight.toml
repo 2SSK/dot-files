@@ -6,8 +6,6 @@ family = "tokyonight"
 name = "Tokyo Night"
 source = "https://github.com/folke/tokyonight.nvim"
 license = "Apache-2.0"
-nvim_dark = "tokyonight-night"
-nvim_light = "tokyonight-day"
 
 [dark.ui]
 bg = "#1a1b26"

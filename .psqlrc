@@ -1,37 +1,21 @@
--- ==========================================================
--- .psqlrc - psql Power User Configuration
--- ==========================================================
+-- psql: results through pspg (PSQL_PAGER, themed from the desktop palette), quiet startup
+\set QUIET 1
 
--- Timing on every query (invaluable for performance work)
-\timing on
-
--- Pretty format with borders
-\x auto
-
--- Better NULL display (no empty spaces)
-\pset null '⟨NULL⟩'
-
--- Prompt: user (blue) @ database (magenta), then psql's state markers; ANSI colours follow the theme
-\set PROMPT1 '%[%033[1;34m%]%n%[%033[0m%]@%[%033[1;35m%]%/%[%033[0m%]%R%x%# '
-\set PROMPT2 '%[%033[2m%]%R%x%#%[%033[0m%] '
-
--- History settings
-\set HISTSIZE 10000
-\set HISTFILE ~/.psql_history
-
--- Auto-commit on (safer for learning)
-\set AUTOCOMMIT on
-
--- Verbose errors
-\set VERBOSITY verbose
-
--- Default to expanded mode for wide tables
-\pset expanded auto
-
--- Results through pspg (PSQL_PAGER) with unicode borders
 \pset pager on
 \pset border 2
 \pset linestyle unicode
+\pset null '⟨NULL⟩'
+\x auto
+\timing on
 
--- Encoding
-\encoding UTF8
+-- user (blue) @ database (magenta), then psql's state markers
+\set PROMPT1 '%[%033[1;34m%]%n%[%033[0m%]@%[%033[1;35m%]%/%[%033[0m%]%R%x%# '
+\set PROMPT2 '%[%033[2m%]%R%x%#%[%033[0m%] '
+
+\set HISTFILE ~/.psql_history
+\set HISTSIZE 10000
+\set HISTCONTROL ignoredups
+\set COMP_KEYWORD_CASE upper
+\set VERBOSITY verbose
+
+\unset QUIET

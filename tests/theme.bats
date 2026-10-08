@@ -24,6 +24,7 @@ signals() { cat "$BATS_TEST_TMPDIR/signals"; }
 	[[ $(signals) == *"pkill -USR1 -x kitty"* ]]
 	[[ $(signals) == *"pkill -USR2 -x foot"* ]]
 	[[ $(signals) == *"pkill -USR2 -x cava"* ]]
+	[[ $(signals) == *"pkill -USR1 -x nvim"* ]]
 	[[ $(signals) == *"tmux source-file $STATE/tmux.conf"* ]]
 	[[ $(signals) != *"xrdb"* ]] # no X display: st is left alone
 }

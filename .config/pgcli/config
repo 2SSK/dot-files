@@ -7,6 +7,10 @@ destructive_warning = drop, shutdown, delete, truncate, alter, update, unconditi
 vi = True
 less_chatty = True
 verbose_errors = True
+table_format = psql_unicode
+pager = pspg
+history_file = ~/.local/state/pgcli/history
+log_file = ~/.local/state/pgcli/log
 prompt = '\x1b[34m\u\x1b[36m@\x1b[35m\d\x1b[0m> '
 multiline_continuation_char = ''
 

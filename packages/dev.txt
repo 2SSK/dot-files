@@ -1,6 +1,12 @@
-# Lint and test tooling (opt-in: install.sh dev). Columns: arch  debian(+ubuntu)  fedora
+# Development: languages, containers, lint and test tools (opt-in: install.sh dev). Columns: arch  debian(+ubuntu)  fedora
 bats                        bats                        bats
 bats-support                bats-support                @bats-helpers
 bats-assert                 bats-assert                 @bats-helpers
 shellcheck                  shellcheck                  ShellCheck
 shfmt                       shfmt                       shfmt
+go                          golang-go                   golang
+clang                       clangd                      clang-tools-extra
+pnpm                        @pnpm                       @pnpm
+docker                      docker.io                   moby-engine
+docker-compose              docker-compose              docker-compose
+docker-buildx               docker-buildx               docker-buildx

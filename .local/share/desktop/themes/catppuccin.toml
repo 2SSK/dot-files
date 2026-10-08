@@ -6,8 +6,6 @@ family = "catppuccin"
 name = "Catppuccin"
 source = "https://github.com/catppuccin/catppuccin"
 license = "MIT"
-nvim_dark = "catppuccin-mocha"
-nvim_light = "catppuccin-latte"
 
 [dark.ui]
 bg = "#1e1e2e"
