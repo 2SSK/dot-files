@@ -67,3 +67,10 @@ os() { printf '%s\n' "$@" >"$OS_RELEASE"; }
 	[ "$status" -eq 0 ]
 	[[ $output == *"usage:"* ]]
 }
+
+@test "--distro prints the detected distro" {
+	os ID=ubuntu ID_LIKE=debian
+	run "$INSTALL" --distro
+	[ "$status" -eq 0 ]
+	[ "$output" = debian ]
+}
