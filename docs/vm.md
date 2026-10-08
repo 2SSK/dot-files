@@ -58,8 +58,10 @@ overrides).
 
 - **Full window**: View → Scale Display → *Auto resize VM with window*; View → Fullscreen
   for the whole screen. The window size reaches the VM as a display change (virtio-gpu); X
-  sessions follow it through a udev rule that runs `xrandr --auto` (`/etc/udev/rules.d/50-x-resize.rules`,
-  installed by `vm` for `"gui": true`). Black bars beside the picture mean the guest lacks it.
+  sessions follow it through a udev rule that runs `xrandr --auto` on every resize
+  (`/etc/udev/rules.d/50-x-resize.rules`) and a login script that applies it once at login
+  (`/etc/X11/xinit/xinitrc.d/50-x-resize.sh`); both redraw the wallpaper. `vm` installs them for
+  `"gui": true`. Black bars beside the picture mean the guest lacks them.
 - **Mouse and keyboard**: the pointer moves in and out freely. Click into the VM to type;
   every key, Super included, then goes to the VM. **Ctrl_L + Alt_L** (or clicking outside)
   gives the keyboard back to the laptop. Change it under Edit → Preferences → Console.

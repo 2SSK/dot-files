@@ -184,6 +184,12 @@ user_data() { # <name> <spec>: cloud-init config
 			  - path: /etc/udev/rules.d/50-x-resize.rules
 			    content: |
 			      ACTION=="change", SUBSYSTEM=="drm", KERNEL=="card[0-9]*", RUN+="/usr/local/bin/x-resize"
+			  - path: /etc/X11/xinit/xinitrc.d/50-x-resize.sh
+			    permissions: '0755'
+			    content: |
+			      # at X login: the size virt-manager already reports, then the wallpaper
+			      xrandr --output Virtual-1 --auto >/dev/null 2>&1
+			      [ -x "$HOME/.fehbg" ] && "$HOME/.fehbg" >/dev/null 2>&1 &
 		EOF
 	fi
 	echo 'runcmd:'
