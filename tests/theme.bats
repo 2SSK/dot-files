@@ -7,12 +7,17 @@ setup() {
 	STATE="$XDG_STATE_HOME/desktop/theme"
 	export HOME="$BATS_TEST_TMPDIR/home"
 	mkdir -p "$HOME" "$BATS_TEST_TMPDIR/bin"
-	for tool in pkill xrdb tmux; do # fakes record their arguments instead of touching the real session
+	for tool in pkill xrdb tmux i3-msg; do # fakes record their arguments instead of touching the real session
 		printf '#!/bin/sh\necho "%s $*" >>"%s"\n' "$tool" "$BATS_TEST_TMPDIR/signals" >"$BATS_TEST_TMPDIR/bin/$tool"
 		chmod +x "$BATS_TEST_TMPDIR/bin/$tool"
 	done
+	# gsettings knows the GNOME interface schema and records what theme sets; never the real dconf
+	# shellcheck disable=SC2016 # expands when the fake runs
+	printf '#!/bin/sh\n[ "$1" = list-schemas ] && echo org.gnome.desktop.interface && exit\necho "gsettings $*" >>"%s"\n' \
+		"$BATS_TEST_TMPDIR/signals" >"$BATS_TEST_TMPDIR/bin/gsettings"
+	chmod +x "$BATS_TEST_TMPDIR/bin/gsettings"
 	export PATH="$BATS_TEST_TMPDIR/bin:$PATH"
-	unset DISPLAY
+	unset DISPLAY XDG_CONFIG_HOME
 }
 
 signals() { cat "$BATS_TEST_TMPDIR/signals"; }
@@ -94,4 +99,37 @@ signals() { cat "$BATS_TEST_TMPDIR/signals"; }
 	run "$THEME" --help
 	[ "$status" -eq 0 ]
 	[[ $output == *"usage:"* ]]
+}
+
+@test "GTK and Qt: their fixed config paths link to the rendered files" {
+	run "$THEME" set tokyonight --mode dark
+	[ "$status" -eq 0 ]
+	local link
+	for link in gtk-3.0/gtk.css:gtk-3.0.css gtk-4.0/gtk.css:gtk-4.0.css qt5ct/qt5ct.conf:qt5ct.conf qt6ct/qt6ct.conf:qt6ct.conf; do
+		[ "$(readlink "$HOME/.config/${link%%:*}")" = "$STATE/${link#*:}" ]
+	done
+	grep -q '@define-color accent_bg_color #7aa2f7;' "$HOME/.config/gtk-3.0/gtk.css"
+	grep -q -- '--window-bg-color: #1a1b26;' "$HOME/.config/gtk-4.0/gtk.css"
+	grep -qx "color_scheme_path=$STATE/qt-colors.conf" "$HOME/.config/qt6ct/qt6ct.conf"
+	grep -qx 'icon_theme=Tela-circle-blue-dark' "$HOME/.config/qt5ct/qt5ct.conf"
+}
+
+@test "an existing GTK or Qt config is moved aside, not deleted" {
+	mkdir -p "$HOME/.config/gtk-3.0"
+	echo '/* mine */' >"$HOME/.config/gtk-3.0/gtk.css"
+	run "$THEME" set tokyonight
+	[ "$status" -eq 0 ]
+	[[ $output == *"event=moved_aside"* ]]
+	[ -L "$HOME/.config/gtk-3.0/gtk.css" ]
+	grep -rq 'mine' "$XDG_STATE_HOME/desktop/backup/theme/gtk-3.0/"
+}
+
+@test "mode sets GTK's dark/light, theme and icons through gsettings" {
+	run "$THEME" set gruvbox --mode light
+	[[ $(signals) == *"gsettings set org.gnome.desktop.interface color-scheme prefer-light"* ]]
+	[[ $(signals) == *"gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3"* ]]
+	[[ $(signals) == *"gsettings set org.gnome.desktop.interface icon-theme Tela-circle-blue-light"* ]]
+	run "$THEME" mode dark
+	[[ $(signals) == *"color-scheme prefer-dark"* && $(signals) == *"gtk-theme adw-gtk3-dark"* ]]
+	[[ $(signals) == *"pkill -HUP -x xsettingsd"* ]]
 }

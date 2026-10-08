@@ -10,3 +10,4 @@ wl-clipboard                wl-clipboard                wl-clipboard
 qt5-wayland                 qtwayland5                  qt5-qtwayland
 xdg-desktop-portal-wlr      xdg-desktop-portal-wlr      xdg-desktop-portal-wlr
 xdg-desktop-portal-gtk      xdg-desktop-portal-gtk      xdg-desktop-portal-gtk
+autotiling                  @autotiling                 @autotiling

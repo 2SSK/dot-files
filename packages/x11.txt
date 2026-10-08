@@ -20,3 +20,4 @@ libxft                      libxft-dev                  libXft-devel
 -                           libx11-dev                  libX11-devel
 xorg-xrdb                   x11-xserver-utils           xrdb
 @st                         @st                         @st
+autotiling                  @autotiling                 @autotiling

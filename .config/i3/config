@@ -1,1 +1,17 @@
-include ~/.config/i3/conf.d/*.conf
+# i3 (X11). The bar, notifications, OSD, lock and power menu come from the Quickshell shell and the
+# desktop-* commands, so nothing here draws them. Colours come from the desktop theme.
+#   conf.d/look.conf        theme colours, fonts, borders, gaps, floating windows
+#   conf.d/keys.conf        apps, focus, moving, layouts, scratchpad, i3 itself
+#   conf.d/workspaces.conf  switching and moving between workspaces
+#   conf.d/resize.conf      the resize mode
+#   conf.d/autostart.conf   wallpaper, compositor, settings daemon, autotiling
+
+set $mod Mod4
+set $term kitty
+set $menu rofi -show drun
+
+include ~/.config/i3/conf.d/look.conf
+include ~/.config/i3/conf.d/keys.conf
+include ~/.config/i3/conf.d/workspaces.conf
+include ~/.config/i3/conf.d/resize.conf
+include ~/.config/i3/conf.d/autostart.conf

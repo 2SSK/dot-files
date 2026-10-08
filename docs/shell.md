@@ -14,7 +14,7 @@ and [starship](https://starship.rs) prompt, with history, but no plugins or vim 
 | `~/.config/shell/fzf.sh` | fzf options for both shells |
 | `~/.config/zsh/` | `.zshrc` and its modules: `options`, `completion`, `keys`, `plugins`, `tools` |
 | `~/.bashrc`, `~/.config/bash/` | bash modules: `options` (history), `tools` (starship) |
-| `~/.config/starship.toml` | Prompt |
+| `~/.config/starship/starship.toml` | Prompt |
 | `~/.config/zsh/local.zsh`, `~/.config/bash/local.bash` | Machine-only settings and secrets (untracked) |
 
 zsh plugins are pinned to release tags in `packages/plugins.txt` and installed by
@@ -22,7 +22,7 @@ zsh plugins are pinned to release tags in `packages/plugins.txt` and installed b
 
 ## Prompt
 
-`~/.config/starship.toml` is the original starship config. Its colours are ANSI names (blue,
+`~/.config/starship/starship.toml` is the original starship config. Its colours are ANSI names (blue,
 green, ...), so the prompt follows the desktop theme like the rest of the terminal.
 
 ## Keys

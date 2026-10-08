@@ -7,7 +7,7 @@ setup() {
 	unset XDG_STATE_HOME XDG_CONFIG_HOME XDG_CACHE_HOME XDG_DATA_HOME
 	mkdir -p "$HOME"
 	mkdir -p "$BATS_TEST_TMPDIR/bin" # fake pkill/xrdb/tmux: never touch the developer's terminals
-	for tool in pkill xrdb tmux; do printf '#!/bin/sh\n' >"$BATS_TEST_TMPDIR/bin/$tool" && chmod +x "$BATS_TEST_TMPDIR/bin/$tool"; done
+	for tool in pkill xrdb tmux gsettings i3-msg; do printf '#!/bin/sh\n' >"$BATS_TEST_TMPDIR/bin/$tool" && chmod +x "$BATS_TEST_TMPDIR/bin/$tool"; done
 	export PATH="$BATS_TEST_TMPDIR/bin:$PATH"
 }
 

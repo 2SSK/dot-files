@@ -196,12 +196,13 @@ x_resize() {
 		    permissions: '0755'
 		    content: |
 		      #!/bin/sh
-		      for xauth in /home/*/.Xauthority; do
-		        user=$(stat -c %U "$xauth") home=$(dirname "$xauth")
-		        DISPLAY=:0 XAUTHORITY="$xauth" runuser -u "$user" -- xrandr --output Virtual-1 --auto >/dev/null 2>&1 || continue
-		        [ -x "$home/.fehbg" ] && DISPLAY=:0 XAUTHORITY="$xauth" runuser -u "$user" -- "$home/.fehbg" >/dev/null 2>&1
-		        exit 0
-		      done
+		      # Runs as root from udev: talk to X with the server's own auth file (sddm keeps the
+		      # user's in /tmp), then redraw the wallpaper (feh's ~/.fehbg) at the new size
+		      auth=$(ps -o args= -C Xorg | sed -n 's/.* -auth \([^ ]*\).*/\1/p' | head -n 1)
+		      [ -n "$auth" ] || exit 0
+		      export DISPLAY=:0 XAUTHORITY="$auth"
+		      xrandr --output Virtual-1 --auto >/dev/null 2>&1
+		      for fehbg in /home/*/.fehbg; do [ -x "$fehbg" ] && "$fehbg" >/dev/null 2>&1; done
 		  - path: /etc/udev/rules.d/50-x-resize.rules
 		    content: |
 		      ACTION=="change", SUBSYSTEM=="drm", KERNEL=="card[0-9]*", RUN+="/usr/local/bin/x-resize"

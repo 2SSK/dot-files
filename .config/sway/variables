@@ -9,7 +9,7 @@ set $up k
 set $right l
 
 # Fonts
-font pango:JetbrainsMono Nerd Font Bold 12
+font pango:Inter Medium 10
 
 # Cursor
 set $cursor_theme Bibata-Modern-Ice
@@ -28,20 +28,22 @@ gaps outer 10
 default_border pixel 2
 default_floating_border pixel 0
 
-# Blur, rounded corners, and shadows
-blur enable
-blur_passes 5
-blur_radius 5
-
-corner_radius 20
-
+# Look, matching i3 + picom: rounded corners, soft black shadows, light blur behind translucent
+# windows, short open/close animations, no dimming
+corner_radius 12
 shadows enable
-shadow_offset 0 4
-shadow_color          #7AA2F7
-shadow_inactive_color #1A1B26
+shadow_blur_radius 24
+shadow_offset 0 6
+shadow_color          #00000052
+shadow_inactive_color #00000033
+blur enable
+blur_passes 2
+blur_radius 5
+animation_duration_ms 180
+default_dim_inactive 0
 
-# Animations
-animation_duration_ms 250
+# Tab and stack headers: centred, soft font, some room around the title
+title_align center
+titlebar_padding 12 6
 
-default_dim_inactive 0.1
 for_window [app_id=".*"] opacity 1

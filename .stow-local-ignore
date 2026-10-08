@@ -16,7 +16,3 @@ __pycache__
 # Not stowed yet: the live ~/.claude and ~/.config/opencode stay as they are
 ^/\.claude
 ^/\.config/opencode
-# Held back until the desktop rework: login environment, X resources and GUI fonts
-^/\.profile
-^/\.Xresources
-^/\.config/fontconfig
