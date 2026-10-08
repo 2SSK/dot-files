@@ -6,6 +6,7 @@ kitty                       kitty                       kitty
 copyq                       copyq                       copyq
 libnotify                   libnotify-bin               libnotify
 wireplumber                 wireplumber                 wireplumber
+pipewire-pulse              pipewire-pulse              pipewire-pulseaudio
 brightnessctl               brightnessctl               brightnessctl
 playerctl                   playerctl                   playerctl
 gpu-screen-recorder         @gpu-screen-recorder        @gpu-screen-recorder

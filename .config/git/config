@@ -1,0 +1,67 @@
+# Colours come from the desktop theme; identity and machine-specific settings
+# ([user], credential helper, internal hosts) live in the untracked local.gitconfig.
+[include]
+	path = ~/.local/state/desktop/theme/git.conf
+	path = ~/.config/git/local.gitconfig
+
+[init]
+	defaultBranch = main
+[core]
+	autocrlf = input
+	compression = 9
+	fsync = none
+	whitespace = error
+	pager = delta
+[commit]
+	gpgSign = false
+	template = ~/.config/git/template
+[advice]
+	addEmptyPathspec = false
+	pushNonFastForward = false
+	statusHints = false
+
+[status]
+	branch = true
+	short = true
+	showStash = true
+	showUntrackedFiles = all
+[log]
+	abbrevCommit = true
+[blame]
+	coloring = highlightRecent
+	date = relative
+[diff]
+	context = 3
+	renames = copies
+	interHunkContext = 10
+	colorMoved = default
+[merge]
+	conflictstyle = zdiff3
+[rerere]
+	enabled = true
+[push]
+	autoSetupRemote = true
+	default = current
+[pull]
+	rebase = true
+[rebase]
+	autoStash = true
+[submodule]
+	fetchJobs = 16
+[pager]
+	branch = false
+
+# delta renders diffs; its colours are in the theme include above
+[interactive]
+	diffFilter = delta --color-only
+	singlekey = true
+[delta]
+	navigate = true
+	line-numbers = true
+	syntax-theme = ansi
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

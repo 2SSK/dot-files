@@ -83,6 +83,7 @@ history expansions like `!!` are shown for confirmation before they run.
 | `frg <pattern>` | Search with ripgrep, preview with the match highlighted, `Enter` opens `$EDITOR` at that line |
 | `fgl [git log args]` | Browse the git log graph with commit previews; `Enter` shows the full commit |
 | `fdex [shell]` | Pick a running Docker container and exec into it (`sh` by default) |
+| `y [dir]` | yazi file manager; quitting leaves the shell in the directory you were browsing |
 
 ## Aliases
 
@@ -92,7 +93,7 @@ history expansions like `!!` are shown for confirmation before they run.
 | Colour | `grep`, `diff`, `ip`, `dir`, `vdir` use their built-in colours |
 | Git | `gs` status, `gd` diff, `gds` staged diff, `ga` add, `gap` add patch, `gc` commit, `gp` push, `gu` pull, `gb` branch, `gsw` switch, `gm` merge, `grb` rebase, `gr` reset, `gcl` clone, `gl` log graph |
 | Docker | `dco` compose, `dps` ps, `dpa` ps -a, `dx` exec -it |
-| Tools | `vi` nvim, `t` tmux, `y` yazi, `lg` lazygit, `ldc` lazydocker, `ff` fastfetch, `top` btop |
+| Tools | `vi` nvim, `t` tmux, `lg` lazygit, `ldc` lazydocker, `ff` fastfetch, `top` btop |
 | Shell | `cl` clear, `e` exit, `rel` restart the shell, `nrd` npm run dev |
 
 ## Colours

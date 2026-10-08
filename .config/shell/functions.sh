@@ -14,6 +14,16 @@ cached_init() {
 	source "$cache"
 }
 
+# yazi that leaves the shell in the directory you were browsing when you quit
+y() {
+	local tmp cwd
+	tmp="$(mktemp -t yazi-cwd.XXXXXX)"
+	yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd <"$tmp"
+	if [[ -n $cwd && $cwd != "$PWD" ]]; then cd -- "$cwd" || :; fi # cd reports its own error
+	rm -f -- "$tmp"
+}
+
 # Fuzzy-pick processes to kill
 fkill() {
 	local pids

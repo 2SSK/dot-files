@@ -61,7 +61,14 @@ class Render(unittest.TestCase):
         self.assertEqual(palette["ui"]["bg"], "#eff1f5")
         self.assertEqual(len(palette["ansi"]), 16)
         self.assertEqual(sorted(p.name for p in self.state.iterdir()),
-                         ["current", "foot.ini", "kitty.conf", "palette.json", "st.Xresources"])
+                         ["cava", "current", "foot.ini", "git.conf", "kitty.conf", "lazydocker", "lazygit.yml",
+                          "palette.json", "st.Xresources", "tmux.conf"])
+
+    def test_removes_outputs_of_dropped_targets(self):
+        self.state.mkdir(parents=True, exist_ok=True)
+        (self.state / "btop.theme").write_text("stale")
+        tr.render("tokyonight", "dark", self.state)
+        self.assertFalse((self.state / "btop.theme").exists())
 
     def test_unknown_family_or_mode(self):
         with self.assertRaises(tr.ThemeError):
@@ -77,7 +84,7 @@ class Render(unittest.TestCase):
                     tr.render(family, mode, state)
                     for name in tr.TARGETS:
                         got = (state / name).read_text()
-                        golden = GOLDEN / f"{family}-{mode}" / name
+                        golden = GOLDEN / f"{family}-{mode}" / name.replace("/", "-")
                         if os.environ.get("UPDATE_GOLDEN"):
                             golden.parent.mkdir(parents=True, exist_ok=True)
                             golden.write_text(got)

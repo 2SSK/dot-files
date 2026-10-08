@@ -1,0 +1,34 @@
+-- ==========================================================
+-- .psqlrc - psql Power User Configuration
+-- ==========================================================
+
+-- Timing on every query (invaluable for performance work)
+\timing on
+
+-- Pretty format with borders
+\x auto
+
+-- Better NULL display (no empty spaces)
+\pset null '⟨NULL⟩'
+
+-- Show connection info in prompt
+\set PROMPT1 '%n@%/%R%x%# '
+
+-- History settings
+\set HISTSIZE 10000
+\set HISTFILE ~/.psql_history
+
+-- Auto-commit on (safer for learning)
+\set AUTOCOMMIT on
+
+-- Verbose errors
+\set VERBOSITY verbose
+
+-- Default to expanded mode for wide tables
+\pset expanded auto
+
+-- Use fewer pager results (show all, don't page small results)
+\pset pager
+
+-- Encoding
+\encoding UTF8

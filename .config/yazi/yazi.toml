@@ -1,0 +1,10 @@
+# yazi: only settings that differ from the defaults. No flavor, so it uses the terminal palette.
+[mgr]
+show_hidden = true
+ratio = [1, 3, 4]
+linemode = "size_and_mtime" # defined in init.lua
+
+[preview]
+tab_size = 2
+max_width = 1200
+max_height = 1000

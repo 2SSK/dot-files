@@ -4,8 +4,8 @@
 setup_file() {
 	export HOME="$BATS_FILE_TMPDIR/home"
 	mkdir -p "$HOME"
-	mkdir -p "$BATS_FILE_TMPDIR/bin" # fake pkill/xrdb: never touch the developer's terminals
-	for tool in pkill xrdb; do printf '#!/bin/sh\n' >"$BATS_FILE_TMPDIR/bin/$tool" && chmod +x "$BATS_FILE_TMPDIR/bin/$tool"; done
+	mkdir -p "$BATS_FILE_TMPDIR/bin" # fake pkill/xrdb/tmux: never touch the developer's terminals
+	for tool in pkill xrdb tmux; do printf '#!/bin/sh\n' >"$BATS_FILE_TMPDIR/bin/$tool" && chmod +x "$BATS_FILE_TMPDIR/bin/$tool"; done
 	export PATH="$BATS_FILE_TMPDIR/bin:$PATH"
 	"$BATS_TEST_DIRNAME/../setup.sh" -y --no-packages >/dev/null
 }
@@ -28,7 +28,7 @@ setup() {
 }
 
 @test "zsh loads shared aliases and functions" {
-	run zsh -i -c 'alias gs; whence -w fkill frg fgl fdex cached_init'
+	run zsh -i -c 'alias gs; whence -w y fkill frg fgl fdex cached_init'
 	[ "$status" -eq 0 ]
 	[[ $output == *"git status --short"* ]]
 }

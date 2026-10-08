@@ -23,7 +23,8 @@ ROLES = ("bg", "bg_alt", "surface", "overlay", "fg", "fg_muted", "primary", "on_
          "accent", "success", "warning", "error", "border", "border_active", "selection")
 ANSI = tuple(f"c{i}" for i in range(16))
 # Templates rendered from the active variant; foot.ini gets both variants (live mode switch)
-TARGETS = ("kitty.conf", "foot.ini", "st.Xresources")
+TARGETS = ("kitty.conf", "foot.ini", "st.Xresources", "cava", "tmux.conf", "git.conf", "lazygit.yml",
+           "lazydocker/config.yml")
 
 
 class ThemeError(Exception):
@@ -80,6 +81,7 @@ def variables(theme, family, mode):
 
 
 def write_atomic(path, text):
+    path.parent.mkdir(parents=True, exist_ok=True)
     fd, tmp = tempfile.mkstemp(dir=path.parent, prefix=f".{path.name}.")
     with os.fdopen(fd, "w") as f:
         f.write(text)
@@ -100,6 +102,10 @@ def render(family, mode, state):
     palette = {"meta": theme["meta"], "mode": mode, "ui": theme[mode]["ui"], "ansi": theme[mode]["ansi"]}
     write_atomic(state / "palette.json", json.dumps(palette, indent=2) + "\n")
     write_atomic(state / "current", f"family={family}\nmode={mode}\n")  # last: marks the render complete
+    # The state dir belongs to the renderer: drop outputs of targets that no longer exist
+    for path in state.iterdir():
+        if path.is_file() and path.name not in (*TARGETS, "palette.json", "current") and not path.name.startswith("."):
+            path.unlink()
 
 
 def state_dir():

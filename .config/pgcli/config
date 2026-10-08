@@ -1,0 +1,23 @@
+# pgcli: only settings that differ from the defaults (pgcli loads its defaults first).
+# Colours are ANSI names, so the prompt and menus follow the central theme.
+[main]
+multi_line = True
+multi_line_mode = psql
+destructive_warning = drop, shutdown, delete, truncate, alter, update, unconditional_update
+vi = True
+less_chatty = True
+verbose_errors = True
+prompt = '\x1b[34m\u\x1b[36m@\x1b[35m\d\x1b[0m> '
+multiline_continuation_char = ''
+
+[colors]
+completion-menu.completion.current = 'bg:ansibrightblack ansiblue'
+completion-menu.completion = 'bg:ansiblack ansiwhite'
+completion-menu.meta.completion.current = 'bg:ansibrightblack ansimagenta'
+completion-menu.meta.completion = 'bg:ansiblack ansiwhite'
+completion-menu.multi-column-meta = 'bg:ansibrightblack ansicyan'
+scrollbar.arrow = 'bg:ansibrightblack'
+scrollbar = 'bg:ansiwhite'
+selected = 'ansiblack bg:ansiblue'
+search = 'ansiblack bg:ansiyellow'
+search.current = 'ansiblack bg:ansigreen'
