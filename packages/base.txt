@@ -18,3 +18,4 @@ qt5ct                       qt5ct                       qt5ct
 qt6ct                       qt6ct                       qt6ct
 tela-circle-icon-theme-blue @tela-circle                @tela-circle
 aur:bibata-cursor-theme-bin @bibata                     @bibata
+timeshift                   timeshift                   timeshift
