@@ -7,7 +7,7 @@ setup() {
 	STATE="$XDG_STATE_HOME/desktop/theme"
 	export HOME="$BATS_TEST_TMPDIR/home"
 	mkdir -p "$HOME" "$BATS_TEST_TMPDIR/bin"
-	for tool in pkill xrdb tmux i3-msg; do # fakes record their arguments instead of touching the real session
+	for tool in pkill xrdb tmux i3-msg kitten; do # fakes record their arguments instead of touching the real session
 		printf '#!/bin/sh\necho "%s $*" >>"%s"\n' "$tool" "$BATS_TEST_TMPDIR/signals" >"$BATS_TEST_TMPDIR/bin/$tool"
 		chmod +x "$BATS_TEST_TMPDIR/bin/$tool"
 	done
@@ -18,6 +18,12 @@ setup() {
 	chmod +x "$BATS_TEST_TMPDIR/bin/gsettings"
 	export PATH="$BATS_TEST_TMPDIR/bin:$PATH"
 	unset DISPLAY XDG_CONFIG_HOME
+	export XDG_RUNTIME_DIR="$BATS_TEST_TMPDIR/run"
+	mkdir -p "$XDG_RUNTIME_DIR"
+}
+
+kitty_socket() { # a listening kitty's socket, as kitty.conf's listen_on names it
+	python3 -c 'import socket, sys; socket.socket(socket.AF_UNIX).bind(sys.argv[1])' "$XDG_RUNTIME_DIR/kitty-$1"
 }
 
 signals() { cat "$BATS_TEST_TMPDIR/signals"; }
@@ -26,7 +32,7 @@ signals() { cat "$BATS_TEST_TMPDIR/signals"; }
 	run "$THEME" set catppuccin --mode light
 	[ "$status" -eq 0 ]
 	[ "$(cat "$STATE/current")" = "$(printf 'family=catppuccin\nmode=light')" ]
-	[[ $(signals) == *"pkill -USR1 -x kitty"* ]]
+	[[ $(signals) != *"pkill -USR1 -x kitty"* ]] # a full config reload blinks; colours go over the socket
 	[[ $(signals) == *"pkill -USR2 -x foot"* ]]
 	[[ $(signals) == *"pkill -USR2 -x cava"* ]]
 	[[ $(signals) == *"pkill -USR1 -x nvim"* ]]
@@ -150,4 +156,20 @@ signals() { cat "$BATS_TEST_TMPDIR/signals"; }
 	"$THEME" set gruvbox
 	[ "$(readlink -f "$STATE")" != "$first" ]
 	[ ! -e "$first" ] # the previous render is gone
+}
+
+@test "kitty windows are recoloured over their sockets, nothing else reloads them" {
+	kitty_socket 101
+	kitty_socket 202
+	run "$THEME" set rosepine --mode dark
+	[ "$status" -eq 0 ]
+	[[ $(signals) == *"kitten @ --to unix:$XDG_RUNTIME_DIR/kitty-101 set-colors --all --configured $STATE/kitty.conf"* ]]
+	[[ $(signals) == *"kitten @ --to unix:$XDG_RUNTIME_DIR/kitty-202 set-colors"* ]]
+	[[ $(signals) != *"picom"* ]] # its reset would redraw the whole screen
+}
+
+@test "a switch prints nothing unless something goes wrong" {
+	run "$THEME" set gruvbox
+	[ "$status" -eq 0 ]
+	[ -z "$output" ]
 }

@@ -4,6 +4,7 @@
 # log_info / log_warn / log_error / die with [key=value ...] arguments.
 
 # log <level> <event> [key=value ...] — level: debug | info | warn | error
+# Quiet by default: only warn and error print. DESKTOP_LOG_LEVEL=info (or debug) shows more.
 log() {
     if (( $# < 2 )); then
         printf 'log: usage: log <level> <event> [key=value ...]\n' >&2
@@ -12,6 +13,8 @@ log() {
 
     local level="$1" event="$2"
     shift 2
+    local -A rank=([debug]=0 [info]=1 [warn]=2 [error]=3)
+    (( ${rank[$level]:-3} >= ${rank[${DESKTOP_LOG_LEVEL:-warn}]:-2} )) || return 0
 
     local line="level=$level event=$event"
     [[ -n ${DESKTOP_DISPLAY:-} ]] && line+=" backend=$DESKTOP_DISPLAY"

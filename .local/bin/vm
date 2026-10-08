@@ -165,7 +165,7 @@ base_volume() { # <url or file>: kept once in the default pool, which every VM's
 		if [[ $1 == http* ]]; then # download only what the pool lacks, and drop it once uploaded
 			file="$cache/${1##*/}"
 			mkdir -p "$cache"
-			log_info download url="$1"
+			echo "downloading ${1##*/} (once; later VMs of this distro reuse it)" >&2
 			curl -fL --progress-bar -o "$file" "$1"
 		fi
 		v vol-create-as default "$name" "$(stat -c %s "$file")" --format qcow2 >/dev/null
@@ -339,7 +339,7 @@ cmd_create() {
 	args+=(--cloud-init "user-data=$seed" --disk "size=$(($(mib "$disk") / 1024)),backing_store=$base,format=qcow2,bus=virtio")
 
 	virt-install "${args[@]}" >/dev/null
-	log_info created name="$name" msg='first boot installs packages; give it a few minutes'
+	echo "created $name; its first boot installs packages, give it a few minutes" >&2
 	if ((gui)); then cmd_open "$name"; else echo "log in: vm open $name"; fi
 }
 

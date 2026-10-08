@@ -19,7 +19,10 @@ theme mode toggle                   # dark ⇄ light (also: mode dark|light)
 | catppuccin | mocha | latte |
 | gruvbox | dark | light |
 | rosepine | main | dawn |
-| eink | grey ink on charcoal | dark ink on grey paper; for black-and-white wallpapers |
+| eink | near-white ink on charcoal | near-black ink on warm paper; for black-and-white wallpapers |
+| kanagawa | wave | lotus |
+| everforest | medium dark | medium light |
+| flexoki | dark | light |
 
 Palette values are copied from each project's official ports, with attribution in
 `~/.local/share/desktop/themes/<family>.toml`. Every variant passes WCAG AA contrast
