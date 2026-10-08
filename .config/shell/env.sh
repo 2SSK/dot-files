@@ -17,6 +17,9 @@ export EDITOR=nvim VISUAL=nvim SUDO_EDITOR=nvim
 export TERMINAL=kitty
 export PAGER=less LESS='-R --mouse' MANPAGER='nvim +Man!'
 export BAT_THEME=ansi # follows the terminal palette
+# Qt apps follow the desktop theme through qt5ct/qt6ct (qt6ct also answers to "qt5ct"); one cursor everywhere
+export QT_QPA_PLATFORMTHEME=qt5ct
+export XCURSOR_THEME=Bibata-Modern-Ice XCURSOR_SIZE=24
 export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship.toml" # explicit, so an inherited value (e.g. from an old tmux server) never wins
 export PNPM_HOME="$XDG_DATA_HOME/pnpm"
 export LG_CONFIG_FILE="$XDG_CONFIG_HOME/lazygit/config.yml,$XDG_STATE_HOME/desktop/theme/lazygit.yml"

@@ -5,3 +5,7 @@
 st.font: JetBrainsMono Nerd Font:size=14:antialias=true:autohint=true
 st.borderpx: 16
 st.chscale: 1.1
+
+! Cursor for X apps (GTK gets it from xsettingsd, Qt and the rest from XCURSOR_* in shell/env.sh)
+Xcursor.theme: Bibata-Modern-Ice
+Xcursor.size: 24

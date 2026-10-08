@@ -40,8 +40,11 @@ Palette values are copied from each project's official ports, with attribution i
 | cava | `cava` alias loads the rendered config (gradient from the ANSI colours) | Live (SIGUSR2) |
 | i3 window borders | `include` of the rendered `i3.conf` | Live (`i3-msg reload`) |
 | picom (i3): shadow colours | Started with the rendered `picom.conf` | Live (SIGUSR1) |
-| GTK icons, cursor, fonts (X11) | xsettingsd reads the rendered `xsettingsd.conf`: Tela-circle-blue dark/light, Bibata-Modern-Ice | Live (SIGHUP) |
-| Quickshell, sway borders, GTK, Qt | `palette.json` and further templates | Coming in later stages |
+| GTK theme, icons, cursor, fonts | X11: xsettingsd reads the rendered `xsettingsd.conf`; Wayland: `gsettings` (org.gnome.desktop.interface). adw-gtk3, Tela-circle-blue dark/light, Bibata-Modern-Ice, Inter / JetBrains Mono | Live |
+| GTK 3 | adw-gtk3 (dark or light) with its named colours from the rendered `gtk-3.0.css` (`~/.config/gtk-3.0/gtk.css` links to it) | Dark/light live; colours on app restart |
+| GTK 4 / libadwaita | libadwaita's CSS variables in the rendered `gtk-4.0.css` (`~/.config/gtk-4.0/gtk.css` links to it); `gsettings` color-scheme | Dark/light live; colours on app restart |
+| Qt 5 / Qt 6 | `QT_QPA_PLATFORMTHEME=qt5ct` (qt6ct answers to it too); `~/.config/qt{5,6}ct/qt{5,6}ct.conf` link to rendered configs: Fusion, the rendered `qt-colors.conf`, Tela icons, Inter | On app restart |
+| Quickshell, sway borders | `palette.json` and further templates | Coming in later stages |
 
 ## Files
 
@@ -73,3 +76,10 @@ rounded pill, and one hint line with the countdown. It sets `GRUB_THEME` and gra
 in `/etc/default/grub` (the original is kept as `grub.pre-desktop`; a serial console is left
 alone) and regenerates `grub.cfg` (`grub-mkconfig`, `update-grub` or `grub2-mkconfig`).
 GRUB can't follow the theme live: run it again after `theme set` to update the colours.
+
+## GTK and Qt
+
+`theme` links the fixed paths GTK and qt5ct/qt6ct read to the rendered files. An existing file there
+that isn't one of these links is moved to `~/.local/state/desktop/backup/theme/` first, never deleted.
+Don't save settings from the qt5ct/qt6ct windows: they would write into the rendered file, and the
+next `theme` overwrites it. Change the templates instead.
