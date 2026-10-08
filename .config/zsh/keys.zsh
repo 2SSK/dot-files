@@ -15,16 +15,17 @@ autoload -Uz edit-command-line
 zle -N edit-command-line
 bindkey -M vicmd v edit-command-line
 
-# Ctrl+k / Ctrl+j (and arrows): history search by the typed prefix
+# Ctrl+p / Ctrl+n (and arrows): history search by the typed prefix.
+# Ctrl+h/j/k/l are left to tmux for moving between panes (vim-tmux-navigator).
 autoload -Uz up-line-or-beginning-search down-line-or-beginning-search
 zle -N up-line-or-beginning-search
 zle -N down-line-or-beginning-search
-bindkey '^k' up-line-or-beginning-search '^[[A' up-line-or-beginning-search
-bindkey '^j' down-line-or-beginning-search '^[[B' down-line-or-beginning-search
+bindkey '^p' up-line-or-beginning-search '^[[A' up-line-or-beginning-search
+bindkey '^n' down-line-or-beginning-search '^[[B' down-line-or-beginning-search
 
-# Autosuggestions: Ctrl+e accept, Ctrl+w accept and run, Ctrl+u toggle
+# Autosuggestions: Ctrl+e accept, Alt+l accept the next word, Ctrl+w accept and run, Ctrl+u toggle
 bindkey '^e' autosuggest-accept '^w' autosuggest-execute '^u' autosuggest-toggle
-bindkey '^l' vi-forward-word
+bindkey '^[l' vi-forward-word
 
 # Alt+s: toggle sudo in front of the line (or the previous command when empty)
 _sudo() {

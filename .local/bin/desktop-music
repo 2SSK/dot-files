@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Pick a folder in ~/Music, play it shuffled through mpd, and open the player (rmpc).
+# usage: desktop-music [folder]
+set -euo pipefail
+
+lib="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")/../lib/desktop" && pwd)"
+# shellcheck source-path=SCRIPTDIR/../.. source=.local/lib/desktop/log.sh
+source "$lib/log.sh"
+
+music="${XDG_MUSIC_DIR:-$HOME/Music}"
+case ${1:-} in
+-h | --help) echo 'usage: desktop-music [folder under ~/Music]' && exit 0 ;;
+esac
+
+folder=${1:-}
+if [[ -z $folder ]]; then
+	folder="$(cd "$music" && find . -mindepth 1 -maxdepth 1 -type d -not -name '.*' -printf '%P\n' | sort |
+		fzf --prompt='♪ ' --header='pick a folder to play' --no-multi \
+			--preview='find {} -type f | sed "s|.*/||; s|\.[^.]*$||" | sort' --preview-label=' tracks ')" || exit 0
+fi
+[[ -d $music/$folder ]] || die no_folder path="$music/$folder"
+
+mpc -q update --wait "$folder"
+mpc -q clear
+mpc -q add "$folder"
+mpc -q random on
+mpc -q play
+exec rmpc

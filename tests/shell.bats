@@ -33,8 +33,8 @@ setup() {
 	[[ $output == *"git status --short"* ]]
 }
 
-@test "bash starts without errors, in vi mode, with shared aliases" {
-	run bash -i -c 'shopt -qo vi && alias gs && echo "$HISTFILE"' 2>&1
+@test "bash starts without errors, with shared aliases and history" {
+	run bash -i -c 'alias gs && echo "$HISTFILE"' 2>&1
 	[ "$status" -eq 0 ]
 	[[ $output == *"git status --short"* ]]
 	[[ $output == *"$HOME/.local/state/bash/history" ]]

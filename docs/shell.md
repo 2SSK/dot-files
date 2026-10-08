@@ -1,8 +1,7 @@
 # Shell
 
-zsh is the default shell; bash is a full fallback with the same features through
-[ble.sh](https://github.com/akinomyoga/ble.sh). Both share one environment, one set of
-aliases and functions, and one [starship](https://starship.rs) prompt.
+zsh is the primary shell. bash is kept simple: the same environment, aliases, functions
+and [starship](https://starship.rs) prompt, with history, but no plugins or vim mode.
 
 ## Layout
 
@@ -14,12 +13,12 @@ aliases and functions, and one [starship](https://starship.rs) prompt.
 | `~/.config/shell/functions.sh` | Fuzzy helpers for both shells |
 | `~/.config/shell/fzf.sh` | fzf options for both shells |
 | `~/.config/zsh/` | `.zshrc` and its modules: `options`, `completion`, `keys`, `plugins`, `tools` |
-| `~/.bashrc`, `~/.config/bash/` | bash modules: `options`, `keys`, `tools` |
+| `~/.bashrc`, `~/.config/bash/` | bash modules: `options` (history), `tools` (starship) |
 | `~/.config/starship.toml` | Prompt |
 | `~/.config/zsh/local.zsh`, `~/.config/bash/local.bash` | Machine-only settings and secrets (untracked) |
 
-Plugins are pinned to release tags in `packages/plugins.txt` and installed by `setup.sh`:
-zsh-autosuggestions, zsh-syntax-highlighting and fzf-tab for zsh, ble.sh for bash.
+zsh plugins are pinned to release tags in `packages/plugins.txt` and installed by
+`setup.sh`: zsh-autosuggestions, zsh-syntax-highlighting and fzf-tab.
 
 ## Prompt
 
@@ -52,11 +51,11 @@ All normal vim motions and edits work on the command line (`w`, `b`, `0`, `$`, `
 
 | Key | Action |
 | --- | --- |
-| `Ctrl+k` / `Ctrl+j`, `↑` / `↓` | Search history for lines starting with what you typed |
+| `Ctrl+p` / `Ctrl+n`, `↑` / `↓` | Search history for lines starting with what you typed |
 | `Ctrl+r` | Fuzzy-search all history (fzf) |
 | `Ctrl+e` | Accept the grey suggestion |
 | `Ctrl+w` | Accept the suggestion and run it |
-| `Ctrl+l` | Accept the next word of the suggestion *(zsh)* |
+| `Alt+l` | Accept the next word of the suggestion |
 | `Ctrl+u` | Turn suggestions on or off *(zsh)* |
 
 History is shared between open zsh sessions, deduplicated, and stored in
@@ -67,13 +66,16 @@ history expansions like `!!` are shown for confirmation before they run.
 
 | Key / command | Action |
 | --- | --- |
-| `Tab` | Completion menu: fzf-tab in zsh (type to filter, `<` `>` switch groups, previews for `cd`/`ls`), ble.sh menu in bash |
+| `Tab` | Completion menu with fzf-tab (type to filter, `<` `>` switch groups, previews for `cd`/`ls`) *(zsh)* |
 | `Ctrl+t` | Insert a file path chosen with fzf (bat preview) |
 | `Alt+c` | `cd` into a directory chosen with fzf |
 | `cd <part>` | Jump to the most used directory matching `<part>` (zoxide) |
 | `cdi` | Pick a directory interactively (zoxide) |
 | `<dir>` | Typing a directory name alone enters it |
 | `Alt+s` | Toggle `sudo` in front of the line; on an empty line, use the previous command *(zsh)* |
+
+`Ctrl+h/j/k/l` are reserved for moving between tmux panes and nvim splits
+([tmux.md](tmux.md)).
 
 ## Functions
 
