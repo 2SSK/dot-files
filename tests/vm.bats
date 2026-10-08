@@ -164,7 +164,7 @@ vi_args() { grep '^virt-install' "$CALLS"; }
 @test "help: short by default, details per command" {
 	run "$VM"
 	[ "$status" -eq 0 ]
-	[[ $output == *"vm help <command>"* && $output != *"--image"* ]]
+	[[ $output == *"vm guide"* && $output != *"--image"* ]]
 	[ "${#lines[@]}" -lt 20 ]
 	run "$VM" help create
 	[[ $output == *"--share <dir>[:tag][:rw]"* ]]
@@ -175,6 +175,6 @@ vi_args() { grep '^virt-install' "$CALLS"; }
 @test "an unknown command is a usage error, not virsh" {
 	run "$VM" snapshot-list box
 	[ "$status" -eq 2 ]
-	[[ $output == *"event=unknown_command"* && $output == *"vm create <name>"* ]]
+	[[ $output == *"event=unknown_command"* && $output == *"vm console <name>"* ]]
 	[ ! -e "$CALLS" ] # virsh never ran
 }
