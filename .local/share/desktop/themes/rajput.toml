@@ -1,0 +1,83 @@
+# Rajput: an original palette for this desktop. Dark is a Rajput miniature at night: deep indigo ink,
+# sandstone-ivory text, gold leaf and turmeric, vermilion (sindoor), peacock teal, mehendi green.
+# Light is Indian watercolour on handmade paper: ivory paper, sepia ink, terracotta and peacock washes,
+# ochre. Muted on purpose; every text colour meets WCAG AA on its background.
+# Source: this repository  License: MIT
+
+[meta]
+family = "rajput"
+name = "Rajput"
+source = "this repository"
+license = "MIT"
+
+[dark.ui]
+bg = "#1b1a2e"
+bg_alt = "#141325"
+surface = "#26243d"
+overlay = "#33304d"
+fg = "#e8dcc4"
+fg_muted = "#9d927f"
+primary = "#e0a458"
+on_primary = "#1b1a2e"
+secondary = "#4fa3a5"
+accent = "#d9644a"
+success = "#8fae6b"
+warning = "#e9c46a"
+error = "#e05a4f"
+border = "#3a3656"
+border_active = "#c8963e"
+selection = "#3d3a5c"
+
+[dark.ansi]
+c0 = "#26243d"
+c1 = "#d9644a"
+c2 = "#8fae6b"
+c3 = "#e0a458"
+c4 = "#7f9bd0"
+c5 = "#c983a8"
+c6 = "#4fa3a5"
+c7 = "#e8dcc4"
+c8 = "#7a738f"
+c9 = "#ec7a5e"
+c10 = "#a6c482"
+c11 = "#f0c27b"
+c12 = "#9cb3e0"
+c13 = "#dba0bf"
+c14 = "#6cbcbd"
+c15 = "#f5ecd9"
+
+[light.ui]
+bg = "#f4ecdc"
+bg_alt = "#ece2cd"
+surface = "#e4d7bd"
+overlay = "#d8c9ab"
+fg = "#3b2f2a"
+fg_muted = "#76624f"
+primary = "#a94a2a"
+on_primary = "#f4ecdc"
+secondary = "#2f6f73"
+accent = "#a77a24"
+success = "#5f7d3a"
+warning = "#9a6b16"
+error = "#b23a3a"
+border = "#d2c2a2"
+border_active = "#a94a2a"
+selection = "#e6d2b0"
+
+[light.ansi]
+c0 = "#3b2f2a"
+c1 = "#b23a3a"
+c2 = "#5a7836"
+c3 = "#8f6312"
+c4 = "#34558b"
+c5 = "#8e4a72"
+c6 = "#2c6a6e"
+c7 = "#d8c9ab"
+c8 = "#76624f"
+c9 = "#b84a33"
+c10 = "#62803c"
+c11 = "#946818"
+c12 = "#3f5f96"
+c13 = "#94507a"
+c14 = "#336f74"
+c15 = "#e4d7bd"

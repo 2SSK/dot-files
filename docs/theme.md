@@ -21,8 +21,7 @@ theme mode toggle                   # dark ⇄ light (also: mode dark|light)
 | rosepine | main | dawn |
 | eink | near-white ink on charcoal | near-black ink on warm paper; for black-and-white wallpapers |
 | kanagawa | wave | lotus |
-| everforest | medium dark | medium light |
-| flexoki | dark | light |
+| rajput | a Rajput miniature at night: indigo ink, gold leaf, vermilion, peacock | Indian watercolour on handmade paper |
 
 Palette values are copied from each project's official ports, with attribution in
 `~/.local/share/desktop/themes/<family>.toml`. Every variant passes WCAG AA contrast
