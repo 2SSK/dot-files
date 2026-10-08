@@ -13,5 +13,6 @@ __pycache__
 ^/setup\.sh
 ^/\.github
 ^/\.claude/settings\.local\.json
-^/trial\.sh
-^/switch\.sh
+# Not stowed yet: the live ~/.claude and ~/.config/opencode stay as they are
+^/\.claude
+^/\.config/opencode
