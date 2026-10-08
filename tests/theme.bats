@@ -23,7 +23,7 @@ signals() { cat "$BATS_TEST_TMPDIR/signals"; }
 
 @test "set keeps the current mode when --mode is omitted" {
 	"$THEME" set gruvbox --mode light
-	run "$THEME" set rose-pine
+	run "$THEME" set rosepine
 	[ "$status" -eq 0 ]
 	grep -qx 'mode=light' "$STATE/current"
 }
@@ -53,7 +53,7 @@ signals() { cat "$BATS_TEST_TMPDIR/signals"; }
 	run "$THEME" list
 	[ "$status" -eq 0 ]
 	[[ $output == *"* catppuccin"* ]]
-	[[ $output == *"  gruvbox"* && $output == *"  rose-pine"* && $output == *"  tokyonight"* ]]
+	[[ $output == *"  gruvbox"* && $output == *"  rosepine"* && $output == *"  eink"* && $output == *"  tokyonight"* ]]
 }
 
 @test "unknown family fails and leaves the theme unchanged" {
