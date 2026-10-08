@@ -31,6 +31,7 @@ Palette values are copied from each project's official ports, with attribution i
 | --- | --- | --- |
 | kitty | `include` of the rendered `kitty.conf` | Live (SIGUSR1) |
 | foot | `include` of the rendered `foot.ini` with dark and light variants | Mode live (SIGUSR1/2); family in new windows |
+| st | `~/.Xresources` includes the rendered `st.Xresources`; `xrdb -merge` + SIGUSR1 (reload patch) | Live on X11 |
 | starship, fzf, zsh autosuggestions, `ls`, bat, btop | The terminal's 16 ANSI colours | With the terminal |
 | Quickshell, WM borders, GTK, Qt, nvim | `palette.json` and further templates | Coming in later stages |
 
@@ -42,9 +43,16 @@ Palette values are copied from each project's official ports, with attribution i
 | `~/.local/share/desktop/templates/` | One template per rendered target |
 | `~/.local/state/desktop/theme/current` | `family=` and `mode=` of the active theme |
 | `~/.local/state/desktop/theme/palette.json` | Active variant for apps that read JSON |
-| `~/.local/state/desktop/theme/kitty.conf`, `foot.ini` | Rendered terminal colours |
+| `~/.local/state/desktop/theme/kitty.conf`, `foot.ini`, `st.Xresources` | Rendered terminal colours |
 
 ## Fonts
 
 fontconfig maps `sans-serif` to **Inter** for interface text and `monospace` to
 **JetBrainsMono Nerd Font** for terminals and code, with Noto Color Emoji as fallback.
+
+## Terminals
+
+kitty is the main terminal on both sessions. The backups are foot on Wayland and st on X11;
+st is built from the pinned 0.9.3 release with the
+[xresources-with-reload-signal](https://st.suckless.org/patches/xresources-with-reload-signal/)
+patch (`packages/extra/st.sh`), and reads its font, padding and colours from `~/.Xresources`.

@@ -1,14 +1,18 @@
 #!/usr/bin/env bats
-# desktop-theme: the central theme selector. A fake pkill records reload signals.
+# desktop-theme: the central theme selector. Fake pkill and xrdb record what would be reloaded.
 
 setup() {
 	THEME="$BATS_TEST_DIRNAME/../.local/bin/desktop-theme"
 	export XDG_STATE_HOME="$BATS_TEST_TMPDIR/state"
 	STATE="$XDG_STATE_HOME/desktop/theme"
-	mkdir -p "$BATS_TEST_TMPDIR/bin"
-	printf '#!/bin/sh\necho "$*" >>"%s"\n' "$BATS_TEST_TMPDIR/signals" >"$BATS_TEST_TMPDIR/bin/pkill"
-	chmod +x "$BATS_TEST_TMPDIR/bin/pkill"
+	export HOME="$BATS_TEST_TMPDIR/home"
+	mkdir -p "$HOME" "$BATS_TEST_TMPDIR/bin"
+	for tool in pkill xrdb; do # fakes record their arguments instead of touching the real session
+		printf '#!/bin/sh\necho "%s $*" >>"%s"\n' "$tool" "$BATS_TEST_TMPDIR/signals" >"$BATS_TEST_TMPDIR/bin/$tool"
+		chmod +x "$BATS_TEST_TMPDIR/bin/$tool"
+	done
 	export PATH="$BATS_TEST_TMPDIR/bin:$PATH"
+	unset DISPLAY
 }
 
 signals() { cat "$BATS_TEST_TMPDIR/signals"; }
@@ -17,8 +21,18 @@ signals() { cat "$BATS_TEST_TMPDIR/signals"; }
 	run "$THEME" set catppuccin --mode light
 	[ "$status" -eq 0 ]
 	[ "$(cat "$STATE/current")" = "$(printf 'family=catppuccin\nmode=light')" ]
-	[[ $(signals) == *"-USR1 -x kitty"* ]]
-	[[ $(signals) == *"-USR2 -x foot"* ]]
+	[[ $(signals) == *"pkill -USR1 -x kitty"* ]]
+	[[ $(signals) == *"pkill -USR2 -x foot"* ]]
+	[[ $(signals) != *"xrdb"* ]] # no X display: st is left alone
+}
+
+@test "with an X display, st gets the new colours through xrdb" {
+	echo '! test' >"$HOME/.Xresources"
+	DISPLAY=:99 run "$THEME" set gruvbox
+	[ "$status" -eq 0 ]
+	[[ $(signals) == *"xrdb -merge $HOME/.Xresources"* ]]
+	[[ $(signals) == *"pkill -USR1 -x st"* ]]
+	grep -qx 'st.background: #282828' "$STATE/st.Xresources"
 }
 
 @test "set keeps the current mode when --mode is omitted" {
