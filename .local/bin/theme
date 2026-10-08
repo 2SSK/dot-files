@@ -99,10 +99,6 @@ main() {
 			mode=$4
 		elif [[ -n ${3:-} ]]; then
 			usage >&2 && exit 2
-		else # keep the current mode, unless the family doesn't have it (some are dark only)
-			local available
-			available="$(python3 "$lib/theme_render.py" modes "$family")" || exit 1
-			[[ " $available " == *" $mode "* ]] || mode=${available%% *}
 		fi
 		apply "$family" "$mode"
 		;;
@@ -115,12 +111,10 @@ main() {
 		apply "$family" "$mode"
 		;;
 	list)
-		local f name only
+		local f name
 		for f in "$themes"/*.toml; do
 			name="$(basename "$f" .toml)"
-			only=''
-			grep -q '^\[light\.ui\]' "$f" || only=' (dark only)'
-			if [[ $name == "$family" ]]; then echo "* $name$only"; else echo "  $name$only"; fi
+			if [[ $name == "$family" ]]; then echo "* $name"; else echo "  $name"; fi
 		done
 		;;
 	current) echo "$family $mode" ;;

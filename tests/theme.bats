@@ -173,16 +173,3 @@ signals() { cat "$BATS_TEST_TMPDIR/signals"; }
 	[ "$status" -eq 0 ]
 	[ -z "$output" ]
 }
-
-@test "dark-only themes: set picks dark, mode light refuses and changes nothing" {
-	"$THEME" set gruvbox --mode light
-	run "$THEME" set vesper
-	[ "$status" -eq 0 ]
-	[ "$(cat "$STATE/current")" = "$(printf 'family=vesper\nmode=dark')" ]
-	run "$THEME" mode light
-	[ "$status" -eq 1 ]
-	[[ $output == *"vesper has no light variant"* ]]
-	grep -qx 'mode=dark' "$STATE/current"
-	run "$THEME" list
-	[[ $output == *"* vesper (dark only)"* && $output == *"  github"* && $output != *"github (dark only)"* ]]
-}
