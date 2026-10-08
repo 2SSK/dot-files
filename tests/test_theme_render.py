@@ -63,7 +63,7 @@ class Render(unittest.TestCase):
         self.assertEqual(sorted(p.name for p in self.state.iterdir()),
                          ["cava", "current", "foot.ini", "git.conf", "kitty.conf", "lazydocker", "lazygit.yml",
                           "nvim.lua", "palette.json", "pspg", "rmpc.ron", "silicon.tmTheme", "st.Xresources",
-                          "tmux.conf"])
+                          "tmux.conf", "vim.vim"])
 
     def test_removes_outputs_of_dropped_targets(self):
         self.state.mkdir(parents=True, exist_ok=True)
@@ -83,6 +83,12 @@ class Render(unittest.TestCase):
         theme = (self.state / "silicon.tmTheme").read_text()
         self.assertIn("<string>#282828</string>", theme)  # gruvbox dark bg
         self.assertIn("<string>comment</string>", theme)
+
+    def test_vim_gets_a_transparent_colourscheme(self):
+        tr.render("tokyonight", "dark", self.state)
+        vim = (self.state / "vim.vim").read_text()
+        self.assertIn("hi Normal       guifg=#c0caf5 guibg=NONE", vim)
+        self.assertIn("hi LineNr       guifg=#3b4261 guibg=NONE", vim)
 
     def test_unknown_family_or_mode(self):
         with self.assertRaises(tr.ThemeError):

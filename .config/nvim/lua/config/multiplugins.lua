@@ -17,6 +17,13 @@ return {
 				mode = "tabs",
 				show_buffer_close_icons = false,
 			},
+			highlights = function(defaults) -- transparent bar, like the rest of the UI
+				local hl = {}
+				for name, spec in pairs(defaults.highlights) do
+					hl[name] = vim.tbl_extend("force", spec, { bg = "NONE" })
+				end
+				return hl
+			end,
 		},
 	},
 	{

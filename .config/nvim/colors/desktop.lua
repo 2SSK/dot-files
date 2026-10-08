@@ -4,5 +4,8 @@ if not theme then
 	error("no desktop theme rendered yet (run `theme`)")
 end
 vim.o.background = theme.background
-require("mini.base16").setup({ palette = theme.palette })
+require("mini.base16").setup({
+	palette = theme.palette,
+	plugins = { default = true, ["akinsho/bufferline.nvim"] = false }, -- bufferline stays transparent
+})
 vim.g.colors_name = "desktop"

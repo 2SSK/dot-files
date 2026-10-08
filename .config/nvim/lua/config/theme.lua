@@ -20,7 +20,10 @@ function M.setup()
 	vim.api.nvim_create_autocmd("ColorScheme", {
 		group = vim.api.nvim_create_augroup("desktop-theme", { clear = true }),
 		callback = function()
-			for _, group in ipairs({ "Normal", "NormalNC", "NormalFloat", "FloatBorder", "SignColumn", "EndOfBuffer" }) do
+			for _, group in ipairs({
+				"Normal", "NormalNC", "NormalFloat", "FloatBorder", "SignColumn", "FoldColumn", "EndOfBuffer",
+				"LineNr", "LineNrAbove", "LineNrBelow", "CursorLineNr", "TabLine", "TabLineFill",
+			}) do
 				local hl = vim.api.nvim_get_hl(0, { name = group, link = false })
 				hl.bg = nil
 				vim.api.nvim_set_hl(0, group, hl)

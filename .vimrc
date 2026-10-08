@@ -1,5 +1,5 @@
-" vim: a light fallback editor. Colours come from the terminal's 16-colour palette, so vim follows
-" the desktop theme like every other terminal app. nvim is the main editor (~/.config/nvim).
+" Fallback editor that follows the desktop theme like every other terminal app.
+" nvim is the main editor (~/.config/nvim).
 
 " Options
 set encoding=utf-8 fileencoding=utf-8
@@ -16,15 +16,21 @@ set backspace=indent,eol,start iskeyword+=- conceallevel=0
 set spelllang=en_us,de_de,es_es
 set laststatus=2 statusline=%f%=%l/%L
 
-" Colours: terminal palette, transparent background
-set notermguicolors background=dark
+" Colours: the desktop theme (rendered by `theme`), transparent background. vim only handles
+" signals on the next keypress, so a timer checks once a second whether the theme changed.
+set termguicolors
 syntax on
-colorscheme default
-augroup transparent | autocmd!
-	autocmd ColorScheme * highlight Normal ctermbg=NONE | highlight NonText ctermbg=NONE
-		\ | highlight LineNr ctermbg=NONE | highlight SignColumn ctermbg=NONE | highlight EndOfBuffer ctermbg=NONE
-augroup END
-doautocmd ColorScheme
+let s:theme = (empty($XDG_STATE_HOME) ? $HOME . '/.local/state' : $XDG_STATE_HOME) . '/desktop/theme/vim.vim'
+let s:theme_time = -1
+function! s:ApplyTheme(...) abort
+	let l:time = getftime(s:theme)
+	if l:time == s:theme_time | return | endif
+	let s:theme_time = l:time
+	if l:time < 0 | colorscheme default | else | execute 'source' fnameescape(s:theme) | endif
+	if a:0 | redraw! | endif
+endfunction
+call s:ApplyTheme()
+call timer_start(1000, function('s:ApplyTheme'), {'repeat': -1})
 
 " Beam cursor in insert mode, block elsewhere
 let &t_SI = "\e[6 q"

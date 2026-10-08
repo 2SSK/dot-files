@@ -1,56 +1,157 @@
 # Neovim
 
-Config: `~/.config/nvim` (lazy.nvim, plugins pinned in `lazy-lock.json`). Colours are the desktop
-theme's palette: `theme` renders it, `colors/desktop.lua` applies it with mini.base16, and running
-nvims switch live. vim (`~/.vimrc`) follows the theme through the terminal palette.
+nvim is the main editor; vim (`~/.vimrc`) is a light fallback with the same basic keys. Both
+follow the desktop theme live with a transparent background: run `theme set <family>` and
+every open nvim and vim switches.
 
-## Plugins (25)
+## Layout
 
-| Area | Plugins |
+| Path | Purpose |
 | --- | --- |
-| Core | lazy.nvim |
-| Picker, dashboard, explorer, notifications, zen, git blame, indent guides | snacks.nvim |
-| Editing, diff signs, colour and TODO highlights, icons, colourscheme | mini.nvim |
-| Completion | blink.cmp, friendly-snippets |
-| LSP, formatters, linters | nvim-lspconfig, mason.nvim, mason-lspconfig.nvim, mason-tool-installer.nvim, lazydev.nvim, conform.nvim, nvim-lint |
-| Syntax | nvim-treesitter (main), nvim-treesitter-textobjects |
-| UI | lualine.nvim, bufferline.nvim (tabs), which-key.nvim, tiny-cmdline.nvim |
-| Files and navigation | oil.nvim, vim-tmux-navigator, auto-session |
-| Git conflicts | git-conflict.nvim |
-| Markdown | render-markdown.nvim, markdown-preview.nvim |
-| Code screenshots | nvim-silicon (theme background and a code theme rendered from the palette) |
+| `~/.config/nvim/init.lua` | Loads `core`, then lazy.nvim, then the theme |
+| `lua/core/` | `options`, `keymaps`, `terminal` (no plugins needed) |
+| `lua/config/plugins/` | One file per plugin or area |
+| `lua/config/multiplugins.lua` | Small plugins: bufferline, git-conflict, silicon, tmux navigator, cmdline |
+| `lua/config/theme.lua`, `colors/desktop.lua` | Desktop theme: palette → mini.base16, transparency, live reload |
+| `plugin/floatterminal.lua` | Floating terminal |
+| `lazy-lock.json` | Pinned plugin versions |
+| `~/.vimrc` | vim: options, keys, netrw, the theme's `vim.vim` |
 
-Built into Neovim 0.12 instead of plugins: Copilot suggestions (inline completion with
-`copilot-language-server` from Mason), folding (LSP and treesitter), and visual-mode `an` / `in`
-to grow or shrink the selection by syntax node.
+The theme engine renders `nvim.lua` (base16 palette), `vim.vim` and `silicon.tmTheme` into
+`~/.local/state/desktop/theme/`. nvim reloads on SIGUSR1 from `theme`; vim checks the file
+once a second.
+
+## Look
+
+- Colours from the desktop palette; transparent background, line numbers and tab bar.
+- Status line (lualine) with rounded section edges; tab bar (bufferline) on top.
+- Only the indent line of the scope under the cursor is drawn.
+- Messages and the command line in a floating line (`cmdheight=0`), notifications as pop-ups,
+  prompts in floating windows, a start dashboard.
+
+## Features
+
+**Finding** (snacks picker, ivy layout at the bottom, 70% of the screen)
+- Files (hidden and ignored included, junk excluded), recent files, live grep with glob
+  filters (`pattern -- -g *.lua`), word under cursor, buffers, TODOs, help, lines in the buffer.
+- File explorer sidebar on the right with git status; oil (`-`) edits a directory like a buffer.
+
+**Editing**
+- Completion menu (blink.cmp): LSP, paths, snippets (friendly-snippets), buffer words, with docs.
+- Copilot as ghost text: accept, reject, cycle suggestions or ask for a new one.
+- Auto pairs, surround (`sa` add, `sd` delete, `sr` replace), move lines with `Alt+h/j/k/l`.
+- Text objects: `af`/`if` function, `ac`/`ic` class, `aa`/`ia` argument, quotes and brackets
+  (mini.ai); `an`/`in` in visual mode grow or shrink the selection by syntax node.
+- TODO/FIXME/HACK/NOTE highlighted; hex colours shown in their colour.
+
+**Code**
+- LSP: Lua, Python, TS/JS, Go, C/C++, Rust, Zig, Svelte, Tailwind, GraphQL, HTML/CSS, Emmet,
+  Copilot. Mason installs the servers.
+- Format on save (prettier, stylua, black + isort, beautysh), linting (nvim-lint).
+- Treesitter highlighting, indentation and folding for 30 languages; folds start open.
+
+**Git**
+- Changed lines in the sign column; inline diff overlay.
+- Status, log and file history pickers; blame for the current line; GitHub issues and PRs.
+- Merge conflicts highlighted, resolved with two keys, listed in the quickfix list.
+
+**Workflow**
+- Splits, tabs, a terminal below or floating; `Ctrl+h/j/k/l` crosses nvim splits and tmux panes.
+- Per-project sessions, zen mode, markdown rendered in place plus a browser preview.
+- Code screenshots of a selection in the theme's colours (saved to the current directory).
 
 ## Keys
 
-Leader is Space. `Space ?` shows the keys of the current buffer; which-key lists the groups.
+Leader is `Space`. Press it and wait to see every group (which-key); `Space ?` lists the
+keys of the current buffer.
 
-| Group | Keys |
+### Everyday
+
+| Key | Action |
 | --- | --- |
-| Files | `w` save, `q` quit, `Q` quit all, `-` / `Space -` parent directory (oil) |
-| `f` Find | `ff` files, `fr` recent, `fs` grep (`pattern -- -g *.lua`), `fc` word under cursor, `fb` buffers, `ft` TODOs, `fh` help, `Space /` lines |
-| `e` Explorer | `ee` file explorer, `en` nvim config |
-| `c` Code | `ca` action, `cr` rename, `cf` format, `cl` lint, `cd` line diagnostics, `cs` symbols, `cR` restart LSP, `cx` run `./run.sh` on the file |
-| `x` Lists | `xx` diagnostics, `xX` buffer diagnostics, `xL` location list, `xQ` quickfix |
-| `g` Git | `gs` status, `gl` log, `gf` file history, `gb` blame line, `gd` diff overlay, `gx` list conflicts, `gi` / `gI` issues, `gp` / `gP` pull requests |
-| `u` UI | `un` dismiss notifications, `uh` notification history, `uz` zen |
-| `s` Splits | `sv` / `sh` split, `se` equalise, `sx` close, `st` terminal below; `ss` (visual) screenshot |
-| `t` Tabs | `to` new, `tx` close, `tf` buffer in new tab, `tt` floating terminal; `Shift+h/l` previous / next |
-| `S` Session | `Sr` restore, `Ss` save |
-| `m` Markdown | `md` preview in the browser |
-| LSP | `gd` definition, `gD` declaration, `gR` references, `gi` implementation, `gt` type; built in: `K`, `[d` / `]d` |
-| Conflicts | in a conflicted file: `co` ours, `ct` theirs, `cb` both, `c0` none, `]x` / `[x` next / previous |
-| Copilot (insert) | `Tab` accept, `Ctrl+]` reject, `Alt+n` / `Alt+p` next / previous suggestion, `Alt+r` ask for a new one |
-| Completion menu | `Ctrl+j/k` move, `Enter` accept, `Ctrl+e` close |
-| Other | `Esc` clears the search highlight, `Alt+h/j/k/l` moves lines, `]t` / `[t` TODOs, `Ctrl+h/j/k/l` splits and tmux panes, `Ctrl+t` terminal split |
+| `jk` | Leave insert mode (also in the terminal) |
+| `Esc` | Clear the search highlight and notifications |
+| `Space w` / `q` / `Q` | Save / quit / quit all |
+| `-` / `Space -` | Parent directory in oil / in a float |
+| `Ctrl+h/j/k/l` | Move between splits and tmux panes |
+| `Alt+h/j/k/l` | Move the line or selection |
+| `]t` / `[t` | Next / previous TODO |
+
+### Find `Space f`, explorer `Space e`
+
+| Key | Action |
+| --- | --- |
+| `ff` / `fr` | Files / recent files |
+| `fs` / `fc` | Grep / grep the word under the cursor |
+| `fb` / `ft` / `fh` | Buffers / TODOs / help |
+| `Space /` | Lines in this buffer |
+| `ee` / `en` | File explorer / nvim config files |
+
+In a picker: type to filter, `Ctrl+j/k` or arrows to move, `Enter` open, `Ctrl+v` / `Ctrl+s`
+open in a vertical / horizontal split, `Tab` select several, `Esc` close.
+
+### Code `Space c`, lists `Space x`
+
+| Key | Action |
+| --- | --- |
+| `gd` / `gD` / `gR` / `gi` / `gt` | Definition / declaration / references / implementation / type |
+| `K` | Hover docs |
+| `[d` / `]d` | Previous / next diagnostic |
+| `ca` / `cr` | Code action / rename |
+| `cf` / `cl` | Format (file or selection) / lint |
+| `cd` / `cs` | Line diagnostics / symbols |
+| `cR` / `cx` | Restart LSP / run `./run.sh` on this file |
+| `xx` / `xX` | Diagnostics / this buffer's diagnostics |
+| `xL` / `xQ` | Location list / quickfix list |
+
+### Git `Space g`
+
+| Key | Action |
+| --- | --- |
+| `gs` / `gl` / `gf` | Status / log / this file's history |
+| `gb` / `gd` | Blame line / diff overlay |
+| `gi` / `gI` | GitHub issues: open / all |
+| `gp` / `gP` | Pull requests: open / all |
+| `gx` | List conflicts |
+| `co` / `ct` / `cb` / `c0` | In a conflict: keep ours / theirs / both / none |
+| `]x` / `[x` | Next / previous conflict |
+
+### Insert mode
+
+| Key | Action |
+| --- | --- |
+| `Tab` | Accept the Copilot suggestion (or jump in a snippet) |
+| `Ctrl+]` | Reject the suggestion |
+| `Alt+n` / `Alt+p` | Next / previous suggestion |
+| `Alt+r` | Ask Copilot for a new suggestion |
+| `Ctrl+Space` | Open the completion menu |
+| `Ctrl+j/k`, `Enter`, `Ctrl+e` | Move, accept, close the menu |
+| `Ctrl+b/f` | Scroll the docs |
+
+### Windows `Space s`, tabs `Space t`, UI `Space u`
+
+| Key | Action |
+| --- | --- |
+| `sv` / `sh` / `se` / `sx` | Split vertically / horizontally, equalise, close |
+| `Ctrl+arrows` | Resize the split |
+| `to` / `tx` / `tf` | New tab / close tab / this buffer in a new tab |
+| `Shift+h` / `Shift+l` | Previous / next tab |
+| `tt` / `st` / `Ctrl+t` | Floating terminal / terminal below / terminal on the right |
+| `un` / `uh` | Dismiss notifications / notification history |
+| `uz` | Zen mode |
+| `Sr` / `Ss` | Restore / save the session for this directory |
+| `md` | Markdown preview in the browser |
+| `ss` *(visual)* | Screenshot the selection |
+
+## vim
+
+The same options and most keys as nvim (`jk`, `Space w/q`, splits `Space s…`, tabs
+`Space t…`, `Tab` / `Shift+Tab` buffers, `Space e` netrw explorer), no plugins.
 
 ## First start on a new machine
 
 `tree-sitter-cli` and a C compiler (both in the `cli` package layer) build the treesitter
-parsers; Mason installs the language servers listed in `config/plugins/mason.lua`, including
-`copilot-language-server`. Sign in to Copilot once with `:LspCopilotSignIn` (an existing
-`~/.config/github-copilot` sign-in is reused). In a read-only checkout (the test VM's share)
-lazy.nvim keeps its lockfile in the state dir.
+parsers; Mason installs the language servers, including `copilot-language-server`. Sign in
+to Copilot once with `:LspCopilotSignIn` (an existing `~/.config/github-copilot` sign-in is
+reused). In a read-only checkout (the test VM's share) lazy.nvim keeps its lockfile in the
+state dir.

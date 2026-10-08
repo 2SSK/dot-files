@@ -5,13 +5,17 @@ return {
 	opts = {
 		dashboard = { enabled = true },
 		explorer = { enabled = true },
-		indent = { enabled = true },
+		indent = { -- only the scope under the cursor
+			enabled = true,
+			indent = { enabled = false },
+			animate = { enabled = false },
+		},
 		input = { enabled = true },
 		notifier = { enabled = true },
 		zen = { enabled = true },
 		picker = {
 			reverse = false,
-			layout = { preset = "ivy", ivy = { style = "vim" } },
+			layout = { preset = "ivy", layout = { height = 0.7 } },
 			sources = {
 				files = {
 					layout = { preview = false },
@@ -54,6 +58,7 @@ return {
 		{ "<leader>gp", function() Snacks.picker.gh_pr() end, desc = "GitHub pull requests (open)" },
 		{ "<leader>gP", function() Snacks.picker.gh_pr({ state = "all" }) end, desc = "GitHub pull requests (all)" },
 		{ "<leader>uz", function() Snacks.zen() end, desc = "Zen mode" },
+		{ "<Esc>", function() Snacks.notifier.hide() vim.cmd.nohlsearch() return "<Esc>" end, expr = true, desc = "Clear search and notifications" },
 		{ "<leader>un", function() Snacks.notifier.hide() end, desc = "Dismiss notifications" },
 		{ "<leader>uh", function() Snacks.notifier.show_history() end, desc = "Notification history" },
 	},

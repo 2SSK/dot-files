@@ -4,7 +4,6 @@ vim.g.maplocalleader = "\\"
 local map = vim.keymap.set
 
 map("i", "jk", "<Esc>")
-map("n", "<Esc>", "<cmd>nohlsearch<CR><Esc>")
 map("n", "<leader>w", "<cmd>w<CR>", { desc = "Save" })
 map("n", "<leader>q", "<cmd>q<CR>", { desc = "Quit" })
 map("n", "<leader>Q", "<cmd>qa<CR>", { desc = "Quit all" })
