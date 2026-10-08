@@ -3,11 +3,11 @@
 Config: `~/.config/tmux/tmux.conf`. The prefix is **`` ` ``** (backtick); press it twice
 to type a literal backtick.
 
-The status bar is minimal and sits at the top, everything on the left: the session name (with
-`●` while the prefix is held), then the windows, the current one bold in the theme's
-primary colour and the rest muted. Colours come from the desktop theme
-(`~/.local/state/desktop/theme/tmux.conf`), and `theme` re-applies them to a
-running tmux.
+The status bar is [minimal-tmux-status](https://github.com/niksingh710/minimal-tmux-status) at
+the top left: the session as a pill in the theme's primary colour (accent while the prefix is
+held), then the windows, the current one as a pill and the rest muted. The desktop theme
+configures and re-runs it (`~/.local/state/desktop/theme/tmux.conf`), so `theme` recolours a
+running tmux too.
 
 Plugins are pinned in `packages/plugins.txt` and installed by `setup.sh` into
 `~/.config/tmux/plugins` (no tpm): tmux-resurrect, tmux-continuum, vim-tmux-navigator

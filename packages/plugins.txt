@@ -7,3 +7,4 @@
 .config/tmux/plugins/tmux-continuum          https://github.com/tmux-plugins/tmux-continuum       v3.1.0
 .config/tmux/plugins/vim-tmux-navigator      https://github.com/christoomey/vim-tmux-navigator    e41c431a0c7b7388ae7ba341f01a0d217eb3a432
 .config/tmux/plugins/tmux-sessionx           https://github.com/omerxx/tmux-sessionx              628575be60646f5712e4c8c2f76683b03b072515
+.config/tmux/plugins/minimal-tmux-status     https://github.com/niksingh710/minimal-tmux-status   4e6fa277e6e3aa0bd7849012ecd6b70258627920
