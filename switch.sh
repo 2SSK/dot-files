@@ -110,6 +110,11 @@ terminal() {
 		[[ -r $old/.config/git/$id.gitconfig ]] && local_file ".config/git/$id.gitconfig" cat "$old/.config/git/$id.gitconfig"
 	done
 	local_file .config/git/local.gitconfig git_local "$old/.config/git/config"
+	# keys the old shell exported everywhere: now only claude and opencode load them
+	if [[ -r $old/.config/zsh/var.zsh && ! -e $HOME/.config/secrets.env ]]; then
+		local_file .config/secrets.env cat "$old/.config/zsh/var.zsh"
+		chmod 600 "$HOME/.config/secrets.env"
+	fi
 	[[ -r $old/.config/kitty/kitty.conf ]] &&
 		local_file .config/kitty/local.conf grep -E '^(font_family|map f8 )' "$old/.config/kitty/kitty.conf"
 	# history moves to ~/.local/state/zsh; start it from the old one
