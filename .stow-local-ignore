@@ -14,3 +14,4 @@ __pycache__
 ^/\.github
 ^/\.claude/settings\.local\.json
 ^/trial\.sh
+^/switch\.sh
