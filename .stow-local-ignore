@@ -4,7 +4,7 @@
 \.gitmodules
 \.stowrc
 __pycache__
-.*\.md
+^/[^/]*\.md
 ^/LICENSE
 ^/packages
 ^/system
@@ -12,3 +12,4 @@ __pycache__
 ^/docs
 ^/setup\.sh
 ^/\.github
+^/\.claude/settings\.local\.json

@@ -1,0 +1,64 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "autoupdate": true,
+  "command": {
+    "git": {
+      "agent": "build",
+      "template": "Create a concise conventional commit message. Check the staging area for changes. Use imperative mood with feat/fix/docs/refactor/chore prefix. First line ≤72 characters."
+    }
+  },
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "headers": { "CONTEXT7_API_KEY": "{env:CONTEXT7_API_KEY}" },
+      "enabled": true
+    },
+    "filesystem": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-filesystem", "{env:HOME}"],
+      "enabled": true
+    },
+    "playwright": {
+      "type": "local",
+      "command": ["npx", "@playwright/mcp@latest"],
+      "enabled": true
+    },
+    "prometheus": {
+      "type": "local",
+      "command": ["npx", "-y", "-p", "@wkronmiller/prometheus-mcp-server", "prometheus-mcp-server"],
+      "environment": { "PROMETHEUS_URL": "{env:PROMETHEUS_URL}" },
+      "enabled": true
+    },
+    "grafana": {
+      "type": "local",
+      "command": ["uvx", "mcp-grafana"],
+      "environment": {
+        "GRAFANA_URL": "{env:GRAFANA_URL}",
+        "GRAFANA_SERVICE_ACCOUNT_TOKEN": "{env:GRAFANA_SERVICE_ACCOUNT_TOKEN}"
+      },
+      "enabled": true
+    },
+    "superset": {
+      "type": "remote",
+      "url": "{env:SUPERSET_MCP_URL}",
+      "headers": { "X-API-Key": "{env:SUPERSET_API_KEY}" },
+      "enabled": true
+    },
+    "supabase": {
+      "type": "remote",
+      "url": "{env:SUPABASE_MCP_URL}",
+      "enabled": true
+    },
+    "postgres": {
+      "type": "local",
+      "command": ["npx", "-y", "@henkey/postgres-mcp-server", "--connection-string", "{env:POSTGRES_DATABASE_URI}"],
+      "enabled": false
+    },
+    "docker": {
+      "type": "local",
+      "command": ["npx", "-y", "docker-mcp-server"],
+      "enabled": false
+    }
+  }
+}

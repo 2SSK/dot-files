@@ -1,4 +1,4 @@
-# Development: languages, containers, lint and test tools (opt-in: install.sh dev). Columns: arch  debian(+ubuntu)  fedora
+# Development: languages, containers, AI coding agents, lint and test tools (opt-in: install.sh dev). Columns: arch  debian(+ubuntu)  fedora
 bats                        bats                        bats
 bats-support                bats-support                @bats-helpers
 bats-assert                 bats-assert                 @bats-helpers
@@ -7,6 +7,9 @@ shfmt                       shfmt                       shfmt
 go                          golang-go                   golang
 clang                       clangd                      clang-tools-extra
 pnpm                        @pnpm                       @pnpm
+uv                          @uv                         uv
 docker                      docker.io                   moby-engine
 docker-compose              docker-compose              docker-compose
 docker-buildx               docker-buildx               docker-buildx
+aur:claude-code             @claude-code                @claude-code
+aur:opencode-bin            @opencode                   @opencode

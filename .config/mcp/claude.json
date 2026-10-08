@@ -1,0 +1,34 @@
+{
+  "filesystem": {
+    "type": "stdio",
+    "command": "npx",
+    "args": ["-y", "@modelcontextprotocol/server-filesystem", "${HOME}"]
+  },
+  "context7": {
+    "type": "http",
+    "url": "https://mcp.context7.com/mcp",
+    "headers": { "CONTEXT7_API_KEY": "${CONTEXT7_API_KEY}" }
+  },
+  "playwright": {
+    "type": "stdio",
+    "command": "npx",
+    "args": ["@playwright/mcp@latest"]
+  },
+  "prometheus": {
+    "type": "stdio",
+    "command": "npx",
+    "args": ["-y", "-p", "@wkronmiller/prometheus-mcp-server", "prometheus-mcp-server"],
+    "env": { "PROMETHEUS_URL": "${PROMETHEUS_URL}" }
+  },
+  "grafana": {
+    "type": "stdio",
+    "command": "uvx",
+    "args": ["mcp-grafana"],
+    "env": { "GRAFANA_URL": "${GRAFANA_URL}", "GRAFANA_SERVICE_ACCOUNT_TOKEN": "${GRAFANA_SERVICE_ACCOUNT_TOKEN}" }
+  },
+  "superset": {
+    "type": "http",
+    "url": "${SUPERSET_MCP_URL}",
+    "headers": { "X-API-Key": "${SUPERSET_API_KEY}" }
+  }
+}

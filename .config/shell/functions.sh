@@ -55,3 +55,18 @@ fdex() {
 	id="$(docker ps --format '{{.ID}}\t{{.Names}}\t{{.Image}}' | fzf --prompt='exec> ' | cut -f1)"
 	[[ -n $id ]] && docker exec -it "$id" "${1:-sh}"
 }
+
+# claude and opencode, and the MCP servers they start, get the keys in ~/.config/secrets.env;
+# nothing else run from the shell sees them
+with_secrets() {
+	(
+		local env="$XDG_CONFIG_HOME/secrets.env"
+		set -a
+		# shellcheck disable=SC1090 # untracked, per machine
+		[[ -r $env ]] && source "$env"
+		set +a
+		"$@"
+	)
+}
+claude() { with_secrets command claude "$@"; }
+opencode() { with_secrets command opencode "$@"; }

@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Register the MCP servers in ~/.config/mcp/claude.json with Claude Code (user scope). Values are
+# ${VAR} placeholders that claude fills in at start from ~/.config/secrets.env (via the claude
+# shell wrapper), so ~/.claude.json never holds a secret. Servers not in the file are left alone.
+# usage: mcp-sync
+set -euo pipefail
+
+config="${XDG_CONFIG_HOME:-$HOME/.config}/mcp/claude.json"
+[[ -r $config ]] || { echo "mcp-sync: $config not found" >&2 && exit 1; }
+command -v claude >/dev/null || { echo 'mcp-sync: claude is not installed' >&2 && exit 1; }
+
+while IFS=$'\t' read -r name spec; do
+	claude mcp remove --scope user "$name" >/dev/null 2>&1 || true # absent is fine
+	claude mcp add-json --scope user "$name" "$spec" >/dev/null
+	echo "mcp-sync: $name"
+done < <(jq -r 'to_entries[] | "\(.key)\t\(.value | tojson)"' "$config")

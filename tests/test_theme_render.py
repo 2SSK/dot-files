@@ -6,6 +6,7 @@ Refresh goldens after an intended change: UPDATE_GOLDEN=1 python3 -m unittest di
 
 import json
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -62,7 +63,7 @@ class Render(unittest.TestCase):
         self.assertEqual(len(palette["ansi"]), 16)
         self.assertEqual(sorted(p.name for p in self.state.iterdir()),
                          ["cava", "current", "foot.ini", "git.conf", "kitty.conf", "lazydocker", "lazygit.yml",
-                          "nvim.lua", "palette.json", "pspg", "rmpc.ron", "silicon.tmTheme", "st.Xresources",
+                          "nvim.lua", "opencode", "palette.json", "pspg", "rmpc.ron", "silicon.tmTheme", "st.Xresources",
                           "tmux.conf", "vim.vim"])
 
     def test_removes_outputs_of_dropped_targets(self):
@@ -90,6 +91,12 @@ class Render(unittest.TestCase):
         self.assertIn("hi Normal       guifg=#c0caf5 guibg=NONE", vim)
         self.assertIn("hi LineNr       guifg=#3b4261 guibg=NONE", vim)
 
+    def test_opencode_gets_a_transparent_theme(self):
+        tr.render("gruvbox", "dark", self.state)
+        theme = json.loads((self.state / "opencode/themes/desktop.json").read_text())
+        self.assertEqual(theme["theme"]["background"], "none")
+        self.assertEqual(theme["theme"]["text"], "#ebdbb2")
+
     def test_unknown_family_or_mode(self):
         with self.assertRaises(tr.ThemeError):
             tr.render("nope", "dark", self.state)
@@ -109,7 +116,7 @@ class Render(unittest.TestCase):
                             golden.parent.mkdir(parents=True, exist_ok=True)
                             golden.write_text(got)
                         self.assertEqual(got, golden.read_text(), f"{golden} differs")
-                        self.assertNotIn("$", got, "unfilled template placeholder")
+                        self.assertIsNone(re.search(r"\$(?!schema\b)\w", got), "unfilled template placeholder")
 
 
 class Cli(unittest.TestCase):
