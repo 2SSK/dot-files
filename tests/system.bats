@@ -47,6 +47,13 @@ setup() {
 	grep -q 'virsh -c qemu:///system net-autostart default' "$CALLS"
 }
 
+@test "docker: enables the socket and adds the user to the docker group once" {
+	run "$SYSTEM" docker
+	[ "$status" -eq 0 ]
+	grep -q 'systemctl enable --now docker.socket' "$CALLS"
+	grep -q "usermod -aG docker $USER" "$CALLS"
+}
+
 @test "unknown part is a usage error" {
 	run "$SYSTEM" bogus
 	[ "$status" -eq 2 ]

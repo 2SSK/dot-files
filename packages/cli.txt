@@ -2,6 +2,7 @@
 zsh                         zsh                         zsh
 tmux                        tmux                        tmux
 neovim                      neovim                      neovim
+vim                         vim                         vim-enhanced
 git                         git                         git
 git-delta                   git-delta                   git-delta
 git-lfs                     git-lfs                     git-lfs
@@ -28,3 +29,4 @@ fastfetch                   fastfetch                   fastfetch
 btop                        btop                        btop
 pgcli                       pgcli                       pgcli
 aur:pspg                    pspg                        pspg
+ttyper                      @ttyper                     @ttyper

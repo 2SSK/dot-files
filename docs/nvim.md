@@ -43,7 +43,8 @@ Leader is Space. `Space ?` shows the keys of the current buffer; which-key lists
 | `m` Markdown | `md` preview in the browser |
 | LSP | `gd` definition, `gD` declaration, `gR` references, `gi` implementation, `gt` type; built in: `K`, `[d` / `]d` |
 | Conflicts | in a conflicted file: `co` ours, `ct` theirs, `cb` both, `c0` none, `]x` / `[x` next / previous |
-| Insert | `Tab` accept Copilot suggestion, `Ctrl+]` dismiss it; menu: `Ctrl+j/k`, `Enter`, `Ctrl+e` |
+| Copilot (insert) | `Tab` accept, `Ctrl+]` reject, `Alt+n` / `Alt+p` next / previous suggestion, `Alt+r` ask for a new one |
+| Completion menu | `Ctrl+j/k` move, `Enter` accept, `Ctrl+e` close |
 | Other | `Esc` clears the search highlight, `Alt+h/j/k/l` moves lines, `]t` / `[t` TODOs, `Ctrl+h/j/k/l` splits and tmux panes, `Ctrl+t` terminal split |
 
 ## First start on a new machine

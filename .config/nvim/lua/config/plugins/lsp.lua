@@ -48,13 +48,23 @@ return {
 				end,
 			})
 
-			-- Copilot as ghost text: Tab accepts (completion.lua), Ctrl+] dismisses.
-			-- Sign in once with :LspCopilotSignIn.
+			-- Copilot as ghost text: Tab accepts (completion.lua). Sign in once with :LspCopilotSignIn.
 			vim.lsp.inline_completion.enable()
-			vim.keymap.set("i", "<C-]>", function()
+			local function dismiss()
 				vim.lsp.inline_completion.enable(false, { bufnr = 0 })
 				vim.lsp.inline_completion.enable(true, { bufnr = 0 })
-			end, { desc = "Dismiss Copilot suggestion" })
+			end
+			vim.keymap.set("i", "<C-]>", dismiss, { desc = "Reject Copilot suggestion" })
+			vim.keymap.set("i", "<M-n>", function()
+				vim.lsp.inline_completion.select({ count = 1 })
+			end, { desc = "Next Copilot suggestion" })
+			vim.keymap.set("i", "<M-p>", function()
+				vim.lsp.inline_completion.select({ count = -1 })
+			end, { desc = "Previous Copilot suggestion" })
+			vim.keymap.set("i", "<M-r>", function()
+				dismiss()
+				vim.api.nvim_exec_autocmds("CursorMovedI", { buffer = 0 }) -- asks Copilot again
+			end, { desc = "New Copilot suggestion" })
 
 			local servers = {
 				copilot = {},

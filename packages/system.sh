@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# System-level setup (sudo): the memory safety net and libvirt. Installs the tracked files
+# System-level setup (sudo): the memory safety net, libvirt and docker. Installs the tracked files
 # under system/ into / and enables services; a no-op when everything is already in place.
-# usage: system.sh memory|libvirt
+# usage: system.sh memory|libvirt|docker
 set -euo pipefail
 
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -49,9 +49,20 @@ libvirt() {
 	changed=1
 }
 
+docker_daemon() {
+	# Socket-activated: the daemon starts on first use. The docker group is root-equivalent.
+	sudo systemctl enable --now docker.socket
+	if ! id -nG "$USER" | tr ' ' '\n' | grep -qx docker; then
+		sudo usermod -aG docker "$USER"
+		log_warn relogin msg='added to the docker group; takes effect at the next login'
+	fi
+	changed=1
+}
+
 case ${1:-} in
 memory) memory ;;
 libvirt) libvirt ;;
-*) echo 'usage: system.sh memory|libvirt' >&2 && exit 2 ;;
+docker) docker_daemon ;;
+*) echo 'usage: system.sh memory|libvirt|docker' >&2 && exit 2 ;;
 esac
 if ((changed)); then log_info system part="$1"; else echo "$1: already in place"; fi

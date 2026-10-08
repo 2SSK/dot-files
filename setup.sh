@@ -14,7 +14,7 @@ usage: setup.sh [-y] [--wm both|i3|sway] [--dev] [--no-packages]
 
   -y, --yes       accept the defaults without asking (both WMs, back up existing configs)
   --wm WM         window manager(s) to install packages for
-  --dev           also install lint/test tools
+  --dev           also install the development tools
   --no-packages   skip packages and shell plugins
 EOF
 }
@@ -117,7 +117,7 @@ main() {
 	fi
 
 	local -a layers=()
-	local distro='' vm=0 safety=0
+	local distro='' vm=0 safety=0 docker=0
 	if ((packages)); then
 		distro="$("$repo/packages/install.sh" --distro)"
 		step "Packages for $distro"
@@ -130,12 +130,8 @@ main() {
 		if confirm 'Install the terminal tools?' y; then layers+=(cli); fi
 		show_layer 'vm (virtual machines: libvirt, virt-manager, vm)' vm
 		if confirm 'Install the virtual machine tools?' y; then layers+=(vm) && vm=1; fi
-		if ((dev)); then
-			show_layer 'dev (lint and test tools)' dev && layers+=(dev)
-		else
-			show_layer 'dev (lint and test tools)' dev
-			if confirm 'Install the lint and test tools?' n; then layers+=(dev); fi
-		fi
+		show_layer 'dev (go, clangd, pnpm, docker, lint and test tools)' dev
+		if ((dev)) || confirm 'Install the development tools?' n; then layers+=(dev) && docker=1; fi
 	fi
 
 	if ((packages)); then
@@ -154,6 +150,7 @@ main() {
 	local system=()
 	((safety)) && system+=('memory safety net (zram, systemd-oomd)')
 	((vm)) && system+=('libvirt service + default network')
+	((docker)) && system+=('docker service + docker group')
 	((${#system[@]} == 0)) || row 'System (sudo)' "$(printf '%s; ' "${system[@]}" | sed 's/; $//')"
 	row 'Existing files' "$(case $policy in none) echo none ;; backup) echo "${#found[@]} → $backup" ;; *) echo "${#found[@]} deleted" ;; esac)"
 	row 'Stow' "$repo → $HOME"
@@ -173,10 +170,11 @@ main() {
 		"$repo/packages/plugins.sh"
 		ok 'zsh and bash plugins at their pinned tags'
 		enable_services
-		if ((safety || vm)); then
+		if ((safety || vm || docker)); then
 			step 'System'
 			((safety == 0)) || "$repo/packages/system.sh" memory
 			((vm == 0)) || "$repo/packages/system.sh" libvirt
+			((docker == 0)) || "$repo/packages/system.sh" docker
 			ok 'system configured'
 		fi
 	fi
