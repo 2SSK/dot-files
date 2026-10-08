@@ -70,12 +70,19 @@ overrides).
   # at every boot, in /etc/fstab:  <tag>  /home/<you>/<tag>  virtiofs  defaults,nofail  0 0
   ```
 
-## Testing the dotfiles
+## Testing the dotfiles (rice-vm)
 
-```sh
-vm up rice          # Arch with a desktop, ~/Dotfiles shared read-only at ~/dotfiles
-vm console rice     # then, inside: ~/dotfiles/setup.sh
-```
+`rice-vm` is the main test VM: Arch with i3 and SwayFX, in libvirt's **user session**
+(`qemu:///session`), which virt-manager connects to automatically under *QEMU/KVM User
+session*. Start, stop and open it there.
 
-Edits on the laptop show up in the VM immediately; re-run `~/dotfiles/setup.sh -y
---no-packages` inside it to re-link and re-apply.
+- The laptop's `~/Dotfiles` is shared read-only and mounted at `~/Dotfiles` in the VM, so
+  edits appear there immediately.
+- Apply them inside the VM: `~/Dotfiles/setup.sh -y --no-packages` (re-links and re-renders
+  the theme), then reload i3 / sway or restart the app.
+- Its disks are `~/.local/share/dotfiles-vm/work.qcow2` on top of `provisioned.qcow2`. Take a
+  snapshot before risky changes: virt-manager → *Manage VM snapshots*, or
+  `virsh -c qemu:///session snapshot-create-as rice-vm clean`.
+
+New VMs from `vms.json` go to the system connection; `LIBVIRT_DEFAULT_URI=qemu:///session vm …`
+targets the user session instead.

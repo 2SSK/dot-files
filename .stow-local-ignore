@@ -6,7 +6,6 @@
 __pycache__
 .*\.md
 ^/LICENSE
-^/vm
 ^/packages
 ^/system
 ^/tests
