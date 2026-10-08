@@ -38,6 +38,7 @@ vi_args() { grep '^virt-install' "$CALLS"; }
 	[ "$status" -eq 0 ]
 	[[ $(calls) == *"curl "*"/images/latest/Arch-Linux-x86_64-cloudimg.qcow2"* ]]
 	[[ $(vi_args) == *"--connect qemu:///system --name box --memory 4096 --vcpus 2 --osinfo archlinux --import"* ]]
+	[[ $(vi_args) == *"--channel unix,target.type=virtio,target.name=org.qemu.guest_agent.0"* ]]
 	[[ $(vi_args) == *"size=30,backing_store=/pool/vm-base-Arch-Linux-x86_64-cloudimg.qcow2"* ]]
 	[[ $(vi_args) == *"--graphics none"* && $(vi_args) != *"--filesystem"* ]]
 	grep -q 'name: tester' "$CALLS.user-data"
@@ -65,8 +66,10 @@ vi_args() { grep '^virt-install' "$CALLS"; }
 	[[ $(vi_args) == *"--filesystem source.dir=$HOME/dev/dot-files-rewrite,target.dir=dot-files,driver.type=virtiofs,readonly=on"* ]]
 	[[ $(vi_args) == *"--filesystem source.dir=$HOME/notes,target.dir=notes,driver.type=virtiofs --"* ]]
 	[[ $(vi_args) == *"--memorybacking source.type=memfd,access.mode=shared"* ]]
-	grep -q 'dot-files, /home/tester/dot-files, virtiofs' "$CALLS.user-data"
-	grep -q 'notes, /home/tester/notes, virtiofs' "$CALLS.user-data"
+	grep -q 'dot-files /home/tester/dot-files virtiofs defaults,nofail' "$CALLS.user-data"
+	grep -q 'notes /home/tester/notes virtiofs defaults,nofail' "$CALLS.user-data"
+	run grep -q '^mounts:' "$CALLS.user-data" # would run before the user exists
+	[ "$status" -eq 1 ]
 	run "$VM" create x --share "$HOME/missing"
 	[ "$status" -eq 1 ]
 	[[ $output == *"event=no_share_dir"* ]]

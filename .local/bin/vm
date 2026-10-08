@@ -197,12 +197,13 @@ user_data() { # <name> <password hash> <desktop 0|1> <share tags> <packages...>
 		package_upgrade: true
 		packages: [$(printf '%s\n' "$@" | paste -sd, | sed 's/,/, /g')]
 	EOF
-	if [[ -n $tags ]]; then
-		echo 'mounts:'
-		for tag in $tags; do echo "  - [$tag, /home/$USER/$tag, virtiofs, \"defaults,nofail\", \"0\", \"0\"]"; done
-	fi
 	echo 'runcmd:'
 	echo '  - [systemctl, enable, --now, qemu-guest-agent]'
+	# Shares mount here, not with cloud-init's mounts module: that runs before the user exists and
+	# would leave the home folder owned by root
+	for tag in $tags; do
+		echo "  - [sh, -c, 'mkdir -p /home/$USER/$tag && echo \"$tag /home/$USER/$tag virtiofs defaults,nofail 0 0\" >>/etc/fstab && mount /home/$USER/$tag']"
+	done
 	((desktop)) || return 0
 	# The desktop: the login screen with i3 preselected, at boot and right away
 	cat <<-EOF
@@ -252,7 +253,8 @@ cmd_create() {
 
 	# shellcheck disable=SC2054 # virt-install sub-options are comma-separated on purpose
 	local args=(--connect "$uri" --name "$name" --memory "$mem_mib" --vcpus "$cpus" --osinfo "$(osinfo "$os")"
-		--import --network network=default,model=virtio --noautoconsole)
+		--import --network network=default,model=virtio --noautoconsole
+		--channel unix,target.type=virtio,target.name=org.qemu.guest_agent.0)
 
 	# Shared folders (virtiofs needs shared memory)
 	local dir tag mode
