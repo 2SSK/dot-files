@@ -1,22 +1,12 @@
-# Startup Applications
 xwayland force
 
-# Start sway session target (required for xdg-desktop-portal)
+# xdg-desktop-portal needs the sway session target
 exec_always systemctl --user start sway-session.target
 
-# autotiling
 exec --no-startup-id autotiling
 
-# Voxtype voice typing
 exec_always --no-startup-id voxtype
 
-# wallpaper
-# exec --no-startup-id waypaper --restore
-# exec --no-startup-id variety --restore
-# exec_always swaybg -i ~/Wallpaper-Bank/hannya_original.png -m fill
-
-# Keep persistent clipboard history
 exec_always --no-startup-id wl-paste --watch cliphist store
 
-# exec qs -c noctalia-shell
 exec noctalia

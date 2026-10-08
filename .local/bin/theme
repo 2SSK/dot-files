@@ -25,13 +25,9 @@ current() { # prints "<family> <mode>"; tokyonight dark until a theme is set
 	echo "$family $mode"
 }
 
-# What uses the theme, one row per app: the rendered file; where the app needs a link to it under
-# ~/.config (- when the app includes the state file itself); how a running app reloads (- when it
-# can't). Adding an app: a template in share/desktop/templates and a row here.
-#   tmux: the whole config, so plugins (continuum hooks status-right) re-apply after the theme
-#   i3: skipped under sway, which sets I3SOCK too;  st: its reload patch re-reads X resources
-#   kitty: colours only, over its socket (SIGUSR1 would reload the whole config, a visible blink)
-#   picom: no reload. Its reset redraws the whole screen; new shadow colours come with its next start
+# One row per app: rendered file, link under ~/.config (or -), reload command (or -). Adding an app:
+# a template in share/desktop/templates and a row here. kitty gets colours over its socket and picom
+# isn't reset: both would visibly redraw. tmux re-sources everything so its plugins re-apply.
 consumers() {
 	cat <<'EOF'
 kitty.conf       -                  for s in "${XDG_RUNTIME_DIR:-/run/user/$UID}"/kitty-*; do [[ -S $s ]] && kitten @ --to "unix:$s" set-colors --all --configured "$state/kitty.conf"; done

@@ -1,5 +1,5 @@
 # shellcheck shell=bash
-# .local/lib/desktop/detect.sh — detect the running session .
+# .local/lib/desktop/detect.sh — detect the running session.
 # Source log.sh first. Sets and exports DESKTOP_DISPLAY and DESKTOP_WM.
 
 # Idempotent: sourcing twice must not re-detect.

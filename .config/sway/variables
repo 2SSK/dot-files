@@ -1,35 +1,26 @@
-# Mod keys
 set $mod Mod4
 set $alt Mod1
 
-# Vim keys
 set $left h
 set $down j
 set $up k
 set $right l
 
-# Fonts
 font pango:Inter Medium 10
 
-# Cursor
 set $cursor_theme Bibata-Modern-Ice
 seat * xcursor_theme $cursor_theme 24
 
-# Applications
 set $term kitty
 set $files nautilus
-# set $menu --no-startup-id rofi -show drun
-# set $menu --no-startup-id wofi --show drun
 set $menu --no-startup-id tofi-drun -c ~/.config/tofi/config --drun-launch=true
 
-# Gaps and Borders
 gaps inner 10
 gaps outer 10
 default_border pixel 2
 default_floating_border pixel 0
 
-# Look, matching i3 + picom: rounded corners, soft black shadows, light blur behind translucent
-# windows, short open/close animations, no dimming
+# Same look as i3 + picom: rounded corners, soft shadows, blur behind translucent windows
 corner_radius 12
 shadows enable
 shadow_blur_radius 24
@@ -42,7 +33,6 @@ blur_radius 5
 animation_duration_ms 180
 default_dim_inactive 0
 
-# Tab and stack headers: centred, soft font, some room around the title
 title_align center
 titlebar_padding 12 6
 

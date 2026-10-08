@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 # vm: virtual machines from cloud images, on libvirt's system connection so virt-manager shows them.
-# Layout: settings, help, helpers, images, first boot, commands, dispatch.
 set -euo pipefail
 
 here="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
@@ -274,7 +273,6 @@ cmd_create() {
 	done
 	! exists "$name" || die vm_exists name="$name" msg="vm start $name"
 
-	# Image, size and packages
 	local mem_mib resolved url distro os
 	mem_mib="$(mib "$mem")"
 	guard_memory "$mem_mib" "$force"
@@ -322,7 +320,6 @@ cmd_create() {
 		args+=(--graphics none --video model.type=virtio --console pty,target.type=serial)
 	fi
 
-	# Login and first boot
 	local password=${VM_PASSWORD:-} hash seed base
 	if [[ -z $password ]]; then
 		read -rsp "password for $USER in $name: " password && echo >&2
