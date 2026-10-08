@@ -24,17 +24,6 @@ y() {
 	rm -f -- "$tmp"
 }
 
-# mkplaylist <folder> [name]: save a ~/Music folder as an mpd playlist (default name: the folder's)
-mkplaylist() {
-	local dir="${1:?usage: mkplaylist <folder under ~/Music> [name]}" name="${2:-${1##*/}}"
-	local lists="$HOME/.local/share/mpd/playlists"
-	[[ -d $HOME/Music/$dir ]] || { echo "mkplaylist: no folder ~/Music/$dir" >&2 && return 1; }
-	mkdir -p "$lists"
-	(cd "$HOME/Music" && find "$dir" -type f \( -iname '*.flac' -o -iname '*.mp3' -o -iname '*.ogg' \
-		-o -iname '*.opus' -o -iname '*.m4a' -o -iname '*.wav' \) | sort) >"$lists/$name.m3u"
-	echo "$(wc -l <"$lists/$name.m3u") tracks → playlist $name"
-}
-
 # Fuzzy-pick processes to kill
 fkill() {
 	local pids

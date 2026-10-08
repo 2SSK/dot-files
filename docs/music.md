@@ -1,21 +1,19 @@
 # Music
 
-[mpd](https://www.musicpd.org) plays `~/Music` through PipeWire as a systemd user
-service, so music keeps playing after the terminal closes. [rmpc](https://mierak.github.io/rmpc/)
-is the interface (`music`), laid out after Seth Phaeno's
-[video](https://www.youtube.com/watch?v=iGW0EpsUb7E); `mpc` controls mpd from the shell and
-[mpd-mpris](https://github.com/natsukagami/mpd-mpris) hands it to media keys, `playerctl`
-and the bar. rmpc's colours come from the desktop theme (applied the next time it starts).
-
-## Playlists
-
 ```sh
-mkplaylist 90s            # save ~/Music/90s as the playlist "90s"
-music                     # 2 → Playlists, select 90s, a adds it to the queue
-mpc load 90s && mpc random on && mpc play   # or straight from the shell
+music          # pick a folder in ~/Music, it plays shuffled and the player opens
+music 90s      # play a folder straight away
 ```
 
-Folders also show up in the Library tab, so any folder can be queued directly.
+[mpd](https://www.musicpd.org) plays through PipeWire as a systemd user service, so music
+keeps playing after you quit the player. [rmpc](https://mierak.github.io/rmpc/) is the
+player, laid out after Seth Phaeno's [video](https://www.youtube.com/watch?v=iGW0EpsUb7E):
+five tabs, the queue beside the album art, and yazi-style folder browsing (`h`/`l`). Colours
+come from the desktop theme (applied the next time it starts). `mpc` controls mpd from the shell and
+[mpd-mpris](https://github.com/natsukagami/mpd-mpris) hands it to media keys, `playerctl`
+and the bar.
+
+A folder is a playlist: drop music into `~/Music/<name>/` and it appears in the picker.
 
 ## rmpc keys
 
@@ -48,7 +46,6 @@ Folders also show up in the Library tab, so any folder can be queued directly.
 | Path | Contents |
 | --- | --- |
 | `~/.config/mpd/mpd.conf` | Library `~/Music`, PipeWire output |
-| `~/.local/share/mpd/playlists/` | Saved playlists (`.m3u`) |
 | `~/.local/state/mpd/` | Database, playback state |
 | `~/.config/rmpc/config.ron` | Tabs and keys |
 | `~/.local/state/desktop/theme/rmpc.ron` | Colours, rendered from the palette |
