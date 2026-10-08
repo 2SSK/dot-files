@@ -2,6 +2,7 @@
 """Render a theme family/mode into ~/.local/state/desktop/theme (PRD §6.5).
 
 usage: theme_render.py render <family> <dark|light>
+       theme_render.py modes <family>
        theme_render.py lint [family...]
 
 Standard library only. Every file under templates/ is a target, rendered to the same relative path.
@@ -47,6 +48,11 @@ def load(family):
         return tomllib.load(f)
 
 
+def modes(theme):
+    """The modes a theme defines; some upstream themes are dark only."""
+    return [m for m in MODES if m in theme]
+
+
 def contrast(a, b):
     """WCAG 2 contrast ratio of two #rrggbb colours."""
     def luminance(hex_colour):
@@ -59,8 +65,8 @@ def contrast(a, b):
 
 def lint(theme):
     """Problems with a loaded theme: missing keys, or text contrast below WCAG AA."""
-    problems = []
-    for mode in MODES:
+    problems = [] if modes(theme) else ["no [dark] or [light] variant"]
+    for mode in modes(theme):
         for table, keys in (("ui", ROLES), ("ansi", ANSI)):
             missing = [k for k in keys if k not in theme.get(mode, {}).get(table, {})]
             if missing:
@@ -85,7 +91,8 @@ def variables(theme, family, mode, state):
         "icon_theme": f"Tela-circle-blue-{mode}",
     }
     for m in MODES:
-        for key, colour in {**theme[m]["ui"], **theme[m]["ansi"]}.items():
+        variant = theme[m] if m in theme else theme[mode]  # a single-mode theme stands in for both
+        for key, colour in {**variant["ui"], **variant["ansi"]}.items():
             values[f"{m}_{key}"] = colour
             values[f"{m}_{key}_x"] = colour.lstrip("#")  # foot wants bare hex
             if m == mode:
@@ -113,6 +120,8 @@ def render(family, mode, state):
     theme = load(family)
     if problems := lint(theme):
         raise ThemeError(f"{family}: " + "; ".join(problems))
+    if mode not in theme:
+        raise ThemeError(f"{family} has no {mode} variant (only {', '.join(modes(theme))})")
 
     state = Path(state)
     state.parent.mkdir(parents=True, exist_ok=True)
@@ -154,6 +163,9 @@ def main(argv):
     try:
         if argv[:1] == ["render"] and len(argv) == 3:
             render(argv[1], argv[2], state_dir())
+            return 0
+        if argv[:1] == ["modes"] and len(argv) == 2:
+            print(" ".join(modes(load(argv[1]))))
             return 0
         if argv[:1] == ["lint"]:
             families = argv[1:] or sorted(p.stem for p in THEMES.glob("*.toml"))

@@ -1,0 +1,83 @@
+# Night Owl (dark) / Light Owl (light). Palette values copied from the official VS Code themes
+# (themes/Night Owl-color-theme.json, Night Owl-Light-color-theme.json), terminal colours included.
+# Light Owl's own greys are too faint for text, so its muted text is its text colour mixed 72 %
+# with its background (#747482).
+# Source: https://github.com/sdras/night-owl-vscode-theme  License: MIT  Copyright: Sarah Drasner
+
+[meta]
+family = "nightowl"
+name = "Night Owl"
+source = "https://github.com/sdras/night-owl-vscode-theme"
+license = "MIT"
+
+[dark.ui]
+bg = "#011627"
+bg_alt = "#01111d"
+surface = "#0b253a"
+overlay = "#1d3b53"
+fg = "#d6deeb"
+fg_muted = "#5f7e97"
+primary = "#82aaff"
+on_primary = "#011627"
+secondary = "#c792ea"
+accent = "#7fdbca"
+success = "#22da6e"
+warning = "#ffeb95"
+error = "#ef5350"
+border = "#1d3b53"
+border_active = "#82aaff"
+selection = "#1d3b53"
+
+[dark.ansi]
+c0 = "#011627"
+c1 = "#ef5350"
+c2 = "#22da6e"
+c3 = "#c5e478"
+c4 = "#82aaff"
+c5 = "#c792ea"
+c6 = "#21c7a8"
+c7 = "#ffffff"
+c8 = "#575656"
+c9 = "#ef5350"
+c10 = "#22da6e"
+c11 = "#ffeb95"
+c12 = "#82aaff"
+c13 = "#c792ea"
+c14 = "#7fdbca"
+c15 = "#ffffff"
+
+[light.ui]
+bg = "#fbfbfb"
+bg_alt = "#f0f0f0"
+surface = "#f0f0f0"
+overlay = "#d9d9d9"
+fg = "#403f53"
+fg_muted = "#747482"
+primary = "#288ed7"
+on_primary = "#fbfbfb"
+secondary = "#d6438a"
+accent = "#2aa298"
+success = "#08916a"
+warning = "#daaa01"
+error = "#e64d49"
+border = "#d9d9d9"
+border_active = "#2aa298"
+selection = "#e0e0e0"
+
+[light.ansi]
+c0 = "#403f53"
+c1 = "#de3d3b"
+c2 = "#08916a"
+c3 = "#e0af02"
+c4 = "#288ed7"
+c5 = "#d6438a"
+c6 = "#2aa298"
+c7 = "#93a1a1"
+c8 = "#403f53"
+c9 = "#de3d3b"
+c10 = "#08916a"
+c11 = "#daaa01"
+c12 = "#288ed7"
+c13 = "#d6438a"
+c14 = "#2aa298"
+c15 = "#93a1a1"

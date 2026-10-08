@@ -31,11 +31,20 @@ class Contrast(unittest.TestCase):
 
 class Lint(unittest.TestCase):
     def test_shipped_themes_pass(self):
-        self.assertEqual(FAMILIES, ["catppuccin", "eink", "gruvbox", "kanagawa", "kesari", "rosepine",
-                                    "tokyonight"])
+        self.assertEqual(FAMILIES, ["catppuccin", "cyberdream", "eink", "github", "gruvbox", "kanagawa",
+                                    "kesari", "nightowl", "omni", "rosepine", "synthwave", "tokyonight",
+                                    "vesper"])
         for family in FAMILIES:
             with self.subTest(family=family):
                 self.assertEqual(tr.lint(tr.load(family)), [])
+
+    def test_dark_only_themes(self):
+        for family in ("vesper", "synthwave", "omni"):
+            with self.subTest(family=family):
+                self.assertEqual(tr.modes(tr.load(family)), ["dark"])
+
+    def test_a_theme_needs_at_least_one_mode(self):
+        self.assertIn("no [dark] or [light] variant", tr.lint({"meta": {}}))
 
     def test_low_contrast_is_reported(self):
         theme = tr.load("tokyonight")
@@ -123,6 +132,13 @@ class Render(unittest.TestCase):
         self.assertEqual(theme["theme"]["background"], "none")
         self.assertEqual(theme["theme"]["text"], "#ebdbb2")
 
+    def test_a_dark_only_theme_has_no_light_render(self):
+        with self.assertRaisesRegex(tr.ThemeError, "vesper has no light variant"):
+            tr.render("vesper", "light", self.state)
+        tr.render("vesper", "dark", self.state)  # foot.ini wants both variants: dark stands in
+        foot = (self.state / "foot.ini").read_text()
+        self.assertEqual(foot.count("background=101010"), 2)
+
     def test_unknown_family_or_mode(self):
         with self.assertRaises(tr.ThemeError):
             tr.render("nope", "dark", self.state)
@@ -144,7 +160,7 @@ class Render(unittest.TestCase):
 
     def test_every_variant_renders(self):
         for family in FAMILIES:
-            for mode in tr.MODES:
+            for mode in tr.modes(tr.load(family)):
                 with self.subTest(family=family, mode=mode):
                     tr.render(family, mode, self.state)  # a missing placeholder raises KeyError
                     self.assertEqual((self.state / "current").read_text(), f"family={family}\nmode={mode}\n")

@@ -1,0 +1,46 @@
+# SynthWave '84: dark only (upstream has no light variant). Palette values copied from the official
+# VS Code theme (themes/synthwave-color-theme.json); its terminal black and white are unset, so
+# black is the activity-bar purple-black and white the grey its syntax uses.
+# Source: https://github.com/robb0wen/synthwave-vscode  License: MIT  Copyright: Robb Owen
+
+[meta]
+family = "synthwave"
+name = "SynthWave '84"
+source = "https://github.com/robb0wen/synthwave-vscode"
+license = "MIT"
+
+[dark.ui]
+bg = "#262335"
+bg_alt = "#241b2f"
+surface = "#2a2139"
+overlay = "#444251"
+fg = "#ffffff"
+fg_muted = "#848bbd"
+primary = "#ff7edb"
+on_primary = "#262335"
+secondary = "#36f9f6"
+accent = "#f97e72"
+success = "#72f1b8"
+warning = "#fede5d"
+error = "#fe4450"
+border = "#495495"
+border_active = "#ff7edb"
+selection = "#444251"
+
+[dark.ansi]
+c0 = "#171520"
+c1 = "#fe4450"
+c2 = "#72f1b8"
+c3 = "#f3e70f"
+c4 = "#03edf9"
+c5 = "#ff7edb"
+c6 = "#03edf9"
+c7 = "#b6b1b1"
+c8 = "#848bbd"
+c9 = "#fe4450"
+c10 = "#72f1b8"
+c11 = "#fede5d"
+c12 = "#03edf9"
+c13 = "#ff7edb"
+c14 = "#03edf9"
+c15 = "#ffffff"

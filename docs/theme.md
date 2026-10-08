@@ -13,6 +13,9 @@ theme mode toggle                   # dark ⇄ light (also: mode dark|light)
 
 ## Families
 
+Dark-only themes (their authors made no light variant) stay dark: `theme mode light` says so and
+changes nothing, and `theme set` picks dark for them.
+
 | Family | Dark | Light |
 | --- | --- | --- |
 | tokyonight *(default)* | night | day |
@@ -22,6 +25,12 @@ theme mode toggle                   # dark ⇄ light (also: mode dark|light)
 | eink | near-white ink on charcoal | near-black ink on warm paper; for black-and-white wallpapers |
 | kanagawa | wave | lotus |
 | kesari | inspired by Rajput art; a miniature at night: indigo ink, gold leaf, vermilion, peacock | Indian watercolour on handmade paper |
+| cyberdream | dark | light |
+| github | dark default | light default |
+| nightowl | Night Owl | Light Owl |
+| vesper | peppermint and orange on near-black | *(dark only)* |
+| synthwave | SynthWave '84 | *(dark only)* |
+| omni | Omni | *(dark only)* |
 
 Palette values are copied from each project's official ports, with attribution in
 `~/.local/share/desktop/themes/<family>.toml`. Every variant passes WCAG AA contrast

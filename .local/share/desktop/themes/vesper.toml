@@ -1,0 +1,46 @@
+# Vesper: dark only (upstream has no light variant). Peppermint and orange on near-black. Palette
+# values copied from the official VS Code theme (themes/Vesper-dark-color-theme.json). It defines no
+# terminal colours, so these come from its syntax colours (orange, mint, red, greys).
+# Source: https://github.com/raunofreiberg/vesper  License: MIT  Copyright: Rauno Freiberg
+
+[meta]
+family = "vesper"
+name = "Vesper"
+source = "https://github.com/raunofreiberg/vesper"
+license = "MIT"
+
+[dark.ui]
+bg = "#101010"
+bg_alt = "#1c1c1c"
+surface = "#1c1c1c"
+overlay = "#232323"
+fg = "#ffffff"
+fg_muted = "#a0a0a0"
+primary = "#ffc799"
+on_primary = "#101010"
+secondary = "#99ffe4"
+accent = "#ffc799"
+success = "#99ffe4"
+warning = "#ffc799"
+error = "#ff8080"
+border = "#505050"
+border_active = "#ffc799"
+selection = "#232323"
+
+[dark.ansi]
+c0 = "#1c1c1c"
+c1 = "#ff8080"
+c2 = "#99ffe4"
+c3 = "#ffc799"
+c4 = "#a0a0a0"
+c5 = "#ffc799"
+c6 = "#99ffe4"
+c7 = "#a0a0a0"
+c8 = "#505050"
+c9 = "#ff8080"
+c10 = "#99ffe4"
+c11 = "#ffc799"
+c12 = "#ffffff"
+c13 = "#ffc799"
+c14 = "#99ffe4"
+c15 = "#ffffff"
