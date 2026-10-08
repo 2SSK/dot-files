@@ -33,8 +33,13 @@ memory() {
 }
 
 libvirt() {
-	# The service, the NAT network VMs get their IP from, and access for this user
-	sudo systemctl enable --now libvirtd.socket
+	# The daemons (per-driver sockets on Arch and Fedora, the monolithic libvirtd on Debian/Ubuntu),
+	# the NAT network VMs get their IP from, and access for this user
+	if systemctl list-unit-files virtqemud.socket >/dev/null 2>&1; then
+		sudo systemctl enable --now virtqemud.socket virtnetworkd.socket virtstoraged.socket virtnodedevd.socket
+	else
+		sudo systemctl enable --now libvirtd.socket
+	fi
 	sudo virsh -c qemu:///system net-autostart default >/dev/null
 	sudo virsh -c qemu:///system net-start default >/dev/null 2>&1 || true # already active is fine
 	if ! id -nG "$USER" | tr ' ' '\n' | grep -qx libvirt; then
