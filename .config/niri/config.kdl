@@ -458,5 +458,4 @@ layer-rule {
     }
 }
 
-include "./noctalia.kdl"
 

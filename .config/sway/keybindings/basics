@@ -42,7 +42,18 @@ bindsym F5 exec brightnessctl set +5%
 # Microphone mute/unmute
 bindsym F9 exec amixer set Capture toggle
 
-# Screenshots
-bindsym F12 exec grimshot save screen ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
+# Screenshots (grimshot — replaced by Noctalia v5 screenshot tool below)
+# bindsym F12 exec grimshot save screen ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
 bindsym Shift+F12 exec grimshot save active ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
-bindsym ctrl+F12 exec grimshot save area ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
+# bindsym ctrl+F12 exec grimshot save area ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
+
+# Screenshots (Noctalia v5 — output policy lives in ~/.config/noctalia/00-shell.toml [shell.screenshot])
+# F12       : fullscreen; shows a monitor picker when more than one output is connected
+# Shift+F12 : freeze screen + annotation editor (copy or save from the editor)
+# ctrl+F12  : quick region capture -> clipboard
+bindsym F12 exec noctalia msg screenshot-fullscreen pick
+# bindsym Shift+F12 exec noctalia msg screenshot-annotate
+bindsym ctrl+F12 exec noctalia msg screenshot-region
+
+# VMs (virt-manager) and other apps that grab the keyboard: Super+Escape hands keys back to sway and again to the app
+bindsym --inhibited $mod+Escape seat - shortcuts_inhibitor toggle

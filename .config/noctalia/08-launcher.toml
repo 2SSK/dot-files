@@ -1,0 +1,9 @@
+[shell.launcher]
+categories = true
+show_icons = true
+compact = false
+app_grid = false
+sort_by_usage = true
+
+[shell.launcher.providers.session]
+global = true

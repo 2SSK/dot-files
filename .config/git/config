@@ -26,6 +26,12 @@
     renames = copies 
     interHunkContext = 10
 
+[rerere]
+    enabled = true
+
+[merge]
+    conflictstyle = zdiff3
+
 [init]
     defaultBranch = main
 
@@ -112,9 +118,11 @@
 
 [url "git@github-work:"]
     insteadOf = ghw:
+
 [alias]
 	fix-remote-personal = !git remote set-url origin $(git remote get-url origin | sed \"s|github.com|github-personal|\")
 	fix-remote-work = !git remote set-url origin $(git remote get-url origin | sed \"s|github.com|github-work|\")
+
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f

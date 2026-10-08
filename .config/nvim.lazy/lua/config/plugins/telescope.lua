@@ -35,8 +35,8 @@ return {
 				find_files = {
 					theme = "ivy",
 					hidden = true,
-					no_ignore = false,
-					no_ignore_parent = false,
+					no_ignore = true, -- show files ignored by .gitignore
+					no_ignore_parent = true,
 				},
 				oldfiles = {
 					theme = "ivy",
@@ -63,7 +63,7 @@ return {
 			defaults = {
 				file_ignore_patterns = {
 					"node_modules",
-					".git",
+					"%.git/",
 					"dist",
 					"build",
 					"vendor",

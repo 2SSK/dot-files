@@ -38,9 +38,13 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 
+# npm global packages
+export PATH="$HOME/.npm-global/bin:$PATH"
+
 # Miniconda
 export PATH="$PATH:/opt/miniconda3/bin"
 
 # spicetify 
 export PATH=$PATH:~/.spicetify
 export PATH=$HOME/.local/bin:$PATH
+PATH='/home/ssk/.serenedb/server/latest':/home/ssk/.local/bin:/home/ssk/.npm-global/bin:/home/ssk/.local/share/pnpm:/usr/lib/jvm/java-17-openjdk/bin:/home/ssk/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/opt/android-sdk/platform-tools:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/usr/lib/rustup/bin:/home/ssk/Android/Sdk/emulator:/home/ssk/Android/Sdk/tools:/home/ssk/Android/Sdk/tools/bin:/home/ssk/Android/Sdk/platform-tools:/home/ssk/go/bin:/snap/bin:/opt/miniconda3/bin:/home/ssk/.spicetify

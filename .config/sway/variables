@@ -40,5 +40,8 @@ shadow_offset 0 4
 shadow_color          #7AA2F7
 shadow_inactive_color #1A1B26
 
+# Animations
+animation_duration_ms 250
+
 default_dim_inactive 0.1
 for_window [app_id=".*"] opacity 1

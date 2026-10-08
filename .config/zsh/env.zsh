@@ -15,8 +15,8 @@ export EDITOR=nvim
 export VISUAL=nvim
 export SUDO_EDITOR=nvim
 export FCEDIT=nvim
-export TERMINAL=alacritty
-export BROWSER=brave
+export TERMINAL=kitty
+export BROWSER=google-chrome-stable
 
 # ==============================
 # Terminal Settings

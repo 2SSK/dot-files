@@ -43,7 +43,7 @@ alias yd='yarn dev'
 alias dco="docker compose"
 alias dps="docker ps"
 alias dpa="docker ps -a"
-alias di="docker images"
+alias di="docker image"
 alias dl="docker ps -l -q"
 alias dx="docker exec -it"
 
