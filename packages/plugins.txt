@@ -1,5 +1,11 @@
-# Shell plugins, pinned to release tags. Columns: dest (under $HOME)  repo  tag  [build command, run in the clone]
+# Shell and tmux plugins, pinned to a release tag (or a commit when a project has no releases).
+# Columns: dest (under $HOME)  repo  ref  [build command, run in the clone]
 .config/zsh/plugins/fzf-tab                  https://github.com/Aloxaf/fzf-tab                    v1.3.0
 .config/zsh/plugins/zsh-autosuggestions      https://github.com/zsh-users/zsh-autosuggestions     v0.7.1
 .config/zsh/plugins/zsh-syntax-highlighting  https://github.com/zsh-users/zsh-syntax-highlighting 0.8.0
 .local/src/ble.sh                            https://github.com/akinomyoga/ble.sh                 v0.4.0-devel3  make install PREFIX="$HOME/.local"
+.config/tmux/plugins/tmux-resurrect          https://github.com/tmux-plugins/tmux-resurrect       v4.0.0
+.config/tmux/plugins/tmux-continuum          https://github.com/tmux-plugins/tmux-continuum       v3.1.0
+.config/tmux/plugins/vim-tmux-navigator      https://github.com/christoomey/vim-tmux-navigator    e41c431a0c7b7388ae7ba341f01a0d217eb3a432
+.config/tmux/plugins/tmux-sessionx           https://github.com/omerxx/tmux-sessionx              628575be60646f5712e4c8c2f76683b03b072515
+.config/tmux/plugins/tmux-floax              https://github.com/omerxx/tmux-floax                 133f526793d90d2caa323c47687dd5544a2c704b
