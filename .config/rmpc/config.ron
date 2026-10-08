@@ -32,14 +32,18 @@
             pane: Split(
                 direction: Horizontal,
                 panes: [
-                    (size: "75%", borders: "ALL", border_symbols: Rounded, pane: Pane(Queue)),
-                    (size: "25%", borders: "ALL", border_symbols: Rounded, pane: Pane(AlbumArt)),
+                    (size: "75%", pane: Split(direction: Vertical, panes: [
+                        (size: "2", pane: Pane(QueueHeader())),
+                        (size: "100%", pane: Pane(Queue)),
+                    ])),
+                    (size: "2", pane: Pane(Empty())),
+                    (size: "25%", pane: Pane(AlbumArt)),
                 ],
             ),
         ),
-        (name: "Playlists", pane: Pane(Playlists)),
+        (name: "Playlists", pane: Split(direction: Horizontal, panes: [(size: "100%", borders: "ALL", border_symbols: Rounded, pane: Pane(Playlists))])),
         (name: "Library", pane: Pane(Directories)),
-        (name: "Artists", pane: Pane(Artists)),
-        (name: "Search", pane: Pane(Search)),
+        (name: "Artists", pane: Split(direction: Horizontal, panes: [(size: "100%", borders: "ALL", border_symbols: Rounded, pane: Pane(Artists))])),
+        (name: "Search", pane: Split(direction: Horizontal, panes: [(size: "100%", borders: "ALL", border_symbols: Rounded, pane: Pane(Search))])),
     ],
 )
