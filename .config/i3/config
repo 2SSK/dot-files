@@ -7,7 +7,8 @@ set $menu rofi -show drun
 
 # --- Look: no title bars, a thin theme-coloured border, gaps (picom rounds and shadows) ---
 include ~/.local/state/desktop/theme/i3.conf
-font pango:Inter Medium 10
+# Titles in Inter; icons in titles fall back to the Nerd Font
+font pango:Inter, JetBrainsMono Nerd Font Medium 11
 title_align center
 default_border pixel 2
 default_floating_border pixel 2
@@ -108,7 +109,9 @@ bindsym $mod+Shift+e exec i3-nagbar -t warning -m 'Exit i3?' -B 'Exit' 'i3-msg e
 # --- Start ---
 # Wallpaper: the one picked last (~/.local/state/desktop/wallpaper links to it), else the default
 exec_always --no-startup-id feh --bg-fill ~/.local/state/desktop/wallpaper 2>/dev/null || feh --bg-fill ~/.local/share/desktop/wallpapers/cat-mocha-lavender_19.jpg
-exec --no-startup-id picom
-exec --no-startup-id autotiling # splits along the longer side of the focused window
+# picom and autotiling also come back on $mod+Shift+r; picom falls back to xrender (no blur) where
+# OpenGL isn't available, e.g. a VM without 3D
+exec_always --no-startup-id pgrep -x picom >/dev/null || picom || picom --backend xrender
+exec_always --no-startup-id pgrep -x autotiling >/dev/null || autotiling # splits along the longer side
 exec --no-startup-id xrdb -merge ~/.Xresources
 exec --no-startup-id dex --autostart --environment i3
