@@ -63,6 +63,12 @@ class Render(unittest.TestCase):
         self.assertEqual(sorted(p.name for p in self.state.iterdir()),
                          ["cava", "current", "foot.ini", "kitty.conf", "palette.json", "st.Xresources"])
 
+    def test_removes_outputs_of_dropped_targets(self):
+        self.state.mkdir(parents=True, exist_ok=True)
+        (self.state / "btop.theme").write_text("stale")
+        tr.render("tokyonight", "dark", self.state)
+        self.assertFalse((self.state / "btop.theme").exists())
+
     def test_unknown_family_or_mode(self):
         with self.assertRaises(tr.ThemeError):
             tr.render("nope", "dark", self.state)

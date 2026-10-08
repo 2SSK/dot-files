@@ -100,6 +100,10 @@ def render(family, mode, state):
     palette = {"meta": theme["meta"], "mode": mode, "ui": theme[mode]["ui"], "ansi": theme[mode]["ansi"]}
     write_atomic(state / "palette.json", json.dumps(palette, indent=2) + "\n")
     write_atomic(state / "current", f"family={family}\nmode={mode}\n")  # last: marks the render complete
+    # The state dir belongs to the renderer: drop outputs of targets that no longer exist
+    for path in state.iterdir():
+        if path.is_file() and path.name not in (*TARGETS, "palette.json", "current") and not path.name.startswith("."):
+            path.unlink()
 
 
 def state_dir():
