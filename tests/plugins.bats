@@ -68,3 +68,16 @@ list() { printf '%s\n' "$@" >"$LIST"; }
 	[ "$status" -eq 1 ]
 	[[ $output == *"event=not_a_clone"* ]]
 }
+
+@test "pins to a commit as well as a tag, and stays offline after" {
+	git -C "$REMOTE" config uploadpack.allowAnySHA1InWant true
+	sha="$(git -C "$REMOTE" rev-parse v1)"
+	commit_tag v2
+	list "p/demo file://$REMOTE $sha"
+	run "$PLUGINS" "$LIST"
+	[ "$status" -eq 0 ]
+	[ "$(cat "$HOME/p/demo/version")" = v1 ]
+	rm -rf "$REMOTE"
+	run "$PLUGINS" "$LIST"
+	[ "$status" -eq 0 ]
+}

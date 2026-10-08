@@ -31,7 +31,7 @@ check_session() {
 check_deps() { # <display>
 	local cmds=(qs kitty copyq notify-send wpctl brightnessctl playerctl gpu-screen-recorder stow)
 	case $1 in
-	x11) cmds+=(i3 i3bar i3status i3lock xss-lock picom feh maim slop xclip) ;;
+	x11) cmds+=(i3 i3bar i3status i3lock xss-lock picom feh maim slop xclip st xrdb) ;;
 	wayland) cmds+=(sway swaylock swayidle grim slurp wl-copy foot) ;;
 	esac
 	local c missing=()

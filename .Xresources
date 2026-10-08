@@ -1,0 +1,7 @@
+! X resources. st (the X11 backup terminal) reads its font, padding and colours here;
+! desktop-theme re-merges this file and sends SIGUSR1 so open st windows recolour.
+#include ".local/state/desktop/theme/st.Xresources"
+
+st.font: JetBrainsMono Nerd Font:size=14:antialias=true:autohint=true
+st.borderpx: 16
+st.chscale: 1.1

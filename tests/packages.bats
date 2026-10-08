@@ -14,7 +14,7 @@ os() { printf '%s\n' "$@" >"$OS_RELEASE"; }
 	[ "$status" -eq 0 ]
 	[[ ${lines[0]} == "native: i3-wm "* && $output == *" dmenu "* ]]
 	[[ $output == *"aur: i3lock-color"* ]]
-	[[ $output != *"extra:"* ]]
+	[[ ${lines[2]} == "extra: st" ]] # built from source on every distro
 }
 
 @test "arch derivative via ID_LIKE resolves to the arch column" {
@@ -66,4 +66,11 @@ os() { printf '%s\n' "$@" >"$OS_RELEASE"; }
 	run "$INSTALL" --help
 	[ "$status" -eq 0 ]
 	[[ $output == *"usage:"* ]]
+}
+
+@test "--distro prints the detected distro" {
+	os ID=ubuntu ID_LIKE=debian
+	run "$INSTALL" --distro
+	[ "$status" -eq 0 ]
+	[ "$output" = debian ]
 }

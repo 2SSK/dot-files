@@ -4,8 +4,8 @@
 setup_file() {
 	export HOME="$BATS_FILE_TMPDIR/home"
 	mkdir -p "$HOME"
-	mkdir -p "$BATS_FILE_TMPDIR/bin" # fake pkill: never signal the developer's terminals
-	printf '#!/bin/sh\n' >"$BATS_FILE_TMPDIR/bin/pkill" && chmod +x "$BATS_FILE_TMPDIR/bin/pkill"
+	mkdir -p "$BATS_FILE_TMPDIR/bin" # fake pkill/xrdb: never touch the developer's terminals
+	for tool in pkill xrdb; do printf '#!/bin/sh\n' >"$BATS_FILE_TMPDIR/bin/$tool" && chmod +x "$BATS_FILE_TMPDIR/bin/$tool"; done
 	export PATH="$BATS_FILE_TMPDIR/bin:$PATH"
 	"$BATS_TEST_DIRNAME/../setup.sh" -y --no-packages >/dev/null
 }

@@ -10,7 +10,7 @@ layers_all=(base cli x11 wayland dev)
 layers_default=(base cli x11 wayland)
 
 usage() {
-	printf 'usage: install.sh [--dry-run] [layer...]\nlayers: %s (default: %s); list format: see base.txt\n' \
+	printf 'usage: install.sh [--dry-run] [layer...] | --distro\nlayers: %s (default: %s); list format: see base.txt\n' \
 		"${layers_all[*]}" "${layers_default[*]}"
 }
 
@@ -38,7 +38,9 @@ install_native() { # <distro> <pkg...>
 	local distro=$1
 	shift
 	case $distro in
-	arch) sudo pacman -S --needed --noconfirm "$@" ;; # no -Sy: avoids partial upgrades
+	# Arch supports installs only together with a full upgrade: -S alone fails on a stale
+	# database (404 for replaced versions), -Sy alone risks a partial upgrade
+	arch) sudo pacman -Syu --needed --noconfirm "$@" ;;
 	debian) sudo apt-get update && sudo apt-get install -y "$@" ;;
 	fedora) sudo dnf install -y "$@" ;;
 	esac
@@ -71,6 +73,7 @@ main() {
 		case $1 in
 		-h | --help) usage && exit 0 ;;
 		--dry-run) dry_run=1 ;;
+		--distro) detect_distro && exit 0 ;;
 		*)
 			[[ " ${layers_all[*]} " == *" $1 "* ]] || { usage >&2 && exit 2; }
 			layers+=("$1")

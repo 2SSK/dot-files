@@ -42,6 +42,18 @@ choose() { # <question> <option...>; first option is the default, prints the cho
 	exit 1
 }
 
+# show_layer <label> <layer>: every package of a layer for this distro, wrapped under a label.
+# AUR packages are marked (aur), ones built from source (build).
+show_layer() {
+	local line
+	printf '  %s%s%s\n' "$bold" "$1" "$reset"
+	while IFS= read -r line; do
+		printf '    %s%s%s\n' "$dim" "$line" "$reset"
+	done < <("$repo/packages/install.sh" --dry-run "$2" |
+		sed -E 's/^native: //; /^aur: /{s/^aur: //; s/([^ ]+)/\1(aur)/g}; /^extra: /{s/^extra: //; s/([^ ]+)/\1(build)/g}' |
+		{ tr '\n' ' ' && echo; } | fold -s -w 76)
+}
+
 # Paths (relative to $HOME) where a real file or foreign link blocks a stow link.
 conflicts() {
 	(cd "$repo" && stow -n . 2>&1 || true) | sed -n 's/.* over existing target \(.*\) since .*/\1/p'
@@ -91,13 +103,23 @@ main() {
 	fi
 
 	local -a layers=()
+	local distro=''
 	if ((packages)); then
-		[[ -n $wm ]] || wm="$(choose 'Window manager?' 'both  i3 (X11) and SwayFX (Wayland)' 'i3  X11 only' 'sway  Wayland only')"
+		distro="$("$repo/packages/install.sh" --distro)"
+		step "Packages for $distro"
+		show_layer 'base (always)' base
 		layers=(base)
-		confirm 'Install terminal tools (zsh, tmux, neovim, fzf, lazygit, ...)?' y && layers+=(cli)
-		[[ $wm == sway ]] || layers+=(x11)
-		[[ $wm == i3 ]] || layers+=(wayland)
-		if ((dev)) || confirm 'Install lint/test tools (bats, shellcheck, shfmt)?' n; then layers+=(dev); fi
+		[[ -n $wm ]] || wm="$(choose 'Window manager?' 'both  i3 (X11) and SwayFX (Wayland)' 'i3  X11 only' 'sway  Wayland only')"
+		if [[ $wm != sway ]]; then show_layer 'x11 (i3)' x11 && layers+=(x11); fi
+		if [[ $wm != i3 ]]; then show_layer 'wayland (SwayFX)' wayland && layers+=(wayland); fi
+		show_layer 'cli (terminal tools)' cli
+		if confirm 'Install the terminal tools?' y; then layers+=(cli); fi
+		if ((dev)); then
+			show_layer 'dev (lint and test tools)' dev && layers+=(dev)
+		else
+			show_layer 'dev (lint and test tools)' dev
+			if confirm 'Install the lint and test tools?' n; then layers+=(dev); fi
+		fi
 	fi
 
 	local shell=0
@@ -106,6 +128,7 @@ main() {
 	# --- Confirm ---
 	step 'Plan'
 	row 'Packages' "$( ((packages)) && echo "${layers[*]} + shell plugins" || echo skip)"
+	[[ $distro != arch ]] || row '' 'includes a full system upgrade (pacman -Syu), as Arch requires'
 	row 'Existing files' "$(case $policy in none) echo none ;; backup) echo "${#found[@]} → $backup" ;; *) echo "${#found[@]} deleted" ;; esac)"
 	row 'Stow' "$repo → $HOME"
 	local family mode
