@@ -22,8 +22,8 @@ zsh plugins are pinned to release tags in `packages/plugins.txt` and installed b
 
 ## Prompt
 
-`~/.config/starship.toml` is the original starship config, kept as it was. It carries its own
-`noctalia` colour palette, so the prompt keeps those colours whatever the desktop theme is.
+`~/.config/starship.toml` is the original starship config. Its colours are ANSI names (blue,
+green, ...), so the prompt follows the desktop theme like the rest of the terminal.
 
 ## Keys
 

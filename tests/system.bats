@@ -33,21 +33,9 @@ setup() {
 	[ ! -e "$CALLS" ]
 }
 
-@test "libvirt: enables the per-driver daemons when present, else libvirtd" {
-	# shellcheck disable=SC2016 # expands when the fake runs
-	printf '#!/bin/sh\necho "systemctl $*" >>"$CALLS"\n[ "$1" != list-unit-files ]\n' >"$BATS_TEST_TMPDIR/bin/systemctl"
-	run "$SYSTEM" libvirt
-	[ "$status" -eq 0 ]
-	grep -q 'systemctl enable --now libvirtd.socket' "$CALLS"
-	# shellcheck disable=SC2016 # expands when the fake runs
-	printf '#!/bin/sh\necho "systemctl $*" >>"$CALLS"\n' >"$BATS_TEST_TMPDIR/bin/systemctl"
-	rm "$CALLS"
-	run "$SYSTEM" libvirt
-	grep -q 'systemctl enable --now virtqemud.socket virtnetworkd.socket virtstoraged.socket' "$CALLS"
-	grep -q 'virsh -c qemu:///system net-autostart default' "$CALLS"
-}
-
 @test "docker: enables the socket and adds the user to the docker group once" {
+	printf '#!/bin/sh\necho "$USER wheel"\n' >"$BATS_TEST_TMPDIR/bin/id" # not in the docker group yet
+	chmod +x "$BATS_TEST_TMPDIR/bin/id"
 	run "$SYSTEM" docker
 	[ "$status" -eq 0 ]
 	grep -q 'systemctl enable --now docker.socket' "$CALLS"

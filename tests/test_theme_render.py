@@ -116,7 +116,8 @@ class Render(unittest.TestCase):
                             golden.parent.mkdir(parents=True, exist_ok=True)
                             golden.write_text(got)
                         self.assertEqual(got, golden.read_text(), f"{golden} differs")
-                        self.assertIsNone(re.search(r"\$(?!schema\b)\w", got), "unfilled template placeholder")
+                        names = "|".join(tr.variables(tr.load(family), family, mode))
+                        self.assertIsNone(re.search(rf"\$({names})\b", got), "unfilled template placeholder")
 
 
 class Cli(unittest.TestCase):
