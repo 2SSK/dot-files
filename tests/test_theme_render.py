@@ -62,13 +62,20 @@ class Render(unittest.TestCase):
         self.assertEqual(len(palette["ansi"]), 16)
         self.assertEqual(sorted(p.name for p in self.state.iterdir()),
                          ["cava", "current", "foot.ini", "git.conf", "kitty.conf", "lazydocker", "lazygit.yml",
-                          "palette.json", "pspg", "rmpc.ron", "st.Xresources", "tmux.conf"])
+                          "nvim.lua", "palette.json", "pspg", "rmpc.ron", "st.Xresources", "tmux.conf"])
 
     def test_removes_outputs_of_dropped_targets(self):
         self.state.mkdir(parents=True, exist_ok=True)
         (self.state / "btop.theme").write_text("stale")
         tr.render("tokyonight", "dark", self.state)
         self.assertFalse((self.state / "btop.theme").exists())
+
+    def test_nvim_gets_the_family_colourscheme_for_the_mode(self):
+        tr.render("rosepine", "light", self.state)
+        self.assertEqual((self.state / "nvim.lua").read_text().splitlines()[-1],
+                         'return { colorscheme = "rose-pine-dawn", background = "light" }')
+        tr.render("gruvbox", "dark", self.state)
+        self.assertIn('colorscheme = "gruvbox", background = "dark"', (self.state / "nvim.lua").read_text())
 
     def test_unknown_family_or_mode(self):
         with self.assertRaises(tr.ThemeError):

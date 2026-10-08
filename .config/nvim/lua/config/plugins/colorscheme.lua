@@ -1,23 +1,23 @@
+-- Colourschemes for the desktop theme families (applied by config/theme.lua). All lazy:
+-- lazy.nvim loads one when it is applied with :colorscheme.
 return {
-	"folke/tokyonight.nvim",
-	name = "tokyonight",
-	priority = 1000,
-	config = function()
-		local bg_dark = "#011423"
-		local comment_fg = "#79a3a5"
-
-		require("tokyonight").setup({
-			style = "night",
-			transparent = true,
-			styles = {
-				sidebars = "transparent",
-				floats = "transparent",
-			},
+	{
+		"folke/tokyonight.nvim",
+		lazy = true,
+		opts = {
 			on_colors = function(colors)
-				colors.comment = comment_fg
-				colors.bg = bg_dark
+				colors.comment = "#79a3a5" -- brighter comments
 			end,
-		})
-		vim.cmd([[colorscheme tokyonight]])
-	end,
+		},
+	},
+	{ "catppuccin/nvim", name = "catppuccin", lazy = true },
+	{ "ellisonleao/gruvbox.nvim", lazy = true },
+	{ "rose-pine/neovim", name = "rose-pine", lazy = true },
+	{
+		"alexxGmZ/e-ink.nvim",
+		lazy = true,
+		config = function()
+			require("e-ink").setup()
+		end,
+	},
 }
