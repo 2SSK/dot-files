@@ -128,7 +128,7 @@ main() {
 		if [[ $wm != i3 ]]; then show_layer 'wayland (SwayFX)' wayland && layers+=(wayland); fi
 		show_layer 'cli (terminal tools)' cli
 		if confirm 'Install the terminal tools?' y; then layers+=(cli); fi
-		show_layer 'vm (virtual machines: libvirt, virt-manager, desktop-vm)' vm
+		show_layer 'vm (virtual machines: libvirt, virt-manager, vm)' vm
 		if confirm 'Install the virtual machine tools?' y; then layers+=(vm) && vm=1; fi
 		if ((dev)); then
 			show_layer 'dev (lint and test tools)' dev && layers+=(dev)

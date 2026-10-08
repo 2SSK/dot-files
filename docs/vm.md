@@ -4,38 +4,60 @@ VMs run on libvirt's system connection (`qemu:///system`): each gets an address 
 `default` NAT network, folders can be shared with virtiofs, and every VM shows up in
 **virt-manager**. `setup.sh` installs the tools (the `vm` layer) and enables the service.
 
-## desktop-vm
+## vm
+
+`vm` is a thin wrapper around `virt-install` and `virsh`. VMs are defined in
+`~/.config/vm/vms.json`; `vm up <name>` creates one from there (or starts it).
 
 ```sh
-desktop-vm create web  --image debian --server --cpus 2 --mem 2G --disk 20G
-desktop-vm create rice --image arch --gui --mem 4G --share ~/Dotfiles:dotfiles:ro
-desktop-vm create try  --image https://example.org/some-cloud-image.qcow2
-desktop-vm create inst --iso ~/Downloads/installer.iso --disk 30G
-
-desktop-vm list                 # name, state, IP
-desktop-vm ssh web [command]    # log in (or run a command) as you
-desktop-vm console rice         # virt-manager window (GUI) or serial console (server)
-desktop-vm start | stop | delete <name>
+vm list                 # every VM: state and IP
+vm up rice              # create from the config, or start
+vm ssh rice [command]   # log in as the VM's user
+vm console rice         # virt-manager window (GUI) or serial console (server)
+vm down rice            # shut down
+vm rm rice              # delete the VM and its disk
+vm images               # image names and versions
+vm config               # edit vms.json
+vm snapshot-list rice   # anything else is passed to virsh on the system connection
 ```
 
-| Option | Meaning |
-| --- | --- |
-| `--image` | `ubuntu` (26.04), `debian` (13), `fedora` (44), `arch`, or any cloud-image URL or file |
-| `--iso` | An installer ISO instead; you install it by hand in the console |
-| `--server` / `--gui` | No display (SSH and serial console) / Spice display with auto-resize, sound and the guest agent |
-| `--cpus`, `--mem`, `--disk` | Size; defaults 2, 2G, 20G |
-| `--share dir[:tag][:ro]` | Mount a laptop folder at `~/<tag>` in the VM (virtiofs), read-only with `:ro` |
-| `--force` | Start even when it would leave the laptop under 2 GiB of free memory |
+### vms.json
 
-Cloud images are prepared by cloud-init on first boot: a user named like yours with
-passwordless sudo, your `~/.ssh/*.pub` keys, password login off, the guest agent (and the
-Spice agent for `--gui`). Images are downloaded once to `~/.cache/desktop-vm/images` and
-each VM's disk is a thin copy on top of them.
+```json
+{
+  "defaults": { "image": "ubuntu:26.04", "cpus": 2, "memory": "2G", "disk": "20G", "gui": false,
+                "user": null, "password": null, "ssh_keys": ["~/.ssh/*.pub"] },
+  "vms": {
+    "rice":   { "image": "arch", "gui": true, "memory": "4G", "disk": "30G",
+                "shares": [{ "source": "~/Dotfiles", "tag": "dotfiles", "readonly": true }] },
+    "server": { "image": "debian:13" },
+    "web":    { "image": "ubuntu:24.04", "cpus": 4, "memory": "4G", "user": "dev", "password": "dev" },
+    "try":    { "iso": "~/Downloads/installer.iso", "disk": "30G" }
+  }
+}
+```
+
+Each VM's keys override `defaults`.
+
+| Key | Meaning |
+| --- | --- |
+| `image` | `ubuntu[:version]` (26.04), `debian[:version]` (13), `fedora[:version]` (44), `arch`, or any cloud-image URL or file |
+| `iso` | An installer ISO instead of `image`; you install it by hand in the console |
+| `cpus`, `memory`, `disk` | Size (`2G`, `512M`, …) |
+| `gui` | `true`: Spice display with auto-resize, sound and the agents; `false`: SSH and serial console only |
+| `user` | Login name in the VM (default: yours), with passwordless sudo |
+| `password` | Optional; hashed before it reaches the VM, and enables password login. Keys are safer |
+| `ssh_keys` | Public keys (globs allowed) installed for `user` |
+| `shares` | Laptop folders mounted at `~/<tag>` in the VM over virtiofs; `readonly` optional |
+
+Cloud images are downloaded once to `~/.cache/vm/images`; each VM's disk is a thin copy on
+top. A VM is only created or started when the laptop keeps at least 2 GiB free (`--force`
+overrides).
 
 ## virt-manager
 
 - **Full window**: View → Scale Display → *Auto resize VM with window* (needs the Spice
-  agent in the guest, which `--gui` installs); View → Fullscreen for the whole screen.
+  agent, which `"gui": true` installs); View → Fullscreen for the whole screen.
 - **Mouse and keyboard**: the pointer moves in and out freely. Click into the VM to type;
   every key, Super included, then goes to the VM. **Ctrl_L + Alt_L** (or clicking outside)
   gives the keyboard back to the laptop. Change it under Edit → Preferences → Console.
@@ -48,7 +70,12 @@ each VM's disk is a thin copy on top of them.
   # at every boot, in /etc/fstab:  <tag>  /home/<you>/<tag>  virtiofs  defaults,nofail  0 0
   ```
 
-## Memory
+## Testing the dotfiles
 
-A VM is only created or started when the laptop keeps at least 2 GiB free. The memory
-safety net from `setup.sh` (zram swap and systemd-oomd) is the second line of defence.
+```sh
+vm up rice          # Arch with a desktop, ~/Dotfiles shared read-only at ~/dotfiles
+vm console rice     # then, inside: ~/dotfiles/setup.sh
+```
+
+Edits on the laptop show up in the VM immediately; re-run `~/dotfiles/setup.sh -y
+--no-packages` inside it to re-link and re-apply.

@@ -1,4 +1,4 @@
-# Virtual machines: libvirt, virt-manager and virt-install (used by desktop-vm).
+# Virtual machines: libvirt, virt-manager and virt-install (used by vm).
 # Columns: arch  debian(+ubuntu)  fedora (format: see base.txt)
 qemu-desktop                qemu-system-x86             qemu-kvm
 libvirt                     libvirt-daemon-system       libvirt

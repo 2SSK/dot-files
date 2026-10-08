@@ -1,0 +1,24 @@
+{
+  "defaults": {
+    "image": "ubuntu:26.04",
+    "cpus": 2,
+    "memory": "2G",
+    "disk": "20G",
+    "gui": false,
+    "user": null,
+    "password": null,
+    "ssh_keys": ["~/.ssh/*.pub"]
+  },
+  "vms": {
+    "rice": {
+      "image": "arch",
+      "gui": true,
+      "memory": "4G",
+      "disk": "30G",
+      "shares": [{ "source": "~/Dotfiles", "tag": "dotfiles", "readonly": true }]
+    },
+    "server": {
+      "image": "debian:13"
+    }
+  }
+}
