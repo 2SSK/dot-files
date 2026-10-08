@@ -32,6 +32,25 @@ entries=(
 	.local/lib/desktop .local/share/desktop
 	.local/share/nvim .local/state/nvim .cache/nvim
 )
+git_local() { # <old git config>: its identity, credential helper and URL shortcuts, plus the
+	# per-folder identities (the tracked config has none of these)
+	local old=$1 key value tmp
+	tmp=$(mktemp)
+	if [[ -r $old ]]; then
+		while read -r key value; do
+			[[ $key == url.https://github.com/.insteadof ]] && continue # tracked (gh:)
+			git config -f "$tmp" --add "$key" "$value"
+		done < <(git config -f "$old" --get-regexp '^(user|credential|url)\.')
+	fi
+	# shellcheck disable=SC2088 # git expands ~ in these paths itself
+	[[ -e $HOME/.config/git/personal.gitconfig ]] && git config -f "$tmp" 'includeIf.gitdir:~/Code/.path' '~/.config/git/personal.gitconfig'
+	# shellcheck disable=SC2088
+	[[ -e $HOME/.config/git/work.gitconfig ]] && git config -f "$tmp" 'includeIf.gitdir:~/Work/.path' '~/.config/git/work.gitconfig'
+	echo '# Machine-only git settings (untracked), carried over from the old dotfiles'
+	cat "$tmp"
+	rm -f "$tmp"
+}
+
 record() { printf '%s\n' "$(IFS=$'\t'; echo "$*")" >>"$manifest"; }
 
 link_entry() { # <path under $HOME>: link every repo file under it, as stow --no-folding would
@@ -90,12 +109,7 @@ terminal() {
 	for id in personal work; do
 		[[ -r $old/.config/git/$id.gitconfig ]] && local_file ".config/git/$id.gitconfig" cat "$old/.config/git/$id.gitconfig"
 	done
-	if [[ -e $HOME/.config/git/personal.gitconfig || -e $HOME/.config/git/work.gitconfig ]]; then
-		local_file .config/git/local.gitconfig printf '%s\n' \
-			'# Identity per folder' \
-			'[includeIf "gitdir:~/Code/"]' '  path = ~/.config/git/personal.gitconfig' \
-			'[includeIf "gitdir:~/Work/"]' '  path = ~/.config/git/work.gitconfig'
-	fi
+	local_file .config/git/local.gitconfig git_local "$old/.config/git/config"
 	[[ -r $old/.config/kitty/kitty.conf ]] &&
 		local_file .config/kitty/local.conf grep -E '^(font_family|map f8 )' "$old/.config/kitty/kitty.conf"
 	# history moves to ~/.local/state/zsh; start it from the old one
