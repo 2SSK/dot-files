@@ -20,6 +20,7 @@ vm create srv --image debian:13 --mem 2G                             # a server,
 vm list                     # every VM: state, and IP while running
 vm start rice               # start it and open its window
 vm open srv                 # window (display VMs) or serial console (Ctrl+] leaves)
+vm console rice             # log in on its serial console, even with a window (Ctrl+] leaves)
 vm stop rice                # shut down; --force pulls the plug
 vm snap rice clean          # snapshot (shut it down first)
 vm snaps rice               # its snapshots

@@ -129,6 +129,12 @@ vi_args() { grep '^virt-install' "$CALLS"; }
 	[[ $(calls) == *"undefine box --remove-all-storage --snapshots-metadata"* ]]
 }
 
+@test "console logs in on the serial console" {
+	VM_EXISTS=1 run "$VM" console box
+	[ "$status" -eq 0 ]
+	[[ $(calls) == *"virsh -c qemu:///system console box"* ]]
+}
+
 @test "snap refuses a running VM" {
 	VM_EXISTS=1 VM_STATE=running run "$VM" snap box
 	[ "$status" -eq 1 ]

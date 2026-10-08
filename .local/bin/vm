@@ -19,17 +19,18 @@ usage() {
 	cat <<-'EOF'
 		vm — virtual machines, shown in virt-manager
 
-		  vm create <name> [options]   new VM, started and opened
-		  vm start  <name>             start it and open its window
-		  vm open   <name>             open its window (or serial console)
-		  vm stop   <name> [--force]   shut down (--force: pull the plug)
+		  vm create  <name> [options]  new VM, started and opened
+		  vm start   <name>            start it and open its window
+		  vm open    <name>            open its window (or serial console)
+		  vm console <name>            log in on its serial console (Ctrl+] leaves)
+		  vm stop    <name> [--force]  shut down (--force: pull the plug)
 		  vm list                      all VMs with state and IP
-		  vm snap   <name> [label]     snapshot (VM must be off)
-		  vm snaps  <name>             list its snapshots
-		  vm revert <name> <label>     back to a snapshot
-		  vm rm     <name> [-y]        delete the VM and its disk
+		  vm snap    <name> [label]    snapshot (VM must be off)
+		  vm snaps   <name>            list its snapshots
+		  vm revert  <name> <label>    back to a snapshot
+		  vm rm      <name> [-y]       delete the VM and its disk
 
-		  vm help <command>            details, e.g. vm help create
+		  vm help    <command>         details, e.g. vm help create
 		  vm guide                     the full guide
 	EOF
 }
@@ -62,6 +63,7 @@ help_for() { # <command>
 		;;
 	start) echo 'vm start <name> [--force]   start it (--force: even when memory is low) and open its window' ;;
 	open) echo 'vm open <name>   its window in virt-manager, or the serial console (Ctrl+] leaves)' ;;
+	console) echo 'vm console <name>   a login on its serial console in this terminal, even when it has a window (Ctrl+] leaves)' ;;
 	stop) echo 'vm stop <name> [--force]   shut down cleanly; --force cuts the power' ;;
 	list) echo 'vm list   every VM with its state, and its IP while running' ;;
 	snap) echo 'vm snap <name> [label]   snapshot a shut-off VM (label: the date and time)' ;;
@@ -325,6 +327,8 @@ cmd_open() {
 	fi
 }
 
+cmd_console() { need_vm "${1:-}" && exec virsh -c "$uri" console "$1"; }
+
 cmd_stop() {
 	need_vm "${1:-}"
 	if [[ ${2:-} == --force ]]; then v destroy "$1" >/dev/null; else v shutdown "$1" >/dev/null; fi
@@ -364,7 +368,7 @@ cmd_rm() {
 cmd=${1:-help}
 shift || true
 case $cmd in
-create | start | open | stop | list | snap | snaps | revert | rm) "cmd_$cmd" "$@" ;;
+create | start | open | console | stop | list | snap | snaps | revert | rm) "cmd_$cmd" "$@" ;;
 help | -h | --help) help_for "${1:-}" ;;
 guide) guide ;;
 *) log_error unknown_command command="$cmd" && usage >&2 && exit 2 ;;
