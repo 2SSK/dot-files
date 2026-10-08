@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Pick a folder in ~/Music, play it shuffled through mpd, and open the player (rmpc).
-# usage: desktop-music [folder]
+# usage: music [folder]
 set -euo pipefail
 
 lib="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")/../lib/desktop" && pwd)"
@@ -9,7 +9,7 @@ source "$lib/log.sh"
 
 music="${XDG_MUSIC_DIR:-$HOME/Music}"
 case ${1:-} in
--h | --help) echo 'usage: desktop-music [folder under ~/Music]' && exit 0 ;;
+-h | --help) echo 'usage: music [folder under ~/Music]' && exit 0 ;;
 esac
 
 folder=${1:-}

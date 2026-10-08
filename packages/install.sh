@@ -6,7 +6,7 @@ here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source-path=SCRIPTDIR/.. source=.local/lib/desktop/log.sh
 source "$here/../.local/lib/desktop/log.sh"
 
-layers_all=(base cli x11 wayland dev)
+layers_all=(base cli x11 wayland vm dev)
 layers_default=(base cli x11 wayland)
 
 usage() {

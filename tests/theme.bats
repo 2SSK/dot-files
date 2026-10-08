@@ -1,8 +1,8 @@
 #!/usr/bin/env bats
-# desktop-theme: the central theme selector. Fake pkill, xrdb and tmux record what would be reloaded.
+# theme: the central theme selector. Fake pkill, xrdb and tmux record what would be reloaded.
 
 setup() {
-	THEME="$BATS_TEST_DIRNAME/../.local/bin/desktop-theme"
+	THEME="$BATS_TEST_DIRNAME/../.local/bin/theme"
 	export XDG_STATE_HOME="$BATS_TEST_TMPDIR/state"
 	STATE="$XDG_STATE_HOME/desktop/theme"
 	export HOME="$BATS_TEST_TMPDIR/home"

@@ -25,3 +25,5 @@ qt6ct                       qt6ct                       qt6ct
 tela-circle-icon-theme-blue @tela-circle                @tela-circle
 aur:bibata-cursor-theme-bin @bibata                     @bibata
 timeshift                   timeshift                   timeshift
+zram-generator              systemd-zram-generator      zram-generator
+-                           systemd-oomd                -
