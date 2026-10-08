@@ -7,7 +7,7 @@ setup() {
 	STATE="$XDG_STATE_HOME/desktop/theme"
 	export HOME="$BATS_TEST_TMPDIR/home"
 	mkdir -p "$HOME" "$BATS_TEST_TMPDIR/bin"
-	for tool in pkill xrdb tmux i3-msg; do # fakes record their arguments instead of touching the real session
+	for tool in pkill xrdb tmux i3-msg kitten; do # fakes record their arguments instead of touching the real session
 		printf '#!/bin/sh\necho "%s $*" >>"%s"\n' "$tool" "$BATS_TEST_TMPDIR/signals" >"$BATS_TEST_TMPDIR/bin/$tool"
 		chmod +x "$BATS_TEST_TMPDIR/bin/$tool"
 	done
@@ -18,6 +18,12 @@ setup() {
 	chmod +x "$BATS_TEST_TMPDIR/bin/gsettings"
 	export PATH="$BATS_TEST_TMPDIR/bin:$PATH"
 	unset DISPLAY XDG_CONFIG_HOME
+	export XDG_RUNTIME_DIR="$BATS_TEST_TMPDIR/run"
+	mkdir -p "$XDG_RUNTIME_DIR"
+}
+
+kitty_socket() { # a listening kitty's socket, as kitty.conf's listen_on names it
+	python3 -c 'import socket, sys; socket.socket(socket.AF_UNIX).bind(sys.argv[1])' "$XDG_RUNTIME_DIR/kitty-$1"
 }
 
 signals() { cat "$BATS_TEST_TMPDIR/signals"; }
@@ -26,7 +32,7 @@ signals() { cat "$BATS_TEST_TMPDIR/signals"; }
 	run "$THEME" set catppuccin --mode light
 	[ "$status" -eq 0 ]
 	[ "$(cat "$STATE/current")" = "$(printf 'family=catppuccin\nmode=light')" ]
-	[[ $(signals) == *"pkill -USR1 -x kitty"* ]]
+	[[ $(signals) != *"pkill -USR1 -x kitty"* ]] # a full config reload blinks; colours go over the socket
 	[[ $(signals) == *"pkill -USR2 -x foot"* ]]
 	[[ $(signals) == *"pkill -USR2 -x cava"* ]]
 	[[ $(signals) == *"pkill -USR1 -x nvim"* ]]
@@ -105,13 +111,15 @@ signals() { cat "$BATS_TEST_TMPDIR/signals"; }
 	run "$THEME" set tokyonight --mode dark
 	[ "$status" -eq 0 ]
 	local link
-	for link in gtk-3.0/gtk.css:gtk-3.0.css gtk-4.0/gtk.css:gtk-4.0.css qt5ct/qt5ct.conf:qt5ct.conf qt6ct/qt6ct.conf:qt6ct.conf; do
+	for link in gtk-3.0/gtk.css:gtk-3.0.css gtk-4.0/gtk.css:gtk-4.0.css gtk-3.0/settings.ini:gtk-settings.ini \
+		gtk-4.0/settings.ini:gtk-settings.ini qt5ct/qt5ct.conf:qt5ct.conf qt6ct/qt6ct.conf:qt6ct.conf; do
 		[ "$(readlink "$HOME/.config/${link%%:*}")" = "$STATE/${link#*:}" ]
 	done
 	grep -q '@define-color accent_bg_color #7aa2f7;' "$HOME/.config/gtk-3.0/gtk.css"
 	grep -q -- '--window-bg-color: #1a1b26;' "$HOME/.config/gtk-4.0/gtk.css"
 	grep -qx "color_scheme_path=$STATE/qt-colors.conf" "$HOME/.config/qt6ct/qt6ct.conf"
 	grep -qx 'icon_theme=Tela-circle-blue-dark' "$HOME/.config/qt5ct/qt5ct.conf"
+	grep -qx 'gtk-theme-name=adw-gtk3-dark' "$HOME/.config/gtk-4.0/settings.ini"
 }
 
 @test "an existing GTK or Qt config is moved aside, not deleted" {
@@ -132,4 +140,38 @@ signals() { cat "$BATS_TEST_TMPDIR/signals"; }
 	run "$THEME" mode dark
 	[[ $(signals) == *"color-scheme prefer-dark"* && $(signals) == *"gtk-theme adw-gtk3-dark"* ]]
 	[[ $(signals) == *"pkill -HUP -x xsettingsd"* ]]
+}
+
+@test "every app in the consumers table uses a file the renderer produces" {
+	"$THEME" set tokyonight
+	local file
+	while read -r file _; do
+		[ -f "$STATE/$file" ] || { echo "no rendered $file" && false; }
+	done < <(sed -n "/^consumers() {/,/^}/{/^[a-z0-9]/p}" "$THEME" | grep -v '^consumers')
+}
+
+@test "a switch swaps the whole theme at once" {
+	"$THEME" set tokyonight
+	[ -L "$STATE" ]
+	local first
+	first="$(readlink -f "$STATE")"
+	"$THEME" set gruvbox
+	[ "$(readlink -f "$STATE")" != "$first" ]
+	[ ! -e "$first" ] # the previous render is gone
+}
+
+@test "kitty windows are recoloured over their sockets, nothing else reloads them" {
+	kitty_socket 101
+	kitty_socket 202
+	run "$THEME" set rosepine --mode dark
+	[ "$status" -eq 0 ]
+	[[ $(signals) == *"kitten @ --to unix:$XDG_RUNTIME_DIR/kitty-101 set-colors --all --configured $STATE/kitty.conf"* ]]
+	[[ $(signals) == *"kitten @ --to unix:$XDG_RUNTIME_DIR/kitty-202 set-colors"* ]]
+	[[ $(signals) != *"picom"* ]] # its reset would redraw the whole screen
+}
+
+@test "a switch prints nothing unless something goes wrong" {
+	run "$THEME" set gruvbox
+	[ "$status" -eq 0 ]
+	[ -z "$output" ]
 }

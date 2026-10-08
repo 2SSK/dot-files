@@ -1,4 +1,3 @@
-# Basics
 bindsym $mod+Return exec $term
 bindsym $mod+t exec alacritty
 bindsym $mod+q kill
@@ -7,53 +6,25 @@ bindsym $mod+Shift+r reload
 bindsym $mod+Shift+e exec swaynag -t warning -m 'Do you really want to exit sway?' -B 'Yes, exit sway' 'swaymsg exit'
 floating_modifier $mod normal
 
-# Lock Screen
-# bindsym $mod+c exec --no-startup-id ~/.config/sway/scripts/swaylock.sh
-# bindsym $mod+c exec hyprlock
-
-# Toggle noctalia-shell wallpaper selector
 bindsym $mod+shift+p exec --no-startup-id noctalia msg panel-toggle wallpaper
-
-# Emojis
-# bindsym $mod+comma exec smile
 bindsym $mod+comma exec --no-startup-id noctalia msg panel-toggle launcher
-
-# Toggle noctalia-shell bar
 bindsym $mod+shift+b exec --no-startup-id noctalia msg bar-toggle
-
-# Power Menu
-# bindsym $mod+p exec --no-startup-id wlogout
 bindsym $mod+p exec --no-startup-id noctalia msg panel-toggle session
-# bindsym $mod+p exec --no-startup-id ~/.config/rofi/powermenu.sh
 
-# Switch to prev/next workspace
 bindsym $mod+slash workspace next
 bindsym $mod+period workspace prev
 
-# Audio controls
 bindsym F1 exec pactl set-sink-mute @DEFAULT_SINK@ toggle
 bindsym F2 exec pactl set-sink-volume @DEFAULT_SINK@ -5%
 bindsym F3 exec pactl set-sink-volume @DEFAULT_SINK@ +5%
-
-# Brightness controls
 bindsym F4 exec brightnessctl set 5%-
 bindsym F5 exec brightnessctl set +5%
-
-# Microphone mute/unmute
 bindsym F9 exec amixer set Capture toggle
 
-# Screenshots (grimshot — replaced by Noctalia v5 screenshot tool below)
-# bindsym F12 exec grimshot save screen ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
-bindsym Shift+F12 exec grimshot save active ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
-# bindsym ctrl+F12 exec grimshot save area ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
-
-# Screenshots (Noctalia v5 — output policy lives in ~/.config/noctalia/00-shell.toml [shell.screenshot])
-# F12       : fullscreen; shows a monitor picker when more than one output is connected
-# Shift+F12 : freeze screen + annotation editor (copy or save from the editor)
-# ctrl+F12  : quick region capture -> clipboard
+# Screenshots: F12 whole screen (picks the output if there are several), ctrl region, Shift window
 bindsym F12 exec noctalia msg screenshot-fullscreen pick
-# bindsym Shift+F12 exec noctalia msg screenshot-annotate
 bindsym ctrl+F12 exec noctalia msg screenshot-region
+bindsym Shift+F12 exec grimshot save active ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
 
-# VMs (virt-manager) and other apps that grab the keyboard: Super+Escape hands keys back to sway and again to the app
+# Apps that grab the keyboard (virt-manager): Super+Escape gives the keys back to sway, and again to the app
 bindsym --inhibited $mod+Escape seat - shortcuts_inhibitor toggle

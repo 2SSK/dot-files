@@ -4,11 +4,16 @@
 usage: theme_render.py render <family> <dark|light>
        theme_render.py lint [family...]
 
-Standard library only. Every output is written atomically, so readers never see a partial file.
+Standard library only. Every file under templates/ is a target, rendered to the same relative path.
+A theme is rendered into a fresh directory next to the state path, which is a symlink swapped to it
+in one step: readers see the old theme or the new one, never a mix.
 """
 
+import fcntl
+import hashlib
 import json
 import os
+import shutil
 import sys
 import tempfile
 import tomllib
@@ -22,17 +27,15 @@ MODES = ("dark", "light")
 ROLES = ("bg", "bg_alt", "surface", "overlay", "fg", "fg_muted", "primary", "on_primary", "secondary",
          "accent", "success", "warning", "error", "border", "border_active", "selection")
 ANSI = tuple(f"c{i}" for i in range(16))
-# Templates rendered from the active variant; foot.ini gets both variants (live mode switch)
-TARGETS = ("kitty.conf", "foot.ini", "st.Xresources", "cava", "tmux.conf", "git.conf", "lazygit.yml",
-           "lazydocker/config.yml", "pspg/pspgconf", "pspg/.pspg_theme_desktop", "rmpc.ron", "nvim.lua",
-           "silicon.tmTheme", "vim.vim", "opencode/themes/desktop.json", "i3.conf",
-           "picom.conf", "picom/round-top.glsl",
-           "picom/round-bottom.glsl", "xsettingsd.conf",
-           "gtk-3.0.css", "gtk-4.0.css", "qt-colors.conf", "qt5ct.conf", "qt6ct.conf")
 
 
 class ThemeError(Exception):
     pass
+
+
+def targets():
+    """Every template, as a path relative to templates/ (also its output path)."""
+    return sorted(str(p.relative_to(TEMPLATES)) for p in TEMPLATES.rglob("*") if p.is_file())
 
 
 def load(family):
@@ -72,11 +75,11 @@ def lint(theme):
     return problems
 
 
-def variables(theme, family, mode, state=None):
+def variables(theme, family, mode, state):
     dark = mode == "dark"
     values = {
         "family": family, "mode": mode,
-        "state": str(state or state_dir()),  # absolute: qt5ct/qt6ct can't resolve ~ or relative paths
+        "state": str(state),  # absolute: qt5ct/qt6ct can't resolve ~ or relative paths
         "gtk_theme": "adw-gtk3-dark" if dark else "adw-gtk3",
         "color_scheme": "prefer-dark" if dark else "prefer-light",
         "icon_theme": f"Tela-circle-blue-{mode}",
@@ -91,32 +94,55 @@ def variables(theme, family, mode, state=None):
     return values
 
 
-def write_atomic(path, text):
-    path.parent.mkdir(parents=True, exist_ok=True)
-    fd, tmp = tempfile.mkstemp(dir=path.parent, prefix=f".{path.name}.")
-    with os.fdopen(fd, "w") as f:
-        f.write(text)
-    os.replace(tmp, path)
+def fingerprint(family, mode, state):
+    """Everything a render depends on; an unchanged fingerprint means an identical render."""
+    h = hashlib.sha256(f"{family}\0{mode}\0{state}\0".encode())
+    h.update(Path(__file__).read_bytes())  # the renderer itself
+    h.update((THEMES / f"{family}.toml").read_bytes())
+    for target in targets():
+        h.update(f"\0{target}\0".encode())
+        h.update((TEMPLATES / target).read_bytes())
+    return h.hexdigest()
 
 
 def render(family, mode, state):
+    """Render into a new directory beside state, then point state (a symlink) at it. A request
+    identical to the current render (same fingerprint) leaves it in place."""
     if mode not in MODES:
         raise ThemeError(f"unknown mode '{mode}' (dark or light)")
     theme = load(family)
     if problems := lint(theme):
         raise ThemeError(f"{family}: " + "; ".join(problems))
 
-    state.mkdir(parents=True, exist_ok=True)
-    values = variables(theme, family, mode, state)
-    for target in TARGETS:
-        write_atomic(state / target, Template((TEMPLATES / target).read_text()).substitute(values))
-    palette = {"meta": theme["meta"], "mode": mode, "ui": theme[mode]["ui"], "ansi": theme[mode]["ansi"]}
-    write_atomic(state / "palette.json", json.dumps(palette, indent=2) + "\n")
-    write_atomic(state / "current", f"family={family}\nmode={mode}\n")  # last: marks the render complete
-    # The state dir belongs to the renderer: drop outputs of targets that no longer exist
-    for path in state.iterdir():
-        if path.is_file() and path.name not in (*TARGETS, "palette.json", "current") and not path.name.startswith("."):
-            path.unlink()
+    state = Path(state)
+    state.parent.mkdir(parents=True, exist_ok=True)
+    with open(state.parent / f".{state.name}.lock", "w") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)  # one render at a time
+        digest = fingerprint(family, mode, state)
+        if state.is_symlink() and (state / ".fingerprint").is_file() \
+                and (state / ".fingerprint").read_text() == digest:
+            return
+        new = Path(tempfile.mkdtemp(dir=state.parent, prefix=f".{state.name}."))
+        new.chmod(0o755)  # mkdtemp makes it private
+        values = variables(theme, family, mode, state)
+        for target in targets():
+            out = new / target
+            out.parent.mkdir(parents=True, exist_ok=True)
+            out.write_text(Template((TEMPLATES / target).read_text()).substitute(values))
+        palette = {"meta": theme["meta"], "mode": mode, "ui": theme[mode]["ui"], "ansi": theme[mode]["ansi"]}
+        (new / "palette.json").write_text(json.dumps(palette, indent=2) + "\n")
+        (new / "current").write_text(f"family={family}\nmode={mode}\n")
+        (new / ".fingerprint").write_text(digest)
+
+        if state.exists() and not state.is_symlink():  # a plain directory from before; the renderer owns it
+            shutil.rmtree(state)
+        link = state.parent / f".{state.name}.link"
+        link.unlink(missing_ok=True)
+        link.symlink_to(new.name)
+        os.replace(link, state)  # the switch, atomic
+        for old in state.parent.glob(f".{state.name}.*"):  # earlier renders, and leftovers of failed ones
+            if old.is_dir() and not old.is_symlink() and old != new:
+                shutil.rmtree(old)
 
 
 def state_dir():

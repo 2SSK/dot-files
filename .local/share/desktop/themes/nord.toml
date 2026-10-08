@@ -1,0 +1,84 @@
+# Nord: dark (Polar Night) / light (Snow Storm). Palette values copied from Nord (src/nord.css);
+# dark terminal colours follow Nord's official Xresources port. Nord ships no light theme, so the
+# light variant uses only Nord colours on Snow Storm. Nord's greys are too faint for text, so muted
+# text is mixed from Nord colours: dark nord4 62 % over nord0, light nord0 72 % over nord6. In the
+# light terminal, Nord's aurora and frost colours are deepened toward nord0 until readable (3.6:1).
+# Source: https://github.com/nordtheme/nord  License: MIT  Copyright: Sven Greb
+
+[meta]
+family = "nord"
+name = "Nord"
+source = "https://github.com/nordtheme/nord"
+license = "MIT"
+
+[dark.ui]
+bg = "#2e3440"
+bg_alt = "#3b4252"
+surface = "#3b4252"
+overlay = "#434c5e"
+fg = "#d8dee9"
+fg_muted = "#979da9"
+primary = "#88c0d0"
+on_primary = "#2e3440"
+secondary = "#81a1c1"
+accent = "#d08770"
+success = "#a3be8c"
+warning = "#ebcb8b"
+error = "#bf616a"
+border = "#434c5e"
+border_active = "#88c0d0"
+selection = "#434c5e"
+
+[dark.ansi]
+c0 = "#3b4252"
+c1 = "#bf616a"
+c2 = "#a3be8c"
+c3 = "#ebcb8b"
+c4 = "#81a1c1"
+c5 = "#b48ead"
+c6 = "#88c0d0"
+c7 = "#e5e9f0"
+c8 = "#4c566a"
+c9 = "#bf616a"
+c10 = "#a3be8c"
+c11 = "#ebcb8b"
+c12 = "#81a1c1"
+c13 = "#b48ead"
+c14 = "#8fbcbb"
+c15 = "#eceff4"
+
+[light.ui]
+bg = "#eceff4"
+bg_alt = "#e5e9f0"
+surface = "#d8dee9"
+overlay = "#d8dee9"
+fg = "#2e3440"
+fg_muted = "#636872"
+primary = "#5e81ac"
+on_primary = "#eceff4"
+secondary = "#b48ead"
+accent = "#d08770"
+success = "#a3be8c"
+warning = "#ebcb8b"
+error = "#bf616a"
+border = "#d8dee9"
+border_active = "#5e81ac"
+selection = "#d8dee9"
+
+[light.ansi]
+c0 = "#3b4252"
+c1 = "#bc6069"
+c2 = "#70816b"
+c3 = "#857962"
+c4 = "#5c7ea8"
+c5 = "#8c738c"
+c6 = "#648085"
+c7 = "#d8dee9"
+c8 = "#636872"
+c9 = "#bc6069"
+c10 = "#70816b"
+c11 = "#857962"
+c12 = "#5c7ea8"
+c13 = "#8c738c"
+c14 = "#648085"
+c15 = "#e5e9f0"

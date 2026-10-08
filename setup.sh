@@ -65,7 +65,10 @@ prune_links() {
 	local link
 	while IFS= read -r -d '' link; do
 		if [[ $(readlink -m "$link") == "$repo"/* ]]; then rm "$link"; fi
-	done < <(find "$HOME" -xdev \( -path "$repo" -o -path "$HOME/.cache" \) -prune -o -type l -print0)
+	done < <( # links into the repo only exist where it has files: top-level dotfiles, .config, .local
+		find "$HOME" -maxdepth 1 -type l -print0
+		find "$HOME/.config" "$HOME/.local" -xdev -path "$repo" -prune -o -type l -print0 2>/dev/null
+	)
 }
 
 # User services from the packages: mpd plays music, mpd-mpris exposes it to media keys and the bar.
