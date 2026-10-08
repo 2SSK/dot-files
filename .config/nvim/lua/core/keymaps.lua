@@ -1,54 +1,27 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
-local keymap = vim.keymap
+local map = vim.keymap.set
 
-keymap.set("i", "jk", "<ESC>")
-keymap.set("n", "<leader>nh", ":nohl<CR>")
+map("i", "jk", "<Esc>")
+map("n", "<Esc>", "<cmd>nohlsearch<CR><Esc>")
+map("n", "<leader>w", "<cmd>w<CR>", { desc = "Save" })
+map("n", "<leader>q", "<cmd>q<CR>", { desc = "Quit" })
+map("n", "<leader>Q", "<cmd>qa<CR>", { desc = "Quit all" })
 
-keymap.set("n", "<leader>w", ":w<CR>")
-keymap.set("n", "<leader>wq", ":wq<CR>")
-keymap.set("n", "<leader>q", ":q<CR>")
-keymap.set("n", "<leader>qa", ":qa<CR>")
+map("n", "<leader>sv", "<C-w>v", { desc = "Split vertically" })
+map("n", "<leader>sh", "<C-w>s", { desc = "Split horizontally" })
+map("n", "<leader>se", "<C-w>=", { desc = "Equalise splits" })
+map("n", "<leader>sx", "<cmd>close<CR>", { desc = "Close split" })
+map("n", "<C-Up>", "<cmd>resize -3<CR>")
+map("n", "<C-Down>", "<cmd>resize +3<CR>")
+map("n", "<C-Left>", "<cmd>vertical resize -3<CR>")
+map("n", "<C-Right>", "<cmd>vertical resize +3<CR>")
 
--- Window Split Command
-keymap.set("n", "<leader>sv", "<C-w>v")
-keymap.set("n", "<leader>sh", "<C-w>s")
-keymap.set("n", "<leader>se", "<C-w>=")
-keymap.set("n", "<leader>sx", "<cmd>close<CR>")
+map("n", "<leader>to", "<cmd>tabnew<CR>", { desc = "New tab" })
+map("n", "<leader>tx", "<cmd>tabclose<CR>", { desc = "Close tab" })
+map("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open buffer in new tab" })
+map("n", "<S-l>", "<cmd>tabnext<CR>", { desc = "Next tab" })
+map("n", "<S-h>", "<cmd>tabprevious<CR>", { desc = "Previous tab" })
 
--- Tab Navigation
-keymap.set("n", "<leader>to", "<cmd>tabnew<CR>")
-keymap.set("n", "<leader>tx", "<cmd>tabclose<CR>")
-keymap.set("n", "<S-l>", "<cmd>tabn<CR>")
-keymap.set("n", "<S-h>", "<cmd>tabp<CR>")
-keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>")
-
--- Zen mode toggle
-keymap.set("n", "<leader>zm", ":ZenMode<CR>")
-
--- Silicon command
-keymap.set("v", "<leader>ss", ":Silicon<CR>")
-
--- Markdown preview toggle
-keymap.set("n", "<leader>md", ":MarkdownPreviewToggle<CR>")
-
--- Resize window commands
-keymap.set("n", "<C-Up>", ":resize -3<CR>")
-keymap.set("n", "<C-Down>", ":resize +3<CR>")
-keymap.set("n", "<C-Left>", ":vertical resize -3<CR>")
-keymap.set("n", "<C-Right>", ":vertical resize +3<CR>")
-
--- Copilot.lua suggestions commands (copilot.vim keymaps updated)
--- Accept suggestion with Ctrl+a
-vim.api.nvim_set_keymap("i", "<C-a>", "<cmd>CopilotSuggestionAccept<CR>", { silent = true })
--- Dismiss suggestion with Ctrl+r
-vim.api.nvim_set_keymap("i", "<C-r>", "<cmd>CopilotSuggestionDismiss<CR>", { silent = true })
-keymap.set("n", "<leader>cd", "<cmd>Copilot disable<CR>", { silent = true })
-
--- Copilot chat commands
-keymap.set("n", "<leader>aa", "<cmd>CopilotChatToggle<cr>", { desc = "Toggle Copilot Chat" })
-keymap.set("n", "<leader>chl", "<cmd>CopilotChatReset<cr>")
-
--- DSA commands
-keymap.set("n", "<leader>cr", ":!./run.sh %<CR>")
+map("n", "<leader>cx", "<cmd>!./run.sh %<CR>", { desc = "Run ./run.sh on this file" })

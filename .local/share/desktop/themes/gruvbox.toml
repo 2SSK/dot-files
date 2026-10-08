@@ -6,8 +6,6 @@ family = "gruvbox"
 name = "Gruvbox"
 source = "https://github.com/ellisonleao/gruvbox.nvim"
 license = "MIT"
-nvim_dark = "gruvbox"
-nvim_light = "gruvbox"
 
 [dark.ui]
 bg = "#282828"

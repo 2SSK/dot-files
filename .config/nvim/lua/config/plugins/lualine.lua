@@ -3,10 +3,8 @@ return {
 	event = "VeryLazy",
 	opts = {
 		options = {
-			icon_enabled = true,
 			theme = "auto",
-			component_seperators = "|",
-			section_separators = { left = "", right = "" },
+			section_separators = { left = "", right = "" },
 		},
 	},
 }

@@ -1,12 +1,10 @@
--- mini.nvim: text objects, pairs, surround, moving lines, git diff signs, colour and TODO
--- highlights, icons. One plugin instead of vim-move, colorizer, todo-comments and devicons.
 return {
 	"echasnovski/mini.nvim",
 	version = false,
 	config = function()
 		local ai = require("mini.ai")
 		ai.setup({
-			custom_textobjects = { -- af/if, ac/ic from treesitter (queries: nvim-treesitter-textobjects)
+			custom_textobjects = {
 				f = ai.gen_spec.treesitter({ a = "@function.outer", i = "@function.inner" }),
 				c = ai.gen_spec.treesitter({ a = "@class.outer", i = "@class.inner" }),
 			},
@@ -16,9 +14,9 @@ return {
 		require("mini.move").setup() -- Alt+h/j/k/l moves the line or selection
 
 		require("mini.diff").setup()
-		vim.keymap.set("n", "<leader>do", function()
+		vim.keymap.set("n", "<leader>gd", function()
 			MiniDiff.toggle_overlay(0)
-		end, { desc = "Toggle diff overlay" })
+		end, { desc = "Diff overlay" })
 
 		local hipatterns = require("mini.hipatterns")
 		local word = function(w)
@@ -42,6 +40,6 @@ return {
 		end, { desc = "Previous todo comment" })
 
 		require("mini.icons").setup()
-		MiniIcons.mock_nvim_web_devicons() -- for plugins that ask for nvim-web-devicons
+		MiniIcons.mock_nvim_web_devicons()
 	end,
 }

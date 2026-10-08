@@ -2,5 +2,3 @@ PRD.md
 AGENTS.md
 ROADMAP.md
 __pycache__/
-# app state that must never be committed (e.g. when a tool runs with XDG_CONFIG_HOME on the repo)
-.config/github-copilot/

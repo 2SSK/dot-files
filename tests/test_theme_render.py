@@ -62,7 +62,8 @@ class Render(unittest.TestCase):
         self.assertEqual(len(palette["ansi"]), 16)
         self.assertEqual(sorted(p.name for p in self.state.iterdir()),
                          ["cava", "current", "foot.ini", "git.conf", "kitty.conf", "lazydocker", "lazygit.yml",
-                          "nvim.lua", "palette.json", "pspg", "rmpc.ron", "st.Xresources", "tmux.conf"])
+                          "nvim.lua", "palette.json", "pspg", "rmpc.ron", "silicon.tmTheme", "st.Xresources",
+                          "tmux.conf"])
 
     def test_removes_outputs_of_dropped_targets(self):
         self.state.mkdir(parents=True, exist_ok=True)
@@ -70,12 +71,18 @@ class Render(unittest.TestCase):
         tr.render("tokyonight", "dark", self.state)
         self.assertFalse((self.state / "btop.theme").exists())
 
-    def test_nvim_gets_the_family_colourscheme_for_the_mode(self):
+    def test_nvim_gets_the_palette_as_base16(self):
         tr.render("rosepine", "light", self.state)
-        self.assertEqual((self.state / "nvim.lua").read_text().splitlines()[-1],
-                         'return { colorscheme = "rose-pine-dawn", background = "light" }')
+        nvim = (self.state / "nvim.lua").read_text()
+        self.assertIn('background = "light"', nvim)
+        self.assertIn('base00 = "#faf4ed"', nvim)  # rose-pine dawn bg
+        self.assertNotIn("$", nvim)
+
+    def test_silicon_gets_a_code_theme_from_the_palette(self):
         tr.render("gruvbox", "dark", self.state)
-        self.assertIn('colorscheme = "gruvbox", background = "dark"', (self.state / "nvim.lua").read_text())
+        theme = (self.state / "silicon.tmTheme").read_text()
+        self.assertIn("<string>#282828</string>", theme)  # gruvbox dark bg
+        self.assertIn("<string>comment</string>", theme)
 
     def test_unknown_family_or_mode(self):
         with self.assertRaises(tr.ThemeError):

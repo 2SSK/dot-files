@@ -1,23 +1,22 @@
--- Follow the desktop theme: `theme` writes ~/.local/state/desktop/theme/nvim.lua
--- ({ colorscheme, background }) and sends SIGUSR1; every running nvim re-applies it.
+-- Follow the desktop theme: `theme` renders ~/.local/state/desktop/theme/nvim.lua and sends
+-- SIGUSR1; every running nvim reloads colors/desktop.lua.
 local M = {}
 
 local state = (vim.env.XDG_STATE_HOME or (vim.env.HOME .. "/.local/state")) .. "/desktop/theme/nvim.lua"
-local fallback = { colorscheme = "tokyonight-night", background = "dark" }
+
+function M.read()
+	local ok, theme = pcall(dofile, state)
+	return ok and type(theme) == "table" and theme or nil
+end
 
 function M.apply()
-	local ok, theme = pcall(dofile, state)
-	if not ok or type(theme) ~= "table" then
-		theme = fallback
-	end
-	vim.o.background = theme.background
-	if not pcall(vim.cmd.colorscheme, theme.colorscheme) then
-		vim.cmd.colorscheme(fallback.colorscheme)
+	if not pcall(vim.cmd.colorscheme, "desktop") then
+		vim.cmd.colorscheme("default")
 	end
 end
 
 function M.setup()
-	-- Transparent background for every colourscheme, so the terminal's opacity shows through
+	-- Transparent background, so the terminal's opacity shows through
 	vim.api.nvim_create_autocmd("ColorScheme", {
 		group = vim.api.nvim_create_augroup("desktop-theme", { clear = true }),
 		callback = function()
@@ -31,9 +30,7 @@ function M.setup()
 	vim.api.nvim_create_autocmd("Signal", {
 		group = "desktop-theme",
 		pattern = "SIGUSR1",
-		-- nested: :colorscheme must fire its autocmds here, or lazy.nvim cannot load the
-		-- scheme's plugin and the ColorScheme hook above does not run
-		nested = true,
+		nested = true, -- so :colorscheme fires ColorScheme (transparency above, lualine)
 		callback = function()
 			M.apply()
 			vim.cmd.redraw({ bang = true })

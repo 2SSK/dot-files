@@ -1,4 +1,3 @@
--- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
 	local lazyrepo = "https://github.com/folke/lazy.nvim.git"
@@ -13,7 +12,6 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 		os.exit(1)
 	end
 end
--- Put lazy into the runtimepath for neovim
 vim.opt.rtp:prepend(lazypath)
 
 -- The tracked lockfile pins plugin versions. In a read-only checkout (the test VM's share),
@@ -28,21 +26,13 @@ if vim.fn.filewritable(lockfile) ~= 1 then
 	lockfile = copy
 end
 
--- Setup lazy.nvim
 require("lazy").setup({
 	lockfile = lockfile,
 	spec = {
-		-- Import all other plugins
 		{ import = "config.plugins" },
-
-		-- Single file small config plugins
 		{ import = "config.multiplugins" },
 	},
-	change_detection = {
-		-- automatically check for config file changees and reload the ui
-		enabled = false,
-		notify = false, -- get a notification when changes are found
-	},
+	change_detection = { enabled = false, notify = false },
 	ui = {
 		border = "rounded",
 		backdrop = 100,

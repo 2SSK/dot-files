@@ -7,8 +7,6 @@ family = "eink"
 name = "E-ink"
 source = "https://github.com/alexxGmZ/e-ink.nvim"
 license = "MIT"
-nvim_dark = "e-ink"
-nvim_light = "e-ink"
 
 [dark.ui]
 bg = "#333333"

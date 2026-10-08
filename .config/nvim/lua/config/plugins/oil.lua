@@ -7,22 +7,11 @@ return {
 				["<C-h>"] = false,
 				["<M-h>"] = "actions.select_split",
 			},
-			view_options = {
-				show_hidden = true,
-			},
-			-- Add borders to oil windows
-			float = {
-				border = "rounded",
-			},
-			preview = {
-				border = "rounded",
-			},
+			view_options = { show_hidden = true },
+			float = { border = "rounded" },
+			preview = { border = "rounded" },
 		})
-
-		-- Open parent directory in current window
-		vim.keymap.set("n", "-", "<CMD>Oil<CR>")
-
-		-- Open parent directory in floating window
-		vim.keymap.set("n", "<space>-", require("oil").toggle_float)
+		vim.keymap.set("n", "-", "<cmd>Oil<CR>", { desc = "Parent directory" })
+		vim.keymap.set("n", "<leader>-", require("oil").toggle_float, { desc = "Parent directory (float)" })
 	end,
 }

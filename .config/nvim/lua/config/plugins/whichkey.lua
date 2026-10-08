@@ -6,9 +6,9 @@ return {
 		delay = 300,
 		icons = {
 			rules = false,
-			breadcrumb = " ", -- symbol used in the command line area that shows your active key combo
-			separator = "󱦰  ", -- symbol used between a key and it's label
-			group = "󰹍 ", -- symbol prepended to a group
+			breadcrumb = " ",
+			separator = "󱦰  ",
+			group = "󰹍 ",
 		},
 		plugins = {
 			spelling = {
@@ -24,13 +24,15 @@ return {
 			{
 				mode = { "n", "v" },
 				{ "<leader>f", group = "Find" },
-				{ "<leader>g", group = "Git" },
-				{ "<leader>e", group = "Explorer / config" },
+				{ "<leader>e", group = "Explorer" },
 				{ "<leader>c", group = "Code" },
 				{ "<leader>x", group = "Diagnostics / lists" },
+				{ "<leader>g", group = "Git" },
 				{ "<leader>u", group = "UI" },
-				{ "<leader>w", group = "Session" },
-				{ "<leader>d", group = "Diff" },
+				{ "<leader>s", group = "Splits / screenshot" },
+				{ "<leader>t", group = "Tabs / terminal" },
+				{ "<leader>S", group = "Session" },
+				{ "<leader>m", group = "Markdown" },
 				{ "[", group = "prev" },
 				{ "]", group = "next" },
 				{ "g", group = "goto" },
@@ -43,7 +45,7 @@ return {
 			function()
 				require("which-key").show({ global = false })
 			end,
-			desc = "Buffer Local Keymaps (which-key)",
+			desc = "Buffer keymaps",
 		},
 	},
 }

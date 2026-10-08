@@ -6,8 +6,6 @@ family = "rosepine"
 name = "Rosé Pine"
 source = "https://github.com/rose-pine/rose-pine-theme"
 license = "MIT"
-nvim_dark = "rose-pine-main"
-nvim_light = "rose-pine-dawn"
 
 [dark.ui]
 bg = "#191724"

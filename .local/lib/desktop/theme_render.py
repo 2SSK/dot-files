@@ -24,7 +24,8 @@ ROLES = ("bg", "bg_alt", "surface", "overlay", "fg", "fg_muted", "primary", "on_
 ANSI = tuple(f"c{i}" for i in range(16))
 # Templates rendered from the active variant; foot.ini gets both variants (live mode switch)
 TARGETS = ("kitty.conf", "foot.ini", "st.Xresources", "cava", "tmux.conf", "git.conf", "lazygit.yml",
-           "lazydocker/config.yml", "pspg/pspgconf", "pspg/.pspg_theme_desktop", "rmpc.ron", "nvim.lua")
+           "lazydocker/config.yml", "pspg/pspgconf", "pspg/.pspg_theme_desktop", "rmpc.ron", "nvim.lua",
+           "silicon.tmTheme")
 
 
 class ThemeError(Exception):
@@ -69,7 +70,7 @@ def lint(theme):
 
 
 def variables(theme, family, mode):
-    values = {"family": family, "mode": mode, "nvim_colorscheme": theme["meta"][f"nvim_{mode}"]}
+    values = {"family": family, "mode": mode}
     for m in MODES:
         for key, colour in {**theme[m]["ui"], **theme[m]["ansi"]}.items():
             values[f"{m}_{key}"] = colour

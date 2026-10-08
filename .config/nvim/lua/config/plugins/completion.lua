@@ -1,5 +1,4 @@
--- blink.cmp: completion from LSP, paths, snippets (friendly-snippets) and the buffer, with a
--- native fuzzy matcher. Copilot suggestions stay inline (Ctrl+a accepts, see copilot.lua).
+-- Completion menu (blink.cmp); Copilot suggestions are inline ghost text (see lsp.lua)
 return {
 	"saghen/blink.cmp",
 	version = "1.*", -- release builds ship the prebuilt fuzzy matcher
@@ -12,6 +11,7 @@ return {
 			["<C-k>"] = { "select_prev", "fallback" },
 			["<CR>"] = { "accept", "fallback" },
 			["<C-e>"] = { "hide", "fallback" },
+			["<Tab>"] = { "snippet_forward", function() return vim.lsp.inline_completion.get() end, "fallback" },
 		},
 		completion = {
 			list = { selection = { preselect = false, auto_insert = false } },
