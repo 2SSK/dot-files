@@ -4,3 +4,4 @@
 __pycache__/
 secrets.env
 /.claude/settings.local.json
+/.config/kitty/local.conf

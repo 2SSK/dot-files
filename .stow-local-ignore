@@ -13,3 +13,4 @@ __pycache__
 ^/setup\.sh
 ^/\.github
 ^/\.claude/settings\.local\.json
+^/trial\.sh
