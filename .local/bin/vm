@@ -10,6 +10,7 @@ source "$lib/log.sh"
 uri="${LIBVIRT_DEFAULT_URI:-qemu:///system}"
 config="${VM_CONFIG:-${XDG_CONFIG_HOME:-$HOME/.config}/vm/vms.json}"
 cache="${XDG_CACHE_HOME:-$HOME/.cache}/vm"
+ssh_opts=(-o StrictHostKeyChecking=accept-new -o UserKnownHostsFile="$cache/known_hosts")
 reserve_mib=2048 # what a running VM must leave free for the laptop
 
 usage() {
@@ -20,6 +21,7 @@ usage: vm list                    VMs from the config and libvirt, with state an
        vm ssh <name> [command]    log in (or run a command) as the VM's user
        vm console <name>          virt-manager window (GUI) or serial console
        vm ip <name>
+       vm tunnel <name> <port> [local]  forward a VM port (e.g. postgres 5432) to localhost
        vm rm <name> [-y]          delete the VM and its disk
        vm images                  image names and default versions
        vm config                  edit $config
@@ -208,6 +210,16 @@ wait_ssh() { # <name>: until port 22 answers (about 3 minutes at most)
 	log_warn ssh_not_ready name="$1" msg='still booting; try vm ssh later'
 }
 
+target() { # <name>: user@address to ssh to
+	need_vm "$1"
+	local addr user
+	addr="$(ip "$1")"
+	[[ -n $addr ]] || die no_ip name="$1" msg="is it running? vm up $1"
+	user="$(spec "$1" 2>/dev/null | jq -r '.user // empty' || true)" # VMs outside the config: you
+	mkdir -p "$cache"
+	echo "${user:-$USER}@$addr"
+}
+
 create() { # <name> <force>
 	local name=$1 s mem_mib disk_gb gui iso
 	s="$(spec "$name")"
@@ -294,14 +306,16 @@ main() {
 	down) need_vm "${1:?}" && v shutdown "$1" ;;
 	ip) need_vm "${1:?}" && ip "$1" ;;
 	ssh)
-		need_vm "${1:?}"
-		local addr user
-		addr="$(ip "$1")"
-		[[ -n $addr ]] || die no_ip name="$1" msg="is it running? vm up $1"
-		user="$(spec "$1" 2>/dev/null | jq -r '.user // empty' || true)" # VMs outside the config: you
+		local to
+		to="$(target "${1:?}")" || exit 1
 		shift
-		mkdir -p "$cache"
-		exec ssh -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile="$cache/known_hosts" "${user:-$USER}@$addr" "$@"
+		exec ssh "${ssh_opts[@]}" "$to" "$@"
+		;;
+	tunnel)
+		local to port=${2:?usage: vm tunnel <name> <port> [local port]}
+		to="$(target "$1")" || exit 1
+		echo "localhost:${3:-$port} -> $1:$port (Ctrl+C closes)"
+		exec ssh "${ssh_opts[@]}" -N -L "${3:-$port}:localhost:$port" "$to"
 		;;
 	console)
 		need_vm "${1:?}"
