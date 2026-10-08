@@ -77,3 +77,15 @@ setup() {
 	[ "${lines[-1]}" = tmux-256color ]
 	rm "$BATS_FILE_TMPDIR/bin/ssh"
 }
+
+@test "zsh and bash point starship at ~/.config/starship/starship.toml, which loads cleanly" {
+	run zsh -i -c 'print -r -- $STARSHIP_CONFIG' 2>&1
+	[ "$output" = "$HOME/.config/starship/starship.toml" ]
+	run bash -i -c 'echo "$STARSHIP_CONFIG"' # bash adds job-control notices without a terminal
+	[ "${lines[-1]}" = "$HOME/.config/starship/starship.toml" ]
+	[ -f "$HOME/.config/starship/starship.toml" ]
+	command -v starship >/dev/null || skip 'starship not installed'
+	run env STARSHIP_CONFIG="$HOME/.config/starship/starship.toml" starship prompt 2>&1
+	[ "$status" -eq 0 ]
+	[[ $output != *"[WARN]"* && $output != *"ERROR"* ]]
+}
