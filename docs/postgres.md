@@ -29,11 +29,16 @@ vm tunnel web 5432 5433     # pick another local port if 5432 is taken
 pgcli postgres://user@localhost:5433/dbname
 ```
 
-For rice-vm (user session, SSH on port 2222):
+For rice-vm (user session, SSH on port 2222), in the background:
 
 ```bash
-ssh -N -L 5433:localhost:5432 -p 2222 -i ~/.local/share/dotfiles-vm/id_ed25519 ssk@127.0.0.1
+ssh -fN -o StrictHostKeyChecking=accept-new -L 5433:localhost:5432 \
+	-p 2222 -i ~/.local/share/dotfiles-vm/id_ed25519 ssk@127.0.0.1
+pgcli postgres://ssk@localhost:5433/demo
+pkill -f 'L 5433:localhost'    # close the tunnel (it also ends when the VM stops)
 ```
+
+"Connection refused" on the local port means no tunnel is running.
 
 Through the tunnel Postgres sees a TCP connection, so the role needs a password
 (`ALTER ROLE ssk PASSWORD '…'`); socket logins inside the VM don't.
