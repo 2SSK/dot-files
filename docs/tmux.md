@@ -1,13 +1,17 @@
 # tmux
 
 Config: `~/.config/tmux/tmux.conf`. The prefix is **`` ` ``** (backtick); press it twice
-to type a literal backtick. The status bar sits at the top with the session on the left
-(`*` while the prefix is active), windows in the centre and the host on the right. It uses
-the terminal's ANSI colours, so it follows the central theme.
+to type a literal backtick.
+
+The status bar is minimal and sits at the top: the session name on the left (with `●`
+while the prefix is held) and the windows centred, the current one bold in the theme's
+primary colour and the rest muted. Colours come from the desktop theme
+(`~/.local/state/desktop/theme/tmux.conf`), and `desktop-theme` re-applies them to a
+running tmux.
 
 Plugins are pinned in `packages/plugins.txt` and installed by `setup.sh` into
-`~/.config/tmux/plugins` (no tpm): tmux-resurrect, tmux-continuum, vim-tmux-navigator,
-tmux-sessionx and tmux-floax.
+`~/.config/tmux/plugins` (no tpm): tmux-resurrect, tmux-continuum, vim-tmux-navigator
+and tmux-sessionx.
 
 ## Keys (after the prefix)
 
@@ -19,7 +23,6 @@ tmux-sessionx and tmux-floax.
 | `m` | Zoom the pane |
 | `Ctrl+←` / `Ctrl+→` | Move the window left / right |
 | `Space` | Session picker with previews (sessionx) |
-| `t` | Floating scratch terminal (floax) |
 | `y` | Toggle typing into all panes at once |
 | `v` | Save the session now (resurrect) |
 | `r` | Reload the config |

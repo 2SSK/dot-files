@@ -1,19 +1,8 @@
-# lazygit: ANSI colour names, so it follows the central theme; delta renders diffs
-# (its colours and line numbers come from the [delta] section of ~/.config/git/config).
+# lazygit: colours come from the desktop theme (merged in through LG_CONFIG_FILE, see shell/env.sh);
+# delta renders diffs with the [delta] settings of ~/.config/git/config.
 gui:
   nerdFontsVersion: "3"
   showRandomTip: false
-  theme:
-    activeBorderColor: [blue, bold]
-    searchingActiveBorderColor: [magenta, bold]
-    inactiveBorderColor: [default]
-    optionsTextColor: [blue]
-    selectedLineFgColor: [bold]
-    cherryPickedCommitFgColor: [magenta]
-    cherryPickedCommitBgColor: [default]
-    markedBaseCommitFgColor: [yellow]
-    markedBaseCommitBgColor: [default]
-    unstagedChangesColor: [red]
 git:
   diffRenderers:
     - command: delta --paging=never --{{colorScheme}}

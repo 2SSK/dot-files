@@ -31,6 +31,7 @@ apply() { # <family> <mode>
 	pkill -USR1 -x kitty || true
 	if [[ $2 == dark ]]; then pkill -USR1 -x foot || true; else pkill -USR2 -x foot || true; fi
 	pkill -USR2 -x cava || true # reload colours only
+	if tmux info >/dev/null 2>&1; then tmux source-file "$state/tmux.conf" || true; fi
 	# st reads colours from the X resource database (its reload patch re-reads it on SIGUSR1)
 	if [[ -n ${DISPLAY:-} && -r $HOME/.Xresources ]] && command -v xrdb >/dev/null; then
 		xrdb -merge "$HOME/.Xresources" && pkill -USR1 -x st || true

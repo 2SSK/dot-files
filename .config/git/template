@@ -1,34 +1,6 @@
-# feat: ✨ 
-# feat: 🔍 
-# feat: 🔗 
-# feat: 🔒 
-
-# fix: 🐛 
-# fix: 🐞 
-# fix: 🩹 
-# fix: 🚑️ 
-
-# style: 💅 
-# style: 🎨 
-# style: 💄 
-
-# ci: 🦊 
-# ci: 📦 
-
-# deploy: 🚀 
-# deploy: 📦 
-
-# chore: 🧹 
-# chore: 🔧 
-# chore: ⚙️ 
-# docs: 📜 
-
-# refactor: 🔨 
-# perf: 🚀 
-
-# test: 🚦 
-# debug: 🧪 
-
-# BREAKING CHANGE: 🚨 
-# BREAKING CHANGE: 💥 
-# BREAKING CHANGE: 💣 
+# <type>(<scope>)!: <summary, imperative, 72 characters at most>
+#
+# <body: what changed and why>
+#
+# Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert
+# A breaking change: add ! after the type, or a "BREAKING CHANGE:" footer

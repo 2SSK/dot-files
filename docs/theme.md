@@ -32,7 +32,11 @@ Palette values are copied from each project's official ports, with attribution i
 | kitty | `include` of the rendered `kitty.conf` | Live (SIGUSR1) |
 | foot | `include` of the rendered `foot.ini` with dark and light variants | Mode live (SIGUSR1/2); family in new windows |
 | st | `~/.Xresources` includes the rendered `st.Xresources`; `xrdb -merge` + SIGUSR1 (reload patch) | Live on X11 |
-| starship, fzf, zsh autosuggestions, `ls`, bat, btop, tmux, lazygit, lazydocker, yazi, fastfetch, delta | The terminal's 16 ANSI colours | With the terminal |
+| tmux | `source-file` of the rendered `tmux.conf` | Live (re-sourced) |
+| git, delta | `[include]` of the rendered `git.conf` | Next command |
+| lazygit | `LG_CONFIG_FILE` merges the rendered `lazygit.yml` | Next start |
+| lazydocker | `lazydocker` alias sets `CONFIG_DIR` to the rendered `lazydocker/` | Next start |
+| starship, fzf, zsh autosuggestions, `ls`, bat, btop, yazi, fastfetch, pgcli | The terminal's 16 ANSI colours | With the terminal |
 | cava | `cava` alias loads the rendered config (gradient from the ANSI colours) | Live (SIGUSR2) |
 | Quickshell, WM borders, GTK, Qt, nvim | `palette.json` and further templates | Coming in later stages |
 
@@ -44,7 +48,7 @@ Palette values are copied from each project's official ports, with attribution i
 | `~/.local/share/desktop/templates/` | One template per rendered target |
 | `~/.local/state/desktop/theme/current` | `family=` and `mode=` of the active theme |
 | `~/.local/state/desktop/theme/palette.json` | Active variant for apps that read JSON |
-| `~/.local/state/desktop/theme/kitty.conf`, `foot.ini`, `st.Xresources`, `cava` | Rendered configs |
+| `~/.local/state/desktop/theme/` `kitty.conf`, `foot.ini`, `st.Xresources`, `cava`, `tmux.conf`, `git.conf`, `lazygit.yml`, `lazydocker/` | Rendered configs |
 
 ## Fonts
 

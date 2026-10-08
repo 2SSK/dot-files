@@ -6,8 +6,8 @@ setup() {
 	export HOME="$BATS_TEST_TMPDIR/home"
 	unset XDG_STATE_HOME XDG_CONFIG_HOME XDG_CACHE_HOME XDG_DATA_HOME
 	mkdir -p "$HOME"
-	mkdir -p "$BATS_TEST_TMPDIR/bin" # fake pkill/xrdb: never touch the developer's terminals
-	for tool in pkill xrdb; do printf '#!/bin/sh\n' >"$BATS_TEST_TMPDIR/bin/$tool" && chmod +x "$BATS_TEST_TMPDIR/bin/$tool"; done
+	mkdir -p "$BATS_TEST_TMPDIR/bin" # fake pkill/xrdb/tmux: never touch the developer's terminals
+	for tool in pkill xrdb tmux; do printf '#!/bin/sh\n' >"$BATS_TEST_TMPDIR/bin/$tool" && chmod +x "$BATS_TEST_TMPDIR/bin/$tool"; done
 	export PATH="$BATS_TEST_TMPDIR/bin:$PATH"
 }
 

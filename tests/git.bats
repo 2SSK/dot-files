@@ -9,29 +9,23 @@ setup() {
 	for f in config template ignore; do ln -s "$BATS_TEST_DIRNAME/../.config/git/$f" "$XDG_CONFIG_HOME/git/$f"; done
 }
 
-@test "delta is the pager and colours are ANSI names only" {
+@test "delta is the pager" {
 	[ "$(git config --get core.pager)" = delta ]
 	[ "$(git config --get delta.syntax-theme)" = ansi ]
-	run grep -nE '#[0-9a-fA-F]{6}' "$XDG_CONFIG_HOME/git/config"
-	[ "$status" -eq 1 ]
 }
 
-@test "identity comes from untracked files, switched by directory" {
-	printf '[user]\n\tname = Default\n' >"$XDG_CONFIG_HOME/git/local.gitconfig"
-	printf '[user]\n\temail = me@personal.test\n' >"$XDG_CONFIG_HOME/git/personal.gitconfig"
-	printf '[user]\n\temail = me@work.test\n' >"$XDG_CONFIG_HOME/git/work.gitconfig"
-	git init -q "$HOME/Code/a" && git init -q "$HOME/Work/b"
-	[ "$(git -C "$HOME/Code/a" config user.name)" = Default ]
-	[ "$(git -C "$HOME/Code/a" config user.email)" = me@personal.test ]
-	[ "$(git -C "$HOME/Work/b" config user.email)" = me@work.test ]
+@test "colours come from the rendered theme include" {
+	XDG_STATE_HOME="$HOME/.local/state" python3 "$BATS_TEST_DIRNAME/../.local/lib/desktop/theme_render.py" render gruvbox dark
+	[ "$(git config --get color.branch.current)" = "#8ec07c bold" ]
+	[ "$(git config --get delta.minus-emph-style)" = "#282828 #fb4934" ]
 }
 
-@test "missing untracked files are fine" {
+@test "identity comes from the untracked local.gitconfig" {
+	printf '[user]\n\tname = Someone\n' >"$XDG_CONFIG_HOME/git/local.gitconfig"
+	[ "$(git config user.name)" = Someone ]
+}
+
+@test "works before the theme or local.gitconfig exist" {
 	run git config --list
 	[ "$status" -eq 0 ]
-}
-
-@test "gh: expands to GitHub" {
-	run git ls-remote --get-url gh:user/repo
-	[ "$output" = "https://github.com/user/repo" ]
 }

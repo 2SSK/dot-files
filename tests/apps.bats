@@ -23,10 +23,10 @@ assert p.vi_mode and p.multi_line"
 	command -v fastfetch >/dev/null || skip "fastfetch not installed"
 	run fastfetch -c "$REPO/.config/fastfetch/config.jsonc" --pipe
 	[ "$status" -eq 0 ]
-	[[ $output == *"----------------------------"* ]]
+	[[ $output == *"──"* ]]
 }
 
-@test "app configs use ANSI colour names, not hard-coded hex" {
-	run grep -lE "#[0-9a-fA-F]{6}" "$REPO"/.config/{lazygit,lazydocker,yazi,pgcli,fastfetch,tmux,btop}/*
+@test "tracked app configs hard-code no colours (they come from the theme)" {
+	run grep -lE "#[0-9a-fA-F]{6}" "$REPO"/.config/{lazygit,yazi,pgcli,fastfetch,tmux,btop,git}/*
 	[ "$status" -eq 1 ]
 }

@@ -1,5 +1,5 @@
 #!/usr/bin/env bats
-# desktop-theme: the central theme selector. Fake pkill and xrdb record what would be reloaded.
+# desktop-theme: the central theme selector. Fake pkill, xrdb and tmux record what would be reloaded.
 
 setup() {
 	THEME="$BATS_TEST_DIRNAME/../.local/bin/desktop-theme"
@@ -7,7 +7,7 @@ setup() {
 	STATE="$XDG_STATE_HOME/desktop/theme"
 	export HOME="$BATS_TEST_TMPDIR/home"
 	mkdir -p "$HOME" "$BATS_TEST_TMPDIR/bin"
-	for tool in pkill xrdb; do # fakes record their arguments instead of touching the real session
+	for tool in pkill xrdb tmux; do # fakes record their arguments instead of touching the real session
 		printf '#!/bin/sh\necho "%s $*" >>"%s"\n' "$tool" "$BATS_TEST_TMPDIR/signals" >"$BATS_TEST_TMPDIR/bin/$tool"
 		chmod +x "$BATS_TEST_TMPDIR/bin/$tool"
 	done
@@ -24,6 +24,7 @@ signals() { cat "$BATS_TEST_TMPDIR/signals"; }
 	[[ $(signals) == *"pkill -USR1 -x kitty"* ]]
 	[[ $(signals) == *"pkill -USR2 -x foot"* ]]
 	[[ $(signals) == *"pkill -USR2 -x cava"* ]]
+	[[ $(signals) == *"tmux source-file $STATE/tmux.conf"* ]]
 	[[ $(signals) != *"xrdb"* ]] # no X display: st is left alone
 }
 

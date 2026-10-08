@@ -15,6 +15,7 @@ alias grep='grep --color=auto' diff='diff --color=auto' ip='ip -color=auto'
 alias cp='cp -iv' mv='mv -iv' rm='rm -Iv' mkdir='mkdir -pv'
 alias cl='clear' e='exit' rel='exec $SHELL'
 alias vi='nvim' t='tmux' lg='lazygit' ldc='lazydocker' ff='fastfetch'
+alias lazydocker='CONFIG_DIR="$XDG_STATE_HOME/desktop/theme/lazydocker" lazydocker' # config rendered from the theme
 alias top='btop'
 alias cava='cava -p "$XDG_STATE_HOME/desktop/theme/cava"' # config rendered from the theme
 
