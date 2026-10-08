@@ -9,6 +9,10 @@ wireplumber                 wireplumber                 wireplumber
 pipewire-pulse              pipewire-pulse              pipewire-pulseaudio
 brightnessctl               brightnessctl               brightnessctl
 playerctl                   playerctl                   playerctl
+mpd                         mpd                         mpd
+mpc                         mpc                         mpc
+rmpc                        @rmpc                       @rmpc
+mpd-mpris                   @mpd-mpris                  @mpd-mpris
 gpu-screen-recorder         @gpu-screen-recorder        @gpu-screen-recorder
 imagemagick                 imagemagick                 ImageMagick
 inter-font                  fonts-inter                 rsms-inter-fonts

@@ -62,7 +62,7 @@ class Render(unittest.TestCase):
         self.assertEqual(len(palette["ansi"]), 16)
         self.assertEqual(sorted(p.name for p in self.state.iterdir()),
                          ["cava", "current", "foot.ini", "git.conf", "kitty.conf", "lazydocker", "lazygit.yml",
-                          "palette.json", "pspg", "st.Xresources", "tmux.conf"])
+                          "palette.json", "pspg", "rmpc.ron", "st.Xresources", "tmux.conf"])
 
     def test_removes_outputs_of_dropped_targets(self):
         self.state.mkdir(parents=True, exist_ok=True)

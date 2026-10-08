@@ -18,6 +18,7 @@ alias vi='nvim' t='tmux' lg='lazygit' ldc='lazydocker' ff='fastfetch'
 alias lazydocker='CONFIG_DIR="$XDG_STATE_HOME/desktop/theme/lazydocker" lazydocker' # config rendered from the theme
 alias top='btop'
 alias cava='cava -p "$XDG_STATE_HOME/desktop/theme/cava"' # config rendered from the theme
+alias music='rmpc'
 
 alias gs='git status --short' gd='git diff' gds='git diff --staged'
 alias ga='git add' gap='git add --patch' gc='git commit' gp='git push' gu='git pull'

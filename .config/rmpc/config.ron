@@ -1,0 +1,44 @@
+// rmpc, the music TUI for mpd. Layout from Seth Phaeno's "the only terminal music CLI that
+// feels right": five tabs, queue beside the album art. Colours come from the theme rendered from
+// the desktop palette (reloaded live). Everything not set here is rmpc's default.
+#![enable(implicit_some)]
+#![enable(unwrap_newtypes)]
+#![enable(unwrap_variant_newtypes)]
+(
+    theme: "~/.local/state/desktop/theme/rmpc.ron",
+    address: "127.0.0.1:6600",
+    volume_step: 5,
+    enable_config_hot_reload: true,
+    album_art: (
+        method: Auto,
+        max_size_px: (width: 1200, height: 1200),
+        disabled_protocols: ["http://", "https://"],
+        vertical_align: Center,
+        horizontal_align: Center,
+    ),
+    keybinds: (
+        global: {
+            "1": SwitchToTab("Queue"),
+            "2": SwitchToTab("Playlists"),
+            "3": SwitchToTab("Library"),
+            "4": SwitchToTab("Artists"),
+            "F": SwitchToTab("Search"),
+        },
+    ),
+    tabs: [
+        (
+            name: "Queue",
+            pane: Split(
+                direction: Horizontal,
+                panes: [
+                    (size: "75%", borders: "ALL", border_symbols: Rounded, pane: Pane(Queue)),
+                    (size: "25%", borders: "ALL", border_symbols: Rounded, pane: Pane(AlbumArt)),
+                ],
+            ),
+        ),
+        (name: "Playlists", pane: Pane(Playlists)),
+        (name: "Library", pane: Pane(Directories)),
+        (name: "Artists", pane: Pane(Artists)),
+        (name: "Search", pane: Pane(Search)),
+    ],
+)

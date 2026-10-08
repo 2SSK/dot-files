@@ -68,6 +68,20 @@ prune_links() {
 	done < <(find "$HOME" -xdev \( -path "$repo" -o -path "$HOME/.cache" \) -prune -o -type l -print0)
 }
 
+# User services from the packages: mpd plays music, mpd-mpris exposes it to media keys and the bar.
+enable_services() {
+	local unit units=()
+	systemctl --user show-environment >/dev/null 2>&1 || { warn 'no systemd user session; services not enabled' && return 0; }
+	for unit in mpd.service mpd-mpris.service; do
+		systemctl --user cat "$unit" >/dev/null 2>&1 && units+=("$unit")
+	done
+	((${#units[@]})) || return 0
+	step 'Enabling user services'
+	systemctl --user daemon-reload
+	systemctl --user enable --now "${units[@]}"
+	ok "running: ${units[*]}"
+}
+
 main() {
 	local wm='' dev=0 packages=1
 	while (($#)); do
@@ -146,6 +160,7 @@ main() {
 		step 'Installing shell plugins'
 		"$repo/packages/plugins.sh"
 		ok 'zsh and bash plugins at their pinned tags'
+		enable_services
 	fi
 
 	if [[ -f $repo/.gitmodules ]]; then
