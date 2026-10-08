@@ -22,6 +22,7 @@ theme mode toggle                   # dark ⇄ light (also: mode dark|light)
 | eink | near-white ink on charcoal | near-black ink on warm paper; for black-and-white wallpapers |
 | kanagawa | wave | lotus |
 | kesari | inspired by Rajput art; a miniature at night: indigo ink, gold leaf, vermilion, peacock | Indian watercolour on handmade paper |
+| nord | Polar Night | Snow Storm (Nord colours; Nord ships no light theme) |
 
 Palette values are copied from each project's official ports, with attribution in
 `~/.local/share/desktop/themes/<family>.toml`. Every variant passes WCAG AA contrast
@@ -43,7 +44,7 @@ Palette values are copied from each project's official ports, with attribution i
 | i3 window borders | `include` of the rendered `i3.conf` | Live (`i3-msg reload`) |
 | picom (i3): shadow colours | Started with the rendered `picom.conf` | Live (SIGUSR1) |
 | GTK theme, icons, cursor, fonts | X11: xsettingsd reads the rendered `xsettingsd.conf`; Wayland: `gsettings` (org.gnome.desktop.interface). adw-gtk3, Tela-circle-blue dark/light, Bibata-Modern-Ice, Inter / JetBrains Mono | Live |
-| GTK 3 | adw-gtk3 (dark or light) with its named colours from the rendered `gtk-3.0.css` (`~/.config/gtk-3.0/gtk.css` links to it) | Dark/light live; colours on app restart |
+| GTK 3 | adw-gtk3 (dark or light) with its named colours from the rendered `gtk-3.0.css` (`~/.config/gtk-3.0/gtk.css` links to it); `settings.ini` (both GTK versions) from `gtk-settings.ini` | Dark/light live; colours on app restart |
 | GTK 4 / libadwaita | libadwaita's CSS variables in the rendered `gtk-4.0.css` (`~/.config/gtk-4.0/gtk.css` links to it); `gsettings` color-scheme | Dark/light live; colours on app restart |
 | Qt 5 / Qt 6 | `QT_QPA_PLATFORMTHEME=qt5ct` (qt6ct answers to it too); `~/.config/qt{5,6}ct/qt{5,6}ct.conf` link to rendered configs: Fusion, the rendered `qt-colors.conf`, Tela icons, Inter | On app restart |
 | Quickshell, sway borders | `palette.json` and further templates | Coming in later stages |

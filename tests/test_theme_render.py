@@ -31,7 +31,7 @@ class Contrast(unittest.TestCase):
 
 class Lint(unittest.TestCase):
     def test_shipped_themes_pass(self):
-        self.assertEqual(FAMILIES, ["catppuccin", "eink", "gruvbox", "kanagawa", "kesari", "rosepine",
+        self.assertEqual(FAMILIES, ["catppuccin", "eink", "gruvbox", "kanagawa", "kesari", "nord", "rosepine",
                                     "tokyonight"])
         for family in FAMILIES:
             with self.subTest(family=family):

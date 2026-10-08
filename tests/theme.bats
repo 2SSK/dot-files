@@ -111,13 +111,15 @@ signals() { cat "$BATS_TEST_TMPDIR/signals"; }
 	run "$THEME" set tokyonight --mode dark
 	[ "$status" -eq 0 ]
 	local link
-	for link in gtk-3.0/gtk.css:gtk-3.0.css gtk-4.0/gtk.css:gtk-4.0.css qt5ct/qt5ct.conf:qt5ct.conf qt6ct/qt6ct.conf:qt6ct.conf; do
+	for link in gtk-3.0/gtk.css:gtk-3.0.css gtk-4.0/gtk.css:gtk-4.0.css gtk-3.0/settings.ini:gtk-settings.ini \
+		gtk-4.0/settings.ini:gtk-settings.ini qt5ct/qt5ct.conf:qt5ct.conf qt6ct/qt6ct.conf:qt6ct.conf; do
 		[ "$(readlink "$HOME/.config/${link%%:*}")" = "$STATE/${link#*:}" ]
 	done
 	grep -q '@define-color accent_bg_color #7aa2f7;' "$HOME/.config/gtk-3.0/gtk.css"
 	grep -q -- '--window-bg-color: #1a1b26;' "$HOME/.config/gtk-4.0/gtk.css"
 	grep -qx "color_scheme_path=$STATE/qt-colors.conf" "$HOME/.config/qt6ct/qt6ct.conf"
 	grep -qx 'icon_theme=Tela-circle-blue-dark' "$HOME/.config/qt5ct/qt5ct.conf"
+	grep -qx 'gtk-theme-name=adw-gtk3-dark' "$HOME/.config/gtk-4.0/settings.ini"
 }
 
 @test "an existing GTK or Qt config is moved aside, not deleted" {

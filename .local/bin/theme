@@ -40,6 +40,8 @@ picom.conf       -                  -
 xsettingsd.conf  -                  pkill -HUP -x xsettingsd
 st.Xresources    -                  [[ -n ${DISPLAY:-} && -r $HOME/.Xresources ]] && xrdb -merge "$HOME/.Xresources" && pkill -USR1 -x st
 gtk-3.0.css      gtk-3.0/gtk.css    -
+gtk-settings.ini gtk-3.0/settings.ini -
+gtk-settings.ini gtk-4.0/settings.ini -
 gtk-4.0.css      gtk-4.0/gtk.css    gtk_settings
 qt5ct.conf       qt5ct/qt5ct.conf   -
 qt6ct.conf       qt6ct/qt6ct.conf   -

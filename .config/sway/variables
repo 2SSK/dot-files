@@ -6,7 +6,7 @@ set $down j
 set $up k
 set $right l
 
-font pango:Inter Medium 10
+font pango:JetBrainsMono Nerd Font Medium 11
 
 set $cursor_theme Bibata-Modern-Ice
 seat * xcursor_theme $cursor_theme 24
