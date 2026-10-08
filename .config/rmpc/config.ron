@@ -22,6 +22,7 @@
             "2": SwitchToTab("Playlists"),
             "3": SwitchToTab("Library"),
             "4": SwitchToTab("Artists"),
+            "5": SwitchToTab("Search"), // replaces the default "Albums" tab, which this layout drops
             "F": SwitchToTab("Search"),
         },
     ),
