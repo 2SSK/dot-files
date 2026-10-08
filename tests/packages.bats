@@ -21,7 +21,7 @@ os() { printf '%s\n' "$@" >"$OS_RELEASE"; }
 	os ID=endeavouros ID_LIKE=arch
 	run "$INSTALL" --dry-run wayland
 	[ "$status" -eq 0 ]
-	[[ $output == *"aur: swayfx"* ]]
+	[[ $output == *"extra: swayfx"* ]] # built against the repo scenefx
 }
 
 @test "ubuntu uses the debian column and dedupes repeated packages" {

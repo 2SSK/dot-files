@@ -40,7 +40,7 @@ reaches the VM. First boot upgrades and installs packages, so give it a few minu
 | `--cpus`, `--mem`, `--disk` | 2, 4G, 30G | Size |
 | `--share <dir>[:tag[:rw]]` | | Laptop folder mounted at `~/<tag>` over virtiofs (tag defaults to the folder's name); read-only unless `:rw`. Repeatable |
 | `--gui` | off | Spice display with 3D acceleration on the Intel GPU (virgl); without it, a serial console |
-| `--desktop` | off | `--gui` plus i3, sway, sddm, kitty, foot (and quickshell on Arch); pick the session at the login screen |
+| `--desktop` | off | `--gui` plus i3, sway, sddm, kitty, foot (and quickshell on Arch); the login screen preselects i3 |
 | `--pkgs "a b"` | | More packages, in the distro's names |
 | `--force` | | Start even if the laptop would keep under 2 GiB free |
 

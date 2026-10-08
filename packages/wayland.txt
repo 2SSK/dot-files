@@ -1,5 +1,5 @@
 # SwayFX / Wayland session. Columns: arch  debian(+ubuntu)  fedora (format: see base.txt)
-aur:swayfx                  @swayfx                     @swayfx
+@swayfx                     @swayfx                     @swayfx
 foot                        foot                        foot
 wmenu                       wmenu                       wmenu
 swayidle                    swayidle                    swayidle

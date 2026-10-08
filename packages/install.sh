@@ -56,7 +56,7 @@ install_aur() { # <pkg...>
 		(cd "$tmp" && makepkg -si --noconfirm)
 		rm -rf "$tmp"
 	fi
-	# AUR forks replace repo packages (i3lock-color → i3lock, swayfx → sway); --noconfirm
+	# AUR forks replace repo packages (i3lock-color → i3lock); --noconfirm
 	# declines that swap, so remove installed conflicts first. -dd: the fork provides them.
 	local c old=()
 	for c in $(yay -Si --aur "$@" | awk -F' : ' '/^Conflicts With/ && $2 != "None" { print $2 }'); do

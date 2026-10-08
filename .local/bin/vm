@@ -47,7 +47,8 @@ help_for() { # <command>
 			  --disk <size>              [30G]
 			  --share <dir>[:tag][:rw]   laptop folder at ~/<tag> in the VM (tag: the folder's name),
 			                             read-only unless :rw; repeatable
-			  --desktop                  i3 + sway + login screen (quickshell on arch); includes --gui
+			  --desktop                  i3 + sway + login screen with i3 preselected (quickshell on arch);
+			                             includes --gui
 			  --gui                      a window instead of a serial console
 			  --pkgs "<a b>"             more packages, in the distro's names
 			  --force                    even if the laptop would keep under 2 GiB free
@@ -202,10 +203,13 @@ user_data() { # <name> <password hash> <desktop 0|1> <share tags> <packages...>
 	fi
 	echo 'runcmd:'
 	echo '  - [systemctl, enable, --now, qemu-guest-agent]'
-	if ((desktop)); then
-		echo '  - [systemctl, set-default, graphical.target]'
-		echo '  - [systemctl, enable, --now, sddm]'
-	fi
+	((desktop)) || return 0
+	# The desktop: the login screen with i3 preselected, at boot and right away
+	cat <<-EOF
+		  - [sh, -c, 'printf "[Last]\\\\nSession=/usr/share/xsessions/i3.desktop\\\\nUser=$USER\\\\n" >/var/lib/sddm/state.conf && chown sddm: /var/lib/sddm/state.conf']
+		  - [systemctl, set-default, graphical.target]
+		  - [systemctl, enable, --now, sddm]
+	EOF
 }
 
 # --- Commands ---

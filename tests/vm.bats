@@ -78,6 +78,7 @@ vi_args() { grep '^virt-install' "$CALLS"; }
 	[[ $(vi_args) == *"--graphics spice"* && $(vi_args) == *"--channel spicevmc"* ]]
 	grep -q 'packages: \[qemu-guest-agent, git, stow, i3-wm, sway, sddm, kitty, foot, quickshell, spice-vdagent\]' "$CALLS.user-data"
 	grep -q 'enable, --now, sddm' "$CALLS.user-data"
+	grep -q 'Session=/usr/share/xsessions/i3.desktop' "$CALLS.user-data" # i3 preselected
 	[[ $(calls) == *"virt-manager --connect qemu:///system --show-domain-console rice"* ]]
 	run "$VM" create deb --image debian --desktop
 	grep -q 'packages: \[qemu-guest-agent, i3, sway, sddm, kitty, foot, spice-vdagent\]' "$CALLS.user-data"
