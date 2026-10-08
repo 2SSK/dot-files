@@ -19,6 +19,8 @@ export PAGER=less LESS='-R --mouse' MANPAGER='nvim +Man!'
 export BAT_THEME=ansi # follows the terminal palette
 export PNPM_HOME="$XDG_DATA_HOME/pnpm"
 export LG_CONFIG_FILE="$XDG_CONFIG_HOME/lazygit/config.yml,$XDG_STATE_HOME/desktop/theme/lazygit.yml"
+# psql: coloured messages, and pspg as the pager with its theme rendered from the desktop palette
+export PG_COLOR=auto PSQL_PAGER=pspg PSPG_CONF="$XDG_STATE_HOME/desktop/theme/pspg/pspgconf"
 
 # Prepend existing dirs once; machine-specific paths belong in local.zsh / local.bash
 for dir in "$HOME/.local/bin" "$HOME/.cargo/bin" "$HOME/go/bin" "$PNPM_HOME" "$HOME/.npm-global/bin"; do

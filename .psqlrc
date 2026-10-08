@@ -11,8 +11,9 @@
 -- Better NULL display (no empty spaces)
 \pset null '⟨NULL⟩'
 
--- Show connection info in prompt
-\set PROMPT1 '%n@%/%R%x%# '
+-- Prompt: user (blue) @ database (magenta), then psql's state markers; ANSI colours follow the theme
+\set PROMPT1 '%[%033[1;34m%]%n%[%033[0m%]@%[%033[1;35m%]%/%[%033[0m%]%R%x%# '
+\set PROMPT2 '%[%033[2m%]%R%x%#%[%033[0m%] '
 
 -- History settings
 \set HISTSIZE 10000
@@ -27,8 +28,10 @@
 -- Default to expanded mode for wide tables
 \pset expanded auto
 
--- Use fewer pager results (show all, don't page small results)
-\pset pager
+-- Results through pspg (PSQL_PAGER) with unicode borders
+\pset pager on
+\pset border 2
+\pset linestyle unicode
 
 -- Encoding
 \encoding UTF8

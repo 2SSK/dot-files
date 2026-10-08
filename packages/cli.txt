@@ -24,3 +24,4 @@ cava                        cava                        cava
 fastfetch                   fastfetch                   fastfetch
 btop                        btop                        btop
 pgcli                       pgcli                       pgcli
+aur:pspg                    pspg                        pspg
