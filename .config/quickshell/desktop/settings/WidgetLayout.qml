@@ -4,9 +4,10 @@ import QtQuick
 import qs
 import qs.widgets
 
-// The bar's three parts as columns of widgets: arrows reorder a widget or move it to the next part,
-// ✕ takes it off the bar, and the widgets not on it wait below to be added.
-Column {
+// The bar's three parts as columns of widgets. Drag a widget to reorder it or move it to another
+// part; drag it out of the columns (or click ✕) to take it off the bar; drag one of the spare
+// widgets below into a column to add it.
+Item {
 	id: root
 
 	readonly property var parts: [
@@ -28,89 +29,138 @@ Column {
 			controls: "Control center",
 			wifi: "Wi-Fi",
 			bluetooth: "Bluetooth",
+			tools: "Clipboard, todo, notes",
+			clipboard: "Clipboard",
 			notes: "Notes",
 			todo: "Todo",
 			power: "Power menu",
 			launcher: "Launcher"
 		})
 	readonly property var unused: Object.keys(names).filter(name => ![...Config.bar.left, ...Config.bar.center, ...Config.bar.right].includes(name))
+	readonly property int chipHeight: 34
+	readonly property int chipGap: 6
 
-	function list(part: string): var {
-		return [...Config.bar[part]];
-	}
+	// the widget being dragged: its name, the part it came from ("" for a spare one) and its place
+	property string dragName: ""
+	property string dragFrom: ""
+	property int dragIndex: -1
+	property point dragAt
+	// where it would land
+	property string dropPart: ""
+	property int dropIndex: -1
 
 	function set(part: string, widgets: var): void {
 		Config.bar[part] = widgets;
 		Config.save();
 	}
 
-	// within a part (step -1/+1) or into the neighbouring part (jump -1/+1)
-	function shift(part: string, index: int, step: int): void {
-		const widgets = list(part);
-		const to = index + step;
-		if (to < 0 || to >= widgets.length)
-			return;
-		[widgets[index], widgets[to]] = [widgets[to], widgets[index]];
-		set(part, widgets);
-	}
-
-	function jump(part: string, index: int, direction: int): void {
-		const keys = parts.map(p => p.key);
-		const target = keys[keys.indexOf(part) + direction];
-		if (!target)
-			return;
-		const from = list(part);
-		const [name] = from.splice(index, 1);
-		const to = list(target);
-		direction > 0 ? to.unshift(name) : to.push(name);
-		set(part, from);
-		set(target, to);
-	}
-
 	function remove(part: string, index: int): void {
-		const widgets = list(part);
+		const widgets = [...Config.bar[part]];
 		widgets.splice(index, 1);
 		set(part, widgets);
 	}
 
+	// the part and the place in it under a point (in this item's coordinates)
+	function target(point: point): var {
+		for (let i = 0; i < columns.count; i++) {
+			const column = columns.itemAt(i);
+			const p = column.mapFromItem(root, point.x, point.y);
+			if (p.x >= 0 && p.x <= column.width && p.y >= 0 && p.y <= column.height) {
+				const count = Config.bar[parts[i].key].length;
+				return { part: parts[i].key, index: Math.max(0, Math.min(count, Math.round((p.y - 38) / (chipHeight + chipGap)))) };
+			}
+		}
+		return { part: "", index: -1 };
+	}
+
+	function startDrag(name: string, from: string, index: int, point: point): void {
+		dragName = name;
+		dragFrom = from;
+		dragIndex = index;
+		moveDrag(point);
+	}
+
+	function moveDrag(point: point): void {
+		dragAt = point;
+		const t = target(point);
+		dropPart = t.part;
+		dropIndex = t.index;
+	}
+
+	function endDrag(): void {
+		if (dragName) {
+			const from = dragFrom ? [...Config.bar[dragFrom]] : null;
+			if (from)
+				from.splice(dragIndex, 1);
+			if (dropPart) {
+				const to = dropPart === dragFrom ? from : [...Config.bar[dropPart]];
+				// a move further down its own part shifts by the one taken out
+				const index = dropPart === dragFrom && dropIndex > dragIndex ? dropIndex - 1 : dropIndex;
+				to.splice(index, 0, dragName);
+				if (from && dropPart !== dragFrom)
+					set(dragFrom, from);
+				set(dropPart, to);
+			} else if (from) {
+				set(dragFrom, from); // dropped outside: off the bar
+			}
+		}
+		dragName = "";
+		dragFrom = "";
+		dropPart = "";
+	}
+
 	width: parent?.width ?? 0
-	spacing: 14
+	implicitHeight: content.implicitHeight
 
-	Row {
+	Column {
+		id: content
+
 		width: parent.width
-		spacing: 10
+		spacing: 14
 
-		Repeater {
-			model: root.parts
+		Row {
+			width: parent.width
+			spacing: 10
 
-			delegate: Rectangle {
-				id: column
+			Repeater {
+				id: columns
 
-				required property var modelData
-				readonly property var widgets: Config.bar[modelData.key]
+				model: root.parts
 
-				width: (root.width - 20) / 3
-				height: Math.max(160, chips.implicitHeight + 50)
-				radius: 12
-				color: Qt.alpha(Theme.surface, 0.55)
+				delegate: Rectangle {
+					id: column
 
-				Text {
-					x: 14
-					y: 12
-					text: column.modelData.title
-					color: Theme.fgMuted
-					font.family: Theme.fontSans
-					font.pixelSize: 12
-					font.weight: Font.DemiBold
-				}
+					required property var modelData
+					readonly property var widgets: Config.bar[modelData.key]
+					readonly property bool hot: root.dragName !== "" && root.dropPart === modelData.key
 
-				Column {
-					id: chips
+					width: (root.width - 20) / 3
+					height: Math.max(200, 50 + (widgets.length + 1) * (root.chipHeight + root.chipGap))
+					radius: 12
+					color: Qt.alpha(Theme.surface, 0.55)
+					border.width: hot ? 1 : 0
+					border.color: Theme.primary
 
-					x: 8
-					y: 38
-					width: parent.width - 16
-					spacing: 6
+					Text {
+						x: 14
+						y: 12
+						text: column.modelData.title
+						color: Theme.fgMuted
+						font.family: Theme.fontSans
+						font.pixelSize: 12
+						font.weight: Font.DemiBold
+					}
+
+					// where the dragged widget would go
+					Rectangle {
+						visible: column.hot
+						x: 8
+						y: 38 + root.dropIndex * (root.chipHeight + root.chipGap) - root.chipGap / 2 - 1
+						width: parent.width - 16
+						height: 2
+						radius: 1
+						color: Theme.primary
+					}
 
 					Repeater {
 						model: column.widgets
@@ -120,20 +170,31 @@ Column {
 
 							required property string modelData
 							required property int index
+							readonly property bool dragged: root.dragName === modelData && root.dragFrom === column.modelData.key
 
-							width: chips.width
-							height: 34
+							x: 8
+							y: 38 + index * (root.chipHeight + root.chipGap)
+							width: column.width - 16
+							height: root.chipHeight
 							radius: 9
-							color: hover.hovered ? Qt.alpha(Theme.overlay, 0.95) : Qt.alpha(Theme.overlay, 0.6)
+							opacity: dragged ? 0.35 : 1
+							color: grip.containsMouse ? Qt.alpha(Theme.overlay, 0.95) : Qt.alpha(Theme.overlay, 0.6)
 
-							HoverHandler {
-								id: hover
+							Glyph {
+								id: handle
+
+								x: 8
+								anchors.verticalCenter: parent.verticalCenter
+								text: "\u{F01DD}" // md-drag
+								font.pixelSize: 14
+								font.weight: Font.Normal
+								color: Theme.fgMuted
 							}
 
 							Text {
-								anchors.left: parent.left
-								anchors.leftMargin: 10
-								anchors.right: tools.left
+								anchors.left: handle.right
+								anchors.leftMargin: 6
+								anchors.right: close.left
 								anchors.verticalCenter: parent.verticalCenter
 								text: root.names[chip.modelData] ?? chip.modelData
 								elide: Text.ElideRight
@@ -142,46 +203,38 @@ Column {
 								font.pixelSize: 13
 							}
 
-							Row {
-								id: tools
+							MouseArea {
+								id: grip
+
+								anchors.fill: parent
+								hoverEnabled: true
+								preventStealing: true // not a scroll of the page
+								cursorShape: root.dragName ? Qt.ClosedHandCursor : Qt.OpenHandCursor
+								onPressed: event => root.startDrag(chip.modelData, column.modelData.key, chip.index, mapToItem(root, event.x, event.y))
+								onPositionChanged: event => { if (pressed) root.moveDrag(mapToItem(root, event.x, event.y)); }
+								onReleased: root.endDrag()
+							}
+
+							Glyph {
+								id: close
 
 								anchors.right: parent.right
-								anchors.rightMargin: 4
+								anchors.rightMargin: 10
 								anchors.verticalCenter: parent.verticalCenter
-								opacity: hover.hovered ? 1 : 0.35
+								opacity: grip.containsMouse ? 1 : 0.3
+								text: "\u{EA76}"
+								font.pixelSize: 13
+								font.weight: Font.Normal
+								color: closeArea.containsMouse ? Theme.error : Theme.fg
 
-								Repeater {
-									model: [
-										{ glyph: "\u{EAB5}", act: () => root.jump(column.modelData.key, chip.index, -1), show: column.modelData.key !== "left" },
-										{ glyph: "\u{EAB7}", act: () => root.shift(column.modelData.key, chip.index, -1), show: chip.index > 0 },
-										{ glyph: "\u{EAB4}", act: () => root.shift(column.modelData.key, chip.index, 1), show: chip.index < column.widgets.length - 1 },
-										{ glyph: "\u{EAB6}", act: () => root.jump(column.modelData.key, chip.index, 1), show: column.modelData.key !== "right" },
-										{ glyph: "\u{EA76}", act: () => root.remove(column.modelData.key, chip.index), show: true }
-									]
+								MouseArea {
+									id: closeArea
 
-									delegate: Glyph {
-										id: tool
-
-										required property var modelData
-
-										width: 22
-										height: 26
-										visible: modelData.show
-										text: modelData.glyph
-										font.pixelSize: 13
-										font.weight: Font.Normal
-										color: toolHover.hovered ? Theme.primary : Theme.fg
-
-										HoverHandler {
-											id: toolHover
-										}
-
-										MouseArea {
-											anchors.fill: parent
-											cursorShape: Qt.PointingHandCursor
-											onClicked: tool.modelData.act()
-										}
-									}
+									anchors.fill: parent
+									anchors.margins: -6
+									hoverEnabled: true
+									cursorShape: Qt.PointingHandCursor
+									onClicked: root.remove(column.modelData.key, chip.index)
 								}
 							}
 						}
@@ -189,54 +242,80 @@ Column {
 				}
 			}
 		}
-	}
 
-	Text {
-		visible: root.unused.length > 0
-		text: "Not on the bar: click to add at the right"
-		color: Theme.fgMuted
-		font.family: Theme.fontSans
-		font.pixelSize: 12
-	}
+		Text {
+			visible: root.unused.length > 0
+			text: "Not on the bar: drag one into a column"
+			color: Theme.fgMuted
+			font.family: Theme.fontSans
+			font.pixelSize: 12
+		}
 
-	Flow {
-		width: parent.width
-		spacing: 6
+		Flow {
+			width: parent.width
+			spacing: 6
 
-		Repeater {
-			model: root.unused
+			Repeater {
+				model: root.unused
 
-			delegate: Rectangle {
-				id: spare
+				delegate: Rectangle {
+					id: spare
 
-				required property string modelData
+					required property string modelData
 
-				width: label.implicitWidth + 30
-				height: 30
-				radius: 15
-				color: spareHover.hovered ? Theme.primary : Qt.alpha(Theme.overlay, 0.7)
+					width: label.implicitWidth + 28
+					height: 30
+					radius: 15
+					opacity: root.dragName === modelData && !root.dragFrom ? 0.35 : 1
+					color: spareArea.containsMouse ? Qt.alpha(Theme.overlay, 0.95) : Qt.alpha(Theme.overlay, 0.6)
 
-				Text {
-					id: label
+					Text {
+						id: label
 
-					anchors.centerIn: parent
-					text: "+  " + (root.names[spare.modelData] ?? spare.modelData)
-					color: spareHover.hovered ? Theme.onPrimary : Theme.fg
-					font.family: Theme.fontSans
-					font.pixelSize: 12
-					font.weight: Font.Medium
-				}
+						anchors.centerIn: parent
+						text: root.names[spare.modelData] ?? spare.modelData
+						color: Theme.fg
+						font.family: Theme.fontSans
+						font.pixelSize: 12
+						font.weight: Font.Medium
+					}
 
-				HoverHandler {
-					id: spareHover
-				}
+					MouseArea {
+						id: spareArea
 
-				MouseArea {
-					anchors.fill: parent
-					cursorShape: Qt.PointingHandCursor
-					onClicked: root.set("right", [...root.list("right"), spare.modelData])
+						anchors.fill: parent
+						hoverEnabled: true
+						preventStealing: true
+						cursorShape: Qt.OpenHandCursor
+						onPressed: event => root.startDrag(spare.modelData, "", -1, mapToItem(root, event.x, event.y))
+						onPositionChanged: event => { if (pressed) root.moveDrag(mapToItem(root, event.x, event.y)); }
+						onReleased: root.endDrag()
+					}
 				}
 			}
+		}
+	}
+
+	// the dragged widget, under the pointer
+	Rectangle {
+		visible: root.dragName !== ""
+		z: 10
+		x: root.dragAt.x - width / 2
+		y: root.dragAt.y - height / 2
+		width: ghostLabel.implicitWidth + 30
+		height: root.chipHeight
+		radius: 9
+		color: Theme.primary
+
+		Text {
+			id: ghostLabel
+
+			anchors.centerIn: parent
+			text: root.names[root.dragName] ?? root.dragName
+			color: Theme.onPrimary
+			font.family: Theme.fontSans
+			font.pixelSize: 13
+			font.weight: Font.Medium
 		}
 	}
 }

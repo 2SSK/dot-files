@@ -4,7 +4,7 @@ import qs.services
 
 // Opens the todo list; a dot while tasks are open.
 Glyph {
-	text: "\u{EAB3}" // cod-checklist
+	text: "\u{F0756}" // md-format-list-checks
 	color: Panel.controlOpen && Panel.controlPage === "todo" ? Theme.primary : Theme.fg
 	font.pixelSize: Theme.iconSize - 1
 	font.weight: Font.Normal

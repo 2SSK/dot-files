@@ -16,6 +16,7 @@ Singleton {
 	property bool osdShown: false
 	property bool settingsOpen: false
 	property bool controlOpen: false
+	property bool clipboardOpen: false
 	property var islands: ({}) // screen name -> the bar's rect on it (screen coordinates from its origin)
 	property string controlPage: "home"
 

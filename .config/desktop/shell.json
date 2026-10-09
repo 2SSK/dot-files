@@ -3,6 +3,7 @@
         "step": 5
     },
     "bar": {
+        "capsules": true,
         "center": [
             "clock"
         ],
@@ -17,13 +18,11 @@
         "right": [
             "tray",
             "brightness",
-            "notes",
-            "todo",
+            "tools",
             "recorder",
             "battery",
             "wifi",
             "bluetooth",
-            "controls",
             "notifications",
             "power"
         ],

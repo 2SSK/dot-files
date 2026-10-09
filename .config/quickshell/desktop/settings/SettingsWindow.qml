@@ -229,6 +229,15 @@ FloatingWindow {
 				}
 
 				SettingRow {
+					label: "Capsules"
+					hint: "Each widget in a soft capsule."
+					Toggle {
+						checked: Config.bar.capsules
+						onToggled: checked => root.set("bar", "capsules", checked)
+					}
+				}
+
+				SettingRow {
 					label: "Position"
 					hint: Config.wayland ? "" : "i3 docks bars only at the top or bottom."
 					Choice {

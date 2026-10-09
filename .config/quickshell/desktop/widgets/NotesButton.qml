@@ -4,7 +4,7 @@ import qs.services
 
 // Opens the scratch note.
 Glyph {
-	text: "\u{EB26}" // cod-note
+	text: "\u{F082E}" // md-notebook
 	color: Panel.controlOpen && Panel.controlPage === "notes" ? Theme.primary : Theme.fg
 	font.pixelSize: Theme.iconSize - 1
 	font.weight: Font.Normal
