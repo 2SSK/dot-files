@@ -4,7 +4,7 @@ import QtQuick
 import Quickshell
 import qs
 
-// Screenshots and recordings, from the capture panel or the Print keys: a dragged region, the
+// Screenshots and recordings, from the capture panel (F12) or its IPC: a dragged region, the
 // focused window or a screen. A screen with more than one monitor connected asks which (the
 // panel's map of them). The panel is closed and gone before anything is taken.
 Singleton {

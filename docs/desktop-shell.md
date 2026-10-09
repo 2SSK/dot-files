@@ -65,10 +65,7 @@ the default one; anything else in its default application. The emoji come from U
 
 | Key | |
 | --- | --- |
-| Print | screenshot of a region: drag a rectangle (Escape or a right click cancels) |
-| Ctrl+Print | screenshot of the focused window |
-| Shift+Print | screenshot of a screen; with more than one monitor it asks which (a map of them as they're arranged, or All screens) |
-| `$mod+Print` | the capture panel: Screenshot or Record × Region, Window, Screen (keys R, W, S; with Shift, record) |
+| F12 | the capture panel (again closes it): Screenshot or Record × Region, Window, Screen. The arrows pick a tile, Enter (or a click) does it; R, W, S take a screenshot straight away, with Shift they record. Region: drag a rectangle (Escape or a right click cancels). Screen with more than one monitor: a map of them as they're arranged, or All screens |
 | `$mod+F12`, the camera in the bar | stops a recording, else opens the capture panel |
 
 A screenshot is saved to `~/Pictures/Screenshots` and copied to the clipboard as an image, ready
@@ -142,7 +139,7 @@ Hidden with `$mod+Shift+b`, the bar comes back over the windows while the pointe
 | F4 / F5, brightness keys | brightness down, up |
 | F6, mic-mute key | microphone mute |
 | `$mod+F12` | stop a recording, else the capture panel |
-| Print, Ctrl+Print, Shift+Print, `$mod+Print` | screenshot of a region, the window, a screen; the capture panel |
+| F12 | capture panel: screenshots and recordings (F12 no longer reaches apps, e.g. browser dev tools) |
 | `$mod+Shift+b` | hide / show the bar |
 | `$mod+n` | notifications (control center) |
 | `$mod+Shift+s` | settings |

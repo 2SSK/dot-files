@@ -8,8 +8,8 @@ import qs.services
 import qs.widgets
 
 // Capture, dropping out of the bar (a HangingPanel): a screenshot or a recording of a region (drag
-// a rectangle), the focused window, or a screen. Keys: R, W, S take a screenshot; with Shift, they
-// record. A screenshot is saved and copied to the clipboard. With more than one monitor, Screen
+// a rectangle), the focused window, or a screen. Keys: the arrows pick a tile and Enter does it;
+// R, W, S take a screenshot straight away, with Shift they record. A screenshot is saved and copied to the clipboard. With more than one monitor, Screen
 // shows a small map of them to pick one (or all). While recording, Record becomes Stop.
 HangingPanel {
 	id: root
@@ -21,6 +21,7 @@ HangingPanel {
 		{ mode: "screen", label: "Screen", glyph: "device-desktop", key: Qt.Key_S }
 	]
 	property int seconds: 0
+	property int selected: 0 // 0–2 screenshot, 3–5 record
 
 	function pick(kind: string, mode: string): void {
 		if (mode === "screen" && Quickshell.screens.length > 1)
@@ -35,6 +36,27 @@ HangingPanel {
 	panelHeight: Panel.captureHeight
 	onDismissed: Panel.captureOpen = false
 	onKeyPressed: event => {
+		const k = event.key;
+		if (!asking && (k === Qt.Key_Left || k === Qt.Key_Right)) {
+			selected = Math.floor(selected / 3) * 3 + (selected % 3 + (k === Qt.Key_Left ? 2 : 1)) % 3;
+			event.accepted = true;
+			return;
+		}
+		if (!asking && (k === Qt.Key_Up || k === Qt.Key_Down)) {
+			selected = (selected + 3) % 6;
+			event.accepted = true;
+			return;
+		}
+		if (!asking && (k === Qt.Key_Return || k === Qt.Key_Enter || k === Qt.Key_Space)) {
+			if (selected >= 3 && Recorder.recording) {
+				Recorder.stop();
+				Panel.captureOpen = false;
+			} else {
+				pick(selected < 3 ? "shot" : "record", modes[selected % 3].mode);
+			}
+			event.accepted = true;
+			return;
+		}
 		const m = modes.find(m => m.key === event.key);
 		if (!m || asking)
 			return;
@@ -60,12 +82,13 @@ HangingPanel {
 		property string glyph
 		property string label
 		property bool danger: false
+		property bool chosen: false // picked with the arrows
 		signal clicked
 
 		height: 78
 		radius: 16
-		color: danger ? (tileHover.hovered ? Qt.lighter(Theme.error, 1.1) : Theme.error) : tileHover.hovered ? Qt.alpha(Theme.primary, 0.16) : Qt.alpha(Theme.surface, 0.8)
-		border.width: tileHover.hovered && !danger ? 1 : 0
+		color: danger ? (tileHover.hovered || chosen ? Qt.lighter(Theme.error, 1.1) : Theme.error) : tileHover.hovered || chosen ? Qt.alpha(Theme.primary, 0.16) : Qt.alpha(Theme.surface, 0.8)
+		border.width: (tileHover.hovered || chosen) && !danger ? 1 : 0
 		border.color: Qt.alpha(Theme.primary, 0.6)
 
 		Behavior on color {
@@ -82,7 +105,7 @@ HangingPanel {
 				anchors.horizontalCenter: parent.horizontalCenter
 				glyph: Icons.g(tile.glyph)
 				font.pixelSize: 22
-				color: tile.danger ? Theme.primaryText : tileHover.hovered ? Theme.primary : Theme.fg
+				color: tile.danger ? Theme.primaryText : tileHover.hovered || tile.chosen ? Theme.primary : Theme.fg
 				filled: tile.danger
 			}
 
@@ -153,10 +176,12 @@ HangingPanel {
 
 				delegate: Tile {
 					required property var modelData
+					required property int index
 
 					width: (parent.width - 16) / 3
 					glyph: modelData.glyph
 					label: modelData.label
+					chosen: root.selected === index
 					onClicked: root.pick("shot", modelData.mode)
 				}
 			}
@@ -182,10 +207,12 @@ HangingPanel {
 
 				delegate: Tile {
 					required property var modelData
+					required property int index
 
 					width: (parent.width - 16) / 3
 					glyph: modelData.glyph
 					label: modelData.label
+					chosen: root.selected === index + 3
 					onClicked: root.pick("record", modelData.mode)
 				}
 			}
@@ -195,6 +222,7 @@ HangingPanel {
 			visible: Recorder.recording
 			width: parent.width
 			danger: true
+			chosen: root.selected >= 3
 			glyph: "player-stop"
 			label: `Stop recording  ·  ${Math.floor(root.seconds / 60)}:${String(root.seconds % 60).padStart(2, "0")}`
 			onClicked: {
