@@ -5,7 +5,7 @@ import Quickshell
 import Quickshell.Services.Notifications
 
 // The notification daemon: apps' notifications arrive here, show as popups (Toasts) and stay in
-// the history (NotificationCenter) until dismissed. Do Not Disturb keeps them out of the popups,
+// the history (the control center's Notifications tab) until dismissed. Do Not Disturb keeps them out of the popups,
 // except critical ones; they still reach the history.
 Singleton {
 	id: root

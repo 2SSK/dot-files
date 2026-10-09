@@ -14,7 +14,37 @@ Singleton {
 	property bool peek: false // the hidden bar showing while the pointer is at the edge
 	property string view: "" // "" or "power"
 	property bool osdShown: false
-	property bool centerOpen: false // the notification centre
+	property bool settingsOpen: false
+	property bool controlOpen: false
+	property var islands: ({}) // screen name -> the bar's rect on it (screen coordinates from its origin)
+	property string controlPage: "home"
+
+	// the control center's panel, centred under the bar, and the inverse curves joining it to the bar
+	readonly property int controlWidth: 760
+	readonly property int controlHeight: 640
+	readonly property int controlFillet: 18
+
+	// the control center's window lives on while it slides back into the bar
+	property bool controlShown: false
+
+	onControlOpenChanged: controlOpen ? controlShown = true : hideControl.restart()
+
+	Timer {
+		id: hideControl
+
+		interval: 230
+		onTriggered: if (!root.controlOpen) root.controlShown = false
+	}
+
+	// the control center, on a page (home, notifications, ...); again on the same page closes it
+	function toggleControl(page: string): void {
+		if (controlOpen && controlPage === page) {
+			controlOpen = false;
+			return;
+		}
+		controlPage = page;
+		controlOpen = true;
+	}
 	property string osdKind: "volume" // volume, mic, brightness, caps or num
 	property real osdValue: 0
 	property bool osdMuted: false
@@ -37,10 +67,6 @@ Singleton {
 		osdMuted = muted;
 		osdShown = true;
 		osdTimer.restart();
-	}
-
-	function toggleCenter(): void {
-		centerOpen = !centerOpen;
 	}
 
 	function toggleBar(): void {

@@ -18,7 +18,6 @@ PopupWindow {
 
 	readonly property bool open: Panel.view === "power" && I3.focusedMonitor?.name === bar.screen?.name
 	readonly property string position: Config.position
-	readonly property int pad: 32 // room for the shadows
 	readonly property real reach: Panel.barShown ? (Config.vertical ? bar.width : bar.height) : 0
 	// mapped while open (see Osd)
 	property bool shown: false
@@ -32,23 +31,27 @@ PopupWindow {
 		onTriggered: if (!root.open) root.shown = false
 	}
 
+	// the whole screen, so a click beside the tiles closes the menu
 	anchor.window: bar
-	anchor.rect.x: position === "left" ? reach - pad + 4 : position === "right" ? bar.width - reach - implicitWidth + pad - 4 : (bar.width - implicitWidth) / 2
-	anchor.rect.y: position === "top" ? reach - pad + 4 : position === "bottom" ? bar.height - reach - implicitHeight + pad - 4 : (bar.height - implicitHeight) / 2
-	implicitWidth: tiles.implicitWidth + 2 * pad
-	implicitHeight: tiles.implicitHeight + 2 * pad + 12
+	anchor.rect.x: position === "right" ? bar.width - implicitWidth : 0
+	anchor.rect.y: position === "bottom" ? bar.height - implicitHeight : 0
+	implicitWidth: bar.screen.width
+	implicitHeight: bar.screen.height
 	visible: shown
 	color: "transparent"
-	mask: Region {
-		item: tiles
+
+	MouseArea {
+		anchors.fill: parent
+		acceptedButtons: Qt.AllButtons
+		onPressed: Panel.closePower()
 	}
 
 	Row {
 		id: tiles
 
-		x: root.pad
-		// drops in by its y (the window's shape follows geometry, not transforms)
-		y: root.pad + (root.open ? 0 : -12)
+		// under the bar (beside a vertical one), dropping in by its y
+		x: root.position === "left" ? root.reach + 12 : root.position === "right" ? root.width - root.reach - 12 - width : (root.width - width) / 2
+		y: (root.position === "top" ? root.reach + 12 : root.position === "bottom" ? root.height - root.reach - 12 - height : (root.height - height) / 2) + (root.open ? 0 : -12)
 		spacing: 10
 		opacity: root.open ? 1 : 0
 

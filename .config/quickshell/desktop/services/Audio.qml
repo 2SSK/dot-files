@@ -14,6 +14,22 @@ Singleton {
 	readonly property real volume: sink?.audio?.volume ?? 0
 	readonly property bool muted: sink?.audio?.muted ?? true
 	readonly property bool micMuted: source?.audio?.muted ?? true
+	readonly property real micVolume: source?.audio?.volume ?? 0
+
+	// from a slider: no OSD, the slider shows the level
+	function setVolume(volume: real): void {
+		if (!sink?.audio)
+			return;
+		sink.audio.muted = false;
+		sink.audio.volume = volume;
+	}
+
+	function setMic(volume: real): void {
+		if (!source?.audio)
+			return;
+		source.audio.muted = false;
+		source.audio.volume = volume;
+	}
 
 	function change(percent: int): void {
 		const audio = sink?.audio;

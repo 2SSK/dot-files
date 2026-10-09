@@ -5,6 +5,8 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import qs.bar
+import qs.control
+import qs.settings
 import qs
 import qs.services
 
@@ -16,6 +18,22 @@ ShellRoot {
 		model: Quickshell.screens
 
 		Bar {}
+	}
+
+	LazyLoader {
+		active: Panel.controlShown
+
+		ControlCenter {
+			visible: true
+		}
+	}
+
+	LazyLoader {
+		active: Panel.settingsOpen
+
+		SettingsWindow {
+			visible: true
+		}
 	}
 
 	IpcHandler {
@@ -58,13 +76,33 @@ ShellRoot {
 		target: "notifications"
 
 		function toggle(): void {
-			Panel.toggleCenter();
+			Panel.toggleControl("notifications");
 		}
 		function dnd(): void {
 			Notifications.dnd = !Notifications.dnd;
 		}
 		function clear(): void {
 			Notifications.clear();
+		}
+	}
+
+	IpcHandler {
+		target: "control"
+
+		function toggle(): void {
+			Panel.toggleControl("home");
+		}
+		function open(page: string): void {
+			Panel.controlPage = page;
+			Panel.controlOpen = true;
+		}
+	}
+
+	IpcHandler {
+		target: "settings"
+
+		function toggle(): void {
+			Panel.settingsOpen = !Panel.settingsOpen;
 		}
 	}
 

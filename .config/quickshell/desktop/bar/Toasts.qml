@@ -25,7 +25,8 @@ PopupWindow {
 	anchor.rect.y: (Config.position === "top" ? bar.height : 0) - 14 + below
 	implicitWidth: 360 + 2 * pad
 	implicitHeight: Math.max(1, stack.implicitHeight) + 2 * pad
-	visible: focused && Notifications.popups.length > 0
+	// not over the control center, which lists them anyway
+	visible: focused && Notifications.popups.length > 0 && !Panel.controlOpen
 	color: "transparent"
 	mask: Region {
 		item: stack
@@ -68,7 +69,7 @@ PopupWindow {
 				}
 
 				Timer {
-					interval: toast.modelData.expireTimeout > 0 ? toast.modelData.expireTimeout : 5000
+					interval: toast.modelData.expireTimeout > 0 ? toast.modelData.expireTimeout : Config.notifications.timeout
 					running: !toast.critical && toast.modelData.expireTimeout !== 0 && !card.hovered
 					onTriggered: Notifications.hide(toast.modelData)
 				}
