@@ -6,6 +6,7 @@ import Quickshell
 import Quickshell.Io
 import qs.bar
 import qs.clipboard
+import qs.wallpaper
 import qs.control
 import qs.settings
 import qs
@@ -33,6 +34,14 @@ ShellRoot {
 		active: Panel.clipboardShown
 
 		ClipboardWindow {
+			visible: true
+		}
+	}
+
+	LazyLoader {
+		active: Panel.wallpaperShown
+
+		WallpaperWindow {
 			visible: true
 		}
 	}
@@ -119,6 +128,17 @@ ShellRoot {
 
 		function toggle(): void {
 			Panel.clipboardOpen = !Panel.clipboardOpen;
+		}
+	}
+
+	IpcHandler {
+		target: "wallpaper"
+
+		function toggle(): void {
+			Panel.wallpaperOpen = !Panel.wallpaperOpen;
+		}
+		function shuffle(): void {
+			Wallpaper.shuffle();
 		}
 	}
 

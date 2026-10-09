@@ -36,6 +36,7 @@ Singleton {
 			"check": 0xea5e,
 			"checkbox": 0xeba6,
 			"checklist": 0xf074,
+			"chevron-down": 0xea5f,
 			"chevron-left": 0xea60,
 			"chevron-right": 0xea61,
 			"clipboard": 0xea6f,

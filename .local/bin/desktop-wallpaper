@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+# Set the wallpaper with a short cross-fade, or put the last one back.
+#   desktop-wallpaper set <image>   fade from the current one to it, and remember it
+#   desktop-wallpaper restore       draw the remembered one (login), no fade
+# The choice is ~/.local/state/desktop/wallpaper, a link the lock screen, sddm and GRUB read too.
+# X11: feh, through a few half-size blended frames made in parallel (feh has no transitions).
+# Wayland: swww's own transition when its daemon runs, else sway's background.
+set -euo pipefail
+
+state="${XDG_STATE_HOME:-$HOME/.local/state}/desktop"
+fallback="$(dirname "$(readlink -f "$0")")/../share/desktop/wallpapers/cat-mocha-lavender_19.jpg"
+frames=(25 50 75)
+
+draw() { # <image>
+	if [[ -n ${WAYLAND_DISPLAY:-} ]]; then
+		if command -v swww >/dev/null && swww query >/dev/null 2>&1; then
+			swww img --transition-type fade --transition-duration 0.6 "$1"
+		else
+			swaymsg -q output '*' bg "$1" fill
+		fi
+	else
+		feh --no-fehbg --bg-fill "$1"
+	fi
+}
+
+fade() { # <from> <to>: blended frames between them, then the new one
+	[[ -z ${WAYLAND_DISPLAY:-} && -f $1 && $1 != "$2" ]] && command -v magick >/dev/null || return 0
+	local dir pct
+	dir="$(mktemp -d)"
+	# shellcheck disable=SC2064 # expand now: dir is local
+	trap "rm -rf '$dir'" RETURN
+	for pct in "${frames[@]}"; do
+		magick "$1" "$2" -resize '960x540^' -gravity center -extent 960x540 \
+			-compose blend -define compose:args="$pct" -composite "$dir/$pct.jpg" &
+	done
+	wait
+	for pct in "${frames[@]}"; do
+		[[ -s $dir/$pct.jpg ]] && feh --no-fehbg --bg-fill "$dir/$pct.jpg" && sleep 0.05
+	done
+}
+
+case ${1:-} in
+set)
+	[[ -f ${2:-} ]] || { echo "desktop-wallpaper: not an image: ${2:-}" >&2 && exit 2; }
+	mkdir -p "$state"
+	from="$(readlink -f "$state/wallpaper" 2>/dev/null || echo "$fallback")"
+	fade "$from" "$2"
+	draw "$2"
+	ln -sfn "$2" "$state/wallpaper"
+	date +%s >"$state/wallpaper-changed"
+	;;
+restore)
+	current="$(readlink -f "$state/wallpaper" 2>/dev/null || true)"
+	[[ -f $current ]] || current="$fallback"
+	draw "$current"
+	;;
+*)
+	echo "usage: desktop-wallpaper set <image> | restore" >&2
+	exit 2
+	;;
+esac

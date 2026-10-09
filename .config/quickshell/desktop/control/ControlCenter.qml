@@ -19,9 +19,7 @@ HangingPanel {
 		{ key: "wifi", glyph: Icons.g("wifi"), component: wifi },
 		{ key: "bluetooth", glyph: Icons.g("bluetooth"), component: bluetooth },
 		{ key: "todo", glyph: Icons.g("checklist"), component: todo },
-		{ key: "notes", glyph: Icons.g("notes"), component: notes },
-		{ key: "alarms", glyph: Icons.g("alarm"), component: alarms },
-		{ key: "wallpaper", glyph: Icons.g("photo"), component: wallpaper }
+		{ key: "notes", glyph: Icons.g("notes"), component: notes }
 	]
 
 	name: "control center"
@@ -291,17 +289,5 @@ HangingPanel {
 		id: notes
 
 		NotesPage {}
-	}
-
-	Component {
-		id: alarms
-
-		AlarmsPage {}
-	}
-
-	Component {
-		id: wallpaper
-
-		WallpaperPage {}
 	}
 }

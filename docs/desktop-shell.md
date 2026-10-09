@@ -21,14 +21,12 @@ the page's title, its buttons and ✕, then the page. The bar's widgets open the
 | Page | Opened by | What's there |
 | --- | --- | --- |
 | Home | `$mod+c` | quick toggles (Wi-Fi, Bluetooth, Do Not Disturb, microphone, recording, bar), volume / mic / brightness, the media player (any MPRIS player, browsers included; a switcher when several play; Space plays or pauses, ← → skip) |
-| Calendar | the clock | a month (‹ ›); a click picks a day, whose events show below; its + adds one, with an optional time ("09:30": a reminder that notifies when due); kept in `~/.local/share/desktop/events.json` |
+| Calendar | the clock | a month (‹ ›); a click picks a day, whose events show below; its + adds one, with an optional time ("09:30": a reminder that notifies when due); kept in `~/.local/share/desktop/events.json`. Below them, the alarms (see Alarms) |
 | System monitor | cpu / mem / temp | CPU, memory and temperature with two minutes of history, disk, uptime, load |
 | Notifications | the bell, `$mod+n` | the history by day, Clear all; Do Not Disturb in the header |
 | Wi-Fi | the Wi-Fi icon | networks by signal: connect (a password for new secured ones), disconnect, forget; scans while open |
 | Bluetooth | the Bluetooth icon | devices: pair, connect, disconnect, forget, battery; the header scans |
 | Todo | the checklist icon, `$mod+Shift+t` | tasks with a priority (H/M/L, a click on it changes it), grouped high to low, done ones last; drag a task (anywhere on it) to reorder it (among another priority's tasks it takes theirs); kept in `~/.local/share/desktop/todo.json` |
-| Alarms | the alarm icon | alarms: a time, a label, once / every day / weekdays, a switch each; a ringing one shows a card under the bar with Stop and Snooze (5 min) and plays the alarm sound until then (5 min at most); kept in `~/.local/share/desktop/alarms.json` |
-| Wallpaper | the picture icon | the images in `wallpaper.folders` (shell.json; the repo's and `~/Wallpaper-Bank`): a click sets one, the header shuffles; rotation: fixed, every 5 min, hourly, daily or each boot |
 | Notes | the notebook icon, `$mod+Shift+n` | notes of three kinds (text, checklist, code with Copy) with a colour tag; new, pin and delete in the header, search beside the list; kept in `~/.local/share/desktop/notes/` (a private folder) |
 
 The gear opens the settings, the power icon the power menu. Escape, ✕ or focusing another window
@@ -43,10 +41,27 @@ item: pin it, save it as a code note, or remove it. The history lives in memory 
 passwords never reach the disk; pinned items are kept in `~/.local/state/desktop/clipboard/` (a
 private folder).
 
+## Alarms
+
+Under the calendar: each alarm with its time, label, how often (once, every day, weekdays) and a
+switch; ✕ removes it. The + opens a line: a time, a label, a click on the chip steps how often,
+Enter adds it. A ringing alarm plays the alarm sound (5 minutes at most) and shows a card under the
+bar: **Stop** ends it (a repeating one rings again on its next day), **Snooze** silences it and rings
+again in 5 minutes (the list shows "Snoozed" meanwhile). Kept in `~/.local/share/desktop/alarms.json`.
+
 ## Wallpaper
 
-Setting one (the Wallpaper page, or rotation) points `~/.local/state/desktop/wallpaper` at it, which
-the lock screen, sddm and GRUB also use, and draws it (feh on X11, sway's background on Wayland).
+`$mod+Shift+p`: the wallpapers, dropping out of the bar like the clipboard. Type to search by name,
+↑ ↓ (or Tab) to move, Enter or a click sets one; the set one has a ring and a tick. The chip beside
+the search picks rotation: never, every 5 minutes, hourly, daily or each boot; the shuffle button
+sets one at random. The images come from `wallpaper.folders` (shell.json; the repo's and
+`~/Wallpaper-Bank`).
+
+`desktop-wallpaper set <image>` does the setting: it points `~/.local/state/desktop/wallpaper` at it
+(the lock screen, sddm and GRUB use it too) and fades over to it. On X11 feh has no transitions, so
+it shows three half-size blended frames (made in parallel with ImageMagick) before the full image;
+on Wayland swww's fade when its daemon runs, else sway's background. `desktop-wallpaper restore`
+draws the remembered one at login.
 
 ## Settings window
 
@@ -84,6 +99,7 @@ Hidden with `$mod+Shift+b`, the bar comes back over the windows while the pointe
 | `$mod+Shift+s` | settings |
 | `$mod+c` | control center |
 | `$mod+Shift+v` | clipboard history |
+| `$mod+Shift+p` | wallpapers |
 | `$mod+Shift+t` / `$mod+Shift+n` | todo / notes |
 | `$mod+p` | power menu (again, Escape or a click beside it closes): arrows or 1–5 pick, Enter runs |
 
@@ -106,15 +122,17 @@ history lasts until the shell restarts.
 Lock, Log Out, Lock & Suspend, Reboot, Shut Down; Log Out, Reboot and Shut Down take a second
 press while `power.confirm` is on. Nothing hibernates.
 
-- **Lock** runs `loginctl lock-session`; xss-lock starts `desktop-lock`: i3lock-color over the
+- **Lock** runs `loginctl lock-session`; on i3, xss-lock starts `desktop-lock`: i3lock-color over the
   blurred, dimmed wallpaper (cached in `~/.cache/desktop`), a clock and a small ring that lights up
   as you type. xss-lock also locks after X's idle timeout. The laptop keeps running.
 - **Closing the lid** only locks, after `packages/system.sh lid` (logind `HandleLidSwitch=lock`),
   so work carries on with the lid shut. On battery it keeps draining.
 - **Lock & Suspend** sleeps; xss-lock locks first.
+- On sway the lock will be the shell's own (Wayland's session lock, a password field with PAM),
+  coming with the sway version of the shell.
 
 ## IPC
 
 `qs -c desktop ipc call <target> <function>`: `audio up|down|mute|mic`, `brightness up|down`,
-`bar toggle`, `recorder toggle`, `notifications toggle|dnd|clear`, `settings toggle`, `control toggle|open <page>|page <page>|close`, `clipboard toggle`, `alarm stop|snooze`, `power open|toggle|close|next|prev|activate|pick <n>`,
+`bar toggle`, `recorder toggle`, `notifications toggle|dnd|clear`, `settings toggle`, `control toggle|open <page>|page <page>|close`, `clipboard toggle`, `wallpaper toggle|shuffle`, `alarm stop|snooze`, `power open|toggle|close|next|prev|activate|pick <n>`,
 `theme reload`.

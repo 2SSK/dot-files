@@ -8,8 +8,8 @@ import qs
 // The wallpaper: the images in wallpaper.folders (shell.json), the one set, and rotation
 // (wallpaper.rotate: off, 5m, 1h, 1d, or boot for a new one each boot). Setting one points
 // ~/.local/state/desktop/wallpaper at it (the lock screen, sddm and GRUB read that too) and draws
-// it: feh on X11, sway's own background on Wayland. The last change is remembered, so a rotation
-// keeps its pace across restarts.
+// it with a short fade (desktop-wallpaper). The last change is remembered, so a rotation keeps its
+// pace across restarts.
 Singleton {
 	id: root
 
@@ -20,13 +20,19 @@ Singleton {
 	property var files: []
 	property string current: ""
 	property real changed: 0 // when it last changed (ms)
+	property string pending: "" // picked while the last one was still fading in
 
+	// one at a time: a pick made while the last one still fades in follows it
 	function set(path: string): void {
-		if (!path)
+		if (!path || path === current)
 			return;
 		current = path;
 		changed = Date.now();
-		apply.command = ["sh", "-c", `ln -sfn "$1" "$2/wallpaper" && date +%s > "$2/wallpaper-changed" && if [ -n "$WAYLAND_DISPLAY" ]; then swaymsg -q output '*' bg "$1" fill; else feh --no-fehbg --bg-fill "$1"; fi`, "sh", path, state];
+		if (apply.running) {
+			pending = path;
+			return;
+		}
+		apply.command = ["desktop-wallpaper", "set", path];
 		apply.running = true;
 	}
 
@@ -45,6 +51,15 @@ Singleton {
 
 	Process {
 		id: apply
+
+		onExited: {
+			const next = root.pending;
+			root.pending = "";
+			if (next && next !== apply.command[2]) {
+				apply.command = ["desktop-wallpaper", "set", next];
+				apply.running = true;
+			}
+		}
 	}
 
 	Process {
@@ -59,7 +74,7 @@ Singleton {
 	// where things stand: the image set, when it changed, and this boot's id against the last one seen
 	Process {
 		running: true
-		command: ["sh", "-c", 'readlink -f "$1/wallpaper"; cat "$1/wallpaper-changed" 2>/dev/null || echo 0; cat /proc/sys/kernel/random/boot_id; cat "$1/wallpaper-boot" 2>/dev/null; cat /proc/sys/kernel/random/boot_id > "$1/wallpaper-boot"', "sh", root.state]
+		command: ["sh", "-c", 'readlink "$1/wallpaper"; cat "$1/wallpaper-changed" 2>/dev/null || echo 0; cat /proc/sys/kernel/random/boot_id; cat "$1/wallpaper-boot" 2>/dev/null; cat /proc/sys/kernel/random/boot_id > "$1/wallpaper-boot"', "sh", root.state]
 		stdout: StdioCollector {
 			onStreamFinished: {
 				const [current, changed, boot, lastBoot] = text.split("\n");

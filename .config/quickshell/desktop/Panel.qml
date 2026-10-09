@@ -18,13 +18,42 @@ Singleton {
 	property bool controlOpen: false
 	property bool clipboardOpen: false
 	property bool clipboardShown: false // lives on while it slides back into the bar
+	property bool wallpaperOpen: false
+	property bool wallpaperShown: false
+	readonly property int wallpaperWidth: 720
+	readonly property int wallpaperHeight: 540
 	// the open panel hanging from the bar (its width; 0 for none): the bar opens its outline there
-	readonly property int hangingWidth: controlOpen ? controlWidth : clipboardOpen ? 560 : 0
-	readonly property int hangingHeight: controlOpen ? controlHeight : clipboardOpen ? 560 : 0
+	readonly property int hangingWidth: controlOpen ? controlWidth : clipboardOpen ? 560 : wallpaperOpen ? wallpaperWidth : 0
+	readonly property int hangingHeight: controlOpen ? controlHeight : clipboardOpen ? 560 : wallpaperOpen ? wallpaperHeight : 0
+
+	onWallpaperOpenChanged: {
+		if (wallpaperOpen) {
+			controlOpen = false;
+			clipboardOpen = false;
+			showWallpaper.restart();
+		} else {
+			hideWallpaper.restart();
+		}
+	}
+
+	Timer {
+		id: showWallpaper
+
+		interval: 60
+		onTriggered: root.wallpaperShown = root.wallpaperOpen
+	}
+
+	Timer {
+		id: hideWallpaper
+
+		interval: 230
+		onTriggered: if (!root.wallpaperOpen) root.wallpaperShown = false
+	}
 
 	onClipboardOpenChanged: {
 		if (clipboardOpen) {
 			controlOpen = false;
+			wallpaperOpen = false;
 			showClipboard.restart();
 		} else {
 			hideClipboard.restart();
@@ -58,6 +87,7 @@ Singleton {
 	onControlOpenChanged: {
 		if (controlOpen) {
 			clipboardOpen = false;
+			wallpaperOpen = false;
 			showControl.restart();
 		} else {
 			hideControl.restart();

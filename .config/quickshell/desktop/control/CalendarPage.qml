@@ -9,7 +9,7 @@ import qs.widgets
 // A month: ‹ › go back and forward. Today is filled with the accent, the chosen day ringed, days of
 // the neighbouring months faint, a dot under days with events. Below: the chosen day's events
 // (nothing when there are none) and a small + that opens a line to add one ("09:30" makes it a
-// reminder that notifies when due). Weeks start on the locale's first day.
+// reminder that notifies when due), then the alarms. Weeks start on the locale's first day.
 Column {
 	id: root
 
@@ -334,5 +334,10 @@ Column {
 				root.adding = false;
 			}
 		}
+	}
+
+	AlarmList {
+		width: parent.width
+		topPadding: 10
 	}
 }
