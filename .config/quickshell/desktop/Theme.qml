@@ -27,7 +27,7 @@ Singleton {
 
 	readonly property string fontSans: "Inter"
 	readonly property string fontMono: "JetBrainsMono Nerd Font"
-	readonly property int fontSize: Math.round(Config.bar.size * 0.4)
+	readonly property int fontSize: Math.round(Config.bar.size * 0.42)
 	readonly property int iconSize: fontSize + 4
 
 	FileView {
