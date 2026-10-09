@@ -4,9 +4,10 @@
 REPO="$BATS_TEST_DIRNAME/.."
 
 @test "no token-shaped strings anywhere in the repo" {
-	# GitHub, Grafana, OpenAI/Anthropic, AWS and Slack tokens, private keys
-	run grep -rInE --exclude-dir=.git --exclude-dir=__pycache__ \
-		'(gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{30,}|glsa_[A-Za-z0-9_]{20,}|sk-(ant-)?[A-Za-z0-9_-]{30,}|AKIA[0-9A-Z]{16}|xox[abpr]-[A-Za-z0-9-]{10,}|-----BEGIN [A-Z ]*PRIVATE KEY-----)' "$REPO"
+	# GitHub, Grafana, OpenAI/Anthropic, AWS and Slack tokens, private keys; in what could be
+	# committed (tracked, or new and not ignored), not local secrets like opencode/.env
+	run git -C "$REPO" grep -InE --untracked \
+		'(gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{30,}|glsa_[A-Za-z0-9_]{20,}|sk-(ant-)?[A-Za-z0-9_-]{30,}|AKIA[0-9A-Z]{16}|xox[abpr]-[A-Za-z0-9-]{10,}|-----BEGIN [A-Z ]*PRIVATE KEY-----)'
 	[ "$status" -eq 1 ] || { echo "$output" && false; }
 }
 

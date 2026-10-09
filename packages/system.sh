@@ -36,7 +36,7 @@ memory() {
 	sudo systemctl enable --now systemd-oomd.service
 }
 
-timeshift() { # the settings page lists snapshots without a password; making, deleting and restoring still ask
+timeshift_list() { # the settings page lists snapshots without a password; making, deleting and restoring still ask
 	local rule tmp dest="$root/etc/sudoers.d/10-desktop-timeshift"
 	rule="$(id -un) ALL=(root) NOPASSWD: /usr/bin/timeshift --list --scripted"
 	tmp="$(mktemp)"
@@ -47,6 +47,31 @@ timeshift() { # the settings page lists snapshots without a password; making, de
 	rm -f "$tmp"
 	log_info installed path=/etc/sudoers.d/10-desktop-timeshift
 	changed=1
+}
+
+# What is kept: the last 3 days, one from about a week ago, and (timeshift-autosnap, its config in
+# system/) the last 3 from before a pacman upgrade. Btrfs snapshots cost only what changed since, so
+# a few more points back are cheap; hourly, boot and monthly ones would be clutter. Timeshift drops
+# what is past these counts at its next scheduled check (cron, hourly).
+timeshift_schedule() {
+	local conf="$root/etc/timeshift/timeshift.json" tmp
+	[[ -f $conf ]] || die timeshift_not_set_up msg='run timeshift once to choose the disk, then this again'
+	local want='.schedule_daily = "true" | .count_daily = "3" | .schedule_weekly = "true" | .count_weekly = "1"
+		| .schedule_hourly = "false" | .schedule_boot = "false" | .schedule_monthly = "false"'
+	# compared by value: timeshift rewrites the file in its own layout
+	jq -e "($want) == ." "$conf" >/dev/null && return 0
+	tmp="$(mktemp)"
+	jq "$want" "$conf" >"$tmp"
+	sudo install -m 644 "$tmp" "$conf"
+	rm -f "$tmp"
+	log_info installed path=/etc/timeshift/timeshift.json daily=3 weekly=1
+	changed=1
+}
+
+timeshift() {
+	timeshift_list
+	timeshift_schedule
+	put etc/timeshift-autosnap.conf
 }
 
 lid() { # closing the lid only locks; logind rereads its config on SIGHUP (a restart would end sessions)

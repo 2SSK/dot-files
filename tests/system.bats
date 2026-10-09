@@ -221,10 +221,17 @@ sddm_fakes() { # a rendered theme, and a fake magick that copies the image
 	[ ! -e "$CALLS" ]
 }
 
-@test "timeshift: lets the user list snapshots without a password, nothing more" {
+timeshift_conf() { # a timeshift.json as timeshift writes it: daily, 5 kept
+	mkdir -p "$SYSTEM_ROOT/etc/timeshift"
+	printf '{\n  "btrfs_mode" : "true",\n  "schedule_daily" : "true",\n  "schedule_hourly" : "true",\n  "count_daily" : "5",\n  "count_weekly" : "3"\n}' \
+		>"$SYSTEM_ROOT/etc/timeshift/timeshift.json"
 	# shellcheck disable=SC2016 # expands when the fake runs
 	printf '#!/bin/sh\necho "visudo $*" >>"$CALLS"\n' >"$BATS_TEST_TMPDIR/bin/visudo"
 	chmod +x "$BATS_TEST_TMPDIR/bin/visudo"
+}
+
+@test "timeshift: lets the user list snapshots without a password, nothing more" {
+	timeshift_conf
 	run "$SYSTEM" timeshift
 	[ "$status" -eq 0 ]
 	rule="$SYSTEM_ROOT/etc/sudoers.d/10-desktop-timeshift"
@@ -235,4 +242,30 @@ sddm_fakes() { # a rendered theme, and a fake magick that copies the image
 	rm "$CALLS"
 	run "$SYSTEM" timeshift
 	[[ $output == *"already in place"* ]]
+}
+
+@test "timeshift: keeps 3 daily and 1 weekly, nothing hourly, the rest of its config as it was" {
+	timeshift_conf
+	run "$SYSTEM" timeshift
+	[ "$status" -eq 0 ]
+	conf="$SYSTEM_ROOT/etc/timeshift/timeshift.json"
+	[ "$(jq -r '[.schedule_daily, .count_daily, .schedule_weekly, .count_weekly, .schedule_hourly, .schedule_boot, .schedule_monthly] | join(" ")' "$conf")" = "true 3 true 1 false false false" ]
+	[ "$(jq -r .btrfs_mode "$conf")" = true ]
+	grep -qx 'maxSnapshots=3' "$SYSTEM_ROOT/etc/timeshift-autosnap.conf"
+	grep -qx 'updateGrub=false' "$SYSTEM_ROOT/etc/timeshift-autosnap.conf"
+}
+
+@test "timeshift: in timeshift's own layout, the same settings count as in place" {
+	timeshift_conf
+	"$SYSTEM" timeshift
+	conf="$SYSTEM_ROOT/etc/timeshift/timeshift.json"
+	jq --indent 4 . "$conf" >"$conf.new" && mv "$conf.new" "$conf"
+	run "$SYSTEM" timeshift
+	[[ $output == *"already in place"* ]]
+}
+
+@test "timeshift: not set up yet says so" {
+	run "$SYSTEM" timeshift
+	[ "$status" -ne 0 ]
+	[[ $output == *"timeshift_not_set_up"* ]]
 }
