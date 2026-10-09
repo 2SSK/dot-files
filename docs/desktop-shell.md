@@ -4,6 +4,15 @@
 Colours come from the desktop theme (see [theme.md](theme.md)); settings from
 `~/.config/desktop/shell.json`, stowed from the repo, which applies as soon as it's saved.
 
+## Control center
+
+`$mod+c` or the sliders icon in the bar: a window at the top right with an icon sidebar. Home has a
+greeting, quick toggles (Wi-Fi, Bluetooth, Do Not Disturb, microphone, screen recording, the bar),
+volume, mic and brightness sliders (a click on an icon mutes) and the media player (MPRIS: cover,
+progress, previous / play / next). The gear opens the settings, the power icon the power menu.
+Escape, the key again, or focusing another window closes it. Wi-Fi needs NetworkManager, Bluetooth
+BlueZ; without them the tiles say "Not available".
+
 ## Settings window
 
 `$mod+Shift+s` (or `qs -c desktop ipc call settings toggle`): Bar (style, position, height,
@@ -19,7 +28,7 @@ in `git diff`; Quickshell writes it with sorted keys and 4-space indents, as it'
 | `style` | `island` (a floating pill) or `static` (the whole edge, word labels and separators) |
 | `position` | `top`, `bottom`; `left`/`right` on sway only (i3 docks only top or bottom, so X11 uses the top) |
 | `size`, `opacity`, `length` | thickness in px, background opacity, the island's share of the edge (0: by the screen width, 80 % under 1500 px down to 42 % from 2200 px; never shorter than its content) |
-| `left`, `center`, `right` | widgets: `launcher`, `workspaces`, `clock`, `stats`, `volume`, `brightness`, `battery`, `tray`, `recorder`, `notifications`, `scratchpad`, `power` |
+| `left`, `center`, `right` | widgets: `launcher`, `workspaces`, `clock`, `stats`, `volume`, `brightness`, `battery`, `tray`, `recorder`, `notifications`, `scratchpad`, `controls`, `power` |
 
 Workspaces are dots: the ones with windows and the one you're on (i3 and sway drop empty ones), the
 current one a wide pill. After them, the scratchpad's window count while it holds any; a click brings
@@ -37,6 +46,7 @@ Hidden with `$mod+Shift+b`, the bar comes back over the windows while the pointe
 | `$mod+Shift+b` | hide / show the bar |
 | `$mod+n` | notification centre |
 | `$mod+Shift+s` | settings |
+| `$mod+c` | control center |
 | `$mod+p` | power menu (again or Escape closes): arrows or 1–5 pick, Enter runs |
 
 Each change shows in a card at the top right; Caps Lock and Num Lock show there by themselves.
@@ -67,5 +77,5 @@ press while `power.confirm` is on. Nothing hibernates.
 ## IPC
 
 `qs -c desktop ipc call <target> <function>`: `audio up|down|mute|mic`, `brightness up|down`,
-`bar toggle`, `recorder toggle`, `notifications toggle|dnd|clear`, `settings toggle`, `power open|toggle|close|next|prev|activate|pick <n>`,
+`bar toggle`, `recorder toggle`, `notifications toggle|dnd|clear`, `settings toggle`, `control toggle`, `power open|toggle|close|next|prev|activate|pick <n>`,
 `theme reload`.

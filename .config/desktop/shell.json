@@ -19,6 +19,7 @@
             "brightness",
             "recorder",
             "battery",
+            "controls",
             "notifications",
             "power"
         ],

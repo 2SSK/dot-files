@@ -25,6 +25,7 @@ Column {
 			recorder: "Screen recorder",
 			battery: "Battery",
 			notifications: "Notifications",
+			controls: "Control center",
 			power: "Power menu",
 			launcher: "Launcher"
 		})

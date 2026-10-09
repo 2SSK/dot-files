@@ -54,7 +54,7 @@ Singleton {
 				property real length: 0 // the island's share of the screen edge; 0 picks one for the screen width
 				property var left: ["workspaces", "scratchpad", "stats"]
 				property var center: ["clock"]
-				property var right: ["tray", "brightness", "recorder", "battery", "notifications", "power"]
+				property var right: ["tray", "brightness", "recorder", "battery", "controls", "notifications", "power"]
 			}
 			property JsonObject notifications: JsonObject {
 				property int timeout: 5000 // ms a popup stays, unless the app sets its own

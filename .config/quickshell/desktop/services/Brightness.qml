@@ -13,6 +13,21 @@ Singleton {
 	property string device: ""
 	property real value: 0 // 0–1
 
+	// from a slider: no OSD; brightnessctl runs at most every 60 ms while dragging
+	function set(level: real): void {
+		if (!available)
+			return;
+		value = Math.max(0.01, Math.min(1, level));
+		pending.restart();
+	}
+
+	Timer {
+		id: pending
+
+		interval: 60
+		onTriggered: Quickshell.execDetached(["brightnessctl", "-q", "-d", root.device, "set", Math.round(root.value * 100) + "%"])
+	}
+
 	function change(percent: int): void {
 		if (!available)
 			return;

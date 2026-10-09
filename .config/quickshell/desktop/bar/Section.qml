@@ -24,7 +24,8 @@ Line {
 			power: "PowerButton",
 			recorder: "RecorderButton",
 			notifications: "NotificationButton",
-			scratchpad: "ScratchpadButton"
+			scratchpad: "ScratchpadButton",
+			controls: "ControlButton"
 		})
 
 	vertical: Config.vertical

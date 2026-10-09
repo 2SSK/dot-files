@@ -5,6 +5,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import qs.bar
+import qs.control
 import qs.settings
 import qs
 import qs.services
@@ -17,6 +18,14 @@ ShellRoot {
 		model: Quickshell.screens
 
 		Bar {}
+	}
+
+	LazyLoader {
+		active: Panel.controlOpen
+
+		ControlCenter {
+			visible: true
+		}
 	}
 
 	LazyLoader {
@@ -74,6 +83,14 @@ ShellRoot {
 		}
 		function clear(): void {
 			Notifications.clear();
+		}
+	}
+
+	IpcHandler {
+		target: "control"
+
+		function toggle(): void {
+			Panel.toggleControl("home");
 		}
 	}
 

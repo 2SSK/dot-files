@@ -16,6 +16,18 @@ Singleton {
 	property bool osdShown: false
 	property bool centerOpen: false // the notification centre
 	property bool settingsOpen: false
+	property bool controlOpen: false
+	property string controlPage: "home"
+
+	// the control center, on a page (home, notifications, ...); again on the same page closes it
+	function toggleControl(page: string): void {
+		if (controlOpen && controlPage === page) {
+			controlOpen = false;
+			return;
+		}
+		controlPage = page;
+		controlOpen = true;
+	}
 	property string osdKind: "volume" // volume, mic, brightness, caps or num
 	property real osdValue: 0
 	property bool osdMuted: false
