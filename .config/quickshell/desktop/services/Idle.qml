@@ -17,7 +17,9 @@ Singleton {
 	// swayidle's arguments: each timeout counts from when you stopped
 	readonly property var swayidle: {
 		const [dim, lock, off] = times;
-		const args = ["swayidle", "-w"];
+		// one swayidle: a shell restart leaves the last one running, so it goes first (KILL: it
+		// handles TERM in its event loop, which an orphan no longer runs)
+		const args = ["sh", "-c", 'pkill -KILL -u "$(id -u)" -x swayidle; exec swayidle "$@"', "sh", "-w"];
 		if (dim > 0 && (lock === 0 || dim < lock))
 			args.push("timeout", String(dim * 60), "desktop-idle dim", "resume", "desktop-idle undim");
 		if (lock > 0)

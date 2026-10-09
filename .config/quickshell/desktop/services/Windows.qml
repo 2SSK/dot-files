@@ -20,8 +20,10 @@ Singleton {
 
 	function step(by: int): void {
 		const n = windows.length;
-		if (n === 0)
+		if (n === 0) {
+			close(); // nothing to switch to: leave the window manager's switcher mode
 			return;
+		}
 		if (!switching) {
 			switching = true;
 			selected = (by > 0 ? Math.min(1, n - 1) : n - 1);
