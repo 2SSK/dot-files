@@ -46,6 +46,11 @@ PanelWindow {
 		onEntered: Panel.peek = true
 	}
 
+	// where the bar is, for the control center to hang from
+	readonly property rect island: Qt.rect(shape.x + (anchors.right && !anchors.left ? modelData.width - width : 0), shape.y + (anchors.bottom && !anchors.top ? modelData.height - height : 0), shape.width, shape.height)
+	onIslandChanged: Panel.islands = Object.assign({}, Panel.islands, { [modelData.name]: island })
+	Component.onCompleted: Panel.islands = Object.assign({}, Panel.islands, { [modelData.name]: island })
+
 	Connections {
 		target: Panel
 
@@ -128,5 +133,13 @@ PanelWindow {
 
 	Toasts {
 		bar: bar
+	}
+
+	// a click anywhere but the control center closes it
+	Dismiss {
+		bar: bar
+		open: Panel.controlOpen
+		hole: Panel.controlRect
+		onDismissed: Panel.controlOpen = false
 	}
 }

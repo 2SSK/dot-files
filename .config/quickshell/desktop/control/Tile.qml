@@ -7,6 +7,7 @@ Rectangle {
 	id: root
 
 	property string glyph
+	property real glyphRotation: 0
 	property string label
 	property string detail
 	property bool on
@@ -37,6 +38,7 @@ Rectangle {
 		Glyph {
 			anchors.centerIn: parent
 			text: root.glyph
+			rotation: root.glyphRotation
 			font.pixelSize: 17
 			font.weight: Font.Normal
 			color: root.on ? Theme.onPrimary : Theme.fg

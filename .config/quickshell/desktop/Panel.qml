@@ -16,6 +16,8 @@ Singleton {
 	property bool osdShown: false
 	property bool settingsOpen: false
 	property bool controlOpen: false
+	property var islands: ({}) // screen name -> the bar's rect on it (screen coordinates from its origin)
+	property rect controlRect // where the control center sits, from its screen's origin
 	property string controlPage: "home"
 
 	// the control center, on a page (home, notifications, ...); again on the same page closes it

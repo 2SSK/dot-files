@@ -7,9 +7,10 @@ import qs
 import qs.services
 import qs.widgets
 
-// The control center: an icon sidebar of pages beside the page. A real window (X11 popups can't
-// take the keyboard): i3 floats it (look.conf) and the shell places it under the bar at the right
-// of the focused screen. Escape, the key again, or focusing another window closes it.
+// The control center: an icon sidebar of pages beside the page, hanging from the bar's end in the
+// bar's colour (square where it meets the bar; picom rounds the far corners, see the picom template).
+// A real window, as X11 popups can't take the keyboard: i3 floats it (look.conf) and the shell puts
+// it in place. Escape, the key again, focusing another window or a click anywhere else closes it.
 FloatingWindow {
 	id: root
 
@@ -20,22 +21,25 @@ FloatingWindow {
 	]
 	readonly property ShellScreen screen: Quickshell.screens.find(s => s.name === I3.focusedMonitor?.name) ?? Quickshell.screens[0]
 
-	title: "Desktop control center"
+	readonly property bool below: Config.position !== "bottom" // hangs below the bar, else above it
+	readonly property rect island: Panel.islands[screen.name] ?? Qt.rect(0, 0, screen.width, 0)
+	// flush with the bar, its right edge where the island's rounded end begins
+	readonly property real px: Config.island ? island.x + island.width - island.height / 2 - implicitWidth : screen.width - implicitWidth
+	readonly property real py: !Panel.barShown ? (below ? 0 : screen.height - implicitHeight) : below ? island.y + island.height : island.y - implicitHeight
+
+	title: below ? "Desktop control center" : "Desktop control center, above"
 	implicitWidth: 470
 	implicitHeight: 640
-	color: Theme.bg
+	color: Qt.alpha(Theme.bg, Config.bar.opacity)
+	onPxChanged: Panel.controlRect = Qt.rect(px, py, implicitWidth, implicitHeight)
+	onPyChanged: Panel.controlRect = Qt.rect(px, py, implicitWidth, implicitHeight)
 	onVisibleChanged: if (!visible) Panel.controlOpen = false
 
-	// i3 maps it centred; move it under the bar's end, once mapped
+	// i3 maps it centred; move it to the bar once mapped
 	Timer {
 		running: true
 		interval: 30
-		onTriggered: {
-			const top = Panel.barShown && Config.position === "top" ? Config.bar.size + (Config.island ? 6 : 0) : 0;
-			const x = root.screen.x + root.screen.width - root.implicitWidth - 12;
-			const y = Config.position === "bottom" ? root.screen.y + root.screen.height - root.implicitHeight - Config.bar.size - 18 : root.screen.y + top + 10;
-			I3.dispatch(`[title="^Desktop control center$"] move position ${Math.round(x)} ${Math.round(y)}`);
-		}
+		onTriggered: I3.dispatch(`[title="^${root.title}$"] move position ${Math.round(root.screen.x + root.px)} ${Math.round(root.screen.y + root.py)}`)
 	}
 
 	// another window taking the focus closes it, as a panel would
@@ -43,7 +47,7 @@ FloatingWindow {
 		subscriptions: ["window"]
 		onIpcEvent: event => {
 			const data = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
-			if (data.change === "focus" && data.container?.name !== root.title)
+			if (data.change === "focus" && !data.container?.name?.startsWith("Desktop control center"))
 				Panel.controlOpen = false;
 		}
 	}
@@ -59,7 +63,7 @@ FloatingWindow {
 
 			width: 58
 			height: parent.height
-			color: Qt.alpha(Theme.surface, 0.5)
+			color: Qt.alpha(Theme.surface, 0.35)
 
 			Column {
 				anchors.horizontalCenter: parent.horizontalCenter
@@ -204,5 +208,9 @@ FloatingWindow {
 		}
 	}
 
-	Component.onCompleted: if (Panel.controlPage === "notifications") Notifications.unread = 0
+	Component.onCompleted: {
+		Panel.controlRect = Qt.rect(px, py, implicitWidth, implicitHeight);
+		if (Panel.controlPage === "notifications")
+			Notifications.unread = 0;
+	}
 }

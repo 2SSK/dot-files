@@ -6,19 +6,21 @@ Colours come from the desktop theme (see [theme.md](theme.md)); settings from
 
 ## Control center
 
-`$mod+c` or the sliders icon in the bar: a window at the top right with an icon sidebar. Home has a
+`$mod+c` or the sliders icon in the bar: a panel hanging from the bar's end, in its colour, with an
+icon sidebar. Home has a
 greeting, quick toggles (Wi-Fi, Bluetooth, Do Not Disturb, microphone, screen recording, the bar),
 volume, mic and brightness sliders (a click on an icon mutes) and the media player (MPRIS: cover,
 progress, previous / play / next). Calendar is a month view (the clock in the bar opens it);
 Notifications is the history. The gear opens the settings, the power icon the power menu.
-Escape, the key again, or focusing another window closes it. Wi-Fi needs NetworkManager, Bluetooth
+Escape, the key again, focusing another window or a click anywhere else closes it. Wi-Fi needs NetworkManager, Bluetooth
 BlueZ; without them the tiles say "Not available".
 
 ## Settings window
 
 `$mod+Shift+s` (or `qs -c desktop ipc call settings toggle`): Bar (style, position, height,
 opacity, island width, which widgets go where), Appearance (theme and dark/light, through `theme`),
-Notifications, Levels (volume/brightness steps, how long the level card stays) and Power. Changes
+Notifications, Levels (volume/brightness steps, how long the level card stays) and Power; Escape
+or focusing another window closes it. Changes
 apply at once and are written to `shell.json`, through the stow link into the repo, so they show up
 in `git diff`; Quickshell writes it with sorted keys and 4-space indents, as it's kept.
 
@@ -48,7 +50,7 @@ Hidden with `$mod+Shift+b`, the bar comes back over the windows while the pointe
 | `$mod+n` | notifications (control center) |
 | `$mod+Shift+s` | settings |
 | `$mod+c` | control center |
-| `$mod+p` | power menu (again or Escape closes): arrows or 1–5 pick, Enter runs |
+| `$mod+p` | power menu (again, Escape or a click beside it closes): arrows or 1–5 pick, Enter runs |
 
 Each change shows in a card at the top right; Caps Lock and Num Lock show there by themselves.
 

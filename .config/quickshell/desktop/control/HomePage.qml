@@ -92,7 +92,8 @@ Column {
 
 		Tile {
 			width: (parent.width - 10) / 2
-			glyph: "\u{EBEB}"
+			glyph: "\u{F10A9}" // md-dock-bottom, upside down for a top bar
+			glyphRotation: Config.position === "top" ? 180 : 0
 			label: "Bar"
 			detail: Panel.barShown ? "Shown" : "Hidden"
 			on: Panel.barShown

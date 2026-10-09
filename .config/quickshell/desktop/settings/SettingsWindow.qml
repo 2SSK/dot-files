@@ -2,6 +2,7 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import Quickshell
+import Quickshell.I3
 import Quickshell.Io
 import qs
 import qs.services
@@ -9,7 +10,7 @@ import qs.widgets
 
 // The settings window: a sidebar of pages, each a column of settings that apply at once and are
 // written to ~/.config/desktop/shell.json (in the repo). A real window, so i3 floats it (see
-// look.conf) and the keyboard works.
+// look.conf) and the keyboard works. Escape or focusing another window closes it.
 FloatingWindow {
 	id: root
 
@@ -19,7 +20,7 @@ FloatingWindow {
 	property var families: []
 
 	readonly property var pages: [
-		{ key: "bar", glyph: "\u{EBEB}", title: "Bar" },
+		{ key: "bar", glyph: "\u{F10A9}", title: "Bar", flip: Config.position === "top" }, // md-dock-bottom, upside down for a top bar
 		{ key: "appearance", glyph: "\u{EB5C}", title: "Appearance" },
 		{ key: "notifications", glyph: "\u{EAA2}", title: "Notifications" },
 		{ key: "levels", glyph: "\u{EACD}", title: "Levels" },
@@ -29,6 +30,16 @@ FloatingWindow {
 	function set(group: string, key: string, value: var): void {
 		Config[group][key] = value;
 		Config.save();
+	}
+
+	// another window taking the focus closes it
+	I3IpcListener {
+		subscriptions: ["window"]
+		onIpcEvent: event => {
+			const data = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
+			if (data.change === "focus" && data.container?.name !== root.title)
+				Panel.settingsOpen = false;
+		}
 	}
 
 	title: "Desktop settings"
@@ -72,6 +83,12 @@ FloatingWindow {
 	function theme(args: var): void {
 		apply.command = ["theme", ...args];
 		apply.running = true;
+	}
+
+	Item {
+		anchors.fill: parent
+		focus: true
+		Keys.onEscapePressed: Panel.settingsOpen = false
 	}
 
 	// sidebar
@@ -120,6 +137,7 @@ FloatingWindow {
 
 						Glyph {
 							width: 20
+							rotation: entry.modelData.flip ? 180 : 0
 							text: entry.modelData.glyph
 							font.pixelSize: 16
 							font.weight: Font.Normal
