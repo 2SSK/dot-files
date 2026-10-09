@@ -113,6 +113,8 @@ HangingPanel {
 	ListView {
 		id: list
 
+		ScrollBoost {}
+
 		x: 16
 		y: search.y + search.height + 12
 		width: parent.width - 32

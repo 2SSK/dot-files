@@ -226,6 +226,8 @@ HangingPanel {
 	}
 
 	Flickable {
+		ScrollBoost {}
+
 		anchors.left: header.left
 		anchors.right: header.right
 		anchors.top: header.bottom

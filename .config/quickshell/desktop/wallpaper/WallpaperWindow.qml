@@ -174,6 +174,8 @@ HangingPanel {
 	GridView {
 		id: grid
 
+		ScrollBoost {}
+
 		x: 10
 		y: header.y + header.height + 10
 		width: parent.width - 20

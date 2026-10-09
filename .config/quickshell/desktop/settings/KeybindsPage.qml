@@ -4,14 +4,13 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import qs
-import qs.control
 import qs.widgets
 
 // Every key binding, read from i3's own config (keys.conf, workspaces.conf, resize.conf), so the
 // list can't drift from what the keys do: each one in plain words, grouped (shell, windows,
 // workspaces, apps, i3), the ten workspace keys folded into one row. Bindings inside a mode (the
 // power menu's, the switcher's, resizing) and the keys inside the shell's own panels are listed by
-// hand at the end. A search narrows it all.
+// hand at the end. The settings window's search narrows it all.
 Column {
 	id: root
 
@@ -29,11 +28,12 @@ Column {
 		{ keys: ["Space"], label: "Control center, Home: play or pause (← → skip)" },
 		{ keys: ["Esc"], label: "Any panel: close it (a click beside it does too)" }
 	]
-	readonly property string query: search.text.trim().toLowerCase()
+	property string query // the search, from the settings window (it stays put while this scrolls)
+	readonly property string needle: query.trim().toLowerCase()
 	readonly property var shown: bindings.filter(b => match(b))
 
 	function match(b: var): bool {
-		return !query || b.label.toLowerCase().includes(query) || b.keys.join(" ").toLowerCase().includes(query);
+		return !needle || b.label.toLowerCase().includes(needle) || b.keys.join(" ").toLowerCase().includes(needle);
 	}
 
 	// "$mod+Shift+Return" -> ["Super", "Shift", "Enter"]
@@ -152,13 +152,6 @@ Column {
 		blockLoading: true
 		printErrors: false
 		onLoaded: root.load()
-	}
-
-	TextField {
-		id: search
-
-		width: parent.width
-		placeholder: "Search keys"
 	}
 
 	component KeyCaps: Row {

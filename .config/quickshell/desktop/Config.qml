@@ -76,6 +76,7 @@ Singleton {
 			}
 			property JsonObject power: JsonObject {
 				property bool confirm: true // a second press runs the action
+				property int batteryLow: 25 // % at which the battery turns red and warns
 			}
 		}
 	}

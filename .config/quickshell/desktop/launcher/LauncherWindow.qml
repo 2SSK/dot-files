@@ -174,6 +174,8 @@ HangingPanel {
 		ListView {
 			id: list
 
+			ScrollBoost {}
+
 			anchors.fill: parent
 			visible: root.mode === "apps" || root.mode === "files"
 			model: visible ? root.results : []
@@ -317,6 +319,8 @@ HangingPanel {
 		// emoji and themes: a grid
 		GridView {
 			id: grid
+
+			ScrollBoost {}
 
 			anchors.fill: parent
 			visible: root.mode === "emoji" || root.mode === "themes"

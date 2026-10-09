@@ -4,6 +4,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import qs
+import qs.control
 import qs.services
 import qs.widgets
 
@@ -187,12 +188,43 @@ FloatingWindow {
 		}
 	}
 
+	// the page's title (and the Keys page's search), fixed above what scrolls
+	Column {
+		id: header
+
+		anchors.left: sidebar.right
+		anchors.leftMargin: 32
+		anchors.right: parent.right
+		anchors.rightMargin: 32
+		y: 28
+		spacing: 16
+
+		Text {
+			text: root.pages.find(p => p.key === root.page)?.title ?? ""
+			color: Theme.fg
+			font.family: Theme.fontSans
+			font.pixelSize: 22
+			font.weight: Font.DemiBold
+		}
+
+		TextField {
+			id: keysSearch
+
+			visible: root.page === "keys"
+			width: parent.width
+			placeholder: "Search keys"
+		}
+	}
+
 	Flickable {
 		id: content
 
+		ScrollBoost {}
+
 		anchors.left: sidebar.right
 		anchors.right: parent.right
-		anchors.top: parent.top
+		anchors.top: header.bottom
+		anchors.topMargin: 6
 		anchors.bottom: parent.bottom
 		contentHeight: pageColumn.implicitHeight + 60
 		clip: true
@@ -202,17 +234,9 @@ FloatingWindow {
 			id: pageColumn
 
 			x: 32
-			y: 28
+			y: 16
 			width: content.width - 64
 			spacing: 22
-
-			Text {
-				text: root.pages.find(p => p.key === root.page)?.title ?? ""
-				color: Theme.fg
-				font.family: Theme.fontSans
-				font.pixelSize: 22
-				font.weight: Font.DemiBold
-			}
 
 			// Bar
 			Section {
@@ -458,10 +482,29 @@ FloatingWindow {
 				}
 			}
 
+			Section {
+				visible: root.page === "power"
+				title: "Battery"
+
+				SettingRow {
+					label: "Low battery"
+					hint: "At or below this, the battery turns red and a notification warns you (again at 10%)."
+					Range {
+						from: 10
+						to: 50
+						step: 1
+						value: Config.power.batteryLow
+						format: v => Math.round(v) + " %"
+						onMoved: value => root.set("power", "batteryLow", Math.round(value))
+					}
+				}
+			}
+
 			// Keys: every binding, read from i3's config
 			KeybindsPage {
 				visible: root.page === "keys"
 				width: parent.width
+				query: keysSearch.text
 			}
 		}
 	}
