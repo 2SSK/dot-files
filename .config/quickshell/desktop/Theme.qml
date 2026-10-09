@@ -22,6 +22,8 @@ Singleton {
 	readonly property color border: ui.border ?? "#3b4261"
 	readonly property color error: ui.error ?? "#f7768e"
 	readonly property color success: ui.success ?? "#9ece6a"
+	readonly property color warning: ui.warning ?? "#e0af68"
+	readonly property color secondary: ui.secondary ?? "#bb9af7"
 
 	readonly property string fontSans: "Inter"
 	readonly property string fontMono: "JetBrainsMono Nerd Font"

@@ -150,6 +150,12 @@ FloatingWindow {
 			bottomRightRadius: root.below ? 18 : 0
 			clip: true
 
+			// clicks on the panel's own empty space stay on it (not the closing area behind)
+			MouseArea {
+				anchors.fill: parent
+				acceptedButtons: Qt.AllButtons
+			}
+
 			Behavior on y {
 				NumberAnimation {
 					duration: Panel.controlOpen ? 260 : 200

@@ -96,6 +96,9 @@ ShellRoot {
 			Panel.controlPage = page;
 			Panel.controlOpen = true;
 		}
+		function close(): void {
+			Panel.controlOpen = false;
+		}
 	}
 
 	IpcHandler {
