@@ -17,22 +17,12 @@ Singleton {
 	property bool settingsOpen: false
 	property bool controlOpen: false
 	property var islands: ({}) // screen name -> the bar's rect on it (screen coordinates from its origin)
-	property rect controlRect // where the control center sits, from its screen's origin
 	property string controlPage: "home"
 
-	// The control center appears a moment after its click catcher (Dismiss), so i3 stacks it above
-	// the catcher: clicks on it reach it, clicks elsewhere close it.
+	// the control center's window lives on while it slides back into the bar
 	property bool controlShown: false
 
-	// closing slides it back into the bar first
-	onControlOpenChanged: controlOpen ? showControl.restart() : hideControl.restart()
-
-	Timer {
-		id: showControl
-
-		interval: 60
-		onTriggered: root.controlShown = root.controlOpen
-	}
+	onControlOpenChanged: controlOpen ? controlShown = true : hideControl.restart()
 
 	Timer {
 		id: hideControl

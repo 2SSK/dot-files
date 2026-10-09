@@ -134,12 +134,4 @@ PanelWindow {
 	Toasts {
 		bar: bar
 	}
-
-	// a click anywhere but the control center closes it
-	Dismiss {
-		bar: bar
-		open: Panel.controlOpen
-		hole: Panel.controlRect
-		onDismissed: Panel.controlOpen = false
-	}
 }
