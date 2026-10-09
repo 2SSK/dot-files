@@ -52,6 +52,7 @@ sddm-theme.conf  -                  sddm
 yazi-flavor.toml yazi/flavors/desktop.yazi/flavor.toml -
 silicon.tmTheme  yazi/flavors/desktop.yazi/tmtheme.xml -
 yazi-theme.toml  yazi/theme.toml    -
+eza-theme.yml    eza/theme.yml      -
 palette.json     -                  "$bin/desktop-wallpaper" screens
 EOF
 }

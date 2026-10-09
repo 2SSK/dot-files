@@ -79,8 +79,12 @@ xclip; Wayland: slurp, grim, wl-copy, and a window records through the portal).
 `desktop-input`, run when i3 starts or reloads, sets the touchpad up as sway's input config does:
 tap to click (one finger left, two right, three middle), tap and drag, natural two-finger scrolling,
 click with fingers, no touchpad while typing, middle-click emulation. Scrolling on X is twice as fast
-as on Wayland by default, so it's slowed: one scroll step per 30 pixels of finger movement
+as on Wayland by default, so it's slowed: one scroll step per 45 pixels of finger movement
 (`DESKTOP_SCROLL_DISTANCE`, 10–50; X's default is 15). Displays use no scaling, as on sway.
+
+picom is started by i3 alone (the package's XDG autostart entry is hidden in
+`~/.config/autostart/picom.desktop`: two at login raced, and ours fell back to the flickering
+xrender backend); if it ever falls back, why is in `$XDG_RUNTIME_DIR/picom.log`.
 
 ## Window switcher
 
