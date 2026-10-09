@@ -43,9 +43,10 @@ private folder).
 
 ## Sway
 
-The same shell runs on sway: `sway -c ~/.config/sway/desktop.conf`, or point
-`~/.config/sway/config` at it with `include ~/.config/sway/desktop.conf` (the repo's own
-`~/.config/sway/config` still starts noctalia until you switch). It reuses i3's keys, workspaces,
+The same shell runs on sway: `~/.config/sway/config` includes `desktop.conf`. The noctalia session
+is kept as `~/.config/sway/noctalia.conf` (`sway -c ~/.config/sway/noctalia.conf`, or include it
+from `~/.config/sway/config` instead to make it the default again). `sway/desktop/apps.conf` keeps
+its app keys and voxtype. It reuses i3's keys, workspaces,
 window rules, colours and resize mode as they are, sway's variables (swayfx's corners, shadows and
 blur), outputs and input; `sway/desktop/` adds what only sway needs: what starts with the session,
 and swayfx's touches for the shell. What differs underneath:

@@ -1,18 +1,3 @@
-include ~/.config/sway/variables
-include ~/.config/sway/colorschemes/folke
-include ~/.config/sway/outputs
-include ~/.config/sway/inputs
-include ~/.config/sway/startup
-
-include ~/.config/sway/keybindings/basics
-include ~/.config/sway/keybindings/apps
-include ~/.config/sway/keybindings/movement
-include ~/.config/sway/keybindings/workspaces
-include ~/.config/sway/keybindings/scratchpad
-include ~/.config/sway/keybindings/resizing
-include ~/.config/sway/conf.d/voxtype-mode.conf
-
-include /etc/sway/config.d/*
-
-include ~/.config/sway/noctalia
-
+# Sway's shell: the desktop shell (Quickshell, the same one as on i3). For noctalia, as before,
+# include ~/.config/sway/noctalia.conf here instead (or start `sway -c ~/.config/sway/noctalia.conf`).
+include ~/.config/sway/desktop.conf
