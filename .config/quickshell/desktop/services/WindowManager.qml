@@ -40,7 +40,8 @@ Singleton {
 		id: events
 
 		running: true
-		command: [root.msg, "-t", "subscribe", "-m", '["workspace","window","output","mode"]']
+		// one event per line: i3-msg prints them so, swaymsg spreads each over many (jq joins them)
+		command: root.msg === "swaymsg" ? ["sh", "-c", `swaymsg -t subscribe -m '["workspace","window","output","mode"]' | jq -c --unbuffered .`] : [root.msg, "-t", "subscribe", "-m", '["workspace","window","output","mode"]']
 		stdout: SplitParser {
 			onRead: line => {
 				refresh.restart();

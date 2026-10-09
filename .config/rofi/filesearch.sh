@@ -83,13 +83,13 @@ file_uri() {
 # Offered as that type alone, the way a file copy looks on Windows. wl-copy
 # cannot: for a text/* type it also offers the same bytes as text/plain, and
 # the clipboard then holds a file and a line of text at once. wl-copy-exact
-# sits next to this script; wl-copy is the fallback if it fails.
+# (~/.local/bin) can; wl-copy is the fallback if it fails.
 copy_files() {
     local path uris=""
     for path in "$@"; do
         uris+="$(file_uri "$path")"$'\r\n'
     done
-    printf '%s' "$uris" | "$(dirname -- "$(realpath -- "${BASH_SOURCE[0]}")")/wl-copy-exact" text/uri-list ||
+    printf '%s' "$uris" | wl-copy-exact text/uri-list ||
         printf '%s' "$uris" | wl-copy --type text/uri-list
 }
 

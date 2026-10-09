@@ -10,10 +10,10 @@ input type:touchpad {
 input "1267:12932:ASUE1306:00_04F3:3284_Touchpad" {
     tap enabled
     tap_button_map lrm
-    tap_drag enabled
-    tap_drag_lock disabled
+    drag enabled
+    drag_lock disabled
     accel_profile adaptive
-    accel_speed 0.0
+    pointer_accel 0.0
     natural_scroll enabled
     scroll_method two_finger
     dwt enabled

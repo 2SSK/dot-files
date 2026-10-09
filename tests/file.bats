@@ -64,7 +64,21 @@ setup() {
 	"$FILE" content "$d/blob.bin"
 	[ "$(sed -n 1p "$CALLS")" = "xclip -selection clipboard -t UTF8_STRING <hello>" ]
 	grep -aq "^xclip -selection clipboard -t image/png <" "$CALLS" # the picture's bytes follow
-	[ "$(tail -1 "$CALLS")" = "xclip -selection clipboard -t text/uri-list <file://$d/blob.bin>" ]
+	[ "$(tail -1 "$CALLS")" = "xclip -selection clipboard -t text/uri-list <file://$d/blob.bin"$'\r'">" ]
+}
+
+@test "file copies the file itself, to paste as an attachment: only text/uri-list, encoded, CRLF" {
+	printf 'x' >"$d/my report é.pdf"
+	"$FILE" file "$d/my report é.pdf"
+	[ "$(cat "$CALLS")" = "xclip -selection clipboard -t text/uri-list <file://$d/my%20report%20%C3%A9.pdf"$'\r'">" ]
+}
+
+@test "on Wayland the file goes through wl-copy-exact (wl-copy would add text/plain)" {
+	# shellcheck disable=SC2016
+	printf '#!/bin/sh\necho "wl-copy-exact $* <$(cat)>" >>"$CALLS"\n' >"$BATS_TEST_TMPDIR/bin/wl-copy-exact"
+	chmod +x "$BATS_TEST_TMPDIR/bin/wl-copy-exact"
+	WAYLAND_DISPLAY=wayland-1 "$FILE" file "$d/notes.md"
+	grep -q "^wl-copy-exact text/uri-list <file://$d/notes.md" "$CALLS"
 }
 
 @test "Wayland copies with wl-copy" {

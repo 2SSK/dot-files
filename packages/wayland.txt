@@ -7,6 +7,7 @@ swaylock                    swaylock                    swaylock
 grim                        grim                        grim
 slurp                       slurp                       slurp
 wl-clipboard                wl-clipboard                wl-clipboard
+swaybg                      swaybg                      swaybg
 qt5-wayland                 qtwayland5                  qt5-qtwayland
 xdg-desktop-portal-wlr      xdg-desktop-portal-wlr      xdg-desktop-portal-wlr
 xdg-desktop-portal-gtk      xdg-desktop-portal-gtk      xdg-desktop-portal-gtk

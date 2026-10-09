@@ -48,3 +48,14 @@ teardown() {
 	wait "$pid" || true
 	[ "$(cat "$LEVEL")" = 80 ]
 }
+
+@test "undim stops a dim, which puts the brightness back" {
+	export XDG_RUNTIME_DIR="$BATS_TEST_TMPDIR"
+	"$IDLE" dim >/dev/null 2>&1 3>&- &
+	pid=$!
+	sleep 2.5
+	"$IDLE" undim
+	wait "$pid" || true
+	[ "$(cat "$LEVEL")" = 80 ]
+	[ ! -e "$BATS_TEST_TMPDIR/desktop-dim.pid" ]
+}

@@ -20,8 +20,10 @@ Singleton {
 
 	function step(by: int): void {
 		const n = windows.length;
-		if (n === 0)
+		if (n === 0) {
+			close(); // nothing to switch to: leave the window manager's switcher mode
 			return;
+		}
 		if (!switching) {
 			switching = true;
 			selected = (by > 0 ? Math.min(1, n - 1) : n - 1);
@@ -38,11 +40,15 @@ Singleton {
 		commit();
 	}
 
+	// the ring goes first, then the focus: as it goes, the window manager focuses whatever is under
+	// the pointer (focus follows the mouse), so the chosen window is focused after that
 	function commit(): void {
 		const target = windows[selected];
 		close();
-		if (target)
-			WindowManager.command(`[con_id=${target.id}] focus`);
+		if (target) {
+			focusLater.target = target.id;
+			focusLater.restart();
+		}
 	}
 
 	function close(): void {
@@ -76,6 +82,15 @@ Singleton {
 		windows = found.sort((a, b) => rank(a) - rank(b));
 		if (switching)
 			selected = Math.min(selected, Math.max(0, windows.length - 1));
+	}
+
+	Timer {
+		id: focusLater
+
+		property var target
+
+		interval: 260 // the ring unmaps after 220 ms
+		onTriggered: WindowManager.command(`[con_id=${target}] focus`)
 	}
 
 	Timer {

@@ -38,7 +38,7 @@ foot.ini         -                  pkill -$([[ $mode == dark ]] && echo USR1 ||
 cava             -                  pkill -USR2 -x cava
 nvim.lua         -                  pkill -USR1 -x nvim
 tmux.conf        -                  tmux info && tmux source-file "${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf"
-i3.conf          -                  [[ -z ${SWAYSOCK:-} ]] && i3-msg -t get_version && i3-msg -q reload
+i3.conf          -                  if [[ -n ${SWAYSOCK:-} ]]; then swaymsg -q reload; else i3-msg -t get_version && i3-msg -q reload; fi
 picom.conf       -                  -
 xsettingsd.conf  -                  pkill -HUP -x xsettingsd
 st.Xresources    -                  [[ -n ${DISPLAY:-} && -r $HOME/.Xresources ]] && xrdb -merge "$HOME/.Xresources" && pkill -USR1 -x st

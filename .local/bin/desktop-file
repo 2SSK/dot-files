@@ -3,7 +3,10 @@
 #   desktop-file open <file>      text and code: $EDITOR (nvim) in $TERMINAL (kitty); web pages,
 #                                 PDFs and SVGs: a new tab of the browser that's running, else of
 #                                 the default one; anything else: its default application
-#   desktop-file path <file>      the full path, as text (to paste into a chat)
+#   desktop-file file <file>      the file itself, to paste as an attachment (Teams, WhatsApp, mail):
+#                                 its file:// URI as text/uri-list alone; with text beside it,
+#                                 apps paste the path instead
+#   desktop-file path <file>      the full path, as text
 #   desktop-file content <file>   text as text, an image as an image, anything else as the file
 #                                 itself (pastes as an attachment)
 #   desktop-file find [query]     up to 60 files under $HOME matching it, best first (fzf), or the
@@ -16,7 +19,7 @@ skip_names=(.git node_modules __pycache__ .venv target .cache .npm .cargo .rustu
 skip_paths=(.local/share .local/state go/pkg .config/BraveSoftware .config/chromium .config/google-chrome)
 
 usage() {
-	echo "usage: desktop-file open|path|content <file> | find [query]" >&2
+	echo "usage: desktop-file open|file|path|content <file> | find [query]" >&2
 	exit 2
 }
 
@@ -47,6 +50,37 @@ copy() { # <type> < data
 		wl-copy --type "$1"
 	else
 		xclip -selection clipboard -t "$1"
+	fi
+}
+
+# file:// URI for an absolute path: every byte outside the unreserved set percent-encoded (also
+# right for the UTF-8 bytes of a non-ASCII name)
+file_uri() {
+	local LC_ALL=C path=$1 out='' char code i
+	for ((i = 0; i < ${#path}; i++)); do
+		char=${path:i:1}
+		case $char in
+		[a-zA-Z0-9/._~-]) out+=$char ;;
+		*)
+			printf -v code '%d' "'$char"
+			((code < 0)) && ((code += 256))
+			printf -v char '%%%02X' "$code"
+			out+=$char
+			;;
+		esac
+	done
+	printf 'file://%s' "$out"
+}
+
+# the file, as a file copy looks: its URI, CRLF-ended (RFC 2483), offered as text/uri-list only
+# (xclip offers just the type it's given; wl-copy would add text/plain, wl-copy-exact doesn't)
+copy_file() { # <path>
+	local uri
+	uri="$(file_uri "$1")"$'\r\n'
+	if [[ -n ${WAYLAND_DISPLAY:-} ]]; then
+		printf '%s' "$uri" | wl-copy-exact text/uri-list || printf '%s' "$uri" | wl-copy --type text/uri-list
+	else
+		printf '%s' "$uri" | xclip -selection clipboard -t text/uri-list
 	fi
 }
 
@@ -118,6 +152,7 @@ open)
 		exec xdg-open "$file"
 	fi
 	;;
+file) copy_file "$file" ;;
 path) copy_text "$file" ;;
 content)
 	if editable "$mime"; then
@@ -125,7 +160,7 @@ content)
 	elif [[ $mime == image/* ]]; then
 		copy "$mime" <"$file"
 	else
-		printf 'file://%s' "$file" | copy text/uri-list
+		copy_file "$file"
 	fi
 	;;
 *) usage ;;

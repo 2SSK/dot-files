@@ -44,11 +44,23 @@ Singleton {
 		history = [];
 	}
 
+	// X11: Qt hears every change. Wayland only tells the focused app, so wl-paste watches instead:
+	// each copy's text, ended by a record separator
 	Connections {
 		target: Quickshell
+		enabled: !Quickshell.env("WAYLAND_DISPLAY")
 
 		function onClipboardTextChanged(): void {
 			root.add(Quickshell.clipboardText);
+		}
+	}
+
+	Process {
+		running: !!Quickshell.env("WAYLAND_DISPLAY")
+		command: ["wl-paste", "--type", "text", "--watch", "sh", "-c", "cat; printf '\\036'"]
+		stdout: SplitParser {
+			splitMarker: "\u001e"
+			onRead: text => root.add(text)
 		}
 	}
 

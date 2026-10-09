@@ -41,6 +41,26 @@ item: pin it, save it as a code note, or remove it. The history lives in memory 
 passwords never reach the disk; pinned items are kept in `~/.local/state/desktop/clipboard/` (a
 private folder).
 
+## Sway
+
+The same shell runs on sway: `~/.config/sway/config` includes `desktop.conf`. The noctalia session
+is kept as `~/.config/sway/noctalia.conf` (`sway -c ~/.config/sway/noctalia.conf`, or include it
+from `~/.config/sway/config` instead to make it the default again). `sway/desktop/apps.conf` keeps
+its app keys and voxtype. It reuses i3's keys, workspaces,
+window rules, colours and resize mode as they are, sway's variables (swayfx's corners, shadows and
+blur), outputs and input; `sway/desktop/` adds what only sway needs: what starts with the session,
+and swayfx's touches for the shell. What differs underneath:
+
+| | i3 (X11) | sway (Wayland) |
+| --- | --- | --- |
+| Panels | a floating window as big as the screen | a layer surface over the screen with the keyboard |
+| Lock screen | i3lock-color (`desktop-lock`) | the shell's own (Quickshell's session lock, PAM `lock/pam/lock`) |
+| Idle | X's timers (`desktop-idle apply`) and xss-lock | swayidle, run by the shell with the same settings |
+| Alt+Tab ends | `desktop-key-release alt` watches X | the ring holds the keyboard and sees Alt let go |
+| Clipboard history | Qt's clipboard signal | `wl-paste --watch` |
+| Wallpaper | feh | swaybg (`swaymsg output * bg`), or swww's fade when it runs |
+| Screens, touchpad | `desktop-displays`, `desktop-input` | sway's `outputs` and `input` |
+
 ## Launcher
 
 One panel dropping out of the bar, with one search over four modes; Tab and Shift+Tab (or the chips)
@@ -50,10 +70,10 @@ switch them, the arrows move, Enter picks:
 | --- | --- | --- |
 | Apps | `$mod+d` | launches it; the ones used most come first |
 | Emoji | `$mod+;` | copies it; recent ones first, search by name or group (`heart`, `food`) |
-| Files | `$mod+Shift+f` | opens it; **Ctrl+Enter** copies its full path (to paste into a chat), **Shift+Enter** its content (text as text, an image as an image, anything else as the file, so it pastes as an attachment); the row's buttons do the same. Without a search, the files changed this week, newest first |
+| Files | `$mod+Shift+f` | opens it; **Ctrl+Enter** copies the file itself (its `file://` URI as `text/uri-list` alone, as a file manager copies), so Ctrl+V in Teams, WhatsApp or a mail attaches it; **Shift+Enter** copies its full path; **Ctrl+Shift+Enter** its content (text as text, an image as an image); the row's buttons do the same. Without a search, the files changed this week, newest first |
 | Themes | `$mod+Shift+y` | applies it and stays open, to try another; the sun/moon chip switches dark and light |
 
-`desktop-file open|path|content <file>` does the file actions, `desktop-file find [query]` the
+`desktop-file open|file|path|content <file>` does the file actions (`wl-copy-exact` puts a file on the Wayland clipboard as `text/uri-list` alone; `wl-copy` would add text), `desktop-file find [query]` the
 search (fd and fzf over `$HOME`, leaving out `.git`, caches and dependencies). Opening picks by type:
 text and code in `$EDITOR` (nvim) inside `$TERMINAL` (kitty); web pages, PDFs and SVGs in a new tab
 of the browser that's running (Brave, Firefox, Chromium, Chrome, LibreWolf, Vivaldi, Zen), else of
