@@ -4,7 +4,7 @@ import qs
 
 // The distro mark; opens the app launcher.
 Glyph {
-	text: "\u{F08C7}" // md-arch
+	glyph: Icons.g("layout-grid")
 	color: Theme.primary
 	font.pixelSize: Theme.iconSize + 1
 

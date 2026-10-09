@@ -37,7 +37,7 @@ Rectangle {
 
 		Glyph {
 			anchors.centerIn: parent
-			text: root.glyph
+			glyph: root.glyph
 			rotation: root.glyphRotation
 			font.pixelSize: 17
 			font.weight: Font.Normal

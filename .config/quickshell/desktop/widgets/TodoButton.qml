@@ -4,13 +4,14 @@ import qs.services
 
 // Opens the todo list; a dot while tasks are open.
 Glyph {
-	text: "\u{EAB3}" // cod-checklist
+	glyph: Icons.g("checklist")
 	color: Panel.controlOpen && Panel.controlPage === "todo" ? Theme.primary : Theme.fg
+	filled: Panel.controlOpen && Panel.controlPage === "todo"
 	font.pixelSize: Theme.iconSize - 1
 	font.weight: Font.Normal
 
 	Rectangle {
-		visible: Todo.items.some(item => !item.done)
+		visible: Todo.open > 0
 		anchors.right: parent.right
 		anchors.top: parent.top
 		width: 6

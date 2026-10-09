@@ -16,6 +16,26 @@ Singleton {
 	property bool osdShown: false
 	property bool settingsOpen: false
 	property bool controlOpen: false
+	property bool clipboardOpen: false
+	property bool clipboardShown: false // lives on while it slides back into the bar
+	// the open panel hanging from the bar (its width; 0 for none): the bar opens its outline there
+	readonly property int hangingWidth: controlOpen ? controlWidth : clipboardOpen ? 560 : 0
+
+	onClipboardOpenChanged: {
+		if (clipboardOpen) {
+			controlOpen = false;
+			clipboardShown = true;
+		} else {
+			hideClipboard.restart();
+		}
+	}
+
+	Timer {
+		id: hideClipboard
+
+		interval: 230
+		onTriggered: if (!root.clipboardOpen) root.clipboardShown = false
+	}
 	property var islands: ({}) // screen name -> the bar's rect on it (screen coordinates from its origin)
 	property string controlPage: "home"
 
@@ -27,7 +47,14 @@ Singleton {
 	// the control center's window lives on while it slides back into the bar
 	property bool controlShown: false
 
-	onControlOpenChanged: controlOpen ? controlShown = true : hideControl.restart()
+	onControlOpenChanged: {
+		if (controlOpen) {
+			clipboardOpen = false;
+			controlShown = true;
+		} else {
+			hideControl.restart();
+		}
+	}
 
 	Timer {
 		id: hideControl
@@ -54,11 +81,11 @@ Singleton {
 	// Lock keeps the laptop running (closing the lid only locks too); nothing hibernates. Actions
 	// that end the session ask for a second press while power.confirm is on.
 	readonly property var actions: [
-		{ id: "lock", glyph: "\u{F0341}", label: "Lock", confirm: false },
-		{ id: "logout", glyph: "\u{F0343}", label: "Log Out", confirm: true },
-		{ id: "suspend", glyph: "\u{F03E4}", label: "Lock & Suspend", confirm: false },
-		{ id: "reboot", glyph: "\u{F0709}", label: "Reboot", confirm: true },
-		{ id: "poweroff", glyph: "\u{F0425}", label: "Shut Down", confirm: true }
+		{ id: "lock", glyph: Icons.g("lock"), label: "Lock", confirm: false },
+		{ id: "logout", glyph: Icons.g("logout"), label: "Log Out", confirm: true },
+		{ id: "suspend", glyph: Icons.g("zzz"), label: "Lock & Suspend", confirm: false },
+		{ id: "reboot", glyph: Icons.g("refresh"), label: "Reboot", confirm: true },
+		{ id: "poweroff", glyph: Icons.g("power"), label: "Shut Down", confirm: true }
 	]
 
 	function osd(kind: string, value: real, muted: bool): void {

@@ -24,12 +24,13 @@ Item {
 		id: line
 
 		vertical: Config.vertical
-		spacing: 6
+		spacing: Recorder.recording ? 6 : 0 // no gap for the hidden timer, so the camera sits centred
 
 		Glyph {
 			id: dot
 
-			text: Recorder.recording ? "\u{F0567}" : "\u{EAD9}" // md-video, cod-device-camera-video
+			glyph: Icons.g("video")
+			filled: Recorder.recording
 			color: Recorder.recording ? Theme.error : Theme.fg
 			font.pixelSize: Theme.iconSize
 

@@ -100,12 +100,12 @@ PopupWindow {
 					anchors.centerIn: parent
 					font.pixelSize: 20
 					color: root.tint
-					text: ({
-							volume: root.muted ? "\u{F0581}" : Panel.osdValue < 0.34 ? "\u{F057F}" : Panel.osdValue < 0.67 ? "\u{F0580}" : "\u{F057E}",
-							mic: root.muted ? "\u{F036D}" : "\u{F036C}",
-							brightness: "\u{F00E0}",
-							caps: "\u{F0A9B}",
-							num: "\u{F03A0}"
+					glyph: ({
+							volume: root.muted ? Icons.g("volume-off") : Panel.osdValue < 0.34 ? Icons.g("volume-3") : Panel.osdValue < 0.67 ? Icons.g("volume-2") : Icons.g("volume"),
+							mic: root.muted ? Icons.g("microphone-off") : Icons.g("microphone"),
+							brightness: Icons.g("brightness-up"),
+							caps: Icons.g("arrow-big-up-line"),
+							num: Icons.g("hash")
 						})[root.kind] ?? ""
 				}
 			}

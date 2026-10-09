@@ -25,7 +25,7 @@ Item {
 
 		Glyph {
 			anchors.centerIn: parent
-			text: root.glyph
+			glyph: root.glyph
 			font.pixelSize: 17
 			font.weight: Font.Normal
 			color: root.muted ? Theme.fgMuted : Theme.fg

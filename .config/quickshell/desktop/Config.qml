@@ -48,13 +48,14 @@ Singleton {
 
 			property JsonObject bar: JsonObject {
 				property string style: "island" // island: a floating pill; static: the whole edge
+				property bool capsules: true // each widget in a soft capsule
 				property string position: "top" // top, bottom, left or right
 				property int size: 34
 				property real opacity: 0.85
 				property real length: 0 // the island's share of the screen edge; 0 picks one for the screen width
 				property var left: ["workspaces", "scratchpad", "stats"]
 				property var center: ["clock"]
-				property var right: ["tray", "brightness", "notes", "todo", "recorder", "battery", "wifi", "bluetooth", "controls", "notifications", "power"]
+				property var right: ["tray", "brightness", "tools", "recorder", "battery", "wifi", "bluetooth", "notifications", "power"]
 			}
 			property JsonObject notifications: JsonObject {
 				property int timeout: 5000 // ms a popup stays, unless the app sets its own

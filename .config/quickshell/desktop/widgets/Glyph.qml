@@ -1,12 +1,15 @@
 import QtQuick
 import qs
 
-// Bar text: the mono font (Nerd glyphs), bold, as waybar and polybar had it.
+// An icon: `glyph` (Icons.g(name)) in Tabler, its filled version with `filled` (active states).
 Text {
+	property string glyph
+	property bool filled: false
+
+	text: filled ? Icons.filled(glyph) : glyph
 	color: Theme.fg
-	font.family: Theme.fontMono
-	font.pixelSize: Theme.fontSize
-	font.weight: Font.Bold
+	font.family: Icons.family
+	font.pixelSize: Theme.iconSize
 	horizontalAlignment: Text.AlignHCenter
 	verticalAlignment: Text.AlignVCenter
 }

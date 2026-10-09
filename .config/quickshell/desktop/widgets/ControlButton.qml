@@ -3,8 +3,9 @@ import qs
 
 // Opens the control center (toggles, levels, media).
 Glyph {
-	text: "\u{EB52}" // cod-settings (sliders)
+	glyph: Icons.g("adjustments-horizontal")
 	color: Panel.controlOpen ? Theme.primary : Theme.fg
+	filled: Panel.controlOpen
 	font.pixelSize: Theme.iconSize
 	font.weight: Font.Normal
 

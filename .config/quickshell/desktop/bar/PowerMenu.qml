@@ -114,7 +114,7 @@ PopupWindow {
 
 					Glyph {
 						anchors.horizontalCenter: parent.horizontalCenter
-						text: tile.modelData.glyph
+						glyph: tile.modelData.glyph
 						font.pixelSize: 30
 						font.weight: Font.Normal
 						color: tile.ink

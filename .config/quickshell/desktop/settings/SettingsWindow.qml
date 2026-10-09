@@ -20,11 +20,11 @@ FloatingWindow {
 	property var families: []
 
 	readonly property var pages: [
-		{ key: "bar", glyph: "\u{F10A9}", title: "Bar", flip: Config.position === "top" }, // md-dock-bottom, upside down for a top bar
-		{ key: "appearance", glyph: "\u{EB5C}", title: "Appearance" },
-		{ key: "notifications", glyph: "\u{EAA2}", title: "Notifications" },
-		{ key: "levels", glyph: "\u{EACD}", title: "Levels" },
-		{ key: "power", glyph: "\u{F0425}", title: "Power" }
+		{ key: "bar", glyph: Icons.g("app-window"), title: "Bar", flip: Config.position === "top" },
+		{ key: "appearance", glyph: Icons.g("palette"), title: "Appearance" },
+		{ key: "notifications", glyph: Icons.g("bell"), title: "Notifications" },
+		{ key: "levels", glyph: Icons.g("adjustments"), title: "Levels" },
+		{ key: "power", glyph: Icons.g("power"), title: "Power" }
 	]
 
 	function set(group: string, key: string, value: var): void {
@@ -144,10 +144,11 @@ FloatingWindow {
 						Glyph {
 							width: 20
 							rotation: entry.modelData.flip ? 180 : 0
-							text: entry.modelData.glyph
+							glyph: entry.modelData.glyph
 							font.pixelSize: 16
 							font.weight: Font.Normal
 							color: entry.on ? Theme.onPrimary : Theme.fg
+							filled: entry.on
 						}
 
 						Text {
@@ -225,6 +226,15 @@ FloatingWindow {
 						options: [{ value: "island", label: "Island" }, { value: "static", label: "Static" }]
 						value: Config.bar.style
 						onPicked: value => root.set("bar", "style", value)
+					}
+				}
+
+				SettingRow {
+					label: "Capsules"
+					hint: "Each widget in a soft capsule."
+					Toggle {
+						checked: Config.bar.capsules
+						onToggled: checked => root.set("bar", "capsules", checked)
 					}
 				}
 
