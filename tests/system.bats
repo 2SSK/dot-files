@@ -332,3 +332,29 @@ subvolume_fakes() { # btrfs makes folders and remembers them as subvolumes; the 
 	[[ $output == *"vms_running"* ]]
 	[ ! -s "$SUBVOLS" ]
 }
+
+@test "power: TLP's settings in, auto-cpufreq off, TLP on and applied" {
+	# shellcheck disable=SC2016 # expands when the fake runs
+	printf '#!/bin/sh\necho "systemctl $*" >>"$CALLS"\ncase "$*" in *is-enabled*auto-cpufreq*) exit 0 ;; *is-enabled*tlp*) exit 1 ;; esac\n' >"$BATS_TEST_TMPDIR/bin/systemctl"
+	# shellcheck disable=SC2016
+	printf '#!/bin/sh\necho "tlp $*" >>"$CALLS"\n' >"$BATS_TEST_TMPDIR/bin/tlp"
+	chmod +x "$BATS_TEST_TMPDIR"/bin/*
+	run "$SYSTEM" power
+	[ "$status" -eq 0 ]
+	grep -qx 'CPU_BOOST_ON_BAT=0' "$SYSTEM_ROOT/etc/tlp.d/10-desktop.conf"
+	grep -qx 'PLATFORM_PROFILE_ON_BAT=quiet' "$SYSTEM_ROOT/etc/tlp.d/10-desktop.conf"
+	grep -qx "systemctl disable --now auto-cpufreq.service" "$CALLS"
+	grep -qx "systemctl enable --now tlp.service" "$CALLS"
+	grep -qx "tlp start" "$CALLS"
+}
+
+@test "power: already set up changes nothing" {
+	# shellcheck disable=SC2016 # expands when the fake runs
+	printf '#!/bin/sh\necho "systemctl $*" >>"$CALLS"\ncase "$*" in *is-enabled*auto-cpufreq*) exit 1 ;; esac\n' >"$BATS_TEST_TMPDIR/bin/systemctl"
+	chmod +x "$BATS_TEST_TMPDIR"/bin/*
+	mkdir -p "$SYSTEM_ROOT/etc/tlp.d"
+	cp "$BATS_TEST_DIRNAME/../system/etc/tlp.d/10-desktop.conf" "$SYSTEM_ROOT/etc/tlp.d/"
+	run "$SYSTEM" power
+	[[ $output == *"already in place"* ]]
+	! grep -q -- "--now" "$CALLS"
+}

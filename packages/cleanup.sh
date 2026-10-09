@@ -35,6 +35,10 @@ packages() {
 	# what the repo installs stays, even where it came in as another package's dependency
 	mapfile -t keep < <(repo_packages | grep -vxF -f <(listed "$here/remove.txt") | installed)
 	((${#keep[@]} == 0)) || sudo pacman -D --asexplicit "${keep[@]}" >/dev/null
+	# a service whose package goes is stopped first (auto-cpufreq: TLP manages power)
+	if systemctl is-enabled --quiet auto-cpufreq.service 2>/dev/null; then
+		sudo systemctl disable --now auto-cpufreq.service
+	fi
 	mapfile -t remove < <(listed "$here/remove.txt" | installed)
 	if ((${#remove[@]})); then
 		log_info removing count="${#remove[@]}"

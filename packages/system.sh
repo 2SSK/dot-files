@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# System-level setup (sudo): the memory safety net, libvirt, docker, the lid, snapshots (Timeshift and the
+# System-level setup (sudo): the memory safety net, libvirt, docker, the lid, power (TLP), snapshots (Timeshift and the
 # subvolumes it leaves out), the GRUB theme and the login screen. Installs
 # the tracked files under system/ into / and enables services; a no-op when everything is already
 # in place.
-# usage: system.sh memory|libvirt|docker|lid|timeshift|subvolumes|grub [--preview]|sddm
+# usage: system.sh memory|libvirt|docker|lid|power|timeshift|subvolumes|grub [--preview]|sddm
 set -euo pipefail
 
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -124,6 +124,20 @@ subvolumes() {
 	((${#kept[@]})) || return 0
 	echo "The originals are kept. Once the VMs, Docker and your apps work, remove them with:"
 	printf '  sudo rm -rf %q\n' "${kept[@]}"
+}
+
+power() { # TLP alone (auto-cpufreq fights it over the CPU), with system/etc/tlp.d's settings
+	put etc/tlp.d/10-desktop.conf
+	if systemctl is-enabled --quiet auto-cpufreq.service 2>/dev/null; then
+		sudo systemctl disable --now auto-cpufreq.service
+		changed=1
+	fi
+	if ! systemctl is-enabled --quiet tlp.service 2>/dev/null; then
+		sudo systemctl enable --now tlp.service
+		changed=1
+	fi
+	((changed)) || return 0
+	sudo tlp start >/dev/null # the settings now, not at the next plug or boot
 }
 
 lid() { # closing the lid only locks; logind rereads its config on SIGHUP (a restart would end sessions)
@@ -410,10 +424,11 @@ memory) memory ;;
 libvirt) libvirt ;;
 docker) docker_daemon ;;
 lid) lid ;;
+power) power ;;
 timeshift) timeshift ;;
 subvolumes) subvolumes ;;
 grub) if [[ ${2:-} == --preview ]]; then grub_preview && exit 0; fi; grub_theme ;;
 sddm) sddm_theme ;;
-*) echo 'usage: system.sh memory|libvirt|docker|lid|timeshift|subvolumes|grub [--preview]|sddm' >&2 && exit 2 ;;
+*) echo 'usage: system.sh memory|libvirt|docker|lid|power|timeshift|subvolumes|grub [--preview]|sddm' >&2 && exit 2 ;;
 esac
 if ((changed)); then log_info system part="$1"; else echo "$1: already in place"; fi

@@ -34,6 +34,12 @@ FAKE
 	grep -qx "yay -S cmatrix-git" "$CALLS"
 }
 
+@test "packages: auto-cpufreq is stopped before its package goes" {
+	run "$CLEANUP" packages
+	[ "$status" -eq 0 ]
+	grep -qx "systemctl disable --now auto-cpufreq.service" "$CALLS"
+}
+
 @test "docker: named volumes stay" {
 	run "$CLEANUP" docker
 	[ "$status" -eq 0 ]
