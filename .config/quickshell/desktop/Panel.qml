@@ -18,6 +18,11 @@ Singleton {
 	property bool controlOpen: false
 	property bool clipboardOpen: false
 	property bool clipboardShown: false // lives on while it slides back into the bar
+	property bool captureOpen: false
+	property bool captureShown: false
+	property string captureAsk: "" // "shot" or "record": the panel only asks which screen
+	readonly property int captureWidth: 520
+	readonly property int captureHeight: 300
 	property bool launcherOpen: false
 	property bool launcherShown: false
 	property string launcherMode: "apps" // apps, emoji, files or themes
@@ -28,8 +33,40 @@ Singleton {
 	readonly property int wallpaperWidth: 720
 	readonly property int wallpaperHeight: 540
 	// the open panel hanging from the bar (its width; 0 for none): the bar opens its outline there
-	readonly property int hangingWidth: controlOpen ? controlWidth : clipboardOpen ? 560 : wallpaperOpen ? wallpaperWidth : launcherOpen ? launcherWidth : 0
-	readonly property int hangingHeight: controlOpen ? controlHeight : clipboardOpen ? 560 : wallpaperOpen ? wallpaperHeight : launcherOpen ? launcherHeight : 0
+	readonly property int hangingWidth: controlOpen ? controlWidth : clipboardOpen ? 560 : wallpaperOpen ? wallpaperWidth : launcherOpen ? launcherWidth : captureOpen ? captureWidth : 0
+	readonly property int hangingHeight: controlOpen ? controlHeight : clipboardOpen ? 560 : wallpaperOpen ? wallpaperHeight : launcherOpen ? launcherHeight : captureOpen ? captureHeight : 0
+
+	// the capture panel; ask: "shot" or "record" to go straight to choosing a screen
+	function openCapture(ask: string): void {
+		captureAsk = ask === "shot" || ask === "record" ? ask : "";
+		captureOpen = true;
+	}
+
+	onCaptureOpenChanged: {
+		if (captureOpen) {
+			controlOpen = false;
+			clipboardOpen = false;
+			wallpaperOpen = false;
+			launcherOpen = false;
+			showCapture.restart();
+		} else {
+			hideCapture.restart();
+		}
+	}
+
+	Timer {
+		id: showCapture
+
+		interval: 60
+		onTriggered: root.captureShown = root.captureOpen
+	}
+
+	Timer {
+		id: hideCapture
+
+		interval: 230
+		onTriggered: if (!root.captureOpen) root.captureShown = false
+	}
 
 	// the launcher on a mode; again on the same mode closes it
 	function toggleLauncher(mode: string): void {
@@ -44,6 +81,7 @@ Singleton {
 	onLauncherOpenChanged: {
 		if (launcherOpen) {
 			controlOpen = false;
+			captureOpen = false;
 			clipboardOpen = false;
 			wallpaperOpen = false;
 			showLauncher.restart();
@@ -69,6 +107,7 @@ Singleton {
 	onWallpaperOpenChanged: {
 		if (wallpaperOpen) {
 			controlOpen = false;
+			captureOpen = false;
 			clipboardOpen = false;
 			launcherOpen = false;
 			showWallpaper.restart();
@@ -95,6 +134,7 @@ Singleton {
 		if (clipboardOpen) {
 			controlOpen = false;
 			wallpaperOpen = false;
+			captureOpen = false;
 			launcherOpen = false;
 			showClipboard.restart();
 		} else {
@@ -129,6 +169,7 @@ Singleton {
 	onControlOpenChanged: {
 		if (controlOpen) {
 			clipboardOpen = false;
+			captureOpen = false;
 			wallpaperOpen = false;
 			launcherOpen = false;
 			showControl.restart();

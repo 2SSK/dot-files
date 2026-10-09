@@ -61,6 +61,22 @@ the default one; anything else in its default application. The emoji come from U
 (`~/.local/share/desktop/emoji.tsv`); use counts and recent emoji are kept in
 `~/.local/state/desktop/launcher.json`.
 
+## Screenshots and recording
+
+| Key | |
+| --- | --- |
+| Print | screenshot of a region: drag a rectangle (Escape or a right click cancels) |
+| Ctrl+Print | screenshot of the focused window |
+| Shift+Print | screenshot of a screen; with more than one monitor it asks which (a map of them as they're arranged, or All screens) |
+| `$mod+Print` | the capture panel: Screenshot or Record × Region, Window, Screen (keys R, W, S; with Shift, record) |
+| `$mod+F12`, the camera in the bar | stops a recording, else opens the capture panel |
+
+A screenshot is saved to `~/Pictures/Screenshots` and copied to the clipboard as an image, ready
+to paste. A recording (gpu-screen-recorder, 60 fps, the system sound) goes to `~/Videos`: a region,
+the focused window, or one screen or all of them; while it runs the bar shows its time, and the
+panel's Record row becomes Stop. `desktop-capture shot|record …` does the work (X11: slop, maim,
+xclip; Wayland: slurp, grim, wl-copy, and a window records through the portal).
+
 ## Window switcher
 
 Hold Ctrl and tap Tab: the open windows come up as rounded cards on a ring, most recently used
@@ -125,7 +141,8 @@ Hidden with `$mod+Shift+b`, the bar comes back over the windows while the pointe
 | F1 / F2 / F3, media keys | mute, volume down, volume up |
 | F4 / F5, brightness keys | brightness down, up |
 | F6, mic-mute key | microphone mute |
-| `$mod+F12` | start / stop screen recording (gpu-screen-recorder, into `~/Videos`) |
+| `$mod+F12` | stop a recording, else the capture panel |
+| Print, Ctrl+Print, Shift+Print, `$mod+Print` | screenshot of a region, the window, a screen; the capture panel |
 | `$mod+Shift+b` | hide / show the bar |
 | `$mod+n` | notifications (control center) |
 | `$mod+Shift+s` | settings |
@@ -168,5 +185,5 @@ press while `power.confirm` is on. Nothing hibernates.
 ## IPC
 
 `qs -c desktop ipc call <target> <function>`: `audio up|down|mute|mic`, `brightness up|down`,
-`bar toggle`, `recorder toggle`, `notifications toggle|dnd|clear`, `settings toggle`, `control toggle|open <page>|page <page>|close`, `clipboard toggle`, `wallpaper toggle|shuffle`, `launcher toggle <apps|emoji|files|themes>|close`, `switcher next|prev|commit|cancel`, `alarm stop|snooze`, `power open|toggle|close|next|prev|activate|pick <n>`,
+`bar toggle`, `recorder toggle`, `notifications toggle|dnd|clear`, `settings toggle`, `control toggle|open <page>|page <page>|close`, `clipboard toggle`, `wallpaper toggle|shuffle`, `launcher toggle <apps|emoji|files|themes>|close`, `switcher next|prev|commit|cancel`, `capture toggle|shot <region|window|screen>|record <region|window|screen>|stop`, `alarm stop|snooze`, `power open|toggle|close|next|prev|activate|pick <n>`,
 `theme reload`.

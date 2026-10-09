@@ -8,6 +8,7 @@ import qs.bar
 import qs.clipboard
 import qs.wallpaper
 import qs.launcher
+import qs.capture
 import qs.control
 import qs.settings
 import qs
@@ -35,6 +36,14 @@ ShellRoot {
 		active: Panel.clipboardShown
 
 		ClipboardWindow {
+			visible: true
+		}
+	}
+
+	LazyLoader {
+		active: Panel.captureShown
+
+		CaptureWindow {
 			visible: true
 		}
 	}
@@ -137,6 +146,24 @@ ShellRoot {
 
 		function toggle(): void {
 			Panel.clipboardOpen = !Panel.clipboardOpen;
+		}
+	}
+
+	// screenshots and recordings: region, window or screen (a screen asks which when there are several)
+	IpcHandler {
+		target: "capture"
+
+		function toggle(): void {
+			Panel.captureOpen ? Panel.captureOpen = false : Panel.openCapture("");
+		}
+		function shot(mode: string): void {
+			Capture.start("shot", mode);
+		}
+		function record(mode: string): void {
+			Capture.start("record", mode);
+		}
+		function stop(): void {
+			Recorder.stop();
 		}
 	}
 

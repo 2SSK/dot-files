@@ -1,0 +1,109 @@
+#!/usr/bin/env bash
+# Screenshots and screen recordings (the shell's capture panel and Print keys).
+#   desktop-capture shot region|window|screen [--monitor NAME --geometry WxH+X+Y]
+#       region: drag a rectangle; window: the focused one; screen: that monitor, else all of them.
+#       Saved to ~/Pictures/Screenshots and copied to the clipboard as an image.
+#   desktop-capture record region|window|screen <file> [--monitor NAME]
+#       gpu-screen-recorder at 60 fps with the system sound, into <file>; prints "recording" as it
+#       starts, then runs in the foreground (exec), so SIGINT ends it and finishes the file.
+# A cancelled region (Escape, or a right click) exits 1 and does nothing.
+# X11: slop, maim, xclip, xdotool. Wayland: slurp, grim, wl-copy; a window records via the portal.
+set -euo pipefail
+
+usage() {
+	echo "usage: desktop-capture shot region|window|screen [--monitor NAME --geometry WxH+X+Y]" >&2
+	echo "       desktop-capture record region|window|screen <file> [--monitor NAME]" >&2
+	exit 2
+}
+
+wayland() { [[ -n ${WAYLAND_DISPLAY:-} ]]; }
+
+# the selection's colour: the theme's accent ("r,g,b" from 0 to 1 for slop)
+accent() {
+	local palette="${XDG_STATE_HOME:-$HOME/.local/state}/desktop/theme/palette.json" hex
+	hex="$(sed -n 's/^ *"primary": "#\([0-9a-fA-F]\{6\}\)".*/\1/p' "$palette" 2>/dev/null | head -1)"
+	hex=${hex:-7aa2f7}
+	printf '%s,%s,%s' "$(awk "BEGIN{printf \"%.2f\", $((16#${hex:0:2}))/255}")" \
+		"$(awk "BEGIN{printf \"%.2f\", $((16#${hex:2:2}))/255}")" "$(awk "BEGIN{printf \"%.2f\", $((16#${hex:4:2}))/255}")"
+}
+
+region() { # prints the dragged rectangle (slop's WxH+X+Y, slurp's "X,Y WxH"); fails when cancelled
+	if wayland; then
+		slurp
+	else
+		slop -f '%g' -b 2 -c "$(accent),0.9" -l -c "$(accent),0.15"
+	fi
+}
+
+shot() { # <mode> [--monitor NAME --geometry G]
+	local mode=$1 monitor='' geometry='' dir file area
+	shift
+	while (($#)); do
+		case $1 in
+		--monitor) monitor=${2:-} && shift ;;
+		--geometry) geometry=${2:-} && shift ;;
+		*) usage ;;
+		esac
+		shift
+	done
+	dir="${XDG_PICTURES_DIR:-$HOME/Pictures}/Screenshots"
+	file="$dir/Screenshot $(date '+%Y-%m-%d %H.%M.%S').png"
+	case $mode in
+	region) area="$(region)" || exit 1 ;;
+	window | screen) ;;
+	*) usage ;;
+	esac
+	mkdir -p "$dir"
+	if wayland; then
+		case $mode in
+		region) grim -g "$area" "$file" ;;
+		window) grim -g "$(swaymsg -t get_tree | jq -r '.. | select(.focused? == true) | .rect | "\(.x),\(.y) \(.width)x\(.height)"')" "$file" ;;
+		screen) if [[ -n $monitor ]]; then grim -o "$monitor" "$file"; else grim "$file"; fi ;;
+		esac
+		wl-copy --type image/png <"$file"
+	else
+		case $mode in
+		region) maim -u -g "$area" "$file" ;;
+		window) maim -u -i "$(xdotool getactivewindow)" "$file" ;;
+		screen) if [[ -n $geometry ]]; then maim -u -g "$geometry" "$file"; else maim -u "$file"; fi ;;
+		esac
+		xclip -selection clipboard -t image/png <"$file"
+	fi
+	notify-send -a Screenshot -i "$file" "Screenshot copied" "$file"
+}
+
+record() { # <mode> <file> [--monitor NAME]
+	local mode=$1 file=${2:-} monitor='' target area
+	[[ -n $file ]] || usage
+	shift 2
+	while (($#)); do
+		case $1 in
+		--monitor) monitor=${2:-} && shift ;;
+		*) usage ;;
+		esac
+		shift
+	done
+	local extra=()
+	case $mode in
+	region)
+		area="$(region)" || exit 1
+		if wayland; then # slurp's "X,Y WxH" to WxH+X+Y
+			read -r xy size <<<"$area"
+			area="$size+${xy%,*}+${xy#*,}"
+		fi
+		target=region && extra=(-region "$area")
+		;;
+	window) if wayland; then target=portal; else target="$(xdotool getactivewindow)"; fi ;;
+	screen) target=${monitor:-screen} ;;
+	*) usage ;;
+	esac
+	mkdir -p "$(dirname "$file")"
+	echo recording # the region is picked: the shell starts its clock
+	exec gpu-screen-recorder -w "$target" "${extra[@]}" -f 60 -a default_output -o "$file"
+}
+
+case ${1:-} in
+shot) (($# >= 2)) || usage && shift && shot "$@" ;;
+record) (($# >= 3)) || usage && shift && record "$@" ;;
+*) usage ;;
+esac
