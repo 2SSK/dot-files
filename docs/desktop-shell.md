@@ -35,12 +35,18 @@ say so and their bar icons hide.
 
 ## Clipboard
 
-`$mod+Shift+v` or the clipboard icon: the history of copied text, dropping out of the bar like the
-control center. Type to search, ↑ ↓ to pick, Enter (or a click) copies it back and closes. On an
-item: pin it, save it as a code note, or remove it. The history lives in memory only, so copied
-passwords never reach the disk; pinned items are kept in `~/.local/state/desktop/clipboard/` (a
-private folder).
+`$mod+Shift+c` or the clipboard icon: the history of what you copied (text, images and files,
+pinned ones first) on the left, the selected one in full on the right: the text, the picture, the
+files. Type to search, ↑ ↓ to pick, Enter (or Copy) puts it back on the clipboard as what it was
+and closes: an image pastes as an image (into Claude Code, opencode, a chat), files paste as
+attachments. Pin, Open (images, files), Save as a note (text) and Remove sit under the preview;
+Clear empties the history (pins stay).
 
+`desktop-clipboard watch` reports each copy (X11: XFixes, no polling; Wayland: `wl-paste --watch`).
+Text stays in memory and images in `$XDG_RUNTIME_DIR` (RAM, gone at logout; the newest 30 kept), so
+copied passwords and screenshots never reach the disk, and a password manager's copies are left
+out. Pinned entries are kept in `~/.local/state/desktop/clipboard/` (a private folder; a pinned
+image is copied there). Region and window screenshots (F12) land in it like any copy.
 ## Sway
 
 The same shell runs on sway: `~/.config/sway/config` includes `desktop.conf`. The noctalia session
@@ -70,7 +76,7 @@ switch them, the arrows move, Enter picks:
 | --- | --- | --- |
 | Apps | `$mod+d` | launches it; the ones used most come first |
 | Emoji | `$mod+;` | copies it; recent ones first, search by name or group (`heart`, `food`) |
-| Files | `$mod+Shift+f` | opens it; **Ctrl+Enter** copies the file itself (its `file://` URI as `text/uri-list` alone, as a file manager copies), so Ctrl+V in Teams, WhatsApp or a mail attaches it; **Shift+Enter** copies its full path; **Ctrl+Shift+Enter** its content (text as text, an image as an image); the row's buttons do the same. Without a search, the files changed this week, newest first |
+| Files | `$mod+Shift+f` | **Enter** (or a click) copies the file itself (its `file://` URI as `text/uri-list` alone, as a file manager copies), so Ctrl+V in Teams, WhatsApp or a mail attaches it; **Ctrl+Enter** opens it; **Shift+Enter** copies its full path; **Ctrl+Shift+Enter** its content (text as text, an image as an image); the row's buttons do the same. Without a search, the files changed this week, newest first |
 | Themes | `$mod+Shift+y` | applies it and stays open, to try another; the sun/moon chip switches dark and light |
 
 `desktop-file open|file|path|content <file>` does the file actions (`wl-copy-exact` puts a file on the Wayland clipboard as `text/uri-list` alone; `wl-copy` would add text), `desktop-file find [query]` the
@@ -224,7 +230,8 @@ Hidden with `$mod+Shift+b`, the bar comes back over the windows while the pointe
 | `$mod+n` | notifications (control center) |
 | `$mod+Shift+s` | settings |
 | `$mod+c` | control center |
-| `$mod+Shift+v` | clipboard history |
+| `$mod+Shift+c` | clipboard history |
+| `$mod+Shift+v` | reload i3 (or sway) |
 | `$mod+Shift+p` | wallpapers |
 | `$mod+d`, `$mod+;`, `$mod+Shift+f`, `$mod+Shift+y` | the launcher: apps, emoji, files, themes |
 | Alt+Tab (hold Alt) | window switcher |

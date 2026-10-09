@@ -20,7 +20,7 @@ Column {
 	readonly property var inside: [
 		{ keys: ["Alt", "Tab"], label: "Window switcher: hold Alt, Tab steps on (Shift+Tab back), let go to switch, Esc cancels" },
 		{ keys: ["Tab"], label: "Launcher: next mode (apps, emoji, files, themes); Shift+Tab goes back" },
-		{ keys: ["Ctrl", "Enter"], label: "Launcher, files: copy the file, to paste as an attachment (Shift+Enter: its path)" },
+		{ keys: ["Enter"], label: "Launcher, files: copy the file, to paste as an attachment (Ctrl+Enter opens it, Shift+Enter copies its path)" },
 		{ keys: ["←", "→", "↑", "↓"], label: "Launcher, capture and power menu: move; Enter picks" },
 		{ keys: ["R", "W", "S"], label: "Capture: screenshot of a region, the window, a screen (with Shift: record)" },
 		{ keys: ["1", "…", "5"], label: "Power menu: jump to an action" },
@@ -86,7 +86,7 @@ Column {
 		if (i3[cmd])
 			return { group: "i3", label: i3[cmd] };
 		if ((m = cmd.match(/^exec\s+(?:--no-startup-id\s+)?(.*)$/)))
-			return { group: "Apps", label: m[1] === "$term" ? "Terminal" : m[1].startsWith("rofi -show window") ? "Window list (rofi)" : `Run ${m[1]}` };
+			return { group: "Apps", label: m[1] === "$term" ? "Terminal" : `Run ${m[1]}` };
 		return { group: "i3", label: cmd };
 	}
 

@@ -12,6 +12,6 @@ Glyph {
 		anchors.fill: parent
 		anchors.margins: -4
 		cursorShape: Qt.PointingHandCursor
-		onClicked: Quickshell.execDetached(["rofi", "-show", "drun"])
+		onClicked: Panel.toggleLauncher("apps")
 	}
 }

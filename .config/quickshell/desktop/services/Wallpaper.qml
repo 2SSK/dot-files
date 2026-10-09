@@ -5,7 +5,8 @@ import Quickshell
 import Quickshell.Io
 import qs
 
-// The wallpaper: the images in wallpaper.folders (shell.json), the one set, and rotation
+// The wallpaper: the images in wallpaper.folders (shell.json; a folder each deep: theme folders
+// such as ~/Wallpaper-Bank/tokyonight are matched to the theme), the one set, and rotation
 // (wallpaper.rotate: off, 5m, 1h, 1d, or boot for a new one each boot). Setting one points
 // ~/.local/state/desktop/wallpaper at it (the lock screen, sddm and GRUB read that too) and draws
 // it with a short fade (desktop-wallpaper). The last change is remembered, so a rotation keeps its
@@ -18,6 +19,9 @@ Singleton {
 	readonly property var folders: (Config.wallpaper.folders ?? []).map(f => f.replace(/^~/, home))
 	readonly property int every: ({ "5m": 300, "1h": 3600, "1d": 86400 })[Config.wallpaper.rotate] ?? 0 // s
 	property var files: []
+	// the ones in a folder named after the current theme (~/Wallpaper-Bank/tokyonight/...)
+	readonly property string family: Theme.palette.meta?.family ?? ""
+	readonly property var themeFiles: files.filter(f => f.split("/").slice(-2, -1)[0] === family)
 	property string current: ""
 	property real changed: 0 // when it last changed (ms)
 	property string pending: "" // picked while the last one was still fading in
@@ -36,9 +40,10 @@ Singleton {
 		apply.running = true;
 	}
 
-	// a different one, at random
+	// a different one, at random: from the current theme's folder when it has some
 	function shuffle(): void {
-		const others = files.filter(f => f !== current);
+		const pool = themeFiles.length > 1 ? themeFiles : files;
+		const others = pool.filter(f => f !== current);
 		if (others.length)
 			set(others[Math.floor(Math.random() * others.length)]);
 	}

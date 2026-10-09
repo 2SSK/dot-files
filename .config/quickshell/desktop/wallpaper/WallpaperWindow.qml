@@ -9,8 +9,9 @@ import qs.services
 import qs.widgets
 
 // Wallpapers, dropping out of the bar (a HangingPanel). Type to search by name; ↑ ↓ move, Enter
-// sets one, a click too; the desktop fades over to it. The rotate chip picks how often a new one
-// comes (never, 5 minutes, hourly, daily, each boot); shuffle sets one at random.
+// sets one, a click too; the desktop fades over to it. The first chip shows the current theme's
+// folder (~/Wallpaper-Bank/<theme>/, the default) or all of them. The rotate chip picks how often a
+// new one comes (never, 5 minutes, hourly, daily, each boot); shuffle sets one at random.
 HangingPanel {
 	id: root
 
@@ -21,14 +22,16 @@ HangingPanel {
 		{ value: "1d", label: "Daily" },
 		{ value: "boot", label: "Each boot" }
 	]
+	// the current theme's folder (when it has wallpapers), or all of them
+	property bool all: Wallpaper.themeFiles.length === 0
 	readonly property var shown: {
 		const words = search.text.toLowerCase().split(/\s+/).filter(w => w);
-		return Wallpaper.files.filter(f => {
+		return (all ? Wallpaper.files : Wallpaper.themeFiles).filter(f => {
 			const name = f.slice(f.lastIndexOf("/") + 1).toLowerCase();
 			return words.every(w => name.includes(w));
 		});
 	}
-	property int current: Math.max(0, Wallpaper.files.indexOf(Wallpaper.current))
+	property int current: Math.max(0, shown.indexOf(Wallpaper.current))
 
 	function label(path: string): string {
 		return path.slice(path.lastIndexOf("/") + 1).replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ");
@@ -53,7 +56,7 @@ HangingPanel {
 		TextField {
 			id: search
 
-			width: parent.width - rotate.width - buttons.width - 16
+			width: parent.width - scope.width - rotate.width - buttons.width - 24
 			height: 38
 			placeholder: "Search wallpapers"
 			Component.onCompleted: focusField()
@@ -63,6 +66,21 @@ HangingPanel {
 			Keys.onDownPressed: grid.moveCurrentIndexDown()
 			Keys.onTabPressed: grid.moveCurrentIndexRight()
 			Keys.onBacktabPressed: grid.moveCurrentIndexLeft()
+		}
+
+		// the theme's folder or all of them
+		Chip {
+			id: scope
+
+			anchors.verticalCenter: parent.verticalCenter
+			height: 38
+			visible: Wallpaper.themeFiles.length > 0
+			glyph: Icons.g(root.all ? "photo" : "palette")
+			label: root.all ? "All" : (Theme.palette.meta?.name ?? "Theme")
+			onClicked: {
+				root.all = !root.all;
+				search.focusField();
+			}
 		}
 
 		// how often a new one comes; a click opens the choices

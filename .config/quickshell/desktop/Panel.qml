@@ -29,13 +29,15 @@ Singleton {
 	property string launcherMode: "apps" // apps, emoji, files or themes
 	readonly property int launcherWidth: 640
 	readonly property int launcherHeight: 560
+	readonly property int clipboardWidth: 920
+	readonly property int clipboardHeight: 580
 	property bool wallpaperOpen: false
 	property bool wallpaperShown: false
 	readonly property int wallpaperWidth: 720
 	readonly property int wallpaperHeight: 540
 	// the open panel hanging from the bar (its width; 0 for none): the bar opens its outline there
-	readonly property int hangingWidth: controlOpen ? controlWidth : clipboardOpen ? 560 : wallpaperOpen ? wallpaperWidth : launcherOpen ? launcherWidth : captureOpen ? captureWidth : authOpen ? 480 : 0
-	readonly property int hangingHeight: controlOpen ? controlHeight : clipboardOpen ? 560 : wallpaperOpen ? wallpaperHeight : launcherOpen ? launcherHeight : captureOpen ? captureHeight : authOpen ? 250 : 0
+	readonly property int hangingWidth: controlOpen ? controlWidth : clipboardOpen ? clipboardWidth : wallpaperOpen ? wallpaperWidth : launcherOpen ? launcherWidth : captureOpen ? captureWidth : authOpen ? 480 : 0
+	readonly property int hangingHeight: controlOpen ? controlHeight : clipboardOpen ? clipboardHeight : wallpaperOpen ? wallpaperHeight : launcherOpen ? launcherHeight : captureOpen ? captureHeight : authOpen ? 250 : 0
 
 	// the capture panel; ask: "shot" or "record" to go straight to choosing a screen
 	function openCapture(ask: string): void {
