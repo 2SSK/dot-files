@@ -7,7 +7,8 @@ WheelHandler {
 	id: root
 
 	property real step: 110 // px per wheel step
-	readonly property Flickable view: parent
+	// a Flickable hands what's declared in it to its content item: the view is that item's parent then
+	readonly property var view: parent && parent.contentY !== undefined ? parent : parent?.parent
 
 	acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
 	target: null
