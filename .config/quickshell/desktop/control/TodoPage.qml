@@ -154,7 +154,7 @@ Item {
 					anchors.verticalCenter: parent.verticalCenter
 					width: 14
 					opacity: hover.hovered || item.dragged ? 0.8 : 0
-					text: Icons.g("dots-six-vertical")
+					glyph: Icons.g("grip-vertical")
 					font.pixelSize: 14
 					color: Theme.fgMuted
 
@@ -198,7 +198,7 @@ Item {
 					Glyph {
 						anchors.centerIn: parent
 						visible: item.modelData.done
-						text: Icons.g("check")
+						glyph: Icons.g("check")
 						font.pixelSize: 12
 						color: Theme.onPrimary
 					}
@@ -263,7 +263,7 @@ Item {
 					anchors.rightMargin: 14
 					anchors.verticalCenter: parent.verticalCenter
 					opacity: hover.hovered ? 1 : 0
-					text: Icons.g("x")
+					glyph: Icons.g("x")
 					font.pixelSize: 14
 					font.weight: Font.Normal
 					color: Theme.fgMuted

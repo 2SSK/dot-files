@@ -17,7 +17,7 @@ Item {
 		spacing: 4
 
 		Glyph {
-			text: Icons.g("stack")
+			glyph: Icons.g("stack-2")
 			font.pixelSize: Theme.iconSize - 2
 			font.weight: Font.Normal
 			color: hover.containsMouse ? Theme.fg : Theme.fgMuted

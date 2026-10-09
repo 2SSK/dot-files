@@ -23,7 +23,7 @@ FloatingWindow {
 		{ key: "bar", glyph: Icons.g("app-window"), title: "Bar", flip: Config.position === "top" },
 		{ key: "appearance", glyph: Icons.g("palette"), title: "Appearance" },
 		{ key: "notifications", glyph: Icons.g("bell"), title: "Notifications" },
-		{ key: "levels", glyph: Icons.g("faders"), title: "Levels" },
+		{ key: "levels", glyph: Icons.g("adjustments"), title: "Levels" },
 		{ key: "power", glyph: Icons.g("power"), title: "Power" }
 	]
 
@@ -144,7 +144,7 @@ FloatingWindow {
 						Glyph {
 							width: 20
 							rotation: entry.modelData.flip ? 180 : 0
-							text: entry.modelData.glyph
+							glyph: entry.modelData.glyph
 							font.pixelSize: 16
 							font.weight: Font.Normal
 							color: entry.on ? Theme.onPrimary : Theme.fg

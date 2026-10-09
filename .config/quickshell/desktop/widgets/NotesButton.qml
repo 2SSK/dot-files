@@ -4,7 +4,7 @@ import qs.services
 
 // Opens the scratch note.
 Glyph {
-	text: Icons.g("notebook")
+	glyph: Icons.g("notebook")
 	color: Panel.controlOpen && Panel.controlPage === "notes" ? Theme.primary : Theme.fg
 	filled: Panel.controlOpen && Panel.controlPage === "notes"
 	font.pixelSize: Theme.iconSize - 1

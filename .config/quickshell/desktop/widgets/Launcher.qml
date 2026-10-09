@@ -4,7 +4,7 @@ import qs
 
 // The distro mark; opens the app launcher.
 Glyph {
-	text: Icons.g("squares-four")
+	glyph: Icons.g("layout-grid")
 	color: Theme.primary
 	font.pixelSize: Theme.iconSize + 1
 

@@ -4,7 +4,7 @@ import qs.services
 
 // Bluetooth: on, off or connected (accent); opens the Bluetooth page.
 Glyph {
-	text: Connectivity.bluetooth ? Icons.g("bluetooth") : Icons.g("bluetooth-slash")
+	glyph: Connectivity.bluetooth ? Icons.g("bluetooth") : Icons.g("bluetooth-off")
 	color: Panel.controlOpen && Panel.controlPage === "bluetooth" ? Theme.primary : Theme.fg
 	filled: Panel.controlOpen && Panel.controlPage === "bluetooth"
 	font.pixelSize: Theme.iconSize - 1

@@ -5,7 +5,7 @@ import qs
 Glyph {
 	readonly property color capsule: Qt.alpha(Theme.error, 0.16)
 
-	text: Icons.g("power")
+	glyph: Icons.g("power")
 	color: Theme.error
 	font.pixelSize: Theme.iconSize
 

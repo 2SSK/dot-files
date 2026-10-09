@@ -43,7 +43,7 @@ Rectangle {
 		Glyph {
 			anchors.centerIn: parent
 			visible: art.status !== Image.Ready
-			text: Icons.g("music-notes")
+			glyph: Icons.g("music")
 			font.pixelSize: 30
 			color: Theme.primary
 		}
@@ -123,9 +123,9 @@ Rectangle {
 
 				Repeater {
 					model: [
-						{ glyph: Icons.g("skip-back"), enabled: root.player?.canGoPrevious ?? false, act: () => root.player.previous() },
-						{ glyph: root.player?.isPlaying ? Icons.g("pause") : Icons.g("play"), enabled: root.player?.canTogglePlaying ?? false, act: () => root.player.togglePlaying(), main: true },
-						{ glyph: Icons.g("skip-forward"), enabled: root.player?.canGoNext ?? false, act: () => root.player.next() }
+						{ glyph: Icons.g("player-skip-back"), enabled: root.player?.canGoPrevious ?? false, act: () => root.player.previous() },
+						{ glyph: root.player?.isPlaying ? Icons.g("player-pause") : Icons.g("player-play"), enabled: root.player?.canTogglePlaying ?? false, act: () => root.player.togglePlaying(), main: true },
+						{ glyph: Icons.g("player-skip-forward"), enabled: root.player?.canGoNext ?? false, act: () => root.player.next() }
 					]
 
 					delegate: Rectangle {
@@ -141,7 +141,7 @@ Rectangle {
 
 						Glyph {
 							anchors.centerIn: parent
-							text: button.modelData.glyph
+							glyph: button.modelData.glyph
 							font.pixelSize: 16
 							font.weight: Font.Normal
 							color: button.modelData.main ? Theme.onPrimary : Theme.fg

@@ -17,9 +17,9 @@ Line {
 	spacing: Config.vertical ? 0 : 6
 
 	Glyph {
-		text: Config.island || Config.vertical ? root.glyph : root.label
+		glyph: Config.island || Config.vertical ? root.glyph : root.label
 		color: Config.island || Config.vertical ? root.tint : Theme.primary
-		font.family: Config.island || Config.vertical ? Icons.light : Theme.fontSans
+		font.family: Config.island || Config.vertical ? Icons.family : Theme.fontSans
 		font.pixelSize: Config.island || Config.vertical ? Theme.iconSize : Theme.fontSize
 	}
 

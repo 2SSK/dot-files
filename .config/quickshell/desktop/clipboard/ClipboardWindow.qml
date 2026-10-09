@@ -78,7 +78,7 @@ HangingPanel {
 
 				Glyph {
 					anchors.centerIn: parent
-					text: button.modelData.glyph
+					glyph: button.modelData.glyph
 					font.pixelSize: 15
 					font.weight: Font.Normal
 				}
@@ -187,7 +187,7 @@ HangingPanel {
 
 				Repeater {
 					model: [
-						{ glyph: entry.modelData.pinned ? Icons.g("push-pin") : Icons.g("push-pin"), tip: "Pin", act: () => Clipboard.pin(entry.modelData.text), on: entry.modelData.pinned },
+						{ glyph: entry.modelData.pinned ? Icons.g("pin") : Icons.g("pin"), tip: "Pin", act: () => Clipboard.pin(entry.modelData.text), on: entry.modelData.pinned },
 						{ glyph: Icons.g("notebook"), tip: "Save as a note", act: () => { Notes.addSnippet(entry.modelData.text); Panel.clipboardOpen = false; Panel.controlPage = "notes"; Panel.controlOpen = true; }, on: false },
 						{ glyph: Icons.g("x"), tip: "Remove", act: () => Clipboard.remove(entry.modelData.text), on: false }
 					]
@@ -204,7 +204,7 @@ HangingPanel {
 
 						Glyph {
 							anchors.centerIn: parent
-							text: tool.modelData.glyph
+							glyph: tool.modelData.glyph
 							font.pixelSize: 14
 							font.weight: Font.Normal
 							color: tool.modelData.on ? Theme.primary : Theme.fg

@@ -82,9 +82,9 @@ Singleton {
 	// that end the session ask for a second press while power.confirm is on.
 	readonly property var actions: [
 		{ id: "lock", glyph: Icons.g("lock"), label: "Lock", confirm: false },
-		{ id: "logout", glyph: Icons.g("sign-out"), label: "Log Out", confirm: true },
-		{ id: "suspend", glyph: Icons.g("pause"), label: "Lock & Suspend", confirm: false },
-		{ id: "reboot", glyph: Icons.g("arrow-clockwise"), label: "Reboot", confirm: true },
+		{ id: "logout", glyph: Icons.g("logout"), label: "Log Out", confirm: true },
+		{ id: "suspend", glyph: Icons.g("zzz"), label: "Lock & Suspend", confirm: false },
+		{ id: "reboot", glyph: Icons.g("refresh"), label: "Reboot", confirm: true },
 		{ id: "poweroff", glyph: Icons.g("power"), label: "Shut Down", confirm: true }
 	]
 

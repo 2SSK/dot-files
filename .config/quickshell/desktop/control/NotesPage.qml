@@ -15,12 +15,12 @@ Item {
 	readonly property string title: "Notes"
 	readonly property var actions: [
 		{ glyph: Icons.g("plus"), on: false, act: () => Notes.create("text", "", "") },
-		{ glyph: Notes.current?.pinned ? Icons.g("push-pin") : Icons.g("push-pin"), on: Notes.current?.pinned ?? false, act: () => Notes.update(Notes.selected, { pinned: !Notes.current.pinned }), show: Notes.current !== null },
+		{ glyph: Notes.current?.pinned ? Icons.g("pin") : Icons.g("pin"), on: Notes.current?.pinned ?? false, act: () => Notes.update(Notes.selected, { pinned: !Notes.current.pinned }), show: Notes.current !== null },
 		{ glyph: Icons.g("trash"), on: false, act: () => Notes.remove(Notes.selected), show: Notes.current !== null }
 	]
 	readonly property var types: [
 		{ key: "text", glyph: Icons.g("note"), label: "Text" },
-		{ key: "checklist", glyph: Icons.g("check-square"), label: "Checklist" },
+		{ key: "checklist", glyph: Icons.g("checkbox"), label: "Checklist" },
 		{ key: "code", glyph: Icons.g("code"), label: "Code" }
 	]
 	readonly property var tags: ({ none: Theme.fgMuted, red: Theme.error, yellow: Theme.warning, green: Theme.success, blue: Theme.primary, purple: Theme.secondary })
@@ -99,7 +99,7 @@ Item {
 
 					x: 12
 					anchors.verticalCenter: parent.verticalCenter
-					text: root.glyph(entry.modelData.type)
+					glyph: root.glyph(entry.modelData.type)
 					font.pixelSize: 15
 					font.weight: Font.Normal
 					color: entry.on ? Theme.primary : Theme.fgMuted
@@ -140,7 +140,7 @@ Item {
 					anchors.verticalCenter: parent.verticalCenter
 					visible: entry.modelData.pinned
 					filled: true
-					text: Icons.g("push-pin")
+					glyph: Icons.g("pin")
 					font.pixelSize: 13
 					color: Theme.primary
 				}
@@ -203,7 +203,7 @@ Item {
 
 							Glyph {
 								anchors.horizontalCenter: parent.horizontalCenter
-								text: starter.modelData.glyph
+								glyph: starter.modelData.glyph
 								font.pixelSize: 18
 								font.weight: Font.Normal
 								color: Theme.fg
@@ -303,7 +303,7 @@ Item {
 							spacing: 6
 
 							Glyph {
-								text: typeChip.modelData.glyph
+								glyph: typeChip.modelData.glyph
 								font.pixelSize: 12
 								font.weight: Font.Normal
 								color: typeChip.on ? Theme.onPrimary : Theme.fg
@@ -552,7 +552,7 @@ Item {
 								Glyph {
 									anchors.centerIn: parent
 									visible: line.modelData.done
-									text: Icons.g("check")
+									glyph: Icons.g("check")
 									font.pixelSize: 11
 									color: Theme.onPrimary
 								}
@@ -585,7 +585,7 @@ Item {
 								anchors.rightMargin: 10
 								anchors.verticalCenter: parent.verticalCenter
 								opacity: lineHover.hovered ? 1 : 0
-								text: Icons.g("x")
+								glyph: Icons.g("x")
 								font.pixelSize: 13
 								font.weight: Font.Normal
 								color: Theme.fgMuted

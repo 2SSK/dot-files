@@ -34,7 +34,7 @@ Rectangle {
 		x: 16
 		anchors.verticalCenter: parent.verticalCenter
 		width: 22
-		text: root.glyph
+		glyph: root.glyph
 		font.pixelSize: 18
 		font.weight: Font.Normal
 		color: root.active ? Theme.primary : Theme.fg

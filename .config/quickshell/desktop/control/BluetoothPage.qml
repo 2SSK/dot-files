@@ -12,8 +12,8 @@ Column {
 
 	readonly property string title: "Bluetooth"
 	readonly property var actions: [
-		{ glyph: Icons.g("arrows-clockwise"), on: Connectivity.adapter?.discovering ?? false, act: () => { if (Connectivity.adapter) Connectivity.adapter.discovering = !Connectivity.adapter.discovering; }, show: Connectivity.bluetooth },
-		{ glyph: Connectivity.bluetooth ? Icons.g("bluetooth") : Icons.g("bluetooth-slash"), on: Connectivity.bluetooth, act: () => Connectivity.toggleBluetooth() }
+		{ glyph: Icons.g("reload"), on: Connectivity.adapter?.discovering ?? false, act: () => { if (Connectivity.adapter) Connectivity.adapter.discovering = !Connectivity.adapter.discovering; }, show: Connectivity.bluetooth },
+		{ glyph: Connectivity.bluetooth ? Icons.g("bluetooth") : Icons.g("bluetooth-off"), on: Connectivity.bluetooth, act: () => Connectivity.toggleBluetooth() }
 	]
 	readonly property var devices: Array.from(Bluetooth.devices.values).filter(d => d.name).sort((a, b) => (b.connected - a.connected) || (b.paired - a.paired) || a.name.localeCompare(b.name))
 

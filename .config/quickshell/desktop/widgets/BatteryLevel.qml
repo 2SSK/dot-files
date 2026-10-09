@@ -14,7 +14,7 @@ Readout {
 
 	visible: present
 	// fa-battery: empty, quarter, half, three quarters, full; fa-bolt while charging
-	glyph: Icons.g(charging ? "battery-charging" : ["battery-empty", "battery-low", "battery-medium", "battery-high", "battery-full"][Math.round(percent / 25)])
+	glyph: Icons.g(charging ? "battery-charging" : ["battery", "battery-1", "battery-2", "battery-3", "battery-4"][Math.round(percent / 25)])
 	label: charging ? "chr" : "bat"
 	value: Math.round(percent) + "%"
 	widest: "100%"

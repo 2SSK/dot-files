@@ -29,7 +29,7 @@ Item {
 		Glyph {
 			id: dot
 
-			text: Icons.g("video-camera")
+			glyph: Icons.g("video")
 			filled: Recorder.recording
 			color: Recorder.recording ? Theme.error : Theme.fg
 			font.pixelSize: Theme.iconSize

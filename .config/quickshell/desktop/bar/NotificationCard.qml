@@ -80,7 +80,7 @@ Rectangle {
 			Glyph {
 				anchors.centerIn: parent
 				visible: !image.visible
-				text: Icons.g("bell")
+				glyph: Icons.g("bell")
 				font.pixelSize: 18
 				font.weight: Font.Normal
 				color: root.critical ? Theme.error : Theme.primary
@@ -131,7 +131,7 @@ Rectangle {
 				Glyph {
 					anchors.right: parent.right
 					anchors.verticalCenter: summary.verticalCenter
-					text: Icons.g("x")
+					glyph: Icons.g("x")
 					font.pixelSize: 14
 					font.weight: Font.Normal
 					color: closeHover.hovered ? Theme.fg : Theme.fgMuted

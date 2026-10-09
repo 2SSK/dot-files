@@ -24,7 +24,7 @@ Item {
 
 		Glyph {
 			visible: Audio.micMuted
-			text: Icons.g("microphone-slash")
+			glyph: Icons.g("microphone-off")
 			color: Theme.error
 		}
 	}

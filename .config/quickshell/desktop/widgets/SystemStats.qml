@@ -26,7 +26,7 @@ Line {
 	}
 
 	Readout {
-		glyph: Icons.g("memory")
+		glyph: Icons.g("database")
 		label: "mem"
 		value: Math.round(Stats.mem * 100) + "%"
 		widest: "100%"
@@ -34,7 +34,7 @@ Line {
 
 	Readout {
 		visible: Stats.temp >= 0
-		glyph: Icons.g("thermometer-simple")
+		glyph: Icons.g("temperature")
 		label: "tmp"
 		value: Math.round(Stats.temp) + "°C"
 		widest: "100°C"

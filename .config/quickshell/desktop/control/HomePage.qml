@@ -48,7 +48,7 @@ Column {
 
 		Tile {
 			width: (parent.width - 10) / 2
-			glyph: Connectivity.wifi ? Icons.g("wifi-high") : Icons.g("wifi-slash")
+			glyph: Connectivity.wifi ? Icons.g("wifi") : Icons.g("wifi-off")
 			label: "Wi-Fi"
 			detail: !Connectivity.wifiAvailable ? "Not available" : !Connectivity.wifi ? "Off" : Connectivity.network || "Not connected"
 			on: Connectivity.wifi
@@ -58,7 +58,7 @@ Column {
 
 		Tile {
 			width: (parent.width - 10) / 2
-			glyph: Connectivity.bluetooth ? Icons.g("bluetooth") : Icons.g("bluetooth-slash")
+			glyph: Connectivity.bluetooth ? Icons.g("bluetooth") : Icons.g("bluetooth-off")
 			label: "Bluetooth"
 			detail: !Connectivity.bluetoothAvailable ? "Not available" : !Connectivity.bluetooth ? "Off" : Connectivity.device || "On"
 			on: Connectivity.bluetooth
@@ -68,7 +68,7 @@ Column {
 
 		Tile {
 			width: (parent.width - 10) / 2
-			glyph: Notifications.dnd ? Icons.g("bell-slash") : Icons.g("bell")
+			glyph: Notifications.dnd ? Icons.g("bell-off") : Icons.g("bell")
 			label: "Do Not Disturb"
 			detail: Notifications.dnd ? "On" : "Off"
 			on: Notifications.dnd
@@ -77,7 +77,7 @@ Column {
 
 		Tile {
 			width: (parent.width - 10) / 2
-			glyph: Audio.micMuted ? Icons.g("microphone-slash") : Icons.g("microphone")
+			glyph: Audio.micMuted ? Icons.g("microphone-off") : Icons.g("microphone")
 			label: "Microphone"
 			detail: Audio.micMuted ? "Muted" : "On"
 			on: !Audio.micMuted
@@ -86,7 +86,7 @@ Column {
 
 		Tile {
 			width: (parent.width - 10) / 2
-			glyph: Recorder.recording ? Icons.g("video-camera") : Icons.g("video-camera")
+			glyph: Recorder.recording ? Icons.g("video") : Icons.g("video")
 			label: "Screen recording"
 			detail: Recorder.recording ? "Recording" : "Off"
 			on: Recorder.recording
@@ -120,7 +120,7 @@ Column {
 
 			Level {
 				width: parent.width
-				glyph: Audio.muted ? Icons.g("speaker-slash") : Icons.g("speaker-high")
+				glyph: Audio.muted ? Icons.g("volume-off") : Icons.g("volume")
 				value: Audio.volume
 				muted: Audio.muted
 				onMoved: value => Audio.setVolume(value)
@@ -129,7 +129,7 @@ Column {
 
 			Level {
 				width: parent.width
-				glyph: Audio.micMuted ? Icons.g("microphone-slash") : Icons.g("microphone")
+				glyph: Audio.micMuted ? Icons.g("microphone-off") : Icons.g("microphone")
 				value: Audio.micVolume
 				muted: Audio.micMuted
 				onMoved: value => Audio.setMic(value)
@@ -139,7 +139,7 @@ Column {
 			Level {
 				visible: Brightness.available
 				width: parent.width
-				glyph: Icons.g("sun")
+				glyph: Icons.g("brightness-half")
 				value: Brightness.value
 				onMoved: value => Brightness.set(value)
 			}

@@ -18,8 +18,8 @@ Column {
 	Repeater {
 		model: [
 			{ glyph: Icons.g("cpu"), label: "CPU", value: Math.round(Stats.cpu * 100) + "%", history: Stats.cpuHistory, max: 1, show: true },
-			{ glyph: Icons.g("memory"), label: "Memory", value: `${Stats.memUsed.toFixed(1)} / ${Stats.memTotal.toFixed(1)} GiB`, history: Stats.memHistory, max: 1, show: true },
-			{ glyph: Icons.g("thermometer-simple"), label: "Temperature", value: Math.round(Stats.temp) + " °C", history: Stats.tempHistory, max: 100, show: Stats.temp >= 0 }
+			{ glyph: Icons.g("database"), label: "Memory", value: `${Stats.memUsed.toFixed(1)} / ${Stats.memTotal.toFixed(1)} GiB`, history: Stats.memHistory, max: 1, show: true },
+			{ glyph: Icons.g("temperature"), label: "Temperature", value: Math.round(Stats.temp) + " °C", history: Stats.tempHistory, max: 100, show: Stats.temp >= 0 }
 		]
 
 		delegate: Rectangle {
@@ -49,7 +49,7 @@ Column {
 				spacing: 10
 
 				Glyph {
-					text: card.modelData.glyph
+					glyph: card.modelData.glyph
 					font.pixelSize: 18
 					color: Theme.primary
 				}

@@ -3,7 +3,7 @@ import qs
 
 // Opens the clipboard history.
 Glyph {
-	text: Icons.g("clipboard-text")
+	glyph: Icons.g("clipboard-text")
 	color: Panel.clipboardOpen ? Theme.primary : Theme.fg
 	filled: Panel.clipboardOpen
 	font.pixelSize: Theme.iconSize - 1

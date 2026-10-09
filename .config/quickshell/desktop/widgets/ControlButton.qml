@@ -3,7 +3,7 @@ import qs
 
 // Opens the control center (toggles, levels, media).
 Glyph {
-	text: Icons.g("sliders-horizontal")
+	glyph: Icons.g("adjustments-horizontal")
 	color: Panel.controlOpen ? Theme.primary : Theme.fg
 	filled: Panel.controlOpen
 	font.pixelSize: Theme.iconSize

@@ -5,7 +5,7 @@ import qs.services
 // The bell: a dot when something new arrived, struck through while Do Not Disturb is on. A click
 // opens the control center's notifications, a right click toggles Do Not Disturb.
 Glyph {
-	text: Notifications.dnd ? Icons.g("bell-slash") : Icons.g("bell")
+	glyph: Notifications.dnd ? Icons.g("bell-off") : Icons.g("bell")
 	color: Panel.controlOpen && Panel.controlPage === "notifications" ? Theme.primary : Notifications.dnd ? Theme.fgMuted : Theme.fg
 	filled: Panel.controlOpen && Panel.controlPage === "notifications"
 	font.pixelSize: Theme.iconSize

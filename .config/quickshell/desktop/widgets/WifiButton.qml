@@ -4,7 +4,7 @@ import qs.services
 
 // Wi-Fi: off, or on (dimmed while not connected); opens the Wi-Fi page.
 Glyph {
-	text: Connectivity.wifi ? Icons.g("wifi-high") : Icons.g("wifi-slash")
+	glyph: Connectivity.wifi ? Icons.g("wifi") : Icons.g("wifi-off")
 	color: Panel.controlOpen && Panel.controlPage === "wifi" ? Theme.primary : Theme.fg
 	filled: Panel.controlOpen && Panel.controlPage === "wifi"
 	font.pixelSize: Theme.iconSize - 1

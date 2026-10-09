@@ -14,7 +14,7 @@ Column {
 
 	readonly property string title: "Notifications"
 	readonly property var actions: [
-		{ glyph: Notifications.dnd ? Icons.g("bell-slash") : Icons.g("bell"), on: Notifications.dnd, act: () => Notifications.dnd = !Notifications.dnd },
+		{ glyph: Notifications.dnd ? Icons.g("bell-off") : Icons.g("bell"), on: Notifications.dnd, act: () => Notifications.dnd = !Notifications.dnd },
 		{ glyph: Icons.g("trash"), on: false, act: () => Notifications.clear(), show: Notifications.history.length > 0 }
 	]
 	property string filter: "all"
@@ -67,7 +67,7 @@ Column {
 
 			Glyph {
 				anchors.horizontalCenter: parent.horizontalCenter
-				text: Notifications.dnd ? Icons.g("bell-slash") : Icons.g("bell")
+				glyph: Notifications.dnd ? Icons.g("bell-off") : Icons.g("bell")
 				font.pixelSize: 26
 				font.weight: Font.Normal
 				color: Theme.fgMuted

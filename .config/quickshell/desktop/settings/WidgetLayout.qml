@@ -185,7 +185,7 @@ Item {
 
 								x: 8
 								anchors.verticalCenter: parent.verticalCenter
-								text: Icons.g("dots-six-vertical")
+								glyph: Icons.g("grip-vertical")
 								font.pixelSize: 14
 								font.weight: Font.Normal
 								color: Theme.fgMuted
@@ -222,7 +222,7 @@ Item {
 								anchors.rightMargin: 10
 								anchors.verticalCenter: parent.verticalCenter
 								opacity: grip.containsMouse ? 1 : 0.3
-								text: Icons.g("x")
+								glyph: Icons.g("x")
 								font.pixelSize: 13
 								font.weight: Font.Normal
 								color: closeArea.containsMouse ? Theme.error : Theme.fg

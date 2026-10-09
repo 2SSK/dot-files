@@ -12,13 +12,13 @@ HangingPanel {
 	id: root
 
 	readonly property var pages: [
-		{ key: "home", glyph: Icons.g("house"), component: home },
-		{ key: "calendar", glyph: Icons.g("calendar-blank"), component: calendar },
-		{ key: "system", glyph: Icons.g("pulse"), component: system },
+		{ key: "home", glyph: Icons.g("home"), component: home },
+		{ key: "calendar", glyph: Icons.g("calendar"), component: calendar },
+		{ key: "system", glyph: Icons.g("activity"), component: system },
 		{ key: "notifications", glyph: Icons.g("bell"), component: notifications },
-		{ key: "wifi", glyph: Icons.g("wifi-high"), component: wifi },
+		{ key: "wifi", glyph: Icons.g("wifi"), component: wifi },
 		{ key: "bluetooth", glyph: Icons.g("bluetooth"), component: bluetooth },
-		{ key: "todo", glyph: Icons.g("list-checks"), component: todo },
+		{ key: "todo", glyph: Icons.g("list-check"), component: todo },
 		{ key: "notes", glyph: Icons.g("notebook"), component: notes }
 	]
 
@@ -72,7 +72,7 @@ HangingPanel {
 
 					Glyph {
 						anchors.centerIn: parent
-						text: entry.modelData.glyph
+						glyph: entry.modelData.glyph
 						font.pixelSize: 18
 						font.weight: Font.Normal
 						color: entry.on ? Theme.onPrimary : Theme.fg
@@ -111,7 +111,7 @@ HangingPanel {
 
 			Repeater {
 				model: [
-					{ glyph: Icons.g("gear-six"), act: () => { Panel.controlOpen = false; Panel.settingsOpen = true; } },
+					{ glyph: Icons.g("settings"), act: () => { Panel.controlOpen = false; Panel.settingsOpen = true; } },
 					{ glyph: Icons.g("power"), act: () => { Panel.controlOpen = false; Panel.openPower(); } }
 				]
 
@@ -127,7 +127,7 @@ HangingPanel {
 
 					Glyph {
 						anchors.centerIn: parent
-						text: action.modelData.glyph
+						glyph: action.modelData.glyph
 						font.pixelSize: 18
 						font.weight: Font.Normal
 						color: Theme.fg
@@ -189,7 +189,7 @@ HangingPanel {
 
 					Glyph {
 						anchors.centerIn: parent
-						text: button.modelData.glyph
+						glyph: button.modelData.glyph
 						font.pixelSize: 15
 						font.weight: Font.Normal
 						color: button.modelData.on ? Theme.onPrimary : Theme.fg

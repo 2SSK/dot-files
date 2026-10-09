@@ -100,11 +100,11 @@ PopupWindow {
 					anchors.centerIn: parent
 					font.pixelSize: 20
 					color: root.tint
-					text: ({
-							volume: root.muted ? Icons.g("speaker-slash") : Panel.osdValue < 0.34 ? Icons.g("speaker-none") : Panel.osdValue < 0.67 ? Icons.g("speaker-low") : Icons.g("speaker-high"),
-							mic: root.muted ? Icons.g("microphone-slash") : Icons.g("microphone"),
-							brightness: Icons.g("sun"),
-							caps: Icons.g("arrow-fat-line-up"),
+					glyph: ({
+							volume: root.muted ? Icons.g("volume-off") : Panel.osdValue < 0.34 ? Icons.g("volume-3") : Panel.osdValue < 0.67 ? Icons.g("volume-2") : Icons.g("volume"),
+							mic: root.muted ? Icons.g("microphone-off") : Icons.g("microphone"),
+							brightness: Icons.g("brightness-half"),
+							caps: Icons.g("arrow-big-up-line"),
 							num: Icons.g("hash")
 						})[root.kind] ?? ""
 				}

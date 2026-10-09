@@ -12,7 +12,7 @@ Column {
 	id: root
 
 	readonly property string title: "Wi-Fi"
-	readonly property var actions: [{ glyph: Connectivity.wifi ? Icons.g("wifi-high") : Icons.g("wifi-slash"), on: Connectivity.wifi, act: () => Connectivity.toggleWifi() }]
+	readonly property var actions: [{ glyph: Connectivity.wifi ? Icons.g("wifi") : Icons.g("wifi-off"), on: Connectivity.wifi, act: () => Connectivity.toggleWifi() }]
 	readonly property var devices: Array.from(Networking.devices.values).filter(d => d.type === DeviceType.Wifi)
 	readonly property var networks: devices.reduce((all, d) => all.concat(Array.from(d.networks.values)), []).filter(n => n.name).sort((a, b) => (b.connected - a.connected) || (b.signalStrength - a.signalStrength))
 	property var asking: null // the network waiting for a password
@@ -48,7 +48,7 @@ Column {
 			spacing: 6
 
 			ListRow {
-				glyph: Icons.g("wifi-high")
+				glyph: Icons.g("wifi")
 				label: entry.modelData.name
 				detail: entry.modelData.connected ? "Connected" : entry.modelData.stateChanging ? "Connecting…" : entry.modelData.known ? "Saved" : entry.secured ? "Secured" : "Open"
 				active: entry.modelData.connected

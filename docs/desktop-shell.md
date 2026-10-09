@@ -1,9 +1,9 @@
 # Desktop shell (Quickshell)
 
 `qs -c desktop`, started by i3 (`.config/i3/conf.d/autostart.conf`). Sources: `.config/quickshell/desktop/`.
-Colours come from the desktop theme (see [theme.md](theme.md)); icons are Phosphor (Light, and
-Fill for active states; the fonts sit in `fonts/` beside the config, MIT licensed; names in
-`Icons.qml`), apps' own icons come from the GTK icon theme (Tela Circle); settings from
+Colours come from the desktop theme (see [theme.md](theme.md)); icons are Tabler, as noctalia's
+(filled versions for active states; the font sits in `fonts/` beside the config, MIT licensed;
+names in `Icons.qml`), apps' own icons come from the GTK icon theme (Tela Circle); settings from
 `~/.config/desktop/shell.json`, stowed from the repo, which applies as soon as it's saved.
 
 ## Control center
