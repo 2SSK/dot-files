@@ -180,6 +180,14 @@ itself. Listing needs root: `packages/system.sh timeshift` allows exactly `times
 --scripted` without a password (`/etc/sudoers.d/10-desktop-timeshift`); without it the page asks
 once. `desktop-timeshift list|create|delete` does the work.
 
+`packages/system.sh timeshift` also sets what is kept: 3 daily snapshots, 1 weekly, and (with
+`timeshift-autosnap`) the last 3 taken before a pacman upgrade. `packages/system.sh subvolumes`
+makes the VM disks, `/var/lib/docker` and `~/.cache` btrfs subvolumes of their own, which
+snapshots leave out (they change all day); the originals are kept beside them until you remove
+them. `packages/cleanup.sh packages|docker|caches|all` makes room: the packages in
+`packages/remove.txt` and orphans (never one the repo's lists install), unused Docker images,
+containers, build cache and unnamed volumes, and old package caches.
+
 ## When idle
 
 Settings → Power → **When idle**: the screen dims after 4 minutes alone (any key or movement brings
