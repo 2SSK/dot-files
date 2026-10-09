@@ -129,14 +129,15 @@ grub_fakes() { # a palette, /etc/default/grub, and fake font/image/grub tools
 	[ ! -e "$CALLS" ]
 }
 
-@test "grub: leaves a serial console alone" {
+@test "grub: a serial console stays, and the themed screen is added to it" {
 	grub_fakes
 	printf '\nGRUB_TERMINAL="serial console"\n' >>"$SYSTEM_ROOT/etc/default/grub"
 	run "$SYSTEM" grub
 	[ "$status" -eq 0 ]
-	[[ $output == *"event=grub_serial"* ]]
-	run grep -q GRUB_TERMINAL_OUTPUT "$SYSTEM_ROOT/etc/default/grub"
-	[ "$status" -eq 1 ]
+	grep -qx 'GRUB_TERMINAL_INPUT="serial console"' "$SYSTEM_ROOT/etc/default/grub"
+	grep -qx 'GRUB_TERMINAL_OUTPUT="gfxterm serial"' "$SYSTEM_ROOT/etc/default/grub"
+	grep -qx '#GRUB_TERMINAL="serial console"' "$SYSTEM_ROOT/etc/default/grub"
+	grep -qx 'GRUB_TERMINAL="serial console"' "$SYSTEM_ROOT/etc/default/grub.pre-desktop"
 }
 
 @test "unknown part is a usage error" {

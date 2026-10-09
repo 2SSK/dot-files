@@ -8,6 +8,7 @@ set -euo pipefail
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source-path=SCRIPTDIR/.. source=.local/lib/desktop/log.sh
 source "$here/../.local/lib/desktop/log.sh"
+((EUID != 0)) || die run_as_user msg='run it as your user: it reads your theme and calls sudo itself'
 src="$here/../system"
 root="${SYSTEM_ROOT:-}" # tests point this at a scratch directory
 
@@ -117,7 +118,7 @@ grub_theme() { # a minimal theme from the desktop palette, rebuilt on every run
 			die grub_font font="${match%:*}"
 		# the name is the NAME section of the PFF2 file: family, style ("Regular", "Book"...), size
 		python3 -c 'import sys; d = open(sys.argv[1], "rb").read(); i = d.index(b"NAME") + 4
-n = int.from_bytes(d[i:i + 4], "big"); print(d[i + 4:i + 4 + n].rstrip(b"\\0").decode())' "$tmp/$3"
+n = int.from_bytes(d[i:i + 4], "big"); print(d[i + 4:i + 4 + n].split(b"\\0")[0].decode())' "$tmp/$3"
 	}
 	local menu_font hint_font term_font
 	menu_font="$(font 'Inter:style=Regular' 26 menu.pf2 Desktop)" || exit 1
@@ -178,8 +179,14 @@ n = int.from_bytes(d[i:i + 4], "big"); print(d[i + 4:i + 4 + n].rstrip(b"\\0").d
 
 	grub_set GRUB_THEME "\"$boot/themes/desktop/theme.txt\""
 	# The theme needs graphical output; a serial console (servers, cloud images) is left alone
-	if grep -q '^GRUB_TERMINAL=.*serial' "$root/etc/default/grub"; then
-		log_warn grub_serial msg='GRUB_TERMINAL uses a serial console; the theme shows only with gfxterm output'
+	# A serial console (cloud images, servers) stays: GRUB_TERMINAL sets input and output at once, so
+	# it is split into its input and an output that adds the themed screen to the serial port
+	local serial
+	serial="$(sed -n 's/^GRUB_TERMINAL=\(.*serial.*\)/\1/p' "$root/etc/default/grub")"
+	if [[ -n $serial ]]; then
+		grub_set GRUB_TERMINAL_INPUT "$serial"
+		grub_set GRUB_TERMINAL_OUTPUT '"gfxterm serial"'
+		sudo sed -i 's/^GRUB_TERMINAL=/#GRUB_TERMINAL=/' "$root/etc/default/grub"
 	else
 		grub_set GRUB_TERMINAL_OUTPUT '"gfxterm"'
 	fi
