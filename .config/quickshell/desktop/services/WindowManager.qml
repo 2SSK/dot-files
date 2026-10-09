@@ -88,8 +88,8 @@ Singleton {
 		}
 	}
 
-	// the tree: the scratchpad (windows keep a scratchpad_state other than "none", hidden in
-	// __i3_scratch or shown), and for the window switcher (treeRead)
+	// the tree: the scratchpad (a scratchpad window's floating container keeps a scratchpad_state
+	// other than "none", hidden in __i3_scratch or shown), and for the window switcher (treeRead)
 	Process {
 		id: tree
 
@@ -97,13 +97,15 @@ Singleton {
 		stdout: StdioCollector {
 			onStreamFinished: {
 				let total = 0, shown = 0;
+				// i3 marks the floating container around a scratchpad window, not the window itself
 				const walk = (node, hidden) => {
 					if (node.name === "__i3_scratch")
 						hidden = true;
-					if ((node.window || node.app_id !== undefined && node.pid) && node.scratchpad_state && node.scratchpad_state !== "none") {
+					if (node.scratchpad_state && node.scratchpad_state !== "none") {
 						total++;
 						if (!hidden)
 							shown++;
+						return;
 					}
 					for (const child of [...(node.nodes ?? []), ...(node.floating_nodes ?? [])])
 						walk(child, hidden);
