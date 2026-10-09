@@ -5,6 +5,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import qs.bar
+import qs.clipboard
 import qs.control
 import qs.settings
 import qs
@@ -12,7 +13,7 @@ import qs.services
 
 ShellRoot {
 	// services that watch on their own, started with the shell
-	readonly property var watchers: [Locks, Recorder, Notifications]
+	readonly property var watchers: [Locks, Recorder, Notifications, Clipboard]
 
 	Variants {
 		model: Quickshell.screens
@@ -24,6 +25,14 @@ ShellRoot {
 		active: Panel.controlShown
 
 		ControlCenter {
+			visible: true
+		}
+	}
+
+	LazyLoader {
+		active: Panel.clipboardShown
+
+		ClipboardWindow {
 			visible: true
 		}
 	}
@@ -98,6 +107,18 @@ ShellRoot {
 		}
 		function close(): void {
 			Panel.controlOpen = false;
+		}
+		// a page, closing it when it's already showing (keys: todo, notes)
+		function page(page: string): void {
+			Panel.toggleControl(page);
+		}
+	}
+
+	IpcHandler {
+		target: "clipboard"
+
+		function toggle(): void {
+			Panel.clipboardOpen = !Panel.clipboardOpen;
 		}
 	}
 

@@ -17,6 +17,25 @@ Singleton {
 	property bool settingsOpen: false
 	property bool controlOpen: false
 	property bool clipboardOpen: false
+	property bool clipboardShown: false // lives on while it slides back into the bar
+	// the open panel hanging from the bar (its width; 0 for none): the bar opens its outline there
+	readonly property int hangingWidth: controlOpen ? controlWidth : clipboardOpen ? 560 : 0
+
+	onClipboardOpenChanged: {
+		if (clipboardOpen) {
+			controlOpen = false;
+			clipboardShown = true;
+		} else {
+			hideClipboard.restart();
+		}
+	}
+
+	Timer {
+		id: hideClipboard
+
+		interval: 230
+		onTriggered: if (!root.clipboardOpen) root.clipboardShown = false
+	}
 	property var islands: ({}) // screen name -> the bar's rect on it (screen coordinates from its origin)
 	property string controlPage: "home"
 
@@ -28,7 +47,14 @@ Singleton {
 	// the control center's window lives on while it slides back into the bar
 	property bool controlShown: false
 
-	onControlOpenChanged: controlOpen ? controlShown = true : hideControl.restart()
+	onControlOpenChanged: {
+		if (controlOpen) {
+			clipboardOpen = false;
+			controlShown = true;
+		} else {
+			hideControl.restart();
+		}
+	}
 
 	Timer {
 		id: hideControl
