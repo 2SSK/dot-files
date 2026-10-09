@@ -4,7 +4,7 @@
 # the wallpaper softly blurred and dimmed, a large light clock (12-hour, as the bar) and the date,
 # a small faint ring that lights up as you type, a quiet hint at the bottom; plain i3lock gets the
 # background colour.
-# Wayland: swaylock.
+# Wayland (sway): the shell's own lock screen (Quickshell's session lock), else swaylock.
 set -euo pipefail
 
 palette="${XDG_STATE_HOME:-$HOME/.local/state}/desktop/theme/palette.json"
@@ -14,6 +14,14 @@ colour() { # <ui role>: rrggbb from the theme, with a fallback
 bg="$(colour bg 1a1b26)" fg="$(colour fg c0caf5)" primary="$(colour primary 7aa2f7)" error="$(colour error f7768e)"
 
 if [[ -n ${WAYLAND_DISPLAY:-} ]]; then
+	# the shell's session lock; once it holds the screen this returns (sleep may go ahead)
+	if qs -c desktop ipc call lock lock >/dev/null 2>&1; then
+		for _ in $(seq 20); do
+			[[ $(qs -c desktop ipc call lock locked 2>/dev/null) == true ]] && exit 0
+			sleep 0.1
+		done
+	fi
+	# no shell: swaylock instead
 	exec swaylock --color "$bg" --inside-color "${bg}cc" --ring-color "$primary" --key-hl-color "$fg" \
 		--ring-wrong-color "$error" --text-color "$fg" --indicator-radius 80
 fi

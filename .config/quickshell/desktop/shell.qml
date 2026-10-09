@@ -11,6 +11,7 @@ import qs.wallpaper
 import qs.launcher
 import qs.capture
 import qs.polkit
+import qs.lock
 import qs.control
 import qs.settings
 import qs
@@ -39,6 +40,25 @@ ShellRoot {
 
 		ClipboardWindow {
 			visible: true
+		}
+	}
+
+	// the lock screen on Wayland (on X11 i3lock locks): `lock lock` over IPC, from desktop-lock
+	LazyLoader {
+		active: !!Quickshell.env("WAYLAND_DISPLAY")
+
+		LockScreen {}
+	}
+
+	IpcHandler {
+		target: "lock"
+
+		function lock(): void {
+			if (Quickshell.env("WAYLAND_DISPLAY"))
+				Lock.locked = true;
+		}
+		function locked(): bool {
+			return Lock.locked;
 		}
 	}
 

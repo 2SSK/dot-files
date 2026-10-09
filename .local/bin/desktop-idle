@@ -7,7 +7,8 @@
 #   desktop-idle dim                       fade the brightness to a quarter; put it back when
 #                                          stopped (xss-lock stops it on any key or movement, or
 #                                          as it locks)
-# Wayland gets the same from swayidle with the sway port.
+#   desktop-idle undim                     stop a dim (swayidle's resume, on Wayland)
+# On Wayland the shell runs swayidle with the same times, calling dim and undim.
 set -euo pipefail
 
 apply() { # <dim> <lock> <off>
@@ -28,10 +29,13 @@ apply() { # <dim> <lock> <off>
 	fi
 }
 
+pidfile="${XDG_RUNTIME_DIR:-/tmp}/desktop-dim.pid"
+
 dim() {
 	local was now step
 	was="$(brightnessctl get)"
-	trap 'brightnessctl -q set "$was"; exit 0' TERM INT
+	echo $$ >"$pidfile"
+	trap 'brightnessctl -q set "$was"; rm -f "$pidfile"; exit 0' TERM INT
 	# a quarter of where it was, in 20 steps over two seconds
 	for step in $(seq 1 20); do
 		now=$((was - (was - was / 4) * step / 20))
@@ -45,5 +49,6 @@ dim() {
 case ${1:-} in
 apply) (($# == 4)) || { echo "usage: desktop-idle apply <dim> <lock> <off>" >&2 && exit 2; }; apply "$2" "$3" "$4" ;;
 dim) dim ;;
-*) echo "usage: desktop-idle apply <dim> <lock> <off> | dim" >&2 && exit 2 ;;
+undim) [[ -s $pidfile ]] && kill -TERM "$(cat "$pidfile")" 2>/dev/null || true ;;
+*) echo "usage: desktop-idle apply <dim> <lock> <off> | dim | undim" >&2 && exit 2 ;;
 esac
