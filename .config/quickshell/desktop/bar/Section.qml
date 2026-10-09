@@ -36,7 +36,7 @@ Line {
 		})
 
 	vertical: Config.vertical
-	spacing: Config.bar.capsules ? 6 : Config.island ? 18 : 10
+	spacing: Config.bar.capsules ? Theme.barInset : Config.island ? 18 : 10
 
 	Repeater {
 		id: slots
@@ -71,7 +71,7 @@ Line {
 
 			Item {
 				readonly property bool capsule: Config.bar.capsules
-				readonly property real thick: Config.bar.size - 8
+				readonly property real thick: Config.bar.size - 2 * Theme.barInset
 
 				implicitWidth: Config.vertical ? (capsule ? thick : widget.width) : widget.width + (capsule ? 24 : 0)
 				implicitHeight: Config.vertical ? widget.height + (capsule ? 24 : 0) : capsule ? thick : widget.height

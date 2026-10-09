@@ -8,7 +8,8 @@ Item {
 
 	required property ShellScreen screen
 	readonly property bool vertical: Config.vertical
-	readonly property int pad: Config.island ? Math.round(Config.bar.size / 2.5) : 8
+	// capsules: the same gap at the ends as above and below them; else room for the round ends
+	readonly property int pad: Config.bar.capsules ? Theme.barInset : Config.island ? Math.round(Config.bar.size / 2.5) : 8
 	readonly property real gap: 40 // at least this between the centre and either side
 	// what the parts need along the bar: the centre stays centred, so the longer side counts twice
 	readonly property real naturalLength: vertical ? 2 * (pad + gap + Math.max(start.height, end.height)) + center.height : 2 * (pad + gap + Math.max(start.width, end.width)) + center.width

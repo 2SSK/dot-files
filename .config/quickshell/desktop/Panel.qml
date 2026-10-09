@@ -2,7 +2,6 @@ pragma Singleton
 
 import QtQuick
 import Quickshell
-import Quickshell.I3
 
 // Shell state: whether the bar is shown (or peeking while hidden), the OSD card (a level or lock
 // that just changed) and the power menu. While the power menu is open i3 is in mode "power", which sends its keys back over IPC
@@ -18,6 +17,11 @@ Singleton {
 	property bool controlOpen: false
 	property bool clipboardOpen: false
 	property bool clipboardShown: false // lives on while it slides back into the bar
+	property bool captureOpen: false
+	property bool captureShown: false
+	property string captureAsk: "" // "shot" or "record": the panel only asks which screen
+	readonly property int captureWidth: 520
+	readonly property int captureHeight: 324
 	property bool launcherOpen: false
 	property bool launcherShown: false
 	property string launcherMode: "apps" // apps, emoji, files or themes
@@ -28,8 +32,40 @@ Singleton {
 	readonly property int wallpaperWidth: 720
 	readonly property int wallpaperHeight: 540
 	// the open panel hanging from the bar (its width; 0 for none): the bar opens its outline there
-	readonly property int hangingWidth: controlOpen ? controlWidth : clipboardOpen ? 560 : wallpaperOpen ? wallpaperWidth : launcherOpen ? launcherWidth : 0
-	readonly property int hangingHeight: controlOpen ? controlHeight : clipboardOpen ? 560 : wallpaperOpen ? wallpaperHeight : launcherOpen ? launcherHeight : 0
+	readonly property int hangingWidth: controlOpen ? controlWidth : clipboardOpen ? 560 : wallpaperOpen ? wallpaperWidth : launcherOpen ? launcherWidth : captureOpen ? captureWidth : 0
+	readonly property int hangingHeight: controlOpen ? controlHeight : clipboardOpen ? 560 : wallpaperOpen ? wallpaperHeight : launcherOpen ? launcherHeight : captureOpen ? captureHeight : 0
+
+	// the capture panel; ask: "shot" or "record" to go straight to choosing a screen
+	function openCapture(ask: string): void {
+		captureAsk = ask === "shot" || ask === "record" ? ask : "";
+		captureOpen = true;
+	}
+
+	onCaptureOpenChanged: {
+		if (captureOpen) {
+			controlOpen = false;
+			clipboardOpen = false;
+			wallpaperOpen = false;
+			launcherOpen = false;
+			showCapture.restart();
+		} else {
+			hideCapture.restart();
+		}
+	}
+
+	Timer {
+		id: showCapture
+
+		interval: 0
+		onTriggered: root.captureShown = root.captureOpen
+	}
+
+	Timer {
+		id: hideCapture
+
+		interval: 0
+		onTriggered: if (!root.captureOpen) root.captureShown = false
+	}
 
 	// the launcher on a mode; again on the same mode closes it
 	function toggleLauncher(mode: string): void {
@@ -44,6 +80,7 @@ Singleton {
 	onLauncherOpenChanged: {
 		if (launcherOpen) {
 			controlOpen = false;
+			captureOpen = false;
 			clipboardOpen = false;
 			wallpaperOpen = false;
 			showLauncher.restart();
@@ -55,20 +92,21 @@ Singleton {
 	Timer {
 		id: showLauncher
 
-		interval: 60
+		interval: 0
 		onTriggered: root.launcherShown = root.launcherOpen
 	}
 
 	Timer {
 		id: hideLauncher
 
-		interval: 230
+		interval: 0
 		onTriggered: if (!root.launcherOpen) root.launcherShown = false
 	}
 
 	onWallpaperOpenChanged: {
 		if (wallpaperOpen) {
 			controlOpen = false;
+			captureOpen = false;
 			clipboardOpen = false;
 			launcherOpen = false;
 			showWallpaper.restart();
@@ -80,14 +118,14 @@ Singleton {
 	Timer {
 		id: showWallpaper
 
-		interval: 60
+		interval: 0
 		onTriggered: root.wallpaperShown = root.wallpaperOpen
 	}
 
 	Timer {
 		id: hideWallpaper
 
-		interval: 230
+		interval: 0
 		onTriggered: if (!root.wallpaperOpen) root.wallpaperShown = false
 	}
 
@@ -95,6 +133,7 @@ Singleton {
 		if (clipboardOpen) {
 			controlOpen = false;
 			wallpaperOpen = false;
+			captureOpen = false;
 			launcherOpen = false;
 			showClipboard.restart();
 		} else {
@@ -105,14 +144,14 @@ Singleton {
 	Timer {
 		id: showClipboard
 
-		interval: 60
+		interval: 0
 		onTriggered: root.clipboardShown = root.clipboardOpen
 	}
 
 	Timer {
 		id: hideClipboard
 
-		interval: 230
+		interval: 0
 		onTriggered: if (!root.clipboardOpen) root.clipboardShown = false
 	}
 	property var islands: ({}) // screen name -> the bar's rect on it (screen coordinates from its origin)
@@ -129,6 +168,7 @@ Singleton {
 	onControlOpenChanged: {
 		if (controlOpen) {
 			clipboardOpen = false;
+			captureOpen = false;
 			wallpaperOpen = false;
 			launcherOpen = false;
 			showControl.restart();
@@ -140,14 +180,14 @@ Singleton {
 	Timer {
 		id: showControl
 
-		interval: 60
+		interval: 0
 		onTriggered: root.controlShown = root.controlOpen
 	}
 
 	Timer {
 		id: hideControl
 
-		interval: 230
+		interval: 0
 		onTriggered: if (!root.controlOpen) root.controlShown = false
 	}
 
@@ -193,14 +233,14 @@ Singleton {
 		selected = 0;
 		armed = -1;
 		view = "power";
-		I3.dispatch('mode "power"');
+		Quickshell.execDetached([Quickshell.env("SWAYSOCK") ? "swaymsg" : "i3-msg", "-q", 'mode "power"']);
 	}
 
 	function closePower(): void {
 		if (view === "power")
 			view = "";
 		armed = -1;
-		I3.dispatch('mode "default"');
+		Quickshell.execDetached([Quickshell.env("SWAYSOCK") ? "swaymsg" : "i3-msg", "-q", 'mode "default"']);
 	}
 
 	function togglePower(): void {

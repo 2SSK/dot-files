@@ -2,7 +2,6 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import Quickshell
-import Quickshell.I3
 import Quickshell.Widgets
 import qs
 import qs.services
@@ -17,7 +16,7 @@ PopupWindow {
 
 	required property PanelWindow bar
 
-	readonly property bool open: Windows.shown && I3.focusedMonitor?.name === bar.screen?.name
+	readonly property bool open: Windows.shown && WindowManager.focusedOutput === bar.screen?.name
 	property bool mapped: false
 
 	onOpenChanged: open ? mapped = true : unmap.restart()

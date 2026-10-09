@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Effects
 import Quickshell
-import Quickshell.I3
 import qs
 import qs.services
 import qs.widgets
@@ -14,7 +13,7 @@ PopupWindow {
 	required property PanelWindow bar
 	required property Item island
 
-	readonly property bool open: Alarms.ringing !== null && I3.focusedMonitor?.name === bar.screen?.name
+	readonly property bool open: Alarms.ringing !== null && WindowManager.focusedOutput === bar.screen?.name
 	readonly property int pad: 28
 	property bool shown: false
 	property var alarm: null // stays while it slides away

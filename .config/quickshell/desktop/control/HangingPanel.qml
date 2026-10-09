@@ -2,15 +2,16 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import Quickshell
-import Quickshell.I3
 import qs
+import qs.services
 
-// A panel that drops out of the middle of the bar, in its colour, joined to it by inverse curves
-// (the bar opens its outline there: Panel.hangingWidth). The window is as big as the screen, so i3
-// can only put it at the screen's corner (look.conf), but its shape is just the panel and the
-// curves: picom blurs behind that shape, and clicks anywhere else go to what's below. A real
-// window, as X11 popups can't take the keyboard. Escape or another window's focus asks to close
-// (dismissed). The control center and the clipboard are built on it.
+// A panel that hangs from the middle of the bar, in its colour, joined to it by inverse curves
+// (the bar opens its outline there: Panel.hangingWidth). The window is as big as the screen and
+// unshaped: the pointer never leaves it, so i3's focus-follows-mouse can't hand the focus back to
+// the window below (a shaped window flickered: focus went there and back as it opened), and a
+// click beside the panel closes it. It shows at once, without animation. A real window, as X11
+// popups can't take the keyboard. Escape, a click beside it, or another window's focus asks to
+// close (dismissed). The control center, clipboard, launcher, wallpaper and capture panels use it.
 FloatingWindow {
 	id: root
 
@@ -22,33 +23,30 @@ FloatingWindow {
 	signal dismissed
 	signal keyPressed(var event) // keys nothing inside took (Escape closes)
 
-	readonly property ShellScreen screen: Quickshell.screens.find(s => s.name === I3.focusedMonitor?.name) ?? Quickshell.screens[0]
+	readonly property ShellScreen screen: Quickshell.screens.find(s => s.name === WindowManager.focusedOutput) ?? Quickshell.screens[0]
 	readonly property bool below: Config.position !== "bottom" // hangs below the bar, else above it
 	readonly property rect island: Panel.islands[screen.name] ?? Qt.rect(0, 0, screen.width, 0)
 	// centred under the bar, flush with it
 	readonly property real px: Math.round(island.x + (island.width - panelWidth) / 2)
 	readonly property real py: !Panel.barShown ? (below ? 0 : screen.height - panelHeight) : below ? island.y + island.height : island.y - panelHeight
 	readonly property int fillet: Panel.controlFillet
-	readonly property color fill: Qt.alpha(Theme.bg, Config.bar.opacity) // the bar's own colour
-	property bool placed: false // mapped: the panel may drop in
+	// the bar's colour, but nearly solid: nothing is blurred behind an unshaped full-screen window
+	readonly property color fill: Qt.alpha(Theme.bg, Math.max(Config.bar.opacity, 0.96))
 
 	title: "Desktop " + name
 	implicitWidth: screen.width
 	implicitHeight: screen.height
+	// a fixed size: i3 floats such a window as it takes it, instead of tiling it for a moment first
+	// (which flashed the other windows' borders and layout)
+	minimumSize: Qt.size(screen.width, screen.height)
+	maximumSize: Qt.size(screen.width, screen.height)
 	color: "transparent"
 	onVisibleChanged: if (!visible) dismissed()
 
-	// one frame to be mapped, then the panel drops
-	Timer {
-		running: true
-		interval: 40
-		onTriggered: root.placed = true
-	}
-
-	// the keyboard: i3 doesn't focus a shaped window by itself, so ask once it has the window (its
-	// "new" event below), and again shortly in case that came first
+	// the keyboard: i3 focuses a new window itself; ask too once it has the window (its "new" event
+	// below), and again shortly in case that came first
 	function takeFocus(): void {
-		I3.dispatch(`[title="^${root.title}$"] focus`);
+		WindowManager.command(`[title="^${root.title}$"] focus`);
 	}
 
 	Timer {
@@ -62,10 +60,10 @@ FloatingWindow {
 	}
 
 	// i3's window events: focus once it has the window; another window taking the focus closes it
-	I3IpcListener {
-		subscriptions: ["window"]
-		onIpcEvent: event => {
-			const data = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
+	Connections {
+		target: WindowManager
+
+		function onWindowEvent(data: var): void {
 			const name = data.container?.name ?? "";
 			if (data.change === "new" && name === root.title)
 				root.takeFocus();
@@ -74,61 +72,20 @@ FloatingWindow {
 		}
 	}
 
-	// the window's shape: the panel (as it slides) and the two curves, a square each minus the
-	// circle that makes it concave
-	readonly property real slotX: root.px - root.fillet
-	readonly property real curveY: root.py + (root.below ? card.y : card.y + card.height - root.fillet)
-
-	mask: Region {
-		x: root.slotX + root.fillet
-		y: root.py + Math.max(0, card.y)
-		width: root.panelWidth
-		height: Math.max(0, root.panelHeight - Math.abs(card.y))
-		bottomLeftRadius: root.below ? 18 : 0
-		bottomRightRadius: root.below ? 18 : 0
-		topLeftRadius: root.below ? 0 : 18
-		topRightRadius: root.below ? 0 : 18
-
-		Region {
-			x: root.slotX
-			y: root.curveY
-			width: card.y > -card.height + root.fillet ? root.fillet : 0
-			height: root.fillet
-
-			Region {
-				shape: RegionShape.Ellipse
-				intersection: Intersection.Subtract
-				x: root.slotX - root.fillet
-				y: root.below ? root.curveY : root.curveY - root.fillet
-				width: 2 * root.fillet
-				height: 2 * root.fillet
-			}
-		}
-
-		Region {
-			x: root.slotX + root.fillet + root.panelWidth
-			y: root.curveY
-			width: card.y > -card.height + root.fillet ? root.fillet : 0
-			height: root.fillet
-
-			Region {
-				shape: RegionShape.Ellipse
-				intersection: Intersection.Subtract
-				x: root.slotX + root.fillet + root.panelWidth
-				y: root.below ? root.curveY : root.curveY - root.fillet
-				width: 2 * root.fillet
-				height: 2 * root.fillet
-			}
-		}
+	// a click beside the panel closes it
+	MouseArea {
+		anchors.fill: parent
+		acceptedButtons: Qt.AllButtons
+		onPressed: root.dismissed()
 	}
 
-	// the panel's place under the bar (and room for its curves); the panel slides out of its edge
+	// the panel's place under the bar, and room for its curves
 	Item {
 		x: root.px - root.fillet
 		y: root.py
 		width: root.panelWidth + 2 * root.fillet
 		height: root.panelHeight
-		clip: true
+		visible: root.open
 
 		// inverse curves where the panel meets the bar, so the bar's edge flows into it
 		Repeater {
@@ -140,9 +97,9 @@ FloatingWindow {
 				required property int modelData
 				property color tint: root.fill
 
-				// beside the panel's edge at the bar, following its slide (outside it: the panel clips)
+				// beside the panel's edge at the bar, where it joins it
 				x: modelData < 0 ? 0 : root.fillet + root.panelWidth
-				y: root.below ? card.y : card.y + card.height - height
+				y: root.below ? 0 : root.panelHeight - height
 				width: root.fillet
 				height: root.fillet
 				transform: Scale {
@@ -175,7 +132,7 @@ FloatingWindow {
 			x: root.fillet
 			width: root.panelWidth
 			height: root.panelHeight
-			y: root.placed && root.open ? 0 : root.below ? -height : height
+			y: 0
 			color: root.fill
 			topLeftRadius: root.below ? 0 : 18
 			topRightRadius: root.below ? 0 : 18
@@ -189,12 +146,6 @@ FloatingWindow {
 				acceptedButtons: Qt.AllButtons
 			}
 
-			Behavior on y {
-				NumberAnimation {
-					duration: root.open ? 260 : 200
-					easing.type: root.open ? Easing.OutCubic : Easing.InCubic
-				}
-			}
 
 			Item {
 				id: inner

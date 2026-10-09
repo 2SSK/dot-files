@@ -2,7 +2,6 @@ pragma Singleton
 
 import QtQuick
 import Quickshell
-import Quickshell.I3
 import Quickshell.Io
 
 // The open windows, most recently focused first (the switcher's ring), and the switcher's state.
@@ -43,7 +42,7 @@ Singleton {
 		const target = windows[selected];
 		close();
 		if (target)
-			I3.dispatch(`[con_id=${target.id}] focus`);
+			WindowManager.command(`[con_id=${target.id}] focus`);
 	}
 
 	function close(): void {
@@ -51,7 +50,7 @@ Singleton {
 		ctrl.running = false;
 		switching = false;
 		shown = false;
-		I3.dispatch('mode "default"');
+		WindowManager.command('mode "default"');
 	}
 
 	function read(tree: var): void {
@@ -99,37 +98,20 @@ Singleton {
 		}
 	}
 
-	Timer {
-		id: reread
+	Connections {
+		target: WindowManager
 
-		interval: 150
-		onTriggered: tree.running = true
-	}
-
-	I3IpcListener {
-		subscriptions: ["window"]
-		onIpcEvent: event => {
-			const data = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
+		function onWindowEvent(data: var): void {
 			const id = data.container?.id;
 			if (data.change === "focus" && id !== undefined && !(data.container.name ?? "").startsWith("Desktop "))
 				root.mru = [id, ...root.mru.filter(m => m !== id)].slice(0, 100);
 			else if (data.change === "close")
 				root.mru = root.mru.filter(m => m !== id);
-			reread.restart();
 		}
-	}
 
-	Process {
-		id: tree
-
-		running: true
-		command: [Quickshell.env("WAYLAND_DISPLAY") ? "swaymsg" : "i3-msg", "-t", "get_tree"]
-		stdout: StdioCollector {
-			onStreamFinished: {
-				try {
-					root.read(JSON.parse(text));
-				} catch (e) {}
-			}
+		// the window list, from the tree WindowManager reads after each change (no second read)
+		function onTreeRead(tree: var): void {
+			root.read(tree);
 		}
 	}
 }

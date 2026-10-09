@@ -3,8 +3,8 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Effects
 import Quickshell
-import Quickshell.I3
 import qs
+import qs.services
 import qs.widgets
 
 // The power menu: a row of tiles floating under the bar (or beside a vertical one), as noctalia's
@@ -16,7 +16,7 @@ PopupWindow {
 	required property PanelWindow bar
 	required property Item island
 
-	readonly property bool open: Panel.view === "power" && I3.focusedMonitor?.name === bar.screen?.name
+	readonly property bool open: Panel.view === "power" && WindowManager.focusedOutput === bar.screen?.name
 	readonly property string position: Config.position
 	readonly property real reach: Panel.barShown ? (Config.vertical ? bar.width : bar.height) : 0
 	// mapped while open (see Osd)

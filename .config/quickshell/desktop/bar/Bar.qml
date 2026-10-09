@@ -1,8 +1,8 @@
 import QtQuick
 import QtQuick.Effects
 import Quickshell
-import Quickshell.I3
 import qs
+import qs.services
 
 // One screen's bar, on any edge. Island: a rounded pill floating off the edge, waybar-like. Static:
 // the whole edge, polybar-like. i3 reserves a dock's full window, so the window is only as big as
@@ -128,7 +128,7 @@ PanelWindow {
 		Item {
 			id: outlineMask
 
-			readonly property bool gap: Panel.hangingWidth > 0 && !bar.vertical && I3.focusedMonitor?.name === bar.modelData.name
+			readonly property bool gap: Panel.hangingWidth > 0 && !bar.vertical && WindowManager.focusedOutput === bar.modelData.name
 			readonly property real gapWidth: Panel.hangingWidth + 2 * Panel.controlFillet
 			readonly property real gapX: (parent.width - gapWidth) / 2
 

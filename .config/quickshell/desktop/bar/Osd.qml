@@ -1,8 +1,8 @@
 import QtQuick
 import QtQuick.Effects
 import Quickshell
-import Quickshell.I3
 import qs
+import qs.services
 import qs.widgets
 
 // A small card at the top right (or the end of a vertical bar) for what just changed: the volume,
@@ -12,7 +12,7 @@ PopupWindow {
 
 	required property PanelWindow bar
 
-	readonly property bool open: Panel.osdShown && I3.focusedMonitor?.name === bar.screen?.name
+	readonly property bool open: Panel.osdShown && WindowManager.focusedOutput === bar.screen?.name
 	readonly property string position: Config.position
 	readonly property string kind: Panel.osdKind
 	readonly property bool muted: Panel.osdMuted

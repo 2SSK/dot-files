@@ -3,6 +3,8 @@
 set -euo pipefail
 
 lib="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")/../lib/desktop" && pwd)"
+# shellcheck disable=SC2034 # used by the consumers' reload commands
+bin="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # shellcheck source-path=SCRIPTDIR/../.. source=.local/lib/desktop/log.sh
 source "$lib/log.sh"
 
@@ -47,6 +49,7 @@ gtk-4.0.css      gtk-4.0/gtk.css    gtk_settings
 qt5ct.conf       qt5ct/qt5ct.conf   -
 qt6ct.conf       qt6ct/qt6ct.conf   -
 sddm-theme.conf  -                  sddm
+palette.json     -                  "$bin/desktop-wallpaper" screens
 EOF
 }
 

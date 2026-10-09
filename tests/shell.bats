@@ -2,6 +2,7 @@
 # zsh and bash configs, stowed into a throwaway $HOME (no plugins: those need the network).
 
 setup_file() {
+	export DESKTOP_SDDM_DIR="$BATS_FILE_TMPDIR/no-sddm" DESKTOP_GRUB_DIR="$BATS_FILE_TMPDIR/no-grub" # never the real login screen or boot menu
 	export HOME="$BATS_FILE_TMPDIR/home"
 	mkdir -p "$HOME"
 	mkdir -p "$BATS_FILE_TMPDIR/bin" # fake pkill/xrdb/tmux: never touch the developer's terminals
@@ -11,6 +12,8 @@ setup_file() {
 }
 
 setup() {
+	# never the real login screen or boot menu (system.sh shares their backgrounds and colours with us)
+	export DESKTOP_SDDM_DIR="$BATS_TEST_TMPDIR/no-sddm" DESKTOP_GRUB_DIR="$BATS_TEST_TMPDIR/no-grub"
 	export HOME="$BATS_FILE_TMPDIR/home"
 	unset ZDOTDIR XDG_CONFIG_HOME XDG_CACHE_HOME XDG_DATA_HOME XDG_STATE_HOME
 }

@@ -2,44 +2,18 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import Quickshell
-import Quickshell.I3
 import qs
+import qs.services
 
 // This screen's workspaces as dots, no numbers: the ones with windows, and the one you're on (i3
-// and sway drop a workspace once it's empty and left). The current one is a wide accent pill, an
-// urgent one red; a click switches.
+// and sway drop a workspace once it's empty and left). The one showing on this screen is a wide
+// pill, in the accent where the focus is (dimmer on another monitor); an urgent one is red; a click
+// switches. Read from WindowManager, which follows i3's own events.
 Line {
 	id: root
 
 	property ShellScreen screen: null // set by the bar
-	// I3.workspaces.values doesn't announce its changes: re-read it after i3's workspace events
-	// (a moment later, once Quickshell has caught up). Each workspace's screen by i3's own output
-	// name: a workspace not shown has no monitor object yet.
-	property int revision: 0
-	readonly property var here: {
-		revision;
-		return Array.from(I3.workspaces.values).filter(ws => (ws.lastIpcObject?.output ?? ws.monitor?.name) === screen?.name && ws.number > 0).sort((a, b) => a.number - b.number);
-	}
-
-	I3IpcListener {
-		subscriptions: ["workspace", "window"]
-		onIpcEvent: reread.restart()
-	}
-
-	Connections {
-		target: I3
-
-		function onFocusedWorkspaceChanged(): void {
-			root.revision++;
-		}
-	}
-
-	Timer {
-		id: reread
-
-		interval: 60
-		onTriggered: root.revision++
-	}
+	readonly property var here: WindowManager.workspaces.filter(ws => ws.output === screen?.name)
 
 	vertical: Config.vertical
 	spacing: 7
@@ -50,10 +24,10 @@ Line {
 		delegate: Item {
 			id: slot
 
-			required property I3Workspace modelData
+			required property var modelData
 
-			readonly property I3Workspace workspace: modelData
-			readonly property bool shown: workspace.active
+			readonly property var workspace: modelData
+			readonly property bool shown: workspace.visible
 			readonly property real dot: Math.round(Config.bar.size * 0.38)
 
 			implicitWidth: Config.vertical ? dot : shown ? dot * 2.6 : dot
@@ -76,7 +50,7 @@ Line {
 			Rectangle {
 				anchors.fill: parent
 				radius: Config.island ? Math.min(width, height) / 2 : 2
-				color: slot.workspace.urgent ? Theme.error : slot.shown ? Theme.primary : hover.containsMouse ? Theme.fg : Qt.alpha(Theme.fg, 0.6)
+				color: slot.workspace.urgent ? Theme.error : slot.shown ? (slot.workspace.focused ? Theme.primary : Qt.alpha(Theme.primary, 0.55)) : hover.containsMouse ? Theme.fg : Qt.alpha(Theme.fg, 0.6)
 
 				Behavior on color {
 					ColorAnimation {
@@ -92,7 +66,7 @@ Line {
 				anchors.margins: -4
 				hoverEnabled: true
 				cursorShape: Qt.PointingHandCursor
-				onClicked: slot.workspace.activate()
+				onClicked: WindowManager.switchTo(slot.workspace.num)
 			}
 		}
 	}

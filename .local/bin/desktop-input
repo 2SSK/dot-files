@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# The touchpad on X11 (i3), set up as sway's input config sets it: tap to click (one finger left, two
+# right, three middle), tap and drag, natural two-finger scrolling, click with fingers, no typing
+# while touching, middle-click emulation, adaptive acceleration. Scrolling is slowed to match
+# Wayland: X turns two-finger movement into a scroll step every DESKTOP_SCROLL_DISTANCE pixels
+# (default 30; X's own is 15, which feels twice as fast; 10–50). Run by i3 at start and reload.
+set -euo pipefail
+
+[[ -n ${DISPLAY:-} ]] || exit 0
+distance=${DESKTOP_SCROLL_DISTANCE:-30}
+
+for id in $(xinput list --id-only); do
+	# a touchpad is what libinput offers tapping on
+	props="$(xinput list-props "$id" 2>/dev/null || true)"
+	[[ $props == *'libinput Tapping Enabled ('* ]] || continue
+	set_prop() { xinput set-prop "$id" "$@" 2>/dev/null || true; }
+	set_prop "libinput Tapping Enabled" 1
+	set_prop "libinput Tapping Button Mapping Enabled" 1 0
+	set_prop "libinput Tapping Drag Enabled" 1
+	set_prop "libinput Tapping Drag Lock Enabled" 0
+	set_prop "libinput Natural Scrolling Enabled" 1
+	set_prop "libinput Scroll Method Enabled" 1 0 0
+	set_prop "libinput Click Method Enabled" 0 1
+	set_prop "libinput Disable While Typing Enabled" 1
+	set_prop "libinput Middle Emulation Enabled" 1
+	set_prop "libinput Accel Profile Enabled" 1 0 0
+	set_prop "libinput Accel Speed" 0
+	set_prop "libinput Scrolling Pixel Distance" "$distance"
+done

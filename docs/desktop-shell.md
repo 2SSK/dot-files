@@ -61,6 +61,27 @@ the default one; anything else in its default application. The emoji come from U
 (`~/.local/share/desktop/emoji.tsv`); use counts and recent emoji are kept in
 `~/.local/state/desktop/launcher.json`.
 
+## Screenshots and recording
+
+| Key | |
+| --- | --- |
+| F12 | the capture panel (again closes it): Screenshot or Record × Region, Window, Screen. The arrows pick a tile, Enter does it; R, W, S take a screenshot straight away, with Shift they record. Only Region uses the mouse: drag a rectangle (Escape or a right click cancels). Window is the focused one. Screen with more than one monitor: a map of them as they're arranged, the panel's own screen picked; the arrows or 1–9 pick, Enter takes it, A takes all, Backspace goes back |
+| `$mod+F12`, the camera in the bar | stops a recording, else opens the capture panel |
+
+A screenshot is saved to `~/Pictures/Screenshots` and copied to the clipboard as an image, ready
+to paste. A recording (gpu-screen-recorder, 60 fps, the system sound) goes to `~/Videos/Recordings`: a
+region, the focused window, or one screen or all of them; while it runs the bar's camera turns red
+and pulses on a red pill with the time (a click stops it), and the panel's Record row becomes Stop. `desktop-capture shot|record …` does the work (X11: slop, maim,
+xclip; Wayland: slurp, grim, wl-copy, and a window records through the portal).
+
+## Touchpad (i3)
+
+`desktop-input`, run when i3 starts or reloads, sets the touchpad up as sway's input config does:
+tap to click (one finger left, two right, three middle), tap and drag, natural two-finger scrolling,
+click with fingers, no touchpad while typing, middle-click emulation. Scrolling on X is twice as fast
+as on Wayland by default, so it's slowed: one scroll step per 30 pixels of finger movement
+(`DESKTOP_SCROLL_DISTANCE`, 10–50; X's default is 15). Displays use no scaling, as on sway.
+
 ## Window switcher
 
 Hold Ctrl and tap Tab: the open windows come up as rounded cards on a ring, most recently used
@@ -95,6 +116,13 @@ it shows three half-size blended frames (made in parallel with ImageMagick) befo
 on Wayland swww's fade when its daemon runs, else sway's background. `desktop-wallpaper restore`
 draws the remembered one at login.
 
+The login screen and the boot menu follow the wallpaper too. They can't read the home folder, so
+`packages/system.sh sddm` and `grub` give you their background files (sddm's in
+`/var/lib/desktop/sddm`, GRUB's `background.jpg` in its theme folder), and every wallpaper change
+redraws them without sudo: sddm shows it as it is, GRUB blurred and dimmed in the theme's
+background colour (so `theme set` redraws GRUB's too). `desktop-wallpaper screens` redraws both by
+hand.
+
 ## Settings window
 
 `$mod+Shift+s` (or `qs -c desktop ipc call settings toggle`): Bar (style, position, height,
@@ -125,7 +153,8 @@ Hidden with `$mod+Shift+b`, the bar comes back over the windows while the pointe
 | F1 / F2 / F3, media keys | mute, volume down, volume up |
 | F4 / F5, brightness keys | brightness down, up |
 | F6, mic-mute key | microphone mute |
-| `$mod+F12` | start / stop screen recording (gpu-screen-recorder, into `~/Videos`) |
+| `$mod+F12` | stop a recording, else the capture panel |
+| F12 | capture panel: screenshots and recordings (F12 no longer reaches apps, e.g. browser dev tools) |
 | `$mod+Shift+b` | hide / show the bar |
 | `$mod+n` | notifications (control center) |
 | `$mod+Shift+s` | settings |
@@ -168,5 +197,5 @@ press while `power.confirm` is on. Nothing hibernates.
 ## IPC
 
 `qs -c desktop ipc call <target> <function>`: `audio up|down|mute|mic`, `brightness up|down`,
-`bar toggle`, `recorder toggle`, `notifications toggle|dnd|clear`, `settings toggle`, `control toggle|open <page>|page <page>|close`, `clipboard toggle`, `wallpaper toggle|shuffle`, `launcher toggle <apps|emoji|files|themes>|close`, `switcher next|prev|commit|cancel`, `alarm stop|snooze`, `power open|toggle|close|next|prev|activate|pick <n>`,
+`bar toggle`, `recorder toggle`, `notifications toggle|dnd|clear`, `settings toggle`, `control toggle|open <page>|page <page>|close`, `clipboard toggle`, `wallpaper toggle|shuffle`, `launcher toggle <apps|emoji|files|themes>|close`, `switcher next|prev|commit|cancel`, `capture toggle|shot <region|window|screen>|record <region|window|screen>|stop`, `alarm stop|snooze`, `power open|toggle|close|next|prev|activate|pick <n>`,
 `theme reload`.

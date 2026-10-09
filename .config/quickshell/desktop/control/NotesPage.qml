@@ -125,7 +125,7 @@ Item {
 
 					Text {
 						width: parent.width
-						text: Qt.formatDateTime(new Date(entry.modelData.updated), new Date(entry.modelData.updated).toDateString() === new Date().toDateString() ? "h:mm AP" : "d MMM")
+						text: Qt.formatDateTime(new Date(entry.modelData.updated), new Date(entry.modelData.updated).toDateString() === new Date().toDateString() ? "hh:mm AP" : "d MMM")
 						color: Theme.fgMuted
 						font.family: Theme.fontSans
 						font.pixelSize: 11
