@@ -24,10 +24,13 @@ repo_packages() { # the arch column of the install lists, without the aur: and @
 	awk '!/^#/ && NF { n = $1; sub(/^(aur:|@)/, "", n); if (n != "-") print n }' "$here"/*.txt
 }
 
-installed() { # names on stdin that are installed
-	local name
+installed() { # [--exact]: the installed packages for the names on stdin. A name can be another
+	# package's (nodejs: nodejs-lts-jod provides it): that one, or with --exact none
+	local name real
 	while read -r name; do
-		pacman -Qq "$name" >/dev/null 2>&1 && echo "$name"
+		real="$(pacman -Qq "$name" 2>/dev/null)" || continue
+		[[ ${1:-} == --exact && $real != "$name" ]] && continue
+		echo "$real"
 	done
 }
 
@@ -40,7 +43,7 @@ packages() {
 	if systemctl is-enabled --quiet auto-cpufreq.service 2>/dev/null; then
 		sudo systemctl disable --now auto-cpufreq.service
 	fi
-	mapfile -t remove < <(listed "$here/remove.txt" | installed)
+	mapfile -t remove < <(listed "$here/remove.txt" | installed --exact)
 	if ((${#remove[@]})); then
 		log_info removing count="${#remove[@]}"
 		sudo pacman -Rns "${remove[@]}"

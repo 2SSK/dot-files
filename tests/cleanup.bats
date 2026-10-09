@@ -1,6 +1,7 @@
 #!/usr/bin/env bats
 # packages/cleanup.sh with fake pacman/docker/sudo/systemctl/yay/paccache recording what they were
-# asked to do. Installed: jq (a dependency, listed by the repo), rofi and steam (in remove.txt).
+# asked to do. Installed: jq (a dependency, listed by the repo), rofi and steam (in remove.txt),
+# and packages that provide nodejs (listed by the repo) and iwd (in remove.txt).
 
 setup() {
 	CLEANUP="$BATS_TEST_DIRNAME/../packages/cleanup.sh"
@@ -12,7 +13,7 @@ setup() {
 	cat >"$bin/pacman" <<'FAKE'
 #!/bin/sh
 case "$1" in
--Qq) case "$2" in jq | rofi | steam | cmatrix) exit 0 ;; *) exit 1 ;; esac ;;
+-Qq) case "$2" in jq | rofi | steam | cmatrix) echo "$2" ;; nodejs | iwd) echo "$2-provider" ;; *) exit 1 ;; esac ;;
 -Qdtq) echo old-lib ;;
 *) echo "pacman $*" >>"$CALLS" ;;
 esac
@@ -28,8 +29,8 @@ FAKE
 @test "packages: what the repo lists is kept, what remove.txt names goes, then orphans" {
 	run "$CLEANUP" packages
 	[ "$status" -eq 0 ]
-	grep -qx "pacman -D --asexplicit jq" "$CALLS"
-	grep -qx "pacman -Rns rofi steam" "$CALLS" # only what is installed
+	grep -qx "pacman -D --asexplicit jq nodejs-provider" "$CALLS" # the package that is installed
+	grep -qx "pacman -Rns rofi steam" "$CALLS" # only what is installed, by that very name
 	grep -qx "pacman -Rns old-lib" "$CALLS"
 	grep -qx "yay -S cmatrix-git" "$CALLS"
 }
