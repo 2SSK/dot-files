@@ -257,7 +257,7 @@ install_if_changed() { # <file> <destination>: install as root when missing or d
 	changed=1
 }
 
-sddm_theme() { # the login screen in the desktop theme; run again after theme set to follow it
+sddm_theme() { # the login screen in the desktop theme; theme set keeps its colours in step
 	local state="${XDG_STATE_HOME:-$HOME/.local/state}/desktop" dir=usr/share/sddm/themes/desktop
 	local family=tokyonight mode=dark
 	# shellcheck disable=SC1091 # family=/mode= of the current theme, written by theme_render.py
@@ -266,9 +266,16 @@ sddm_theme() { # the login screen in the desktop theme; run again after theme se
 	python3 "$here/../.local/lib/desktop/theme_render.py" render "$family" "$mode"
 	put $dir/Main.qml
 	put $dir/metadata.desktop
-	install_if_changed "$state/theme/sddm-theme.conf" "$root/$dir/theme.conf"
 
-	# sddm can't read the home directory: a copy of the wallpaper, at most 2560 px wide
+	# Colours and wallpaper live in a folder the user owns, which sddm can read (it can't read the
+	# home directory): theme set then updates them without sudo. The theme links to them.
+	local shared=/var/lib/desktop/sddm file
+	if [[ ! -O $root$shared ]]; then
+		sudo install -d -o "$(id -un)" -g "$(id -gn)" -m 755 "$root$shared"
+		changed=1
+	fi
+	cmp -s "$state/theme/sddm-theme.conf" "$root$shared/theme.conf" || { install -m 644 "$state/theme/sddm-theme.conf" "$root$shared/theme.conf" && changed=1; }
+
 	local wallpaper tmp
 	wallpaper="$(readlink -f "$state/wallpaper" 2>/dev/null || true)"
 	[[ -f $wallpaper ]] || wallpaper="$here/../.local/share/desktop/wallpapers/cat-mocha-lavender_19.jpg"
@@ -276,7 +283,13 @@ sddm_theme() { # the login screen in the desktop theme; run again after theme se
 	# shellcheck disable=SC2064 # expand now: tmp is local
 	trap "rm -f '$tmp'" RETURN
 	magick "$wallpaper" -resize '2560x2560>' -strip -quality 90 "$tmp"
-	install_if_changed "$tmp" "$root/$dir/background.jpg"
+	cmp -s "$tmp" "$root$shared/background.jpg" || { install -m 644 "$tmp" "$root$shared/background.jpg" && changed=1; }
+
+	for file in theme.conf background.jpg; do
+		[[ $(readlink "$root/$dir/$file") == "$shared/$file" ]] && continue
+		sudo ln -sfn "$shared/$file" "$root/$dir/$file"
+		changed=1
+	done
 
 	# /etc/sddm.conf overrides sddm.conf.d, so a Current= there is changed in place (original kept)
 	local conf="$root/etc/sddm.conf"

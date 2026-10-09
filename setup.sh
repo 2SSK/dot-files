@@ -220,7 +220,7 @@ main() {
 		step 'Boot menu and login screen'
 		[[ ! -f /etc/default/grub ]] || "$repo/packages/system.sh" grub
 		! command -v sddm >/dev/null || "$repo/packages/system.sh" sddm
-		ok "in the $family $mode theme; run packages/system.sh grub / sddm again after a theme switch"
+		ok "in the $family $mode theme; the login screen follows theme set, the boot menu needs packages/system.sh grub"
 	fi
 
 	if ((shell)); then

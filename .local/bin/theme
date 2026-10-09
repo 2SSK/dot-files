@@ -46,6 +46,7 @@ gtk-settings.ini gtk-4.0/settings.ini -
 gtk-4.0.css      gtk-4.0/gtk.css    gtk_settings
 qt5ct.conf       qt5ct/qt5ct.conf   -
 qt6ct.conf       qt6ct/qt6ct.conf   -
+sddm-theme.conf  -                  sddm
 EOF
 }
 
@@ -73,6 +74,13 @@ gtk_settings() { # what GTK on Wayland and libadwaita read (GTK on X11 reads xse
 	gsettings set "$schema" cursor-size 24
 	gsettings set "$schema" font-name 'Inter 11'
 	gsettings set "$schema" monospace-font-name 'JetBrainsMono Nerd Font 11'
+}
+
+sddm() { # the login screen's colours, in the folder packages/system.sh sddm shares with it
+	local dir="${DESKTOP_SDDM_DIR:-/var/lib/desktop/sddm}"
+	[[ -w $dir ]] || return 0
+	cmp -s "$state/sddm-theme.conf" "$dir/theme.conf" && return 0
+	install -m 644 "$state/sddm-theme.conf" "$dir/.theme.conf.new" && mv "$dir/.theme.conf.new" "$dir/theme.conf"
 }
 
 apply() { # <family> <mode>

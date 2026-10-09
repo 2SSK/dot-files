@@ -175,3 +175,15 @@ signals() { cat "$BATS_TEST_TMPDIR/signals"; }
 	[ "$status" -eq 0 ]
 	[ -z "$output" ]
 }
+
+@test "set updates the login screen's colours where system.sh sddm shared them, and nowhere else" {
+	export DESKTOP_SDDM_DIR="$BATS_TEST_TMPDIR/sddm"
+	run "$THEME" set kanagawa
+	[ "$status" -eq 0 ]
+	[ ! -e "$DESKTOP_SDDM_DIR" ]
+	mkdir "$DESKTOP_SDDM_DIR"
+	run "$THEME" set kanagawa
+	grep -qx 'bg=#1f1f28' "$DESKTOP_SDDM_DIR/theme.conf"
+	run "$THEME" set nord
+	! grep -qx 'bg=#1f1f28' "$DESKTOP_SDDM_DIR/theme.conf"
+}
