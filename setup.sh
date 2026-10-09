@@ -120,7 +120,7 @@ main() {
 	fi
 
 	local -a layers=()
-	local distro='' vm=0 safety=0 docker=0
+	local distro='' vm=0 safety=0 docker=0 screens=0
 	if ((packages)); then
 		distro="$("$repo/packages/install.sh" --distro)"
 		step "Packages for $distro"
@@ -141,6 +141,10 @@ main() {
 		printf '  %s%s%s\n' "$dim" 'zram compresses little-used memory instead of killing apps when RAM fills up;' "$reset"
 		printf '  %s%s%s\n' "$dim" 'systemd-oomd stops only the runaway app before the desktop freezes.' "$reset"
 		if confirm 'Turn on the memory safety net (zram + systemd-oomd)?' y; then safety=1; fi
+		# the boot menu and login screen in the desktop theme, where GRUB and sddm are in use
+		if [[ -f /etc/default/grub ]] || command -v sddm >/dev/null; then
+			if confirm 'Theme the boot menu (GRUB) and the login screen (sddm)?' y; then screens=1; fi
+		fi
 	fi
 
 	local shell=0
@@ -154,6 +158,7 @@ main() {
 	((safety)) && system+=('memory safety net (zram, systemd-oomd)')
 	((vm)) && system+=('libvirt services, default network, firewall zone, libvirt group')
 	((docker)) && system+=('docker service + docker group')
+	((screens)) && system+=('boot menu and login screen themes')
 	((${#system[@]} == 0)) || row 'System (sudo)' "$(printf '%s; ' "${system[@]}" | sed 's/; $//')"
 	row 'Existing files' "$(case $policy in none) echo none ;; backup) echo "${#found[@]} → $backup" ;; *) echo "${#found[@]} deleted" ;; esac)"
 	row 'Stow' "$repo → $HOME"
@@ -209,6 +214,13 @@ main() {
 		ok "$family $mode (change it with: theme set <family>)"
 	else
 		warn 'python3 missing; theme not rendered'
+	fi
+
+	if ((screens)); then # after the theme: both are built from it
+		step 'Boot menu and login screen'
+		[[ ! -f /etc/default/grub ]] || "$repo/packages/system.sh" grub
+		! command -v sddm >/dev/null || "$repo/packages/system.sh" sddm
+		ok "in the $family $mode theme; run packages/system.sh grub / sddm again after a theme switch"
 	fi
 
 	if ((shell)); then

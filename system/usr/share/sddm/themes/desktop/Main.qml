@@ -179,16 +179,105 @@ Rectangle {
 		anchors.bottom: parent.bottom
 		anchors.margins: 32
 		text: sessions.count > 0 && sessions.itemAt(root.session) ? sessions.itemAt(root.session).name : ""
-		color: config.fgMuted
+		color: chooser.open ? config.fg : config.fgMuted
 		font.family: config.font
 		font.pixelSize: 15
 
 		MouseArea {
 			anchors.fill: parent
 			cursorShape: Qt.PointingHandCursor
-			onClicked: root.session = (root.session + 1) % sessions.count
+			onClicked: chooser.open = !chooser.open
 		}
 	}
+
+	// Session chooser: a translucent bar that slides down from the top; a click picks a session
+	Rectangle {
+		id: chooser
+
+		property bool open: false
+
+		width: parent.width
+		height: 56
+		y: open ? 0 : -height
+		opacity: open ? 1 : 0
+		color: Qt.alpha(config.bg, 0.35)
+
+		Behavior on y {
+			NumberAnimation {
+				duration: 260
+				easing.type: Easing.OutCubic
+			}
+		}
+
+		Behavior on opacity {
+			NumberAnimation {
+				duration: 200
+			}
+		}
+
+		Rectangle {
+			anchors.bottom: parent.bottom
+			width: parent.width
+			height: 1
+			color: config.border
+		}
+
+		Row {
+			anchors.centerIn: parent
+			spacing: 8
+
+			Repeater {
+				model: sessionModel
+
+				delegate: Rectangle {
+					id: choice
+
+					required property int index
+					required property string name
+
+					readonly property bool current: index === root.session
+
+					visible: !name.includes("debug log") // i3's extra debugging session
+					width: label.implicitWidth + 32
+					height: 32
+					radius: 16
+					color: current ? config.primary : choiceHover.containsMouse ? Qt.alpha(config.surface, 0.8) : "transparent"
+
+					Behavior on color {
+						ColorAnimation {
+							duration: 150
+						}
+					}
+
+					Text {
+						id: label
+
+						anchors.centerIn: parent
+						text: choice.name
+						color: choice.current ? config.bg : config.fg
+						font.family: config.font
+						font.pixelSize: 14
+						font.weight: Font.Medium
+					}
+
+					MouseArea {
+						id: choiceHover
+
+						anchors.fill: parent
+						hoverEnabled: true
+						cursorShape: Qt.PointingHandCursor
+						onClicked: {
+							root.session = choice.index;
+							chooser.open = false;
+							password.forceActiveFocus();
+						}
+					}
+				}
+			}
+		}
+	}
+
+	Keys.onEscapePressed: chooser.open = false
 
 	Row {
 		anchors.right: parent.right
