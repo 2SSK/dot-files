@@ -12,7 +12,7 @@ os() { printf '%s\n' "$@" >"$OS_RELEASE"; }
 	os ID=arch
 	run "$INSTALL" --dry-run x11
 	[ "$status" -eq 0 ]
-	[[ ${lines[0]} == "native: i3-wm "* && $output == *" dmenu "* ]]
+	[[ ${lines[0]} == "native: i3-wm "* && $output == *" picom "* ]]
 	[[ $output == *"aur: i3lock-color"* ]]
 	[[ ${lines[2]} == "extra: st" ]] # built from source on every distro
 }
@@ -28,7 +28,7 @@ os() { printf '%s\n' "$@" >"$OS_RELEASE"; }
 	os ID=ubuntu 'ID_LIKE="debian"'
 	run "$INSTALL" --dry-run x11
 	[ "$status" -eq 0 ]
-	[[ $output == *"suckless-tools"* ]]
+	[[ $output == *" picom "* ]]
 	[ "$(grep -o x11-xserver-utils <<<"$output" | wc -l)" -eq 1 ]
 	[[ $output == *"extra: i3lock-color"* ]]
 }
@@ -37,7 +37,7 @@ os() { printf '%s\n' "$@" >"$OS_RELEASE"; }
 	os ID=fedora
 	run "$INSTALL" --dry-run x11
 	[ "$status" -eq 0 ]
-	[[ $output == "native: i3 "* && $output == *" dmenu "* ]]
+	[[ $output == "native: i3 "* && $output == *" picom "* ]]
 	[[ $output == *"dex-autostart"* ]]
 }
 

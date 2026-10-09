@@ -13,7 +13,7 @@ seat * xcursor_theme $cursor_theme 24
 
 set $term kitty
 set $files nautilus
-set $menu --no-startup-id tofi-drun -c ~/.config/tofi/config --drun-launch=true
+set $menu --no-startup-id noctalia msg panel-toggle launcher
 
 gaps inner 10
 gaps outer 10

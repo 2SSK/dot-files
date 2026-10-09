@@ -86,7 +86,7 @@ Column {
 		if (i3[cmd])
 			return { group: "i3", label: i3[cmd] };
 		if ((m = cmd.match(/^exec\s+(?:--no-startup-id\s+)?(.*)$/)))
-			return { group: "Apps", label: m[1] === "$term" ? "Terminal" : m[1].startsWith("rofi -show window") ? "Window list (rofi)" : `Run ${m[1]}` };
+			return { group: "Apps", label: m[1] === "$term" ? "Terminal" : `Run ${m[1]}` };
 		return { group: "i3", label: cmd };
 	}
 

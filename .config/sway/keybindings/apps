@@ -9,4 +9,3 @@ bindsym $mod+Shift+c exec noctalia msg panel-toggle clipboard
 bindsym $mod+Shift+s exec noctalia msg settings-toggle
 bindsym $mod+Escape exec noctalia msg panel-toggle control-center
 
-bindsym $mod+Shift+f exec --no-startup-id ~/.config/rofi/filesearch.sh
