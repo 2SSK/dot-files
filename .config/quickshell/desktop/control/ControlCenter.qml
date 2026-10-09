@@ -19,7 +19,9 @@ HangingPanel {
 		{ key: "wifi", glyph: Icons.g("wifi"), component: wifi },
 		{ key: "bluetooth", glyph: Icons.g("bluetooth"), component: bluetooth },
 		{ key: "todo", glyph: Icons.g("checklist"), component: todo },
-		{ key: "notes", glyph: Icons.g("notes"), component: notes }
+		{ key: "notes", glyph: Icons.g("notes"), component: notes },
+		{ key: "alarms", glyph: Icons.g("alarm"), component: alarms },
+		{ key: "wallpaper", glyph: Icons.g("photo"), component: wallpaper }
 	]
 
 	name: "control center"
@@ -83,14 +85,14 @@ HangingPanel {
 					width: 42
 					height: 42
 					radius: 12
-					color: on ? Qt.alpha(Theme.primary, 0.22) : hover.hovered ? Qt.alpha(Theme.fg, 0.08) : "transparent"
+					color: on ? Theme.primary : hover.hovered ? Qt.alpha(Theme.fg, 0.08) : "transparent"
 
 					Glyph {
 						anchors.centerIn: parent
 						glyph: entry.modelData.glyph
 						font.pixelSize: 18
 						font.weight: Font.Normal
-						color: entry.on ? Theme.primary : Theme.fg
+						color: entry.on ? Theme.onPrimary : Theme.fg
 						filled: true
 					}
 
@@ -289,5 +291,17 @@ HangingPanel {
 		id: notes
 
 		NotesPage {}
+	}
+
+	Component {
+		id: alarms
+
+		AlarmsPage {}
+	}
+
+	Component {
+		id: wallpaper
+
+		WallpaperPage {}
 	}
 }

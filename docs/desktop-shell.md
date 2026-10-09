@@ -27,6 +27,8 @@ the page's title, its buttons and ✕, then the page. The bar's widgets open the
 | Wi-Fi | the Wi-Fi icon | networks by signal: connect (a password for new secured ones), disconnect, forget; scans while open |
 | Bluetooth | the Bluetooth icon | devices: pair, connect, disconnect, forget, battery; the header scans |
 | Todo | the checklist icon, `$mod+Shift+t` | tasks with a priority (H/M/L, a click on it changes it), grouped high to low, done ones last; drag a task (anywhere on it) to reorder it (among another priority's tasks it takes theirs); kept in `~/.local/share/desktop/todo.json` |
+| Alarms | the alarm icon | alarms: a time, a label, once / every day / weekdays, a switch each; a ringing one shows a card under the bar with Stop and Snooze (5 min) and plays the alarm sound until then (5 min at most); kept in `~/.local/share/desktop/alarms.json` |
+| Wallpaper | the picture icon | the images in `wallpaper.folders` (shell.json; the repo's and `~/Wallpaper-Bank`): a click sets one, the header shuffles; rotation: fixed, every 5 min, hourly, daily or each boot |
 | Notes | the notebook icon, `$mod+Shift+n` | notes of three kinds (text, checklist, code with Copy) with a colour tag; new, pin and delete in the header, search beside the list; kept in `~/.local/share/desktop/notes/` (a private folder) |
 
 The gear opens the settings, the power icon the power menu. Escape, ✕ or focusing another window
@@ -40,6 +42,11 @@ control center. Type to search, ↑ ↓ to pick, Enter (or a click) copies it ba
 item: pin it, save it as a code note, or remove it. The history lives in memory only, so copied
 passwords never reach the disk; pinned items are kept in `~/.local/state/desktop/clipboard/` (a
 private folder).
+
+## Wallpaper
+
+Setting one (the Wallpaper page, or rotation) points `~/.local/state/desktop/wallpaper` at it, which
+the lock screen, sddm and GRUB also use, and draws it (feh on X11, sway's background on Wayland).
 
 ## Settings window
 
@@ -109,5 +116,5 @@ press while `power.confirm` is on. Nothing hibernates.
 ## IPC
 
 `qs -c desktop ipc call <target> <function>`: `audio up|down|mute|mic`, `brightness up|down`,
-`bar toggle`, `recorder toggle`, `notifications toggle|dnd|clear`, `settings toggle`, `control toggle|open <page>|page <page>|close`, `clipboard toggle`, `power open|toggle|close|next|prev|activate|pick <n>`,
+`bar toggle`, `recorder toggle`, `notifications toggle|dnd|clear`, `settings toggle`, `control toggle|open <page>|page <page>|close`, `clipboard toggle`, `alarm stop|snooze`, `power open|toggle|close|next|prev|activate|pick <n>`,
 `theme reload`.

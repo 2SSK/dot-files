@@ -40,5 +40,12 @@
     },
     "power": {
         "confirm": true
+    },
+    "wallpaper": {
+        "folders": [
+            "~/.local/share/desktop/wallpapers",
+            "~/Wallpaper-Bank"
+        ],
+        "rotate": "off"
     }
 }

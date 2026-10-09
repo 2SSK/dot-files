@@ -45,17 +45,31 @@ FloatingWindow {
 		onTriggered: root.placed = true
 	}
 
+	// the keyboard: i3 doesn't focus a shaped window by itself, so ask once it has the window (its
+	// "new" event below), and again shortly in case that came first
+	function takeFocus(): void {
+		I3.dispatch(`[title="^${root.title}$"] focus`);
+	}
+
+	Timer {
+		running: true
+		interval: 250
+		onTriggered: root.takeFocus()
+	}
+
 	ElapsedTimer {
 		id: opened
 	}
 
-	// another window taking the focus closes it, as a panel would
+	// i3's window events: focus once it has the window; another window taking the focus closes it
 	I3IpcListener {
 		subscriptions: ["window"]
 		onIpcEvent: event => {
 			const data = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
 			const name = data.container?.name ?? "";
-			if (data.change === "focus" && name && name !== root.title && opened.elapsed() > 600)
+			if (data.change === "new" && name === root.title)
+				root.takeFocus();
+			else if (data.change === "focus" && name && name !== root.title && opened.elapsed() > 600)
 				root.dismissed();
 		}
 	}

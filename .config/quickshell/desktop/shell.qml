@@ -13,7 +13,7 @@ import qs.services
 
 ShellRoot {
 	// services that watch on their own, started with the shell
-	readonly property var watchers: [Locks, Recorder, Notifications, Clipboard, Events]
+	readonly property var watchers: [Locks, Recorder, Notifications, Clipboard, Events, Alarms, Wallpaper]
 
 	Variants {
 		model: Quickshell.screens
@@ -119,6 +119,17 @@ ShellRoot {
 
 		function toggle(): void {
 			Panel.clipboardOpen = !Panel.clipboardOpen;
+		}
+	}
+
+	IpcHandler {
+		target: "alarm"
+
+		function stop(): void {
+			Alarms.stop();
+		}
+		function snooze(): void {
+			Alarms.snooze();
 		}
 	}
 

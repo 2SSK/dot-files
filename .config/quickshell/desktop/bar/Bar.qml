@@ -198,4 +198,9 @@ PanelWindow {
 	Toasts {
 		bar: bar
 	}
+
+	AlarmCard {
+		bar: bar
+		island: shape
+	}
 }
