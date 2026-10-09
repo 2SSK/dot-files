@@ -75,15 +75,16 @@ def report():
 
 
 def put(kind, data):
+    # the copier stays behind serving the clipboard: it mustn't hold our output open
+    quiet = {"stdout": subprocess.DEVNULL, "stderr": subprocess.DEVNULL}
     if WAYLAND:
         if kind == "text/uri-list":
             # wl-copy would offer text/plain beside it, and apps would paste the path instead
-            if subprocess.run(["wl-copy-exact", kind], input=data).returncode == 0:
+            if subprocess.run(["wl-copy-exact", kind], input=data, **quiet).returncode == 0:
                 return
-        subprocess.run(["wl-copy", "--type", kind], input=data)
+        subprocess.run(["wl-copy", "--type", kind], input=data, **quiet)
     else:
-        # xclip stays behind serving the clipboard: don't wait on its output
-        subprocess.run(["xclip", "-selection", "clipboard", "-t", kind, "-i"], input=data, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.run(["xclip", "-selection", "clipboard", "-t", kind, "-i"], input=data, **quiet)
 
 
 def copy(args):
