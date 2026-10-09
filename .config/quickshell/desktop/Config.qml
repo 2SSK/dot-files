@@ -11,6 +11,7 @@ Singleton {
 
 	readonly property JsonObject bar: adapter.bar
 	readonly property JsonObject osd: adapter.osd
+	readonly property JsonObject notifications: adapter.notifications
 	readonly property JsonObject audio: adapter.audio
 	readonly property JsonObject brightness: adapter.brightness
 	readonly property JsonObject power: adapter.power
@@ -21,8 +22,16 @@ Singleton {
 	readonly property bool vertical: position === "left" || position === "right"
 	readonly property bool island: bar.style === "island"
 
+	// write shell.json soon after the last change (sliders change many times a second)
 	function save(): void {
-		file.writeAdapter();
+		saveTimer.restart();
+	}
+
+	Timer {
+		id: saveTimer
+
+		interval: 400
+		onTriggered: file.writeAdapter()
 	}
 
 	FileView {
@@ -46,6 +55,9 @@ Singleton {
 				property var left: ["workspaces", "scratchpad", "stats"]
 				property var center: ["clock"]
 				property var right: ["tray", "brightness", "recorder", "battery", "notifications", "power"]
+			}
+			property JsonObject notifications: JsonObject {
+				property int timeout: 5000 // ms a popup stays, unless the app sets its own
 			}
 			property JsonObject osd: JsonObject {
 				property int timeout: 1800 // ms

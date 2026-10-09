@@ -4,6 +4,14 @@
 Colours come from the desktop theme (see [theme.md](theme.md)); settings from
 `~/.config/desktop/shell.json`, stowed from the repo, which applies as soon as it's saved.
 
+## Settings window
+
+`$mod+Shift+s` (or `qs -c desktop ipc call settings toggle`): Bar (style, position, height,
+opacity, island width, which widgets go where), Appearance (theme and dark/light, through `theme`),
+Notifications, Levels (volume/brightness steps, how long the level card stays) and Power. Changes
+apply at once and are written to `shell.json`, through the stow link into the repo, so they show up
+in `git diff`; Quickshell writes it with sorted keys and 4-space indents, as it's kept.
+
 ## Bar
 
 | Setting (`bar.*`) | Values |
@@ -28,6 +36,7 @@ Hidden with `$mod+Shift+b`, the bar comes back over the windows while the pointe
 | `$mod+F12` | start / stop screen recording (gpu-screen-recorder, into `~/Videos`) |
 | `$mod+Shift+b` | hide / show the bar |
 | `$mod+n` | notification centre |
+| `$mod+Shift+s` | settings |
 | `$mod+p` | power menu (again or Escape closes): arrows or 1–5 pick, Enter runs |
 
 Each change shows in a card at the top right; Caps Lock and Num Lock show there by themselves.
@@ -58,5 +67,5 @@ press while `power.confirm` is on. Nothing hibernates.
 ## IPC
 
 `qs -c desktop ipc call <target> <function>`: `audio up|down|mute|mic`, `brightness up|down`,
-`bar toggle`, `recorder toggle`, `notifications toggle|dnd|clear`, `power open|toggle|close|next|prev|activate|pick <n>`,
+`bar toggle`, `recorder toggle`, `notifications toggle|dnd|clear`, `settings toggle`, `power open|toggle|close|next|prev|activate|pick <n>`,
 `theme reload`.

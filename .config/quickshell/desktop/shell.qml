@@ -5,6 +5,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import qs.bar
+import qs.settings
 import qs
 import qs.services
 
@@ -16,6 +17,14 @@ ShellRoot {
 		model: Quickshell.screens
 
 		Bar {}
+	}
+
+	LazyLoader {
+		active: Panel.settingsOpen
+
+		SettingsWindow {
+			visible: true
+		}
 	}
 
 	IpcHandler {
@@ -65,6 +74,14 @@ ShellRoot {
 		}
 		function clear(): void {
 			Notifications.clear();
+		}
+	}
+
+	IpcHandler {
+		target: "settings"
+
+		function toggle(): void {
+			Panel.settingsOpen = !Panel.settingsOpen;
 		}
 	}
 

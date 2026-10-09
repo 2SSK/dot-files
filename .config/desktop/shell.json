@@ -1,37 +1,40 @@
 {
-  "bar": {
-    "style": "island",
-    "position": "top",
-    "size": 34,
-    "opacity": 0.85,
-    "length": 0,
-    "left": [
-      "workspaces",
-      "scratchpad",
-      "stats"
-    ],
-    "center": [
-      "clock"
-    ],
-    "right": [
-      "tray",
-      "brightness",
-      "recorder",
-      "battery",
-      "notifications",
-      "power"
-    ]
-  },
-  "osd": {
-    "timeout": 1800
-  },
-  "audio": {
-    "step": 5
-  },
-  "brightness": {
-    "step": 5
-  },
-  "power": {
-    "confirm": true
-  }
+    "audio": {
+        "step": 5
+    },
+    "bar": {
+        "center": [
+            "clock"
+        ],
+        "left": [
+            "workspaces",
+            "scratchpad",
+            "stats"
+        ],
+        "length": 0,
+        "opacity": 0.85,
+        "position": "top",
+        "right": [
+            "tray",
+            "brightness",
+            "recorder",
+            "battery",
+            "notifications",
+            "power"
+        ],
+        "size": 34,
+        "style": "island"
+    },
+    "brightness": {
+        "step": 5
+    },
+    "notifications": {
+        "timeout": 5000
+    },
+    "osd": {
+        "timeout": 1800
+    },
+    "power": {
+        "confirm": true
+    }
 }

@@ -15,6 +15,7 @@ Singleton {
 	property string view: "" // "" or "power"
 	property bool osdShown: false
 	property bool centerOpen: false // the notification centre
+	property bool settingsOpen: false
 	property string osdKind: "volume" // volume, mic, brightness, caps or num
 	property real osdValue: 0
 	property bool osdMuted: false
