@@ -27,4 +27,25 @@ alias gb='git branch' gsw='git switch' gm='git merge' grb='git rebase' gr='git r
 alias gl='git log --graph --all --pretty=format:"%C(magenta)%h %C(white) %an  %ar%C(blue)  %D%n%s%n"'
 
 alias dco='docker compose' dps='docker ps' dpa='docker ps -a' dx='docker exec -it'
-alias nrd='npm run dev'
+
+# yay for repo and AUR alike: u upgrades everything, i installs, r removes with unneeded deps
+if command -v yay >/dev/null; then
+	alias u='yay -Syu' i='yay -S' r='yay -Rns'
+fi
+
+if [[ -n ${WAYLAND_DISPLAY:-} ]]; then
+	alias c='wl-copy' v='wl-paste'
+else
+	alias c='xclip -selection clipboard' v='xclip -selection clipboard -o'
+fi
+
+alias ..='cd ..' ...='cd ../..'
+alias g.='cd ~/.config' gD='cd ~/Documents' gS='cd ~/Pictures/Screenshots'
+
+alias df='df -h' du='du -h' free='free -h' off='systemctl poweroff'
+alias mem='free -h && echo && ps aux --sort=-%mem | head -6' cpu='ps aux --sort=-%cpu | head -6'
+alias ports='ss -tulpn'
+alias status='nmcli device status' list='nmcli device wifi list' connect='nmcli device wifi connect' disconnect='nmcli device disconnect'
+
+alias weather='curl wttr.in/bengaluru?u'
+alias tc='tty-clock -t' sl='sl --help -F -a' p='pipes.sh' cb='cbonsai -liv' aq='asciiquarium' cm='cmatrix -abs'

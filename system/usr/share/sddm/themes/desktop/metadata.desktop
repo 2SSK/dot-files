@@ -1,0 +1,9 @@
+[SddmGreeterTheme]
+Name=Desktop
+Description=Login screen in the desktop theme's colours, installed by packages/system.sh sddm
+Type=sddm-theme
+MainScript=Main.qml
+ConfigFile=theme.conf
+Theme-Id=desktop
+Theme-API=2.0
+QtVersion=6

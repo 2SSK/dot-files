@@ -118,7 +118,11 @@ grub_fakes() { # a palette, /etc/default/grub, and fake font/image/grub tools
 	theme="$SYSTEM_ROOT/boot/grub/themes/desktop"
 	grep -q 'desktop-color: "#1a1b26"' "$theme/theme.txt"
 	grep -q 'item_font = "Desktop Regular 26"' "$theme/theme.txt"
-	[ -f "$theme/select_nw.png" ] && [ -f "$theme/select_c.png" ] && [ -f "$theme/menu.pf2" ]
+	[ -f "$theme/select_w.png" ]
+	[ -f "$theme/select_c.png" ]
+	[ -f "$theme/select_e.png" ]
+	[ ! -e "$theme/select_n.png" ] # top and bottom pieces would overlap the next entry
+	[ -f "$theme/menu.pf2" ]
 	grep -qx 'GRUB_THEME="/boot/grub/themes/desktop/theme.txt"' "$SYSTEM_ROOT/etc/default/grub"
 	grep -qx 'GRUB_GFXMODE=auto' "$SYSTEM_ROOT/etc/default/grub"
 	grep -qx 'GRUB_TERMINAL_OUTPUT="gfxterm"' "$SYSTEM_ROOT/etc/default/grub"
@@ -129,17 +133,61 @@ grub_fakes() { # a palette, /etc/default/grub, and fake font/image/grub tools
 	[ ! -e "$CALLS" ]
 }
 
-@test "grub: leaves a serial console alone" {
+@test "grub: a serial console stays, and the themed screen is added to it" {
 	grub_fakes
 	printf '\nGRUB_TERMINAL="serial console"\n' >>"$SYSTEM_ROOT/etc/default/grub"
 	run "$SYSTEM" grub
 	[ "$status" -eq 0 ]
-	[[ $output == *"event=grub_serial"* ]]
-	run grep -q GRUB_TERMINAL_OUTPUT "$SYSTEM_ROOT/etc/default/grub"
-	[ "$status" -eq 1 ]
+	grep -qx 'GRUB_TERMINAL_INPUT="serial console"' "$SYSTEM_ROOT/etc/default/grub"
+	grep -qx 'GRUB_TERMINAL_OUTPUT="gfxterm serial"' "$SYSTEM_ROOT/etc/default/grub"
+	grep -qx '#GRUB_TERMINAL="serial console"' "$SYSTEM_ROOT/etc/default/grub"
+	grep -qx 'GRUB_TERMINAL="serial console"' "$SYSTEM_ROOT/etc/default/grub.pre-desktop"
 }
 
 @test "unknown part is a usage error" {
 	run "$SYSTEM" bogus
 	[ "$status" -eq 2 ]
+}
+
+sddm_fakes() { # a rendered theme, and a fake magick that copies the image
+	export XDG_STATE_HOME="$BATS_TEST_TMPDIR/state"
+	XDG_STATE_HOME="$XDG_STATE_HOME" python3 "$BATS_TEST_DIRNAME/../.local/lib/desktop/theme_render.py" render kanagawa dark
+	# shellcheck disable=SC2016 # expands when the fake runs
+	printf '#!/bin/sh\necho "magick $*" >>"$CALLS"\nfor last; do :; done\ncp "$1" "$last"\n' >"$BATS_TEST_TMPDIR/bin/magick"
+	chmod +x "$BATS_TEST_TMPDIR/bin/magick"
+}
+
+@test "sddm: installs the theme, its colours and the wallpaper, and selects it" {
+	sddm_fakes
+	run "$SYSTEM" sddm
+	[ "$status" -eq 0 ]
+	local dir="$SYSTEM_ROOT/usr/share/sddm/themes/desktop"
+	[ -f "$dir/Main.qml" ]
+	[ -f "$dir/metadata.desktop" ]
+	grep -qx 'Current=desktop' "$SYSTEM_ROOT/etc/sddm.conf.d/10-desktop.conf"
+}
+
+@test "sddm: colours and wallpaper live in a folder the user owns, so theme set can update them" {
+	sddm_fakes
+	run "$SYSTEM" sddm
+	[ "$status" -eq 0 ]
+	local dir="$SYSTEM_ROOT/usr/share/sddm/themes/desktop" shared="$SYSTEM_ROOT/var/lib/desktop/sddm"
+	[ "$(readlink "$dir/theme.conf")" = /var/lib/desktop/sddm/theme.conf ]
+	[ "$(readlink "$dir/background.jpg")" = /var/lib/desktop/sddm/background.jpg ]
+	[ "$(stat -c %U "$shared")" = "$(id -un)" ]
+	[ "$(stat -c %a "$shared/background.jpg")" = 644 ]
+	grep -qx 'bg=#1f1f28' "$shared/theme.conf"
+}
+
+@test "sddm: an existing /etc/sddm.conf theme is switched in place, the original kept; reruns change nothing" {
+	sddm_fakes
+	mkdir -p "$SYSTEM_ROOT/etc"
+	printf '[Theme]\nCurrent=voidsddm\n' >"$SYSTEM_ROOT/etc/sddm.conf"
+	run "$SYSTEM" sddm
+	[ "$status" -eq 0 ]
+	grep -qx 'Current=desktop' "$SYSTEM_ROOT/etc/sddm.conf"
+	grep -qx 'Current=voidsddm' "$SYSTEM_ROOT/etc/sddm.conf.pre-desktop"
+	[ ! -e "$SYSTEM_ROOT/etc/sddm.conf.d/10-desktop.conf" ]
+	run "$SYSTEM" sddm
+	[[ $output == *"sddm: already in place"* ]]
 }

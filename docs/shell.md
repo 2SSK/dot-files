@@ -76,6 +76,9 @@ history expansions like `!!` are shown for confirmation before they run.
 | `fgl [git log args]` | Browse the git log graph with commit previews; `Enter` shows the full commit |
 | `fdex [shell]` | Pick a running Docker container and exec into it (`sh` by default) |
 | `y [dir]` | yazi file manager; quitting leaves the shell in the directory you were browsing |
+| `mkcd <dir>` | Create a directory and enter it |
+| `extract <archive>` | Unpack tar.*, zip, rar, 7z, gz, bz2, xz, zst into the current directory |
+| `killport <port>` | Stop whatever listens on a TCP port |
 
 ## Aliases
 
@@ -86,7 +89,13 @@ history expansions like `!!` are shown for confirmation before they run.
 | Git | `gs` status, `gd` diff, `gds` staged diff, `ga` add, `gap` add patch, `gc` commit, `gp` push, `gu` pull, `gb` branch, `gsw` switch, `gm` merge, `grb` rebase, `gr` reset, `gcl` clone, `gl` log graph |
 | Docker | `dco` compose, `dps` ps, `dpa` ps -a, `dx` exec -it |
 | Tools | `vi` nvim, `t` tmux, `lg` lazygit, `ldc` lazydocker, `ff` fastfetch, `top` btop |
-| Shell | `cl` clear, `e` exit, `rel` restart the shell, `nrd` npm run dev |
+| Packages (yay) | `u` upgrade everything, `i` install, `r` remove with unneeded deps, `s` fuzzy-search repos and AUR with a preview and install the picks |
+| Clipboard | `c` copy, `v` paste: wl-clipboard on Wayland, xclip on X11 |
+| Navigation | `..`, `...` up; `g.` ~/.config, `gD` ~/Documents, `gS` ~/Pictures/Screenshots |
+| System | `df`, `du`, `free` human-readable; `mem`, `cpu` top 5 processes; `off` power off |
+| Network | `myip` local and external address, `ports` listening sockets; `status`, `list`, `connect`, `disconnect` (nmcli) |
+| Shell | `cl` clear, `e` exit, `rel` restart the shell |
+| Fun | `weather`, `tc` tty-clock, `sl`, `p` pipes.sh, `cb` cbonsai, `aq` asciiquarium, `cm` cmatrix |
 
 ## Colours
 
