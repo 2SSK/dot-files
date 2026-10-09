@@ -49,6 +49,9 @@ gtk-4.0.css      gtk-4.0/gtk.css    gtk_settings
 qt5ct.conf       qt5ct/qt5ct.conf   -
 qt6ct.conf       qt6ct/qt6ct.conf   -
 sddm-theme.conf  -                  sddm
+yazi-flavor.toml yazi/flavors/desktop.yazi/flavor.toml -
+silicon.tmTheme  yazi/flavors/desktop.yazi/tmtheme.xml -
+yazi-theme.toml  yazi/theme.toml    -
 palette.json     -                  "$bin/desktop-wallpaper" screens
 EOF
 }
