@@ -101,11 +101,11 @@ PopupWindow {
 					font.pixelSize: 20
 					color: root.tint
 					text: ({
-							volume: root.muted ? "\u{F0581}" : Panel.osdValue < 0.34 ? "\u{F057F}" : Panel.osdValue < 0.67 ? "\u{F0580}" : "\u{F057E}",
-							mic: root.muted ? "\u{F036D}" : "\u{F036C}",
-							brightness: "\u{F00E0}",
-							caps: "\u{F0A9B}",
-							num: "\u{F03A0}"
+							volume: root.muted ? Icons.g("speaker-slash") : Panel.osdValue < 0.34 ? Icons.g("speaker-none") : Panel.osdValue < 0.67 ? Icons.g("speaker-low") : Icons.g("speaker-high"),
+							mic: root.muted ? Icons.g("microphone-slash") : Icons.g("microphone"),
+							brightness: Icons.g("sun"),
+							caps: Icons.g("arrow-fat-line-up"),
+							num: Icons.g("hash")
 						})[root.kind] ?? ""
 				}
 			}

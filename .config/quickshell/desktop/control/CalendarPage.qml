@@ -57,9 +57,9 @@ Column {
 
 			Repeater {
 				model: [
-					{ glyph: "\u{EAB5}", act: () => root.shift(-1) },
+					{ glyph: Icons.g("caret-left"), act: () => root.shift(-1) },
 					{ text: "Today", act: () => { root.year = clock.date.getFullYear(); root.month = clock.date.getMonth(); } },
-					{ glyph: "\u{EAB6}", act: () => root.shift(1) }
+					{ glyph: Icons.g("caret-right"), act: () => root.shift(1) }
 				]
 
 				delegate: Rectangle {
@@ -78,7 +78,7 @@ Column {
 						anchors.centerIn: parent
 						text: button.modelData.text ?? button.modelData.glyph
 						color: Theme.fg
-						font.family: button.modelData.text ? Theme.fontSans : Theme.fontMono
+						font.family: button.modelData.text ? Theme.fontSans : Icons.light
 						font.pixelSize: 13
 						font.weight: Font.Medium
 					}

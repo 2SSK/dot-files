@@ -29,7 +29,8 @@ Item {
 		Glyph {
 			id: dot
 
-			text: Recorder.recording ? "\u{F0567}" : "\u{EAD9}" // md-video, cod-device-camera-video
+			text: Icons.g("video-camera")
+			filled: Recorder.recording
 			color: Recorder.recording ? Theme.error : Theme.fg
 			font.pixelSize: Theme.iconSize
 

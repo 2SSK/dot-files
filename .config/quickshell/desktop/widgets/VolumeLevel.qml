@@ -16,7 +16,7 @@ Item {
 		spacing: 6
 
 		Readout {
-			glyph: Audio.muted ? "󰖁" : Audio.volume < 0.34 ? "󰕿" : Audio.volume < 0.67 ? "󰖀" : "󰕾"
+			glyph: Icons.g(Audio.muted ? "speaker-slash" : Audio.volume < 0.34 ? "speaker-none" : Audio.volume < 0.67 ? "speaker-low" : "speaker-high")
 			label: "vol"
 			value: Audio.muted ? "mute" : Math.round(Audio.volume * 100) + "%"
 			tint: Audio.muted ? Theme.fgMuted : Theme.fg
@@ -24,7 +24,7 @@ Item {
 
 		Glyph {
 			visible: Audio.micMuted
-			text: "󰍭"
+			text: Icons.g("microphone-slash")
 			color: Theme.error
 		}
 	}

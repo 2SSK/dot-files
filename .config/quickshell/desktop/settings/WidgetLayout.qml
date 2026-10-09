@@ -185,7 +185,7 @@ Item {
 
 								x: 8
 								anchors.verticalCenter: parent.verticalCenter
-								text: "\u{F01DD}" // md-drag
+								text: Icons.g("dots-six-vertical")
 								font.pixelSize: 14
 								font.weight: Font.Normal
 								color: Theme.fgMuted
@@ -222,7 +222,7 @@ Item {
 								anchors.rightMargin: 10
 								anchors.verticalCenter: parent.verticalCenter
 								opacity: grip.containsMouse ? 1 : 0.3
-								text: "\u{EA76}"
+								text: Icons.g("x")
 								font.pixelSize: 13
 								font.weight: Font.Normal
 								color: closeArea.containsMouse ? Theme.error : Theme.fg

@@ -19,14 +19,14 @@ Line {
 	}
 
 	Readout {
-		glyph: "\u{F029A}" // md-gauge
+		glyph: Icons.g("cpu")
 		label: "cpu"
 		value: Math.round(Stats.cpu * 100) + "%"
 		widest: "100%"
 	}
 
 	Readout {
-		glyph: "\u{F061A}" // md-chip
+		glyph: Icons.g("memory")
 		label: "mem"
 		value: Math.round(Stats.mem * 100) + "%"
 		widest: "100%"
@@ -34,7 +34,7 @@ Line {
 
 	Readout {
 		visible: Stats.temp >= 0
-		glyph: "\u{F0238}" // md-fire
+		glyph: Icons.g("thermometer-simple")
 		label: "tmp"
 		value: Math.round(Stats.temp) + "°C"
 		widest: "100°C"

@@ -12,14 +12,14 @@ HangingPanel {
 	id: root
 
 	readonly property var pages: [
-		{ key: "home", glyph: "\u{EB06}", component: home },
-		{ key: "calendar", glyph: "\u{EAB0}", component: calendar },
-		{ key: "system", glyph: "\u{EB03}", component: system },
-		{ key: "notifications", glyph: "\u{EAA2}", component: notifications },
-		{ key: "wifi", glyph: "\u{F05A9}", component: wifi },
-		{ key: "bluetooth", glyph: "\u{F00AF}", component: bluetooth },
-		{ key: "todo", glyph: "\u{F0756}", component: todo },
-		{ key: "notes", glyph: "\u{F082E}", component: notes }
+		{ key: "home", glyph: Icons.g("house"), component: home },
+		{ key: "calendar", glyph: Icons.g("calendar-blank"), component: calendar },
+		{ key: "system", glyph: Icons.g("pulse"), component: system },
+		{ key: "notifications", glyph: Icons.g("bell"), component: notifications },
+		{ key: "wifi", glyph: Icons.g("wifi-high"), component: wifi },
+		{ key: "bluetooth", glyph: Icons.g("bluetooth"), component: bluetooth },
+		{ key: "todo", glyph: Icons.g("list-checks"), component: todo },
+		{ key: "notes", glyph: Icons.g("notebook"), component: notes }
 	]
 
 	name: "control center"
@@ -76,6 +76,7 @@ HangingPanel {
 						font.pixelSize: 18
 						font.weight: Font.Normal
 						color: entry.on ? Theme.onPrimary : Theme.fg
+						filled: entry.on
 					}
 
 					Rectangle {
@@ -110,8 +111,8 @@ HangingPanel {
 
 			Repeater {
 				model: [
-					{ glyph: "\u{EB51}", act: () => { Panel.controlOpen = false; Panel.settingsOpen = true; } },
-					{ glyph: "\u{F0425}", act: () => { Panel.controlOpen = false; Panel.openPower(); } }
+					{ glyph: Icons.g("gear-six"), act: () => { Panel.controlOpen = false; Panel.settingsOpen = true; } },
+					{ glyph: Icons.g("power"), act: () => { Panel.controlOpen = false; Panel.openPower(); } }
 				]
 
 				delegate: Rectangle {
@@ -172,7 +173,7 @@ HangingPanel {
 			spacing: 8
 
 			Repeater {
-				model: [...(page.item?.actions ?? []).filter(a => a.show !== false), { glyph: "\u{EA76}", on: false, act: () => Panel.controlOpen = false }]
+				model: [...(page.item?.actions ?? []).filter(a => a.show !== false), { glyph: Icons.g("x"), on: false, act: () => Panel.controlOpen = false }]
 
 				delegate: Rectangle {
 					id: button
@@ -192,6 +193,7 @@ HangingPanel {
 						font.pixelSize: 15
 						font.weight: Font.Normal
 						color: button.modelData.on ? Theme.onPrimary : Theme.fg
+						filled: button.modelData.on ?? false
 					}
 
 					HoverHandler {

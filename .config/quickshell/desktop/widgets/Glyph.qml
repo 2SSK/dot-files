@@ -1,12 +1,13 @@
 import QtQuick
 import qs
 
-// Bar text: the mono font (Nerd glyphs), bold, as waybar and polybar had it.
+// An icon (Icons.g(name)) in Phosphor Light, or Phosphor Fill with `filled` (active states).
 Text {
+	property bool filled: false
+
 	color: Theme.fg
-	font.family: Theme.fontMono
-	font.pixelSize: Theme.fontSize
-	font.weight: Font.Bold
+	font.family: filled ? Icons.fill : Icons.light
+	font.pixelSize: Theme.iconSize
 	horizontalAlignment: Text.AlignHCenter
 	verticalAlignment: Text.AlignVCenter
 }

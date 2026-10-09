@@ -48,7 +48,7 @@ Column {
 
 		Tile {
 			width: (parent.width - 10) / 2
-			glyph: Connectivity.wifi ? "\u{F05A9}" : "\u{F05AA}" // md-wifi, md-wifi-off
+			glyph: Connectivity.wifi ? Icons.g("wifi-high") : Icons.g("wifi-slash")
 			label: "Wi-Fi"
 			detail: !Connectivity.wifiAvailable ? "Not available" : !Connectivity.wifi ? "Off" : Connectivity.network || "Not connected"
 			on: Connectivity.wifi
@@ -58,7 +58,7 @@ Column {
 
 		Tile {
 			width: (parent.width - 10) / 2
-			glyph: Connectivity.bluetooth ? "\u{F00AF}" : "\u{F00B2}" // md-bluetooth, md-bluetooth-off
+			glyph: Connectivity.bluetooth ? Icons.g("bluetooth") : Icons.g("bluetooth-slash")
 			label: "Bluetooth"
 			detail: !Connectivity.bluetoothAvailable ? "Not available" : !Connectivity.bluetooth ? "Off" : Connectivity.device || "On"
 			on: Connectivity.bluetooth
@@ -68,7 +68,7 @@ Column {
 
 		Tile {
 			width: (parent.width - 10) / 2
-			glyph: Notifications.dnd ? "\u{EC08}" : "\u{EAA2}"
+			glyph: Notifications.dnd ? Icons.g("bell-slash") : Icons.g("bell")
 			label: "Do Not Disturb"
 			detail: Notifications.dnd ? "On" : "Off"
 			on: Notifications.dnd
@@ -77,7 +77,7 @@ Column {
 
 		Tile {
 			width: (parent.width - 10) / 2
-			glyph: Audio.micMuted ? "\u{F036D}" : "\u{F036C}"
+			glyph: Audio.micMuted ? Icons.g("microphone-slash") : Icons.g("microphone")
 			label: "Microphone"
 			detail: Audio.micMuted ? "Muted" : "On"
 			on: !Audio.micMuted
@@ -86,7 +86,7 @@ Column {
 
 		Tile {
 			width: (parent.width - 10) / 2
-			glyph: Recorder.recording ? "\u{F0567}" : "\u{EAD9}"
+			glyph: Recorder.recording ? Icons.g("video-camera") : Icons.g("video-camera")
 			label: "Screen recording"
 			detail: Recorder.recording ? "Recording" : "Off"
 			on: Recorder.recording
@@ -95,7 +95,7 @@ Column {
 
 		Tile {
 			width: (parent.width - 10) / 2
-			glyph: "\u{F10A9}" // md-dock-bottom, upside down for a top bar
+			glyph: Icons.g("app-window")
 			glyphRotation: Config.position === "top" ? 180 : 0
 			label: "Bar"
 			detail: Panel.barShown ? "Shown" : "Hidden"
@@ -120,7 +120,7 @@ Column {
 
 			Level {
 				width: parent.width
-				glyph: Audio.muted ? "\u{F0581}" : "\u{F057E}"
+				glyph: Audio.muted ? Icons.g("speaker-slash") : Icons.g("speaker-high")
 				value: Audio.volume
 				muted: Audio.muted
 				onMoved: value => Audio.setVolume(value)
@@ -129,7 +129,7 @@ Column {
 
 			Level {
 				width: parent.width
-				glyph: Audio.micMuted ? "\u{F036D}" : "\u{F036C}"
+				glyph: Audio.micMuted ? Icons.g("microphone-slash") : Icons.g("microphone")
 				value: Audio.micVolume
 				muted: Audio.micMuted
 				onMoved: value => Audio.setMic(value)
@@ -139,7 +139,7 @@ Column {
 			Level {
 				visible: Brightness.available
 				width: parent.width
-				glyph: "\u{F00E0}"
+				glyph: Icons.g("sun")
 				value: Brightness.value
 				onMoved: value => Brightness.set(value)
 			}

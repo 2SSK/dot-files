@@ -1,7 +1,9 @@
 # Desktop shell (Quickshell)
 
 `qs -c desktop`, started by i3 (`.config/i3/conf.d/autostart.conf`). Sources: `.config/quickshell/desktop/`.
-Colours come from the desktop theme (see [theme.md](theme.md)); settings from
+Colours come from the desktop theme (see [theme.md](theme.md)); icons are Phosphor (Light, and
+Fill for active states; the fonts sit in `fonts/` beside the config, MIT licensed; names in
+`Icons.qml`), apps' own icons come from the GTK icon theme (Tela Circle); settings from
 `~/.config/desktop/shell.json`, stowed from the repo, which applies as soon as it's saved.
 
 ## Control center
@@ -17,7 +19,7 @@ the page's title, its buttons and ✕, then the page. The bar's widgets open the
 | Notifications | the bell, `$mod+n` | the history by day; Do Not Disturb and clear in the header |
 | Wi-Fi | the Wi-Fi icon | networks by signal: connect (a password for new secured ones), disconnect, forget; scans while open |
 | Bluetooth | the Bluetooth icon | devices: pair, connect, disconnect, forget, battery; the header scans |
-| Todo | the checklist icon, `$mod+Shift+t` | tasks with a priority (H/M/L, a click on it changes it), sorted high to low, done ones last; kept in `~/.local/share/desktop/todo.json` |
+| Todo | the checklist icon, `$mod+Shift+t` | tasks with a priority (H/M/L, a click on it changes it), grouped high to low, done ones last; drag a task by its handle to reorder it (among another priority's tasks it takes theirs); kept in `~/.local/share/desktop/todo.json` |
 | Notes | the notebook icon, `$mod+Shift+n` | notes of three kinds (text, checklist, code with Copy) with a colour tag; new, pin and delete in the header, search beside the list; kept in `~/.local/share/desktop/notes/` (a private folder) |
 
 The gear opens the settings, the power icon the power menu. Escape, ✕, focusing another window or a

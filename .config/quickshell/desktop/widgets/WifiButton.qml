@@ -4,8 +4,9 @@ import qs.services
 
 // Wi-Fi: off, or on (dimmed while not connected); opens the Wi-Fi page.
 Glyph {
-	text: Connectivity.wifi ? "\u{F05A9}" : "\u{F05AA}"
+	text: Connectivity.wifi ? Icons.g("wifi-high") : Icons.g("wifi-slash")
 	color: Panel.controlOpen && Panel.controlPage === "wifi" ? Theme.primary : Theme.fg
+	filled: Panel.controlOpen && Panel.controlPage === "wifi"
 	font.pixelSize: Theme.iconSize - 1
 	font.weight: Font.Normal
 	readonly property bool present: Connectivity.wifiAvailable

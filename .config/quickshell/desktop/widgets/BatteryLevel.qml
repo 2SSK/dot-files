@@ -2,7 +2,7 @@ import QtQuick
 import Quickshell.Services.UPower
 import qs
 
-// The laptop battery as a horizontal cell: a bolt while charging, red and blinking when low.
+// The laptop battery as a horizontal cell, by charge; a bolt while charging, red and blinking when low.
 Readout {
 	id: root
 
@@ -14,7 +14,7 @@ Readout {
 
 	visible: present
 	// fa-battery: empty, quarter, half, three quarters, full; fa-bolt while charging
-	glyph: charging ? "" : ["", "", "", "", ""][Math.round(percent / 25)]
+	glyph: Icons.g(charging ? "battery-charging" : ["battery-empty", "battery-low", "battery-medium", "battery-high", "battery-full"][Math.round(percent / 25)])
 	label: charging ? "chr" : "bat"
 	value: Math.round(percent) + "%"
 	widest: "100%"

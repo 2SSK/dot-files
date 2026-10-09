@@ -59,8 +59,8 @@ HangingPanel {
 
 		Repeater {
 			model: [
-				{ glyph: "\u{EA81}", act: () => Clipboard.clear(), show: Clipboard.history.length > 0 },
-				{ glyph: "\u{EA76}", act: () => Panel.clipboardOpen = false, show: true }
+				{ glyph: Icons.g("trash"), act: () => Clipboard.clear(), show: Clipboard.history.length > 0 },
+				{ glyph: Icons.g("x"), act: () => Panel.clipboardOpen = false, show: true }
 			]
 
 			delegate: Rectangle {
@@ -187,9 +187,9 @@ HangingPanel {
 
 				Repeater {
 					model: [
-						{ glyph: entry.modelData.pinned ? "\u{F0403}" : "\u{F0931}", tip: "Pin", act: () => Clipboard.pin(entry.modelData.text), on: entry.modelData.pinned },
-						{ glyph: "\u{F082E}", tip: "Save as a note", act: () => { Notes.addSnippet(entry.modelData.text); Panel.clipboardOpen = false; Panel.controlPage = "notes"; Panel.controlOpen = true; }, on: false },
-						{ glyph: "\u{EA76}", tip: "Remove", act: () => Clipboard.remove(entry.modelData.text), on: false }
+						{ glyph: entry.modelData.pinned ? Icons.g("push-pin") : Icons.g("push-pin"), tip: "Pin", act: () => Clipboard.pin(entry.modelData.text), on: entry.modelData.pinned },
+						{ glyph: Icons.g("notebook"), tip: "Save as a note", act: () => { Notes.addSnippet(entry.modelData.text); Panel.clipboardOpen = false; Panel.controlPage = "notes"; Panel.controlOpen = true; }, on: false },
+						{ glyph: Icons.g("x"), tip: "Remove", act: () => Clipboard.remove(entry.modelData.text), on: false }
 					]
 
 					delegate: Rectangle {
@@ -208,6 +208,7 @@ HangingPanel {
 							font.pixelSize: 14
 							font.weight: Font.Normal
 							color: tool.modelData.on ? Theme.primary : Theme.fg
+							filled: tool.modelData.on
 						}
 
 						HoverHandler {

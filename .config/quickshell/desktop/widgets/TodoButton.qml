@@ -4,8 +4,9 @@ import qs.services
 
 // Opens the todo list; a dot while tasks are open.
 Glyph {
-	text: "\u{F0756}" // md-format-list-checks
+	text: Icons.g("list-checks")
 	color: Panel.controlOpen && Panel.controlPage === "todo" ? Theme.primary : Theme.fg
+	filled: Panel.controlOpen && Panel.controlPage === "todo"
 	font.pixelSize: Theme.iconSize - 1
 	font.weight: Font.Normal
 

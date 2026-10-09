@@ -14,14 +14,14 @@ Item {
 
 	readonly property string title: "Notes"
 	readonly property var actions: [
-		{ glyph: "\u{EA60}", on: false, act: () => Notes.create("text", "", "") },
-		{ glyph: Notes.current?.pinned ? "\u{F0403}" : "\u{F0931}", on: Notes.current?.pinned ?? false, act: () => Notes.update(Notes.selected, { pinned: !Notes.current.pinned }), show: Notes.current !== null },
-		{ glyph: "\u{EA81}", on: false, act: () => Notes.remove(Notes.selected), show: Notes.current !== null }
+		{ glyph: Icons.g("plus"), on: false, act: () => Notes.create("text", "", "") },
+		{ glyph: Notes.current?.pinned ? Icons.g("push-pin") : Icons.g("push-pin"), on: Notes.current?.pinned ?? false, act: () => Notes.update(Notes.selected, { pinned: !Notes.current.pinned }), show: Notes.current !== null },
+		{ glyph: Icons.g("trash"), on: false, act: () => Notes.remove(Notes.selected), show: Notes.current !== null }
 	]
 	readonly property var types: [
-		{ key: "text", glyph: "\u{EB26}", label: "Text" },
-		{ key: "checklist", glyph: "\u{EAB3}", label: "Checklist" },
-		{ key: "code", glyph: "\u{EAC4}", label: "Code" }
+		{ key: "text", glyph: Icons.g("note"), label: "Text" },
+		{ key: "checklist", glyph: Icons.g("check-square"), label: "Checklist" },
+		{ key: "code", glyph: Icons.g("code"), label: "Code" }
 	]
 	readonly property var tags: ({ none: Theme.fgMuted, red: Theme.error, yellow: Theme.warning, green: Theme.success, blue: Theme.primary, purple: Theme.secondary })
 	property string query: ""
@@ -139,7 +139,8 @@ Item {
 					anchors.rightMargin: 10
 					anchors.verticalCenter: parent.verticalCenter
 					visible: entry.modelData.pinned
-					text: "\u{F0403}"
+					filled: true
+					text: Icons.g("push-pin")
 					font.pixelSize: 13
 					color: Theme.primary
 				}
@@ -551,7 +552,7 @@ Item {
 								Glyph {
 									anchors.centerIn: parent
 									visible: line.modelData.done
-									text: "\u{EAB2}"
+									text: Icons.g("check")
 									font.pixelSize: 11
 									color: Theme.onPrimary
 								}
@@ -584,7 +585,7 @@ Item {
 								anchors.rightMargin: 10
 								anchors.verticalCenter: parent.verticalCenter
 								opacity: lineHover.hovered ? 1 : 0
-								text: "\u{EA76}"
+								text: Icons.g("x")
 								font.pixelSize: 13
 								font.weight: Font.Normal
 								color: Theme.fgMuted

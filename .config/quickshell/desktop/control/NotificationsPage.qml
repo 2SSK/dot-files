@@ -14,8 +14,8 @@ Column {
 
 	readonly property string title: "Notifications"
 	readonly property var actions: [
-		{ glyph: Notifications.dnd ? "\u{EC08}" : "\u{EAA2}", on: Notifications.dnd, act: () => Notifications.dnd = !Notifications.dnd },
-		{ glyph: "\u{EA81}", on: false, act: () => Notifications.clear(), show: Notifications.history.length > 0 }
+		{ glyph: Notifications.dnd ? Icons.g("bell-slash") : Icons.g("bell"), on: Notifications.dnd, act: () => Notifications.dnd = !Notifications.dnd },
+		{ glyph: Icons.g("trash"), on: false, act: () => Notifications.clear(), show: Notifications.history.length > 0 }
 	]
 	property string filter: "all"
 
@@ -67,7 +67,7 @@ Column {
 
 			Glyph {
 				anchors.horizontalCenter: parent.horizontalCenter
-				text: Notifications.dnd ? "\u{EC08}" : "\u{EAA2}"
+				text: Notifications.dnd ? Icons.g("bell-slash") : Icons.g("bell")
 				font.pixelSize: 26
 				font.weight: Font.Normal
 				color: Theme.fgMuted

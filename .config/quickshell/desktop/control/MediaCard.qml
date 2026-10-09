@@ -43,7 +43,7 @@ Rectangle {
 		Glyph {
 			anchors.centerIn: parent
 			visible: art.status !== Image.Ready
-			text: "\u{F075A}" // md-music-note
+			text: Icons.g("music-notes")
 			font.pixelSize: 30
 			color: Theme.primary
 		}
@@ -123,9 +123,9 @@ Rectangle {
 
 				Repeater {
 					model: [
-						{ glyph: "\u{F04AE}", enabled: root.player?.canGoPrevious ?? false, act: () => root.player.previous() },
-						{ glyph: root.player?.isPlaying ? "\u{F03E4}" : "\u{F040A}", enabled: root.player?.canTogglePlaying ?? false, act: () => root.player.togglePlaying(), main: true },
-						{ glyph: "\u{F04AD}", enabled: root.player?.canGoNext ?? false, act: () => root.player.next() }
+						{ glyph: Icons.g("skip-back"), enabled: root.player?.canGoPrevious ?? false, act: () => root.player.previous() },
+						{ glyph: root.player?.isPlaying ? Icons.g("pause") : Icons.g("play"), enabled: root.player?.canTogglePlaying ?? false, act: () => root.player.togglePlaying(), main: true },
+						{ glyph: Icons.g("skip-forward"), enabled: root.player?.canGoNext ?? false, act: () => root.player.next() }
 					]
 
 					delegate: Rectangle {

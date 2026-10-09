@@ -81,11 +81,11 @@ Singleton {
 	// Lock keeps the laptop running (closing the lid only locks too); nothing hibernates. Actions
 	// that end the session ask for a second press while power.confirm is on.
 	readonly property var actions: [
-		{ id: "lock", glyph: "\u{F0341}", label: "Lock", confirm: false },
-		{ id: "logout", glyph: "\u{F0343}", label: "Log Out", confirm: true },
-		{ id: "suspend", glyph: "\u{F03E4}", label: "Lock & Suspend", confirm: false },
-		{ id: "reboot", glyph: "\u{F0709}", label: "Reboot", confirm: true },
-		{ id: "poweroff", glyph: "\u{F0425}", label: "Shut Down", confirm: true }
+		{ id: "lock", glyph: Icons.g("lock"), label: "Lock", confirm: false },
+		{ id: "logout", glyph: Icons.g("sign-out"), label: "Log Out", confirm: true },
+		{ id: "suspend", glyph: Icons.g("pause"), label: "Lock & Suspend", confirm: false },
+		{ id: "reboot", glyph: Icons.g("arrow-clockwise"), label: "Reboot", confirm: true },
+		{ id: "poweroff", glyph: Icons.g("power"), label: "Shut Down", confirm: true }
 	]
 
 	function osd(kind: string, value: real, muted: bool): void {

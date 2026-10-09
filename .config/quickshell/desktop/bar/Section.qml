@@ -62,7 +62,7 @@ Line {
 			vertical: Config.vertical
 			spacing: root.spacing
 
-			Glyph {
+			Label {
 				visible: !Config.island && !Config.bar.capsules && slot.present && slot.follows
 				text: Config.vertical ? "—" : "|"
 				color: Theme.border

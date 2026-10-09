@@ -20,11 +20,11 @@ FloatingWindow {
 	property var families: []
 
 	readonly property var pages: [
-		{ key: "bar", glyph: "\u{F10A9}", title: "Bar", flip: Config.position === "top" }, // md-dock-bottom, upside down for a top bar
-		{ key: "appearance", glyph: "\u{EB5C}", title: "Appearance" },
-		{ key: "notifications", glyph: "\u{EAA2}", title: "Notifications" },
-		{ key: "levels", glyph: "\u{EACD}", title: "Levels" },
-		{ key: "power", glyph: "\u{F0425}", title: "Power" }
+		{ key: "bar", glyph: Icons.g("app-window"), title: "Bar", flip: Config.position === "top" },
+		{ key: "appearance", glyph: Icons.g("palette"), title: "Appearance" },
+		{ key: "notifications", glyph: Icons.g("bell"), title: "Notifications" },
+		{ key: "levels", glyph: Icons.g("faders"), title: "Levels" },
+		{ key: "power", glyph: Icons.g("power"), title: "Power" }
 	]
 
 	function set(group: string, key: string, value: var): void {
@@ -148,6 +148,7 @@ FloatingWindow {
 							font.pixelSize: 16
 							font.weight: Font.Normal
 							color: entry.on ? Theme.onPrimary : Theme.fg
+							filled: entry.on
 						}
 
 						Text {
