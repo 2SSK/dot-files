@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# Screens on X11 (i3), arranged as sway's outputs config does: the laptop panel at the left, each
+# connected external screen to the right of the one before, at its preferred mode; a screen that
+# was unplugged but is still on is turned off. Then the wallpaper is drawn again across them all.
+#   desktop-displays apply   arrange now
+#   desktop-displays watch   arrange now and whenever a screen is plugged in or out (i3 starts it)
+set -euo pipefail
+
+[[ -n ${DISPLAY:-} ]] || exit 0
+
+apply() {
+	local line name state geometry internal='' externals=() off=() args=() previous
+	while read -r line; do
+		[[ $line =~ ^([A-Za-z0-9-]+)\ (connected|disconnected)(\ primary)?\ ?([0-9]+x[0-9]+\+[0-9]+\+[0-9]+)? ]] || continue
+		name=${BASH_REMATCH[1]} state=${BASH_REMATCH[2]} geometry=${BASH_REMATCH[4]}
+		if [[ $state == connected ]]; then
+			if [[ -z $internal && $name =~ ^(eDP|LVDS|DSI) ]]; then internal=$name; else externals+=("$name"); fi
+		elif [[ -n $geometry ]]; then
+			off+=("$name")
+		fi
+	done < <(xrandr --query)
+	# no laptop panel (a desktop): the first screen leads
+	if [[ -z $internal && ${#externals[@]} -gt 0 ]]; then internal=${externals[0]} && externals=("${externals[@]:1}"); fi
+	[[ -n $internal ]] || return 0
+	args=(--output "$internal" --auto --primary --pos 0x0)
+	previous=$internal
+	for name in "${externals[@]}"; do
+		args+=(--output "$name" --auto --right-of "$previous")
+		previous=$name
+	done
+	for name in "${off[@]}"; do args+=(--output "$name" --off); done
+	xrandr "${args[@]}"
+	desktop-wallpaper restore >/dev/null 2>&1 || true
+}
+
+case ${1:-apply} in
+apply) apply ;;
+watch)
+	apply
+	# a drm change event per plug or unplug (several at once): arrange once they settle
+	udevadm monitor --udev --subsystem-match=drm 2>/dev/null | while read -r line; do
+		[[ $line == *change* ]] || continue
+		while read -r -t 1 _; do :; done
+		apply || true
+	done
+	;;
+*) echo "usage: desktop-displays apply|watch" >&2 && exit 2 ;;
+esac

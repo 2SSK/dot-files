@@ -74,6 +74,16 @@ region, the focused window, or one screen or all of them; while it runs the bar'
 and pulses on a red pill with the time (a click stops it), and the panel's Record row becomes Stop. `desktop-capture shot|record …` does the work (X11: slop, maim,
 xclip; Wayland: slurp, grim, wl-copy, and a window records through the portal).
 
+## Screens (i3)
+
+`desktop-displays` arranges screens as sway's outputs config does: the laptop panel at the left,
+each connected external screen to the right of the one before at its preferred mode; an unplugged
+screen is turned off, and the wallpaper is drawn again across them. i3 starts it in `watch` mode,
+which listens for plug and unplug events (`udevadm monitor`) and arranges again. Workspaces 2, 3, 9
+and 10 live on the external screen (HDMI-1, else DP-1), the rest on the panel, as on sway; with no
+external screen they all stay on the panel. The bar and its panels follow onto each screen; the
+capture panel's Screen choice shows a map of them.
+
 ## Touchpad (i3)
 
 `desktop-input`, run when i3 starts or reloads, sets the touchpad up as sway's input config does:
