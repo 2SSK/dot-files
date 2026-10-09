@@ -36,6 +36,10 @@ FloatingWindow {
 	title: "Desktop " + name
 	implicitWidth: screen.width
 	implicitHeight: screen.height
+	// a fixed size: i3 floats such a window as it takes it, instead of tiling it for a moment first
+	// (which flashed the other windows' borders and layout)
+	minimumSize: Qt.size(screen.width, screen.height)
+	maximumSize: Qt.size(screen.width, screen.height)
 	color: "transparent"
 	onVisibleChanged: if (!visible) dismissed()
 
