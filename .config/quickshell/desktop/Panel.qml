@@ -22,7 +22,7 @@ Singleton {
 	property bool captureShown: false
 	property string captureAsk: "" // "shot" or "record": the panel only asks which screen
 	readonly property int captureWidth: 520
-	readonly property int captureHeight: 300
+	readonly property int captureHeight: 324
 	property bool launcherOpen: false
 	property bool launcherShown: false
 	property string launcherMode: "apps" // apps, emoji, files or themes

@@ -8,8 +8,10 @@ import qs.services
 import qs.widgets
 
 // Capture, dropping out of the bar (a HangingPanel): a screenshot or a recording of a region (drag
-// a rectangle), the focused window, or a screen. Keys: the arrows pick a tile and Enter does it;
-// R, W, S take a screenshot straight away, with Shift they record. A screenshot is saved and copied to the clipboard. With more than one monitor, Screen
+// a rectangle; the only thing done with the mouse), the focused window, or a screen. Keys: the
+// arrows pick a tile and Enter does it; R, W, S take a screenshot straight away, with Shift they
+// record. Choosing a screen: the arrows or 1–9 pick one, A all of them, Enter takes it, Escape or
+// Backspace goes back. A screenshot is saved and copied to the clipboard. With more than one monitor, Screen
 // shows a small map of them to pick one (or all). While recording, Record becomes Stop.
 HangingPanel {
 	id: root
@@ -22,6 +24,8 @@ HangingPanel {
 	]
 	property int seconds: 0
 	property int selected: 0 // 0–2 screenshot, 3–5 record
+	property int monitor: 0 // the screen picked when asking which
+	readonly property var sortedScreens: [...Quickshell.screens].sort((a, b) => a.x - b.x || a.y - b.y)
 
 	function pick(kind: string, mode: string): void {
 		if (mode === "screen" && Quickshell.screens.length > 1)
@@ -35,8 +39,30 @@ HangingPanel {
 	panelWidth: Panel.captureWidth
 	panelHeight: Panel.captureHeight
 	onDismissed: Panel.captureOpen = false
+	// the screen picked to begin with: the one this panel is on
+	onAskingChanged: monitor = Math.max(0, sortedScreens.findIndex(s => s.name === screen.name))
+	Component.onCompleted: monitor = Math.max(0, sortedScreens.findIndex(s => s.name === screen.name))
 	onKeyPressed: event => {
 		const k = event.key;
+		if (asking) {
+			const n = sortedScreens.length;
+			if (k === Qt.Key_Left || k === Qt.Key_Up)
+				monitor = (monitor + n - 1) % n;
+			else if (k === Qt.Key_Right || k === Qt.Key_Down || k === Qt.Key_Tab)
+				monitor = (monitor + 1) % n;
+			else if (k >= Qt.Key_1 && k <= Qt.Key_9 && k - Qt.Key_1 < n)
+				Capture.take(asking, "screen", sortedScreens[k - Qt.Key_1]);
+			else if (k === Qt.Key_A)
+				Capture.take(asking, "screen", null);
+			else if (k === Qt.Key_Return || k === Qt.Key_Enter || k === Qt.Key_Space)
+				Capture.take(asking, "screen", sortedScreens[monitor]);
+			else if (k === Qt.Key_Backspace)
+				asking = "";
+			else
+				return;
+			event.accepted = true;
+			return;
+		}
 		if (!asking && (k === Qt.Key_Left || k === Qt.Key_Right)) {
 			selected = Math.floor(selected / 3) * 3 + (selected % 3 + (k === Qt.Key_Left ? 2 : 1)) % 3;
 			event.accepted = true;
@@ -248,7 +274,7 @@ HangingPanel {
 		x: 16
 		y: 16
 		width: parent.width - 32
-		height: parent.height - 32
+		height: parent.height - 52
 
 		Row {
 			id: head
@@ -291,7 +317,7 @@ HangingPanel {
 		Chip {
 			anchors.right: parent.right
 			anchors.verticalCenter: head.verticalCenter
-			label: "All screens"
+			label: "All screens  (A)"
 			onClicked: Capture.take(root.asking, "screen", null)
 		}
 
@@ -304,7 +330,7 @@ HangingPanel {
 			height: parent.height - head.height - 14
 
 			Repeater {
-				model: chooser.screens
+				model: root.sortedScreens
 
 				delegate: Rectangle {
 					id: monitor
@@ -317,9 +343,11 @@ HangingPanel {
 					width: modelData.width * chooser.k - 8
 					height: modelData.height * chooser.k - 8
 					radius: 14
-					color: monitorHover.hovered ? Qt.alpha(Theme.primary, 0.2) : Qt.alpha(Theme.surface, 0.85)
-					border.width: monitorHover.hovered ? 2 : 1
-					border.color: monitorHover.hovered ? Theme.primary : Qt.alpha(Theme.border, 0.9)
+					readonly property bool chosen: monitorHover.hovered || root.monitor === index
+
+					color: chosen ? Qt.alpha(Theme.primary, 0.2) : Qt.alpha(Theme.surface, 0.85)
+					border.width: chosen ? 2 : 1
+					border.color: chosen ? Theme.primary : Qt.alpha(Theme.border, 0.9)
 
 					Behavior on color {
 						ColorAnimation {
@@ -335,12 +363,12 @@ HangingPanel {
 							anchors.horizontalCenter: parent.horizontalCenter
 							glyph: Icons.g("device-desktop")
 							font.pixelSize: 20
-							color: monitorHover.hovered ? Theme.primary : Theme.fg
+							color: monitor.chosen ? Theme.primary : Theme.fg
 						}
 
 						Text {
 							anchors.horizontalCenter: parent.horizontalCenter
-							text: monitor.modelData.name
+							text: `${monitor.index + 1}  ${monitor.modelData.name}`
 							color: Theme.fg
 							font.family: Theme.fontSans
 							font.pixelSize: 13
@@ -368,5 +396,16 @@ HangingPanel {
 				}
 			}
 		}
+	}
+
+	// what the keys do
+	Text {
+		x: 16
+		anchors.bottom: parent.bottom
+		anchors.bottomMargin: 10
+		text: root.asking ? "←→ or 1–9 pick · Enter takes it · A all screens · Backspace back" : "←→↑↓ pick · Enter does it · R W S screenshot · Shift+R W S record"
+		color: Theme.fgMuted
+		font.family: Theme.fontSans
+		font.pixelSize: 11
 	}
 }

@@ -3,7 +3,8 @@ import Quickshell
 import qs
 import qs.services
 
-// Screen recording: a click starts it; while recording the camera turns red, pulses and shows the time.
+// Screen recording: a click opens the capture panel; while recording the camera turns red and pulses
+// on a soft red pill with the time, and a click stops it.
 Item {
 	id: root
 
@@ -18,6 +19,25 @@ Item {
 		repeat: true
 		triggeredOnStart: true
 		onTriggered: root.seconds = Math.floor((Date.now() - Recorder.started.getTime()) / 1000)
+	}
+
+	// recording: a soft red pill behind the camera and the clock
+	Rectangle {
+		anchors.fill: parent
+		anchors.margins: -5
+		anchors.leftMargin: -8
+		anchors.rightMargin: -8
+		radius: height / 2
+		color: Qt.alpha(Theme.error, 0.18)
+		border.width: 1
+		border.color: Qt.alpha(Theme.error, 0.5)
+		opacity: Recorder.recording ? 1 : 0
+
+		Behavior on opacity {
+			NumberAnimation {
+				duration: 200
+			}
+		}
 	}
 
 	Line {

@@ -65,13 +65,13 @@ the default one; anything else in its default application. The emoji come from U
 
 | Key | |
 | --- | --- |
-| F12 | the capture panel (again closes it): Screenshot or Record × Region, Window, Screen. The arrows pick a tile, Enter (or a click) does it; R, W, S take a screenshot straight away, with Shift they record. Region: drag a rectangle (Escape or a right click cancels). Screen with more than one monitor: a map of them as they're arranged, or All screens |
+| F12 | the capture panel (again closes it): Screenshot or Record × Region, Window, Screen. The arrows pick a tile, Enter does it; R, W, S take a screenshot straight away, with Shift they record. Only Region uses the mouse: drag a rectangle (Escape or a right click cancels). Window is the focused one. Screen with more than one monitor: a map of them as they're arranged, the panel's own screen picked; the arrows or 1–9 pick, Enter takes it, A takes all, Backspace goes back |
 | `$mod+F12`, the camera in the bar | stops a recording, else opens the capture panel |
 
 A screenshot is saved to `~/Pictures/Screenshots` and copied to the clipboard as an image, ready
-to paste. A recording (gpu-screen-recorder, 60 fps, the system sound) goes to `~/Videos`: a region,
-the focused window, or one screen or all of them; while it runs the bar shows its time, and the
-panel's Record row becomes Stop. `desktop-capture shot|record …` does the work (X11: slop, maim,
+to paste. A recording (gpu-screen-recorder, 60 fps, the system sound) goes to `~/Videos/Recordings`: a
+region, the focused window, or one screen or all of them; while it runs the bar's camera turns red
+and pulses on a red pill with the time (a click stops it), and the panel's Record row becomes Stop. `desktop-capture shot|record …` does the work (X11: slop, maim,
 xclip; Wayland: slurp, grim, wl-copy, and a window records through the portal).
 
 ## Window switcher
