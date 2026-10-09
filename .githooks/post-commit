@@ -1,20 +1,10 @@
 #!/bin/sh
-# Keep the live checkout in step with work on rewrite: after a commit on rewrite, main (checked out
-# in another worktree, ~/dot-files) fast-forwards to it, links to files that were deleted go, and
-# stow links new ones. Never forces: if main has diverged or a local change is in the way, it says
-# so and leaves main as it was. Enabled with: git config core.hooksPath .githooks
-[ "$(git symbolic-ref --short -q HEAD)" = rewrite ] || exit 0
-live="$(git worktree list --porcelain | awk '/^worktree /{w=substr($0, 10)} $0 == "branch refs/heads/main" {print w}')"
-[ -n "$live" ] || exit 0
-# git runs hooks with this worktree's GIT_DIR and index: the live one has its own
-unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE
+# Keep ~ in step with the checkout: after each commit on main, links to files that were deleted go
+# and stow links new ones. Enabled with: git config core.hooksPath .githooks
+[ "$(git symbolic-ref --short -q HEAD)" = main ] || exit 0
+live="$(git rev-parse --show-toplevel)"
 
-if ! git -C "$live" merge --ff-only -q rewrite >/dev/null 2>&1; then
-	echo "post-commit: main not updated (it has diverged, or local changes in $live are in the way)" >&2
-	exit 0
-fi
-
-# links into the live checkout whose file is gone (stow keeps them), where stow puts links
+# links into the checkout whose file is gone (stow keeps them), where stow puts links
 {
 	find "$HOME" -maxdepth 1 -type l -print
 	find "$HOME/.config" "$HOME/.local" -xdev -path "$live" -prune -o -type l -print

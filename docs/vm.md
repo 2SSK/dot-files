@@ -15,7 +15,7 @@ at boot for a network that never comes (firewalld drops its DHCP request).
 ## vm
 
 ```sh
-vm create rice --desktop --share ~/dev/dot-files-rewrite:dot-files   # the Quickshell test VM
+vm create rice --desktop --share ~/dot-files:dot-files   # the Quickshell test VM
 vm create srv --image debian:13 --mem 2G                             # a server, serial console
 vm list                     # every VM: state, and IP while running
 vm start rice               # start it and open its window
@@ -54,7 +54,7 @@ Snapshots need the VM shut down: libvirt can't snapshot a running VM with shared
 
 ## Testing the dotfiles
 
-`vm create rice --desktop --share ~/dev/dot-files-rewrite:dot-files` gives an Arch VM with GRUB,
+`vm create rice --desktop --share ~/dot-files:dot-files` gives an Arch VM with GRUB,
 i3 and sway, and the worktree mounted read-only at `~/dot-files`, the same path as on the laptop.
 Edit on the laptop; the VM sees each change at once. In the VM, `cd ~/dot-files && stow .` links
 the configs. Take `vm snap rice clean` after the first boot, and revert to it whenever an
