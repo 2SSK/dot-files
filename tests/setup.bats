@@ -2,6 +2,8 @@
 # setup.sh -y --no-packages against a throwaway $HOME.
 
 setup() {
+	# never the real login screen or boot menu (system.sh shares their backgrounds and colours with us)
+	export DESKTOP_SDDM_DIR="$BATS_TEST_TMPDIR/no-sddm" DESKTOP_GRUB_DIR="$BATS_TEST_TMPDIR/no-grub"
 	REPO="$(cd "$BATS_TEST_DIRNAME/.." && pwd)"
 	export HOME="$BATS_TEST_TMPDIR/home"
 	unset XDG_STATE_HOME XDG_CONFIG_HOME XDG_CACHE_HOME XDG_DATA_HOME

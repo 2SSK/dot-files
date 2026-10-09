@@ -8,6 +8,8 @@ set -euo pipefail
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source-path=SCRIPTDIR/.. source=.local/lib/desktop/log.sh
 source "$here/../.local/lib/desktop/log.sh"
+# shellcheck source-path=SCRIPTDIR/.. source=.local/lib/desktop/screens.sh
+source "$here/../.local/lib/desktop/screens.sh"
 ((EUID != 0)) || die run_as_user msg='run it as your user: it reads your theme and calls sudo itself'
 src="$here/../system"
 root="${SYSTEM_ROOT:-}" # tests point this at a scratch directory
@@ -131,9 +133,7 @@ n = int.from_bytes(d[i:i + 4], "big"); print(d[i + 4:i + 4 + n].split(b"\0")[0].
 	local state="${XDG_STATE_HOME:-$HOME/.local/state}/desktop" wallpaper
 	wallpaper="$(readlink -f "$state/wallpaper" 2>/dev/null || true)"
 	[[ -f $wallpaper ]] || wallpaper="$here/../.local/share/desktop/wallpapers/cat-mocha-lavender_19.jpg"
-	magick "$wallpaper" -resize '1920x1080^' -gravity center -extent 1920x1080 -blur 0x24 \
-		\( -size 1920x1080 xc:"$bg" -alpha set -channel A -evaluate set 55% +channel \) -composite \
-		-quality 92 "$out/background.jpg"
+	boot_background "$wallpaper" "$bg" "$out/background.jpg"
 
 	# Selected entry: a rounded pill exactly one item tall, cut into left, middle and right only. Top
 	# and bottom pieces would be drawn outside the item and overlap its neighbours. 8-bit RGBA, the
@@ -190,10 +190,13 @@ grub_theme() { # install the theme and point GRUB at it; a no-op when nothing ch
 	trap "rm -rf '$tmp'" RETURN
 	grub_build "$tmp" "$mkfont"
 
-	local f
+	# the background is the user's: desktop-wallpaper redraws it when the wallpaper changes
+	local f owner=()
 	for f in "$tmp"/*; do
-		cmp -s "$f" "$dest/${f##*/}" 2>/dev/null && continue
-		sudo install -D -m 644 "$f" "$dest/${f##*/}"
+		owner=()
+		[[ ${f##*/} == background.jpg ]] && owner=(-o "$(id -un)" -g "$(id -gn)")
+		cmp -s "$f" "$dest/${f##*/}" 2>/dev/null && { ((${#owner[@]} == 0)) || [[ -O $dest/${f##*/} ]]; } && continue
+		sudo install -D -m 644 "${owner[@]}" "$f" "$dest/${f##*/}"
 		changed=1
 	done
 	for f in "$dest"/*; do # files an older version of the theme left behind
@@ -288,7 +291,7 @@ sddm_theme() { # the login screen in the desktop theme; theme set keeps its colo
 	tmp="$(mktemp --suffix=.jpg)"
 	# shellcheck disable=SC2064 # expand now: tmp is local
 	trap "rm -f '$tmp'" RETURN
-	magick "$wallpaper" -resize '2560x2560>' -strip -quality 90 "$tmp"
+	login_background "$wallpaper" "$tmp"
 	cmp -s "$tmp" "$root$shared/background.jpg" || { install -m 644 "$tmp" "$root$shared/background.jpg" && changed=1; }
 
 	for file in theme.conf background.jpg; do

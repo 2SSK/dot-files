@@ -2,6 +2,8 @@
 # desktop-doctor against a throwaway $HOME and a fake session.
 
 setup() {
+	# never the real login screen or boot menu (system.sh shares their backgrounds and colours with us)
+	export DESKTOP_SDDM_DIR="$BATS_TEST_TMPDIR/no-sddm" DESKTOP_GRUB_DIR="$BATS_TEST_TMPDIR/no-grub"
 	DOCTOR="$BATS_TEST_DIRNAME/../.local/bin/desktop-doctor"
 	REPO="$(cd "$BATS_TEST_DIRNAME/.." && pwd)"
 	export HOME="$BATS_TEST_TMPDIR/home" NO_COLOR=1

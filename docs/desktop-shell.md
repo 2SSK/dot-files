@@ -108,6 +108,13 @@ it shows three half-size blended frames (made in parallel with ImageMagick) befo
 on Wayland swww's fade when its daemon runs, else sway's background. `desktop-wallpaper restore`
 draws the remembered one at login.
 
+The login screen and the boot menu follow the wallpaper too. They can't read the home folder, so
+`packages/system.sh sddm` and `grub` give you their background files (sddm's in
+`/var/lib/desktop/sddm`, GRUB's `background.jpg` in its theme folder), and every wallpaper change
+redraws them without sudo: sddm shows it as it is, GRUB blurred and dimmed in the theme's
+background colour (so `theme set` redraws GRUB's too). `desktop-wallpaper screens` redraws both by
+hand.
+
 ## Settings window
 
 `$mod+Shift+s` (or `qs -c desktop ipc call settings toggle`): Bar (style, position, height,

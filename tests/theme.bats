@@ -2,6 +2,8 @@
 # theme: the central theme selector. Fake pkill, xrdb and tmux record what would be reloaded.
 
 setup() {
+	# never the real login screen or boot menu (system.sh shares their backgrounds and colours with us)
+	export DESKTOP_SDDM_DIR="$BATS_TEST_TMPDIR/no-sddm" DESKTOP_GRUB_DIR="$BATS_TEST_TMPDIR/no-grub"
 	THEME="$BATS_TEST_DIRNAME/../.local/bin/theme"
 	export XDG_STATE_HOME="$BATS_TEST_TMPDIR/state"
 	STATE="$XDG_STATE_HOME/desktop/theme"

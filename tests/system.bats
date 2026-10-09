@@ -2,6 +2,8 @@
 # packages/system.sh against a throwaway root, with fake sudo/systemctl/virsh/usermod/sysctl.
 
 setup() {
+	# never the real login screen or boot menu (system.sh shares their backgrounds and colours with us)
+	export DESKTOP_SDDM_DIR="$BATS_TEST_TMPDIR/no-sddm" DESKTOP_GRUB_DIR="$BATS_TEST_TMPDIR/no-grub"
 	SYSTEM="$BATS_TEST_DIRNAME/../packages/system.sh"
 	export SYSTEM_ROOT="$BATS_TEST_TMPDIR/root" CALLS="$BATS_TEST_TMPDIR/calls"
 	mkdir -p "$SYSTEM_ROOT" "$BATS_TEST_TMPDIR/bin"
@@ -131,6 +133,20 @@ grub_fakes() { # a palette, /etc/default/grub, and fake font/image/grub tools
 	run "$SYSTEM" grub
 	[[ $output == *"already in place"* ]]
 	[ ! -e "$CALLS" ]
+}
+
+@test "grub: the background is installed as the user's, so a new wallpaper can replace it" {
+	grub_fakes
+	# sudo records the installs it runs
+	# shellcheck disable=SC2016
+	printf '#!/bin/sh
+[ "$1" = install ] && echo "sudo $*" >>"$CALLS"
+"$@"
+' >"$BATS_TEST_TMPDIR/bin/sudo"
+	run "$SYSTEM" grub
+	[ "$status" -eq 0 ]
+	grep -q "^sudo install -D -m 644 -o $(id -un) -g $(id -gn) .*/background.jpg $SYSTEM_ROOT/boot/grub/themes/desktop/background.jpg" "$CALLS"
+	! grep -q "^sudo install -D -m 644 -o .*/theme.txt" "$CALLS"
 }
 
 @test "grub: a serial console stays, and the themed screen is added to it" {

@@ -2,14 +2,21 @@
 # Set the wallpaper with a short cross-fade, or put the last one back.
 #   desktop-wallpaper set <image>   fade from the current one to it, and remember it
 #   desktop-wallpaper restore       draw the remembered one (login), no fade
-# The choice is ~/.local/state/desktop/wallpaper, a link the lock screen, sddm and GRUB read too.
+#   desktop-wallpaper screens       redraw the login screen's and boot menu's backgrounds from it
+# The choice is ~/.local/state/desktop/wallpaper, a link the lock screen reads too. The login screen
+# (sddm) and boot menu (GRUB) can't read the home folder: packages/system.sh sddm and grub give us
+# a background file of theirs, which set (and theme, for GRUB's tint) redraws.
 # X11: feh, through a few half-size blended frames made in parallel (feh has no transitions).
 # Wayland: swww's own transition when its daemon runs, else sway's background.
 set -euo pipefail
 
 state="${XDG_STATE_HOME:-$HOME/.local/state}/desktop"
-fallback="$(dirname "$(readlink -f "$0")")/../share/desktop/wallpapers/cat-mocha-lavender_19.jpg"
+here="$(dirname "$(readlink -f "$0")")"
+fallback="$here/../share/desktop/wallpapers/cat-mocha-lavender_19.jpg"
 frames=(25 50 75)
+
+# shellcheck source-path=SCRIPTDIR/.. source=.local/lib/desktop/screens.sh
+source "$here/../lib/desktop/screens.sh"
 
 draw() { # <image>
 	if [[ -n ${WAYLAND_DISPLAY:-} ]]; then
@@ -39,7 +46,29 @@ fade() { # <from> <to>: blended frames between them, then the new one
 	done
 }
 
+# The login screen's background (sddm's shared folder is ours: a new file, then moved in place) and
+# the boot menu's (only GRUB's background file is ours: rewritten in place). Either is skipped when
+# system.sh hasn't set it up.
+screens() {
+	local wallpaper sddm="${DESKTOP_SDDM_DIR:-/var/lib/desktop/sddm}" grub="${DESKTOP_GRUB_DIR:-}" dir colour tmp
+	wallpaper="$(readlink -f "$state/wallpaper" 2>/dev/null || true)"
+	[[ -f $wallpaper ]] || wallpaper="$fallback"
+	if [[ -z $grub ]]; then
+		for dir in /boot/grub/themes/desktop /boot/grub2/themes/desktop; do [[ -d $dir ]] && grub=$dir && break; done
+	fi
+	if [[ -d $sddm && -w $sddm ]]; then
+		login_background "$wallpaper" "$sddm/.background.new.jpg" && mv -f "$sddm/.background.new.jpg" "$sddm/background.jpg" &
+	fi
+	if [[ -n $grub && -w $grub/background.jpg ]]; then
+		colour="$(sed -n 's/^ *"bg": "\(#[0-9a-fA-F]\{6\}\)".*/\1/p' "$state/theme/palette.json" 2>/dev/null | head -1)"
+		tmp="$(mktemp --suffix=.jpg)"
+		{ boot_background "$wallpaper" "${colour:-#1a1b26}" "$tmp" && cat "$tmp" >"$grub/background.jpg"; rm -f "$tmp"; } &
+	fi
+	wait
+}
+
 case ${1:-} in
+screens) screens ;;
 set)
 	[[ -f ${2:-} ]] || { echo "desktop-wallpaper: not an image: ${2:-}" >&2 && exit 2; }
 	mkdir -p "$state"
@@ -48,6 +77,7 @@ set)
 	draw "$2"
 	ln -sfn "$2" "$state/wallpaper"
 	date +%s >"$state/wallpaper-changed"
+	screens
 	;;
 restore)
 	current="$(readlink -f "$state/wallpaper" 2>/dev/null || true)"
@@ -55,7 +85,7 @@ restore)
 	draw "$current"
 	;;
 *)
-	echo "usage: desktop-wallpaper set <image> | restore" >&2
+	echo "usage: desktop-wallpaper set <image> | restore | screens" >&2
 	exit 2
 	;;
 esac
