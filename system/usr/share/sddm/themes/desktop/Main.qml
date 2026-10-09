@@ -8,7 +8,8 @@ Rectangle {
 	id: root
 
 	property int session: sessionModel.lastIndex
-	readonly property string user: userModel.lastUser
+	// The last user, else the first one (a fresh install has no last user yet)
+	readonly property string user: userModel.lastUser || (users.count > 0 ? users.itemAt(0).name : "")
 
 	function login() {
 		sddm.login(root.user, password.text, root.session);
@@ -114,6 +115,7 @@ Rectangle {
 				font.family: config.font
 				font.pixelSize: 16
 				focus: true
+				cursorVisible: activeFocus && text.length > 0
 				onTextEdited: error.visible = false
 				Keys.onReturnPressed: root.login()
 				Keys.onEnterPressed: root.login()
@@ -151,7 +153,17 @@ Rectangle {
 		}
 	}
 
-	// Session names, read through a hidden repeater: sessionModel only exposes them to delegates
+	// User and session names, read through hidden repeaters: the models only expose them to delegates
+	Repeater {
+		id: users
+
+		model: userModel
+
+		delegate: Item {
+			required property string name
+		}
+	}
+
 	Repeater {
 		id: sessions
 

@@ -208,7 +208,11 @@ install_if_changed() { # <file> <destination>: install as root when missing or d
 
 sddm_theme() { # the login screen in the desktop theme; run again after theme set to follow it
 	local state="${XDG_STATE_HOME:-$HOME/.local/state}/desktop" dir=usr/share/sddm/themes/desktop
-	[[ -f $state/theme/sddm-theme.conf ]] || die no_theme msg='run: theme set <family>'
+	local family=tokyonight mode=dark
+	# shellcheck disable=SC1091 # family=/mode= of the current theme, written by theme_render.py
+	[[ -r $state/theme/current ]] && source "$state/theme/current"
+	# a render from before this template existed lacks it; an unchanged render is a no-op
+	python3 "$here/../.local/lib/desktop/theme_render.py" render "$family" "$mode"
 	put $dir/Main.qml
 	put $dir/metadata.desktop
 	install_if_changed "$state/theme/sddm-theme.conf" "$root/$dir/theme.conf"
