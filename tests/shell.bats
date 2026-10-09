@@ -110,16 +110,15 @@ setup() {
 }
 
 @test "helpers from the old config are loaded in both shells" {
-	run zsh -i -c 'whence -w mkcd extract killport calc dirsize backup path hgrep sysinfo myip s'
+	run zsh -i -c 'whence -w mkcd extract killport myip s'
 	[ "$status" -eq 0 ]
-	run bash -i -c 'type -t mkcd extract killport calc myip && alias .. off ports' 2>&1
+	run bash -i -c 'type -t mkcd extract killport myip && alias .. off ports' 2>&1
 	[ "$status" -eq 0 ]
 }
 
-@test "mkcd creates a directory and enters it; calc does arithmetic" {
-	run zsh -i -c "mkcd '$BATS_TEST_TMPDIR/a/b' && pwd && calc '7 / 2'"
-	[ "${lines[0]}" = "$BATS_TEST_TMPDIR/a/b" ]
-	[ "${lines[1]}" = 3.50 ]
+@test "mkcd creates a directory and enters it" {
+	run zsh -i -c "mkcd '$BATS_TEST_TMPDIR/a/b' && pwd"
+	[ "$output" = "$BATS_TEST_TMPDIR/a/b" ]
 }
 
 @test "extract unpacks by extension and refuses what it doesn't know" {

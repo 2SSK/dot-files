@@ -87,14 +87,6 @@ s() {
 
 mkcd() { mkdir -p -- "$1" && cd -- "$1" || return; }
 
-# backup <file>: a copy beside it, stamped with the time
-backup() {
-	[[ -f $1 ]] || { echo "not a file: $1" >&2 && return 1; }
-	local copy
-	copy="$1.backup.$(date +%Y%m%d_%H%M%S)"
-	cp -- "$1" "$copy" && echo "backup: $copy"
-}
-
 # extract <archive>: unpacks into the current directory, picking the tool by extension
 extract() {
 	[[ -f $1 ]] || { echo "not a file: $1" >&2 && return 1; }
@@ -111,11 +103,6 @@ extract() {
 	esac
 }
 
-hgrep() { fc -ln 1 | grep -i -- "$1"; }
-dirsize() { du -sh -- "${1:-.}" 2>/dev/null | cut -f1; }
-calc() { echo "scale=2; $*" | bc -l; }
-path() { tr ':' '\n' <<<"$PATH" | nl; }
-
 # killport <port>: stop whatever listens on a TCP port
 killport() {
 	[[ -n $1 ]] || { echo 'usage: killport <port>' >&2 && return 2; }
@@ -126,13 +113,4 @@ killport() {
 myip() {
 	ip -4 route get 1.1.1.1 | awk '{ for (i = 1; i < NF; i++) if ($i == "src") print "Local:    " $(i + 1) }'
 	printf 'External: %s\n' "$(curl -fsS --max-time 5 ifconfig.me)"
-}
-
-sysinfo() {
-	echo "Host:    $(uname -n)"
-	echo "Kernel:  $(uname -r)"
-	echo "Uptime:  $(uptime -p)"
-	echo "Memory:  $(free -h | awk '/^Mem:/ {print $3 "/" $2}')"
-	echo "Load:   $(cut -d' ' -f1-3 /proc/loadavg)"
-	echo "Disk:    $(df -h / | awk 'NR==2 {print $3 "/" $2 " (" $5 ")"}')"
 }

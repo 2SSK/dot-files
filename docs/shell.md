@@ -78,25 +78,23 @@ history expansions like `!!` are shown for confirmation before they run.
 | `y [dir]` | yazi file manager; quitting leaves the shell in the directory you were browsing |
 | `mkcd <dir>` | Create a directory and enter it |
 | `extract <archive>` | Unpack tar.*, zip, rar, 7z, gz, bz2, xz, zst into the current directory |
-| `backup <file>` | Copy beside it, stamped with the time |
 | `killport <port>` | Stop whatever listens on a TCP port |
-| `calc <expr>`, `dirsize [dir]`, `path`, `hgrep <text>`, `sysinfo` | Arithmetic (2 decimals), a directory's size, PATH one per line, search history, host summary |
 
 ## Aliases
 
 | Group | Aliases |
 | --- | --- |
-| Files | `ls`, `ll` (long, with git status), `la` (all), `lt`/`tree` (tree, 2/3 levels), `lsa` (all, with sizes): [eza](https://eza.rocks) with icons, directories first; plain coloured `ls` when eza is missing. `cp`, `mv`, `rm` ask before overwriting; `mkdir` creates parents |
+| Files | `ls`, `ll` (long, with git status), `la` (all), `lt` (tree, 2 levels): [eza](https://eza.rocks) with icons, directories first; plain coloured `ls` when eza is missing. `cp`, `mv`, `rm` ask before overwriting; `mkdir` creates parents |
 | Colour | `grep`, `diff`, `ip`, `dir`, `vdir` use their built-in colours |
 | Git | `gs` status, `gd` diff, `gds` staged diff, `ga` add, `gap` add patch, `gc` commit, `gp` push, `gu` pull, `gb` branch, `gsw` switch, `gm` merge, `grb` rebase, `gr` reset, `gcl` clone, `gl` log graph |
 | Docker | `dco` compose, `dps` ps, `dpa` ps -a, `dx` exec -it |
 | Tools | `vi` nvim, `t` tmux, `lg` lazygit, `ldc` lazydocker, `ff` fastfetch, `top` btop |
 | Packages (yay) | `u` upgrade everything, `i` install, `r` remove with unneeded deps, `s` fuzzy-search repos and AUR with a preview and install the picks |
 | Clipboard | `c` copy, `v` paste: wl-clipboard on Wayland, xclip on X11 |
-| Navigation | `..`, `...`, `.3`, `.4`, `.5` up; `g.` ~/.config, `gD` ~/Documents, `gS` ~/Pictures/Screenshots |
-| System | `df`, `du`, `free` human-readable; `mem`, `cpu` top 5 processes; `psg` find a process; `off` power off |
-| Network | `myip` local and external address, `ports` listening sockets, `listening` open connections; `status`, `list`, `connect`, `disconnect` (nmcli) |
-| Shell | `cl` clear, `e` exit, `rel` restart the shell, `rmf` rm -rf, `gi` git init, `di` docker image, `nrd` npm run dev, `ys`/`yd` yarn start/dev |
+| Navigation | `..`, `...` up; `g.` ~/.config, `gD` ~/Documents, `gS` ~/Pictures/Screenshots |
+| System | `df`, `du`, `free` human-readable; `mem`, `cpu` top 5 processes; `off` power off |
+| Network | `myip` local and external address, `ports` listening sockets; `status`, `list`, `connect`, `disconnect` (nmcli) |
+| Shell | `cl` clear, `e` exit, `rel` restart the shell |
 | Fun | `weather`, `tc` tty-clock, `sl`, `p` pipes.sh, `cb` cbonsai, `aq` asciiquarium, `cm` cmatrix |
 
 ## Colours
