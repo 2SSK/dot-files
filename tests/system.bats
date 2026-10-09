@@ -191,3 +191,16 @@ sddm_fakes() { # a rendered theme, and a fake magick that copies the image
 	run "$SYSTEM" sddm
 	[[ $output == *"sddm: already in place"* ]]
 }
+
+@test "lid: closing it only locks, and logind rereads its config without a restart" {
+	run "$SYSTEM" lid
+	[ "$status" -eq 0 ]
+	grep -qx 'HandleLidSwitch=lock' "$SYSTEM_ROOT/etc/systemd/logind.conf.d/10-lid.conf"
+	grep -qx 'HandleLidSwitchExternalPower=lock' "$SYSTEM_ROOT/etc/systemd/logind.conf.d/10-lid.conf"
+	grep -q 'systemctl kill --signal=HUP systemd-logind.service' "$CALLS"
+	! grep -q 'restart' "$CALLS"
+	rm "$CALLS"
+	run "$SYSTEM" lid
+	[[ $output == *"lid: already in place"* ]]
+	[ ! -e "$CALLS" ]
+}

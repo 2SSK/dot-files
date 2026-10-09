@@ -5,7 +5,7 @@ import Quickshell
 import Quickshell.I3
 
 // Shell state: whether the bar is shown (or peeking while hidden), the OSD card (a level or lock
-// that just changed) and the power menu the island grows into. While the power menu is open i3 is in mode "power", which sends its keys back over IPC
+// that just changed) and the power menu. While the power menu is open i3 is in mode "power", which sends its keys back over IPC
 // (keys.conf): an X11 popup can't take the keyboard itself.
 Singleton {
 	id: root
@@ -20,12 +20,14 @@ Singleton {
 	property int selected: 0
 	property int armed: -1 // the action waiting for its confirming press
 
+	// Lock keeps the laptop running (closing the lid only locks too); nothing hibernates. Actions
+	// that end the session ask for a second press while power.confirm is on.
 	readonly property var actions: [
-		{ id: "suspend", glyph: "󰒲", label: "Suspend" },
-		{ id: "logout", glyph: "󰍃", label: "Log out" },
-		{ id: "reboot", glyph: "󰜉", label: "Reboot" },
-		{ id: "poweroff", glyph: "󰐥", label: "Shut down" },
-		{ id: "firmware", glyph: "󰍛", label: "Firmware" }
+		{ id: "lock", glyph: "\u{F0341}", label: "Lock", confirm: false },
+		{ id: "logout", glyph: "\u{F0343}", label: "Log Out", confirm: true },
+		{ id: "suspend", glyph: "\u{F03E4}", label: "Lock & Suspend", confirm: false },
+		{ id: "reboot", glyph: "\u{F0709}", label: "Reboot", confirm: true },
+		{ id: "poweroff", glyph: "\u{F0425}", label: "Shut Down", confirm: true }
 	]
 
 	function osd(kind: string, value: real, muted: bool): void {
@@ -68,19 +70,33 @@ Singleton {
 		if (index < 0 || index >= actions.length)
 			return;
 		selected = index;
-		if (Config.power.confirm && armed !== index) {
+		if (Config.power.confirm && actions[index].confirm && armed !== index) {
 			armed = index;
 			armTimer.restart();
 			return;
 		}
-		const id = actions[index].id;
 		closePower();
+		pending = actions[index].id;
+		run.restart(); // once the menu has faded, so the lock screen's blur doesn't catch it
+	}
+
+	property string pending: ""
+
+	Timer {
+		id: run
+
+		interval: 280
+		onTriggered: root.execute(root.pending)
+	}
+
+	function execute(id: string): void {
+		// the locker (desktop-lock, run by xss-lock on X11) locks for lock-session and before sleep
 		Quickshell.execDetached({
-			suspend: ["systemctl", "suspend"],
+			lock: ["loginctl", "lock-session"],
 			logout: Quickshell.env("SWAYSOCK") ? ["swaymsg", "exit"] : ["i3-msg", "exit"],
+			suspend: ["systemctl", "suspend"],
 			reboot: ["systemctl", "reboot"],
-			poweroff: ["systemctl", "poweroff"],
-			firmware: ["systemctl", "reboot", "--firmware-setup"]
+			poweroff: ["systemctl", "poweroff"]
 		}[id]);
 	}
 

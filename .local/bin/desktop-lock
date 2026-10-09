@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Lock the screen in the desktop theme and wait until it's unlocked. xss-lock runs it (i3's
+# autostart) for `loginctl lock-session`, a closed lid and before sleep. X11: i3lock-color over a
+# blurred screen, with a clock; plain i3lock gets the background colour. Wayland: swaylock.
+set -euo pipefail
+
+palette="${XDG_STATE_HOME:-$HOME/.local/state}/desktop/theme/palette.json"
+colour() { # <ui role>: rrggbb from the theme, with a fallback
+	python3 -c 'import json, sys; print(json.load(open(sys.argv[1]))["ui"][sys.argv[2]].lstrip("#"))' "$palette" "$1" 2>/dev/null || echo "$2"
+}
+bg="$(colour bg 1a1b26)" fg="$(colour fg c0caf5)" primary="$(colour primary 7aa2f7)" error="$(colour error f7768e)"
+
+if [[ -n ${WAYLAND_DISPLAY:-} ]]; then
+	exec swaylock --color "$bg" --inside-color "${bg}cc" --ring-color "$primary" --key-hl-color "$fg" \
+		--ring-wrong-color "$error" --text-color "$fg" --indicator-radius 80
+fi
+
+if i3lock --version 2>&1 | grep -q 'i3lock-color\|\.c\.'; then
+	exec i3lock --nofork --ignore-empty-password --show-failed-attempts --blur 8 --color "$bg" \
+		--clock --time-str '%H:%M' --date-str '%A, %d %B' --time-size 72 --date-size 18 \
+		--time-font Inter --date-font Inter --layout-font Inter --verif-font Inter --wrong-font Inter \
+		--time-color "${fg}ff" --date-color "${fg}cc" --time-pos 'ix:iy-140' --date-pos 'tx:ty+36' \
+		--radius 60 --ring-width 6 --inside-color "${bg}00" --ring-color "${fg}22" --line-uses-inside \
+		--keyhl-color "${primary}ff" --bshl-color "${error}ff" --separator-color 00000000 \
+		--insidever-color "${bg}00" --ringver-color "${primary}ff" --insidewrong-color "${bg}00" \
+		--ringwrong-color "${error}ff" --verif-text '' --wrong-text '' --noinput-text ''
+fi
+exec i3lock --nofork --ignore-empty-password --show-failed-attempts --color "$bg"

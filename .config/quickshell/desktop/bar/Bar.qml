@@ -4,7 +4,7 @@ import qs
 
 // One screen's bar, on any edge. Island: a rounded pill floating off the edge, waybar-like. Static:
 // the whole edge, polybar-like. i3 reserves a dock's full window, so the window is only as big as
-// the bar; what the island grows into (OSD, power menu) is the Expansion popup over the windows.
+// the bar; the OSD card and the power menu are popups over the windows.
 // Hidden (Panel.barShown), the bar slides off the edge and the window shrinks to a pixel, so i3
 // gives the room back while the popups still have a window to hang from; the pointer at that edge
 // brings the bar back over the windows for a moment (Peek).
@@ -109,7 +109,7 @@ PanelWindow {
 		}
 	}
 
-	Expansion {
+	PowerMenu {
 		bar: bar
 		island: shape
 	}

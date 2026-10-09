@@ -1,10 +1,8 @@
 import QtQuick
 import qs
 
-// Opens the power menu; red, on a red capsule.
+// Opens the power menu; red.
 Glyph {
-	readonly property color capsule: Qt.alpha(Theme.error, 0.16)
-
 	text: "\u{F0425}" // md-power
 	color: Theme.error
 	font.pixelSize: Theme.iconSize

@@ -3,7 +3,7 @@ import Quickshell
 import qs
 import qs.services
 
-// Screen recording: a click starts it; while recording the glyph turns red, pulses and shows the time.
+// Screen recording: a click starts it; while recording the camera turns red, pulses and shows the time.
 Item {
 	id: root
 
@@ -29,7 +29,7 @@ Item {
 		Glyph {
 			id: dot
 
-			text: Recorder.recording ? "\u{F044B}" : "\u{F0EC3}" // md-record-rec, md-record-circle-outline
+			text: Recorder.recording ? "\u{F0567}" : "\u{EAD9}" // md-video, cod-device-camera-video
 			color: Recorder.recording ? Theme.error : Theme.fg
 			font.pixelSize: Theme.iconSize
 
