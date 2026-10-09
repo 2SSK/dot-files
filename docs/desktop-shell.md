@@ -136,6 +136,10 @@ or focusing another window closes it. Changes
 apply at once and are written to `shell.json`, through the stow link into the repo, so they show up
 in `git diff`; Quickshell writes it with sorted keys and 4-space indents, as it's kept.
 
+The **Keys** page lists every key binding in words, read from i3's own key config (so it can't
+drift from what the keys do), grouped and searchable, with the keys inside the shell's panels at
+the end. `$mod+Shift+/` opens it.
+
 ## Bar
 
 | Setting (`bar.*`) | Values |
@@ -167,6 +171,7 @@ Hidden with `$mod+Shift+b`, the bar comes back over the windows while the pointe
 | `$mod+Shift+p` | wallpapers |
 | `$mod+d`, `$mod+;`, `$mod+Shift+f`, `$mod+Shift+y` | the launcher: apps, emoji, files, themes |
 | Alt+Tab (hold Alt) | window switcher |
+| `$mod+Shift+/` (Super+?) | every key binding, in words (Settings → Keys) |
 | `$mod+Shift+t` / `$mod+Shift+n` | todo / notes |
 | `$mod+p` | power menu (again, Escape or a click beside it closes): arrows or 1–5 pick, Enter runs |
 
@@ -201,5 +206,5 @@ press while `power.confirm` is on. Nothing hibernates.
 ## IPC
 
 `qs -c desktop ipc call <target> <function>`: `audio up|down|mute|mic`, `brightness up|down`,
-`bar toggle`, `recorder toggle`, `notifications toggle|dnd|clear`, `settings toggle`, `control toggle|open <page>|page <page>|close`, `clipboard toggle`, `wallpaper toggle|shuffle`, `launcher toggle <apps|emoji|files|themes>|close`, `switcher next|prev|commit|cancel`, `capture toggle|shot <region|window|screen>|record <region|window|screen>|stop`, `alarm stop|snooze`, `power open|toggle|close|next|prev|activate|pick <n>`,
+`bar toggle`, `recorder toggle`, `notifications toggle|dnd|clear`, `settings toggle|page <bar|appearance|notifications|levels|power|keys>`, `control toggle|open <page>|page <page>|close`, `clipboard toggle`, `wallpaper toggle|shuffle`, `launcher toggle <apps|emoji|files|themes>|close`, `switcher next|prev|commit|cancel|list`, `capture toggle|shot <region|window|screen>|record <region|window|screen>|stop`, `alarm stop|snooze`, `power open|toggle|close|next|prev|activate|pick <n>`,
 `theme reload`.
