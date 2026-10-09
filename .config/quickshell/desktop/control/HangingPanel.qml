@@ -20,6 +20,7 @@ FloatingWindow {
 	property int panelHeight: 640
 	default property alias content: inner.data
 	signal dismissed
+	signal keyPressed(var event) // keys nothing inside took (Escape closes)
 
 	readonly property ShellScreen screen: Quickshell.screens.find(s => s.name === I3.focusedMonitor?.name) ?? Quickshell.screens[0]
 	readonly property bool below: Config.position !== "bottom" // hangs below the bar, else above it
@@ -146,6 +147,7 @@ FloatingWindow {
 				anchors.fill: parent
 				focus: true
 				Keys.onEscapePressed: root.dismissed()
+				Keys.onPressed: event => root.keyPressed(event)
 			}
 		}
 	}

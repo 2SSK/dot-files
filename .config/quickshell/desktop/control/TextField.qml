@@ -33,6 +33,7 @@ Rectangle {
 		font.family: Theme.fontSans
 		font.pixelSize: 14
 		clip: true
+		activeFocusOnTab: true
 		onAccepted: root.accepted(text)
 	}
 

@@ -4,7 +4,8 @@ import qs
 import qs.services
 import qs.widgets
 
-// The current player: cover, title, artist, progress, and previous / play-pause / next.
+// The current player: cover, title, artist, progress, and previous / play-pause / next; with more
+// than one player, their names on top to switch between them.
 Rectangle {
 	id: root
 
@@ -15,7 +16,7 @@ Rectangle {
 		return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 	}
 
-	height: 116
+	height: 116 + (switcher.visible ? 40 : 0)
 	radius: 16
 	color: Qt.alpha(Theme.surface, 0.8)
 
@@ -28,12 +29,72 @@ Rectangle {
 		font.pixelSize: 13
 	}
 
+	// the players, when there are several
+	Row {
+		id: switcher
+
+		visible: Media.players.length > 1
+		x: 14
+		y: 12
+		spacing: 6
+
+		Repeater {
+			model: Media.players
+
+			delegate: Rectangle {
+				id: chip
+
+				required property var modelData
+				readonly property bool on: Media.player === modelData
+
+				width: chipLabel.implicitWidth + (modelData.isPlaying ? 38 : 22)
+				height: 26
+				radius: 13
+				color: on ? Theme.primary : chipHover.hovered ? Qt.alpha(Theme.fg, 0.1) : Qt.alpha(Theme.overlay, 0.8)
+
+				Row {
+					anchors.centerIn: parent
+					spacing: 5
+
+					Glyph {
+						anchors.verticalCenter: parent.verticalCenter
+						visible: chip.modelData.isPlaying
+						glyph: Icons.g("music")
+						font.pixelSize: 11
+						color: chip.on ? Theme.onPrimary : Theme.primary
+					}
+
+					Text {
+						id: chipLabel
+
+						anchors.verticalCenter: parent.verticalCenter
+						text: Media.name(chip.modelData)
+						color: chip.on ? Theme.onPrimary : Theme.fg
+						font.family: Theme.fontSans
+						font.pixelSize: 12
+						font.weight: Font.Medium
+					}
+				}
+
+				HoverHandler {
+					id: chipHover
+				}
+
+				MouseArea {
+					anchors.fill: parent
+					cursorShape: Qt.PointingHandCursor
+					onClicked: Media.chosen = chip.modelData.dbusName
+				}
+			}
+		}
+	}
+
 	Rectangle {
 		id: cover
 
 		visible: root.player !== null
 		x: 14
-		anchors.verticalCenter: parent.verticalCenter
+		y: (switcher.visible ? 40 : 0) + (116 - height) / 2
 		width: 88
 		height: 88
 		radius: 12
@@ -64,7 +125,7 @@ Rectangle {
 		anchors.leftMargin: 14
 		anchors.right: parent.right
 		anchors.rightMargin: 14
-		anchors.verticalCenter: parent.verticalCenter
+		anchors.verticalCenter: cover.verticalCenter
 		spacing: 6
 
 		Text {

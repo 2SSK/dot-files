@@ -20,14 +20,23 @@ Singleton {
 	property bool clipboardShown: false // lives on while it slides back into the bar
 	// the open panel hanging from the bar (its width; 0 for none): the bar opens its outline there
 	readonly property int hangingWidth: controlOpen ? controlWidth : clipboardOpen ? 560 : 0
+	readonly property int hangingHeight: controlOpen ? controlHeight : clipboardOpen ? 560 : 0
 
+	// a panel's window comes a moment after its blur backdrop (Bar), so i3 stacks it above
 	onClipboardOpenChanged: {
 		if (clipboardOpen) {
 			controlOpen = false;
-			clipboardShown = true;
+			showClipboard.restart();
 		} else {
 			hideClipboard.restart();
 		}
+	}
+
+	Timer {
+		id: showClipboard
+
+		interval: 60
+		onTriggered: root.clipboardShown = root.clipboardOpen
 	}
 
 	Timer {
@@ -50,10 +59,17 @@ Singleton {
 	onControlOpenChanged: {
 		if (controlOpen) {
 			clipboardOpen = false;
-			controlShown = true;
+			showControl.restart();
 		} else {
 			hideControl.restart();
 		}
+	}
+
+	Timer {
+		id: showControl
+
+		interval: 60
+		onTriggered: root.controlShown = root.controlOpen
 	}
 
 	Timer {

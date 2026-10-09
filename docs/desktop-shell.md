@@ -6,6 +6,12 @@ Colours come from the desktop theme (see [theme.md](theme.md)); icons are Tabler
 names in `Icons.qml`), apps' own icons come from the GTK icon theme (Tela Circle); settings from
 `~/.config/desktop/shell.json`, stowed from the repo, which applies as soon as it's saved.
 
+## Blur
+
+picom blurs behind the shell, inside the shapes its windows take: the bar's pill, the level card,
+the notification popups and, behind the control center and the clipboard, an empty backdrop window
+that grows with their slide. Full-screen windows that only catch clicks are left out.
+
 ## Control center
 
 A panel that drops out of the middle of the bar, in its colour: an icon sidebar of pages, a header with
@@ -13,10 +19,10 @@ the page's title, its buttons and ✕, then the page. The bar's widgets open the
 
 | Page | Opened by | What's there |
 | --- | --- | --- |
-| Home | `$mod+c` | quick toggles (Wi-Fi, Bluetooth, Do Not Disturb, microphone, recording, bar), volume / mic / brightness, the media player |
-| Calendar | the clock | a month; ‹ › and Today |
+| Home | `$mod+c` | quick toggles (Wi-Fi, Bluetooth, Do Not Disturb, microphone, recording, bar), volume / mic / brightness, the media player (any MPRIS player, browsers included; a switcher when several play; Space plays or pauses, ← → skip) |
+| Calendar | the clock | a month (‹ ›); a click picks a day, whose events show below; add one with an optional time ("09:30": a reminder that notifies when due); kept in `~/.local/share/desktop/events.json` |
 | System monitor | cpu / mem / temp | CPU, memory and temperature with two minutes of history, disk, uptime, load |
-| Notifications | the bell, `$mod+n` | the history by day; Do Not Disturb and clear in the header |
+| Notifications | the bell, `$mod+n` | the history by day, Clear all; Do Not Disturb in the header |
 | Wi-Fi | the Wi-Fi icon | networks by signal: connect (a password for new secured ones), disconnect, forget; scans while open |
 | Bluetooth | the Bluetooth icon | devices: pair, connect, disconnect, forget, battery; the header scans |
 | Todo | the checklist icon, `$mod+Shift+t` | tasks with a priority (H/M/L, a click on it changes it), grouped high to low, done ones last; drag a task by its handle to reorder it (among another priority's tasks it takes theirs); kept in `~/.local/share/desktop/todo.json` |

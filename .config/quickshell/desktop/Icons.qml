@@ -73,7 +73,8 @@ Singleton {
 			"x": 0xeb55,
 			"zzz": 0xf228
 		})
-	// outline name -> its -filled version's codepoint
+	// outline name -> its -filled version's codepoint (home and microphone left out: their filled
+	// glyphs are empty in this font)
 	readonly property var filledCodes: ({
 			"adjustments": 0xf6ec,
 			"app-window": 0xf71a,
@@ -87,10 +88,8 @@ Singleton {
 			"brightness-up": 0xfb24,
 			"calendar": 0xfb27,
 			"gauge": 0xfc2c,
-			"home": 0xfe2b,
 			"layout-grid": 0xfe1c,
 			"lock": 0xfe15,
-			"microphone": 0xfe0f,
 			"pin": 0xf68d,
 			"player-pause": 0xf690,
 			"player-play": 0xf691,

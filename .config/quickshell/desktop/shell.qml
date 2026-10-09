@@ -13,7 +13,7 @@ import qs.services
 
 ShellRoot {
 	// services that watch on their own, started with the shell
-	readonly property var watchers: [Locks, Recorder, Notifications, Clipboard]
+	readonly property var watchers: [Locks, Recorder, Notifications, Clipboard, Events]
 
 	Variants {
 		model: Quickshell.screens

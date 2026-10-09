@@ -3,10 +3,13 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell
 import qs
+import qs.services
 import qs.widgets
 
-// A month: arrows go back and forward, Today returns; today is filled with the accent, days of the
-// neighbouring months are faint. Weeks start on the locale's first day.
+// A month: ‹ › go back and forward. Today is filled with the accent, the chosen day ringed, days of
+// the neighbouring months faint, a dot under days with events. Below: the chosen day's events, and
+// a line to add one ("09:30" makes it a reminder that notifies when due). Weeks start on the
+// locale's first day.
 Column {
 	id: root
 
@@ -21,6 +24,7 @@ Column {
 
 	property int year: clock.date.getFullYear()
 	property int month: clock.date.getMonth() // 0–11
+	property date chosen: clock.date
 	readonly property int first: Qt.locale().firstDayOfWeek % 7 // 0 = Sunday
 	// the 42 days on show, from the start of the week holding the 1st
 	readonly property var days: {
@@ -28,6 +32,7 @@ Column {
 		start.setDate(1 - (start.getDay() - first + 7) % 7);
 		return Array.from({ length: 42 }, (_, i) => new Date(start.getFullYear(), start.getMonth(), start.getDate() + i));
 	}
+	readonly property var dayEvents: { Events.events; return Events.on(chosen); }
 
 	function shift(months: int): void {
 		const next = new Date(year, month + months, 1);
@@ -35,7 +40,7 @@ Column {
 		month = next.getMonth();
 	}
 
-	spacing: 14
+	spacing: 12
 
 	Item {
 		width: parent.width
@@ -56,41 +61,32 @@ Column {
 			spacing: 6
 
 			Repeater {
-				model: [
-					{ glyph: Icons.g("chevron-left"), act: () => root.shift(-1) },
-					{ text: "Today", act: () => { root.year = clock.date.getFullYear(); root.month = clock.date.getMonth(); } },
-					{ glyph: Icons.g("chevron-right"), act: () => root.shift(1) }
-				]
+				model: [{ glyph: Icons.g("chevron-left"), step: -1 }, { glyph: Icons.g("chevron-right"), step: 1 }]
 
 				delegate: Rectangle {
-					id: button
+					id: arrow
 
 					required property var modelData
 
-					width: modelData.text ? label.implicitWidth + 22 : 32
+					width: 32
 					height: 32
 					radius: 10
-					color: buttonHover.hovered ? Qt.alpha(Theme.fg, 0.1) : Qt.alpha(Theme.surface, 0.8)
+					color: arrowHover.hovered ? Qt.alpha(Theme.fg, 0.1) : Qt.alpha(Theme.surface, 0.8)
 
-					Text {
-						id: label
-
+					Glyph {
 						anchors.centerIn: parent
-						text: button.modelData.text ?? button.modelData.glyph
-						color: Theme.fg
-						font.family: button.modelData.text ? Theme.fontSans : Icons.family
-						font.pixelSize: 13
-						font.weight: Font.Medium
+						glyph: arrow.modelData.glyph
+						font.pixelSize: 16
 					}
 
 					HoverHandler {
-						id: buttonHover
+						id: arrowHover
 					}
 
 					MouseArea {
 						anchors.fill: parent
 						cursorShape: Qt.PointingHandCursor
-						onClicked: button.modelData.act()
+						onClicked: root.shift(arrow.modelData.step)
 					}
 				}
 			}
@@ -106,13 +102,12 @@ Column {
 		Grid {
 			id: grid
 
+			readonly property real cell: (parent.width - 24) / 7
+
 			x: 12
 			y: 12
 			columns: 7
-			columnSpacing: 0
-			rowSpacing: 4
-
-			readonly property real cell: (parent.width - 24) / 7
+			rowSpacing: 2
 
 			// weekday names
 			Repeater {
@@ -122,7 +117,7 @@ Column {
 					required property int index
 
 					width: grid.cell
-					height: 28
+					height: 26
 					horizontalAlignment: Text.AlignHCenter
 					verticalAlignment: Text.AlignVCenter
 					text: Qt.locale().dayName((root.first + index) % 7, Locale.ShortFormat).slice(0, 2)
@@ -141,17 +136,21 @@ Column {
 
 					required property var modelData
 					readonly property bool today: modelData.toDateString() === clock.date.toDateString()
+					readonly property bool picked: modelData.toDateString() === root.chosen.toDateString()
 					readonly property bool inMonth: modelData.getMonth() === root.month
+					readonly property bool busy: { Events.events; return Events.has(modelData); }
 
 					width: grid.cell
-					height: 38
+					height: 36
 
 					Rectangle {
 						anchors.centerIn: parent
-						width: 34
-						height: 34
-						radius: 17
-						color: day.today ? Theme.primary : "transparent"
+						width: 32
+						height: 32
+						radius: 16
+						color: day.today ? Theme.primary : dayHover.hovered ? Qt.alpha(Theme.fg, 0.08) : "transparent"
+						border.width: day.picked && !day.today ? 1 : 0
+						border.color: Theme.primary
 					}
 
 					Text {
@@ -163,15 +162,136 @@ Column {
 						font.weight: day.today ? Font.Bold : Font.Normal
 						font.features: ({ tnum: 1 })
 					}
+
+					// has events
+					Rectangle {
+						visible: day.busy
+						anchors.horizontalCenter: parent.horizontalCenter
+						anchors.bottom: parent.bottom
+						anchors.bottomMargin: 1
+						width: 4
+						height: 4
+						radius: 2
+						color: day.today ? Theme.onPrimary : Theme.primary
+					}
+
+					HoverHandler {
+						id: dayHover
+					}
+
+					MouseArea {
+						anchors.fill: parent
+						cursorShape: Qt.PointingHandCursor
+						onClicked: {
+							root.chosen = day.modelData;
+							if (!day.inMonth)
+								root.shift(day.modelData < new Date(root.year, root.month, 1) ? -1 : 1);
+						}
+					}
 				}
 			}
 		}
 	}
 
+	// the chosen day's events
 	Text {
-		text: Qt.formatDateTime(clock.date, "dddd, d MMMM yyyy")
-		color: Theme.fgMuted
+		text: Qt.formatDate(root.chosen, "dddd, d MMMM")
+		color: Theme.fg
 		font.family: Theme.fontSans
-		font.pixelSize: 13
+		font.pixelSize: 14
+		font.weight: Font.DemiBold
+	}
+
+	Repeater {
+		model: root.dayEvents
+
+		delegate: Rectangle {
+			id: event
+
+			required property var modelData
+
+			width: root.width
+			height: 44
+			radius: 11
+			color: eventHover.hovered ? Qt.alpha(Theme.overlay, 0.9) : Qt.alpha(Theme.surface, 0.8)
+
+			HoverHandler {
+				id: eventHover
+			}
+
+			Row {
+				x: 14
+				anchors.verticalCenter: parent.verticalCenter
+				spacing: 10
+
+				Glyph {
+					anchors.verticalCenter: parent.verticalCenter
+					glyph: Icons.g(event.modelData.time ? "bell" : "calendar")
+					filled: !!event.modelData.time && !event.modelData.notified
+					font.pixelSize: 15
+					color: event.modelData.time ? Theme.primary : Theme.fgMuted
+				}
+
+				Label {
+					anchors.verticalCenter: parent.verticalCenter
+					visible: !!event.modelData.time
+					text: event.modelData.time
+					color: Theme.primary
+					font.pixelSize: 13
+				}
+
+				Text {
+					anchors.verticalCenter: parent.verticalCenter
+					width: root.width - 140
+					text: event.modelData.text
+					elide: Text.ElideRight
+					color: Theme.fg
+					font.family: Theme.fontSans
+					font.pixelSize: 14
+				}
+			}
+
+			Glyph {
+				anchors.right: parent.right
+				anchors.rightMargin: 14
+				anchors.verticalCenter: parent.verticalCenter
+				opacity: eventHover.hovered ? 1 : 0
+				glyph: Icons.g("x")
+				font.pixelSize: 14
+				color: Theme.fgMuted
+
+				MouseArea {
+					anchors.fill: parent
+					anchors.margins: -6
+					cursorShape: Qt.PointingHandCursor
+					onClicked: Events.remove(event.modelData.id)
+				}
+			}
+		}
+	}
+
+	// add one: an optional time, then the text
+	Row {
+		width: parent.width
+		spacing: 8
+
+		TextField {
+			id: time
+
+			width: 86
+			placeholder: "09:30"
+		}
+
+		TextField {
+			id: what
+
+			width: parent.width - time.width - 8
+			placeholder: Events.on(root.chosen).length ? "Add another" : "Add an event or a reminder"
+			onAccepted: value => {
+				Events.add(root.chosen, time.text, value);
+				what.text = "";
+				time.text = "";
+			}
+		}
 	}
 }

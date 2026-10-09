@@ -34,8 +34,11 @@ PanelWindow {
 	implicitWidth: vertical ? (docked ? size + gap : 1) : 0
 	implicitHeight: vertical ? 0 : docked ? size + gap : 1
 	color: "transparent"
+	// the window's shape: the bar with its rounded ends (picom blurs only inside it), or the
+	// one-pixel edge while hidden
 	mask: Region {
 		item: bar.docked ? shape : edge
+		radius: bar.docked ? shape.radius : 0
 	}
 
 	// the one-pixel edge left while hidden
@@ -194,5 +197,46 @@ PanelWindow {
 
 	Toasts {
 		bar: bar
+	}
+
+	// Behind a panel hanging from the bar (control center, clipboard): an empty window of its shape
+	// for picom to blur behind, growing with the panel's slide. It maps first, so the panel's window
+	// stacks above it and takes the clicks.
+	PopupWindow {
+		id: backdrop
+
+		readonly property bool below: bar.position !== "bottom"
+		readonly property bool open: Panel.hangingWidth > 0 && !bar.vertical && I3.focusedMonitor?.name === bar.modelData.name
+
+		anchor.window: bar
+		anchor.rect.x: shape.x + (shape.width - Panel.hangingWidth) / 2
+		anchor.rect.y: below ? shape.y + shape.height : shape.y - Panel.hangingHeight
+		implicitWidth: Math.max(1, Panel.hangingWidth)
+		implicitHeight: Math.max(1, Panel.hangingHeight)
+		visible: open
+		color: "transparent"
+		mask: Region {
+			y: backdrop.below ? 0 : backdrop.height - reveal.height
+			width: backdrop.width
+			height: reveal.height
+			topLeftRadius: backdrop.below ? 0 : 18
+			topRightRadius: backdrop.below ? 0 : 18
+			bottomLeftRadius: backdrop.below ? 18 : 0
+			bottomRightRadius: backdrop.below ? 18 : 0
+		}
+
+		// how much of the panel has slid out (the panel's own slide: HangingPanel)
+		Item {
+			id: reveal
+
+			height: backdrop.open ? Panel.hangingHeight : 0
+
+			Behavior on height {
+				NumberAnimation {
+					duration: 300
+					easing.type: Easing.OutCubic
+				}
+			}
+		}
 	}
 }

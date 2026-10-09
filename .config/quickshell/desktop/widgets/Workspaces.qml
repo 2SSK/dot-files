@@ -43,10 +43,10 @@ Line {
 
 			readonly property I3Workspace workspace: modelData
 			readonly property bool shown: workspace.active
-			readonly property real dot: Math.round(Config.bar.size * 0.3)
+			readonly property real dot: Math.round(Config.bar.size * 0.38)
 
-			implicitWidth: Config.vertical ? dot : shown ? dot * 3 : dot
-			implicitHeight: Config.vertical ? (shown ? dot * 3 : dot) : dot
+			implicitWidth: Config.vertical ? dot : shown ? dot * 2.6 : dot
+			implicitHeight: Config.vertical ? (shown ? dot * 2.6 : dot) : dot
 
 			Behavior on implicitWidth {
 				NumberAnimation {
