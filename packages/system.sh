@@ -38,15 +38,22 @@ memory() {
 }
 
 timeshift_list() { # the settings page lists snapshots without a password; making, deleting and restoring still ask
-	local rule tmp dest="$root/etc/sudoers.d/10-desktop-timeshift"
+	# sudo reads sudoers.d in name order and the last rule that matches wins: after the installer's
+	# "%wheel ALL=(ALL) ALL" (EndeavourOS's 10-installer), or that one asks for the password again
+	local rule tmp dest="$root/etc/sudoers.d/90-desktop-timeshift" first="$root/etc/sudoers.d/10-desktop-timeshift"
 	rule="$(id -un) ALL=(root) NOPASSWD: /usr/bin/timeshift --list --scripted"
+	if sudo test -e "$first"; then # where an earlier version put it, before the installer's rule
+		sudo rm -f "$first"
+		changed=1
+	fi
 	tmp="$(mktemp)"
 	printf '# packages/system.sh timeshift: the shell'"'"'s settings page reads the snapshot list\n%s\n' "$rule" >"$tmp"
-	if cmp -s "$tmp" "$dest" 2>/dev/null; then rm -f "$tmp" && return 0; fi
+	# sudoers.d is root's alone to read
+	if sudo cmp -s "$tmp" "$dest" 2>/dev/null; then rm -f "$tmp" && return 0; fi
 	visudo -cf "$tmp" >/dev/null || { rm -f "$tmp" && die sudoers_invalid path="$dest"; }
 	sudo install -D -m 440 "$tmp" "$dest"
 	rm -f "$tmp"
-	log_info installed path=/etc/sudoers.d/10-desktop-timeshift
+	log_info installed path=/etc/sudoers.d/90-desktop-timeshift
 	changed=1
 }
 

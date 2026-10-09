@@ -177,7 +177,7 @@ the end. `$mod+Shift+/` opens it.
 The **Timeshift** page lists the system's snapshots (newest first, with their kind and comment),
 makes one now with a comment, and deletes one (a second press confirms); restoring opens Timeshift
 itself. Listing needs root: `packages/system.sh timeshift` allows exactly `timeshift --list
---scripted` without a password (`/etc/sudoers.d/10-desktop-timeshift`); without it the page asks
+--scripted` without a password (`/etc/sudoers.d/90-desktop-timeshift`, after the installer's rules); without it the page asks
 once. `desktop-timeshift list|create|delete` does the work.
 
 `packages/system.sh timeshift` also sets what is kept: 3 daily snapshots, 1 weekly, and (with

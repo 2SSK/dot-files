@@ -234,7 +234,7 @@ timeshift_conf() { # a timeshift.json as timeshift writes it: daily, 5 kept
 	timeshift_conf
 	run "$SYSTEM" timeshift
 	[ "$status" -eq 0 ]
-	rule="$SYSTEM_ROOT/etc/sudoers.d/10-desktop-timeshift"
+	rule="$SYSTEM_ROOT/etc/sudoers.d/90-desktop-timeshift"
 	grep -qx "$(id -un) ALL=(root) NOPASSWD: /usr/bin/timeshift --list --scripted" "$rule"
 	[ "$(grep -vc '^#' "$rule")" -eq 1 ]
 	[ "$(stat -c %a "$rule")" = 440 ]
@@ -357,4 +357,15 @@ subvolume_fakes() { # btrfs makes folders and remembers them as subvolumes; the 
 	run "$SYSTEM" power
 	[[ $output == *"already in place"* ]]
 	! grep -q -- "--now" "$CALLS"
+}
+
+@test "timeshift: the rule comes after the installer's, an earlier one before it goes" {
+	timeshift_conf
+	mkdir -p "$SYSTEM_ROOT/etc/sudoers.d"
+	echo old >"$SYSTEM_ROOT/etc/sudoers.d/10-desktop-timeshift"
+	run "$SYSTEM" timeshift
+	[ "$status" -eq 0 ]
+	[ ! -e "$SYSTEM_ROOT/etc/sudoers.d/10-desktop-timeshift" ]
+	[[ 90-desktop-timeshift > 10-installer ]] # sudo reads them in name order; the last match wins
+	[ -f "$SYSTEM_ROOT/etc/sudoers.d/90-desktop-timeshift" ]
 }
