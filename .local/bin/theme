@@ -30,6 +30,7 @@ current() { # prints "<family> <mode>"; tokyonight dark until a theme is set
 # isn't reset: both would visibly redraw. tmux re-sources everything so its plugins re-apply.
 consumers() {
 	cat <<'EOF'
+palette.json     -                  qs -c desktop ipc call theme reload
 kitty.conf       -                  for s in "${XDG_RUNTIME_DIR:-/run/user/$UID}"/kitty-*; do [[ -S $s ]] && kitten @ --to "unix:$s" set-colors --all --configured "$state/kitty.conf"; done
 foot.ini         -                  pkill -$([[ $mode == dark ]] && echo USR1 || echo USR2) -x foot
 cava             -                  pkill -USR2 -x cava
