@@ -16,6 +16,7 @@ Rectangle {
 	}
 
 	color: config.bg
+	Keys.onEscapePressed: sessionMenu.open = false
 
 	Image {
 		id: wallpaper
@@ -38,6 +39,13 @@ Rectangle {
 		anchors.fill: parent
 		color: config.bg
 		opacity: 0.45
+	}
+
+	// A click anywhere else closes the session menu
+	MouseArea {
+		anchors.fill: parent
+		enabled: sessionMenu.open
+		onClicked: sessionMenu.open = false
 	}
 
 	Column {
@@ -105,11 +113,11 @@ Rectangle {
 				id: password
 
 				anchors.fill: parent
-				anchors.leftMargin: 18
-				anchors.rightMargin: 18
+				anchors.leftMargin: 44
+				anchors.rightMargin: 44
 				verticalAlignment: TextInput.AlignVCenter
 				horizontalAlignment: TextInput.AlignHCenter
-				echoMode: TextInput.Password
+				echoMode: reveal.shown ? TextInput.Normal : TextInput.Password
 				passwordCharacter: "•"
 				color: config.fg
 				font.family: config.font
@@ -128,6 +136,34 @@ Rectangle {
 				color: config.fgMuted
 				font.family: config.font
 				font.pixelSize: 15
+			}
+
+			// Show or hide what's typed
+			Text {
+				id: reveal
+
+				property bool shown: false
+
+				anchors.right: parent.right
+				anchors.rightMargin: 14
+				anchors.verticalCenter: parent.verticalCenter
+				text: shown ? "󰈉" : "󰈈"
+				color: revealHover.containsMouse || shown ? config.fg : config.fgMuted
+				font.family: config.fontMono
+				font.pixelSize: 18
+
+				MouseArea {
+					id: revealHover
+
+					anchors.fill: parent
+					anchors.margins: -6
+					hoverEnabled: true
+					cursorShape: Qt.PointingHandCursor
+					onClicked: {
+						reveal.shown = !reveal.shown;
+						password.forceActiveFocus();
+					}
+				}
 			}
 
 			SequentialAnimation on anchors.horizontalCenterOffset {
@@ -174,57 +210,91 @@ Rectangle {
 		}
 	}
 
-	Text {
+	// Session: its name in the bottom left; a click opens a small menu just above it
+	Item {
+		id: sessionButton
+
 		anchors.left: parent.left
 		anchors.bottom: parent.bottom
 		anchors.margins: 32
-		text: sessions.count > 0 && sessions.itemAt(root.session) ? sessions.itemAt(root.session).name : ""
-		color: chooser.open ? config.fg : config.fgMuted
-		font.family: config.font
-		font.pixelSize: 15
+		implicitWidth: sessionRow.implicitWidth
+		implicitHeight: sessionRow.implicitHeight
+
+		Row {
+			id: sessionRow
+
+			spacing: 6
+
+			Text {
+				text: sessions.count > 0 && sessions.itemAt(root.session) ? sessions.itemAt(root.session).name : ""
+				color: sessionMenu.open || sessionHover.containsMouse ? config.fg : config.fgMuted
+				font.family: config.font
+				font.pixelSize: 15
+			}
+
+			Text {
+				anchors.verticalCenter: parent.verticalCenter
+				text: "󰅃"
+				rotation: sessionMenu.open ? 0 : 180
+				color: config.fgMuted
+				font.family: config.fontMono
+				font.pixelSize: 12
+
+				Behavior on rotation {
+					NumberAnimation {
+						duration: 200
+						easing.type: Easing.OutCubic
+					}
+				}
+			}
+		}
 
 		MouseArea {
+			id: sessionHover
+
 			anchors.fill: parent
+			anchors.margins: -6
+			hoverEnabled: true
 			cursorShape: Qt.PointingHandCursor
-			onClicked: chooser.open = !chooser.open
+			onClicked: sessionMenu.open = !sessionMenu.open
 		}
 	}
 
-	// Session chooser: a translucent bar that slides down from the top; a click picks a session
 	Rectangle {
-		id: chooser
+		id: sessionMenu
 
 		property bool open: false
 
-		width: parent.width
-		height: 56
-		y: open ? 0 : -height
+		anchors.left: sessionButton.left
+		anchors.bottom: sessionButton.top
+		anchors.leftMargin: -12
+		anchors.bottomMargin: open ? 12 : 4
+		width: Math.max(160, choices.implicitWidth + 12)
+		height: choices.implicitHeight + 12
+		radius: 12
+		color: Qt.alpha(config.surface, 0.9)
+		border.width: 1
+		border.color: config.border
 		opacity: open ? 1 : 0
-		color: Qt.alpha(config.bg, 0.35)
+		visible: opacity > 0
 
-		Behavior on y {
+		Behavior on opacity {
 			NumberAnimation {
-				duration: 260
+				duration: 180
+			}
+		}
+
+		Behavior on anchors.bottomMargin {
+			NumberAnimation {
+				duration: 220
 				easing.type: Easing.OutCubic
 			}
 		}
 
-		Behavior on opacity {
-			NumberAnimation {
-				duration: 200
-			}
-		}
+		Column {
+			id: choices
 
-		Rectangle {
-			anchors.bottom: parent.bottom
-			width: parent.width
-			height: 1
-			color: config.border
-		}
-
-		Row {
 			anchors.centerIn: parent
-			spacing: 8
 
 			Repeater {
 				model: sessionModel
@@ -238,26 +308,22 @@ Rectangle {
 					readonly property bool current: index === root.session
 
 					visible: !name.includes("debug log") // i3's extra debugging session
-					width: label.implicitWidth + 32
-					height: 32
-					radius: 16
-					color: current ? config.primary : choiceHover.containsMouse ? Qt.alpha(config.surface, 0.8) : "transparent"
-
-					Behavior on color {
-						ColorAnimation {
-							duration: 150
-						}
-					}
+					width: Math.max(148, label.implicitWidth + 24)
+					height: visible ? 32 : 0
+					radius: 8
+					color: choiceHover.containsMouse ? Qt.alpha(config.overlay, 0.6) : "transparent"
 
 					Text {
 						id: label
 
-						anchors.centerIn: parent
+						anchors.left: parent.left
+						anchors.leftMargin: 12
+						anchors.verticalCenter: parent.verticalCenter
 						text: choice.name
-						color: choice.current ? config.bg : config.fg
+						color: choice.current ? config.primary : config.fg
 						font.family: config.font
 						font.pixelSize: 14
-						font.weight: Font.Medium
+						font.weight: choice.current ? Font.DemiBold : Font.Normal
 					}
 
 					MouseArea {
@@ -268,7 +334,7 @@ Rectangle {
 						cursorShape: Qt.PointingHandCursor
 						onClicked: {
 							root.session = choice.index;
-							chooser.open = false;
+							sessionMenu.open = false;
 							password.forceActiveFocus();
 						}
 					}
@@ -277,8 +343,7 @@ Rectangle {
 		}
 	}
 
-	Keys.onEscapePressed: chooser.open = false
-
+	// Power: reboot and shut down
 	Row {
 		anchors.right: parent.right
 		anchors.bottom: parent.bottom
@@ -287,24 +352,23 @@ Rectangle {
 
 		Repeater {
 			model: [
-				{ glyph: "󰤄", action: () => sddm.suspend(), enabled: sddm.canSuspend },
-				{ glyph: "󰜉", action: () => sddm.reboot(), enabled: sddm.canReboot },
-				{ glyph: "󰐥", action: () => sddm.powerOff(), enabled: sddm.canPowerOff }
+				{ glyph: "󰜉", action: () => sddm.reboot() },
+				{ glyph: "󰐥", action: () => sddm.powerOff() }
 			]
 
 			delegate: Text {
 				required property var modelData
 
-				visible: modelData.enabled
 				text: modelData.glyph
-				color: hover.containsMouse ? config.fg : config.fgMuted
+				color: powerHover.containsMouse ? config.fg : config.fgMuted
 				font.family: config.fontMono
 				font.pixelSize: 22
 
 				MouseArea {
-					id: hover
+					id: powerHover
 
 					anchors.fill: parent
+					anchors.margins: -6
 					hoverEnabled: true
 					cursorShape: Qt.PointingHandCursor
 					onClicked: parent.modelData.action()
