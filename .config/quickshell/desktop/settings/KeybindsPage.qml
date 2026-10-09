@@ -54,7 +54,7 @@ Column {
 				"recorder toggle": "Stop recording (else the capture panel)", "notifications toggle": "Notifications",
 				"control toggle": "Control center", "clipboard toggle": "Clipboard history", "wallpaper toggle": "Wallpapers",
 				"capture toggle": "Screenshot and recording", "settings toggle": "Settings", "power open": "Power menu",
-				"switcher next": "Window switcher"
+				"switcher next": "Window switcher", "switcher prev": "Window switcher, backwards"
 			};
 			const label = known[`${target} ${fn}`] ?? (target === "launcher" ? `Launcher: ${arg}` : target === "control" && fn === "page" ? `Control center: ${arg}` : `${target} ${fn} ${arg}`.trim());
 			return { group: "Shell", label };
