@@ -5,6 +5,7 @@
 if command -v eza >/dev/null; then
 	alias ls='eza --group-directories-first --icons=auto'
 	alias ll='ls -l --git' la='ll -a' lt='ls --tree --level=2' l='ls -la --git'
+	alias tree='ls --tree --level=3' lsa='ls -la --git --total-size'
 else
 	alias ls='ls --color=auto --group-directories-first -h'
 	alias ll='ls -l' la='ls -lA' l='ls -lA'
@@ -28,3 +29,27 @@ alias gl='git log --graph --all --pretty=format:"%C(magenta)%h %C(white) %an  %a
 
 alias dco='docker compose' dps='docker ps' dpa='docker ps -a' dx='docker exec -it'
 alias nrd='npm run dev'
+alias gi='git init' di='docker image' ys='yarn start' yd='yarn dev' rmf='rm -rf'
+
+# yay for repo and AUR alike: u upgrades everything, i installs, r removes with unneeded deps
+if command -v yay >/dev/null; then
+	alias u='yay -Syu' i='yay -S' r='yay -Rns'
+fi
+
+if [[ -n ${WAYLAND_DISPLAY:-} ]]; then
+	alias c='wl-copy' v='wl-paste'
+else
+	alias c='xclip -selection clipboard' v='xclip -selection clipboard -o'
+fi
+
+alias ..='cd ..' ...='cd ../..' .3='cd ../../..' .4='cd ../../../..' .5='cd ../../../../..'
+alias g.='cd ~/.config' gD='cd ~/Documents' gS='cd ~/Pictures/Screenshots'
+
+alias df='df -h' du='du -h' free='free -h' off='systemctl poweroff'
+alias mem='free -h && echo && ps aux --sort=-%mem | head -6' cpu='ps aux --sort=-%cpu | head -6'
+alias psg='ps aux | grep -v grep | grep -i -e VSZ -e'
+alias ports='ss -tulpn' listening='lsof -P -i -n'
+alias status='nmcli device status' list='nmcli device wifi list' connect='nmcli device wifi connect' disconnect='nmcli device disconnect'
+
+alias weather='curl wttr.in/bengaluru?u'
+alias tc='tty-clock -t' sl='sl --help -F -a' p='pipes.sh' cb='cbonsai -liv' aq='asciiquarium' cm='cmatrix -abs'

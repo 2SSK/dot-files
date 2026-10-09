@@ -89,3 +89,44 @@ setup() {
 	[ "$status" -eq 0 ]
 	[[ $output != *"[WARN]"* && $output != *"ERROR"* ]]
 }
+
+@test "package aliases go through yay when it is installed, and stay away otherwise" {
+	printf '#!/bin/sh\n' >"$BATS_FILE_TMPDIR/bin/yay" && chmod +x "$BATS_FILE_TMPDIR/bin/yay"
+	run zsh -i -c 'alias u i r'
+	rm "$BATS_FILE_TMPDIR/bin/yay"
+	[ "${lines[0]}" = "u='yay -Syu'" ]
+	[ "${lines[1]}" = "i='yay -S'" ]
+	[ "${lines[2]}" = "r='yay -Rns'" ]
+	PATH="$BATS_FILE_TMPDIR/noeza" run zsh -i -c 'alias u'
+	[ "$status" -ne 0 ]
+}
+
+@test "clipboard aliases follow the session: wl-copy on Wayland, xclip on X11" {
+	run env WAYLAND_DISPLAY=wayland-1 zsh -i -c 'alias c v'
+	[ "${lines[0]}" = "c=wl-copy" ]
+	[ "${lines[1]}" = "v=wl-paste" ]
+	run env -u WAYLAND_DISPLAY zsh -i -c 'alias c'
+	[ "$output" = "c='xclip -selection clipboard'" ]
+}
+
+@test "helpers from the old config are loaded in both shells" {
+	run zsh -i -c 'whence -w mkcd extract killport calc dirsize backup path hgrep sysinfo myip s'
+	[ "$status" -eq 0 ]
+	run bash -i -c 'type -t mkcd extract killport calc myip && alias .. off ports' 2>&1
+	[ "$status" -eq 0 ]
+}
+
+@test "mkcd creates a directory and enters it; calc does arithmetic" {
+	run zsh -i -c "mkcd '$BATS_TEST_TMPDIR/a/b' && pwd && calc '7 / 2'"
+	[ "${lines[0]}" = "$BATS_TEST_TMPDIR/a/b" ]
+	[ "${lines[1]}" = 3.50 ]
+}
+
+@test "extract unpacks by extension and refuses what it doesn't know" {
+	mkdir -p "$BATS_TEST_TMPDIR/x" && echo hi >"$BATS_TEST_TMPDIR/x/f"
+	tar -C "$BATS_TEST_TMPDIR/x" -czf "$BATS_TEST_TMPDIR/f.tar.gz" f
+	run zsh -i -c "cd '$BATS_TEST_TMPDIR' && rm x/f && cd x && extract ../f.tar.gz && cat f"
+	[ "${lines[-1]}" = hi ]
+	run zsh -i -c "extract '$BATS_TEST_TMPDIR/x/f'"
+	[ "$status" -ne 0 ]
+}

@@ -118,7 +118,11 @@ grub_fakes() { # a palette, /etc/default/grub, and fake font/image/grub tools
 	theme="$SYSTEM_ROOT/boot/grub/themes/desktop"
 	grep -q 'desktop-color: "#1a1b26"' "$theme/theme.txt"
 	grep -q 'item_font = "Desktop Regular 26"' "$theme/theme.txt"
-	[ -f "$theme/select_nw.png" ] && [ -f "$theme/select_c.png" ] && [ -f "$theme/menu.pf2" ]
+	[ -f "$theme/select_w.png" ]
+	[ -f "$theme/select_c.png" ]
+	[ -f "$theme/select_e.png" ]
+	[ ! -e "$theme/select_n.png" ] # top and bottom pieces would overlap the next entry
+	[ -f "$theme/menu.pf2" ]
 	grep -qx 'GRUB_THEME="/boot/grub/themes/desktop/theme.txt"' "$SYSTEM_ROOT/etc/default/grub"
 	grep -qx 'GRUB_GFXMODE=auto' "$SYSTEM_ROOT/etc/default/grub"
 	grep -qx 'GRUB_TERMINAL_OUTPUT="gfxterm"' "$SYSTEM_ROOT/etc/default/grub"
@@ -158,7 +162,8 @@ sddm_fakes() { # a rendered theme, and a fake magick that copies the image
 	run "$SYSTEM" sddm
 	[ "$status" -eq 0 ]
 	local dir="$SYSTEM_ROOT/usr/share/sddm/themes/desktop"
-	[ -f "$dir/Main.qml" ] && [ -f "$dir/metadata.desktop" ]
+	[ -f "$dir/Main.qml" ]
+	[ -f "$dir/metadata.desktop" ]
 	grep -qx 'Current=desktop' "$SYSTEM_ROOT/etc/sddm.conf.d/10-desktop.conf"
 }
 
@@ -169,7 +174,8 @@ sddm_fakes() { # a rendered theme, and a fake magick that copies the image
 	local dir="$SYSTEM_ROOT/usr/share/sddm/themes/desktop" shared="$SYSTEM_ROOT/var/lib/desktop/sddm"
 	[ "$(readlink "$dir/theme.conf")" = /var/lib/desktop/sddm/theme.conf ]
 	[ "$(readlink "$dir/background.jpg")" = /var/lib/desktop/sddm/background.jpg ]
-	[ "$(stat -c %U "$shared")" = "$(id -un)" ] && [ "$(stat -c %a "$shared/background.jpg")" = 644 ]
+	[ "$(stat -c %U "$shared")" = "$(id -un)" ]
+	[ "$(stat -c %a "$shared/background.jpg")" = 644 ]
 	grep -qx 'bg=#1f1f28' "$shared/theme.conf"
 }
 

@@ -79,3 +79,60 @@ ssh() {
 	*) command ssh "$@" ;;
 	esac
 }
+
+# s: search the repos and the AUR, preview each package, install the ones picked (Tab marks several)
+s() {
+	yay -Slq | fzf --multi --preview 'yay -Sii {1}' --preview-window=down:75% | xargs -ro yay -S
+}
+
+mkcd() { mkdir -p -- "$1" && cd -- "$1" || return; }
+
+# backup <file>: a copy beside it, stamped with the time
+backup() {
+	[[ -f $1 ]] || { echo "not a file: $1" >&2 && return 1; }
+	local copy
+	copy="$1.backup.$(date +%Y%m%d_%H%M%S)"
+	cp -- "$1" "$copy" && echo "backup: $copy"
+}
+
+# extract <archive>: unpacks into the current directory, picking the tool by extension
+extract() {
+	[[ -f $1 ]] || { echo "not a file: $1" >&2 && return 1; }
+	case $1 in
+	*.tar.* | *.tar | *.tgz | *.tbz2) tar xf "$1" ;;
+	*.zip) unzip "$1" ;;
+	*.rar) unrar x "$1" ;;
+	*.7z) 7z x "$1" ;;
+	*.gz) gunzip -k "$1" ;;
+	*.bz2) bunzip2 -k "$1" ;;
+	*.xz) unxz -k "$1" ;;
+	*.zst) unzstd "$1" ;;
+	*) echo "don't know how to extract: $1" >&2 && return 1 ;;
+	esac
+}
+
+hgrep() { fc -ln 1 | grep -i -- "$1"; }
+dirsize() { du -sh -- "${1:-.}" 2>/dev/null | cut -f1; }
+calc() { echo "scale=2; $*" | bc -l; }
+path() { tr ':' '\n' <<<"$PATH" | nl; }
+
+# killport <port>: stop whatever listens on a TCP port
+killport() {
+	[[ -n $1 ]] || { echo 'usage: killport <port>' >&2 && return 2; }
+	fuser -k -TERM "$1/tcp" || echo "nothing on port $1"
+}
+
+# myip: the address on the local network, and the one the internet sees
+myip() {
+	ip -4 route get 1.1.1.1 | awk '{ for (i = 1; i < NF; i++) if ($i == "src") print "Local:    " $(i + 1) }'
+	printf 'External: %s\n' "$(curl -fsS --max-time 5 ifconfig.me)"
+}
+
+sysinfo() {
+	echo "Host:    $(uname -n)"
+	echo "Kernel:  $(uname -r)"
+	echo "Uptime:  $(uptime -p)"
+	echo "Memory:  $(free -h | awk '/^Mem:/ {print $3 "/" $2}')"
+	echo "Load:   $(cut -d' ' -f1-3 /proc/loadavg)"
+	echo "Disk:    $(df -h / | awk 'NR==2 {print $3 "/" $2 " (" $5 ")"}')"
+}
