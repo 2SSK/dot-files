@@ -4,10 +4,11 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-// What the bar shows of i3 (or sway): the workspaces and the scratchpad. Read straight from the
-// window manager, not through Quickshell.I3, whose event connections drop and then leave the bar
-// stale: a long-lived `i3-msg -t subscribe -m` says when something changed (and is started again if
-// i3 restarts or the connection goes), then the workspaces and the tree are reread.
+// The shell's line to i3 (or sway): the workspaces, the focused monitor, the scratchpad, window
+// events, and commands. Not through Quickshell.I3, whose connections drop and then leave the bar
+// stale and commands ignored: a long-lived `i3-msg -t subscribe -m` says when something changed
+// (started again if i3 restarts or the connection goes), then the workspaces and the tree are
+// reread; commands go through i3-msg.
 Singleton {
 	id: root
 
@@ -15,9 +16,17 @@ Singleton {
 	property var workspaces: [] // { num, name, focused, visible, urgent, output }, by number
 	property int scratchpad: 0 // windows that belong to the scratchpad
 	property int scratchpadShown: 0 // of those, the ones out on a workspace now
+	readonly property string focusedOutput: workspaces.find(w => w.focused)?.output ?? ""
+
+	signal windowEvent(var data) // i3's window events: { change, container: { id, name, ... } }
+
+	// a command for the window manager: through i3-msg, as Quickshell.I3's own connection drops them
+	function command(cmd: string): void {
+		Quickshell.execDetached([msg, "-q", cmd]);
+	}
 
 	function switchTo(num: int): void {
-		Quickshell.execDetached([msg, "-q", `workspace number ${num}`]);
+		command(`workspace number ${num}`);
 	}
 
 	function showScratchpad(): void {
@@ -31,7 +40,14 @@ Singleton {
 		running: true
 		command: [root.msg, "-t", "subscribe", "-m", '["workspace","window","output","mode"]']
 		stdout: SplitParser {
-			onRead: refresh.restart()
+			onRead: line => {
+				refresh.restart();
+				try {
+					const data = JSON.parse(line);
+					if (data.container)
+						root.windowEvent(data);
+				} catch (e) {}
+			}
 		}
 		onExited: again.restart()
 	}

@@ -3,7 +3,6 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Effects
 import Quickshell
-import Quickshell.I3
 import Quickshell.Services.Notifications
 import qs
 import qs.services
@@ -16,7 +15,7 @@ PopupWindow {
 
 	required property PanelWindow bar
 
-	readonly property bool focused: I3.focusedMonitor?.name === bar.screen?.name
+	readonly property bool focused: WindowManager.focusedOutput === bar.screen?.name
 	readonly property int pad: 28
 	readonly property real below: Panel.osdShown ? 84 : 0 // room for the OSD card above
 

@@ -2,7 +2,6 @@ pragma Singleton
 
 import QtQuick
 import Quickshell
-import Quickshell.I3
 
 // Shell state: whether the bar is shown (or peeking while hidden), the OSD card (a level or lock
 // that just changed) and the power menu. While the power menu is open i3 is in mode "power", which sends its keys back over IPC
@@ -234,14 +233,14 @@ Singleton {
 		selected = 0;
 		armed = -1;
 		view = "power";
-		I3.dispatch('mode "power"');
+		Quickshell.execDetached([Quickshell.env("SWAYSOCK") ? "swaymsg" : "i3-msg", "-q", 'mode "power"']);
 	}
 
 	function closePower(): void {
 		if (view === "power")
 			view = "";
 		armed = -1;
-		I3.dispatch('mode "default"');
+		Quickshell.execDetached([Quickshell.env("SWAYSOCK") ? "swaymsg" : "i3-msg", "-q", 'mode "default"']);
 	}
 
 	function togglePower(): void {

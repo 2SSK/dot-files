@@ -2,8 +2,8 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import Quickshell
-import Quickshell.I3
 import qs
+import qs.services
 
 // A panel that drops out of the middle of the bar, in its colour, joined to it by inverse curves
 // (the bar opens its outline there: Panel.hangingWidth). The window is as big as the screen, so i3
@@ -22,7 +22,7 @@ FloatingWindow {
 	signal dismissed
 	signal keyPressed(var event) // keys nothing inside took (Escape closes)
 
-	readonly property ShellScreen screen: Quickshell.screens.find(s => s.name === I3.focusedMonitor?.name) ?? Quickshell.screens[0]
+	readonly property ShellScreen screen: Quickshell.screens.find(s => s.name === WindowManager.focusedOutput) ?? Quickshell.screens[0]
 	readonly property bool below: Config.position !== "bottom" // hangs below the bar, else above it
 	readonly property rect island: Panel.islands[screen.name] ?? Qt.rect(0, 0, screen.width, 0)
 	// centred under the bar, flush with it
@@ -48,7 +48,7 @@ FloatingWindow {
 	// the keyboard: i3 doesn't focus a shaped window by itself, so ask once it has the window (its
 	// "new" event below), and again shortly in case that came first
 	function takeFocus(): void {
-		I3.dispatch(`[title="^${root.title}$"] focus`);
+		WindowManager.command(`[title="^${root.title}$"] focus`);
 	}
 
 	Timer {
@@ -62,10 +62,10 @@ FloatingWindow {
 	}
 
 	// i3's window events: focus once it has the window; another window taking the focus closes it
-	I3IpcListener {
-		subscriptions: ["window"]
-		onIpcEvent: event => {
-			const data = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
+	Connections {
+		target: WindowManager
+
+		function onWindowEvent(data: var): void {
 			const name = data.container?.name ?? "";
 			if (data.change === "new" && name === root.title)
 				root.takeFocus();

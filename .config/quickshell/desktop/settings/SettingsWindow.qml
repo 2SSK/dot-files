@@ -2,7 +2,6 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import Quickshell
-import Quickshell.I3
 import Quickshell.Io
 import qs
 import qs.services
@@ -33,10 +32,10 @@ FloatingWindow {
 	}
 
 	// another window taking the focus closes it
-	I3IpcListener {
-		subscriptions: ["window"]
-		onIpcEvent: event => {
-			const data = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
+	Connections {
+		target: WindowManager
+
+		function onWindowEvent(data: var): void {
 			const name = data.container?.name ?? "";
 			// a named window other than this one, once it has settled (its own mapping fires focus too)
 			if (data.change === "focus" && name && name !== root.title && opened.elapsed() > 600)

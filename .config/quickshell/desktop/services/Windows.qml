@@ -2,7 +2,6 @@ pragma Singleton
 
 import QtQuick
 import Quickshell
-import Quickshell.I3
 import Quickshell.Io
 
 // The open windows, most recently focused first (the switcher's ring), and the switcher's state.
@@ -43,7 +42,7 @@ Singleton {
 		const target = windows[selected];
 		close();
 		if (target)
-			I3.dispatch(`[con_id=${target.id}] focus`);
+			WindowManager.command(`[con_id=${target.id}] focus`);
 	}
 
 	function close(): void {
@@ -51,7 +50,7 @@ Singleton {
 		ctrl.running = false;
 		switching = false;
 		shown = false;
-		I3.dispatch('mode "default"');
+		WindowManager.command('mode "default"');
 	}
 
 	function read(tree: var): void {
@@ -106,10 +105,10 @@ Singleton {
 		onTriggered: tree.running = true
 	}
 
-	I3IpcListener {
-		subscriptions: ["window"]
-		onIpcEvent: event => {
-			const data = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
+	Connections {
+		target: WindowManager
+
+		function onWindowEvent(data: var): void {
 			const id = data.container?.id;
 			if (data.change === "focus" && id !== undefined && !(data.container.name ?? "").startsWith("Desktop "))
 				root.mru = [id, ...root.mru.filter(m => m !== id)].slice(0, 100);
