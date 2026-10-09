@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+# Lock the screen in the desktop theme and wait until it's unlocked. xss-lock runs it (i3's
+# autostart) for `loginctl lock-session`, a closed lid and before sleep. X11: i3lock-color over the
+# blurred wallpaper, with a clock and a small typing ring; plain i3lock gets the background colour.
+# Wayland: swaylock.
+set -euo pipefail
+
+palette="${XDG_STATE_HOME:-$HOME/.local/state}/desktop/theme/palette.json"
+colour() { # <ui role>: rrggbb from the theme, with a fallback
+	python3 -c 'import json, sys; print(json.load(open(sys.argv[1]))["ui"][sys.argv[2]].lstrip("#"))' "$palette" "$1" 2>/dev/null || echo "$2"
+}
+bg="$(colour bg 1a1b26)" fg="$(colour fg c0caf5)" primary="$(colour primary 7aa2f7)" error="$(colour error f7768e)"
+
+if [[ -n ${WAYLAND_DISPLAY:-} ]]; then
+	exec swaylock --color "$bg" --inside-color "${bg}cc" --ring-color "$primary" --key-hl-color "$fg" \
+		--ring-wrong-color "$error" --text-color "$fg" --indicator-radius 80
+fi
+
+# The wallpaper, blurred (at a quarter size: fast, and as soft) and dimmed in the theme's
+# background colour, cached until either changes
+backdrop() {
+	local state="${XDG_STATE_HOME:-$HOME/.local/state}/desktop" wallpaper out
+	wallpaper="$(readlink -f "$state/wallpaper" 2>/dev/null || true)"
+	[[ -f $wallpaper ]] || wallpaper="$(dirname "$(readlink -f "$0")")/../share/desktop/wallpapers/cat-mocha-lavender_19.jpg"
+	[[ -f $wallpaper ]] && command -v magick >/dev/null || return 1
+	out="${XDG_CACHE_HOME:-$HOME/.cache}/desktop/lock-$bg.png"
+	if [[ ! -s $out || $wallpaper -nt $out ]]; then
+		mkdir -p "${out%/*}"
+		magick "$wallpaper" -resize '2560x1440^' -gravity center -extent 2560x1440 -scale 25% -blur 0x7 -resize 400% \
+			\( -size 2560x1440 "xc:#$bg" -alpha set -channel A -evaluate set 45% +channel \) -composite -define png:compression-level=1 "$out.tmp.png" &&
+			mv "$out.tmp.png" "$out" || return 1
+	fi
+	echo "$out"
+}
+
+if i3lock --version 2>&1 | grep -q 'i3lock-color\|\.c\.'; then
+	image=(--blur 8)
+	if picture="$(backdrop)"; then image=(--image "$picture" --fill); fi
+	# The clock, a hint, and a small ring under it: it lights up in the accent colour per key, accent
+	# while checking, red when wrong. i3lock never shows the typed characters.
+	exec i3lock --nofork --ignore-empty-password --show-failed-attempts "${image[@]}" --color "$bg" \
+		--clock --force-clock --time-str '%H:%M' --date-str '%A, %d %B' --time-size 96 --date-size 20 \
+		--time-font Inter --date-font Inter --greeter-font Inter --verif-font Inter --wrong-font Inter --layout-font Inter \
+		--time-color "${fg}ff" --date-color "${fg}cc" --time-pos 'x+w/2:y+h/2-90' --date-pos 'tx:ty+40' \
+		--greeter-text 'Type your password to unlock' --greeter-size 15 --greeter-color "${fg}99" --greeter-pos 'x+w/2:y+h/2+40' \
+		--ind-pos 'x+w/2:y+h/2+100' --radius 20 --ring-width 3 --inside-color "${bg}00" --ring-color "${fg}33" \
+		--line-uses-inside --separator-color 00000000 --keyhl-color "${primary}ff" --bshl-color "${error}ff" \
+		--insidever-color "${bg}00" --ringver-color "${primary}ff" --insidewrong-color "${bg}00" --ringwrong-color "${error}ff" \
+		--verif-text 'Checking…' --wrong-text 'Wrong password' --noinput-text '' --verif-size 15 --wrong-size 15 \
+		--verif-color "${fg}cc" --wrong-color "${error}ff" --verif-pos 'ix:iy+48' --wrong-pos 'ix:iy+48' \
+		--pass-media-keys --pass-volume-keys --pass-screen-keys
+fi
+exec i3lock --nofork --ignore-empty-password --show-failed-attempts --color "$bg"

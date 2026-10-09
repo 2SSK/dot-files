@@ -1,0 +1,37 @@
+{
+  "bar": {
+    "style": "island",
+    "position": "top",
+    "size": 34,
+    "opacity": 0.85,
+    "length": 0,
+    "left": [
+      "workspaces",
+      "scratchpad",
+      "stats"
+    ],
+    "center": [
+      "clock"
+    ],
+    "right": [
+      "tray",
+      "brightness",
+      "recorder",
+      "battery",
+      "notifications",
+      "power"
+    ]
+  },
+  "osd": {
+    "timeout": 1800
+  },
+  "audio": {
+    "step": 5
+  },
+  "brightness": {
+    "step": 5
+  },
+  "power": {
+    "confirm": true
+  }
+}

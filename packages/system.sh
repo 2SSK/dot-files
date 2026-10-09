@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# System-level setup (sudo): the memory safety net, libvirt, docker, the GRUB theme and the login screen. Installs
+# System-level setup (sudo): the memory safety net, libvirt, docker, the lid, the GRUB theme and the login screen. Installs
 # the tracked files under system/ into / and enables services; a no-op when everything is already
 # in place.
-# usage: system.sh memory|libvirt|docker|grub [--preview]|sddm
+# usage: system.sh memory|libvirt|docker|lid|grub [--preview]|sddm
 set -euo pipefail
 
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -32,6 +32,12 @@ memory() {
 	sudo systemctl start systemd-zram-setup@zram0.service
 	sudo sysctl --quiet --load "$root/etc/sysctl.d/99-zram.conf" 2>/dev/null || true
 	sudo systemctl enable --now systemd-oomd.service
+}
+
+lid() { # closing the lid only locks; logind rereads its config on SIGHUP (a restart would end sessions)
+	put etc/systemd/logind.conf.d/10-lid.conf
+	((changed)) || return 0
+	sudo systemctl kill --signal=HUP systemd-logind.service
 }
 
 libvirt() {
@@ -310,8 +316,9 @@ case ${1:-} in
 memory) memory ;;
 libvirt) libvirt ;;
 docker) docker_daemon ;;
+lid) lid ;;
 grub) if [[ ${2:-} == --preview ]]; then grub_preview && exit 0; fi; grub_theme ;;
 sddm) sddm_theme ;;
-*) echo 'usage: system.sh memory|libvirt|docker|grub [--preview]|sddm' >&2 && exit 2 ;;
+*) echo 'usage: system.sh memory|libvirt|docker|lid|grub [--preview]|sddm' >&2 && exit 2 ;;
 esac
 if ((changed)); then log_info system part="$1"; else echo "$1: already in place"; fi

@@ -1,0 +1,42 @@
+import QtQuick
+import Quickshell
+import qs
+
+// The bar's three parts: start (left or top), centre, end (right or bottom).
+Item {
+	id: root
+
+	required property ShellScreen screen
+	readonly property bool vertical: Config.vertical
+	readonly property int pad: Config.island ? Math.round(Config.bar.size / 2.5) : 8
+	readonly property real gap: 40 // at least this between the centre and either side
+	// what the parts need along the bar: the centre stays centred, so the longer side counts twice
+	readonly property real naturalLength: vertical ? 2 * (pad + gap + Math.max(start.height, end.height)) + center.height : 2 * (pad + gap + Math.max(start.width, end.width)) + center.width
+
+	Section {
+		id: start
+
+		names: Config.bar.left
+		screen: root.screen
+		x: root.vertical ? (root.width - width) / 2 : root.pad
+		y: root.vertical ? root.pad : (root.height - height) / 2
+	}
+
+	Section {
+		id: center
+
+		names: Config.bar.center
+		screen: root.screen
+		x: (root.width - width) / 2
+		y: (root.height - height) / 2
+	}
+
+	Section {
+		id: end
+
+		names: Config.bar.right
+		screen: root.screen
+		x: root.vertical ? (root.width - width) / 2 : root.width - width - root.pad
+		y: root.vertical ? root.height - height - root.pad : (root.height - height) / 2
+	}
+}

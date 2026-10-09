@@ -1,0 +1,62 @@
+# Desktop shell (Quickshell)
+
+`qs -c desktop`, started by i3 (`.config/i3/conf.d/autostart.conf`). Sources: `.config/quickshell/desktop/`.
+Colours come from the desktop theme (see [theme.md](theme.md)); settings from
+`~/.config/desktop/shell.json`, stowed from the repo, which applies as soon as it's saved.
+
+## Bar
+
+| Setting (`bar.*`) | Values |
+| --- | --- |
+| `style` | `island` (a floating pill) or `static` (the whole edge, word labels and separators) |
+| `position` | `top`, `bottom`; `left`/`right` on sway only (i3 docks only top or bottom, so X11 uses the top) |
+| `size`, `opacity`, `length` | thickness in px, background opacity, the island's share of the edge (0: by the screen width, 80 % under 1500 px down to 42 % from 2200 px; never shorter than its content) |
+| `left`, `center`, `right` | widgets: `launcher`, `workspaces`, `clock`, `stats`, `volume`, `brightness`, `battery`, `tray`, `recorder`, `notifications`, `scratchpad`, `power` |
+
+Workspaces are dots: the ones with windows and the one you're on (i3 and sway drop empty ones), the
+current one a wide pill. After them, the scratchpad's window count while it holds any; a click brings
+one up.
+Hidden with `$mod+Shift+b`, the bar comes back over the windows while the pointer is at its edge.
+
+## Keys (i3)
+
+| Key | Does |
+| --- | --- |
+| F1 / F2 / F3, media keys | mute, volume down, volume up |
+| F4 / F5, brightness keys | brightness down, up |
+| F6, mic-mute key | microphone mute |
+| `$mod+F12` | start / stop screen recording (gpu-screen-recorder, into `~/Videos`) |
+| `$mod+Shift+b` | hide / show the bar |
+| `$mod+n` | notification centre |
+| `$mod+p` | power menu (again or Escape closes): arrows or 1–5 pick, Enter runs |
+
+Each change shows in a card at the top right; Caps Lock and Num Lock show there by themselves.
+
+## Notifications
+
+The shell is the notification daemon on i3. New ones pop up at the top right and leave after their
+timeout (5 s unless the app sets one), not while hovered; critical ones stay until closed. A click
+runs the app's default action; ✕ dismisses for good.
+
+The bell shows a dot for unread ones. A click (or `$mod+n`) opens the centre: the history, newest
+first, Do Not Disturb and Clear; a click outside closes it. A right click on the bell toggles Do
+Not Disturb: popups stop, except critical ones, and everything still reaches the history. The
+history lasts until the shell restarts.
+
+## Power menu
+
+Lock, Log Out, Lock & Suspend, Reboot, Shut Down; Log Out, Reboot and Shut Down take a second
+press while `power.confirm` is on. Nothing hibernates.
+
+- **Lock** runs `loginctl lock-session`; xss-lock starts `desktop-lock`: i3lock-color over the
+  blurred, dimmed wallpaper (cached in `~/.cache/desktop`), a clock and a small ring that lights up
+  as you type. xss-lock also locks after X's idle timeout. The laptop keeps running.
+- **Closing the lid** only locks, after `packages/system.sh lid` (logind `HandleLidSwitch=lock`),
+  so work carries on with the lid shut. On battery it keeps draining.
+- **Lock & Suspend** sleeps; xss-lock locks first.
+
+## IPC
+
+`qs -c desktop ipc call <target> <function>`: `audio up|down|mute|mic`, `brightness up|down`,
+`bar toggle`, `recorder toggle`, `notifications toggle|dnd|clear`, `power open|toggle|close|next|prev|activate|pick <n>`,
+`theme reload`.
