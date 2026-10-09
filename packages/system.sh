@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# System-level setup (sudo): the memory safety net, libvirt, docker and the GRUB theme. Installs
+# System-level setup (sudo): the memory safety net, libvirt, docker, the GRUB theme and the login screen. Installs
 # the tracked files under system/ into / and enables services; a no-op when everything is already
 # in place.
-# usage: system.sh memory|libvirt|docker|grub
+# usage: system.sh memory|libvirt|docker|grub|sddm
 set -euo pipefail
 
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -193,11 +193,50 @@ n = int.from_bytes(d[i:i + 4], "big"); print(d[i + 4:i + 4 + n].rstrip(b"\\0").d
 	fi
 }
 
+install_if_changed() { # <file> <destination>: install as root when missing or different
+	cmp -s "$1" "$2" 2>/dev/null && return 0
+	sudo install -D -m 644 "$1" "$2"
+	changed=1
+}
+
+sddm_theme() { # the login screen in the desktop theme; run again after theme set to follow it
+	local state="${XDG_STATE_HOME:-$HOME/.local/state}/desktop" dir=usr/share/sddm/themes/desktop
+	[[ -f $state/theme/sddm-theme.conf ]] || die no_theme msg='run: theme set <family>'
+	put $dir/Main.qml
+	put $dir/metadata.desktop
+	install_if_changed "$state/theme/sddm-theme.conf" "$root/$dir/theme.conf"
+
+	# sddm can't read the home directory: a copy of the wallpaper, at most 2560 px wide
+	local wallpaper tmp
+	wallpaper="$(readlink -f "$state/wallpaper" 2>/dev/null || true)"
+	[[ -f $wallpaper ]] || wallpaper="$here/../.local/share/desktop/wallpapers/cat-mocha-lavender_19.jpg"
+	tmp="$(mktemp --suffix=.jpg)"
+	# shellcheck disable=SC2064 # expand now: tmp is local
+	trap "rm -f '$tmp'" RETURN
+	magick "$wallpaper" -resize '2560x2560>' -strip -quality 90 "$tmp"
+	install_if_changed "$tmp" "$root/$dir/background.jpg"
+
+	# /etc/sddm.conf overrides sddm.conf.d, so a Current= there is changed in place (original kept)
+	local conf="$root/etc/sddm.conf"
+	if grep -q '^Current=' "$conf" 2>/dev/null; then
+		if ! grep -qx 'Current=desktop' "$conf"; then
+			[[ -e $conf.pre-desktop ]] || sudo cp "$conf" "$conf.pre-desktop"
+			sudo sed -i 's|^Current=.*|Current=desktop|' "$conf"
+			changed=1
+		fi
+	else
+		printf '[Theme]\nCurrent=desktop\n' >"$tmp.conf"
+		install_if_changed "$tmp.conf" "$root/etc/sddm.conf.d/10-desktop.conf"
+		rm -f "$tmp.conf"
+	fi
+}
+
 case ${1:-} in
 memory) memory ;;
 libvirt) libvirt ;;
 docker) docker_daemon ;;
 grub) grub_theme ;;
-*) echo 'usage: system.sh memory|libvirt|docker|grub' >&2 && exit 2 ;;
+sddm) sddm_theme ;;
+*) echo 'usage: system.sh memory|libvirt|docker|grub|sddm' >&2 && exit 2 ;;
 esac
 if ((changed)); then log_info system part="$1"; else echo "$1: already in place"; fi

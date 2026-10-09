@@ -82,6 +82,15 @@ st is built from the pinned 0.9.3 release with the
 [xresources-with-reload-signal](https://st.suckless.org/patches/xresources-with-reload-signal/)
 patch (`packages/extra/st.sh`), and reads its font, padding and colours from `~/.Xresources`.
 
+## Login screen (SDDM)
+
+`packages/system.sh sddm` (sudo) installs the `desktop` SDDM theme: your wallpaper blurred and dimmed,
+a large clock, a rounded password field (a wrong password shakes it), the session (click to switch)
+and suspend / reboot / power off. Colours and fonts come from the active theme (`sddm-theme.conf`).
+sddm can't read your home directory, so like GRUB it doesn't follow `theme set` by itself: run it
+again after a switch. An `/etc/sddm.conf` that names another theme is switched in place (the
+original stays as `sddm.conf.pre-desktop`).
+
 ## Boot menu (GRUB)
 
 `packages/system.sh grub` (sudo) installs a minimal GRUB theme built from the active palette:

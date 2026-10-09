@@ -143,3 +143,34 @@ grub_fakes() { # a palette, /etc/default/grub, and fake font/image/grub tools
 	run "$SYSTEM" bogus
 	[ "$status" -eq 2 ]
 }
+
+sddm_fakes() { # a rendered theme, and a fake magick that copies the image
+	export XDG_STATE_HOME="$BATS_TEST_TMPDIR/state"
+	XDG_STATE_HOME="$XDG_STATE_HOME" python3 "$BATS_TEST_DIRNAME/../.local/lib/desktop/theme_render.py" render kanagawa dark
+	# shellcheck disable=SC2016 # expands when the fake runs
+	printf '#!/bin/sh\necho "magick $*" >>"$CALLS"\nfor last; do :; done\ncp "$1" "$last"\n' >"$BATS_TEST_TMPDIR/bin/magick"
+	chmod +x "$BATS_TEST_TMPDIR/bin/magick"
+}
+
+@test "sddm: installs the theme, its colours and the wallpaper, and selects it" {
+	sddm_fakes
+	run "$SYSTEM" sddm
+	[ "$status" -eq 0 ]
+	local dir="$SYSTEM_ROOT/usr/share/sddm/themes/desktop"
+	[ -f "$dir/Main.qml" ] && [ -f "$dir/metadata.desktop" ] && [ -f "$dir/background.jpg" ]
+	grep -qx 'bg=#1f1f28' "$dir/theme.conf"
+	grep -qx 'Current=desktop' "$SYSTEM_ROOT/etc/sddm.conf.d/10-desktop.conf"
+}
+
+@test "sddm: an existing /etc/sddm.conf theme is switched in place, the original kept; reruns change nothing" {
+	sddm_fakes
+	mkdir -p "$SYSTEM_ROOT/etc"
+	printf '[Theme]\nCurrent=voidsddm\n' >"$SYSTEM_ROOT/etc/sddm.conf"
+	run "$SYSTEM" sddm
+	[ "$status" -eq 0 ]
+	grep -qx 'Current=desktop' "$SYSTEM_ROOT/etc/sddm.conf"
+	grep -qx 'Current=voidsddm' "$SYSTEM_ROOT/etc/sddm.conf.pre-desktop"
+	[ ! -e "$SYSTEM_ROOT/etc/sddm.conf.d/10-desktop.conf" ]
+	run "$SYSTEM" sddm
+	[[ $output == *"sddm: already in place"* ]]
+}
