@@ -46,6 +46,7 @@ FAKE
 	grep -qx "docker volume prune -f" "$CALLS"
 	! grep -q "volume prune.*-a" "$CALLS"
 	grep -qx "docker image prune -a -f" "$CALLS"
+	! grep -q "container prune" "$CALLS" # a stopped database's unnamed volume would go with it
 }
 
 @test "caches: keeps 2 versions of installed packages, none of removed ones" {

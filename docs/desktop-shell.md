@@ -186,7 +186,7 @@ makes the VM disks, `/var/lib/docker` and `~/.cache` btrfs subvolumes of their o
 snapshots leave out (they change all day); the originals are kept beside them until you remove
 them. `packages/cleanup.sh packages|docker|caches|all` makes room: the packages in
 `packages/remove.txt` and orphans (never one the repo's lists install), unused Docker images,
-containers, build cache and unnamed volumes, and old package caches.
+build cache and unnamed volumes (never containers: a stopped one may hold a database's data), and old package caches.
 
 ## When idle
 

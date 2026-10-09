@@ -3,8 +3,9 @@
 # listing first; pacman asks before it removes anything.
 #   packages  what packages/remove.txt names (with what only they needed), then orphans; the
 #             packages the repo's lists name are marked explicit first, so none goes as a dependency
-#   docker    stopped containers, images no container uses, the build cache and unnamed volumes
-#             (named ones, a database's say, stay)
+#   docker    images no container uses, the build cache and unnamed volumes no container refers to.
+#             Containers stay, stopped ones too: a database run without a named volume keeps its
+#             data in an unnamed one, which would go with the container (docker container prune)
 #   caches    pacman's package cache (the last 2 versions of what is installed), the AUR build cache
 #   all       all three
 # usage: cleanup.sh packages|docker|caches|all
@@ -58,7 +59,6 @@ packages() {
 docker_clean() {
 	command -v docker >/dev/null || { echo "docker: not installed" && return 0; }
 	docker system df
-	docker container prune -f
 	docker image prune -a -f
 	docker builder prune -a -f
 	docker volume prune -f # unnamed volumes only (-a would take named ones too)
