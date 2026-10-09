@@ -16,3 +16,4 @@ __pycache__
 # Not stowed yet: the live ~/.claude and ~/.config/opencode stay as they are
 ^/\.claude
 ^/\.config/opencode
+^/\.githooks

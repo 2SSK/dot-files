@@ -27,7 +27,10 @@ Singleton {
 
 	readonly property string fontSans: "Inter"
 	readonly property string fontMono: "JetBrainsMono Nerd Font"
-	readonly property int fontSize: Math.round(Config.bar.size * 0.42)
+	readonly property int fontSize: Math.round(Config.bar.size * 0.4) // 16 px at a 40 px bar
+	// capsules sit this far inside the bar on every side, so their round ends run parallel to the
+	// island's: a capsule's radius is the bar's less this gap
+	readonly property int barInset: Math.round(Config.bar.size * 0.15)
 	readonly property int iconSize: fontSize + 4
 
 	FileView {

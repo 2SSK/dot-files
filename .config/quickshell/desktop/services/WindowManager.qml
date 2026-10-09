@@ -19,6 +19,7 @@ Singleton {
 	readonly property string focusedOutput: workspaces.find(w => w.focused)?.output ?? ""
 
 	signal windowEvent(var data) // i3's window events: { change, container: { id, name, ... } }
+	signal treeRead(var tree) // the whole window tree, reread after each change
 
 	// a command for the window manager: through i3-msg, as Quickshell.I3's own connection drops them
 	function command(cmd: string): void {
@@ -87,7 +88,8 @@ Singleton {
 		}
 	}
 
-	// scratchpad windows keep a scratchpad_state other than "none", hidden in __i3_scratch or shown
+	// the tree: the scratchpad (windows keep a scratchpad_state other than "none", hidden in
+	// __i3_scratch or shown), and for the window switcher (treeRead)
 	Process {
 		id: tree
 
@@ -107,9 +109,11 @@ Singleton {
 						walk(child, hidden);
 				};
 				try {
-					walk(JSON.parse(text), false);
+					const parsed = JSON.parse(text);
+					walk(parsed, false);
 					root.scratchpad = total;
 					root.scratchpadShown = shown;
+					root.treeRead(parsed);
 				} catch (e) {}
 			}
 		}

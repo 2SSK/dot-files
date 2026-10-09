@@ -98,13 +98,6 @@ Singleton {
 		}
 	}
 
-	Timer {
-		id: reread
-
-		interval: 150
-		onTriggered: tree.running = true
-	}
-
 	Connections {
 		target: WindowManager
 
@@ -114,21 +107,11 @@ Singleton {
 				root.mru = [id, ...root.mru.filter(m => m !== id)].slice(0, 100);
 			else if (data.change === "close")
 				root.mru = root.mru.filter(m => m !== id);
-			reread.restart();
 		}
-	}
 
-	Process {
-		id: tree
-
-		running: true
-		command: [Quickshell.env("WAYLAND_DISPLAY") ? "swaymsg" : "i3-msg", "-t", "get_tree"]
-		stdout: StdioCollector {
-			onStreamFinished: {
-				try {
-					root.read(JSON.parse(text));
-				} catch (e) {}
-			}
+		// the window list, from the tree WindowManager reads after each change (no second read)
+		function onTreeRead(tree: var): void {
+			root.read(tree);
 		}
 	}
 }

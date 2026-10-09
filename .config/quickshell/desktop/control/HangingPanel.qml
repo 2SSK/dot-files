@@ -74,16 +74,18 @@ FloatingWindow {
 		}
 	}
 
-	// the window's shape: the panel (as it slides) and the two curves, a square each minus the
-	// circle that makes it concave
+	// the window's shape: the panel where it ends up and the two curves, a square each minus the
+	// circle that makes it concave. It stays put while the panel drops in: a shape that changed
+	// every frame made X and picom redo the window's outline and its blur 60 times a second, which
+	// flickered. So the panel only drops a little, fading in, inside this fixed shape.
 	readonly property real slotX: root.px - root.fillet
-	readonly property real curveY: root.py + (root.below ? card.y : card.y + card.height - root.fillet)
+	readonly property real curveY: root.py + (root.below ? 0 : root.panelHeight - root.fillet)
 
 	mask: Region {
 		x: root.slotX + root.fillet
-		y: root.py + Math.max(0, card.y)
+		y: root.py
 		width: root.panelWidth
-		height: Math.max(0, root.panelHeight - Math.abs(card.y))
+		height: root.panelHeight
 		bottomLeftRadius: root.below ? 18 : 0
 		bottomRightRadius: root.below ? 18 : 0
 		topLeftRadius: root.below ? 0 : 18
@@ -92,7 +94,7 @@ FloatingWindow {
 		Region {
 			x: root.slotX
 			y: root.curveY
-			width: card.y > -card.height + root.fillet ? root.fillet : 0
+			width: root.fillet
 			height: root.fillet
 
 			Region {
@@ -108,7 +110,7 @@ FloatingWindow {
 		Region {
 			x: root.slotX + root.fillet + root.panelWidth
 			y: root.curveY
-			width: card.y > -card.height + root.fillet ? root.fillet : 0
+			width: root.fillet
 			height: root.fillet
 
 			Region {
@@ -122,13 +124,21 @@ FloatingWindow {
 		}
 	}
 
-	// the panel's place under the bar (and room for its curves); the panel slides out of its edge
+	// the panel's place under the bar (and room for its curves): it fades in, dropping a little
 	Item {
 		x: root.px - root.fillet
 		y: root.py
 		width: root.panelWidth + 2 * root.fillet
 		height: root.panelHeight
 		clip: true
+		opacity: root.placed && root.open ? 1 : 0
+
+		Behavior on opacity {
+			NumberAnimation {
+				duration: root.open ? 180 : 140
+				easing.type: Easing.OutCubic
+			}
+		}
 
 		// inverse curves where the panel meets the bar, so the bar's edge flows into it
 		Repeater {
@@ -140,9 +150,9 @@ FloatingWindow {
 				required property int modelData
 				property color tint: root.fill
 
-				// beside the panel's edge at the bar, following its slide (outside it: the panel clips)
+				// beside the panel's edge at the bar, where it joins it
 				x: modelData < 0 ? 0 : root.fillet + root.panelWidth
-				y: root.below ? card.y : card.y + card.height - height
+				y: root.below ? 0 : root.panelHeight - height
 				width: root.fillet
 				height: root.fillet
 				transform: Scale {
@@ -175,7 +185,7 @@ FloatingWindow {
 			x: root.fillet
 			width: root.panelWidth
 			height: root.panelHeight
-			y: root.placed && root.open ? 0 : root.below ? -height : height
+			y: root.placed && root.open ? 0 : root.below ? -16 : 16
 			color: root.fill
 			topLeftRadius: root.below ? 0 : 18
 			topRightRadius: root.below ? 0 : 18
@@ -191,7 +201,7 @@ FloatingWindow {
 
 			Behavior on y {
 				NumberAnimation {
-					duration: root.open ? 260 : 200
+					duration: root.open ? 220 : 140
 					easing.type: root.open ? Easing.OutCubic : Easing.InCubic
 				}
 			}
