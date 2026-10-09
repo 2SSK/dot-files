@@ -25,7 +25,8 @@ PopupWindow {
 	anchor.rect.y: (Config.position === "top" ? bar.height : 0) - 14 + below
 	implicitWidth: 360 + 2 * pad
 	implicitHeight: Math.max(1, stack.implicitHeight) + 2 * pad
-	visible: focused && Notifications.popups.length > 0
+	// not over the control center, which lists them anyway
+	visible: focused && Notifications.popups.length > 0 && !Panel.controlOpen
 	color: "transparent"
 	mask: Region {
 		item: stack

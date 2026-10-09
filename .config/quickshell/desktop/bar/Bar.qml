@@ -129,9 +129,4 @@ PanelWindow {
 	Toasts {
 		bar: bar
 	}
-
-	NotificationCenter {
-		bar: bar
-		island: shape
-	}
 }

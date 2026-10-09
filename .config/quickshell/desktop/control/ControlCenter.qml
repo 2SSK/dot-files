@@ -4,6 +4,7 @@ import QtQuick
 import Quickshell
 import Quickshell.I3
 import qs
+import qs.services
 import qs.widgets
 
 // The control center: an icon sidebar of pages beside the page. A real window (X11 popups can't
@@ -13,7 +14,9 @@ FloatingWindow {
 	id: root
 
 	readonly property var pages: [
-		{ key: "home", glyph: "\u{EB06}", title: "Home" }
+		{ key: "home", glyph: "\u{EB06}", title: "Home" },
+		{ key: "calendar", glyph: "\u{EAB0}", title: "Calendar" },
+		{ key: "notifications", glyph: "\u{EAA2}", title: "Notifications" }
 	]
 	readonly property ShellScreen screen: Quickshell.screens.find(s => s.name === I3.focusedMonitor?.name) ?? Quickshell.screens[0]
 
@@ -83,6 +86,16 @@ FloatingWindow {
 							font.pixelSize: 18
 							font.weight: Font.Normal
 							color: entry.on ? Theme.onPrimary : Theme.fg
+						}
+
+						Rectangle {
+							visible: entry.modelData.key === "notifications" && Notifications.unread > 0 && !entry.on
+							x: parent.width - 12
+							y: 6
+							width: 7
+							height: 7
+							radius: 4
+							color: Theme.primary
 						}
 
 						HoverHandler {
@@ -158,7 +171,7 @@ FloatingWindow {
 				x: 18
 				y: 20
 				width: parent.width - 36
-				sourceComponent: home
+				sourceComponent: ({ home, calendar, notifications })[Panel.controlPage] ?? home
 			}
 		}
 	}
@@ -168,4 +181,28 @@ FloatingWindow {
 
 		HomePage {}
 	}
+
+	Component {
+		id: calendar
+
+		CalendarPage {}
+	}
+
+	Component {
+		id: notifications
+
+		NotificationsPage {}
+	}
+
+	// seen: the bell's dot goes
+	Connections {
+		target: Panel
+
+		function onControlPageChanged(): void {
+			if (Panel.controlPage === "notifications")
+				Notifications.unread = 0;
+		}
+	}
+
+	Component.onCompleted: if (Panel.controlPage === "notifications") Notifications.unread = 0
 }

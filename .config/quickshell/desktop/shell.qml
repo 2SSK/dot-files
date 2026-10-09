@@ -76,7 +76,7 @@ ShellRoot {
 		target: "notifications"
 
 		function toggle(): void {
-			Panel.toggleCenter();
+			Panel.toggleControl("notifications");
 		}
 		function dnd(): void {
 			Notifications.dnd = !Notifications.dnd;

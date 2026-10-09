@@ -9,7 +9,8 @@ Colours come from the desktop theme (see [theme.md](theme.md)); settings from
 `$mod+c` or the sliders icon in the bar: a window at the top right with an icon sidebar. Home has a
 greeting, quick toggles (Wi-Fi, Bluetooth, Do Not Disturb, microphone, screen recording, the bar),
 volume, mic and brightness sliders (a click on an icon mutes) and the media player (MPRIS: cover,
-progress, previous / play / next). The gear opens the settings, the power icon the power menu.
+progress, previous / play / next). Calendar is a month view (the clock in the bar opens it);
+Notifications is the history. The gear opens the settings, the power icon the power menu.
 Escape, the key again, or focusing another window closes it. Wi-Fi needs NetworkManager, Bluetooth
 BlueZ; without them the tiles say "Not available".
 
@@ -44,7 +45,7 @@ Hidden with `$mod+Shift+b`, the bar comes back over the windows while the pointe
 | F6, mic-mute key | microphone mute |
 | `$mod+F12` | start / stop screen recording (gpu-screen-recorder, into `~/Videos`) |
 | `$mod+Shift+b` | hide / show the bar |
-| `$mod+n` | notification centre |
+| `$mod+n` | notifications (control center) |
 | `$mod+Shift+s` | settings |
 | `$mod+c` | control center |
 | `$mod+p` | power menu (again or Escape closes): arrows or 1–5 pick, Enter runs |
@@ -57,8 +58,9 @@ The shell is the notification daemon on i3. New ones pop up at the top right and
 timeout (5 s unless the app sets one), not while hovered; critical ones stay until closed. A click
 runs the app's default action; ✕ dismisses for good.
 
-The bell shows a dot for unread ones. A click (or `$mod+n`) opens the centre: the history, newest
-first, Do Not Disturb and Clear; a click outside closes it. A right click on the bell toggles Do
+The bell shows a dot for unread ones. A click (or `$mod+n`) opens the control center's
+Notifications tab: the history, newest first, filtered by All / Today / Yesterday / Older, with Do
+Not Disturb and Clear. A right click on the bell toggles Do
 Not Disturb: popups stop, except critical ones, and everything still reaches the history. The
 history lasts until the shell restarts.
 
