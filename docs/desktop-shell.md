@@ -21,7 +21,7 @@ the page's title, its buttons and ✕, then the page. The bar's widgets open the
 | Page | Opened by | What's there |
 | --- | --- | --- |
 | Home | `$mod+c` | quick toggles (Wi-Fi, Bluetooth, Do Not Disturb, microphone, recording, bar), volume / mic / brightness, the media player (any MPRIS player, browsers included; a switcher when several play; Space plays or pauses, ← → skip) |
-| Calendar | the clock | a month (‹ ›); a click picks a day, whose events show below; its + adds one, with an optional time ("09:30": a reminder that notifies when due); kept in `~/.local/share/desktop/events.json`. Below them, the alarms (see Alarms) |
+| Calendar | the clock | two views, switched in the header. **Calendar**: a month (‹ ›; a dot under days with something on); a click picks a day, whose events, reminders and alarms show below; its + adds one to it. **Reminders & alarms**: one line to add an event, reminder or alarm on any day (click the kind to change it, the date chip for a small month, a time, the text, and for an alarm once / daily / weekdays), then the reminders coming up and every alarm with its switch. A reminder notifies when due; see Alarms. Kept in `~/.local/share/desktop/events.json` and `alarms.json` |
 | System monitor | cpu / mem / temp | CPU, memory and temperature with two minutes of history, disk, uptime, load |
 | Notifications | the bell, `$mod+n` | the history by day, Clear all; Do Not Disturb in the header |
 | Wi-Fi | the Wi-Fi icon | networks by signal: connect (a password for new secured ones), disconnect, forget; scans while open |
@@ -43,11 +43,10 @@ private folder).
 
 ## Alarms
 
-Under the calendar: each alarm with its time, label, how often (once, every day, weekdays) and a
-switch; ✕ removes it. The + opens a line: a time, a label, a click on the chip steps how often,
-Enter adds it. A ringing alarm plays the alarm sound (5 minutes at most) and shows a card under the
-bar: **Stop** ends it (a repeating one rings again on its next day), **Snooze** silences it and rings
-again in 5 minutes (the list shows "Snoozed" meanwhile). Kept in `~/.local/share/desktop/alarms.json`.
+Set in the calendar (Reminders & alarms): a time, a label and how often; a once alarm rings on its
+day. A ringing alarm plays the alarm sound (5 minutes at most) and shows a card under the bar:
+**Stop** ends it (a repeating one rings again on its next day), **Snooze** silences it and rings
+again in 5 minutes (the list shows "Snoozed" meanwhile).
 
 ## Wallpaper
 

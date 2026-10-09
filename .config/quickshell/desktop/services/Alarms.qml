@@ -5,7 +5,8 @@ import Quickshell
 import Quickshell.Io
 
 // Alarms, kept on this machine in ~/.local/share/desktop/alarms.json: { id, time (HH:mm), label,
-// repeat (once, daily or weekdays), enabled, fired (the last minute it rang, "yyyy-MM-ddTHH:mm"),
+// repeat (once, daily or weekdays), date (yyyy-MM-dd: the day a once alarm rings; "" for the next
+// time it comes), enabled, fired (the last minute it rang, "yyyy-MM-ddTHH:mm"),
 // snooze (when a snoozed one rings again, ms, or 0) }. A ringing alarm shows a card (AlarmCard)
 // and plays the alarm sound every few seconds until it's stopped or snoozed, for 5 minutes at most.
 Singleton {
@@ -15,10 +16,28 @@ Singleton {
 	property var ringing: null // the alarm ringing now
 	readonly property string sound: "/usr/share/sounds/freedesktop/stereo/alarm-clock-elapsed.oga"
 
-	function add(time: string, label: string, repeat: string): void {
+	// date: the day for a once alarm (ignored for repeating ones)
+	function add(time: string, label: string, repeat: string, date: var): bool {
 		if (!/^\d{1,2}:\d{2}$/.test(time.trim()))
-			return;
-		save([...adapter.alarms, { id: `${Date.now()}-${Math.floor(Math.random() * 1e6)}`, time: time.trim().padStart(5, "0"), label: label.trim() || "Alarm", repeat, enabled: true, fired: "", snooze: 0 }]);
+			return false;
+		const day = repeat === "once" && date ? Qt.formatDate(date, "yyyy-MM-dd") : "";
+		save([...adapter.alarms, { id: `${Date.now()}-${Math.floor(Math.random() * 1e6)}`, time: time.trim().padStart(5, "0"), label: label.trim() || "Alarm", repeat, date: day, enabled: true, fired: "", snooze: 0 }]);
+		return true;
+	}
+
+	// whether it rings on a day: a once alarm on its date (or, undated, today), a daily one every
+	// day, a weekdays one Monday to Friday
+	function ringsOn(alarm: var, day: date): bool {
+		if (alarm.repeat === "daily")
+			return true;
+		if (alarm.repeat === "weekdays")
+			return day.getDay() >= 1 && day.getDay() <= 5;
+		return (alarm.date || Qt.formatDate(new Date(), "yyyy-MM-dd")) === Qt.formatDate(day, "yyyy-MM-dd");
+	}
+
+	// the enabled ones ringing on a day, by time
+	function on(day: date): var {
+		return alarms.filter(a => a.enabled && ringsOn(a, day));
 	}
 
 	function update(id: string, change: var): void {
@@ -70,7 +89,7 @@ Singleton {
 				}
 				if (!alarm.enabled || alarm.time !== hm || alarm.fired === minute)
 					continue;
-				if (alarm.repeat === "weekdays" && !weekday)
+				if (alarm.repeat === "weekdays" && !weekday || alarm.repeat === "once" && alarm.date && alarm.date !== Qt.formatDate(now, "yyyy-MM-dd"))
 					continue;
 				root.update(alarm.id, { fired: minute, enabled: alarm.repeat !== "once" });
 				root.ring(alarm);
