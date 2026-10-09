@@ -11,7 +11,7 @@ Colours come from the desktop theme (see [theme.md](theme.md)); settings from
 | `style` | `island` (a floating pill) or `static` (the whole edge, word labels and separators) |
 | `position` | `top`, `bottom`; `left`/`right` on sway only (i3 docks only top or bottom, so X11 uses the top) |
 | `size`, `opacity`, `length` | thickness in px, background opacity, the island's share of the edge (0 fits its content) |
-| `left`, `center`, `right` | widgets: `launcher`, `workspaces`, `clock`, `stats`, `volume`, `brightness`, `battery`, `tray`, `recorder`, `power` |
+| `left`, `center`, `right` | widgets: `launcher`, `workspaces`, `clock`, `stats`, `volume`, `brightness`, `battery`, `tray`, `recorder`, `notifications`, `power` |
 
 Workspaces are dots: 1–5 always, the shown one a wide pill, used ones bright, empty ones faint.
 Hidden with `$mod+Shift+b`, the bar comes back over the windows while the pointer is at its edge.
@@ -25,9 +25,21 @@ Hidden with `$mod+Shift+b`, the bar comes back over the windows while the pointe
 | F6, mic-mute key | microphone mute |
 | `$mod+F12` | start / stop screen recording (gpu-screen-recorder, into `~/Videos`) |
 | `$mod+Shift+b` | hide / show the bar |
+| `$mod+n` | notification centre |
 | `$mod+p` | power menu (again or Escape closes): arrows or 1–5 pick, Enter runs |
 
 Each change shows in a card at the top right; Caps Lock and Num Lock show there by themselves.
+
+## Notifications
+
+The shell is the notification daemon on i3. New ones pop up at the top right and leave after their
+timeout (5 s unless the app sets one), not while hovered; critical ones stay until closed. A click
+runs the app's default action; ✕ dismisses for good.
+
+The bell shows a dot for unread ones. A click (or `$mod+n`) opens the centre: the history, newest
+first, Do Not Disturb and Clear; a click outside closes it. A right click on the bell toggles Do
+Not Disturb: popups stop, except critical ones, and everything still reaches the history. The
+history lasts until the shell restarts.
 
 ## Power menu
 
@@ -43,5 +55,5 @@ press while `power.confirm` is on. Nothing hibernates.
 ## IPC
 
 `qs -c desktop ipc call <target> <function>`: `audio up|down|mute|mic`, `brightness up|down`,
-`bar toggle`, `recorder toggle`, `power open|toggle|close|next|prev|activate|pick <n>`,
+`bar toggle`, `recorder toggle`, `notifications toggle|dnd|clear`, `power open|toggle|close|next|prev|activate|pick <n>`,
 `theme reload`.

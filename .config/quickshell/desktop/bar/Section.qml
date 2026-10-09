@@ -22,11 +22,12 @@ Line {
 			battery: "BatteryLevel",
 			tray: "Tray",
 			power: "PowerButton",
-			recorder: "RecorderButton"
+			recorder: "RecorderButton",
+			notifications: "NotificationButton"
 		})
 
 	vertical: Config.vertical
-	spacing: Config.island ? 16 : 10
+	spacing: Config.island ? 12 : 10
 
 	Repeater {
 		id: slots

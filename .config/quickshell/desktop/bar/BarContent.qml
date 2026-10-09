@@ -10,7 +10,7 @@ Item {
 	readonly property bool vertical: Config.vertical
 	readonly property int pad: Config.island ? Math.round(Config.bar.size / 2.5) : 8
 	// what the parts need along the bar, with room between them
-	readonly property real naturalLength: 2 * pad + 64 + (vertical ? start.height + center.height + end.height : start.width + center.width + end.width)
+	readonly property real naturalLength: 2 * pad + 96 + (vertical ? start.height + center.height + end.height : start.width + center.width + end.width)
 
 	Section {
 		id: start

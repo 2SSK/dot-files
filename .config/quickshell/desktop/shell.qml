@@ -10,7 +10,7 @@ import qs.services
 
 ShellRoot {
 	// services that watch on their own, started with the shell
-	readonly property var watchers: [Locks, Recorder]
+	readonly property var watchers: [Locks, Recorder, Notifications]
 
 	Variants {
 		model: Quickshell.screens
@@ -51,6 +51,20 @@ ShellRoot {
 
 		function toggle(): void {
 			Panel.toggleBar();
+		}
+	}
+
+	IpcHandler {
+		target: "notifications"
+
+		function toggle(): void {
+			Panel.toggleCenter();
+		}
+		function dnd(): void {
+			Notifications.dnd = !Notifications.dnd;
+		}
+		function clear(): void {
+			Notifications.clear();
 		}
 	}
 

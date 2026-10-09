@@ -122,4 +122,13 @@ PanelWindow {
 	Osd {
 		bar: bar
 	}
+
+	Toasts {
+		bar: bar
+	}
+
+	NotificationCenter {
+		bar: bar
+		island: shape
+	}
 }

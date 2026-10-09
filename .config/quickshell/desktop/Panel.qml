@@ -14,6 +14,7 @@ Singleton {
 	property bool peek: false // the hidden bar showing while the pointer is at the edge
 	property string view: "" // "" or "power"
 	property bool osdShown: false
+	property bool centerOpen: false // the notification centre
 	property string osdKind: "volume" // volume, mic, brightness, caps or num
 	property real osdValue: 0
 	property bool osdMuted: false
@@ -36,6 +37,10 @@ Singleton {
 		osdMuted = muted;
 		osdShown = true;
 		osdTimer.restart();
+	}
+
+	function toggleCenter(): void {
+		centerOpen = !centerOpen;
 	}
 
 	function toggleBar(): void {
