@@ -13,7 +13,7 @@ usage() {
 	cat <<'EOF'
 usage: theme set <family> [--mode dark|light]
        theme mode dark|light|toggle
-       theme list
+       theme list [--json]
        theme current
 EOF
 }
@@ -118,6 +118,7 @@ main() {
 		apply "$family" "$mode"
 		;;
 	list)
+		[[ ${2:-} != --json ]] || exec python3 "$lib/theme_render.py" palettes
 		local f name
 		for f in "$themes"/*.toml; do
 			name="$(basename "$f" .toml)"

@@ -9,6 +9,7 @@ Rectangle {
 	property string placeholder
 	property bool password
 	signal accepted(string text)
+	signal keyPressed(var event) // before the field's own handling: accept it to take the key
 
 	function focusField(): void {
 		input.forceActiveFocus();
@@ -35,6 +36,7 @@ Rectangle {
 		clip: true
 		activeFocusOnTab: true
 		onAccepted: root.accepted(text)
+		Keys.onPressed: event => root.keyPressed(event)
 	}
 
 	Text {

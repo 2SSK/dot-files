@@ -7,6 +7,7 @@ import Quickshell.Io
 import qs.bar
 import qs.clipboard
 import qs.wallpaper
+import qs.launcher
 import qs.control
 import qs.settings
 import qs
@@ -34,6 +35,14 @@ ShellRoot {
 		active: Panel.clipboardShown
 
 		ClipboardWindow {
+			visible: true
+		}
+	}
+
+	LazyLoader {
+		active: Panel.launcherShown
+
+		LauncherWindow {
 			visible: true
 		}
 	}
@@ -128,6 +137,18 @@ ShellRoot {
 
 		function toggle(): void {
 			Panel.clipboardOpen = !Panel.clipboardOpen;
+		}
+	}
+
+	// apps, emoji, files or themes; again on the same one closes it
+	IpcHandler {
+		target: "launcher"
+
+		function toggle(mode: string): void {
+			Panel.toggleLauncher(mode);
+		}
+		function close(): void {
+			Panel.launcherOpen = false;
 		}
 	}
 

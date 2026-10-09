@@ -41,6 +41,26 @@ item: pin it, save it as a code note, or remove it. The history lives in memory 
 passwords never reach the disk; pinned items are kept in `~/.local/state/desktop/clipboard/` (a
 private folder).
 
+## Launcher
+
+One panel dropping out of the bar, with one search over four modes; Tab and Shift+Tab (or the chips)
+switch them, the arrows move, Enter picks:
+
+| Mode | Key | Enter |
+| --- | --- | --- |
+| Apps | `$mod+d` | launches it; the ones used most come first |
+| Emoji | `$mod+;` | copies it; recent ones first, search by name or group (`heart`, `food`) |
+| Files | `$mod+Shift+f` | opens it; **Ctrl+Enter** copies its full path (to paste into a chat), **Shift+Enter** its content (text as text, an image as an image, anything else as the file, so it pastes as an attachment); the row's buttons do the same. Without a search, the files changed this week, newest first |
+| Themes | `$mod+Shift+y` | applies it and stays open, to try another; the sun/moon chip switches dark and light |
+
+`desktop-file open|path|content <file>` does the file actions, `desktop-file find [query]` the
+search (fd and fzf over `$HOME`, leaving out `.git`, caches and dependencies). Opening picks by type:
+text and code in `$EDITOR` (nvim) inside `$TERMINAL` (kitty); web pages, PDFs and SVGs in a new tab
+of the browser that's running (Brave, Firefox, Chromium, Chrome, LibreWolf, Vivaldi, Zen), else of
+the default one; anything else in its default application. The emoji come from Unicode's list
+(`~/.local/share/desktop/emoji.tsv`); use counts and recent emoji are kept in
+`~/.local/state/desktop/launcher.json`.
+
 ## Alarms
 
 Set in the calendar (Reminders & alarms): a time, a label and how often; a once alarm rings on its
@@ -99,6 +119,7 @@ Hidden with `$mod+Shift+b`, the bar comes back over the windows while the pointe
 | `$mod+c` | control center |
 | `$mod+Shift+v` | clipboard history |
 | `$mod+Shift+p` | wallpapers |
+| `$mod+d`, `$mod+;`, `$mod+Shift+f`, `$mod+Shift+y` | the launcher: apps, emoji, files, themes |
 | `$mod+Shift+t` / `$mod+Shift+n` | todo / notes |
 | `$mod+p` | power menu (again, Escape or a click beside it closes): arrows or 1–5 pick, Enter runs |
 
@@ -133,5 +154,5 @@ press while `power.confirm` is on. Nothing hibernates.
 ## IPC
 
 `qs -c desktop ipc call <target> <function>`: `audio up|down|mute|mic`, `brightness up|down`,
-`bar toggle`, `recorder toggle`, `notifications toggle|dnd|clear`, `settings toggle`, `control toggle|open <page>|page <page>|close`, `clipboard toggle`, `wallpaper toggle|shuffle`, `alarm stop|snooze`, `power open|toggle|close|next|prev|activate|pick <n>`,
+`bar toggle`, `recorder toggle`, `notifications toggle|dnd|clear`, `settings toggle`, `control toggle|open <page>|page <page>|close`, `clipboard toggle`, `wallpaper toggle|shuffle`, `launcher toggle <apps|emoji|files|themes>|close`, `alarm stop|snooze`, `power open|toggle|close|next|prev|activate|pick <n>`,
 `theme reload`.
