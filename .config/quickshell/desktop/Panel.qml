@@ -56,14 +56,14 @@ Singleton {
 	Timer {
 		id: showCapture
 
-		interval: 60
+		interval: 0
 		onTriggered: root.captureShown = root.captureOpen
 	}
 
 	Timer {
 		id: hideCapture
 
-		interval: 230
+		interval: 0
 		onTriggered: if (!root.captureOpen) root.captureShown = false
 	}
 
@@ -92,14 +92,14 @@ Singleton {
 	Timer {
 		id: showLauncher
 
-		interval: 60
+		interval: 0
 		onTriggered: root.launcherShown = root.launcherOpen
 	}
 
 	Timer {
 		id: hideLauncher
 
-		interval: 230
+		interval: 0
 		onTriggered: if (!root.launcherOpen) root.launcherShown = false
 	}
 
@@ -118,14 +118,14 @@ Singleton {
 	Timer {
 		id: showWallpaper
 
-		interval: 60
+		interval: 0
 		onTriggered: root.wallpaperShown = root.wallpaperOpen
 	}
 
 	Timer {
 		id: hideWallpaper
 
-		interval: 230
+		interval: 0
 		onTriggered: if (!root.wallpaperOpen) root.wallpaperShown = false
 	}
 
@@ -144,14 +144,14 @@ Singleton {
 	Timer {
 		id: showClipboard
 
-		interval: 60
+		interval: 0
 		onTriggered: root.clipboardShown = root.clipboardOpen
 	}
 
 	Timer {
 		id: hideClipboard
 
-		interval: 230
+		interval: 0
 		onTriggered: if (!root.clipboardOpen) root.clipboardShown = false
 	}
 	property var islands: ({}) // screen name -> the bar's rect on it (screen coordinates from its origin)
@@ -180,14 +180,14 @@ Singleton {
 	Timer {
 		id: showControl
 
-		interval: 60
+		interval: 0
 		onTriggered: root.controlShown = root.controlOpen
 	}
 
 	Timer {
 		id: hideControl
 
-		interval: 230
+		interval: 0
 		onTriggered: if (!root.controlOpen) root.controlShown = false
 	}
 

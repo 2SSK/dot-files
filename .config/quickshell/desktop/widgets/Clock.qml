@@ -17,7 +17,7 @@ Label {
 		onClicked: Panel.toggleControl("calendar")
 	}
 
-	text: Qt.formatDateTime(clock.date, Config.vertical ? "hh\nmm" : "h:mm AP ddd, MMM dd")
+	text: Qt.formatDateTime(clock.date, Config.vertical ? "hh\nmm" : "hh:mm AP ddd, MMM dd")
 	lineHeight: 0.9
 	font.weight: Font.Medium
 }
