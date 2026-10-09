@@ -10,8 +10,9 @@ import Quickshell.I3
 Singleton {
 	id: root
 
+	property bool barShown: true
 	property string view: "" // "", "osd" or "power"
-	property string osdKind: "volume" // volume, mic or brightness
+	property string osdKind: "volume" // volume, mic, brightness, caps or num
 	property real osdValue: 0
 	property bool osdMuted: false
 	property int selected: 0
@@ -33,6 +34,10 @@ Singleton {
 		osdMuted = muted;
 		view = "osd";
 		osdTimer.restart();
+	}
+
+	function toggleBar(): void {
+		barShown = !barShown;
 	}
 
 	function openPower(): void {

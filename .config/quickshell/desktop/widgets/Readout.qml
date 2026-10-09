@@ -17,6 +17,7 @@ Line {
 	Glyph {
 		text: Config.island || Config.vertical ? root.glyph : root.label
 		color: Config.island || Config.vertical ? root.tint : Theme.primary
+		font.pixelSize: Config.island || Config.vertical ? Theme.iconSize : Theme.fontSize
 	}
 
 	Glyph {

@@ -6,7 +6,7 @@ import qs
 Glyph {
 	text: "󰣇"
 	color: Theme.primary
-	font.pixelSize: Theme.fontSize + 3
+	font.pixelSize: Theme.iconSize + 1
 
 	MouseArea {
 		anchors.fill: parent

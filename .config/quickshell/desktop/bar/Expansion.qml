@@ -18,17 +18,20 @@ PopupWindow {
 	readonly property string position: Config.position
 	readonly property int size: Config.bar.size
 	readonly property bool open: Panel.view !== "" && I3.focusedMonitor?.name === bar.screen?.name
+	// on a shown island the shape starts as the pill itself; otherwise it's a card from the edge
+	readonly property bool pill: Config.island && Panel.barShown
 	property string view: "" // stays set while closing, so the content doesn't vanish mid-animation
 
 	// along = the bar's direction, across = away from the edge
 	readonly property real islandAlong: vertical ? island.height : island.width
 	readonly property real viewAlong: (vertical ? loader.implicitHeight : loader.implicitWidth) + 40
 	readonly property real viewAcross: (vertical ? loader.implicitWidth : loader.implicitHeight) + 24
-	readonly property real openAlong: Config.island ? Math.max(islandAlong, viewAlong) : viewAlong
-	readonly property real openAcross: (Config.island ? size : 0) + viewAcross
-	readonly property real closedAlong: Config.island ? islandAlong : viewAlong
-	readonly property real closedAcross: Config.island ? size : 0
-	readonly property real edge: Config.island ? bar.gap : size // from the screen edge to the shape
+	readonly property real openAlong: pill ? Math.max(islandAlong, viewAlong) : viewAlong
+	readonly property real openAcross: (pill ? size : 0) + viewAcross
+	readonly property real closedAlong: pill ? islandAlong : viewAlong
+	readonly property real closedAcross: pill ? size : 0
+	// from the screen edge to the shape: the island's gap, or just past a shown static bar
+	readonly property real edge: Config.island ? bar.gap : Panel.barShown ? size : 0
 	readonly property int pad: 32 // room for the shadow
 
 	onOpenChanged: {
@@ -98,7 +101,7 @@ PopupWindow {
 		border.width: 1
 		border.color: Qt.alpha(Theme.border, 0.6)
 		// island: the pill's ends round off the open card; static: only the corners away from the edge
-		radius: Config.island ? (root.open ? 22 : size / 2) : 0
+		radius: Config.island ? (root.open || !root.pill ? 22 : size / 2) : 0
 		topLeftRadius: Config.island ? radius : (root.position === "bottom" || root.position === "right" ? 16 : 0)
 		topRightRadius: Config.island ? radius : (root.position === "bottom" || root.position === "left" ? 16 : 0)
 		bottomLeftRadius: Config.island ? radius : (root.position === "top" || root.position === "right" ? 16 : 0)
@@ -128,7 +131,7 @@ PopupWindow {
 
 		// on an island the bar stays in place inside the growing shape
 		BarContent {
-			visible: Config.island
+			visible: root.pill
 			screen: root.bar.screen
 			width: root.island.width
 			height: root.island.height
@@ -139,7 +142,7 @@ PopupWindow {
 		Loader {
 			id: loader
 
-			readonly property real offset: Config.island ? root.size : 0
+			readonly property real offset: root.pill ? root.size : 0
 
 			x: root.position === "left" ? loader.offset + 12 : root.position === "right" ? parent.width - loader.offset - 12 - width : (parent.width - width) / 2
 			y: root.position === "top" ? loader.offset + 12 : root.position === "bottom" ? parent.height - loader.offset - 12 - height : (parent.height - height) / 2

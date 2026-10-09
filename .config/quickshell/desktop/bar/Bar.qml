@@ -5,6 +5,8 @@ import qs
 // One screen's bar, on any edge. Island: a rounded pill floating off the edge, waybar-like. Static:
 // the whole edge, polybar-like. i3 reserves a dock's full window, so the window is only as big as
 // the bar; what the island grows into (OSD, power menu) is the Expansion popup over the windows.
+// Hidden (Panel.barShown), the bar slides off the edge and the window shrinks to a pixel, so i3
+// gives the room back while the popup still has a window to hang from.
 PanelWindow {
 	id: bar
 
@@ -15,6 +17,7 @@ PanelWindow {
 	readonly property int size: Config.bar.size
 	readonly property int gap: Config.island ? 6 : 0 // the island's distance from the screen edge
 	readonly property real edgeLength: vertical ? modelData.height : modelData.width
+	property bool docked: true // the window at full size; false only once the bar has slid away
 	readonly property real length: !Config.island ? edgeLength : Math.min(edgeLength - 2 * gap, Math.max(content.naturalLength, Config.bar.length * edgeLength))
 
 	screen: modelData
@@ -22,15 +25,62 @@ PanelWindow {
 	anchors.bottom: position !== "top"
 	anchors.left: position !== "right"
 	anchors.right: position !== "left"
-	implicitWidth: vertical ? size + gap : 0
-	implicitHeight: vertical ? 0 : size + gap
+	implicitWidth: vertical ? (docked ? size + gap : 1) : 0
+	implicitHeight: vertical ? 0 : docked ? size + gap : 1
 	color: "transparent"
 	mask: Region {
 		item: shape
 	}
 
+	Connections {
+		target: Panel
+
+		function onBarShownChanged(): void {
+			if (Panel.barShown)
+				bar.docked = true;
+			else
+				undock.restart();
+		}
+	}
+
+	Timer {
+		id: undock
+
+		interval: 280
+		onTriggered: if (!Panel.barShown) bar.docked = false
+	}
+
 	Rectangle {
 		id: shape
+
+		// slid off the edge while hidden
+		readonly property real away: Panel.barShown ? 0 : (bar.size + bar.gap + 8) * (bar.position === "top" || bar.position === "left" ? -1 : 1)
+
+		opacity: Panel.barShown ? 1 : 0
+		transform: Translate {
+			x: bar.vertical ? shape.away : 0
+			y: bar.vertical ? 0 : shape.away
+
+			Behavior on x {
+				NumberAnimation {
+					duration: 260
+					easing.type: Easing.OutCubic
+				}
+			}
+
+			Behavior on y {
+				NumberAnimation {
+					duration: 260
+					easing.type: Easing.OutCubic
+				}
+			}
+		}
+
+		Behavior on opacity {
+			NumberAnimation {
+				duration: 220
+			}
+		}
 
 		width: bar.vertical ? bar.size : bar.length
 		height: bar.vertical ? bar.length : bar.size

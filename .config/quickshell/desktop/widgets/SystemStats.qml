@@ -8,13 +8,13 @@ Line {
 	spacing: Config.vertical ? 8 : 14
 
 	Readout {
-		glyph: "󰻠"
+		glyph: "\uf4bc" // nf-oct-cpu
 		label: "cpu"
 		value: Math.round(Stats.cpu * 100) + "%"
 	}
 
 	Readout {
-		glyph: "󰍛"
+		glyph: "\uefc5" // nf-fa-memory
 		label: "mem"
 		value: Stats.memUsed.toFixed(1) + "G"
 	}

@@ -9,6 +9,9 @@ import qs
 import qs.services
 
 ShellRoot {
+	// services that watch on their own, started with the shell
+	readonly property var watchers: [Locks, Recorder]
+
 	Variants {
 		model: Quickshell.screens
 
@@ -40,6 +43,22 @@ ShellRoot {
 		}
 		function down(): void {
 			Brightness.change(-Config.brightness.step);
+		}
+	}
+
+	IpcHandler {
+		target: "bar"
+
+		function toggle(): void {
+			Panel.toggleBar();
+		}
+	}
+
+	IpcHandler {
+		target: "recorder"
+
+		function toggle(): void {
+			Recorder.toggle();
 		}
 	}
 

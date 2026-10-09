@@ -5,6 +5,7 @@ import qs
 Glyph {
 	text: "󰐥"
 	color: Panel.view === "power" ? Theme.error : Theme.fg
+	font.pixelSize: Theme.iconSize
 
 	MouseArea {
 		anchors.fill: parent

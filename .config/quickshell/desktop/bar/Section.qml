@@ -21,7 +21,8 @@ Line {
 			brightness: "BrightnessLevel",
 			battery: "BatteryLevel",
 			tray: "Tray",
-			power: "PowerButton"
+			power: "PowerButton",
+			recorder: "RecorderButton"
 		})
 
 	vertical: Config.vertical
@@ -47,6 +48,7 @@ Line {
 				return false;
 			}
 
+			visible: present // a missing battery or backlight leaves no gap
 			vertical: Config.vertical
 			spacing: root.spacing
 
