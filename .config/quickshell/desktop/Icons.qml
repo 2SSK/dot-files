@@ -72,6 +72,7 @@ Singleton {
 			"note": 0xeb6d,
 			"notes": 0xeb6e,
 			"palette": 0xeb01,
+			"paperclip": 0xeb02,
 			"photo": 0xeb0a,
 			"pin": 0xec9c,
 			"player-pause": 0xed45,

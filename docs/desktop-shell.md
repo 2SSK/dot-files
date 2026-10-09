@@ -69,10 +69,10 @@ switch them, the arrows move, Enter picks:
 | --- | --- | --- |
 | Apps | `$mod+d` | launches it; the ones used most come first |
 | Emoji | `$mod+;` | copies it; recent ones first, search by name or group (`heart`, `food`) |
-| Files | `$mod+Shift+f` | opens it; **Ctrl+Enter** copies its full path (to paste into a chat), **Shift+Enter** its content (text as text, an image as an image, anything else as the file, so it pastes as an attachment); the row's buttons do the same. Without a search, the files changed this week, newest first |
+| Files | `$mod+Shift+f` | opens it; **Ctrl+Enter** copies the file itself (its `file://` URI as `text/uri-list` alone, as a file manager copies), so Ctrl+V in Teams, WhatsApp or a mail attaches it; **Shift+Enter** copies its full path; **Ctrl+Shift+Enter** its content (text as text, an image as an image); the row's buttons do the same. Without a search, the files changed this week, newest first |
 | Themes | `$mod+Shift+y` | applies it and stays open, to try another; the sun/moon chip switches dark and light |
 
-`desktop-file open|path|content <file>` does the file actions, `desktop-file find [query]` the
+`desktop-file open|file|path|content <file>` does the file actions (`wl-copy-exact` puts a file on the Wayland clipboard as `text/uri-list` alone; `wl-copy` would add text), `desktop-file find [query]` the
 search (fd and fzf over `$HOME`, leaving out `.git`, caches and dependencies). Opening picks by type:
 text and code in `$EDITOR` (nvim) inside `$TERMINAL` (kitty); web pages, PDFs and SVGs in a new tab
 of the browser that's running (Brave, Firefox, Chromium, Chrome, LibreWolf, Vivaldi, Zen), else of

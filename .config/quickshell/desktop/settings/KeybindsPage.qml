@@ -20,7 +20,7 @@ Column {
 	readonly property var inside: [
 		{ keys: ["Alt", "Tab"], label: "Window switcher: hold Alt, Tab steps on (Shift+Tab back), let go to switch, Esc cancels" },
 		{ keys: ["Tab"], label: "Launcher: next mode (apps, emoji, files, themes); Shift+Tab goes back" },
-		{ keys: ["Ctrl", "Enter"], label: "Launcher, files: copy the path (Shift+Enter: the content)" },
+		{ keys: ["Ctrl", "Enter"], label: "Launcher, files: copy the file, to paste as an attachment (Shift+Enter: its path)" },
 		{ keys: ["←", "→", "↑", "↓"], label: "Launcher, capture and power menu: move; Enter picks" },
 		{ keys: ["R", "W", "S"], label: "Capture: screenshot of a region, the window, a screen (with Shift: record)" },
 		{ keys: ["1", "…", "5"], label: "Power menu: jump to an action" },
