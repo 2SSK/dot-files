@@ -25,7 +25,7 @@ Hidden with `$mod+Shift+b`, the bar comes back over the windows while the pointe
 | F6, mic-mute key | microphone mute |
 | `$mod+F12` | start / stop screen recording (gpu-screen-recorder, into `~/Videos`) |
 | `$mod+Shift+b` | hide / show the bar |
-| `$mod+Escape` | power menu: arrows or 1–5 pick, Enter runs, Escape closes |
+| `$mod+p` | power menu (again or Escape closes): arrows or 1–5 pick, Enter runs |
 
 Each change shows in a card at the top right; Caps Lock and Num Lock show there by themselves.
 
