@@ -139,7 +139,7 @@ Column {
 			Level {
 				visible: Brightness.available
 				width: parent.width
-				glyph: Icons.g("brightness-half")
+				glyph: Icons.g("brightness-up")
 				value: Brightness.value
 				onMoved: value => Brightness.set(value)
 			}

@@ -142,6 +142,7 @@ Rectangle {
 						Glyph {
 							anchors.centerIn: parent
 							glyph: button.modelData.glyph
+							filled: true
 							font.pixelSize: 16
 							font.weight: Font.Normal
 							color: button.modelData.main ? Theme.onPrimary : Theme.fg

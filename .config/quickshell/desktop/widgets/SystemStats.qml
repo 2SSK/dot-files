@@ -19,14 +19,14 @@ Line {
 	}
 
 	Readout {
-		glyph: Icons.g("cpu")
+		glyph: Icons.g("gauge")
 		label: "cpu"
 		value: Math.round(Stats.cpu * 100) + "%"
 		widest: "100%"
 	}
 
 	Readout {
-		glyph: Icons.g("database")
+		glyph: Icons.g("cpu")
 		label: "mem"
 		value: Math.round(Stats.mem * 100) + "%"
 		widest: "100%"
@@ -34,7 +34,7 @@ Line {
 
 	Readout {
 		visible: Stats.temp >= 0
-		glyph: Icons.g("temperature")
+		glyph: Icons.g("flame")
 		label: "tmp"
 		value: Math.round(Stats.temp) + "°C"
 		widest: "100°C"

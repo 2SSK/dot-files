@@ -18,8 +18,8 @@ HangingPanel {
 		{ key: "notifications", glyph: Icons.g("bell"), component: notifications },
 		{ key: "wifi", glyph: Icons.g("wifi"), component: wifi },
 		{ key: "bluetooth", glyph: Icons.g("bluetooth"), component: bluetooth },
-		{ key: "todo", glyph: Icons.g("list-check"), component: todo },
-		{ key: "notes", glyph: Icons.g("notebook"), component: notes }
+		{ key: "todo", glyph: Icons.g("checklist"), component: todo },
+		{ key: "notes", glyph: Icons.g("notes"), component: notes }
 	]
 
 	name: "control center"

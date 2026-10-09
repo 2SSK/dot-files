@@ -103,7 +103,7 @@ PopupWindow {
 					glyph: ({
 							volume: root.muted ? Icons.g("volume-off") : Panel.osdValue < 0.34 ? Icons.g("volume-3") : Panel.osdValue < 0.67 ? Icons.g("volume-2") : Icons.g("volume"),
 							mic: root.muted ? Icons.g("microphone-off") : Icons.g("microphone"),
-							brightness: Icons.g("brightness-half"),
+							brightness: Icons.g("brightness-up"),
 							caps: Icons.g("arrow-big-up-line"),
 							num: Icons.g("hash")
 						})[root.kind] ?? ""

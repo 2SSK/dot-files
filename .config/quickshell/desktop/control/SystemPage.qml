@@ -17,9 +17,9 @@ Column {
 
 	Repeater {
 		model: [
-			{ glyph: Icons.g("cpu"), label: "CPU", value: Math.round(Stats.cpu * 100) + "%", history: Stats.cpuHistory, max: 1, show: true },
-			{ glyph: Icons.g("database"), label: "Memory", value: `${Stats.memUsed.toFixed(1)} / ${Stats.memTotal.toFixed(1)} GiB`, history: Stats.memHistory, max: 1, show: true },
-			{ glyph: Icons.g("temperature"), label: "Temperature", value: Math.round(Stats.temp) + " °C", history: Stats.tempHistory, max: 100, show: Stats.temp >= 0 }
+			{ glyph: Icons.g("gauge"), label: "CPU", value: Math.round(Stats.cpu * 100) + "%", history: Stats.cpuHistory, max: 1, show: true },
+			{ glyph: Icons.g("cpu"), label: "Memory", value: `${Stats.memUsed.toFixed(1)} / ${Stats.memTotal.toFixed(1)} GiB`, history: Stats.memHistory, max: 1, show: true },
+			{ glyph: Icons.g("flame"), label: "Temperature", value: Math.round(Stats.temp) + " °C", history: Stats.tempHistory, max: 100, show: Stats.temp >= 0 }
 		]
 
 		delegate: Rectangle {
