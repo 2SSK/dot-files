@@ -23,7 +23,8 @@ Line {
 			tray: "Tray",
 			power: "PowerButton",
 			recorder: "RecorderButton",
-			notifications: "NotificationButton"
+			notifications: "NotificationButton",
+			scratchpad: "ScratchpadButton"
 		})
 
 	vertical: Config.vertical

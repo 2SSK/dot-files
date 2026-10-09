@@ -43,7 +43,7 @@ Singleton {
 				property int size: 34
 				property real opacity: 0.85
 				property real length: 0.5 // the island's share of the screen edge; 0 fits its content
-				property var left: ["workspaces"]
+				property var left: ["workspaces", "scratchpad"]
 				property var center: ["clock"]
 				property var right: ["tray", "recorder", "stats", "brightness", "battery", "notifications", "power"]
 			}

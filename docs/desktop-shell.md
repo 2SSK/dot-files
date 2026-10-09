@@ -11,9 +11,11 @@ Colours come from the desktop theme (see [theme.md](theme.md)); settings from
 | `style` | `island` (a floating pill) or `static` (the whole edge, word labels and separators) |
 | `position` | `top`, `bottom`; `left`/`right` on sway only (i3 docks only top or bottom, so X11 uses the top) |
 | `size`, `opacity`, `length` | thickness in px, background opacity, the island's share of the edge (0 fits its content) |
-| `left`, `center`, `right` | widgets: `launcher`, `workspaces`, `clock`, `stats`, `volume`, `brightness`, `battery`, `tray`, `recorder`, `notifications`, `power` |
+| `left`, `center`, `right` | widgets: `launcher`, `workspaces`, `clock`, `stats`, `volume`, `brightness`, `battery`, `tray`, `recorder`, `notifications`, `scratchpad`, `power` |
 
-Workspaces are dots: 1–5 always, the shown one a wide pill, used ones bright, empty ones faint.
+Workspaces are dots: the ones with windows and the one you're on (i3 and sway drop empty ones), the
+current one a wide pill. After them, the scratchpad's window count while it holds any; a click brings
+one up.
 Hidden with `$mod+Shift+b`, the bar comes back over the windows while the pointer is at its edge.
 
 ## Keys (i3)
@@ -46,8 +48,9 @@ history lasts until the shell restarts.
 Lock, Log Out, Lock & Suspend, Reboot, Shut Down; Log Out, Reboot and Shut Down take a second
 press while `power.confirm` is on. Nothing hibernates.
 
-- **Lock** runs `loginctl lock-session`; xss-lock starts `desktop-lock` (i3lock-color, blurred,
-  in the theme). The laptop keeps running.
+- **Lock** runs `loginctl lock-session`; xss-lock starts `desktop-lock`: i3lock-color over the
+  blurred, dimmed wallpaper (cached in `~/.cache/desktop`), a clock and a small ring that lights up
+  as you type. xss-lock also locks after X's idle timeout. The laptop keeps running.
 - **Closing the lid** only locks, after `packages/system.sh lid` (logind `HandleLidSwitch=lock`),
   so work carries on with the lid shut. On battery it keeps draining.
 - **Lock & Suspend** sleeps; xss-lock locks first.

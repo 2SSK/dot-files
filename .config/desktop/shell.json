@@ -6,7 +6,8 @@
     "opacity": 0.85,
     "length": 0.5,
     "left": [
-      "workspaces"
+      "workspaces",
+      "scratchpad"
     ],
     "center": [
       "clock"
