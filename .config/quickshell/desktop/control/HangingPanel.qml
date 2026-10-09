@@ -37,8 +37,9 @@ Scope {
 	readonly property real px: Math.round(island.x + (island.width - panelWidth) / 2)
 	readonly property real py: !Panel.barShown ? (below ? 0 : screen.height - panelHeight) : below ? island.y + island.height : island.y - panelHeight
 	readonly property int fillet: Panel.controlFillet
-	// the bar's colour, but nearly solid: nothing is blurred behind a window as big as the screen
-	readonly property color fill: Qt.alpha(Theme.bg, Math.max(Config.bar.opacity, 0.96))
+	// the bar's colour, solid: nothing is blurred behind a window as big as the screen, so anything
+	// behind would show through a see-through panel
+	readonly property color fill: Theme.bg
 	readonly property string title: "Desktop " + name
 
 	// the keyboard (X11): i3 focuses a new window itself; ask too once it has the window (its "new"

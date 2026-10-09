@@ -35,12 +35,18 @@ say so and their bar icons hide.
 
 ## Clipboard
 
-`$mod+Shift+v` or the clipboard icon: the history of copied text, dropping out of the bar like the
-control center. Type to search, ↑ ↓ to pick, Enter (or a click) copies it back and closes. On an
-item: pin it, save it as a code note, or remove it. The history lives in memory only, so copied
-passwords never reach the disk; pinned items are kept in `~/.local/state/desktop/clipboard/` (a
-private folder).
+`$mod+Shift+v` or the clipboard icon: the history of what you copied (text, images and files,
+pinned ones first) on the left, the selected one in full on the right: the text, the picture, the
+files. Type to search, ↑ ↓ to pick, Enter (or Copy) puts it back on the clipboard as what it was
+and closes: an image pastes as an image (into Claude Code, opencode, a chat), files paste as
+attachments. Pin, Open (images, files), Save as a note (text) and Remove sit under the preview;
+Clear empties the history (pins stay).
 
+`desktop-clipboard watch` reports each copy (X11: XFixes, no polling; Wayland: `wl-paste --watch`).
+Text stays in memory and images in `$XDG_RUNTIME_DIR` (RAM, gone at logout; the newest 30 kept), so
+copied passwords and screenshots never reach the disk, and a password manager's copies are left
+out. Pinned entries are kept in `~/.local/state/desktop/clipboard/` (a private folder; a pinned
+image is copied there). Region and window screenshots (F12) land in it like any copy.
 ## Sway
 
 The same shell runs on sway: `~/.config/sway/config` includes `desktop.conf`. The noctalia session
