@@ -74,6 +74,14 @@ region, the focused window, or one screen or all of them; while it runs the bar'
 and pulses on a red pill with the time (a click stops it), and the panel's Record row becomes Stop. `desktop-capture shot|record …` does the work (X11: slop, maim,
 xclip; Wayland: slurp, grim, wl-copy, and a window records through the portal).
 
+## Touchpad (i3)
+
+`desktop-input`, run when i3 starts or reloads, sets the touchpad up as sway's input config does:
+tap to click (one finger left, two right, three middle), tap and drag, natural two-finger scrolling,
+click with fingers, no touchpad while typing, middle-click emulation. Scrolling on X is twice as fast
+as on Wayland by default, so it's slowed: one scroll step per 30 pixels of finger movement
+(`DESKTOP_SCROLL_DISTANCE`, 10–50; X's default is 15). Displays use no scaling, as on sway.
+
 ## Window switcher
 
 Hold Ctrl and tap Tab: the open windows come up as rounded cards on a ring, most recently used
