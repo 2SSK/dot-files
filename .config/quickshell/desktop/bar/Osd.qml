@@ -20,8 +20,8 @@ PopupWindow {
 	readonly property color tint: muted ? Theme.fgMuted : Theme.primary
 	readonly property int pad: 28 // room for the shadow
 
-	// The window stays mapped (the first map of a shaped popup can come up blank); while closed its
-	// shape is empty, so it's invisible and lets clicks through.
+	// mapped when it opens, so it lands above every window (X stacks by mapping order), and unmapped
+	// once it has faded
 	property bool shown: false
 
 	onOpenChanged: open ? shown = true : hide.restart()
@@ -38,10 +38,10 @@ PopupWindow {
 	anchor.rect.y: position === "bottom" ? -implicitHeight + 12 : position === "top" ? bar.height - 14 : 0
 	implicitWidth: card.width + 2 * pad
 	implicitHeight: card.height + 2 * pad
-	visible: true
+	visible: shown
 	color: "transparent"
 	mask: Region {
-		item: root.shown ? card : null
+		item: card
 	}
 
 	// card and shadow fade in together; the card slides by its x (the window's shape follows

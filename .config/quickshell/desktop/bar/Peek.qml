@@ -15,7 +15,7 @@ PopupWindow {
 	readonly property bool vertical: Config.vertical
 	readonly property real reach: Config.bar.size + (Config.island ? 6 : 0) + 24 // bar, gap, shadow room
 
-	// mapped all the time, its shape empty while closed (see Osd)
+	// mapped while open (see Osd)
 	property bool shown: false
 
 	onOpenChanged: {
@@ -46,10 +46,10 @@ PopupWindow {
 	anchor.rect.y: position === "bottom" ? bar.height - implicitHeight : 0
 	implicitWidth: vertical ? reach : bar.width
 	implicitHeight: vertical ? bar.height : reach
-	visible: true
+	visible: shown
 	color: "transparent"
 	mask: Region {
-		item: root.shown ? zone : null
+		item: zone
 	}
 
 	// the bar and the strip between it and the screen edge, where the pointer arrived: hovering

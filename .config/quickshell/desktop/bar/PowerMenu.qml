@@ -20,7 +20,7 @@ PopupWindow {
 	readonly property string position: Config.position
 	readonly property int pad: 32 // room for the shadows
 	readonly property real reach: Panel.barShown ? (Config.vertical ? bar.width : bar.height) : 0
-	// mapped all the time, its shape empty while closed (see Osd)
+	// mapped while open (see Osd)
 	property bool shown: false
 
 	onOpenChanged: open ? shown = true : hide.restart()
@@ -37,10 +37,10 @@ PopupWindow {
 	anchor.rect.y: position === "top" ? reach - pad + 4 : position === "bottom" ? bar.height - reach - implicitHeight + pad - 4 : (bar.height - implicitHeight) / 2
 	implicitWidth: tiles.implicitWidth + 2 * pad
 	implicitHeight: tiles.implicitHeight + 2 * pad + 12
-	visible: true
+	visible: shown
 	color: "transparent"
 	mask: Region {
-		item: root.shown ? tiles : null
+		item: tiles
 	}
 
 	Row {
