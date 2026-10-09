@@ -3,9 +3,8 @@ return {
 		"iamcco/markdown-preview.nvim",
 		cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
 		ft = { "markdown" },
-		build = function()
-			vim.fn["mkdp#util#install"]()
-		end,
+		-- the plugin's prebuilt preview server; mkdp#util#install() isn't loaded yet when lazy builds
+		build = "cd app && ./install.sh",
 		init = function()
 			vim.g.mkdp_filetypes = { "markdown" }
 		end,

@@ -1,9 +1,11 @@
 # shellcheck shell=bash
 # Aliases shared by bash and zsh.
 
-# eza when installed (icons, git column, tree), else coloured GNU ls; both use LS_COLORS
+# eza when installed (icons, git column, tree), in the desktop theme's colours (eza/theme.yml,
+# rendered by theme): LS_COLORS would override that file, so eza runs without it. Else coloured
+# GNU ls with LS_COLORS.
 if command -v eza >/dev/null; then
-	alias ls='eza --group-directories-first --icons=auto'
+	alias ls='LS_COLORS= eza --group-directories-first --icons=auto'
 	alias ll='ls -l --git' la='ll -a' lt='ls --tree --level=2' l='ls -la --git'
 else
 	alias ls='ls --color=auto --group-directories-first -h'

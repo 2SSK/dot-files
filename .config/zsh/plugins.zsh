@@ -6,7 +6,7 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
 
 zstyle ':fzf-tab:*' switch-group '<' '>'
 if (( $+commands[eza] )); then
-	zstyle ':fzf-tab:complete:(cd|z|ls|ll|la|lt):*' fzf-preview 'eza -1a --icons --color=always --group-directories-first $realpath'
+	zstyle ':fzf-tab:complete:(cd|z|ls|ll|la|lt):*' fzf-preview 'LS_COLORS= eza -1a --icons --color=always --group-directories-first $realpath'
 else
 	zstyle ':fzf-tab:complete:(cd|z|ls|ll|la):*' fzf-preview 'ls -1A --color=always $realpath'
 fi

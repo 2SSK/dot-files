@@ -174,13 +174,16 @@ HangingPanel {
 		ListView {
 			id: list
 
+			ScrollBoost {}
+
 			anchors.fill: parent
 			visible: root.mode === "apps" || root.mode === "files"
 			model: visible ? root.results : []
 			currentIndex: root.current
 			spacing: 2
 			boundsBehavior: Flickable.StopAtBounds
-			highlightMoveDuration: 100
+			highlightMoveDuration: 0
+			highlightResizeDuration: 0
 			highlightFollowsCurrentItem: true
 			highlight: Rectangle {
 				radius: 12
@@ -206,7 +209,10 @@ HangingPanel {
 				HoverHandler {
 					id: rowHover
 
-					onHoveredChanged: if (hovered) root.current = row.index
+					// the row under the pointer once it moves (not one that opened under a still pointer)
+					property point from
+					onHoveredChanged: from = point.position
+					onPointChanged: if (hovered && Math.abs(point.position.x - from.x) + Math.abs(point.position.y - from.y) > 3) root.current = row.index
 				}
 
 				MouseArea {
@@ -314,6 +320,8 @@ HangingPanel {
 		GridView {
 			id: grid
 
+			ScrollBoost {}
+
 			anchors.fill: parent
 			visible: root.mode === "emoji" || root.mode === "themes"
 			model: visible ? root.results : []
@@ -322,7 +330,7 @@ HangingPanel {
 			cellHeight: root.mode === "emoji" ? cellWidth : Math.round(cellWidth * 0.66)
 			boundsBehavior: Flickable.StopAtBounds
 			highlightFollowsCurrentItem: true
-			highlightMoveDuration: 100
+			highlightMoveDuration: 0
 			highlight: Rectangle {
 				radius: 14
 				color: root.mode === "emoji" ? Qt.alpha(Theme.primary, 0.18) : "transparent"
@@ -345,7 +353,10 @@ HangingPanel {
 				HoverHandler {
 					id: cellHover
 
-					onHoveredChanged: if (hovered) root.current = cell.index
+					// the row under the pointer once it moves (not one that opened under a still pointer)
+					property point from
+					onHoveredChanged: from = point.position
+					onPointChanged: if (hovered && Math.abs(point.position.x - from.x) + Math.abs(point.position.y - from.y) > 3) root.current = cell.index
 				}
 
 				MouseArea {

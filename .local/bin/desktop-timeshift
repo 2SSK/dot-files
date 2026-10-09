@@ -1,0 +1,67 @@
+#!/usr/bin/env python3
+"""Timeshift for the shell's settings page.
+
+  desktop-timeshift list [--ask]     the snapshots as JSON, newest first: {device, mode, status, free,
+                                     snapshots: [{name, tags, comment}]}. Through `sudo -n` (allowed
+                                     without a password by `packages/system.sh timeshift`); without
+                                     that rule it exits 3, or with --ask goes through pkexec.
+  desktop-timeshift create <comment> a snapshot now (pkexec: asks for your password)
+  desktop-timeshift delete <name>    delete one (pkexec)
+"""
+import json
+import re
+import subprocess
+import sys
+
+NAME = re.compile(r"^\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}$")
+
+
+def parse(text):
+    info = {"device": "", "mode": "", "status": "", "free": "", "snapshots": []}
+    columns = None
+    for line in text.splitlines():
+        if columns is None:
+            m = re.match(r"^(Device|Mode|Status)\s*:\s*(.*)$", line)
+            if m:
+                info[m.group(1).lower()] = m.group(2).strip()
+            m = re.match(r"^\d+ snapshots?, (.*)$", line)
+            if m:
+                info["free"] = m.group(1).strip()
+            if line.startswith("Num") and "Name" in line and "Tags" in line:
+                columns = (line.index("Name"), line.index("Tags"), line.index("Description") if "Description" in line else None)
+            continue
+        if not line.strip() or line.startswith("---"):
+            continue
+        name_at, tags_at, desc_at = columns
+        name = line[name_at:tags_at].strip()
+        if not NAME.match(name):
+            continue
+        tags = (line[tags_at:desc_at] if desc_at else line[tags_at:]).strip()
+        comment = line[desc_at:].strip() if desc_at else ""
+        info["snapshots"].append({"name": name, "tags": tags, "comment": comment})
+    info["snapshots"].sort(key=lambda s: s["name"], reverse=True)
+    return info
+
+
+def main(argv):
+    if argv[:1] == ["list"] and len(argv) <= 2:
+        ask = argv[1:] == ["--ask"]
+        command = (["pkexec"] if ask else ["sudo", "-n"]) + ["timeshift", "--list", "--scripted"]
+        result = subprocess.run(command, capture_output=True, text=True)
+        if result.returncode != 0:
+            return 3 if not ask else 1
+        print(json.dumps(parse(result.stdout)))
+        return 0
+    if argv[:1] == ["create"] and len(argv) == 2:
+        return subprocess.run(["pkexec", "timeshift", "--create", "--comments", argv[1], "--scripted"]).returncode
+    if argv[:1] == ["delete"] and len(argv) == 2:
+        if not NAME.match(argv[1]):
+            print(f"desktop-timeshift: not a snapshot name: {argv[1]}", file=sys.stderr)
+            return 2
+        return subprocess.run(["pkexec", "timeshift", "--delete", "--snapshot", argv[1], "--scripted"]).returncode
+    print(__doc__.strip(), file=sys.stderr)
+    return 2
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

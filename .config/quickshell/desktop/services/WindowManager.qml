@@ -17,6 +17,7 @@ Singleton {
 	property int scratchpad: 0 // windows that belong to the scratchpad
 	property int scratchpadShown: 0 // of those, the ones out on a workspace now
 	readonly property string focusedOutput: workspaces.find(w => w.focused)?.output ?? ""
+	property string mode: "default" // i3's binding mode (passthrough, resize, power, switcher...)
 
 	signal windowEvent(var data) // i3's window events: { change, container: { id, name, ... } }
 	signal treeRead(var tree) // the whole window tree, reread after each change
@@ -47,6 +48,8 @@ Singleton {
 					const data = JSON.parse(line);
 					if (data.container)
 						root.windowEvent(data);
+					else if (data.pango_markup !== undefined)
+						root.mode = data.change; // a mode event
 				} catch (e) {}
 			}
 		}

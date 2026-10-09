@@ -101,6 +101,29 @@ assert {t["family"] for t in themes} >= {"gruvbox", "tokyonight", "eink"}
 ' "$output"
 }
 
+@test "yazi gets the desktop flavor: a valid theme in the theme's colours, its own theme.toml kept aside" {
+	export XDG_CONFIG_HOME="$BATS_TEST_TMPDIR/config"
+	mkdir -p "$XDG_CONFIG_HOME/yazi"
+	printf '[flavor]\ndark = "noctalia"\n' >"$XDG_CONFIG_HOME/yazi/theme.toml"
+	run "$THEME" set catppuccin
+	[ "$status" -eq 0 ]
+	flavor="$XDG_CONFIG_HOME/yazi/flavors/desktop.yazi"
+	[ "$(readlink "$flavor/flavor.toml")" = "$STATE/yazi-flavor.toml" ]
+	[ "$(readlink "$flavor/tmtheme.xml")" = "$STATE/silicon.tmTheme" ]
+	[ "$(readlink "$XDG_CONFIG_HOME/yazi/theme.toml")" = "$STATE/yazi-theme.toml" ]
+	python3 -c 'import sys, tomllib; t = tomllib.load(open(sys.argv[1], "rb")); assert t["mgr"]["cwd"]["fg"] == "#89b4fa", t["mgr"]; assert {r["fg"] for r in t["icon"]["conds"]} == {"#89b4fa"}' "$flavor/flavor.toml"
+	python3 -c 'import sys, tomllib; assert tomllib.load(open(sys.argv[1], "rb"))["flavor"]["dark"] == "desktop"' "$XDG_CONFIG_HOME/yazi/theme.toml"
+	ls "$XDG_STATE_HOME"/desktop/backup/theme/yazi/theme.toml.* # noctalia's, moved aside
+}
+
+@test "eza gets its colours from the theme" {
+	export XDG_CONFIG_HOME="$BATS_TEST_TMPDIR/config"
+	run "$THEME" set catppuccin
+	[ "$status" -eq 0 ]
+	[ "$(readlink "$XDG_CONFIG_HOME/eza/theme.yml")" = "$STATE/eza-theme.yml" ]
+	grep -q '^  directory: {foreground: "#89b4fa", is_bold: true}$' "$STATE/eza-theme.yml"
+}
+
 @test "unknown family fails and leaves the theme unchanged" {
 	"$THEME" set gruvbox
 	run "$THEME" set nope

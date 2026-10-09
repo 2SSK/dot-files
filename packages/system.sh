@@ -2,7 +2,7 @@
 # System-level setup (sudo): the memory safety net, libvirt, docker, the lid, the GRUB theme and the login screen. Installs
 # the tracked files under system/ into / and enables services; a no-op when everything is already
 # in place.
-# usage: system.sh memory|libvirt|docker|lid|grub [--preview]|sddm
+# usage: system.sh memory|libvirt|docker|lid|timeshift|grub [--preview]|sddm
 set -euo pipefail
 
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -34,6 +34,19 @@ memory() {
 	sudo systemctl start systemd-zram-setup@zram0.service
 	sudo sysctl --quiet --load "$root/etc/sysctl.d/99-zram.conf" 2>/dev/null || true
 	sudo systemctl enable --now systemd-oomd.service
+}
+
+timeshift() { # the settings page lists snapshots without a password; making, deleting and restoring still ask
+	local rule tmp dest="$root/etc/sudoers.d/10-desktop-timeshift"
+	rule="$(id -un) ALL=(root) NOPASSWD: /usr/bin/timeshift --list --scripted"
+	tmp="$(mktemp)"
+	printf '# packages/system.sh timeshift: the shell'"'"'s settings page reads the snapshot list\n%s\n' "$rule" >"$tmp"
+	if cmp -s "$tmp" "$dest" 2>/dev/null; then rm -f "$tmp" && return 0; fi
+	visudo -cf "$tmp" >/dev/null || { rm -f "$tmp" && die sudoers_invalid path="$dest"; }
+	sudo install -D -m 440 "$tmp" "$dest"
+	rm -f "$tmp"
+	log_info installed path=/etc/sudoers.d/10-desktop-timeshift
+	changed=1
 }
 
 lid() { # closing the lid only locks; logind rereads its config on SIGHUP (a restart would end sessions)
@@ -320,8 +333,9 @@ memory) memory ;;
 libvirt) libvirt ;;
 docker) docker_daemon ;;
 lid) lid ;;
+timeshift) timeshift ;;
 grub) if [[ ${2:-} == --preview ]]; then grub_preview && exit 0; fi; grub_theme ;;
 sddm) sddm_theme ;;
-*) echo 'usage: system.sh memory|libvirt|docker|lid|grub [--preview]|sddm' >&2 && exit 2 ;;
+*) echo 'usage: system.sh memory|libvirt|docker|lid|timeshift|grub [--preview]|sddm' >&2 && exit 2 ;;
 esac
 if ((changed)); then log_info system part="$1"; else echo "$1: already in place"; fi

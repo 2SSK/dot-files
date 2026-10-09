@@ -4,11 +4,13 @@
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import Quickshell.Services.Polkit
 import qs.bar
 import qs.clipboard
 import qs.wallpaper
 import qs.launcher
 import qs.capture
+import qs.polkit
 import qs.control
 import qs.settings
 import qs
@@ -16,7 +18,7 @@ import qs.services
 
 ShellRoot {
 	// services that watch on their own, started with the shell
-	readonly property var watchers: [Locks, Recorder, Notifications, Clipboard, Events, Alarms, Wallpaper, Windows]
+	readonly property var watchers: [Locks, Recorder, Notifications, Clipboard, Events, Alarms, Wallpaper, Windows, Battery, NightLight, Idle]
 
 	Variants {
 		model: Quickshell.screens
@@ -37,6 +39,22 @@ ShellRoot {
 
 		ClipboardWindow {
 			visible: true
+		}
+	}
+
+	// the polkit agent: apps asking for admin rights (pkexec, Timeshift, ...) ask through the shell
+	PolkitAgent {
+		id: polkit
+
+		onIsActiveChanged: Panel.authOpen = isActive
+	}
+
+	LazyLoader {
+		active: Panel.authOpen
+
+		AuthWindow {
+			visible: true
+			agent: polkit
 		}
 	}
 
@@ -183,6 +201,10 @@ ShellRoot {
 		function cancel(): void {
 			Windows.close();
 		}
+		// the ring's order, most recent first (for checking it)
+		function list(): string {
+			return Windows.windows.map(w => w.title).join("\n");
+		}
 	}
 
 	// apps, emoji, files or themes; again on the same one closes it
@@ -194,6 +216,14 @@ ShellRoot {
 		}
 		function close(): void {
 			Panel.launcherOpen = false;
+		}
+	}
+
+	IpcHandler {
+		target: "nightlight"
+
+		function toggle(): void {
+			NightLight.toggle();
 		}
 	}
 
@@ -224,6 +254,15 @@ ShellRoot {
 
 		function toggle(): void {
 			Panel.settingsOpen = !Panel.settingsOpen;
+		}
+		// a page (bar, appearance, notifications, levels, power, keys); again on the same one closes it
+		function page(page: string): void {
+			if (Panel.settingsOpen && Panel.settingsPage === page) {
+				Panel.settingsOpen = false;
+				return;
+			}
+			Panel.settingsPage = page;
+			Panel.settingsOpen = true;
 		}
 	}
 

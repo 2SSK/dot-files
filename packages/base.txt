@@ -5,6 +5,7 @@ quickshell                  @quickshell                 @quickshell
 kitty                       kitty                       kitty
 copyq                       copyq                       copyq
 libnotify                   libnotify-bin               libnotify
+gammastep                   gammastep                   gammastep
 wireplumber                 wireplumber                 wireplumber
 pipewire-audio              pipewire-audio              -
 pipewire-pulse              pipewire-pulse              pipewire-pulseaudio

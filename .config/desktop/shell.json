@@ -3,7 +3,7 @@
         "step": 5
     },
     "bar": {
-        "capsules": true,
+        "capsules": false,
         "center": [
             "clock"
         ],
@@ -16,17 +16,12 @@
         "opacity": 0.85,
         "position": "top",
         "right": [
-            "tray",
-            "brightness",
-            "tools",
             "recorder",
             "battery",
-            "wifi",
-            "bluetooth",
             "notifications",
             "power"
         ],
-        "size": 34,
+        "size": 40,
         "style": "island"
     },
     "brightness": {

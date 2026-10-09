@@ -7,15 +7,15 @@ import Quickshell.Io
 // The open windows, most recently focused first (the switcher's ring), and the switcher's state.
 // The list is reread from i3's tree (sway's on Wayland) whenever a window changes; the order comes
 // from focus events. While switching, i3 is in mode "switcher", which sends its keys back over IPC
-// (keys.conf): Ctrl+Tab steps on. Letting go of Ctrl switches: i3 can't see that (Ctrl was pressed
-// before its mode began), so desktop-ctrl-release waits for it.
+// (keys.conf): Alt+Tab steps on. Letting go of Alt switches: i3 can't see that (Alt was pressed
+// before its mode began), so desktop-key-release waits for it.
 Singleton {
 	id: root
 
 	property var mru: [] // container ids, most recent first
 	property var windows: [] // { id, title, cls, workspace, focused }
 	property bool switching: false
-	property bool shown: false // the ring shows once Ctrl is held a moment (a quick tap just switches)
+	property bool shown: false // the ring shows once Alt is held a moment (a quick tap just switches)
 	property int selected: 0
 
 	function step(by: int): void {
@@ -85,11 +85,11 @@ Singleton {
 		onTriggered: if (root.switching) root.shown = true
 	}
 
-	// Ctrl let go (or not held at all: a quick tap): switch
+	// Alt let go (or not held at all: a quick tap): switch
 	Process {
 		id: ctrl
 
-		command: ["desktop-ctrl-release"]
+		command: ["desktop-key-release", "alt"]
 		onExited: code => {
 			if (code === 0 && root.switching)
 				root.commit();

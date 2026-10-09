@@ -26,7 +26,10 @@ fake() { # <name> <version line>
 	[ "$status" -eq 0 ]
 	[[ $(cat "$ARGS") == *"--nofork"* ]]
 	[[ $(cat "$ARGS") =~ --image\ $XDG_CACHE_HOME/desktop/lock-1f1f28-[0-9a-f]{12}\.png\ --fill ]]
-	[[ $(cat "$ARGS") == *"--radius 20"* ]]
+	[[ $(cat "$ARGS") == *"--radius 14"* ]] # small, faint until typing
+	[[ $(cat "$ARGS") == *"--time-str %I:%M"* ]] # 07:10, as the bar
+	[[ $(cat "$ARGS") == *"--time-font Inter Display Light"* ]]
+	[[ $(cat "$ARGS") == *"--greeter-text Type to unlock"* ]]
 	[[ $(cat "$ARGS") != *"--bar-indicator"* ]]
 	[[ $(cat "$ARGS") == *"--keyhl-color 7e9cd8ff"* ]]
 	[[ $(cat "$ARGS") == *"--ringwrong-color e82424ff"* ]]

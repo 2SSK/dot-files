@@ -74,25 +74,39 @@ region, the focused window, or one screen or all of them; while it runs the bar'
 and pulses on a red pill with the time (a click stops it), and the panel's Record row becomes Stop. `desktop-capture shot|record …` does the work (X11: slop, maim,
 xclip; Wayland: slurp, grim, wl-copy, and a window records through the portal).
 
+## Screens (i3)
+
+`desktop-displays` arranges screens as sway's outputs config does: the laptop panel at the left,
+each connected external screen to the right of the one before at its preferred mode; an unplugged
+screen is turned off, and the wallpaper is drawn again across them. i3 starts it in `watch` mode,
+which listens for plug and unplug events (`udevadm monitor`) and arranges again. Workspaces 2, 3, 9
+and 10 live on the external screen (HDMI-1, else DP-1), the rest on the panel, as on sway; with no
+external screen they all stay on the panel. The bar and its panels follow onto each screen; the
+capture panel's Screen choice shows a map of them.
+
 ## Touchpad (i3)
 
 `desktop-input`, run when i3 starts or reloads, sets the touchpad up as sway's input config does:
 tap to click (one finger left, two right, three middle), tap and drag, natural two-finger scrolling,
 click with fingers, no touchpad while typing, middle-click emulation. Scrolling on X is twice as fast
-as on Wayland by default, so it's slowed: one scroll step per 30 pixels of finger movement
+as on Wayland by default, so it's slowed: one scroll step per 45 pixels of finger movement
 (`DESKTOP_SCROLL_DISTANCE`, 10–50; X's default is 15). Displays use no scaling, as on sway.
+
+picom is started by i3 alone (the package's XDG autostart entry is hidden in
+`~/.config/autostart/picom.desktop`: two at login raced, and ours fell back to the flickering
+xrender backend); if it ever falls back, why is in `$XDG_RUNTIME_DIR/picom.log`.
 
 ## Window switcher
 
-Hold Ctrl and tap Tab: the open windows come up as rounded cards on a ring, most recently used
-first, and each Tab turns the ring to bring the next one to the front (Ctrl+Shift+Tab or Ctrl+←
-turn it back); cards further round shrink, fade and turn away. Let go of Ctrl to switch to the front
-one; Escape cancels, a click picks one. A quick Ctrl+Tab goes straight back to the last window
-without showing the ring. Ctrl+Tab is taken from apps (browser and terminal tabs) on i3.
+Hold Alt and tap Tab: the open windows come up as rounded cards on a ring, most recently used
+first, and each Tab turns the ring to bring the next one to the front (Alt+Shift+Tab or Alt+←
+turn it back); cards further round shrink, fade and turn away. Let go of Alt to switch to the front
+one; Escape cancels, a click picks one. A quick Alt+Tab goes straight back to the last window
+without showing the ring.
 
 The shell's popup can't take the keyboard on X11, so i3's mode "switcher" sends the keys over IPC;
-i3 can't see Ctrl let go (it was pressed before the mode began), so the shell runs
-`desktop-ctrl-release`, which asks X whether Ctrl is still held (nothing is grabbed). Cards show the
+i3 can't see Alt let go (it was pressed before the mode began), so the shell runs
+`desktop-key-release alt`, which asks X whether Alt is still held (nothing is grabbed). Cards show the
 app's icon, the window's title, the app and workspace; X11 has no live window previews.
 
 ## Alarms
@@ -132,6 +146,37 @@ or focusing another window closes it. Changes
 apply at once and are written to `shell.json`, through the stow link into the repo, so they show up
 in `git diff`; Quickshell writes it with sorted keys and 4-space indents, as it's kept.
 
+The **Keys** page lists every key binding in words, read from i3's own key config (so it can't
+drift from what the keys do), grouped and searchable, with the keys inside the shell's panels at
+the end. `$mod+Shift+/` opens it.
+
+
+The **Timeshift** page lists the system's snapshots (newest first, with their kind and comment),
+makes one now with a comment, and deletes one (a second press confirms); restoring opens Timeshift
+itself. Listing needs root: `packages/system.sh timeshift` allows exactly `timeshift --list
+--scripted` without a password (`/etc/sudoers.d/10-desktop-timeshift`); without it the page asks
+once. `desktop-timeshift list|create|delete` does the work.
+
+## When idle
+
+Settings → Power → **When idle**: the screen dims after 4 minutes alone (any key or movement brings
+it back), locks after 5 and switches off after 10; each can be Never. On i3, `desktop-idle apply`
+sets X's screensaver and DPMS timers to them; xss-lock runs `desktop-idle dim` when the screensaver
+starts and locks when its cycle ends. Video players and browsers playing video hold the screensaver
+off themselves. Locking keeps the laptop running; nothing suspends on its own.
+
+## Night light
+
+A warmer screen, through gammastep (X11 and Wayland alike): the control center's **Night light**
+tile turns it on or off, Settings → Appearance sets how warm (3000–6000 K, 4000 K by default) and
+an optional schedule (on by itself from 19:00 to 07:00 by default; switching it off during those
+hours keeps it off until they end). It fades in and back out. `nightlight toggle` over IPC.
+
+## Password prompts (polkit)
+
+The shell is the session's polkit agent on i3: when an app asks for admin rights (pkexec,
+Timeshift, a package manager's GUI), a small panel drops from the bar with what's asked and a
+password field; Escape or Cancel declines, a wrong password shakes it and asks again.
 ## Bar
 
 | Setting (`bar.*`) | Values |
@@ -162,7 +207,9 @@ Hidden with `$mod+Shift+b`, the bar comes back over the windows while the pointe
 | `$mod+Shift+v` | clipboard history |
 | `$mod+Shift+p` | wallpapers |
 | `$mod+d`, `$mod+;`, `$mod+Shift+f`, `$mod+Shift+y` | the launcher: apps, emoji, files, themes |
-| Ctrl+Tab (hold Ctrl) | window switcher |
+| Alt+Tab (hold Alt) | window switcher |
+| `$mod+Shift+/` (Super+?) | every key binding, in words (Settings → Keys) |
+| `$mod+Escape` | keys to the VM (or anything nested) until pressed again; the bar shows "VM keys" |
 | `$mod+Shift+t` / `$mod+Shift+n` | todo / notes |
 | `$mod+p` | power menu (again, Escape or a click beside it closes): arrows or 1–5 pick, Enter runs |
 
@@ -197,5 +244,5 @@ press while `power.confirm` is on. Nothing hibernates.
 ## IPC
 
 `qs -c desktop ipc call <target> <function>`: `audio up|down|mute|mic`, `brightness up|down`,
-`bar toggle`, `recorder toggle`, `notifications toggle|dnd|clear`, `settings toggle`, `control toggle|open <page>|page <page>|close`, `clipboard toggle`, `wallpaper toggle|shuffle`, `launcher toggle <apps|emoji|files|themes>|close`, `switcher next|prev|commit|cancel`, `capture toggle|shot <region|window|screen>|record <region|window|screen>|stop`, `alarm stop|snooze`, `power open|toggle|close|next|prev|activate|pick <n>`,
+`bar toggle`, `recorder toggle`, `notifications toggle|dnd|clear`, `settings toggle|page <bar|appearance|notifications|levels|power|timeshift|keys>`, `control toggle|open <page>|page <page>|close`, `clipboard toggle`, `wallpaper toggle|shuffle`, `launcher toggle <apps|emoji|files|themes>|close`, `switcher next|prev|commit|cancel|list`, `nightlight toggle`, `capture toggle|shot <region|window|screen>|record <region|window|screen>|stop`, `alarm stop|snooze`, `power open|toggle|close|next|prev|activate|pick <n>`,
 `theme reload`.

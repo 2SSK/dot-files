@@ -29,7 +29,7 @@ FAKE
 	grep -qx 'set-prop set-prop 10 libinput Scroll Method Enabled 1 0 0' "$CALLS"
 	grep -qx 'set-prop set-prop 10 libinput Click Method Enabled 0 1' "$CALLS"
 	grep -qx 'set-prop set-prop 10 libinput Middle Emulation Enabled 1' "$CALLS"
-	grep -qx 'set-prop set-prop 10 libinput Scrolling Pixel Distance 30' "$CALLS"
+	grep -qx 'set-prop set-prop 10 libinput Scrolling Pixel Distance 45' "$CALLS"
 }
 
 @test "devices that aren't touchpads are left alone" {
@@ -39,8 +39,8 @@ FAKE
 }
 
 @test "the scroll distance can be changed" {
-	DESKTOP_SCROLL_DISTANCE=45 "$INPUT"
-	grep -qx 'set-prop set-prop 10 libinput Scrolling Pixel Distance 45' "$CALLS"
+	DESKTOP_SCROLL_DISTANCE=50 "$INPUT"
+	grep -qx 'set-prop set-prop 10 libinput Scrolling Pixel Distance 50' "$CALLS"
 }
 
 @test "without X it does nothing" {

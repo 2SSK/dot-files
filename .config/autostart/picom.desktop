@@ -1,0 +1,7 @@
+[Desktop Entry]
+# Hides the picom package's own autostart entry (/etc/xdg/autostart/picom.desktop): i3 starts
+# picom itself with the theme's config (autostart.conf). Started twice at login, the two raced and
+# ours fell back to xrender, which flickers.
+Type=Application
+Name=picom
+Hidden=true

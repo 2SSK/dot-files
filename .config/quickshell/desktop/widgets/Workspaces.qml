@@ -70,4 +70,26 @@ Line {
 			}
 		}
 	}
+
+	// i3's mode, where it changes what the keys do: keys passed through to a VM, or resizing
+	Rectangle {
+		readonly property string label: ({ passthrough: "VM keys", resize: "Resize" })[WindowManager.mode] ?? ""
+
+		visible: label !== ""
+		implicitWidth: modeLabel.implicitWidth + 16
+		implicitHeight: Math.round(Config.bar.size * 0.5)
+		radius: height / 2
+		color: Theme.primary
+
+		Text {
+			id: modeLabel
+
+			anchors.centerIn: parent
+			text: parent.label
+			color: Theme.primaryText
+			font.family: Theme.fontSans
+			font.pixelSize: Theme.fontSize - 3
+			font.weight: Font.DemiBold
+		}
+	}
 }

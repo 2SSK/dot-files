@@ -3,11 +3,11 @@
 # right, three middle), tap and drag, natural two-finger scrolling, click with fingers, no typing
 # while touching, middle-click emulation, adaptive acceleration. Scrolling is slowed to match
 # Wayland: X turns two-finger movement into a scroll step every DESKTOP_SCROLL_DISTANCE pixels
-# (default 30; X's own is 15, which feels twice as fast; 10–50). Run by i3 at start and reload.
+# (default 45; X's own is 15, three times as fast; 10–50). Run by i3 at start and reload.
 set -euo pipefail
 
 [[ -n ${DISPLAY:-} ]] || exit 0
-distance=${DESKTOP_SCROLL_DISTANCE:-30}
+distance=${DESKTOP_SCROLL_DISTANCE:-45}
 
 for id in $(xinput list --id-only); do
 	# a touchpad is what libinput offers tapping on

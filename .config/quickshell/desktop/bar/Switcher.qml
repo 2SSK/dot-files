@@ -7,9 +7,9 @@ import qs
 import qs.services
 import qs.widgets
 
-// The window switcher (Ctrl+Tab): the open windows as rounded cards on a ring, most recent first.
+// The window switcher (Alt+Tab): the open windows as rounded cards on a ring, most recent first.
 // The ring turns to bring the next one to the front; cards further round shrink, fade and turn
-// away. Releasing Ctrl switches to the front one, Escape cancels, a click picks one. A quick tap
+// away. Releasing Alt switches to the front one, Escape cancels, a click picks one. A quick tap
 // switches to the last window without showing the ring. i3's "switcher" mode hands it the keys.
 PopupWindow {
 	id: root

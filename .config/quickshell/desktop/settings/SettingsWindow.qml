@@ -4,6 +4,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import qs
+import qs.control
 import qs.services
 import qs.widgets
 
@@ -13,7 +14,7 @@ import qs.widgets
 FloatingWindow {
 	id: root
 
-	property string page: "bar"
+	property string page: Panel.settingsPage
 	property string family: ""
 	property string mode: ""
 	property var families: []
@@ -23,7 +24,9 @@ FloatingWindow {
 		{ key: "appearance", glyph: Icons.g("palette"), title: "Appearance" },
 		{ key: "notifications", glyph: Icons.g("bell"), title: "Notifications" },
 		{ key: "levels", glyph: Icons.g("adjustments"), title: "Levels" },
-		{ key: "power", glyph: Icons.g("power"), title: "Power" }
+		{ key: "power", glyph: Icons.g("power"), title: "Power" },
+		{ key: "timeshift", glyph: Icons.g("history"), title: "Timeshift" },
+		{ key: "keys", glyph: Icons.g("keyboard"), title: "Keys" }
 	]
 
 	function set(group: string, key: string, value: var): void {
@@ -167,7 +170,7 @@ FloatingWindow {
 					MouseArea {
 						anchors.fill: parent
 						cursorShape: Qt.PointingHandCursor
-						onClicked: root.page = entry.modelData.key
+						onClicked: Panel.settingsPage = entry.modelData.key
 					}
 				}
 			}
@@ -186,12 +189,43 @@ FloatingWindow {
 		}
 	}
 
+	// the page's title (and the Keys page's search), fixed above what scrolls
+	Column {
+		id: header
+
+		anchors.left: sidebar.right
+		anchors.leftMargin: 32
+		anchors.right: parent.right
+		anchors.rightMargin: 32
+		y: 28
+		spacing: 16
+
+		Text {
+			text: root.pages.find(p => p.key === root.page)?.title ?? ""
+			color: Theme.fg
+			font.family: Theme.fontSans
+			font.pixelSize: 22
+			font.weight: Font.DemiBold
+		}
+
+		TextField {
+			id: keysSearch
+
+			visible: root.page === "keys"
+			width: parent.width
+			placeholder: "Search keys"
+		}
+	}
+
 	Flickable {
 		id: content
 
+		ScrollBoost {}
+
 		anchors.left: sidebar.right
 		anchors.right: parent.right
-		anchors.top: parent.top
+		anchors.top: header.bottom
+		anchors.topMargin: 6
 		anchors.bottom: parent.bottom
 		contentHeight: pageColumn.implicitHeight + 60
 		clip: true
@@ -201,17 +235,9 @@ FloatingWindow {
 			id: pageColumn
 
 			x: 32
-			y: 28
+			y: 16
 			width: content.width - 64
 			spacing: 22
-
-			Text {
-				text: root.pages.find(p => p.key === root.page)?.title ?? ""
-				color: Theme.fg
-				font.family: Theme.fontSans
-				font.pixelSize: 22
-				font.weight: Font.DemiBold
-			}
 
 			// Bar
 			Section {
@@ -370,6 +396,63 @@ FloatingWindow {
 				}
 			}
 
+			Section {
+				visible: root.page === "appearance"
+				title: "Night light"
+
+				SettingRow {
+					label: "On now"
+					hint: NightLight.available ? "A warmer screen; also in the control center." : "Needs gammastep (packages/base.txt)."
+					Toggle {
+						checked: NightLight.active
+						onToggled: NightLight.toggle()
+					}
+				}
+
+				SettingRow {
+					label: "Warmth"
+					hint: "Lower is warmer."
+					Range {
+						from: 3000
+						to: 6000
+						step: 100
+						value: Config.nightLight.temperature
+						format: v => Math.round(v) + " K"
+						onMoved: value => root.set("nightLight", "temperature", Math.round(value / 100) * 100)
+					}
+				}
+
+				SettingRow {
+					label: "On a schedule"
+					hint: `By itself from ${Config.nightLight.from} to ${Config.nightLight.to}.`
+					Toggle {
+						checked: Config.nightLight.schedule
+						onToggled: checked => root.set("nightLight", "schedule", checked)
+					}
+				}
+
+				SettingRow {
+					visible: Config.nightLight.schedule
+					label: "From, to"
+					hint: "24-hour times, and Enter."
+					Row {
+						spacing: 8
+
+						TextField {
+							width: 80
+							text: Config.nightLight.from
+							onAccepted: value => { if (/^\d{1,2}:\d{2}$/.test(value.trim())) root.set("nightLight", "from", value.trim().padStart(5, "0")); }
+						}
+
+						TextField {
+							width: 80
+							text: Config.nightLight.to
+							onAccepted: value => { if (/^\d{1,2}:\d{2}$/.test(value.trim())) root.set("nightLight", "to", value.trim().padStart(5, "0")); }
+						}
+					}
+				}
+			}
+
 			// Notifications
 			Section {
 				visible: root.page === "notifications"
@@ -455,6 +538,70 @@ FloatingWindow {
 						onToggled: checked => root.set("power", "confirm", checked)
 					}
 				}
+			}
+
+			Section {
+				visible: root.page === "power"
+				title: "When idle"
+
+				Repeater {
+					model: [
+						{ key: "dim", label: "Dim the screen", hint: "Any key or movement brings it back." },
+						{ key: "lock", label: "Lock", hint: "The laptop keeps running." },
+						{ key: "off", label: "Switch the screen off", hint: "Even while locked." }
+					]
+
+					delegate: SettingRow {
+						id: idleRow
+
+						required property var modelData
+
+						label: modelData.label
+						hint: modelData.hint
+						Range {
+							from: 0
+							to: 30
+							step: 1
+							value: Config.idle[idleRow.modelData.key]
+							format: v => Math.round(v) === 0 ? "Never" : Math.round(v) + " min"
+							onMoved: value => root.set("idle", idleRow.modelData.key, Math.round(value))
+						}
+					}
+				}
+			}
+
+			Section {
+				visible: root.page === "power"
+				title: "Battery"
+
+				SettingRow {
+					label: "Low battery"
+					hint: "At or below this, the battery turns red and a notification warns you (again at 10%)."
+					Range {
+						from: 10
+						to: 50
+						step: 1
+						value: Config.power.batteryLow
+						format: v => Math.round(v) + " %"
+						onMoved: value => root.set("power", "batteryLow", Math.round(value))
+					}
+				}
+			}
+
+			// Timeshift: the system's snapshots (loaded each time the page opens)
+			Loader {
+				active: root.page === "timeshift"
+				visible: active
+				width: parent.width
+
+				sourceComponent: TimeshiftPage {}
+			}
+
+			// Keys: every binding, read from i3's config
+			KeybindsPage {
+				visible: root.page === "keys"
+				width: parent.width
+				query: keysSearch.text
 			}
 		}
 	}
