@@ -29,15 +29,15 @@ HangingPanel {
 		return e.kind === "text" ? e.text : e.kind === "files" ? e.paths.join(" ") : "image picture screenshot";
 	}
 
-	function name(path: string): string {
+	function fileName(path: string): string {
 		return path.slice(path.lastIndexOf("/") + 1);
 	}
 
-	function title(e: var): string {
+	function headline(e: var): string {
 		if (e.kind === "image")
 			return "Image";
 		if (e.kind === "files")
-			return e.paths.length === 1 ? name(e.paths[0]) : `${name(e.paths[0])} and ${e.paths.length - 1} more`;
+			return e.paths.length === 1 ? fileName(e.paths[0]) : `${fileName(e.paths[0])} and ${e.paths.length - 1} more`;
 		return e.text.trim().split("\n")[0];
 	}
 
@@ -171,7 +171,7 @@ HangingPanel {
 
 					Text {
 						width: parent.width
-						text: root.title(row.modelData)
+						text: root.headline(row.modelData)
 						elide: Text.ElideRight
 						maximumLineCount: 1
 						textFormat: Text.PlainText
@@ -295,7 +295,7 @@ HangingPanel {
 
 					Column {
 						Text {
-							text: root.name(parent.parent.modelData)
+							text: root.fileName(parent.parent.modelData)
 							color: Theme.fg
 							font.family: Theme.fontSans
 							font.pixelSize: 13
