@@ -89,7 +89,7 @@ Scope {
 
 				Text {
 					anchors.horizontalCenter: parent.horizontalCenter
-					text: Qt.formatTime(clock.date, "hh:mm")
+					text: Qt.formatTime(clock.date, "hh:mm AP").slice(0, 5) // 12-hour, as the bar (03:21)
 					color: Theme.fg
 					font.family: "Inter Display"
 					font.weight: Font.Light
