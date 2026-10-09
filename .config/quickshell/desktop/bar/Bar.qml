@@ -191,6 +191,10 @@ PanelWindow {
 		island: shape
 	}
 
+	Switcher {
+		bar: bar
+	}
+
 	Osd {
 		bar: bar
 	}

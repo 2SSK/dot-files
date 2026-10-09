@@ -15,7 +15,7 @@ import qs.services
 
 ShellRoot {
 	// services that watch on their own, started with the shell
-	readonly property var watchers: [Locks, Recorder, Notifications, Clipboard, Events, Alarms, Wallpaper]
+	readonly property var watchers: [Locks, Recorder, Notifications, Clipboard, Events, Alarms, Wallpaper, Windows]
 
 	Variants {
 		model: Quickshell.screens
@@ -137,6 +137,24 @@ ShellRoot {
 
 		function toggle(): void {
 			Panel.clipboardOpen = !Panel.clipboardOpen;
+		}
+	}
+
+	// the window switcher, driven by i3's "switcher" mode
+	IpcHandler {
+		target: "switcher"
+
+		function next(): void {
+			Windows.step(1);
+		}
+		function prev(): void {
+			Windows.step(-1);
+		}
+		function commit(): void {
+			Windows.commit();
+		}
+		function cancel(): void {
+			Windows.close();
 		}
 	}
 

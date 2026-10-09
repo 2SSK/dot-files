@@ -26,3 +26,9 @@ setup() {
 		"$REPO/.config/i3/config" "$REPO"/.config/i3/conf.d/*.conf
 	[ "$status" -eq 1 ]
 }
+
+@test "desktop-ctrl-release fails cleanly without an X display" {
+	run env -u DISPLAY "$BATS_TEST_DIRNAME/../.local/bin/desktop-ctrl-release"
+	[ "$status" -eq 1 ]
+	[[ $output == *"no X display"* ]]
+}
