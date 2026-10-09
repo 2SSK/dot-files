@@ -55,6 +55,8 @@ packages() {
 	fi
 	# cmatrix 2.0 paints black behind the rain; the git build draws on the terminal's background
 	if pacman -Qq cmatrix >/dev/null 2>&1 && ! pacman -Qq cmatrix-git >/dev/null 2>&1 && command -v yay >/dev/null; then
+		# the two conflict, and yay's question defaults to no: the old one goes first
+		sudo pacman -R cmatrix
 		yay -S cmatrix-git
 	fi
 }

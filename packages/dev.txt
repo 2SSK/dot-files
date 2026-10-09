@@ -11,3 +11,5 @@ pnpm                        @pnpm                       @pnpm
 docker                      docker.io                   moby-engine
 docker-compose              docker-compose              docker-compose
 docker-buildx               docker-buildx               docker-buildx
+ninja                       ninja-build                 ninja-build
+python-paramiko             python3-paramiko            python3-paramiko

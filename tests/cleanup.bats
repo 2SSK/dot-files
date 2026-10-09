@@ -32,7 +32,7 @@ FAKE
 	grep -qx "pacman -D --asexplicit jq nodejs-provider" "$CALLS" # the package that is installed
 	grep -qx "pacman -Rns rofi steam" "$CALLS" # only what is installed, by that very name
 	grep -qx "pacman -Rns old-lib" "$CALLS"
-	grep -qx "yay -S cmatrix-git" "$CALLS"
+	grep -A1 -x "pacman -R cmatrix" "$CALLS" | grep -qx "yay -S cmatrix-git" # they conflict
 }
 
 @test "packages: auto-cpufreq is stopped before its package goes" {
