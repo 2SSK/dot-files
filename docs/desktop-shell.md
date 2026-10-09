@@ -35,7 +35,7 @@ say so and their bar icons hide.
 
 ## Clipboard
 
-`$mod+Shift+v` or the clipboard icon: the history of what you copied (text, images and files,
+`$mod+Shift+c` or the clipboard icon: the history of what you copied (text, images and files,
 pinned ones first) on the left, the selected one in full on the right: the text, the picture, the
 files. Type to search, ↑ ↓ to pick, Enter (or Copy) puts it back on the clipboard as what it was
 and closes: an image pastes as an image (into Claude Code, opencode, a chat), files paste as
@@ -76,7 +76,7 @@ switch them, the arrows move, Enter picks:
 | --- | --- | --- |
 | Apps | `$mod+d` | launches it; the ones used most come first |
 | Emoji | `$mod+;` | copies it; recent ones first, search by name or group (`heart`, `food`) |
-| Files | `$mod+Shift+f` | opens it; **Ctrl+Enter** copies the file itself (its `file://` URI as `text/uri-list` alone, as a file manager copies), so Ctrl+V in Teams, WhatsApp or a mail attaches it; **Shift+Enter** copies its full path; **Ctrl+Shift+Enter** its content (text as text, an image as an image); the row's buttons do the same. Without a search, the files changed this week, newest first |
+| Files | `$mod+Shift+f` | **Enter** (or a click) copies the file itself (its `file://` URI as `text/uri-list` alone, as a file manager copies), so Ctrl+V in Teams, WhatsApp or a mail attaches it; **Ctrl+Enter** opens it; **Shift+Enter** copies its full path; **Ctrl+Shift+Enter** its content (text as text, an image as an image); the row's buttons do the same. Without a search, the files changed this week, newest first |
 | Themes | `$mod+Shift+y` | applies it and stays open, to try another; the sun/moon chip switches dark and light |
 
 `desktop-file open|file|path|content <file>` does the file actions (`wl-copy-exact` puts a file on the Wayland clipboard as `text/uri-list` alone; `wl-copy` would add text), `desktop-file find [query]` the
@@ -230,7 +230,8 @@ Hidden with `$mod+Shift+b`, the bar comes back over the windows while the pointe
 | `$mod+n` | notifications (control center) |
 | `$mod+Shift+s` | settings |
 | `$mod+c` | control center |
-| `$mod+Shift+v` | clipboard history |
+| `$mod+Shift+c` | clipboard history |
+| `$mod+Shift+v` | reload i3 (or sway) |
 | `$mod+Shift+p` | wallpapers |
 | `$mod+d`, `$mod+;`, `$mod+Shift+f`, `$mod+Shift+y` | the launcher: apps, emoji, files, themes |
 | Alt+Tab (hold Alt) | window switcher |

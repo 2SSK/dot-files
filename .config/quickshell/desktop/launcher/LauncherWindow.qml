@@ -12,9 +12,9 @@ import qs.widgets
 // Shift+Tab (or the chips) switch them. Arrows move, Enter picks:
 //   Apps: launches it (the ones used most come first).
 //   Emoji: copies it (recent ones first; search by name or group).
-//   Files: opens it (text in nvim, web pages and PDFs in the browser, the rest in their app);
-//     Ctrl+Enter copies the file itself, to paste as an attachment in a chat or mail; Shift+Enter
-//     its path; Ctrl+Shift+Enter its content; the row's buttons do the same.
+//   Files: copies the file itself, to paste as an attachment in a chat or mail; Ctrl+Enter opens
+//     it (text in nvim, web pages and PDFs in the browser, the rest in their app); Shift+Enter
+//     copies its path, Ctrl+Shift+Enter its content; the row's buttons do the same.
 //   Themes: applies it, and stays open to try another; the sun/moon switches dark and light.
 HangingPanel {
 	id: root
@@ -22,7 +22,7 @@ HangingPanel {
 	readonly property var modes: [
 		{ key: "apps", label: "Apps", glyph: "apps", hint: "Enter opens" },
 		{ key: "emoji", label: "Emoji", glyph: "mood-smile", hint: "Enter copies" },
-		{ key: "files", label: "Files", glyph: "file", hint: "Enter opens · Ctrl+Enter copies the file (paste to attach) · Shift+Enter the path · Ctrl+Shift+Enter the content" },
+		{ key: "files", label: "Files", glyph: "file", hint: "Enter copies the file (paste to attach) · Ctrl+Enter opens · Shift+Enter the path · Ctrl+Shift+Enter the content" },
 		{ key: "themes", label: "Themes", glyph: "palette", hint: "Enter applies" }
 	]
 	readonly property string mode: Panel.launcherMode
@@ -119,7 +119,7 @@ HangingPanel {
 			else if ((k === Qt.Key_Left || k === Qt.Key_Right) && root.columns > 1)
 				root.move(k === Qt.Key_Left ? -1 : 1);
 			else if (k === Qt.Key_Return || k === Qt.Key_Enter)
-				root.pick(root.current, (event.modifiers & Qt.ControlModifier) && (event.modifiers & Qt.ShiftModifier) ? "content" : event.modifiers & Qt.ControlModifier ? "file" : event.modifiers & Qt.ShiftModifier ? "path" : "open");
+				root.pick(root.current, (event.modifiers & Qt.ControlModifier) && (event.modifiers & Qt.ShiftModifier) ? "content" : event.modifiers & Qt.ControlModifier ? "open" : event.modifiers & Qt.ShiftModifier ? "path" : root.mode === "files" ? "file" : "open");
 			else
 				return;
 			event.accepted = true;
@@ -219,7 +219,7 @@ HangingPanel {
 				MouseArea {
 					anchors.fill: parent
 					cursorShape: Qt.PointingHandCursor
-					onClicked: root.pick(row.index, "open")
+					onClicked: root.pick(row.index, root.mode === "files" ? "file" : "open")
 				}
 
 				IconImage {
