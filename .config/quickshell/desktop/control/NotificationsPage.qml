@@ -30,11 +30,62 @@ Column {
 
 	spacing: 14
 
-	Choice {
+	Row {
 		width: parent.width
-		options: [{ value: "all", label: "All" }, { value: "today", label: "Today" }, { value: "yesterday", label: "Yesterday" }, { value: "older", label: "Older" }]
-		value: root.filter
-		onPicked: value => root.filter = value
+		spacing: 8
+
+		Choice {
+			width: parent.width - clearAll.width - 8
+			options: [{ value: "all", label: "All" }, { value: "today", label: "Today" }, { value: "yesterday", label: "Yesterday" }, { value: "older", label: "Older" }]
+			value: root.filter
+			onPicked: value => root.filter = value
+		}
+
+		// every notification gone, the ones filtered out too
+		Rectangle {
+			id: clearAll
+
+			anchors.verticalCenter: parent.verticalCenter
+			width: clearLabel.implicitWidth + 44
+			height: 34
+			radius: 10
+			opacity: Notifications.history.length > 0 ? 1 : 0.45
+			color: clearHover.hovered && Notifications.history.length > 0 ? Theme.error : Qt.alpha(Theme.overlay, 0.7)
+
+			Row {
+				anchors.centerIn: parent
+				spacing: 6
+
+				Glyph {
+					anchors.verticalCenter: parent.verticalCenter
+					glyph: Icons.g("trash")
+					font.pixelSize: 14
+					color: clearHover.hovered && Notifications.history.length > 0 ? Theme.bg : Theme.fg
+				}
+
+				Text {
+					id: clearLabel
+
+					anchors.verticalCenter: parent.verticalCenter
+					text: "Clear all"
+					color: clearHover.hovered && Notifications.history.length > 0 ? Theme.bg : Theme.fg
+					font.family: Theme.fontSans
+					font.pixelSize: 13
+					font.weight: Font.Medium
+				}
+			}
+
+			HoverHandler {
+				id: clearHover
+			}
+
+			MouseArea {
+				anchors.fill: parent
+				enabled: Notifications.history.length > 0
+				cursorShape: Qt.PointingHandCursor
+				onClicked: Notifications.clear()
+			}
+		}
 	}
 
 	Column {

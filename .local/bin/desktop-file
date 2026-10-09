@@ -1,0 +1,132 @@
+#!/usr/bin/env bash
+# Open a file with what suits it, or copy its path or its content (the launcher's file picker).
+#   desktop-file open <file>      text and code: $EDITOR (nvim) in $TERMINAL (kitty); web pages,
+#                                 PDFs and SVGs: a new tab of the browser that's running, else of
+#                                 the default one; anything else: its default application
+#   desktop-file path <file>      the full path, as text (to paste into a chat)
+#   desktop-file content <file>   text as text, an image as an image, anything else as the file
+#                                 itself (pastes as an attachment)
+#   desktop-file find [query]     up to 60 files under $HOME matching it, best first (fzf), or the
+#                                 most recently changed without one; .git, caches and dependencies
+#                                 are left out. The list is cached for a minute.
+set -euo pipefail
+
+# left out of find, by name anywhere or by path under $HOME
+skip_names=(.git node_modules __pycache__ .venv target .cache .npm .cargo .rustup .mozilla .var Trash)
+skip_paths=(.local/share .local/state go/pkg .config/BraveSoftware .config/chromium .config/google-chrome)
+
+usage() {
+	echo "usage: desktop-file open|path|content <file> | find [query]" >&2
+	exit 2
+}
+
+# a running browser's command, else the default browser's, else nothing
+browser() {
+	local proc cmd default
+	for proc in brave:brave firefox:firefox chromium:chromium chrome:google-chrome-stable librewolf:librewolf vivaldi-bin:vivaldi zen:zen-browser; do
+		cmd=${proc#*:}
+		pgrep -x "${proc%%:*}" >/dev/null && command -v "$cmd" >/dev/null && echo "$cmd" && return
+	done
+	default="$(xdg-settings get default-web-browser 2>/dev/null || true)"
+	for cmd in brave firefox chromium google-chrome-stable librewolf vivaldi zen-browser; do
+		[[ $default == *"${cmd%%-*}"* ]] && command -v "$cmd" >/dev/null && echo "$cmd" && return
+	done
+	return 0
+}
+
+editable() { # <mime type>
+	case $1 in
+	text/html | application/xhtml+xml) return 1 ;;
+	text/* | application/json | application/javascript | application/x*yaml | application/toml | application/x-shellscript | application/xml | inode/x-empty) return 0 ;;
+	*) return 1 ;;
+	esac
+}
+
+copy() { # <type> < data
+	if [[ -n ${WAYLAND_DISPLAY:-} ]]; then
+		wl-copy --type "$1"
+	else
+		xclip -selection clipboard -t "$1"
+	fi
+}
+
+copy_text() { # <text>
+	if [[ -n ${WAYLAND_DISPLAY:-} ]]; then
+		wl-copy --type 'text/plain;charset=utf-8' "$1"
+	else
+		printf '%s' "$1" | xclip -selection clipboard -t UTF8_STRING
+	fi
+}
+
+# every file under $HOME, relative to it; with --recent, those changed in the last week, newest
+# first
+files() {
+	local n fd_args=() find_args=()
+	for n in "${skip_names[@]}"; do fd_args+=(--exclude "$n") && find_args+=(-name "$n" -o); done
+	for n in "${skip_paths[@]}"; do fd_args+=(--exclude "/$n") && find_args+=(-path "./$n" -o); done
+	cd "$HOME"
+	if [[ ${1:-} == --recent ]]; then
+		if command -v fd >/dev/null; then
+			fd --type f --hidden --changed-within 7d "${fd_args[@]}" -0 . | xargs -0r stat -c '%Y %n'
+		else
+			find . \( "${find_args[@]}" -false \) -prune -o -type f -mtime -7 -printf '%T@ %p\n'
+		fi | sort -rn | cut -d' ' -f2- | sed 's|^\./||'
+	elif command -v fd >/dev/null; then
+		fd --type f --hidden "${fd_args[@]}" . | sed 's|^\./||'
+	else
+		find . \( "${find_args[@]}" -false \) -prune -o -type f -print | sed 's|^\./||'
+	fi
+}
+
+find_files() { # [query]
+	if [[ -z ${1:-} ]]; then
+		files --recent | head -60 | sed "s|^|$HOME/|"
+		return
+	fi
+	local cache="${XDG_RUNTIME_DIR:-/tmp}/desktop/files.list"
+	mkdir -p "${cache%/*}"
+	if [[ ! -s $cache || -n $(find "$cache" -mmin +1) ]]; then
+		files >"$cache.new" && mv "$cache.new" "$cache"
+	fi
+	if command -v fzf >/dev/null; then
+		fzf --filter "$1" --scheme path <"$cache"
+	else
+		grep -iF -- "$1" "$cache"
+	fi | head -60 | sed "s|^|$HOME/|"
+}
+
+if [[ ${1:-} == find ]]; then
+	(($# <= 2)) || usage
+	find_files "${2:-}"
+	exit
+fi
+(($# == 2)) || usage
+action=$1
+[[ -e $2 ]] || { echo "desktop-file: no such file: $2" >&2 && exit 1; }
+file="$(realpath -- "$2")"
+mime="$(file --brief --mime-type -- "$file")"
+
+case $action in
+open)
+	if [[ -d $file ]]; then
+		exec "${TERMINAL:-kitty}" --directory "$file"
+	elif [[ $mime == text/html || $mime == application/xhtml+xml || $mime == application/pdf || $mime == image/svg+xml ]] && cmd="$(browser)" && [[ -n $cmd ]]; then
+		exec "$cmd" --new-tab "file://$file"
+	elif editable "$mime"; then
+		exec "${TERMINAL:-kitty}" -e "${EDITOR:-nvim}" "$file"
+	else
+		exec xdg-open "$file"
+	fi
+	;;
+path) copy_text "$file" ;;
+content)
+	if editable "$mime"; then
+		copy_text "$(cat -- "$file")"
+	elif [[ $mime == image/* ]]; then
+		copy "$mime" <"$file"
+	else
+		printf 'file://%s' "$file" | copy text/uri-list
+	fi
+	;;
+*) usage ;;
+esac

@@ -15,6 +15,7 @@ Singleton {
 	readonly property JsonObject audio: adapter.audio
 	readonly property JsonObject brightness: adapter.brightness
 	readonly property JsonObject power: adapter.power
+	readonly property JsonObject wallpaper: adapter.wallpaper
 	// i3 docks only at the top or bottom (a side dock takes the whole screen), so on X11 a side
 	// position falls back to the top; sway places the bar on any edge
 	readonly property bool wayland: !!Quickshell.env("WAYLAND_DISPLAY")
@@ -68,6 +69,10 @@ Singleton {
 			}
 			property JsonObject brightness: JsonObject {
 				property int step: 5
+			}
+			property JsonObject wallpaper: JsonObject {
+				property var folders: ["~/.local/share/desktop/wallpapers", "~/Wallpaper-Bank"]
+				property string rotate: "off" // off, 5m, 1h, 1d or boot
 			}
 			property JsonObject power: JsonObject {
 				property bool confirm: true // a second press runs the action

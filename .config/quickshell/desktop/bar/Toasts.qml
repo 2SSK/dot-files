@@ -30,6 +30,7 @@ PopupWindow {
 	color: "transparent"
 	mask: Region {
 		item: stack
+		radius: 16 // the cards' corners; picom blurs inside this shape
 	}
 
 	Column {

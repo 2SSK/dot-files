@@ -3,6 +3,7 @@
 
 usage: theme_render.py render <family> <dark|light>
        theme_render.py lint [family...]
+       theme_render.py palettes
 
 Standard library only. Every file under templates/ is a target, rendered to the same relative path.
 A theme is rendered into a fresh directory next to the state path, which is a symlink swapped to it
@@ -45,6 +46,16 @@ def load(family):
         raise ThemeError(f"unknown theme '{family}' (known: {known})")
     with path.open("rb") as f:
         return tomllib.load(f)
+
+
+def palettes():
+    """Every family's name and its dark and light ui colours (the shell's theme picker)."""
+    themes = []
+    for path in sorted(THEMES.glob("*.toml")):
+        theme = load(path.stem)
+        themes.append({"family": path.stem, "name": theme["meta"]["name"],
+                       **{mode: theme[mode]["ui"] for mode in ("dark", "light") if mode in theme}})
+    return themes
 
 
 def contrast(a, b):
@@ -154,6 +165,9 @@ def main(argv):
     try:
         if argv[:1] == ["render"] and len(argv) == 3:
             render(argv[1], argv[2], state_dir())
+            return 0
+        if argv == ["palettes"]:
+            print(json.dumps(palettes()))
             return 0
         if argv[:1] == ["lint"]:
             families = argv[1:] or sorted(p.stem for p in THEMES.glob("*.toml"))

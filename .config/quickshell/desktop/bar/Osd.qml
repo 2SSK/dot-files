@@ -42,6 +42,7 @@ PopupWindow {
 	color: "transparent"
 	mask: Region {
 		item: card
+		radius: card.radius // the shape picom blurs behind
 	}
 
 	// card and shadow fade in together; the card slides by its x (the window's shape follows

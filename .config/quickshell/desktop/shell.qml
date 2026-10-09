@@ -6,6 +6,8 @@ import Quickshell
 import Quickshell.Io
 import qs.bar
 import qs.clipboard
+import qs.wallpaper
+import qs.launcher
 import qs.control
 import qs.settings
 import qs
@@ -13,7 +15,7 @@ import qs.services
 
 ShellRoot {
 	// services that watch on their own, started with the shell
-	readonly property var watchers: [Locks, Recorder, Notifications, Clipboard]
+	readonly property var watchers: [Locks, Recorder, Notifications, Clipboard, Events, Alarms, Wallpaper, Windows]
 
 	Variants {
 		model: Quickshell.screens
@@ -33,6 +35,22 @@ ShellRoot {
 		active: Panel.clipboardShown
 
 		ClipboardWindow {
+			visible: true
+		}
+	}
+
+	LazyLoader {
+		active: Panel.launcherShown
+
+		LauncherWindow {
+			visible: true
+		}
+	}
+
+	LazyLoader {
+		active: Panel.wallpaperShown
+
+		WallpaperWindow {
 			visible: true
 		}
 	}
@@ -119,6 +137,58 @@ ShellRoot {
 
 		function toggle(): void {
 			Panel.clipboardOpen = !Panel.clipboardOpen;
+		}
+	}
+
+	// the window switcher, driven by i3's "switcher" mode
+	IpcHandler {
+		target: "switcher"
+
+		function next(): void {
+			Windows.step(1);
+		}
+		function prev(): void {
+			Windows.step(-1);
+		}
+		function commit(): void {
+			Windows.commit();
+		}
+		function cancel(): void {
+			Windows.close();
+		}
+	}
+
+	// apps, emoji, files or themes; again on the same one closes it
+	IpcHandler {
+		target: "launcher"
+
+		function toggle(mode: string): void {
+			Panel.toggleLauncher(mode);
+		}
+		function close(): void {
+			Panel.launcherOpen = false;
+		}
+	}
+
+	IpcHandler {
+		target: "wallpaper"
+
+		function toggle(): void {
+			Panel.wallpaperOpen = !Panel.wallpaperOpen;
+		}
+		function shuffle(): void {
+			Wallpaper.shuffle();
+		}
+	}
+
+	IpcHandler {
+		target: "alarm"
+
+		function stop(): void {
+			Alarms.stop();
+		}
+		function snooze(): void {
+			Alarms.snooze();
 		}
 	}
 

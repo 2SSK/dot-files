@@ -27,6 +27,21 @@ HangingPanel {
 	panelWidth: Panel.controlWidth
 	panelHeight: Panel.controlHeight
 	onDismissed: Panel.controlOpen = false
+	// on Home, the media keys: Space plays or pauses, ← → skip
+	onKeyPressed: event => {
+		const player = Media.player;
+		if (Panel.controlPage !== "home" || !player)
+			return;
+		if (event.key === Qt.Key_Space && player.canTogglePlaying)
+			player.togglePlaying();
+		else if (event.key === Qt.Key_Left && player.canGoPrevious)
+			player.previous();
+		else if (event.key === Qt.Key_Right && player.canGoNext)
+			player.next();
+		else
+			return;
+		event.accepted = true;
+	}
 
 	Component.onCompleted: if (Panel.controlPage === "notifications") Notifications.unread = 0
 
@@ -75,8 +90,8 @@ HangingPanel {
 						glyph: entry.modelData.glyph
 						font.pixelSize: 18
 						font.weight: Font.Normal
-						color: entry.on ? Theme.onPrimary : Theme.fg
-						filled: entry.on
+						color: entry.on ? Theme.primaryText : Theme.fg
+						filled: true
 					}
 
 					Rectangle {
@@ -192,7 +207,7 @@ HangingPanel {
 						glyph: button.modelData.glyph
 						font.pixelSize: 15
 						font.weight: Font.Normal
-						color: button.modelData.on ? Theme.onPrimary : Theme.fg
+						color: button.modelData.on ? Theme.primaryText : Theme.fg
 						filled: button.modelData.on ?? false
 					}
 

@@ -34,8 +34,11 @@ PanelWindow {
 	implicitWidth: vertical ? (docked ? size + gap : 1) : 0
 	implicitHeight: vertical ? 0 : docked ? size + gap : 1
 	color: "transparent"
+	// the window's shape: the bar with its rounded ends (picom blurs only inside it), or the
+	// one-pixel edge while hidden
 	mask: Region {
 		item: bar.docked ? shape : edge
+		radius: bar.docked ? shape.radius : 0
 	}
 
 	// the one-pixel edge left while hidden
@@ -188,11 +191,20 @@ PanelWindow {
 		island: shape
 	}
 
+	Switcher {
+		bar: bar
+	}
+
 	Osd {
 		bar: bar
 	}
 
 	Toasts {
 		bar: bar
+	}
+
+	AlarmCard {
+		bar: bar
+		island: shape
 	}
 }

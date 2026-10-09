@@ -196,7 +196,7 @@ Rectangle {
 
 							anchors.centerIn: parent
 							text: button.modelData.text
-							color: buttonHover.hovered ? Theme.onPrimary : Theme.fg
+							color: buttonHover.hovered ? Theme.primaryText : Theme.fg
 							font.family: Theme.fontSans
 							font.pixelSize: 12
 							font.weight: Font.Medium

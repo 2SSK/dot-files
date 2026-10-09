@@ -25,7 +25,7 @@ fake() { # <name> <version line>
 	run "$LOCK"
 	[ "$status" -eq 0 ]
 	[[ $(cat "$ARGS") == *"--nofork"* ]]
-	[[ $(cat "$ARGS") == *"--image $XDG_CACHE_HOME/desktop/lock-1f1f28.png --fill"* ]]
+	[[ $(cat "$ARGS") =~ --image\ $XDG_CACHE_HOME/desktop/lock-1f1f28-[0-9a-f]{12}\.png\ --fill ]]
 	[[ $(cat "$ARGS") == *"--radius 20"* ]]
 	[[ $(cat "$ARGS") != *"--bar-indicator"* ]]
 	[[ $(cat "$ARGS") == *"--keyhl-color 7e9cd8ff"* ]]

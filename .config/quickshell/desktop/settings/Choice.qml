@@ -47,7 +47,7 @@ Rectangle {
 
 					anchors.centerIn: parent
 					text: option.modelData.label
-					color: option.on ? Theme.onPrimary : Theme.fg
+					color: option.on ? Theme.primaryText : Theme.fg
 					font.family: Theme.fontSans
 					font.pixelSize: 13
 					font.weight: Font.Medium

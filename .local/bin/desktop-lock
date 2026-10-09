@@ -23,7 +23,8 @@ backdrop() {
 	wallpaper="$(readlink -f "$state/wallpaper" 2>/dev/null || true)"
 	[[ -f $wallpaper ]] || wallpaper="$(dirname "$(readlink -f "$0")")/../share/desktop/wallpapers/cat-mocha-lavender_19.jpg"
 	[[ -f $wallpaper ]] && command -v magick >/dev/null || return 1
-	out="${XDG_CACHE_HOME:-$HOME/.cache}/desktop/lock-$bg.png"
+	# one per wallpaper and colour: a switch to an older picture still gets its own
+	out="${XDG_CACHE_HOME:-$HOME/.cache}/desktop/lock-$bg-$(printf %s "$wallpaper" | md5sum | cut -c1-12).png"
 	if [[ ! -s $out || $wallpaper -nt $out ]]; then
 		mkdir -p "${out%/*}"
 		magick "$wallpaper" -resize '2560x1440^' -gravity center -extent 2560x1440 -scale 25% -blur 0x7 -resize 400% \

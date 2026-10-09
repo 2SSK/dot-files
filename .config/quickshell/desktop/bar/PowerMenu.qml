@@ -79,7 +79,7 @@ PopupWindow {
 
 				readonly property bool selected: Panel.selected === index
 				readonly property bool armed: Panel.armed === index
-				readonly property color ink: armed || selected ? Theme.onPrimary : Theme.fg
+				readonly property color ink: armed || selected ? Theme.primaryText : Theme.fg
 
 				width: 170
 				height: 118
@@ -138,7 +138,7 @@ PopupWindow {
 					width: 18
 					height: 18
 					radius: 4
-					color: tile.armed || tile.selected ? Qt.alpha(Theme.onPrimary, 0.2) : Qt.alpha(Theme.overlay, 0.9)
+					color: tile.armed || tile.selected ? Qt.alpha(Theme.primaryText, 0.2) : Qt.alpha(Theme.overlay, 0.9)
 
 					Text {
 						anchors.centerIn: parent

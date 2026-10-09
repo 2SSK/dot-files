@@ -25,7 +25,7 @@ Rectangle {
 		radius: 9
 		y: 3
 		x: root.checked ? root.width - width - 3 : 3
-		color: root.checked ? Theme.onPrimary : Theme.fg
+		color: root.checked ? Theme.primaryText : Theme.fg
 
 		Behavior on x {
 			NumberAnimation {

@@ -19,7 +19,7 @@ Rectangle {
 
 		anchors.centerIn: parent
 		text: root.text
-		color: root.accent ? Theme.onPrimary : Theme.fg
+		color: root.accent ? Theme.primaryText : Theme.fg
 		font.family: Theme.fontSans
 		font.pixelSize: 12
 		font.weight: Font.Medium

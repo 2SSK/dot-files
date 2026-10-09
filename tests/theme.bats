@@ -85,6 +85,20 @@ signals() { cat "$BATS_TEST_TMPDIR/signals"; }
 	[[ $output == *"  gruvbox"* && $output == *"  rosepine"* && $output == *"  eink"* && $output == *"  tokyonight"* ]]
 }
 
+@test "list --json gives each family's name and its dark and light colours" {
+	run "$THEME" list --json
+	[ "$status" -eq 0 ]
+	python3 -c '
+import json, sys
+themes = json.loads(sys.argv[1])
+cat = next(t for t in themes if t["family"] == "catppuccin")
+assert cat["name"] == "Catppuccin", cat
+assert cat["dark"]["bg"] == "#1e1e2e" and cat["dark"]["primary"] == "#89b4fa", cat
+assert cat["light"]["bg"].startswith("#"), cat
+assert {t["family"] for t in themes} >= {"gruvbox", "tokyonight", "eink"}
+' "$output"
+}
+
 @test "unknown family fails and leaves the theme unchanged" {
 	"$THEME" set gruvbox
 	run "$THEME" set nope

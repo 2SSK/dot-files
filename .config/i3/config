@@ -8,7 +8,8 @@
 
 set $mod Mod4
 set $term kitty
-set $menu rofi -show drun
+# the shell, over its IPC: qs -c desktop ipc call <target> <function>
+set $shell exec --no-startup-id qs -c desktop ipc call
 
 include ~/.config/i3/conf.d/look.conf
 include ~/.config/i3/conf.d/keys.conf

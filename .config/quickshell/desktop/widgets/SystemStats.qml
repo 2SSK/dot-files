@@ -22,14 +22,14 @@ Line {
 		glyph: Icons.g("gauge")
 		label: "cpu"
 		value: Math.round(Stats.cpu * 100) + "%"
-		widest: "100%"
+		widest: "88%"
 	}
 
 	Readout {
 		glyph: Icons.g("cpu")
 		label: "mem"
 		value: Math.round(Stats.mem * 100) + "%"
-		widest: "100%"
+		widest: "88%"
 	}
 
 	Readout {
@@ -37,7 +37,7 @@ Line {
 		glyph: Icons.g("flame")
 		label: "tmp"
 		value: Math.round(Stats.temp) + "°C"
-		widest: "100°C"
+		widest: "88°C"
 		tint: Stats.temp >= 85 ? Theme.error : Theme.fg
 	}
 }

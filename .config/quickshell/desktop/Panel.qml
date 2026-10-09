@@ -18,16 +18,95 @@ Singleton {
 	property bool controlOpen: false
 	property bool clipboardOpen: false
 	property bool clipboardShown: false // lives on while it slides back into the bar
+	property bool launcherOpen: false
+	property bool launcherShown: false
+	property string launcherMode: "apps" // apps, emoji, files or themes
+	readonly property int launcherWidth: 640
+	readonly property int launcherHeight: 560
+	property bool wallpaperOpen: false
+	property bool wallpaperShown: false
+	readonly property int wallpaperWidth: 720
+	readonly property int wallpaperHeight: 540
 	// the open panel hanging from the bar (its width; 0 for none): the bar opens its outline there
-	readonly property int hangingWidth: controlOpen ? controlWidth : clipboardOpen ? 560 : 0
+	readonly property int hangingWidth: controlOpen ? controlWidth : clipboardOpen ? 560 : wallpaperOpen ? wallpaperWidth : launcherOpen ? launcherWidth : 0
+	readonly property int hangingHeight: controlOpen ? controlHeight : clipboardOpen ? 560 : wallpaperOpen ? wallpaperHeight : launcherOpen ? launcherHeight : 0
+
+	// the launcher on a mode; again on the same mode closes it
+	function toggleLauncher(mode: string): void {
+		if (launcherOpen && launcherMode === mode) {
+			launcherOpen = false;
+			return;
+		}
+		launcherMode = mode || "apps";
+		launcherOpen = true;
+	}
+
+	onLauncherOpenChanged: {
+		if (launcherOpen) {
+			controlOpen = false;
+			clipboardOpen = false;
+			wallpaperOpen = false;
+			showLauncher.restart();
+		} else {
+			hideLauncher.restart();
+		}
+	}
+
+	Timer {
+		id: showLauncher
+
+		interval: 60
+		onTriggered: root.launcherShown = root.launcherOpen
+	}
+
+	Timer {
+		id: hideLauncher
+
+		interval: 230
+		onTriggered: if (!root.launcherOpen) root.launcherShown = false
+	}
+
+	onWallpaperOpenChanged: {
+		if (wallpaperOpen) {
+			controlOpen = false;
+			clipboardOpen = false;
+			launcherOpen = false;
+			showWallpaper.restart();
+		} else {
+			hideWallpaper.restart();
+		}
+	}
+
+	Timer {
+		id: showWallpaper
+
+		interval: 60
+		onTriggered: root.wallpaperShown = root.wallpaperOpen
+	}
+
+	Timer {
+		id: hideWallpaper
+
+		interval: 230
+		onTriggered: if (!root.wallpaperOpen) root.wallpaperShown = false
+	}
 
 	onClipboardOpenChanged: {
 		if (clipboardOpen) {
 			controlOpen = false;
-			clipboardShown = true;
+			wallpaperOpen = false;
+			launcherOpen = false;
+			showClipboard.restart();
 		} else {
 			hideClipboard.restart();
 		}
+	}
+
+	Timer {
+		id: showClipboard
+
+		interval: 60
+		onTriggered: root.clipboardShown = root.clipboardOpen
 	}
 
 	Timer {
@@ -50,10 +129,19 @@ Singleton {
 	onControlOpenChanged: {
 		if (controlOpen) {
 			clipboardOpen = false;
-			controlShown = true;
+			wallpaperOpen = false;
+			launcherOpen = false;
+			showControl.restart();
 		} else {
 			hideControl.restart();
 		}
+	}
+
+	Timer {
+		id: showControl
+
+		interval: 60
+		onTriggered: root.controlShown = root.controlOpen
 	}
 
 	Timer {

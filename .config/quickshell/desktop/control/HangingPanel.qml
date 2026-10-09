@@ -6,10 +6,10 @@ import Quickshell.I3
 import qs
 
 // A panel that drops out of the middle of the bar, in its colour, joined to it by inverse curves
-// (the bar opens its outline there: Panel.hangingWidth). The window is transparent and as big as
-// the screen, so i3 can only put it at the screen's corner (look.conf) and the panel is drawn under
-// the bar inside it; a click anywhere off the panel lands on the window. A real window, as X11
-// popups can't take the keyboard. Escape, a click off it or another window's focus asks to close
+// (the bar opens its outline there: Panel.hangingWidth). The window is as big as the screen, so i3
+// can only put it at the screen's corner (look.conf), but its shape is just the panel and the
+// curves: picom blurs behind that shape, and clicks anywhere else go to what's below. A real
+// window, as X11 popups can't take the keyboard. Escape or another window's focus asks to close
 // (dismissed). The control center and the clipboard are built on it.
 FloatingWindow {
 	id: root
@@ -20,6 +20,7 @@ FloatingWindow {
 	property int panelHeight: 640
 	default property alias content: inner.data
 	signal dismissed
+	signal keyPressed(var event) // keys nothing inside took (Escape closes)
 
 	readonly property ShellScreen screen: Quickshell.screens.find(s => s.name === I3.focusedMonitor?.name) ?? Quickshell.screens[0]
 	readonly property bool below: Config.position !== "bottom" // hangs below the bar, else above it
@@ -44,26 +45,81 @@ FloatingWindow {
 		onTriggered: root.placed = true
 	}
 
+	// the keyboard: i3 doesn't focus a shaped window by itself, so ask once it has the window (its
+	// "new" event below), and again shortly in case that came first
+	function takeFocus(): void {
+		I3.dispatch(`[title="^${root.title}$"] focus`);
+	}
+
+	Timer {
+		running: true
+		interval: 250
+		onTriggered: root.takeFocus()
+	}
+
 	ElapsedTimer {
 		id: opened
 	}
 
-	// another window taking the focus closes it, as a panel would
+	// i3's window events: focus once it has the window; another window taking the focus closes it
 	I3IpcListener {
 		subscriptions: ["window"]
 		onIpcEvent: event => {
 			const data = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
 			const name = data.container?.name ?? "";
-			if (data.change === "focus" && name && name !== root.title && opened.elapsed() > 600)
+			if (data.change === "new" && name === root.title)
+				root.takeFocus();
+			else if (data.change === "focus" && name && name !== root.title && opened.elapsed() > 600)
 				root.dismissed();
 		}
 	}
 
-	// a click off the panel closes it
-	MouseArea {
-		anchors.fill: parent
-		acceptedButtons: Qt.AllButtons
-		onPressed: root.dismissed()
+	// the window's shape: the panel (as it slides) and the two curves, a square each minus the
+	// circle that makes it concave
+	readonly property real slotX: root.px - root.fillet
+	readonly property real curveY: root.py + (root.below ? card.y : card.y + card.height - root.fillet)
+
+	mask: Region {
+		x: root.slotX + root.fillet
+		y: root.py + Math.max(0, card.y)
+		width: root.panelWidth
+		height: Math.max(0, root.panelHeight - Math.abs(card.y))
+		bottomLeftRadius: root.below ? 18 : 0
+		bottomRightRadius: root.below ? 18 : 0
+		topLeftRadius: root.below ? 0 : 18
+		topRightRadius: root.below ? 0 : 18
+
+		Region {
+			x: root.slotX
+			y: root.curveY
+			width: card.y > -card.height + root.fillet ? root.fillet : 0
+			height: root.fillet
+
+			Region {
+				shape: RegionShape.Ellipse
+				intersection: Intersection.Subtract
+				x: root.slotX - root.fillet
+				y: root.below ? root.curveY : root.curveY - root.fillet
+				width: 2 * root.fillet
+				height: 2 * root.fillet
+			}
+		}
+
+		Region {
+			x: root.slotX + root.fillet + root.panelWidth
+			y: root.curveY
+			width: card.y > -card.height + root.fillet ? root.fillet : 0
+			height: root.fillet
+
+			Region {
+				shape: RegionShape.Ellipse
+				intersection: Intersection.Subtract
+				x: root.slotX + root.fillet + root.panelWidth
+				y: root.below ? root.curveY : root.curveY - root.fillet
+				width: 2 * root.fillet
+				height: 2 * root.fillet
+			}
+		}
 	}
 
 	// the panel's place under the bar (and room for its curves); the panel slides out of its edge
@@ -146,6 +202,7 @@ FloatingWindow {
 				anchors.fill: parent
 				focus: true
 				Keys.onEscapePressed: root.dismissed()
+				Keys.onPressed: event => root.keyPressed(event)
 			}
 		}
 	}

@@ -306,14 +306,14 @@ Item {
 								glyph: typeChip.modelData.glyph
 								font.pixelSize: 12
 								font.weight: Font.Normal
-								color: typeChip.on ? Theme.onPrimary : Theme.fg
+								color: typeChip.on ? Theme.primaryText : Theme.fg
 							}
 
 							Text {
 								id: typeLabel
 
 								text: typeChip.modelData.label
-								color: typeChip.on ? Theme.onPrimary : Theme.fg
+								color: typeChip.on ? Theme.primaryText : Theme.fg
 								font.family: Theme.fontSans
 								font.pixelSize: 12
 								font.weight: Font.Medium
@@ -479,7 +479,7 @@ Item {
 
 							anchors.centerIn: parent
 							text: copied ? "Copied" : "Copy"
-							color: copyHover.hovered ? Theme.onPrimary : Theme.fg
+							color: copyHover.hovered ? Theme.primaryText : Theme.fg
 							font.family: Theme.fontSans
 							font.pixelSize: 12
 							font.weight: Font.Medium
@@ -554,7 +554,7 @@ Item {
 									visible: line.modelData.done
 									glyph: Icons.g("check")
 									font.pixelSize: 11
-									color: Theme.onPrimary
+									color: Theme.primaryText
 								}
 
 								MouseArea {
