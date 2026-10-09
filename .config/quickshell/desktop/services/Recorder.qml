@@ -57,7 +57,7 @@ Singleton {
 		onExited: code => {
 			if (code === 1)
 				return; // the region was cancelled
-			Quickshell.execDetached(["notify-send", "-a", "Screen recording", code === 0 ? "Recording saved" : "Recording failed", code === 0 ? root.file : `gpu-screen-recorder exited with ${code}`]);
+			Quickshell.execDetached(["notify-send", "-a", "Screen recording", "-t", "3000", code === 0 ? "Recording saved" : "Recording failed", code === 0 ? root.file : `gpu-screen-recorder exited with ${code}`]);
 		}
 	}
 }

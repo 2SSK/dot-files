@@ -209,6 +209,7 @@ Hidden with `$mod+Shift+b`, the bar comes back over the windows while the pointe
 | `$mod+d`, `$mod+;`, `$mod+Shift+f`, `$mod+Shift+y` | the launcher: apps, emoji, files, themes |
 | Alt+Tab (hold Alt) | window switcher |
 | `$mod+Shift+/` (Super+?) | every key binding, in words (Settings → Keys) |
+| `$mod+Escape` | keys to the VM (or anything nested) until pressed again; the bar shows "VM keys" |
 | `$mod+Shift+t` / `$mod+Shift+n` | todo / notes |
 | `$mod+p` | power menu (again, Escape or a click beside it closes): arrows or 1–5 pick, Enter runs |
 

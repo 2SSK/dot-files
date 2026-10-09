@@ -5,7 +5,7 @@ import Quickshell
 import Quickshell.Services.UPower
 import qs
 
-// Battery warnings: an urgent notification when the charge falls to power.batteryLow (25% by
+// Battery warnings: a notification (3 s) when the charge falls to power.batteryLow (25% by
 // default) while not charging, and again at 10%. Each fires once on the way down; plugging in, or
 // charging back above, re-arms it.
 Singleton {
@@ -37,7 +37,7 @@ Singleton {
 	}
 
 	function notify(title: string, body: string): void {
-		Quickshell.execDetached(["notify-send", "-a", "Battery", "-u", "critical", "-i", "battery-caution", title, body]);
+		Quickshell.execDetached(["notify-send", "-a", "Battery", "-t", "3000", "-i", "battery-caution", title, body]);
 	}
 
 	onPercentChanged: check()

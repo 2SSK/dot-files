@@ -69,7 +69,7 @@ shot() { # <mode> [--monitor NAME --geometry G]
 		esac
 		xclip -selection clipboard -t image/png <"$file"
 	fi
-	notify-send -a Screenshot -i "$file" "Screenshot copied" "$file"
+	notify-send -a Screenshot -t 3000 -i "$file" "Screenshot copied" "$file"
 }
 
 record() { # <mode> <file> [--monitor NAME]

@@ -77,7 +77,8 @@ Column {
 			"focus parent": "Focus the parent container", "focus mode_toggle": "Focus between tiled and floating",
 			"layout stacking": "Stacked layout", "layout tabbed": "Tabbed layout", "layout toggle split": "Split layout, turned",
 			"split h": "Split side by side", "split v": "Split one above the other", "scratchpad show": "Show the scratchpad",
-			"move scratchpad": "Send the window to the scratchpad", "mode \"resize\"": "Resize mode"
+			"move scratchpad": "Send the window to the scratchpad", "mode \"resize\"": "Resize mode",
+			"mode \"passthrough\"": "Keys to the VM (again: back to i3)"
 		};
 		if (windows[cmd])
 			return { group: "Windows", label: windows[cmd] };
