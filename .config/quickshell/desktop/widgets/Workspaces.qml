@@ -12,22 +12,33 @@ Line {
 	id: root
 
 	property ShellScreen screen: null // set by the bar
-	// I3.workspaces.values doesn't announce its changes: re-read it on every i3 event
+	// I3.workspaces.values doesn't announce its changes: re-read it after i3's workspace events
+	// (a moment later, once Quickshell has caught up). Each workspace's screen by i3's own output
+	// name: a workspace not shown has no monitor object yet.
 	property int revision: 0
 	readonly property var here: {
 		revision;
-		return I3.workspaces.values.filter(ws => ws.monitor?.name === screen?.name && ws.number > 0).sort((a, b) => a.number - b.number);
+		return Array.from(I3.workspaces.values).filter(ws => (ws.lastIpcObject?.output ?? ws.monitor?.name) === screen?.name && ws.number > 0).sort((a, b) => a.number - b.number);
+	}
+
+	I3IpcListener {
+		subscriptions: ["workspace", "window"]
+		onIpcEvent: reread.restart()
 	}
 
 	Connections {
 		target: I3
 
-		function onRawEvent(): void {
-			root.revision++;
-		}
 		function onFocusedWorkspaceChanged(): void {
 			root.revision++;
 		}
+	}
+
+	Timer {
+		id: reread
+
+		interval: 60
+		onTriggered: root.revision++
 	}
 
 	vertical: Config.vertical

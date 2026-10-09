@@ -90,8 +90,8 @@ HangingPanel {
 						glyph: entry.modelData.glyph
 						font.pixelSize: 18
 						font.weight: Font.Normal
-						color: entry.on ? Theme.onPrimary : Theme.fg
-						filled: entry.on
+						color: entry.on ? Theme.primary : Theme.fg
+						filled: true
 					}
 
 					Rectangle {

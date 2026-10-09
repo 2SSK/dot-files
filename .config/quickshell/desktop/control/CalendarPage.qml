@@ -7,9 +7,9 @@ import qs.services
 import qs.widgets
 
 // A month: ‹ › go back and forward. Today is filled with the accent, the chosen day ringed, days of
-// the neighbouring months faint, a dot under days with events. Below: the chosen day's events, and
-// a line to add one ("09:30" makes it a reminder that notifies when due). Weeks start on the
-// locale's first day.
+// the neighbouring months faint, a dot under days with events. Below: the chosen day's events
+// (nothing when there are none) and a small + that opens a line to add one ("09:30" makes it a
+// reminder that notifies when due). Weeks start on the locale's first day.
 Column {
 	id: root
 
@@ -33,6 +33,9 @@ Column {
 		return Array.from({ length: 42 }, (_, i) => new Date(start.getFullYear(), start.getMonth(), start.getDate() + i));
 	}
 	readonly property var dayEvents: { Events.events; return Events.on(chosen); }
+	property bool adding: false
+
+	onChosenChanged: adding = false
 
 	function shift(months: int): void {
 		const next = new Date(year, month + months, 1);
@@ -193,13 +196,49 @@ Column {
 		}
 	}
 
-	// the chosen day's events
-	Text {
-		text: Qt.formatDate(root.chosen, "dddd, d MMMM")
-		color: Theme.fg
-		font.family: Theme.fontSans
-		font.pixelSize: 14
-		font.weight: Font.DemiBold
+	// the chosen day, and + to add to it
+	Item {
+		width: parent.width
+		height: 30
+
+		Text {
+			anchors.verticalCenter: parent.verticalCenter
+			text: Qt.formatDate(root.chosen, "dddd, d MMMM")
+			color: Theme.fg
+			font.family: Theme.fontSans
+			font.pixelSize: 14
+			font.weight: Font.DemiBold
+		}
+
+		Rectangle {
+			anchors.right: parent.right
+			anchors.verticalCenter: parent.verticalCenter
+			width: 30
+			height: 30
+			radius: 10
+			color: root.adding ? Theme.primary : addHover.hovered ? Qt.alpha(Theme.fg, 0.1) : Qt.alpha(Theme.surface, 0.8)
+
+			Glyph {
+				anchors.centerIn: parent
+				glyph: Icons.g(root.adding ? "x" : "plus")
+				font.pixelSize: 15
+				color: root.adding ? Theme.onPrimary : Theme.fg
+			}
+
+			HoverHandler {
+				id: addHover
+			}
+
+			MouseArea {
+				anchors.fill: parent
+				cursorShape: Qt.PointingHandCursor
+				onClicked: {
+					root.adding = !root.adding;
+					if (root.adding)
+						what.focusField();
+				}
+			}
+		}
 	}
 
 	Repeater {
@@ -272,6 +311,7 @@ Column {
 
 	// add one: an optional time, then the text
 	Row {
+		visible: root.adding
 		width: parent.width
 		spacing: 8
 
@@ -279,18 +319,19 @@ Column {
 			id: time
 
 			width: 86
-			placeholder: "09:30"
+			placeholder: "time"
 		}
 
 		TextField {
 			id: what
 
 			width: parent.width - time.width - 8
-			placeholder: Events.on(root.chosen).length ? "Add another" : "Add an event or a reminder"
+			placeholder: "What, and Enter"
 			onAccepted: value => {
 				Events.add(root.chosen, time.text, value);
 				what.text = "";
 				time.text = "";
+				root.adding = false;
 			}
 		}
 	}

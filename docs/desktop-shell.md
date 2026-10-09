@@ -9,8 +9,9 @@ names in `Icons.qml`), apps' own icons come from the GTK icon theme (Tela Circle
 ## Blur
 
 picom blurs behind the shell, inside the shapes its windows take: the bar's pill, the level card,
-the notification popups and, behind the control center and the clipboard, an empty backdrop window
-that grows with their slide. Full-screen windows that only catch clicks are left out.
+the notification popups, and the control center and clipboard panels (their windows cover the
+screen but take the panel's shape, so clicks beside a panel reach what's below it). Full-screen
+windows that only catch clicks, like the power menu's, are left out.
 
 ## Control center
 
@@ -20,16 +21,16 @@ the page's title, its buttons and ✕, then the page. The bar's widgets open the
 | Page | Opened by | What's there |
 | --- | --- | --- |
 | Home | `$mod+c` | quick toggles (Wi-Fi, Bluetooth, Do Not Disturb, microphone, recording, bar), volume / mic / brightness, the media player (any MPRIS player, browsers included; a switcher when several play; Space plays or pauses, ← → skip) |
-| Calendar | the clock | a month (‹ ›); a click picks a day, whose events show below; add one with an optional time ("09:30": a reminder that notifies when due); kept in `~/.local/share/desktop/events.json` |
+| Calendar | the clock | a month (‹ ›); a click picks a day, whose events show below; its + adds one, with an optional time ("09:30": a reminder that notifies when due); kept in `~/.local/share/desktop/events.json` |
 | System monitor | cpu / mem / temp | CPU, memory and temperature with two minutes of history, disk, uptime, load |
 | Notifications | the bell, `$mod+n` | the history by day, Clear all; Do Not Disturb in the header |
 | Wi-Fi | the Wi-Fi icon | networks by signal: connect (a password for new secured ones), disconnect, forget; scans while open |
 | Bluetooth | the Bluetooth icon | devices: pair, connect, disconnect, forget, battery; the header scans |
-| Todo | the checklist icon, `$mod+Shift+t` | tasks with a priority (H/M/L, a click on it changes it), grouped high to low, done ones last; drag a task by its handle to reorder it (among another priority's tasks it takes theirs); kept in `~/.local/share/desktop/todo.json` |
+| Todo | the checklist icon, `$mod+Shift+t` | tasks with a priority (H/M/L, a click on it changes it), grouped high to low, done ones last; drag a task (anywhere on it) to reorder it (among another priority's tasks it takes theirs); kept in `~/.local/share/desktop/todo.json` |
 | Notes | the notebook icon, `$mod+Shift+n` | notes of three kinds (text, checklist, code with Copy) with a colour tag; new, pin and delete in the header, search beside the list; kept in `~/.local/share/desktop/notes/` (a private folder) |
 
-The gear opens the settings, the power icon the power menu. Escape, ✕, focusing another window or a
-click anywhere else closes it. Wi-Fi needs NetworkManager, Bluetooth BlueZ; without them the pages
+The gear opens the settings, the power icon the power menu. Escape, ✕ or focusing another window
+closes it. Wi-Fi needs NetworkManager, Bluetooth BlueZ; without them the pages
 say so and their bar icons hide.
 
 ## Clipboard

@@ -6,7 +6,7 @@ import qs.services
 import qs.widgets
 
 // Todo: pick a priority and add with Enter. Open tasks come first, high to low, then done ones;
-// drag a task by its handle to reorder it (among another priority's tasks it takes theirs), a
+// drag a task (anywhere on it) to reorder it (among another priority's tasks it takes theirs), a
 // click on its H / M / L changes it, the circle ticks it off, ✕ removes it. The header's button
 // clears the done ones.
 Item {
@@ -146,7 +146,7 @@ Item {
 					color: Theme.primary
 				}
 
-				// the drag handle
+				// the grip, a hint that the row drags
 				Glyph {
 					id: handle
 
@@ -157,29 +157,31 @@ Item {
 					glyph: Icons.g("grip-vertical")
 					font.pixelSize: 14
 					color: Theme.fgMuted
+				}
 
-					MouseArea {
-						anchors.fill: parent
-						anchors.margins: -6
-						preventStealing: true // not a scroll of the panel
-						cursorShape: root.dragId ? Qt.ClosedHandCursor : Qt.OpenHandCursor
-						onPressed: event => {
-							root.dragId = item.modelData.id;
-							root.dragY = mapToItem(root, event.x, event.y).y;
-							root.dropIndex = root.landing(root.dragY);
-						}
-						onPositionChanged: event => {
-							if (!pressed)
-								return;
-							root.dragY = mapToItem(root, event.x, event.y).y;
-							root.dropIndex = root.landing(root.dragY);
-						}
-						onReleased: {
-							if (root.dropIndex !== item.index && root.dropIndex !== item.index + 1)
-								Todo.move(item.modelData.id, root.dropIndex > item.index ? root.dropIndex - 1 : root.dropIndex);
-							root.dragId = "";
-							root.dropIndex = -1;
-						}
+				// the whole row drags: a press that moves more than a few pixels starts it (a plain click
+				// still reaches the circle, the H / M / L and ✕ above this)
+				MouseArea {
+					property real pressY: 0
+
+					anchors.fill: parent
+					preventStealing: true // not a scroll of the panel
+					cursorShape: root.dragId ? Qt.ClosedHandCursor : Qt.OpenHandCursor
+					onPressed: event => pressY = event.y
+					onPositionChanged: event => {
+						if (!pressed)
+							return;
+						if (!root.dragId && Math.abs(event.y - pressY) < 6)
+							return;
+						root.dragId = item.modelData.id;
+						root.dragY = mapToItem(root, event.x, event.y).y;
+						root.dropIndex = root.landing(root.dragY);
+					}
+					onReleased: {
+						if (root.dragId === item.modelData.id && root.dropIndex !== item.index && root.dropIndex !== item.index + 1)
+							Todo.move(item.modelData.id, root.dropIndex > item.index ? root.dropIndex - 1 : root.dropIndex);
+						root.dragId = "";
+						root.dropIndex = -1;
 					}
 				}
 

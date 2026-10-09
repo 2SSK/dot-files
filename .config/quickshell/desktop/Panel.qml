@@ -22,7 +22,6 @@ Singleton {
 	readonly property int hangingWidth: controlOpen ? controlWidth : clipboardOpen ? 560 : 0
 	readonly property int hangingHeight: controlOpen ? controlHeight : clipboardOpen ? 560 : 0
 
-	// a panel's window comes a moment after its blur backdrop (Bar), so i3 stacks it above
 	onClipboardOpenChanged: {
 		if (clipboardOpen) {
 			controlOpen = false;
