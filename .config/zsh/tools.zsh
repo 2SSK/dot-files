@@ -10,3 +10,17 @@ if [[ -t 0 ]]; then # fzf's widgets need a terminal
 fi
 cached_init zoxide.zsh zoxide init zsh --cmd cd
 cached_init starship.zsh starship init zsh
+
+# In tmux, before each command: the display variables of the session the client attached from
+# (tmux updates them on attach, but a shell started under i3 keeps i3's: DISPLAY=:0 is then the
+# login screen's X server under sway, and X answers "Authorization required")
+if [[ -n $TMUX ]]; then
+	_tmux_session_env() {
+		local line
+		for line in "${(@f)$(tmux show-environment -s 2>/dev/null)}"; do
+			[[ $line == (unset |)(DISPLAY|WAYLAND_DISPLAY|XAUTHORITY|SWAYSOCK|I3SOCK|XDG_CURRENT_DESKTOP|XDG_SESSION_DESKTOP|XDG_SESSION_TYPE)[=\;]* ]] && eval "$line"
+		done
+	}
+	autoload -Uz add-zsh-hook
+	add-zsh-hook preexec _tmux_session_env
+fi

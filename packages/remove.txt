@@ -1,5 +1,5 @@
 # What packages/cleanup.sh packages removes when installed (pacman -Rns: with what only they
-# needed). One name per line; comments say why. Kept on purpose: GNOME (a fallback session), dev,
+# needed). One name per line; comments say why. Kept on purpose: GNOME (a fallback session), dev, yay, jq, auto-cpufreq,
 # Kubernetes and database tools, media apps, the terminal toys with aliases (aliases.sh).
 
 # Old desktops and their tools: the desktop shell (Quickshell) replaced them on i3 and sway
@@ -63,5 +63,3 @@ rog-control-center
 b43-fwcutter
 decklink-sdk
 
-# TLP manages power; auto-cpufreq fights it over the CPU
-auto-cpufreq
