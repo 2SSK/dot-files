@@ -183,6 +183,10 @@ ShellRoot {
 		function cancel(): void {
 			Windows.close();
 		}
+		// the ring's order, most recent first (for checking it)
+		function list(): string {
+			return Windows.windows.map(w => w.title).join("\n");
+		}
 	}
 
 	// apps, emoji, files or themes; again on the same one closes it
