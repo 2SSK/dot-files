@@ -27,6 +27,17 @@
     "brightness": {
         "step": 5
     },
+    "idle": {
+        "dim": 4,
+        "lock": 5,
+        "off": 10
+    },
+    "nightLight": {
+        "from": "19:00",
+        "schedule": false,
+        "temperature": 4000,
+        "to": "07:00"
+    },
     "notifications": {
         "timeout": 5000
     },
@@ -34,6 +45,7 @@
         "timeout": 1800
     },
     "power": {
+        "batteryLow": 25,
         "confirm": true
     },
     "wallpaper": {
