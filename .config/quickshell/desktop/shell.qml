@@ -4,11 +4,13 @@
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import Quickshell.Services.Polkit
 import qs.bar
 import qs.clipboard
 import qs.wallpaper
 import qs.launcher
 import qs.capture
+import qs.polkit
 import qs.control
 import qs.settings
 import qs
@@ -37,6 +39,22 @@ ShellRoot {
 
 		ClipboardWindow {
 			visible: true
+		}
+	}
+
+	// the polkit agent: apps asking for admin rights (pkexec, Timeshift, ...) ask through the shell
+	PolkitAgent {
+		id: polkit
+
+		onIsActiveChanged: Panel.authOpen = isActive
+	}
+
+	LazyLoader {
+		active: Panel.authOpen
+
+		AuthWindow {
+			visible: true
+			agent: polkit
 		}
 	}
 

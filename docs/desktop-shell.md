@@ -140,6 +140,18 @@ The **Keys** page lists every key binding in words, read from i3's own key confi
 drift from what the keys do), grouped and searchable, with the keys inside the shell's panels at
 the end. `$mod+Shift+/` opens it.
 
+
+The **Timeshift** page lists the system's snapshots (newest first, with their kind and comment),
+makes one now with a comment, and deletes one (a second press confirms); restoring opens Timeshift
+itself. Listing needs root: `packages/system.sh timeshift` allows exactly `timeshift --list
+--scripted` without a password (`/etc/sudoers.d/10-desktop-timeshift`); without it the page asks
+once. `desktop-timeshift list|create|delete` does the work.
+
+## Password prompts (polkit)
+
+The shell is the session's polkit agent on i3: when an app asks for admin rights (pkexec,
+Timeshift, a package manager's GUI), a small panel drops from the bar with what's asked and a
+password field; Escape or Cancel declines, a wrong password shakes it and asks again.
 ## Bar
 
 | Setting (`bar.*`) | Values |
@@ -206,5 +218,5 @@ press while `power.confirm` is on. Nothing hibernates.
 ## IPC
 
 `qs -c desktop ipc call <target> <function>`: `audio up|down|mute|mic`, `brightness up|down`,
-`bar toggle`, `recorder toggle`, `notifications toggle|dnd|clear`, `settings toggle|page <bar|appearance|notifications|levels|power|keys>`, `control toggle|open <page>|page <page>|close`, `clipboard toggle`, `wallpaper toggle|shuffle`, `launcher toggle <apps|emoji|files|themes>|close`, `switcher next|prev|commit|cancel|list`, `capture toggle|shot <region|window|screen>|record <region|window|screen>|stop`, `alarm stop|snooze`, `power open|toggle|close|next|prev|activate|pick <n>`,
+`bar toggle`, `recorder toggle`, `notifications toggle|dnd|clear`, `settings toggle|page <bar|appearance|notifications|levels|power|timeshift|keys>`, `control toggle|open <page>|page <page>|close`, `clipboard toggle`, `wallpaper toggle|shuffle`, `launcher toggle <apps|emoji|files|themes>|close`, `switcher next|prev|commit|cancel|list`, `capture toggle|shot <region|window|screen>|record <region|window|screen>|stop`, `alarm stop|snooze`, `power open|toggle|close|next|prev|activate|pick <n>`,
 `theme reload`.

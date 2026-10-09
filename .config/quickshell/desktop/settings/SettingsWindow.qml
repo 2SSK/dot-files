@@ -25,6 +25,7 @@ FloatingWindow {
 		{ key: "notifications", glyph: Icons.g("bell"), title: "Notifications" },
 		{ key: "levels", glyph: Icons.g("adjustments"), title: "Levels" },
 		{ key: "power", glyph: Icons.g("power"), title: "Power" },
+		{ key: "timeshift", glyph: Icons.g("history"), title: "Timeshift" },
 		{ key: "keys", glyph: Icons.g("keyboard"), title: "Keys" }
 	]
 
@@ -498,6 +499,15 @@ FloatingWindow {
 						onMoved: value => root.set("power", "batteryLow", Math.round(value))
 					}
 				}
+			}
+
+			// Timeshift: the system's snapshots (loaded each time the page opens)
+			Loader {
+				active: root.page === "timeshift"
+				visible: active
+				width: parent.width
+
+				sourceComponent: TimeshiftPage {}
 			}
 
 			// Keys: every binding, read from i3's config

@@ -220,3 +220,19 @@ sddm_fakes() { # a rendered theme, and a fake magick that copies the image
 	[[ $output == *"lid: already in place"* ]]
 	[ ! -e "$CALLS" ]
 }
+
+@test "timeshift: lets the user list snapshots without a password, nothing more" {
+	# shellcheck disable=SC2016 # expands when the fake runs
+	printf '#!/bin/sh\necho "visudo $*" >>"$CALLS"\n' >"$BATS_TEST_TMPDIR/bin/visudo"
+	chmod +x "$BATS_TEST_TMPDIR/bin/visudo"
+	run "$SYSTEM" timeshift
+	[ "$status" -eq 0 ]
+	rule="$SYSTEM_ROOT/etc/sudoers.d/10-desktop-timeshift"
+	grep -qx "$(id -un) ALL=(root) NOPASSWD: /usr/bin/timeshift --list --scripted" "$rule"
+	[ "$(grep -vc '^#' "$rule")" -eq 1 ]
+	[ "$(stat -c %a "$rule")" = 440 ]
+	grep -q "^visudo -cf " "$CALLS"
+	rm "$CALLS"
+	run "$SYSTEM" timeshift
+	[[ $output == *"already in place"* ]]
+}

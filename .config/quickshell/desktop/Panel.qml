@@ -18,6 +18,7 @@ Singleton {
 	property bool controlOpen: false
 	property bool clipboardOpen: false
 	property bool clipboardShown: false // lives on while it slides back into the bar
+	property bool authOpen: false // the password prompt (polkit), while an app asks
 	property bool captureOpen: false
 	property bool captureShown: false
 	property string captureAsk: "" // "shot" or "record": the panel only asks which screen
@@ -33,13 +34,22 @@ Singleton {
 	readonly property int wallpaperWidth: 720
 	readonly property int wallpaperHeight: 540
 	// the open panel hanging from the bar (its width; 0 for none): the bar opens its outline there
-	readonly property int hangingWidth: controlOpen ? controlWidth : clipboardOpen ? 560 : wallpaperOpen ? wallpaperWidth : launcherOpen ? launcherWidth : captureOpen ? captureWidth : 0
-	readonly property int hangingHeight: controlOpen ? controlHeight : clipboardOpen ? 560 : wallpaperOpen ? wallpaperHeight : launcherOpen ? launcherHeight : captureOpen ? captureHeight : 0
+	readonly property int hangingWidth: controlOpen ? controlWidth : clipboardOpen ? 560 : wallpaperOpen ? wallpaperWidth : launcherOpen ? launcherWidth : captureOpen ? captureWidth : authOpen ? 480 : 0
+	readonly property int hangingHeight: controlOpen ? controlHeight : clipboardOpen ? 560 : wallpaperOpen ? wallpaperHeight : launcherOpen ? launcherHeight : captureOpen ? captureHeight : authOpen ? 250 : 0
 
 	// the capture panel; ask: "shot" or "record" to go straight to choosing a screen
 	function openCapture(ask: string): void {
 		captureAsk = ask === "shot" || ask === "record" ? ask : "";
 		captureOpen = true;
+	}
+
+	// the password prompt takes the place of any other panel
+	onAuthOpenChanged: if (authOpen) {
+		controlOpen = false;
+		clipboardOpen = false;
+		wallpaperOpen = false;
+		launcherOpen = false;
+		captureOpen = false;
 	}
 
 	onCaptureOpenChanged: {

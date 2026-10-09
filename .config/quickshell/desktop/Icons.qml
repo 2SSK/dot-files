@@ -57,6 +57,7 @@ Singleton {
 			"gauge": 0xeab1,
 			"grip-vertical": 0xec01,
 			"hash": 0xeabc,
+			"history": 0xebea,
 			"home": 0xeac1,
 			"keyboard": 0xebd6,
 			"layout-grid": 0xedba,
