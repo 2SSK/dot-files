@@ -27,7 +27,7 @@ Line {
 		})
 
 	vertical: Config.vertical
-	spacing: Config.island ? 12 : 10
+	spacing: Config.island ? 18 : 10
 
 	Repeater {
 		id: slots

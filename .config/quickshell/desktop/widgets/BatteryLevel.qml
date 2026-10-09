@@ -17,6 +17,7 @@ Readout {
 	glyph: charging ? "" : ["", "", "", "", ""][Math.round(percent / 25)]
 	label: charging ? "chr" : "bat"
 	value: Math.round(percent) + "%"
+	widest: "100%"
 	tint: low ? Theme.error : charging ? Theme.success : Theme.fg
 
 	SequentialAnimation on opacity {

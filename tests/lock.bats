@@ -16,14 +16,30 @@ fake() { # <name> <version line>
 	chmod +x "$BATS_TEST_TMPDIR/bin/$1"
 }
 
-@test "i3lock-color: blurred, with a clock, in the theme's colours, staying in the foreground" {
+@test "i3lock-color: the wallpaper blurred and cached, a clock and a password bar, in the theme" {
 	fake i3lock 'i3lock: version 2.13.c.5'
+	# shellcheck disable=SC2016 # expands when the fake runs
+	printf '#!/bin/sh\nfor last; do :; done\necho png >"$last"\necho run >>"$ARGS.magick"\n' >"$BATS_TEST_TMPDIR/bin/magick"
+	chmod +x "$BATS_TEST_TMPDIR/bin/magick"
+	export XDG_CACHE_HOME="$BATS_TEST_TMPDIR/cache"
 	run "$LOCK"
 	[ "$status" -eq 0 ]
 	[[ $(cat "$ARGS") == *"--nofork"* ]]
-	[[ $(cat "$ARGS") == *"--blur 8"* ]]
+	[[ $(cat "$ARGS") == *"--image $XDG_CACHE_HOME/desktop/lock-1f1f28.png --fill"* ]]
+	[[ $(cat "$ARGS") == *"--bar-indicator"* ]]
 	[[ $(cat "$ARGS") == *"--keyhl-color 7e9cd8ff"* ]]
 	[[ $(cat "$ARGS") == *"--ringwrong-color e82424ff"* ]]
+	run "$LOCK" # cached: the picture isn't made again
+	[ "$(wc -l <"$ARGS.magick")" -eq 1 ]
+}
+
+@test "i3lock-color blurs the screen when the wallpaper can't be prepared" {
+	fake i3lock 'i3lock: version 2.13.c.5'
+	printf '#!/bin/sh\nexit 1\n' >"$BATS_TEST_TMPDIR/bin/magick"
+	chmod +x "$BATS_TEST_TMPDIR/bin/magick"
+	XDG_CACHE_HOME="$BATS_TEST_TMPDIR/cache" run "$LOCK"
+	[[ $(cat "$ARGS") == *"--blur 8"* ]]
+	[[ $(cat "$ARGS") != *"--image"* ]]
 }
 
 @test "plain i3lock gets the background colour" {

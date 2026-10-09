@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Lock the screen in the desktop theme and wait until it's unlocked. xss-lock runs it (i3's
-# autostart) for `loginctl lock-session`, a closed lid and before sleep. X11: i3lock-color over a
-# blurred screen, with a clock; plain i3lock gets the background colour. Wayland: swaylock.
+# autostart) for `loginctl lock-session`, a closed lid and before sleep. X11: i3lock-color over the
+# blurred wallpaper, with a clock and a password bar; plain i3lock gets the background colour.
+# Wayland: swaylock.
 set -euo pipefail
 
 palette="${XDG_STATE_HOME:-$HOME/.local/state}/desktop/theme/palette.json"
@@ -15,14 +16,38 @@ if [[ -n ${WAYLAND_DISPLAY:-} ]]; then
 		--ring-wrong-color "$error" --text-color "$fg" --indicator-radius 80
 fi
 
+# The wallpaper, blurred (at a quarter size: fast, and as soft) and dimmed in the theme's
+# background colour, cached until either changes
+backdrop() {
+	local state="${XDG_STATE_HOME:-$HOME/.local/state}/desktop" wallpaper out
+	wallpaper="$(readlink -f "$state/wallpaper" 2>/dev/null || true)"
+	[[ -f $wallpaper ]] || wallpaper="$(dirname "$(readlink -f "$0")")/../share/desktop/wallpapers/cat-mocha-lavender_19.jpg"
+	[[ -f $wallpaper ]] && command -v magick >/dev/null || return 1
+	out="${XDG_CACHE_HOME:-$HOME/.cache}/desktop/lock-$bg.png"
+	if [[ ! -s $out || $wallpaper -nt $out ]]; then
+		mkdir -p "${out%/*}"
+		magick "$wallpaper" -resize '2560x1440^' -gravity center -extent 2560x1440 -scale 25% -blur 0x7 -resize 400% \
+			\( -size 2560x1440 "xc:#$bg" -alpha set -channel A -evaluate set 45% +channel \) -composite -define png:compression-level=1 "$out.tmp.png" &&
+			mv "$out.tmp.png" "$out" || return 1
+	fi
+	echo "$out"
+}
+
 if i3lock --version 2>&1 | grep -q 'i3lock-color\|\.c\.'; then
-	exec i3lock --nofork --ignore-empty-password --show-failed-attempts --blur 8 --color "$bg" \
-		--clock --time-str '%H:%M' --date-str '%A, %d %B' --time-size 72 --date-size 18 \
-		--time-font Inter --date-font Inter --layout-font Inter --verif-font Inter --wrong-font Inter \
-		--time-color "${fg}ff" --date-color "${fg}cc" --time-pos 'ix:iy-140' --date-pos 'tx:ty+36' \
-		--radius 60 --ring-width 6 --inside-color "${bg}00" --ring-color "${fg}22" --line-uses-inside \
-		--keyhl-color "${primary}ff" --bshl-color "${error}ff" --separator-color 00000000 \
-		--insidever-color "${bg}00" --ringver-color "${primary}ff" --insidewrong-color "${bg}00" \
-		--ringwrong-color "${error}ff" --verif-text '' --wrong-text '' --noinput-text ''
+	image=(--blur 8)
+	if picture="$(backdrop)"; then image=(--image "$picture" --fill); fi
+	# Clock above a password bar: a thin line that ripples while typing, accent while checking,
+	# red when wrong. i3lock never shows the typed characters.
+	exec i3lock --nofork --ignore-empty-password --show-failed-attempts "${image[@]}" --color "$bg" \
+		--clock --time-str '%H:%M' --date-str '%A, %d %B' --time-size 96 --date-size 20 \
+		--time-font Inter --date-font Inter --greeter-font Inter --verif-font Inter --wrong-font Inter --layout-font Inter \
+		--time-color "${fg}ff" --date-color "${fg}cc" --time-pos 'x+w/2:y+h/2-90' --date-pos 'tx:ty+40' \
+		--greeter-text 'Type your password to unlock' --greeter-size 15 --greeter-color "${fg}99" --greeter-pos 'x+w/2:y+h/2+40' \
+		--bar-indicator --bar-total-width 360 --bar-pos 'x+w/2-180:y+h/2+64' --bar-base-width 3 --bar-max-height 14 \
+		--bar-step 3 --bar-count 36 --bar-periodic-step 2 --bar-color "${fg}33" --keyhl-color "${primary}ff" \
+		--bshl-color "${error}ff" --ringver-color "${primary}ff" --ringwrong-color "${error}ff" \
+		--verif-text 'Checking…' --wrong-text 'Wrong password' --noinput-text '' --verif-size 15 --wrong-size 15 \
+		--verif-color "${fg}cc" --wrong-color "${error}ff" --verif-pos 'x+w/2:y+h/2+110' --wrong-pos 'x+w/2:y+h/2+110' \
+		--pass-media-keys --pass-volume-keys --pass-screen-keys
 fi
 exec i3lock --nofork --ignore-empty-password --show-failed-attempts --color "$bg"

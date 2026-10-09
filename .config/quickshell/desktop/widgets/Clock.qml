@@ -3,7 +3,7 @@ import Quickshell
 import qs
 
 // "10:18 AM Fri, Oct 09"; a vertical bar shows hours over minutes.
-Glyph {
+Label {
 	SystemClock {
 		id: clock
 
@@ -12,4 +12,5 @@ Glyph {
 
 	text: Qt.formatDateTime(clock.date, Config.vertical ? "hh\nmm" : "h:mm AP ddd, MMM dd")
 	lineHeight: 0.9
+	font.weight: Font.Medium
 }
