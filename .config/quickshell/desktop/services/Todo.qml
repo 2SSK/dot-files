@@ -4,23 +4,41 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-// Todo items, kept on this machine in ~/.local/share/desktop/todo.json.
+// Todo items, kept on this machine in ~/.local/share/desktop/todo.json: { id, text, done, priority }
+// with priority high, medium or low. `sorted` puts open ones first, by priority, then done ones.
 Singleton {
 	id: root
 
-	readonly property var items: adapter.items // [{ text, done }]
+	readonly property var order: ({ high: 0, medium: 1, low: 2 })
+	// older items may lack an id or a priority
+	readonly property var items: adapter.items.map((item, i) => ({ id: item.id ?? `old-${i}`, text: item.text, done: !!item.done, priority: item.priority ?? "medium" }))
+	readonly property var sorted: [...items].sort((a, b) => (a.done - b.done) || (order[a.priority] - order[b.priority]))
+	readonly property int open: items.filter(item => !item.done).length
 
-	function add(text: string): void {
+	function add(text: string, priority: string): void {
 		if (text.trim())
-			save([...items, { text: text.trim(), done: false }]);
+			save([...items, { id: `${Date.now()}-${Math.floor(Math.random() * 1e6)}`, text: text.trim(), done: false, priority }]);
 	}
 
-	function toggle(index: int): void {
-		save(items.map((item, i) => i === index ? { text: item.text, done: !item.done } : item));
+	function update(id: string, change: var): void {
+		save(items.map(item => item.id === id ? Object.assign({}, item, change) : item));
 	}
 
-	function remove(index: int): void {
-		save(items.filter((_, i) => i !== index));
+	function toggle(id: string): void {
+		const item = items.find(i => i.id === id);
+		if (item)
+			update(id, { done: !item.done });
+	}
+
+	// high → medium → low → high
+	function cyclePriority(id: string): void {
+		const item = items.find(i => i.id === id);
+		if (item)
+			update(id, { priority: ({ high: "medium", medium: "low", low: "high" })[item.priority] });
+	}
+
+	function remove(id: string): void {
+		save(items.filter(item => item.id !== id));
 	}
 
 	function clearDone(): void {

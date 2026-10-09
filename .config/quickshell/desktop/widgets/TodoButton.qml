@@ -10,7 +10,7 @@ Glyph {
 	font.weight: Font.Normal
 
 	Rectangle {
-		visible: Todo.items.some(item => !item.done)
+		visible: Todo.open > 0
 		anchors.right: parent.right
 		anchors.top: parent.top
 		width: 6
