@@ -2,10 +2,10 @@ import QtQuick
 import qs
 import qs.services
 
-// CPU use, memory use and the CPU temperature (hidden without a sensor).
+// CPU use, memory use and the CPU temperature (hidden without a sensor), as one group.
 Line {
 	vertical: Config.vertical
-	spacing: Config.vertical ? 8 : 14
+	spacing: Config.vertical ? 6 : 9
 
 	Readout {
 		glyph: "\u{F029A}" // md-gauge

@@ -42,10 +42,10 @@ Singleton {
 				property string position: "top" // top, bottom, left or right
 				property int size: 34
 				property real opacity: 0.85
-				property real length: 0.5 // the island's share of the screen edge; 0 fits its content
-				property var left: ["workspaces", "scratchpad"]
+				property real length: 0 // the island's share of the screen edge; 0 picks one for the screen width
+				property var left: ["workspaces", "scratchpad", "stats"]
 				property var center: ["clock"]
-				property var right: ["tray", "recorder", "stats", "brightness", "battery", "notifications", "power"]
+				property var right: ["tray", "brightness", "recorder", "battery", "notifications", "power"]
 			}
 			property JsonObject osd: JsonObject {
 				property int timeout: 1800 // ms

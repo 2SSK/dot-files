@@ -9,8 +9,9 @@ Item {
 	required property ShellScreen screen
 	readonly property bool vertical: Config.vertical
 	readonly property int pad: Config.island ? Math.round(Config.bar.size / 2.5) : 8
-	// what the parts need along the bar, with room between them
-	readonly property real naturalLength: 2 * pad + 96 + (vertical ? start.height + center.height + end.height : start.width + center.width + end.width)
+	readonly property real gap: 40 // at least this between the centre and either side
+	// what the parts need along the bar: the centre stays centred, so the longer side counts twice
+	readonly property real naturalLength: vertical ? 2 * (pad + gap + Math.max(start.height, end.height)) + center.height : 2 * (pad + gap + Math.max(start.width, end.width)) + center.width
 
 	Section {
 		id: start

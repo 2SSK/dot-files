@@ -10,7 +10,7 @@ Colours come from the desktop theme (see [theme.md](theme.md)); settings from
 | --- | --- |
 | `style` | `island` (a floating pill) or `static` (the whole edge, word labels and separators) |
 | `position` | `top`, `bottom`; `left`/`right` on sway only (i3 docks only top or bottom, so X11 uses the top) |
-| `size`, `opacity`, `length` | thickness in px, background opacity, the island's share of the edge (0 fits its content) |
+| `size`, `opacity`, `length` | thickness in px, background opacity, the island's share of the edge (0: by the screen width, 80 % under 1500 px down to 42 % from 2200 px; never shorter than its content) |
 | `left`, `center`, `right` | widgets: `launcher`, `workspaces`, `clock`, `stats`, `volume`, `brightness`, `battery`, `tray`, `recorder`, `notifications`, `scratchpad`, `power` |
 
 Workspaces are dots: the ones with windows and the one you're on (i3 and sway drop empty ones), the

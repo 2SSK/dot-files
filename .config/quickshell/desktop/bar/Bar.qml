@@ -19,7 +19,10 @@ PanelWindow {
 	readonly property int gap: Config.island ? 6 : 0 // the island's distance from the screen edge
 	readonly property real edgeLength: vertical ? modelData.height : modelData.width
 	property bool docked: true // the window at full size; false only once the bar has slid away
-	readonly property real length: !Config.island ? edgeLength : Math.min(edgeLength - 2 * gap, Math.max(content.naturalLength, Config.bar.length * edgeLength))
+	// the island's share of the edge: bar.length, or by the screen's width (more of a narrow one);
+	// never shorter than its content, never longer than the edge
+	readonly property real share: Config.bar.length > 0 ? Config.bar.length : edgeLength < 1500 ? 0.8 : edgeLength < 2200 ? 0.55 : 0.42
+	readonly property real length: !Config.island ? edgeLength : Math.min(edgeLength - 2 * gap, Math.max(content.naturalLength, share * edgeLength))
 
 	screen: modelData
 	anchors.top: position !== "bottom"
