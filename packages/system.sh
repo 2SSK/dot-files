@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-# System-level setup (sudo): the memory safety net, libvirt, docker, the lid, the GRUB theme and the login screen. Installs
+# System-level setup (sudo): the memory safety net, libvirt, docker, the lid, power (TLP), snapshots (Timeshift and the
+# subvolumes it leaves out), the GRUB theme and the login screen. Installs
 # the tracked files under system/ into / and enables services; a no-op when everything is already
 # in place.
-# usage: system.sh memory|libvirt|docker|lid|timeshift|grub [--preview]|sddm
+# usage: system.sh memory|libvirt|docker|lid|power|timeshift|subvolumes|grub [--preview]|sddm
 set -euo pipefail
 
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -36,17 +37,114 @@ memory() {
 	sudo systemctl enable --now systemd-oomd.service
 }
 
-timeshift() { # the settings page lists snapshots without a password; making, deleting and restoring still ask
-	local rule tmp dest="$root/etc/sudoers.d/10-desktop-timeshift"
+timeshift_list() { # the settings page lists snapshots without a password; making, deleting and restoring still ask
+	# sudo reads sudoers.d in name order and the last rule that matches wins: after the installer's
+	# "%wheel ALL=(ALL) ALL" (EndeavourOS's 10-installer), or that one asks for the password again
+	local rule tmp dest="$root/etc/sudoers.d/90-desktop-timeshift" first="$root/etc/sudoers.d/10-desktop-timeshift"
 	rule="$(id -un) ALL=(root) NOPASSWD: /usr/bin/timeshift --list --scripted"
+	if sudo test -e "$first"; then # where an earlier version put it, before the installer's rule
+		sudo rm -f "$first"
+		changed=1
+	fi
 	tmp="$(mktemp)"
 	printf '# packages/system.sh timeshift: the shell'"'"'s settings page reads the snapshot list\n%s\n' "$rule" >"$tmp"
-	if cmp -s "$tmp" "$dest" 2>/dev/null; then rm -f "$tmp" && return 0; fi
+	# sudoers.d is root's alone to read
+	if sudo cmp -s "$tmp" "$dest" 2>/dev/null; then rm -f "$tmp" && return 0; fi
 	visudo -cf "$tmp" >/dev/null || { rm -f "$tmp" && die sudoers_invalid path="$dest"; }
 	sudo install -D -m 440 "$tmp" "$dest"
 	rm -f "$tmp"
-	log_info installed path=/etc/sudoers.d/10-desktop-timeshift
+	log_info installed path=/etc/sudoers.d/90-desktop-timeshift
 	changed=1
+}
+
+# What is kept: the last 3 days, one from about a week ago, and (timeshift-autosnap, its config in
+# system/) the last 3 from before a pacman upgrade. Btrfs snapshots cost only what changed since, so
+# a few more points back are cheap; hourly, boot and monthly ones would be clutter. Timeshift drops
+# what is past these counts at its next scheduled check (cron, hourly).
+timeshift_schedule() {
+	local conf="$root/etc/timeshift/timeshift.json" tmp
+	[[ -f $conf ]] || die timeshift_not_set_up msg='run timeshift once to choose the disk, then this again'
+	local want='.schedule_daily = "true" | .count_daily = "3" | .schedule_weekly = "true" | .count_weekly = "1"
+		| .schedule_hourly = "false" | .schedule_boot = "false" | .schedule_monthly = "false"'
+	# compared by value: timeshift rewrites the file in its own layout
+	jq -e "($want) == ." "$conf" >/dev/null && return 0
+	tmp="$(mktemp)"
+	jq "$want" "$conf" >"$tmp"
+	sudo install -m 644 "$tmp" "$conf"
+	rm -f "$tmp"
+	log_info installed path=/etc/timeshift/timeshift.json daily=3 weekly=1
+	changed=1
+}
+
+timeshift() {
+	timeshift_list
+	timeshift_schedule
+	put etc/timeshift-autosnap.conf
+}
+
+# Folders whose data changes all day, made btrfs subvolumes of their own: a snapshot (Timeshift's of
+# / and /home) leaves nested subvolumes out, so snapshots don't keep every old version of a VM disk,
+# Docker's layers or ~/.cache. What is there is copied into the new subvolume and the original kept
+# beside it (<folder>.old-subvolume) until you have checked and removed it; a missing folder is made
+# empty. A no-op once each is a subvolume.
+is_subvolume() { sudo btrfs subvolume show "$1" >/dev/null 2>&1; }
+
+make_subvolume() { # <dir> [nocow]: the folder's contents, in a new subvolume at the same path
+	local dir=$1 old="$1.old-subvolume"
+	if [[ ! -e $dir ]]; then
+		sudo btrfs subvolume create "$dir" >/dev/null
+		[[ ${2:-} != nocow ]] || sudo chattr +C "$dir"
+	else
+		[[ ! -e $old ]] || die subvolume_leftover path="$old" msg='an earlier run stopped half way: check it, then move it away'
+		sudo mv "$dir" "$old"
+		sudo btrfs subvolume create "$dir" >/dev/null
+		sudo chown --reference="$old" "$dir"
+		sudo chmod --reference="$old" "$dir"
+		# no copy-on-write (VM disks): set on the empty folder, the copies inherit it
+		[[ ${2:-} != nocow ]] || sudo chattr +C "$dir"
+		sudo cp -a --reflink=auto "$old/." "$dir/" || die subvolume_copy_failed path="$dir" msg="the original is in $old"
+		kept+=("$old")
+	fi
+	log_info subvolume path="$dir"
+	changed=1
+}
+
+subvolumes() {
+	local images="$root/var/lib/libvirt/images" docker="$root/var/lib/docker" cache="$HOME/.cache" was_active=0 kept=()
+	[[ $(findmnt -no FSTYPE --target "${root:-/}") == btrfs ]] || die not_btrfs msg='subvolumes are a btrfs thing'
+	if [[ -d ${images%/*} ]] && ! is_subvolume "$images"; then
+		if command -v virsh >/dev/null && [[ -n $(sudo virsh -c qemu:///system list --name --state-running) ]]; then
+			die vms_running msg='shut the VMs down first (virsh list)'
+		fi
+		make_subvolume "$images" nocow
+	fi
+	if [[ -d ${docker%/*} ]] && ! is_subvolume "$docker"; then
+		if systemctl is-active --quiet docker.service; then
+			was_active=1
+			sudo systemctl stop docker.socket docker.service
+		fi
+		make_subvolume "$docker"
+		((!was_active)) || sudo systemctl start docker.service
+	fi
+	# apps write their cache all the time: close the browsers first
+	is_subvolume "$cache" || make_subvolume "$cache"
+	((${#kept[@]})) || return 0
+	echo "The originals are kept. Once the VMs, Docker and your apps work, remove them with:"
+	printf '  sudo rm -rf %q\n' "${kept[@]}"
+}
+
+power() { # TLP alone (auto-cpufreq fights it over the CPU), with system/etc/tlp.d's settings
+	put etc/tlp.d/10-desktop.conf
+	if systemctl is-enabled --quiet auto-cpufreq.service 2>/dev/null; then
+		sudo systemctl disable --now auto-cpufreq.service
+		changed=1
+	fi
+	if ! systemctl is-enabled --quiet tlp.service 2>/dev/null; then
+		sudo systemctl enable --now tlp.service
+		changed=1
+	fi
+	((changed)) || return 0
+	sudo tlp start >/dev/null # the settings now, not at the next plug or boot
 }
 
 lid() { # closing the lid only locks; logind rereads its config on SIGHUP (a restart would end sessions)
@@ -333,9 +431,11 @@ memory) memory ;;
 libvirt) libvirt ;;
 docker) docker_daemon ;;
 lid) lid ;;
+power) power ;;
 timeshift) timeshift ;;
+subvolumes) subvolumes ;;
 grub) if [[ ${2:-} == --preview ]]; then grub_preview && exit 0; fi; grub_theme ;;
 sddm) sddm_theme ;;
-*) echo 'usage: system.sh memory|libvirt|docker|lid|timeshift|grub [--preview]|sddm' >&2 && exit 2 ;;
+*) echo 'usage: system.sh memory|libvirt|docker|lid|power|timeshift|subvolumes|grub [--preview]|sddm' >&2 && exit 2 ;;
 esac
 if ((changed)); then log_info system part="$1"; else echo "$1: already in place"; fi

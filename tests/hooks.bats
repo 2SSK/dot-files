@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
-# .githooks/post-commit: a commit on rewrite fast-forwards main's worktree (the live checkout) and
-# relinks it with stow. Throwaway repos, a fake stow, a throwaway $HOME.
+# .githooks/post-commit: a commit on main drops links to deleted files and relinks with stow.
+# A throwaway repo, a fake stow, a throwaway $HOME.
 
 setup() {
 	export HOME="$BATS_TEST_TMPDIR/home" CALLS="$BATS_TEST_TMPDIR/calls"
@@ -10,41 +10,31 @@ setup() {
 	chmod +x "$BATS_TEST_TMPDIR/bin/stow"
 	export PATH="$BATS_TEST_TMPDIR/bin:$PATH"
 	export GIT_AUTHOR_NAME=t GIT_AUTHOR_EMAIL=t@t GIT_COMMITTER_NAME=t GIT_COMMITTER_EMAIL=t@t
-	live="$BATS_TEST_TMPDIR/live" work="$BATS_TEST_TMPDIR/work"
+	live="$BATS_TEST_TMPDIR/live"
 	git init -q -b main "$live"
 	mkdir -p "$live/.githooks" "$live/.config/app"
 	cp "$BATS_TEST_DIRNAME/../.githooks/post-commit" "$live/.githooks/"
 	echo one >"$live/.config/app/old.conf"
 	git -C "$live" add -A && git -C "$live" commit -qm first
 	git -C "$live" config core.hooksPath .githooks
-	git -C "$live" worktree add -q -b rewrite "$work"
-	# a stow link to a file the next commit deletes
+	rm -f "$CALLS"
+	# a stow link to a file the next commit deletes, and one that isn't ours
 	ln -s "$live/.config/app/old.conf" "$HOME/.config/old.conf"
+	ln -s /nonexistent "$HOME/.config/other"
 }
 
-@test "a commit on rewrite fast-forwards main and relinks" {
-	echo two >"$work/new.conf"
-	git -C "$work" rm -q .config/app/old.conf
-	git -C "$work" add -A && git -C "$work" commit -qm second
-	[ "$(git -C "$live" rev-parse HEAD)" = "$(git -C "$work" rev-parse HEAD)" ]
-	[ -f "$live/new.conf" ]
+@test "a commit on main drops dead links and relinks" {
+	echo two >"$live/new.conf"
+	git -C "$live" rm -q .config/app/old.conf
+	git -C "$live" add -A && git -C "$live" commit -qm second
 	grep -qx "stow . in $live" "$CALLS"
 	[ ! -L "$HOME/.config/old.conf" ] # the link to the deleted file is gone
+	[ -L "$HOME/.config/other" ]      # a dead link elsewhere is left alone
 }
 
-@test "a commit on another branch leaves main alone" {
-	git -C "$work" checkout -q -b other
-	echo x >"$work/x" && git -C "$work" add -A && git -C "$work" commit -qm other
-	[ "$(git -C "$live" rev-parse HEAD)" != "$(git -C "$work" rev-parse HEAD)" ]
+@test "a commit on another branch does nothing" {
+	git -C "$live" checkout -q -b other
+	git -C "$live" rm -q .config/app/old.conf && git -C "$live" commit -qm other
 	[ ! -e "$CALLS" ]
-}
-
-@test "local changes in the way: main stays, the commit still succeeds" {
-	echo mine >"$live/new.conf" # untracked, and rewrite adds the same file
-	echo two >"$work/new.conf"
-	git -C "$work" add -A
-	run git -C "$work" commit -qm second
-	[ "$status" -eq 0 ]
-	[[ $output == *"main not updated"* ]]
-	[ "$(cat "$live/new.conf")" = mine ]
+	[ -L "$HOME/.config/old.conf" ]
 }

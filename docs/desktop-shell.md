@@ -49,10 +49,7 @@ out. Pinned entries are kept in `~/.local/state/desktop/clipboard/` (a private f
 image is copied there). Region and window screenshots (F12) land in it like any copy.
 ## Sway
 
-The same shell runs on sway: `~/.config/sway/config` includes `desktop.conf`. The noctalia session
-is kept as `~/.config/sway/noctalia.conf` (`sway -c ~/.config/sway/noctalia.conf`, or include it
-from `~/.config/sway/config` instead to make it the default again). `sway/desktop/apps.conf` keeps
-its app keys and voxtype. It reuses i3's keys, workspaces,
+The same shell runs on sway: `~/.config/sway/config` includes `desktop.conf`, with the same keys as i3. It reuses i3's keys, workspaces,
 window rules, colours and resize mode as they are, sway's variables (swayfx's corners, shadows and
 blur), outputs and input; `sway/desktop/` adds what only sway needs: what starts with the session,
 and swayfx's touches for the shell. What differs underneath:
@@ -180,8 +177,16 @@ the end. `$mod+Shift+/` opens it.
 The **Timeshift** page lists the system's snapshots (newest first, with their kind and comment),
 makes one now with a comment, and deletes one (a second press confirms); restoring opens Timeshift
 itself. Listing needs root: `packages/system.sh timeshift` allows exactly `timeshift --list
---scripted` without a password (`/etc/sudoers.d/10-desktop-timeshift`); without it the page asks
+--scripted` without a password (`/etc/sudoers.d/90-desktop-timeshift`, after the installer's rules); without it the page asks
 once. `desktop-timeshift list|create|delete` does the work.
+
+`packages/system.sh timeshift` also sets what is kept: 3 daily snapshots, 1 weekly, and (with
+`timeshift-autosnap`) the last 3 taken before a pacman upgrade. `packages/system.sh subvolumes`
+makes the VM disks, `/var/lib/docker` and `~/.cache` btrfs subvolumes of their own, which
+snapshots leave out (they change all day); the originals are kept beside them until you remove
+them. `packages/cleanup.sh packages|docker|caches|all` makes room: the packages in
+`packages/remove.txt` and orphans (never one the repo's lists install), unused Docker images,
+build cache and unnamed volumes (never containers: a stopped one may hold a database's data), and old package caches.
 
 ## When idle
 

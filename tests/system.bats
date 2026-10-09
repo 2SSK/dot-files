@@ -221,13 +221,20 @@ sddm_fakes() { # a rendered theme, and a fake magick that copies the image
 	[ ! -e "$CALLS" ]
 }
 
-@test "timeshift: lets the user list snapshots without a password, nothing more" {
+timeshift_conf() { # a timeshift.json as timeshift writes it: daily, 5 kept
+	mkdir -p "$SYSTEM_ROOT/etc/timeshift"
+	printf '{\n  "btrfs_mode" : "true",\n  "schedule_daily" : "true",\n  "schedule_hourly" : "true",\n  "count_daily" : "5",\n  "count_weekly" : "3"\n}' \
+		>"$SYSTEM_ROOT/etc/timeshift/timeshift.json"
 	# shellcheck disable=SC2016 # expands when the fake runs
 	printf '#!/bin/sh\necho "visudo $*" >>"$CALLS"\n' >"$BATS_TEST_TMPDIR/bin/visudo"
 	chmod +x "$BATS_TEST_TMPDIR/bin/visudo"
+}
+
+@test "timeshift: lets the user list snapshots without a password, nothing more" {
+	timeshift_conf
 	run "$SYSTEM" timeshift
 	[ "$status" -eq 0 ]
-	rule="$SYSTEM_ROOT/etc/sudoers.d/10-desktop-timeshift"
+	rule="$SYSTEM_ROOT/etc/sudoers.d/90-desktop-timeshift"
 	grep -qx "$(id -un) ALL=(root) NOPASSWD: /usr/bin/timeshift --list --scripted" "$rule"
 	[ "$(grep -vc '^#' "$rule")" -eq 1 ]
 	[ "$(stat -c %a "$rule")" = 440 ]
@@ -235,4 +242,130 @@ sddm_fakes() { # a rendered theme, and a fake magick that copies the image
 	rm "$CALLS"
 	run "$SYSTEM" timeshift
 	[[ $output == *"already in place"* ]]
+}
+
+@test "timeshift: keeps 3 daily and 1 weekly, nothing hourly, the rest of its config as it was" {
+	timeshift_conf
+	run "$SYSTEM" timeshift
+	[ "$status" -eq 0 ]
+	conf="$SYSTEM_ROOT/etc/timeshift/timeshift.json"
+	[ "$(jq -r '[.schedule_daily, .count_daily, .schedule_weekly, .count_weekly, .schedule_hourly, .schedule_boot, .schedule_monthly] | join(" ")' "$conf")" = "true 3 true 1 false false false" ]
+	[ "$(jq -r .btrfs_mode "$conf")" = true ]
+	grep -qx 'maxSnapshots=3' "$SYSTEM_ROOT/etc/timeshift-autosnap.conf"
+	grep -qx 'updateGrub=false' "$SYSTEM_ROOT/etc/timeshift-autosnap.conf"
+}
+
+@test "timeshift: in timeshift's own layout, the same settings count as in place" {
+	timeshift_conf
+	"$SYSTEM" timeshift
+	conf="$SYSTEM_ROOT/etc/timeshift/timeshift.json"
+	jq --indent 4 . "$conf" >"$conf.new" && mv "$conf.new" "$conf"
+	run "$SYSTEM" timeshift
+	[[ $output == *"already in place"* ]]
+}
+
+@test "timeshift: not set up yet says so" {
+	run "$SYSTEM" timeshift
+	[ "$status" -ne 0 ]
+	[[ $output == *"timeshift_not_set_up"* ]]
+}
+
+subvolume_fakes() { # btrfs makes folders and remembers them as subvolumes; the root is btrfs
+	local bin="$BATS_TEST_TMPDIR/bin"
+	export SUBVOLS="$BATS_TEST_TMPDIR/subvols" HOME="$BATS_TEST_TMPDIR/home"
+	: >"$SUBVOLS"
+	# shellcheck disable=SC2016 # expands when the fake runs
+	printf '#!/bin/sh\ncase "$2" in\nshow) grep -qxF "$3" "$SUBVOLS" ;;\ncreate) mkdir "$3" && echo "$3" >>"$SUBVOLS" ;;\nesac\n' >"$bin/btrfs"
+	# shellcheck disable=SC2016
+	printf '#!/bin/sh\necho "chattr $*" >>"$CALLS"\n' >"$bin/chattr"
+	printf '#!/bin/sh\necho btrfs\n' >"$bin/findmnt"
+	chmod +x "$bin"/*
+	mkdir -p "$SYSTEM_ROOT/var/lib/libvirt/images" "$SYSTEM_ROOT/var/lib/docker/overlay2" "$HOME/.cache/app"
+	echo disk >"$SYSTEM_ROOT/var/lib/libvirt/images/vm.qcow2"
+	echo layer >"$SYSTEM_ROOT/var/lib/docker/overlay2/l"
+	echo cached >"$HOME/.cache/app/c"
+	chmod 710 "$SYSTEM_ROOT/var/lib/docker"
+}
+
+@test "subvolumes: VM disks, docker and ~/.cache move into subvolumes, the originals kept" {
+	subvolume_fakes
+	run "$SYSTEM" subvolumes
+	[ "$status" -eq 0 ]
+	for dir in "$SYSTEM_ROOT/var/lib/libvirt/images" "$SYSTEM_ROOT/var/lib/docker" "$HOME/.cache"; do
+		grep -qxF "$dir" "$SUBVOLS"
+		[ -d "$dir.old-subvolume" ] # kept until checked
+		[[ $output == *"sudo rm -rf $dir.old-subvolume"* ]]
+	done
+	[ "$(cat "$SYSTEM_ROOT/var/lib/libvirt/images/vm.qcow2")" = disk ]
+	[ "$(cat "$SYSTEM_ROOT/var/lib/docker/overlay2/l")" = layer ]
+	[ "$(cat "$HOME/.cache/app/c")" = cached ]
+	[ "$(stat -c %a "$SYSTEM_ROOT/var/lib/docker")" = 710 ]
+	grep -qx "chattr +C $SYSTEM_ROOT/var/lib/libvirt/images" "$CALLS" # no copy-on-write for VM disks
+	[ "$(grep -c '^chattr' "$CALLS")" -eq 1 ]
+	grep -q "systemctl stop docker.socket docker.service" "$CALLS"
+	grep -q "systemctl start docker.service" "$CALLS"
+}
+
+@test "subvolumes: a second run changes nothing" {
+	subvolume_fakes
+	"$SYSTEM" subvolumes
+	rm "$CALLS"
+	run "$SYSTEM" subvolumes
+	[ "$status" -eq 0 ]
+	[[ $output == *"already in place"* ]]
+}
+
+@test "subvolumes: a leftover from a run that stopped half way stops it" {
+	subvolume_fakes
+	mkdir "$HOME/.cache.old-subvolume"
+	run "$SYSTEM" subvolumes
+	[ "$status" -ne 0 ]
+	[[ $output == *"subvolume_leftover"* ]]
+	[ -f "$HOME/.cache/app/c" ] # untouched
+}
+
+@test "subvolumes: running VMs stop it before anything moves" {
+	subvolume_fakes
+	printf '#!/bin/sh\necho rice\n' >"$BATS_TEST_TMPDIR/bin/virsh"
+	run "$SYSTEM" subvolumes
+	[ "$status" -ne 0 ]
+	[[ $output == *"vms_running"* ]]
+	[ ! -s "$SUBVOLS" ]
+}
+
+@test "power: TLP's settings in, auto-cpufreq off, TLP on and applied" {
+	# shellcheck disable=SC2016 # expands when the fake runs
+	printf '#!/bin/sh\necho "systemctl $*" >>"$CALLS"\ncase "$*" in *is-enabled*auto-cpufreq*) exit 0 ;; *is-enabled*tlp*) exit 1 ;; esac\n' >"$BATS_TEST_TMPDIR/bin/systemctl"
+	# shellcheck disable=SC2016
+	printf '#!/bin/sh\necho "tlp $*" >>"$CALLS"\n' >"$BATS_TEST_TMPDIR/bin/tlp"
+	chmod +x "$BATS_TEST_TMPDIR"/bin/*
+	run "$SYSTEM" power
+	[ "$status" -eq 0 ]
+	grep -qx 'CPU_BOOST_ON_BAT=0' "$SYSTEM_ROOT/etc/tlp.d/10-desktop.conf"
+	grep -qx 'PLATFORM_PROFILE_ON_BAT=quiet' "$SYSTEM_ROOT/etc/tlp.d/10-desktop.conf"
+	grep -qx "systemctl disable --now auto-cpufreq.service" "$CALLS"
+	grep -qx "systemctl enable --now tlp.service" "$CALLS"
+	grep -qx "tlp start" "$CALLS"
+}
+
+@test "power: already set up changes nothing" {
+	# shellcheck disable=SC2016 # expands when the fake runs
+	printf '#!/bin/sh\necho "systemctl $*" >>"$CALLS"\ncase "$*" in *is-enabled*auto-cpufreq*) exit 1 ;; esac\n' >"$BATS_TEST_TMPDIR/bin/systemctl"
+	chmod +x "$BATS_TEST_TMPDIR"/bin/*
+	mkdir -p "$SYSTEM_ROOT/etc/tlp.d"
+	cp "$BATS_TEST_DIRNAME/../system/etc/tlp.d/10-desktop.conf" "$SYSTEM_ROOT/etc/tlp.d/"
+	run "$SYSTEM" power
+	[[ $output == *"already in place"* ]]
+	! grep -q -- "--now" "$CALLS"
+}
+
+@test "timeshift: the rule comes after the installer's, an earlier one before it goes" {
+	timeshift_conf
+	mkdir -p "$SYSTEM_ROOT/etc/sudoers.d"
+	echo old >"$SYSTEM_ROOT/etc/sudoers.d/10-desktop-timeshift"
+	run "$SYSTEM" timeshift
+	[ "$status" -eq 0 ]
+	[ ! -e "$SYSTEM_ROOT/etc/sudoers.d/10-desktop-timeshift" ]
+	[[ 90-desktop-timeshift > 10-installer ]] # sudo reads them in name order; the last match wins
+	[ -f "$SYSTEM_ROOT/etc/sudoers.d/90-desktop-timeshift" ]
 }

@@ -56,7 +56,7 @@ help_for() { # <command>
 			Asks for the password of your user in the VM (VM_PASSWORD skips the prompt).
 			First boot installs the packages: give it a few minutes.
 
-			  vm create rice --desktop --share ~/dev/dot-files-rewrite:dot-files
+			  vm create rice --desktop --share ~/dot-files:dot-files
 			  vm create srv --image debian:12 --mem 2G
 		EOF
 		;;
