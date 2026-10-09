@@ -53,6 +53,6 @@
             "~/.local/share/desktop/wallpapers",
             "~/Wallpaper-Bank"
         ],
-        "rotate": "off"
+        "rotate": "boot"
     }
 }
