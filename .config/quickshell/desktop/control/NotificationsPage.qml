@@ -12,6 +12,11 @@ import qs.widgets
 Column {
 	id: root
 
+	readonly property string title: "Notifications"
+	readonly property var actions: [
+		{ glyph: Notifications.dnd ? "\u{EC08}" : "\u{EAA2}", on: Notifications.dnd, act: () => Notifications.dnd = !Notifications.dnd },
+		{ glyph: "\u{EA81}", on: false, act: () => Notifications.clear(), show: Notifications.history.length > 0 }
+	]
 	property string filter: "all"
 
 	// days since midnight today when it arrived: 0 today, 1 yesterday, ...
@@ -24,63 +29,6 @@ Column {
 	readonly property var shown: Notifications.history.filter(n => n && (filter === "all" || (filter === "today" && age(n) === 0) || (filter === "yesterday" && age(n) === 1) || (filter === "older" && age(n) > 1)))
 
 	spacing: 14
-
-	Item {
-		width: parent.width
-		height: 32
-
-		Text {
-			anchors.verticalCenter: parent.verticalCenter
-			text: "Notifications"
-			color: Theme.fg
-			font.family: Theme.fontSans
-			font.pixelSize: 20
-			font.weight: Font.DemiBold
-		}
-
-		Row {
-			anchors.right: parent.right
-			anchors.verticalCenter: parent.verticalCenter
-			spacing: 6
-
-			Repeater {
-				model: [
-					{ glyph: Notifications.dnd ? "\u{EC08}" : "\u{EAA2}", on: Notifications.dnd, act: () => Notifications.dnd = !Notifications.dnd, show: true },
-					{ glyph: "\u{EA81}", on: false, act: () => Notifications.clear(), show: Notifications.history.length > 0 } // cod-trash
-				]
-
-				delegate: Rectangle {
-					id: button
-
-					required property var modelData
-
-					visible: modelData.show
-					width: 32
-					height: 32
-					radius: 10
-					color: modelData.on ? Theme.primary : buttonHover.hovered ? Qt.alpha(Theme.fg, 0.1) : Qt.alpha(Theme.surface, 0.8)
-
-					Glyph {
-						anchors.centerIn: parent
-						text: button.modelData.glyph
-						font.pixelSize: 15
-						font.weight: Font.Normal
-						color: button.modelData.on ? Theme.onPrimary : Theme.fg
-					}
-
-					HoverHandler {
-						id: buttonHover
-					}
-
-					MouseArea {
-						anchors.fill: parent
-						cursorShape: Qt.PointingHandCursor
-						onClicked: button.modelData.act()
-					}
-				}
-			}
-		}
-	}
 
 	Choice {
 		width: parent.width

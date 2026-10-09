@@ -37,9 +37,15 @@ FloatingWindow {
 		subscriptions: ["window"]
 		onIpcEvent: event => {
 			const data = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
-			if (data.change === "focus" && data.container?.name !== root.title)
+			const name = data.container?.name ?? "";
+			// a named window other than this one, once it has settled (its own mapping fires focus too)
+			if (data.change === "focus" && name && name !== root.title && opened.elapsed() > 600)
 				Panel.settingsOpen = false;
 		}
+	}
+
+	ElapsedTimer {
+		id: opened
 	}
 
 	title: "Desktop settings"

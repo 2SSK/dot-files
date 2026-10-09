@@ -21,7 +21,7 @@ ShellRoot {
 	}
 
 	LazyLoader {
-		active: Panel.controlOpen
+		active: Panel.controlShown
 
 		ControlCenter {
 			visible: true
@@ -91,6 +91,10 @@ ShellRoot {
 
 		function toggle(): void {
 			Panel.toggleControl("home");
+		}
+		function open(page: string): void {
+			Panel.controlPage = page;
+			Panel.controlOpen = true;
 		}
 	}
 

@@ -20,6 +20,19 @@ Singleton {
 	property rect controlRect // where the control center sits, from its screen's origin
 	property string controlPage: "home"
 
+	// The control center appears a moment after its click catcher (Dismiss), so i3 stacks it above
+	// the catcher: clicks on it reach it, clicks elsewhere close it.
+	property bool controlShown: false
+
+	onControlOpenChanged: controlOpen ? showControl.restart() : controlShown = false
+
+	Timer {
+		id: showControl
+
+		interval: 60
+		onTriggered: root.controlShown = root.controlOpen
+	}
+
 	// the control center, on a page (home, notifications, ...); again on the same page closes it
 	function toggleControl(page: string): void {
 		if (controlOpen && controlPage === page) {

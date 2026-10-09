@@ -17,8 +17,12 @@
         "right": [
             "tray",
             "brightness",
+            "notes",
+            "todo",
             "recorder",
             "battery",
+            "wifi",
+            "bluetooth",
             "controls",
             "notifications",
             "power"

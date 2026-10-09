@@ -25,7 +25,11 @@ Line {
 			recorder: "RecorderButton",
 			notifications: "NotificationButton",
 			scratchpad: "ScratchpadButton",
-			controls: "ControlButton"
+			controls: "ControlButton",
+			wifi: "WifiButton",
+			bluetooth: "BluetoothButton",
+			notes: "NotesButton",
+			todo: "TodoButton"
 		})
 
 	vertical: Config.vertical

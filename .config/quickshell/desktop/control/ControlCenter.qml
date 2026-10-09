@@ -7,39 +7,54 @@ import qs
 import qs.services
 import qs.widgets
 
-// The control center: an icon sidebar of pages beside the page, hanging from the bar's end in the
-// bar's colour (square where it meets the bar; picom rounds the far corners, see the picom template).
-// A real window, as X11 popups can't take the keyboard: i3 floats it (look.conf) and the shell puts
-// it in place. Escape, the key again, focusing another window or a click anywhere else closes it.
+// The control center: a panel hanging from the middle of the bar, in its colour (square where it
+// meets the bar; picom rounds the far corners, see the picom template). An icon sidebar of pages,
+// a header with the page's title, its buttons and ✕, then the page. The bar's widgets open their
+// page. A real window, as X11 popups can't take the keyboard: i3 floats it (look.conf) and the
+// shell puts it in place. Escape, ✕, focusing another window or a click anywhere else closes it.
 FloatingWindow {
 	id: root
 
 	readonly property var pages: [
-		{ key: "home", glyph: "\u{EB06}", title: "Home" },
-		{ key: "calendar", glyph: "\u{EAB0}", title: "Calendar" },
-		{ key: "notifications", glyph: "\u{EAA2}", title: "Notifications" }
+		{ key: "home", glyph: "\u{EB06}", component: home },
+		{ key: "calendar", glyph: "\u{EAB0}", component: calendar },
+		{ key: "system", glyph: "\u{EB03}", component: system },
+		{ key: "notifications", glyph: "\u{EAA2}", component: notifications },
+		{ key: "wifi", glyph: "\u{F05A9}", component: wifi },
+		{ key: "bluetooth", glyph: "\u{F00AF}", component: bluetooth },
+		{ key: "todo", glyph: "\u{EAB3}", component: todo },
+		{ key: "notes", glyph: "\u{EB26}", component: notes }
 	]
 	readonly property ShellScreen screen: Quickshell.screens.find(s => s.name === I3.focusedMonitor?.name) ?? Quickshell.screens[0]
-
 	readonly property bool below: Config.position !== "bottom" // hangs below the bar, else above it
 	readonly property rect island: Panel.islands[screen.name] ?? Qt.rect(0, 0, screen.width, 0)
-	// flush with the bar, its right edge where the island's rounded end begins
-	readonly property real px: Config.island ? island.x + island.width - island.height / 2 - implicitWidth : screen.width - implicitWidth
+	// centred under the bar, flush with it
+	readonly property real px: Math.round(island.x + (island.width - implicitWidth) / 2)
 	readonly property real py: !Panel.barShown ? (below ? 0 : screen.height - implicitHeight) : below ? island.y + island.height : island.y - implicitHeight
 
 	title: below ? "Desktop control center" : "Desktop control center, above"
-	implicitWidth: 470
+	implicitWidth: 760
 	implicitHeight: 640
-	color: Qt.alpha(Theme.bg, Config.bar.opacity)
+	color: Qt.alpha(Theme.bg, Math.max(Config.bar.opacity, 0.92))
+	onVisibleChanged: if (!visible) Panel.controlOpen = false
 	onPxChanged: Panel.controlRect = Qt.rect(px, py, implicitWidth, implicitHeight)
 	onPyChanged: Panel.controlRect = Qt.rect(px, py, implicitWidth, implicitHeight)
-	onVisibleChanged: if (!visible) Panel.controlOpen = false
+
+	Component.onCompleted: {
+		Panel.controlRect = Qt.rect(px, py, implicitWidth, implicitHeight);
+		if (Panel.controlPage === "notifications")
+			Notifications.unread = 0;
+	}
 
 	// i3 maps it centred; move it to the bar once mapped
 	Timer {
 		running: true
 		interval: 30
-		onTriggered: I3.dispatch(`[title="^${root.title}$"] move position ${Math.round(root.screen.x + root.px)} ${Math.round(root.screen.y + root.py)}`)
+		onTriggered: I3.dispatch(`[title="^${root.title}$"] move position ${root.screen.x + root.px} ${root.screen.y + root.py}`)
+	}
+
+	ElapsedTimer {
+		id: opened
 	}
 
 	// another window taking the focus closes it, as a panel would
@@ -47,8 +62,19 @@ FloatingWindow {
 		subscriptions: ["window"]
 		onIpcEvent: event => {
 			const data = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
-			if (data.change === "focus" && !data.container?.name?.startsWith("Desktop control center"))
+			const name = data.container?.name ?? "";
+			if (data.change === "focus" && name && !name.startsWith("Desktop control center") && opened.elapsed() > 600)
 				Panel.controlOpen = false;
+		}
+	}
+
+	// seen: the bell's dot goes
+	Connections {
+		target: Panel
+
+		function onControlPageChanged(): void {
+			if (Panel.controlPage === "notifications")
+				Notifications.unread = 0;
 		}
 	}
 
@@ -61,13 +87,16 @@ FloatingWindow {
 		Rectangle {
 			id: sidebar
 
+			x: 14
+			y: 14
 			width: 58
-			height: parent.height
-			color: Qt.alpha(Theme.surface, 0.35)
+			height: parent.height - 28
+			radius: 16
+			color: Qt.alpha(Theme.surface, 0.7)
 
 			Column {
 				anchors.horizontalCenter: parent.horizontalCenter
-				y: 14
+				y: 10
 				spacing: 6
 
 				Repeater {
@@ -79,8 +108,8 @@ FloatingWindow {
 						required property var modelData
 						readonly property bool on: Panel.controlPage === modelData.key
 
-						width: 40
-						height: 40
+						width: 42
+						height: 42
 						radius: 12
 						color: on ? Theme.primary : hover.hovered ? Qt.alpha(Theme.fg, 0.08) : "transparent"
 
@@ -95,7 +124,7 @@ FloatingWindow {
 						Rectangle {
 							visible: entry.modelData.key === "notifications" && Notifications.unread > 0 && !entry.on
 							x: parent.width - 12
-							y: 6
+							y: 7
 							width: 7
 							height: 7
 							radius: 4
@@ -119,7 +148,7 @@ FloatingWindow {
 			Column {
 				anchors.horizontalCenter: parent.horizontalCenter
 				anchors.bottom: parent.bottom
-				anchors.bottomMargin: 14
+				anchors.bottomMargin: 10
 				spacing: 6
 
 				Repeater {
@@ -133,8 +162,8 @@ FloatingWindow {
 
 						required property var modelData
 
-						width: 40
-						height: 40
+						width: 42
+						height: 42
 						radius: 12
 						color: actionHover.hovered ? Qt.alpha(Theme.fg, 0.08) : "transparent"
 
@@ -160,22 +189,83 @@ FloatingWindow {
 			}
 		}
 
-		Flickable {
+		// header: the page's title, its buttons, and close
+		Item {
+			id: header
+
 			anchors.left: sidebar.right
+			anchors.leftMargin: 18
 			anchors.right: parent.right
-			anchors.top: parent.top
+			anchors.rightMargin: 16
+			y: 14
+			height: 42
+
+			Text {
+				anchors.verticalCenter: parent.verticalCenter
+				text: page.item?.title ?? ""
+				color: Theme.primary
+				font.family: Theme.fontSans
+				font.pixelSize: 18
+				font.weight: Font.DemiBold
+			}
+
+			Row {
+				anchors.right: parent.right
+				anchors.verticalCenter: parent.verticalCenter
+				spacing: 8
+
+				Repeater {
+					model: [...(page.item?.actions ?? []).filter(a => a.show !== false), { glyph: "\u{EA76}", on: false, act: () => Panel.controlOpen = false }]
+
+					delegate: Rectangle {
+						id: button
+
+						required property var modelData
+
+						width: 38
+						height: 38
+						radius: 11
+						color: modelData.on ? Theme.primary : buttonHover.hovered ? Qt.alpha(Theme.fg, 0.1) : Qt.alpha(Theme.surface, 0.7)
+						border.width: modelData.on ? 0 : 1
+						border.color: Qt.alpha(Theme.border, 0.7)
+
+						Glyph {
+							anchors.centerIn: parent
+							text: button.modelData.glyph
+							font.pixelSize: 15
+							font.weight: Font.Normal
+							color: button.modelData.on ? Theme.onPrimary : Theme.fg
+						}
+
+						HoverHandler {
+							id: buttonHover
+						}
+
+						MouseArea {
+							anchors.fill: parent
+							cursorShape: Qt.PointingHandCursor
+							onClicked: button.modelData.act()
+						}
+					}
+				}
+			}
+		}
+
+		Flickable {
+			anchors.left: header.left
+			anchors.right: header.right
+			anchors.top: header.bottom
+			anchors.topMargin: 14
 			anchors.bottom: parent.bottom
-			contentHeight: page.implicitHeight + 40
+			contentHeight: page.implicitHeight + 16
 			clip: true
 			boundsBehavior: Flickable.StopAtBounds
 
 			Loader {
 				id: page
 
-				x: 18
-				y: 20
-				width: parent.width - 36
-				sourceComponent: ({ home, calendar, notifications })[Panel.controlPage] ?? home
+				width: parent.width
+				sourceComponent: (root.pages.find(p => p.key === Panel.controlPage) ?? root.pages[0]).component
 			}
 		}
 	}
@@ -193,24 +283,38 @@ FloatingWindow {
 	}
 
 	Component {
+		id: system
+
+		SystemPage {}
+	}
+
+	Component {
 		id: notifications
 
 		NotificationsPage {}
 	}
 
-	// seen: the bell's dot goes
-	Connections {
-		target: Panel
+	Component {
+		id: wifi
 
-		function onControlPageChanged(): void {
-			if (Panel.controlPage === "notifications")
-				Notifications.unread = 0;
-		}
+		WifiPage {}
 	}
 
-	Component.onCompleted: {
-		Panel.controlRect = Qt.rect(px, py, implicitWidth, implicitHeight);
-		if (Panel.controlPage === "notifications")
-			Notifications.unread = 0;
+	Component {
+		id: bluetooth
+
+		BluetoothPage {}
+	}
+
+	Component {
+		id: todo
+
+		TodoPage {}
+	}
+
+	Component {
+		id: notes
+
+		NotesPage {}
 	}
 }

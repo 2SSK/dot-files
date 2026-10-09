@@ -4,7 +4,8 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-// CPU and memory use (/proc) and the CPU temperature (hwmon: coretemp, k10temp, ...), every 2 s.
+// CPU and memory use (/proc) and the CPU temperature (hwmon: coretemp, k10temp, ...), every 2 s,
+// with the last two minutes of each for graphs; the root disk, uptime and load for the monitor page.
 Singleton {
 	id: root
 
@@ -14,6 +15,17 @@ Singleton {
 	readonly property real mem: memTotal > 0 ? memUsed / memTotal : 0 // 0–1
 	property real temp: -1 // °C; -1 without a sensor
 	property string tempFile: ""
+	property var cpuHistory: [] // the last 60 samples, oldest first
+	property var memHistory: []
+	property var tempHistory: []
+	property real diskUsed: 0 // GiB, of /
+	property real diskTotal: 0
+	property real uptime: 0 // s
+	property string load: ""
+
+	function remember(list: var, value: real): var {
+		return [...list, value].slice(-60);
+	}
 	property var previous: null
 
 	function update(): void {
@@ -31,7 +43,15 @@ Singleton {
 		if (tempFile) {
 			thermal.reload();
 			temp = Number(thermal.text().trim()) / 1000;
+			tempHistory = remember(tempHistory, temp);
 		}
+		cpuHistory = remember(cpuHistory, cpu);
+		memHistory = remember(memHistory, mem);
+
+		uptimeFile.reload();
+		uptime = Number(uptimeFile.text().split(" ")[0]);
+		loadFile.reload();
+		load = loadFile.text().split(" ").slice(0, 3).join("  ");
 	}
 
 	FileView {
@@ -56,6 +76,42 @@ Singleton {
 		path: root.tempFile
 		blockLoading: true
 		printErrors: false
+	}
+
+	FileView {
+		id: uptimeFile
+
+		path: "/proc/uptime"
+		blockLoading: true
+	}
+
+	FileView {
+		id: loadFile
+
+		path: "/proc/loadavg"
+		blockLoading: true
+	}
+
+	// the root disk, every 30 s
+	Process {
+		id: disk
+
+		command: ["df", "-B1", "--output=used,size", "/"]
+		stdout: StdioCollector {
+			onStreamFinished: {
+				const [used, size] = text.trim().split("\n")[1].trim().split(/\s+/).map(Number);
+				root.diskUsed = used / 1073741824;
+				root.diskTotal = size / 1073741824;
+			}
+		}
+	}
+
+	Timer {
+		interval: 30000
+		running: true
+		repeat: true
+		triggeredOnStart: true
+		onTriggered: disk.running = true
 	}
 
 	FileView {

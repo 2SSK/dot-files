@@ -6,14 +6,23 @@ Colours come from the desktop theme (see [theme.md](theme.md)); settings from
 
 ## Control center
 
-`$mod+c` or the sliders icon in the bar: a panel hanging from the bar's end, in its colour, with an
-icon sidebar. Home has a
-greeting, quick toggles (Wi-Fi, Bluetooth, Do Not Disturb, microphone, screen recording, the bar),
-volume, mic and brightness sliders (a click on an icon mutes) and the media player (MPRIS: cover,
-progress, previous / play / next). Calendar is a month view (the clock in the bar opens it);
-Notifications is the history. The gear opens the settings, the power icon the power menu.
-Escape, the key again, focusing another window or a click anywhere else closes it. Wi-Fi needs NetworkManager, Bluetooth
-BlueZ; without them the tiles say "Not available".
+A panel hanging from the middle of the bar, in its colour: an icon sidebar of pages, a header with
+the page's title, its buttons and ✕, then the page. The bar's widgets open their page:
+
+| Page | Opened by | What's there |
+| --- | --- | --- |
+| Home | the sliders icon, `$mod+c` | quick toggles (Wi-Fi, Bluetooth, Do Not Disturb, microphone, recording, bar), volume / mic / brightness, the media player |
+| Calendar | the clock | a month; ‹ › and Today |
+| System monitor | cpu / mem / temp | CPU, memory and temperature with two minutes of history, disk, uptime, load |
+| Notifications | the bell, `$mod+n` | the history by day; Do Not Disturb and clear in the header |
+| Wi-Fi | the Wi-Fi icon | networks by signal: connect (a password for new secured ones), disconnect, forget; scans while open |
+| Bluetooth | the Bluetooth icon | devices: pair, connect, disconnect, forget, battery; the header scans |
+| Todo | the checklist icon | add with Enter, tick off, remove; kept in `~/.local/share/desktop/todo.json` |
+| Notes | the note icon | one scratch note, saved as you type to `~/.local/share/desktop/notes.md` |
+
+The gear opens the settings, the power icon the power menu. Escape, ✕, focusing another window or a
+click anywhere else closes it. Wi-Fi needs NetworkManager, Bluetooth BlueZ; without them the pages
+say so and their bar icons hide.
 
 ## Settings window
 
@@ -31,7 +40,7 @@ in `git diff`; Quickshell writes it with sorted keys and 4-space indents, as it'
 | `style` | `island` (a floating pill) or `static` (the whole edge, word labels and separators) |
 | `position` | `top`, `bottom`; `left`/`right` on sway only (i3 docks only top or bottom, so X11 uses the top) |
 | `size`, `opacity`, `length` | thickness in px, background opacity, the island's share of the edge (0: by the screen width, 80 % under 1500 px down to 42 % from 2200 px; never shorter than its content) |
-| `left`, `center`, `right` | widgets: `launcher`, `workspaces`, `clock`, `stats`, `volume`, `brightness`, `battery`, `tray`, `recorder`, `notifications`, `scratchpad`, `controls`, `power` |
+| `left`, `center`, `right` | widgets: `launcher`, `workspaces`, `clock`, `stats`, `volume`, `brightness`, `battery`, `tray`, `recorder`, `notifications`, `scratchpad`, `controls`, `wifi`, `bluetooth`, `notes`, `todo`, `power` |
 
 Workspaces are dots: the ones with windows and the one you're on (i3 and sway drop empty ones), the
 current one a wide pill. After them, the scratchpad's window count while it holds any; a click brings
@@ -81,5 +90,5 @@ press while `power.confirm` is on. Nothing hibernates.
 ## IPC
 
 `qs -c desktop ipc call <target> <function>`: `audio up|down|mute|mic`, `brightness up|down`,
-`bar toggle`, `recorder toggle`, `notifications toggle|dnd|clear`, `settings toggle`, `control toggle`, `power open|toggle|close|next|prev|activate|pick <n>`,
+`bar toggle`, `recorder toggle`, `notifications toggle|dnd|clear`, `settings toggle`, `control toggle|open <page>`, `power open|toggle|close|next|prev|activate|pick <n>`,
 `theme reload`.

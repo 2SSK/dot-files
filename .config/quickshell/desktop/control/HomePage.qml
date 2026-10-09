@@ -8,6 +8,9 @@ import qs.widgets
 Column {
 	id: root
 
+	readonly property string title: "Control center"
+	readonly property var actions: []
+
 	spacing: 16
 
 	SystemClock {

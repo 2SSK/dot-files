@@ -26,6 +26,10 @@ Column {
 			battery: "Battery",
 			notifications: "Notifications",
 			controls: "Control center",
+			wifi: "Wi-Fi",
+			bluetooth: "Bluetooth",
+			notes: "Notes",
+			todo: "Todo",
 			power: "Power menu",
 			launcher: "Launcher"
 		})

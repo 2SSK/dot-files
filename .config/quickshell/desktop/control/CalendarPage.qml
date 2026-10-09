@@ -10,6 +10,9 @@ import qs.widgets
 Column {
 	id: root
 
+	readonly property string title: "Calendar"
+	readonly property var actions: []
+
 	SystemClock {
 		id: clock
 
@@ -43,7 +46,7 @@ Column {
 			text: Qt.formatDate(new Date(root.year, root.month, 1), "MMMM yyyy")
 			color: Theme.fg
 			font.family: Theme.fontSans
-			font.pixelSize: 20
+			font.pixelSize: 17
 			font.weight: Font.DemiBold
 		}
 
