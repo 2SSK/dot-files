@@ -69,8 +69,8 @@ PopupWindow {
 				}
 
 				Timer {
-					// the app's own timeout comes in seconds
-					interval: toast.modelData.expireTimeout > 0 ? toast.modelData.expireTimeout * 1000 : Config.notifications.timeout
+					// the app's own timeout, in milliseconds as notify-send's -t
+					interval: toast.modelData.expireTimeout > 0 ? toast.modelData.expireTimeout : Config.notifications.timeout
 					running: !toast.critical && toast.modelData.expireTimeout !== 0 && !card.hovered
 					onTriggered: Notifications.hide(toast.modelData)
 				}
