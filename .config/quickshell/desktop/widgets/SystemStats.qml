@@ -2,20 +2,28 @@ import QtQuick
 import qs
 import qs.services
 
-// CPU and memory use.
+// CPU use, memory use and the CPU temperature (hidden without a sensor).
 Line {
 	vertical: Config.vertical
-	spacing: Config.vertical ? 8 : 14
+	spacing: Config.vertical ? 8 : 12
 
 	Readout {
-		glyph: "\uf4bc" // nf-oct-cpu
+		glyph: "\u{F029A}" // md-gauge
 		label: "cpu"
 		value: Math.round(Stats.cpu * 100) + "%"
 	}
 
 	Readout {
-		glyph: "\uefc5" // nf-fa-memory
+		glyph: "\u{F061A}" // md-chip
 		label: "mem"
-		value: Stats.memUsed.toFixed(1) + "G"
+		value: Math.round(Stats.mem * 100) + "%"
+	}
+
+	Readout {
+		visible: Stats.temp >= 0
+		glyph: "\u{F0238}" // md-fire
+		label: "tmp"
+		value: Math.round(Stats.temp) + "°C"
+		tint: Stats.temp >= 85 ? Theme.error : Theme.fg
 	}
 }

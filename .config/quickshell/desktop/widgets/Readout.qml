@@ -12,7 +12,7 @@ Line {
 	property color tint: Theme.fg
 
 	vertical: Config.vertical
-	spacing: Config.vertical ? 0 : 6
+	spacing: Config.vertical ? 0 : 5
 
 	Glyph {
 		text: Config.island || Config.vertical ? root.glyph : root.label

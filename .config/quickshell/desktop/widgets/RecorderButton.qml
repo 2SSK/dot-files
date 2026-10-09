@@ -29,7 +29,7 @@ Item {
 		Glyph {
 			id: dot
 
-			text: Recorder.recording ? "󰑋" : "󰻃"
+			text: Recorder.recording ? "\u{F044B}" : "\u{F0EC3}" // md-record-rec, md-record-circle-outline
 			color: Recorder.recording ? Theme.error : Theme.fg
 			font.pixelSize: Theme.iconSize
 

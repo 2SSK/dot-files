@@ -6,7 +6,8 @@ import qs
 // the whole edge, polybar-like. i3 reserves a dock's full window, so the window is only as big as
 // the bar; what the island grows into (OSD, power menu) is the Expansion popup over the windows.
 // Hidden (Panel.barShown), the bar slides off the edge and the window shrinks to a pixel, so i3
-// gives the room back while the popup still has a window to hang from.
+// gives the room back while the popups still have a window to hang from; the pointer at that edge
+// brings the bar back over the windows for a moment (Peek).
 PanelWindow {
 	id: bar
 
@@ -29,7 +30,17 @@ PanelWindow {
 	implicitHeight: vertical ? 0 : docked ? size + gap : 1
 	color: "transparent"
 	mask: Region {
-		item: shape
+		item: bar.docked ? shape : edge
+	}
+
+	// the one-pixel edge left while hidden
+	MouseArea {
+		id: edge
+
+		anchors.fill: parent
+		enabled: !bar.docked
+		hoverEnabled: true
+		onEntered: Panel.peek = true
 	}
 
 	Connections {
@@ -53,26 +64,24 @@ PanelWindow {
 	Rectangle {
 		id: shape
 
-		// slid off the edge while hidden
+		// off the edge while hidden
 		readonly property real away: Panel.barShown ? 0 : (bar.size + bar.gap + 8) * (bar.position === "top" || bar.position === "left" ? -1 : 1)
 
 		opacity: Panel.barShown ? 1 : 0
-		transform: Translate {
-			x: bar.vertical ? shape.away : 0
-			y: bar.vertical ? 0 : shape.away
 
-			Behavior on x {
-				NumberAnimation {
-					duration: 260
-					easing.type: Easing.OutCubic
-				}
+		Behavior on x {
+			enabled: bar.vertical
+			NumberAnimation {
+				duration: 260
+				easing.type: Easing.OutCubic
 			}
+		}
 
-			Behavior on y {
-				NumberAnimation {
-					duration: 260
-					easing.type: Easing.OutCubic
-				}
+		Behavior on y {
+			enabled: !bar.vertical
+			NumberAnimation {
+				duration: 260
+				easing.type: Easing.OutCubic
 			}
 		}
 
@@ -84,8 +93,9 @@ PanelWindow {
 
 		width: bar.vertical ? bar.size : bar.length
 		height: bar.vertical ? bar.length : bar.size
-		x: !bar.vertical ? (parent.width - width) / 2 : bar.position === "left" ? bar.gap : 0
-		y: bar.vertical ? (parent.height - height) / 2 : bar.position === "top" ? bar.gap : 0
+		// slid by x/y while hiding, not a transform: the window's shape follows geometry
+		x: !bar.vertical ? (parent.width - width) / 2 : (bar.position === "left" ? bar.gap : 0) + away
+		y: bar.vertical ? (parent.height - height) / 2 : (bar.position === "top" ? bar.gap : 0) + away
 		radius: Config.island ? bar.size / 2 : 0
 		color: Qt.alpha(Theme.bg, Config.bar.opacity)
 		border.width: Config.island ? 1 : 0
@@ -102,5 +112,14 @@ PanelWindow {
 	Expansion {
 		bar: bar
 		island: shape
+	}
+
+	Peek {
+		bar: bar
+		island: shape
+	}
+
+	Osd {
+		bar: bar
 	}
 }

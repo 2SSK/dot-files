@@ -4,7 +4,7 @@ import Quickshell
 import Quickshell.I3
 import qs
 
-// The island growing into the OSD or the power menu, on the focused screen. A popup lies exactly
+// The island growing into the power menu, on the focused screen. A popup lies exactly
 // over the bar: on an island it starts as the same pill (bar content included) and grows away from
 // the edge; on a static bar a card slides out of it. The popup is bigger than the shape and lets
 // clicks through everywhere else.
@@ -17,10 +17,9 @@ PopupWindow {
 	readonly property bool vertical: Config.vertical
 	readonly property string position: Config.position
 	readonly property int size: Config.bar.size
-	readonly property bool open: Panel.view !== "" && I3.focusedMonitor?.name === bar.screen?.name
+	readonly property bool open: Panel.view === "power" && I3.focusedMonitor?.name === bar.screen?.name
 	// on a shown island the shape starts as the pill itself; otherwise it's a card from the edge
 	readonly property bool pill: Config.island && Panel.barShown
-	property string view: "" // stays set while closing, so the content doesn't vanish mid-animation
 
 	// along = the bar's direction, across = away from the edge
 	readonly property real islandAlong: vertical ? island.height : island.width
@@ -36,19 +35,9 @@ PopupWindow {
 
 	onOpenChanged: {
 		if (open) {
-			view = Panel.view;
 			visible = true;
 		} else {
 			hide.restart();
-		}
-	}
-
-	Connections {
-		target: Panel
-
-		function onViewChanged(): void {
-			if (Panel.view !== "")
-				root.view = Panel.view;
 		}
 	}
 
@@ -147,7 +136,7 @@ PopupWindow {
 			x: root.position === "left" ? loader.offset + 12 : root.position === "right" ? parent.width - loader.offset - 12 - width : (parent.width - width) / 2
 			y: root.position === "top" ? loader.offset + 12 : root.position === "bottom" ? parent.height - loader.offset - 12 - height : (parent.height - height) / 2
 			opacity: root.open ? 1 : 0
-			sourceComponent: root.view === "power" ? power : osd
+			sourceComponent: power
 
 			Behavior on opacity {
 				NumberAnimation {
@@ -155,12 +144,6 @@ PopupWindow {
 				}
 			}
 		}
-	}
-
-	Component {
-		id: osd
-
-		OsdView {}
 	}
 
 	Component {

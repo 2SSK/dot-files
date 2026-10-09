@@ -4,14 +4,16 @@ import QtQuick
 import Quickshell
 import Quickshell.I3
 
-// What the island shows beyond the bar: nothing, the OSD (a level that just changed) or the power
-// menu. While the power menu is open i3 is in mode "power", which sends its keys back over IPC
+// Shell state: whether the bar is shown (or peeking while hidden), the OSD card (a level or lock
+// that just changed) and the power menu the island grows into. While the power menu is open i3 is in mode "power", which sends its keys back over IPC
 // (keys.conf): an X11 popup can't take the keyboard itself.
 Singleton {
 	id: root
 
 	property bool barShown: true
-	property string view: "" // "", "osd" or "power"
+	property bool peek: false // the hidden bar showing while the pointer is at the edge
+	property string view: "" // "" or "power"
+	property bool osdShown: false
 	property string osdKind: "volume" // volume, mic, brightness, caps or num
 	property real osdValue: 0
 	property bool osdMuted: false
@@ -27,17 +29,16 @@ Singleton {
 	]
 
 	function osd(kind: string, value: real, muted: bool): void {
-		if (view === "power")
-			return;
 		osdKind = kind;
 		osdValue = value;
 		osdMuted = muted;
-		view = "osd";
+		osdShown = true;
 		osdTimer.restart();
 	}
 
 	function toggleBar(): void {
 		barShown = !barShown;
+		peek = false;
 	}
 
 	function openPower(): void {
@@ -87,7 +88,7 @@ Singleton {
 		id: osdTimer
 
 		interval: Config.osd.timeout
-		onTriggered: if (root.view === "osd") root.view = ""
+		onTriggered: root.osdShown = false
 	}
 
 	Timer {
