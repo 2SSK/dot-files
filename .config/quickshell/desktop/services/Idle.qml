@@ -8,7 +8,7 @@ import qs
 // When idle (Settings → Power): the screen dims, locks, then switches off after idle.dim, .lock
 // and .off minutes (0: never). X11 (i3): desktop-idle sets X's timers, at start and on every change
 // (xss-lock dims and locks). Wayland (sway): the shell runs swayidle with them, restarted on a
-// change; it also locks before sleep.
+// change; it also locks before sleep and on loginctl lock-session (the power menu's Lock, the lid).
 Singleton {
 	id: root
 
@@ -18,8 +18,10 @@ Singleton {
 	readonly property var swayidle: {
 		const [dim, lock, off] = times;
 		// one swayidle: a shell restart leaves the last one running, so it goes first (KILL: it
-		// handles TERM in its event loop, which an orphan no longer runs)
-		const args = ["sh", "-c", 'pkill -KILL -u "$(id -u)" -x swayidle; exec swayidle "$@"', "sh", "-w"];
+		// handles TERM in its event loop, which an orphan no longer runs). Without it nothing locks
+		// on sway (the power menu's Lock and the lid go through it too): say so, loudly
+		const missing = 'notify-send -u critical -a Lock "The screen can\'t lock" "swayidle isn\'t installed: Lock, the lid, idle and sleep do nothing on sway. sudo pacman -S swayidle"';
+		const args = ["sh", "-c", `command -v swayidle >/dev/null || { ${missing}; exit 127; }; pkill -KILL -u "$(id -u)" -x swayidle; exec swayidle "$@"`, "sh", "-w"];
 		if (dim > 0 && (lock === 0 || dim < lock))
 			args.push("timeout", String(dim * 60), "desktop-idle dim", "resume", "desktop-idle undim");
 		if (lock > 0)
