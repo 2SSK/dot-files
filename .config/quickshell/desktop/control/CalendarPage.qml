@@ -200,7 +200,7 @@ Column {
 				anchors.centerIn: parent
 				glyph: Icons.g(root.adding ? "x" : "plus")
 				font.pixelSize: 15
-				color: root.adding ? Theme.onPrimary : Theme.fg
+				color: root.adding ? Theme.primaryText : Theme.fg
 			}
 
 			HoverHandler {

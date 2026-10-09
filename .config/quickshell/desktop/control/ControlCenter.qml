@@ -90,7 +90,7 @@ HangingPanel {
 						glyph: entry.modelData.glyph
 						font.pixelSize: 18
 						font.weight: Font.Normal
-						color: entry.on ? Theme.onPrimary : Theme.fg
+						color: entry.on ? Theme.primaryText : Theme.fg
 						filled: true
 					}
 
@@ -207,7 +207,7 @@ HangingPanel {
 						glyph: button.modelData.glyph
 						font.pixelSize: 15
 						font.weight: Font.Normal
-						color: button.modelData.on ? Theme.onPrimary : Theme.fg
+						color: button.modelData.on ? Theme.primaryText : Theme.fg
 						filled: button.modelData.on ?? false
 					}
 

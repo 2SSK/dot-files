@@ -61,7 +61,7 @@ Rectangle {
 						visible: chip.modelData.isPlaying
 						glyph: Icons.g("music")
 						font.pixelSize: 11
-						color: chip.on ? Theme.onPrimary : Theme.primary
+						color: chip.on ? Theme.primaryText : Theme.primary
 					}
 
 					Text {
@@ -69,7 +69,7 @@ Rectangle {
 
 						anchors.verticalCenter: parent.verticalCenter
 						text: Media.name(chip.modelData)
-						color: chip.on ? Theme.onPrimary : Theme.fg
+						color: chip.on ? Theme.primaryText : Theme.fg
 						font.family: Theme.fontSans
 						font.pixelSize: 12
 						font.weight: Font.Medium
@@ -206,7 +206,7 @@ Rectangle {
 							filled: true
 							font.pixelSize: 16
 							font.weight: Font.Normal
-							color: button.modelData.main ? Theme.onPrimary : Theme.fg
+							color: button.modelData.main ? Theme.primaryText : Theme.fg
 						}
 
 						HoverHandler {

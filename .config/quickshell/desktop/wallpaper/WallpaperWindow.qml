@@ -255,32 +255,33 @@ HangingPanel {
 					}
 				}
 
-				// its name, on hover or when picked with the keys
-				Rectangle {
+				// its name, on hover or when picked with the keys: plain text with a soft shadow
+				Text {
 					anchors.left: parent.left
 					anchors.right: parent.right
 					anchors.bottom: parent.bottom
-					height: 28
-					radius: 12
-					color: Qt.alpha(Theme.bg, 0.75)
+					anchors.margins: 10
+					text: root.label(tile.modelData)
+					elide: Text.ElideRight
+					color: "white"
+					font.family: Theme.fontSans
+					font.pixelSize: 12
+					font.weight: Font.DemiBold
 					opacity: hover.hovered || tile.picked && search.text ? 1 : 0
+					layer.enabled: true
+					layer.effect: MultiEffect {
+						shadowEnabled: true
+						shadowColor: "black"
+						shadowOpacity: 0.8
+						shadowBlur: 0.6
+						shadowVerticalOffset: 1
+						shadowHorizontalOffset: 0
+					}
 
 					Behavior on opacity {
 						NumberAnimation {
 							duration: 150
 						}
-					}
-
-					Text {
-						anchors.fill: parent
-						anchors.leftMargin: 12
-						anchors.rightMargin: 12
-						verticalAlignment: Text.AlignVCenter
-						text: root.label(tile.modelData)
-						elide: Text.ElideRight
-						color: Theme.fg
-						font.family: Theme.fontSans
-						font.pixelSize: 12
 					}
 				}
 
@@ -321,7 +322,7 @@ HangingPanel {
 						anchors.centerIn: parent
 						glyph: Icons.g("check")
 						font.pixelSize: 14
-						color: Theme.onPrimary
+						color: Theme.primaryText
 					}
 				}
 			}

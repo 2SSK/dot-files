@@ -61,8 +61,8 @@ PopupWindow {
 
 		readonly property real cx: width / 2
 		readonly property real cy: height / 2 - 40
-		readonly property real rx: Math.min(width * 0.3, 140 + count * 45)
-		readonly property real ry: Math.min(90, 30 + count * 10)
+		readonly property real rx: Math.min(width * 0.34, 200 + count * 60)
+		readonly property real ry: Math.min(120, 40 + count * 14)
 
 		anchors.fill: parent
 		model: Windows.windows
@@ -115,8 +115,8 @@ PopupWindow {
 			readonly property real side: ring.rx > 0 ? (x + width / 2 - ring.cx) / ring.rx : 0
 			readonly property var entry: DesktopEntries.heuristicLookup(modelData.cls) ?? DesktopEntries.heuristicLookup(modelData.instance)
 
-			width: 250
-			height: 180
+			width: 360
+			height: 250
 			// PathView places the item's centre on the path
 			z: depth * 100
 			scale: 0.62 + 0.38 * depth
@@ -135,7 +135,7 @@ PopupWindow {
 
 			Rectangle {
 				anchors.fill: parent
-				radius: 24
+				radius: 30
 				color: Qt.alpha(Theme.surface, 0.96)
 				border.width: card.front ? 3 : 1
 				border.color: card.front ? Theme.primary : Qt.alpha(Theme.border, 0.9)
@@ -151,17 +151,17 @@ PopupWindow {
 				id: icon
 
 				anchors.horizontalCenter: parent.horizontalCenter
-				y: 26
-				implicitSize: 64
+				y: 36
+				implicitSize: 96
 				source: Quickshell.iconPath(card.entry?.icon ?? card.modelData.cls.toLowerCase(), "application-x-executable")
 				asynchronous: true
 			}
 
 			Text {
 				anchors.top: icon.bottom
-				anchors.topMargin: 12
+				anchors.topMargin: 16
 				anchors.horizontalCenter: parent.horizontalCenter
-				width: parent.width - 32
+				width: parent.width - 40
 				horizontalAlignment: Text.AlignHCenter
 				text: card.modelData.title
 				elide: Text.ElideRight
@@ -169,18 +169,18 @@ PopupWindow {
 				wrapMode: Text.Wrap
 				color: Theme.fg
 				font.family: Theme.fontSans
-				font.pixelSize: 13
+				font.pixelSize: 16
 				font.weight: card.front ? Font.DemiBold : Font.Normal
 			}
 
 			Text {
 				anchors.bottom: parent.bottom
-				anchors.bottomMargin: 12
+				anchors.bottomMargin: 18
 				anchors.horizontalCenter: parent.horizontalCenter
 				text: (card.entry?.name ?? card.modelData.cls) + "  ·  " + card.modelData.workspace
 				color: Theme.fgMuted
 				font.family: Theme.fontSans
-				font.pixelSize: 11
+				font.pixelSize: 13
 			}
 
 			MouseArea {

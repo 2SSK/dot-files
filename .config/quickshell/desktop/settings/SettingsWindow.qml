@@ -147,14 +147,14 @@ FloatingWindow {
 							glyph: entry.modelData.glyph
 							font.pixelSize: 16
 							font.weight: Font.Normal
-							color: entry.on ? Theme.onPrimary : Theme.fg
+							color: entry.on ? Theme.primaryText : Theme.fg
 							filled: entry.on
 						}
 
 						Text {
 							anchors.verticalCenter: parent.verticalCenter
 							text: entry.modelData.title
-							color: entry.on ? Theme.onPrimary : Theme.fg
+							color: entry.on ? Theme.primaryText : Theme.fg
 							font.family: Theme.fontSans
 							font.pixelSize: 14
 							font.weight: Font.Medium
@@ -351,7 +351,7 @@ FloatingWindow {
 							Text {
 								anchors.centerIn: parent
 								text: swatch.modelData
-								color: swatch.on ? Theme.onPrimary : Theme.fg
+								color: swatch.on ? Theme.primaryText : Theme.fg
 								font.family: Theme.fontSans
 								font.pixelSize: 14
 								font.weight: Font.Medium

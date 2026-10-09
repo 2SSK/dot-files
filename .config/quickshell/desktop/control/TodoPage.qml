@@ -202,7 +202,7 @@ Item {
 						visible: item.modelData.done
 						glyph: Icons.g("check")
 						font.pixelSize: 12
-						color: Theme.onPrimary
+						color: Theme.primaryText
 					}
 
 					MouseArea {
@@ -310,7 +310,7 @@ Item {
 			anchors.verticalCenter: parent.verticalCenter
 			text: Todo.items.find(item => item.id === root.dragId)?.text ?? ""
 			elide: Text.ElideRight
-			color: Theme.onPrimary
+			color: Theme.primaryText
 			font.family: Theme.fontSans
 			font.pixelSize: 14
 			font.weight: Font.Medium

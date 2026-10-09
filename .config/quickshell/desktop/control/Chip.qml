@@ -37,14 +37,14 @@ Rectangle {
 			glyph: root.glyph
 			filled: root.on
 			font.pixelSize: 14
-			color: root.on ? Theme.onPrimary : Theme.fg
+			color: root.on ? Theme.primaryText : Theme.fg
 		}
 
 		Text {
 			visible: root.label !== ""
 			anchors.verticalCenter: parent.verticalCenter
 			text: root.label
-			color: root.on ? Theme.onPrimary : Theme.fg
+			color: root.on ? Theme.primaryText : Theme.fg
 			font.family: Theme.fontSans
 			font.pixelSize: 13
 			font.weight: root.on ? Font.DemiBold : Font.Normal

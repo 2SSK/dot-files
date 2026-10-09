@@ -33,7 +33,7 @@ Rectangle {
 		width: 36
 		height: 36
 		radius: 18
-		color: root.on ? Qt.alpha(Theme.onPrimary, 0.14) : Qt.alpha(Theme.fg, 0.07)
+		color: root.on ? Qt.alpha(Theme.primaryText, 0.14) : Qt.alpha(Theme.fg, 0.07)
 
 		Glyph {
 			anchors.centerIn: parent
@@ -41,7 +41,7 @@ Rectangle {
 			rotation: root.glyphRotation
 			font.pixelSize: 17
 			font.weight: Font.Normal
-			color: root.on ? Theme.onPrimary : Theme.fg
+			color: root.on ? Theme.primaryText : Theme.fg
 		}
 	}
 
@@ -57,7 +57,7 @@ Rectangle {
 			width: parent.width
 			text: root.label
 			elide: Text.ElideRight
-			color: root.on ? Theme.onPrimary : Theme.fg
+			color: root.on ? Theme.primaryText : Theme.fg
 			font.family: Theme.fontSans
 			font.pixelSize: 13
 			font.weight: Font.DemiBold
@@ -67,7 +67,7 @@ Rectangle {
 			width: parent.width
 			text: root.detail
 			elide: Text.ElideRight
-			color: root.on ? Qt.alpha(Theme.onPrimary, 0.75) : Theme.fgMuted
+			color: root.on ? Qt.alpha(Theme.primaryText, 0.75) : Theme.fgMuted
 			font.family: Theme.fontSans
 			font.pixelSize: 11
 		}

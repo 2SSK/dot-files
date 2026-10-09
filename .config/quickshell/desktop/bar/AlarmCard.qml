@@ -174,7 +174,7 @@ PopupWindow {
 
 						anchors.centerIn: parent
 						text: button.modelData.label
-						color: button.modelData.accent ? Theme.onPrimary : Theme.fg
+						color: button.modelData.accent ? Theme.primaryText : Theme.fg
 						font.family: Theme.fontSans
 						font.pixelSize: 13
 						font.weight: Font.DemiBold

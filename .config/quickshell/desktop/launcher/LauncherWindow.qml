@@ -451,7 +451,7 @@ HangingPanel {
 							anchors.centerIn: parent
 							glyph: Icons.g("check")
 							font.pixelSize: 12
-							color: cell.colours.on_primary ?? Theme.onPrimary
+							color: cell.colours.on_primary ?? Theme.primaryText
 						}
 					}
 				}

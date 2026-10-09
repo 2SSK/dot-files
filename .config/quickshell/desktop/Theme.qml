@@ -18,7 +18,7 @@ Singleton {
 	readonly property color fg: ui.fg ?? "#c0caf5"
 	readonly property color fgMuted: ui.fg_muted ?? "#737aa2"
 	readonly property color primary: ui.primary ?? "#7aa2f7"
-	readonly property color onPrimary: ui.on_primary ?? "#1a1b26"
+	readonly property color primaryText: ui.on_primary ?? "#1a1b26"
 	readonly property color border: ui.border ?? "#3b4261"
 	readonly property color error: ui.error ?? "#f7768e"
 	readonly property color success: ui.success ?? "#9ece6a"

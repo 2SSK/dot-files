@@ -157,7 +157,7 @@ Column {
 					Text {
 						anchors.centerIn: parent
 						text: day.modelData.getDate()
-						color: day.today ? Theme.onPrimary : day.inMonth ? Theme.fg : Qt.alpha(Theme.fgMuted, 0.5)
+						color: day.today ? Theme.primaryText : day.inMonth ? Theme.fg : Qt.alpha(Theme.fgMuted, 0.5)
 						font.family: Theme.fontSans
 						font.pixelSize: 13
 						font.weight: day.today ? Font.Bold : Font.Normal
@@ -172,7 +172,7 @@ Column {
 						width: 4
 						height: 4
 						radius: 2
-						color: day.today ? Theme.onPrimary : Theme.primary
+						color: day.today ? Theme.primaryText : Theme.primary
 					}
 
 					HoverHandler {

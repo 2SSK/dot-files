@@ -312,7 +312,7 @@ Item {
 
 			anchors.centerIn: parent
 			text: root.names[root.dragName] ?? root.dragName
-			color: Theme.onPrimary
+			color: Theme.primaryText
 			font.family: Theme.fontSans
 			font.pixelSize: 13
 			font.weight: Font.Medium
