@@ -225,6 +225,15 @@ ShellRoot {
 		function toggle(): void {
 			Panel.settingsOpen = !Panel.settingsOpen;
 		}
+		// a page (bar, appearance, notifications, levels, power, keys); again on the same one closes it
+		function page(page: string): void {
+			if (Panel.settingsOpen && Panel.settingsPage === page) {
+				Panel.settingsOpen = false;
+				return;
+			}
+			Panel.settingsPage = page;
+			Panel.settingsOpen = true;
+		}
 	}
 
 	IpcHandler {

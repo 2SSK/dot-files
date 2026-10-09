@@ -13,7 +13,7 @@ import qs.widgets
 FloatingWindow {
 	id: root
 
-	property string page: "bar"
+	property string page: Panel.settingsPage
 	property string family: ""
 	property string mode: ""
 	property var families: []
@@ -23,7 +23,8 @@ FloatingWindow {
 		{ key: "appearance", glyph: Icons.g("palette"), title: "Appearance" },
 		{ key: "notifications", glyph: Icons.g("bell"), title: "Notifications" },
 		{ key: "levels", glyph: Icons.g("adjustments"), title: "Levels" },
-		{ key: "power", glyph: Icons.g("power"), title: "Power" }
+		{ key: "power", glyph: Icons.g("power"), title: "Power" },
+		{ key: "keys", glyph: Icons.g("keyboard"), title: "Keys" }
 	]
 
 	function set(group: string, key: string, value: var): void {
@@ -167,7 +168,7 @@ FloatingWindow {
 					MouseArea {
 						anchors.fill: parent
 						cursorShape: Qt.PointingHandCursor
-						onClicked: root.page = entry.modelData.key
+						onClicked: Panel.settingsPage = entry.modelData.key
 					}
 				}
 			}
@@ -455,6 +456,12 @@ FloatingWindow {
 						onToggled: checked => root.set("power", "confirm", checked)
 					}
 				}
+			}
+
+			// Keys: every binding, read from i3's config
+			KeybindsPage {
+				visible: root.page === "keys"
+				width: parent.width
 			}
 		}
 	}

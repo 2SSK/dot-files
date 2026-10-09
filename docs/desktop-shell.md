@@ -88,15 +88,15 @@ xrender backend); if it ever falls back, why is in `$XDG_RUNTIME_DIR/picom.log`.
 
 ## Window switcher
 
-Hold Ctrl and tap Tab: the open windows come up as rounded cards on a ring, most recently used
-first, and each Tab turns the ring to bring the next one to the front (Ctrl+Shift+Tab or Ctrl+←
-turn it back); cards further round shrink, fade and turn away. Let go of Ctrl to switch to the front
-one; Escape cancels, a click picks one. A quick Ctrl+Tab goes straight back to the last window
-without showing the ring. Ctrl+Tab is taken from apps (browser and terminal tabs) on i3.
+Hold Alt and tap Tab: the open windows come up as rounded cards on a ring, most recently used
+first, and each Tab turns the ring to bring the next one to the front (Alt+Shift+Tab or Alt+←
+turn it back); cards further round shrink, fade and turn away. Let go of Alt to switch to the front
+one; Escape cancels, a click picks one. A quick Alt+Tab goes straight back to the last window
+without showing the ring.
 
 The shell's popup can't take the keyboard on X11, so i3's mode "switcher" sends the keys over IPC;
-i3 can't see Ctrl let go (it was pressed before the mode began), so the shell runs
-`desktop-ctrl-release`, which asks X whether Ctrl is still held (nothing is grabbed). Cards show the
+i3 can't see Alt let go (it was pressed before the mode began), so the shell runs
+`desktop-key-release alt`, which asks X whether Alt is still held (nothing is grabbed). Cards show the
 app's icon, the window's title, the app and workspace; X11 has no live window previews.
 
 ## Alarms
@@ -166,7 +166,7 @@ Hidden with `$mod+Shift+b`, the bar comes back over the windows while the pointe
 | `$mod+Shift+v` | clipboard history |
 | `$mod+Shift+p` | wallpapers |
 | `$mod+d`, `$mod+;`, `$mod+Shift+f`, `$mod+Shift+y` | the launcher: apps, emoji, files, themes |
-| Ctrl+Tab (hold Ctrl) | window switcher |
+| Alt+Tab (hold Alt) | window switcher |
 | `$mod+Shift+t` / `$mod+Shift+n` | todo / notes |
 | `$mod+p` | power menu (again, Escape or a click beside it closes): arrows or 1–5 pick, Enter runs |
 

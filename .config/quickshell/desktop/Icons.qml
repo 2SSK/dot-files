@@ -58,6 +58,7 @@ Singleton {
 			"grip-vertical": 0xec01,
 			"hash": 0xeabc,
 			"home": 0xeac1,
+			"keyboard": 0xebd6,
 			"layout-grid": 0xedba,
 			"link": 0xeade,
 			"lock": 0xeae2,

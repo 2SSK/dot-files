@@ -14,6 +14,7 @@ Singleton {
 	property string view: "" // "" or "power"
 	property bool osdShown: false
 	property bool settingsOpen: false
+	property string settingsPage: "bar"
 	property bool controlOpen: false
 	property bool clipboardOpen: false
 	property bool clipboardShown: false // lives on while it slides back into the bar

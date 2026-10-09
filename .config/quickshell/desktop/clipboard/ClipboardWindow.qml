@@ -122,7 +122,8 @@ HangingPanel {
 		model: root.entries
 		currentIndex: root.current
 		boundsBehavior: Flickable.StopAtBounds
-		highlightMoveDuration: 120
+		highlightMoveDuration: 0
+		highlightResizeDuration: 0
 
 		delegate: Rectangle {
 			id: entry
@@ -141,7 +142,10 @@ HangingPanel {
 			HoverHandler {
 				id: hover
 
-				onHoveredChanged: if (hovered) root.current = entry.index
+				// the row under the pointer once it moves (not one that opened under a still pointer)
+				property point from
+				onHoveredChanged: from = point.position
+				onPointChanged: if (hovered && Math.abs(point.position.x - from.x) + Math.abs(point.position.y - from.y) > 3) root.current = entry.index
 			}
 
 			MouseArea {
