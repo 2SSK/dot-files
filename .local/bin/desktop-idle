@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# What happens when you leave the laptop alone (X11, i3), set from the shell's settings:
+#   desktop-idle apply <dim> <lock> <off>   minutes (0: never). X's screensaver starts at the dim
+#                                          time; xss-lock then runs `desktop-idle dim` and locks
+#                                          when the screensaver's cycle ends, at the lock time.
+#                                          The screen switches off (DPMS) at the off time.
+#   desktop-idle dim                       fade the brightness to a quarter; put it back when
+#                                          stopped (xss-lock stops it on any key or movement, or
+#                                          as it locks)
+# Wayland gets the same from swayidle with the sway port.
+set -euo pipefail
+
+apply() { # <dim> <lock> <off>
+	local dim=$1 lock=$2 off=$3
+	[[ -n ${DISPLAY:-} ]] || return 0
+	if ((lock == 0)); then
+		xset s off
+	elif ((dim > 0 && dim < lock)); then
+		xset s $((dim * 60)) $(((lock - dim) * 60))
+	else
+		xset s $((lock * 60)) 0
+	fi
+	if ((off == 0)); then
+		xset -dpms
+	else
+		xset dpms 0 0 $((off * 60))
+		xset +dpms
+	fi
+}
+
+dim() {
+	local was now step
+	was="$(brightnessctl get)"
+	trap 'brightnessctl -q set "$was"; exit 0' TERM INT
+	# a quarter of where it was, in 20 steps over two seconds
+	for step in $(seq 1 20); do
+		now=$((was - (was - was / 4) * step / 20))
+		brightnessctl -q set "$now"
+		sleep 0.1
+	done
+	# stay dim until stopped
+	while :; do sleep 1 & wait $!; done
+}
+
+case ${1:-} in
+apply) (($# == 4)) || { echo "usage: desktop-idle apply <dim> <lock> <off>" >&2 && exit 2; }; apply "$2" "$3" "$4" ;;
+dim) dim ;;
+*) echo "usage: desktop-idle apply <dim> <lock> <off> | dim" >&2 && exit 2 ;;
+esac

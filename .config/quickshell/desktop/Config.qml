@@ -16,6 +16,7 @@ Singleton {
 	readonly property JsonObject brightness: adapter.brightness
 	readonly property JsonObject power: adapter.power
 	readonly property JsonObject nightLight: adapter.nightLight
+	readonly property JsonObject idle: adapter.idle
 	readonly property JsonObject wallpaper: adapter.wallpaper
 	// i3 docks only at the top or bottom (a side dock takes the whole screen), so on X11 a side
 	// position falls back to the top; sway places the bar on any edge
@@ -74,6 +75,11 @@ Singleton {
 			property JsonObject wallpaper: JsonObject {
 				property var folders: ["~/.local/share/desktop/wallpapers", "~/Wallpaper-Bank"]
 				property string rotate: "off" // off, 5m, 1h, 1d or boot
+			}
+			property JsonObject idle: JsonObject {
+				property int dim: 4 // minutes alone until the screen dims (0: never)
+				property int lock: 5 // until it locks
+				property int off: 10 // until the screen switches off
 			}
 			property JsonObject nightLight: JsonObject {
 				property int temperature: 4000 // K: lower is warmer

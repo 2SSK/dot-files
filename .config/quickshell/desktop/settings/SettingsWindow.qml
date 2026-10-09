@@ -542,6 +542,36 @@ FloatingWindow {
 
 			Section {
 				visible: root.page === "power"
+				title: "When idle"
+
+				Repeater {
+					model: [
+						{ key: "dim", label: "Dim the screen", hint: "Any key or movement brings it back." },
+						{ key: "lock", label: "Lock", hint: "The laptop keeps running." },
+						{ key: "off", label: "Switch the screen off", hint: "Even while locked." }
+					]
+
+					delegate: SettingRow {
+						id: idleRow
+
+						required property var modelData
+
+						label: modelData.label
+						hint: modelData.hint
+						Range {
+							from: 0
+							to: 30
+							step: 1
+							value: Config.idle[idleRow.modelData.key]
+							format: v => Math.round(v) === 0 ? "Never" : Math.round(v) + " min"
+							onMoved: value => root.set("idle", idleRow.modelData.key, Math.round(value))
+						}
+					}
+				}
+			}
+
+			Section {
+				visible: root.page === "power"
 				title: "Battery"
 
 				SettingRow {

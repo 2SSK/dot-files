@@ -157,6 +157,14 @@ itself. Listing needs root: `packages/system.sh timeshift` allows exactly `times
 --scripted` without a password (`/etc/sudoers.d/10-desktop-timeshift`); without it the page asks
 once. `desktop-timeshift list|create|delete` does the work.
 
+## When idle
+
+Settings → Power → **When idle**: the screen dims after 4 minutes alone (any key or movement brings
+it back), locks after 5 and switches off after 10; each can be Never. On i3, `desktop-idle apply`
+sets X's screensaver and DPMS timers to them; xss-lock runs `desktop-idle dim` when the screensaver
+starts and locks when its cycle ends. Video players and browsers playing video hold the screensaver
+off themselves. Locking keeps the laptop running; nothing suspends on its own.
+
 ## Night light
 
 A warmer screen, through gammastep (X11 and Wayland alike): the control center's **Night light**
