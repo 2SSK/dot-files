@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-# System-level setup (sudo): the memory safety net, libvirt, docker, the lid, the GRUB theme and the login screen. Installs
+# System-level setup (sudo): the memory safety net, libvirt, docker, the lid, snapshots (Timeshift and the
+# subvolumes it leaves out), the GRUB theme and the login screen. Installs
 # the tracked files under system/ into / and enables services; a no-op when everything is already
 # in place.
-# usage: system.sh memory|libvirt|docker|lid|timeshift|grub [--preview]|sddm
+# usage: system.sh memory|libvirt|docker|lid|timeshift|subvolumes|grub [--preview]|sddm
 set -euo pipefail
 
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -72,6 +73,57 @@ timeshift() {
 	timeshift_list
 	timeshift_schedule
 	put etc/timeshift-autosnap.conf
+}
+
+# Folders whose data changes all day, made btrfs subvolumes of their own: a snapshot (Timeshift's of
+# / and /home) leaves nested subvolumes out, so snapshots don't keep every old version of a VM disk,
+# Docker's layers or ~/.cache. What is there is copied into the new subvolume and the original kept
+# beside it (<folder>.old-subvolume) until you have checked and removed it; a missing folder is made
+# empty. A no-op once each is a subvolume.
+is_subvolume() { sudo btrfs subvolume show "$1" >/dev/null 2>&1; }
+
+make_subvolume() { # <dir> [nocow]: the folder's contents, in a new subvolume at the same path
+	local dir=$1 old="$1.old-subvolume"
+	if [[ ! -e $dir ]]; then
+		sudo btrfs subvolume create "$dir" >/dev/null
+		[[ ${2:-} != nocow ]] || sudo chattr +C "$dir"
+	else
+		[[ ! -e $old ]] || die subvolume_leftover path="$old" msg='an earlier run stopped half way: check it, then move it away'
+		sudo mv "$dir" "$old"
+		sudo btrfs subvolume create "$dir" >/dev/null
+		sudo chown --reference="$old" "$dir"
+		sudo chmod --reference="$old" "$dir"
+		# no copy-on-write (VM disks): set on the empty folder, the copies inherit it
+		[[ ${2:-} != nocow ]] || sudo chattr +C "$dir"
+		sudo cp -a --reflink=auto "$old/." "$dir/" || die subvolume_copy_failed path="$dir" msg="the original is in $old"
+		kept+=("$old")
+	fi
+	log_info subvolume path="$dir"
+	changed=1
+}
+
+subvolumes() {
+	local images="$root/var/lib/libvirt/images" docker="$root/var/lib/docker" cache="$HOME/.cache" was_active=0 kept=()
+	[[ $(findmnt -no FSTYPE --target "${root:-/}") == btrfs ]] || die not_btrfs msg='subvolumes are a btrfs thing'
+	if [[ -d ${images%/*} ]] && ! is_subvolume "$images"; then
+		if command -v virsh >/dev/null && [[ -n $(sudo virsh -c qemu:///system list --name --state-running) ]]; then
+			die vms_running msg='shut the VMs down first (virsh list)'
+		fi
+		make_subvolume "$images" nocow
+	fi
+	if [[ -d ${docker%/*} ]] && ! is_subvolume "$docker"; then
+		if systemctl is-active --quiet docker.service; then
+			was_active=1
+			sudo systemctl stop docker.socket docker.service
+		fi
+		make_subvolume "$docker"
+		((!was_active)) || sudo systemctl start docker.service
+	fi
+	# apps write their cache all the time: close the browsers first
+	is_subvolume "$cache" || make_subvolume "$cache"
+	((${#kept[@]})) || return 0
+	echo "The originals are kept. Once the VMs, Docker and your apps work, remove them with:"
+	printf '  sudo rm -rf %q\n' "${kept[@]}"
 }
 
 lid() { # closing the lid only locks; logind rereads its config on SIGHUP (a restart would end sessions)
@@ -359,8 +411,9 @@ libvirt) libvirt ;;
 docker) docker_daemon ;;
 lid) lid ;;
 timeshift) timeshift ;;
+subvolumes) subvolumes ;;
 grub) if [[ ${2:-} == --preview ]]; then grub_preview && exit 0; fi; grub_theme ;;
 sddm) sddm_theme ;;
-*) echo 'usage: system.sh memory|libvirt|docker|lid|timeshift|grub [--preview]|sddm' >&2 && exit 2 ;;
+*) echo 'usage: system.sh memory|libvirt|docker|lid|timeshift|subvolumes|grub [--preview]|sddm' >&2 && exit 2 ;;
 esac
 if ((changed)); then log_info system part="$1"; else echo "$1: already in place"; fi

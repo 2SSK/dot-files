@@ -1,0 +1,67 @@
+# What packages/cleanup.sh packages removes when installed (pacman -Rns: with what only they
+# needed). One name per line; comments say why. Kept on purpose: GNOME (a fallback session), dev,
+# Kubernetes and database tools, media apps, the terminal toys with aliases (aliases.sh).
+
+# Old desktops and their tools: the desktop shell (Quickshell) replaced them on i3 and sway
+hyprland
+hyprshot
+noctalia
+aylurs-gtk-shell-git
+libastal-niri-git
+xwayland-satellite
+awww
+mpvpaper
+matugen-bin
+wallust
+rofi
+tofi
+dmenu
+i3status
+polybar
+dunst
+cliphist
+sway-contrib
+smile
+scrot
+xbindkeys
+numlockx
+nwg-look
+blueberry
+network-manager-applet
+mate-polkit
+polkit-gnome
+archlinux-xdg-menu
+eos-settings-i3wm
+
+# Doubles of what stays: nvim (amp), file-roller (xarchiver), gnome-calculator (galculator),
+# snapshot (cheese), mpv, rmpc and Spotify (amberol)
+amp
+xarchiver
+galculator
+cheese
+amberol
+
+# Unused: never set up, or replaced
+jupyterlab
+nushell
+wine
+steam
+lib32-vulkan-intel
+spicetify-cli
+countryfetch
+nerdfetch
+pfetch
+onefetch
+figlet
+snapper
+ufw
+netctl
+iwd
+ntp
+haveged
+rog-control-center
+b43-fwcutter
+decklink-sdk
+
+# TLP manages power; auto-cpufreq fights it over the CPU
+auto-cpufreq

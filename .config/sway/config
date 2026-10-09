@@ -1,3 +1,2 @@
-# Sway's shell: the desktop shell (Quickshell, the same one as on i3). For noctalia, as before,
-# include ~/.config/sway/noctalia.conf here instead (or start `sway -c ~/.config/sway/noctalia.conf`).
+# Sway runs the desktop shell (Quickshell, the same one as on i3): see desktop.conf
 include ~/.config/sway/desktop.conf

@@ -269,3 +269,66 @@ timeshift_conf() { # a timeshift.json as timeshift writes it: daily, 5 kept
 	[ "$status" -ne 0 ]
 	[[ $output == *"timeshift_not_set_up"* ]]
 }
+
+subvolume_fakes() { # btrfs makes folders and remembers them as subvolumes; the root is btrfs
+	local bin="$BATS_TEST_TMPDIR/bin"
+	export SUBVOLS="$BATS_TEST_TMPDIR/subvols" HOME="$BATS_TEST_TMPDIR/home"
+	: >"$SUBVOLS"
+	# shellcheck disable=SC2016 # expands when the fake runs
+	printf '#!/bin/sh\ncase "$2" in\nshow) grep -qxF "$3" "$SUBVOLS" ;;\ncreate) mkdir "$3" && echo "$3" >>"$SUBVOLS" ;;\nesac\n' >"$bin/btrfs"
+	# shellcheck disable=SC2016
+	printf '#!/bin/sh\necho "chattr $*" >>"$CALLS"\n' >"$bin/chattr"
+	printf '#!/bin/sh\necho btrfs\n' >"$bin/findmnt"
+	chmod +x "$bin"/*
+	mkdir -p "$SYSTEM_ROOT/var/lib/libvirt/images" "$SYSTEM_ROOT/var/lib/docker/overlay2" "$HOME/.cache/app"
+	echo disk >"$SYSTEM_ROOT/var/lib/libvirt/images/vm.qcow2"
+	echo layer >"$SYSTEM_ROOT/var/lib/docker/overlay2/l"
+	echo cached >"$HOME/.cache/app/c"
+	chmod 710 "$SYSTEM_ROOT/var/lib/docker"
+}
+
+@test "subvolumes: VM disks, docker and ~/.cache move into subvolumes, the originals kept" {
+	subvolume_fakes
+	run "$SYSTEM" subvolumes
+	[ "$status" -eq 0 ]
+	for dir in "$SYSTEM_ROOT/var/lib/libvirt/images" "$SYSTEM_ROOT/var/lib/docker" "$HOME/.cache"; do
+		grep -qxF "$dir" "$SUBVOLS"
+		[ -d "$dir.old-subvolume" ] # kept until checked
+		[[ $output == *"sudo rm -rf $dir.old-subvolume"* ]]
+	done
+	[ "$(cat "$SYSTEM_ROOT/var/lib/libvirt/images/vm.qcow2")" = disk ]
+	[ "$(cat "$SYSTEM_ROOT/var/lib/docker/overlay2/l")" = layer ]
+	[ "$(cat "$HOME/.cache/app/c")" = cached ]
+	[ "$(stat -c %a "$SYSTEM_ROOT/var/lib/docker")" = 710 ]
+	grep -qx "chattr +C $SYSTEM_ROOT/var/lib/libvirt/images" "$CALLS" # no copy-on-write for VM disks
+	[ "$(grep -c '^chattr' "$CALLS")" -eq 1 ]
+	grep -q "systemctl stop docker.socket docker.service" "$CALLS"
+	grep -q "systemctl start docker.service" "$CALLS"
+}
+
+@test "subvolumes: a second run changes nothing" {
+	subvolume_fakes
+	"$SYSTEM" subvolumes
+	rm "$CALLS"
+	run "$SYSTEM" subvolumes
+	[ "$status" -eq 0 ]
+	[[ $output == *"already in place"* ]]
+}
+
+@test "subvolumes: a leftover from a run that stopped half way stops it" {
+	subvolume_fakes
+	mkdir "$HOME/.cache.old-subvolume"
+	run "$SYSTEM" subvolumes
+	[ "$status" -ne 0 ]
+	[[ $output == *"subvolume_leftover"* ]]
+	[ -f "$HOME/.cache/app/c" ] # untouched
+}
+
+@test "subvolumes: running VMs stop it before anything moves" {
+	subvolume_fakes
+	printf '#!/bin/sh\necho rice\n' >"$BATS_TEST_TMPDIR/bin/virsh"
+	run "$SYSTEM" subvolumes
+	[ "$status" -ne 0 ]
+	[[ $output == *"vms_running"* ]]
+	[ ! -s "$SUBVOLS" ]
+}

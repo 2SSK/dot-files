@@ -50,4 +50,4 @@ alias ports='ss -tulpn'
 alias status='nmcli device status' list='nmcli device wifi list' connect='nmcli device wifi connect' disconnect='nmcli device disconnect'
 
 alias weather='curl wttr.in/bengaluru?u'
-alias tc='tty-clock -t' sl='sl --help -F -a' p='pipes.sh' cb='cbonsai -liv' aq='asciiquarium' cm='cmatrix -abs'
+alias tc='tty-clock -t' sl='sl --help -F -a' p='pipes.sh' cb='cbonsai -liv' aq='asciiquarium -t' cm='cmatrix -abs'

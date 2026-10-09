@@ -52,8 +52,11 @@ fake() { # <name> <version line>
 	[ "$(cat "$ARGS")" = "--nofork --ignore-empty-password --show-failed-attempts --color 1f1f28" ]
 }
 
-@test "Wayland uses swaylock" {
+@test "Wayland without the shell uses swaylock" {
 	fake swaylock 'swaylock version 1.8'
+	# no shell to ask (never the real one: the tests may run in a live session)
+	printf '#!/bin/sh\nexit 1\n' >"$BATS_TEST_TMPDIR/bin/qs"
+	chmod +x "$BATS_TEST_TMPDIR/bin/qs"
 	WAYLAND_DISPLAY=wayland-1 run "$LOCK"
 	[[ $(cat "$ARGS") == "--color 1f1f28 "* ]]
 }
