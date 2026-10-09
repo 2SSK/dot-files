@@ -24,13 +24,21 @@ Singleton {
 	// the catcher: clicks on it reach it, clicks elsewhere close it.
 	property bool controlShown: false
 
-	onControlOpenChanged: controlOpen ? showControl.restart() : controlShown = false
+	// closing slides it back into the bar first
+	onControlOpenChanged: controlOpen ? showControl.restart() : hideControl.restart()
 
 	Timer {
 		id: showControl
 
 		interval: 60
 		onTriggered: root.controlShown = root.controlOpen
+	}
+
+	Timer {
+		id: hideControl
+
+		interval: 230
+		onTriggered: if (!root.controlOpen) root.controlShown = false
 	}
 
 	// the control center, on a page (home, notifications, ...); again on the same page closes it

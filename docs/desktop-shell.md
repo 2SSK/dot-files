@@ -6,7 +6,7 @@ Colours come from the desktop theme (see [theme.md](theme.md)); settings from
 
 ## Control center
 
-A panel hanging from the middle of the bar, in its colour: an icon sidebar of pages, a header with
+A panel that drops out of the middle of the bar, in its colour: an icon sidebar of pages, a header with
 the page's title, its buttons and ✕, then the page. The bar's widgets open their page:
 
 | Page | Opened by | What's there |
