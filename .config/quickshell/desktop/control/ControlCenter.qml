@@ -33,8 +33,10 @@ FloatingWindow {
 	readonly property real px: Math.round(island.x + (island.width - panelWidth) / 2)
 	readonly property real py: !Panel.barShown ? (below ? 0 : screen.height - panelHeight) : below ? island.y + island.height : island.y - panelHeight
 
-	readonly property int panelWidth: 760
-	readonly property int panelHeight: 640
+	readonly property int panelWidth: Panel.controlWidth
+	readonly property int panelHeight: Panel.controlHeight
+	readonly property int fillet: Panel.controlFillet
+	readonly property color fill: Qt.alpha(Theme.bg, Config.bar.opacity) // the bar's own colour
 	property bool placed: false // mapped: the panel may drop in
 
 	title: "Desktop control center"
@@ -87,21 +89,61 @@ FloatingWindow {
 		onPressed: Panel.controlOpen = false
 	}
 
-	// the panel's place under the bar; the panel slides out of its edge
+	// the panel's place under the bar (and room for its curves); the panel slides out of its edge
 	Item {
-		x: root.px
+		x: root.px - root.fillet
 		y: root.py
-		width: root.panelWidth
+		width: root.panelWidth + 2 * root.fillet
 		height: root.panelHeight
 		clip: true
+
+		// inverse curves where the panel meets the bar, so the bar's edge flows into it
+		Repeater {
+			model: [-1, 1] // left, right
+
+			delegate: Canvas {
+				id: curve
+
+				required property int modelData
+
+				// beside the panel's edge at the bar, following its slide (outside it: the panel clips)
+				x: modelData < 0 ? 0 : root.fillet + root.panelWidth
+				y: root.below ? card.y : card.y + card.height - height
+				width: root.fillet
+				height: root.fillet
+				transform: Scale {
+					origin.x: curve.width / 2
+					origin.y: curve.height / 2
+					xScale: curve.modelData // the left one is drawn mirrored
+					yScale: root.below ? 1 : -1
+				}
+				// drawn for the right side under a top bar: the corner where the panel's edge (x 0)
+				// meets the bar (y 0), filled up to a quarter circle centred one radius out from it
+				property color tint: root.fill
+				onTintChanged: requestPaint()
+				onPaint: {
+					const ctx = getContext("2d");
+					const r = width;
+					ctx.reset();
+					ctx.fillStyle = tint;
+					ctx.beginPath();
+					ctx.moveTo(0, 0);
+					ctx.lineTo(r, 0);
+					ctx.arc(r, r, r, -Math.PI / 2, Math.PI, true);
+					ctx.closePath();
+					ctx.fill();
+				}
+			}
+		}
 
 		Rectangle {
 			id: card
 
+			x: root.fillet
 			width: root.panelWidth
 			height: root.panelHeight
 			y: root.placed && Panel.controlOpen ? 0 : root.below ? -height : height
-			color: Qt.alpha(Theme.bg, Math.max(Config.bar.opacity, 0.92))
+			color: root.fill
 			topLeftRadius: root.below ? 0 : 18
 			topRightRadius: root.below ? 0 : 18
 			bottomLeftRadius: root.below ? 18 : 0

@@ -1,5 +1,7 @@
 import QtQuick
+import QtQuick.Effects
 import Quickshell
+import Quickshell.I3
 import qs
 
 // One screen's bar, on any edge. Island: a rounded pill floating off the edge, waybar-like. Static:
@@ -106,8 +108,67 @@ PanelWindow {
 		y: bar.vertical ? (parent.height - height) / 2 : (bar.position === "top" ? bar.gap : 0) + away
 		radius: Config.island ? bar.size / 2 : 0
 		color: Qt.alpha(Theme.bg, Config.bar.opacity)
-		border.width: Config.island ? 1 : 0
-		border.color: Qt.alpha(Theme.border, 0.6)
+
+		// the island's outline, with a gap where the open control center meets the bar
+		Rectangle {
+			id: outline
+
+			anchors.fill: parent
+			visible: false
+			layer.enabled: true
+			radius: parent.radius
+			color: "transparent"
+			border.width: 1
+			border.color: Qt.alpha(Theme.border, 0.6)
+		}
+
+		Item {
+			id: outlineMask
+
+			readonly property bool gap: Panel.controlOpen && !bar.vertical && I3.focusedMonitor?.name === bar.modelData.name
+			readonly property real gapWidth: Panel.controlWidth + 2 * Panel.controlFillet
+			readonly property real gapX: (parent.width - gapWidth) / 2
+
+			anchors.fill: parent
+			visible: false
+			layer.enabled: true
+
+			// everything but the panel's stretch of the edge it hangs from
+			Rectangle {
+				width: parent.width
+				height: parent.height
+				visible: !outlineMask.gap
+			}
+
+			Rectangle {
+				visible: outlineMask.gap
+				width: outlineMask.gapX
+				height: parent.height
+			}
+
+			Rectangle {
+				visible: outlineMask.gap
+				x: outlineMask.gapX + outlineMask.gapWidth
+				width: parent.width - x
+				height: parent.height
+			}
+
+			Rectangle {
+				visible: outlineMask.gap
+				x: outlineMask.gapX
+				y: bar.position === "bottom" ? 2 : 0
+				width: outlineMask.gapWidth
+				height: parent.height - 2
+			}
+		}
+
+		MultiEffect {
+			anchors.fill: parent
+			visible: Config.island
+			source: outline
+			maskEnabled: true
+			maskSource: outlineMask
+		}
 
 		BarContent {
 			id: content

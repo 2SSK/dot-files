@@ -19,6 +19,11 @@ Singleton {
 	property var islands: ({}) // screen name -> the bar's rect on it (screen coordinates from its origin)
 	property string controlPage: "home"
 
+	// the control center's panel, centred under the bar, and the inverse curves joining it to the bar
+	readonly property int controlWidth: 760
+	readonly property int controlHeight: 640
+	readonly property int controlFillet: 18
+
 	// the control center's window lives on while it slides back into the bar
 	property bool controlShown: false
 
