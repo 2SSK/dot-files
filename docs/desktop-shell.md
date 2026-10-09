@@ -41,6 +41,25 @@ item: pin it, save it as a code note, or remove it. The history lives in memory 
 passwords never reach the disk; pinned items are kept in `~/.local/state/desktop/clipboard/` (a
 private folder).
 
+## Sway
+
+The same shell runs on sway: `sway -c ~/.config/sway/desktop.conf`, or point
+`~/.config/sway/config` at it with `include ~/.config/sway/desktop.conf` (the repo's own
+`~/.config/sway/config` still starts noctalia until you switch). It reuses i3's keys, workspaces,
+window rules, colours and resize mode as they are, sway's variables (swayfx's corners, shadows and
+blur), outputs and input; `sway/desktop/` adds what only sway needs: what starts with the session,
+and swayfx's touches for the shell. What differs underneath:
+
+| | i3 (X11) | sway (Wayland) |
+| --- | --- | --- |
+| Panels | a floating window as big as the screen | a layer surface over the screen with the keyboard |
+| Lock screen | i3lock-color (`desktop-lock`) | the shell's own (Quickshell's session lock, PAM `lock/pam/lock`) |
+| Idle | X's timers (`desktop-idle apply`) and xss-lock | swayidle, run by the shell with the same settings |
+| Alt+Tab ends | `desktop-key-release alt` watches X | the ring holds the keyboard and sees Alt let go |
+| Clipboard history | Qt's clipboard signal | `wl-paste --watch` |
+| Wallpaper | feh | swaybg (`swaymsg output * bg`), or swww's fade when it runs |
+| Screens, touchpad | `desktop-displays`, `desktop-input` | sway's `outputs` and `input` |
+
 ## Launcher
 
 One panel dropping out of the bar, with one search over four modes; Tab and Shift+Tab (or the chips)
