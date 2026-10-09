@@ -396,6 +396,63 @@ FloatingWindow {
 				}
 			}
 
+			Section {
+				visible: root.page === "appearance"
+				title: "Night light"
+
+				SettingRow {
+					label: "On now"
+					hint: NightLight.available ? "A warmer screen; also in the control center." : "Needs gammastep (packages/base.txt)."
+					Toggle {
+						checked: NightLight.active
+						onToggled: NightLight.toggle()
+					}
+				}
+
+				SettingRow {
+					label: "Warmth"
+					hint: "Lower is warmer."
+					Range {
+						from: 3000
+						to: 6000
+						step: 100
+						value: Config.nightLight.temperature
+						format: v => Math.round(v) + " K"
+						onMoved: value => root.set("nightLight", "temperature", Math.round(value / 100) * 100)
+					}
+				}
+
+				SettingRow {
+					label: "On a schedule"
+					hint: `By itself from ${Config.nightLight.from} to ${Config.nightLight.to}.`
+					Toggle {
+						checked: Config.nightLight.schedule
+						onToggled: checked => root.set("nightLight", "schedule", checked)
+					}
+				}
+
+				SettingRow {
+					visible: Config.nightLight.schedule
+					label: "From, to"
+					hint: "24-hour times, and Enter."
+					Row {
+						spacing: 8
+
+						TextField {
+							width: 80
+							text: Config.nightLight.from
+							onAccepted: value => { if (/^\d{1,2}:\d{2}$/.test(value.trim())) root.set("nightLight", "from", value.trim().padStart(5, "0")); }
+						}
+
+						TextField {
+							width: 80
+							text: Config.nightLight.to
+							onAccepted: value => { if (/^\d{1,2}:\d{2}$/.test(value.trim())) root.set("nightLight", "to", value.trim().padStart(5, "0")); }
+						}
+					}
+				}
+			}
+
 			// Notifications
 			Section {
 				visible: root.page === "notifications"

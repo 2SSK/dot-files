@@ -95,6 +95,16 @@ Column {
 
 		Tile {
 			width: (parent.width - 10) / 2
+			glyph: Icons.g("moon")
+			label: "Night light"
+			detail: !NightLight.available ? "Not installed" : NightLight.active ? NightLight.temperature + " K" : NightLight.scheduled ? "Off till morning" : Config.nightLight.schedule ? "From " + Config.nightLight.from : "Off"
+			on: NightLight.active
+			available: NightLight.available
+			onClicked: NightLight.toggle()
+		}
+
+		Tile {
+			width: (parent.width - 10) / 2
 			glyph: Icons.g("app-window")
 			glyphRotation: Config.position === "top" ? 180 : 0
 			label: "Bar"

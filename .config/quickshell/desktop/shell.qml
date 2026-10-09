@@ -18,7 +18,7 @@ import qs.services
 
 ShellRoot {
 	// services that watch on their own, started with the shell
-	readonly property var watchers: [Locks, Recorder, Notifications, Clipboard, Events, Alarms, Wallpaper, Windows, Battery]
+	readonly property var watchers: [Locks, Recorder, Notifications, Clipboard, Events, Alarms, Wallpaper, Windows, Battery, NightLight]
 
 	Variants {
 		model: Quickshell.screens
@@ -216,6 +216,14 @@ ShellRoot {
 		}
 		function close(): void {
 			Panel.launcherOpen = false;
+		}
+	}
+
+	IpcHandler {
+		target: "nightlight"
+
+		function toggle(): void {
+			NightLight.toggle();
 		}
 	}
 

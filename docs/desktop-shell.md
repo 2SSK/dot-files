@@ -157,6 +157,13 @@ itself. Listing needs root: `packages/system.sh timeshift` allows exactly `times
 --scripted` without a password (`/etc/sudoers.d/10-desktop-timeshift`); without it the page asks
 once. `desktop-timeshift list|create|delete` does the work.
 
+## Night light
+
+A warmer screen, through gammastep (X11 and Wayland alike): the control center's **Night light**
+tile turns it on or off, Settings → Appearance sets how warm (3000–6000 K, 4000 K by default) and
+an optional schedule (on by itself from 19:00 to 07:00 by default; switching it off during those
+hours keeps it off until they end). It fades in and back out. `nightlight toggle` over IPC.
+
 ## Password prompts (polkit)
 
 The shell is the session's polkit agent on i3: when an app asks for admin rights (pkexec,
@@ -228,5 +235,5 @@ press while `power.confirm` is on. Nothing hibernates.
 ## IPC
 
 `qs -c desktop ipc call <target> <function>`: `audio up|down|mute|mic`, `brightness up|down`,
-`bar toggle`, `recorder toggle`, `notifications toggle|dnd|clear`, `settings toggle|page <bar|appearance|notifications|levels|power|timeshift|keys>`, `control toggle|open <page>|page <page>|close`, `clipboard toggle`, `wallpaper toggle|shuffle`, `launcher toggle <apps|emoji|files|themes>|close`, `switcher next|prev|commit|cancel|list`, `capture toggle|shot <region|window|screen>|record <region|window|screen>|stop`, `alarm stop|snooze`, `power open|toggle|close|next|prev|activate|pick <n>`,
+`bar toggle`, `recorder toggle`, `notifications toggle|dnd|clear`, `settings toggle|page <bar|appearance|notifications|levels|power|timeshift|keys>`, `control toggle|open <page>|page <page>|close`, `clipboard toggle`, `wallpaper toggle|shuffle`, `launcher toggle <apps|emoji|files|themes>|close`, `switcher next|prev|commit|cancel|list`, `nightlight toggle`, `capture toggle|shot <region|window|screen>|record <region|window|screen>|stop`, `alarm stop|snooze`, `power open|toggle|close|next|prev|activate|pick <n>`,
 `theme reload`.
