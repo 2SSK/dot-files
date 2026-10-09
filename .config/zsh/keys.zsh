@@ -27,11 +27,12 @@ bindkey '^n' down-line-or-beginning-search '^[[B' down-line-or-beginning-search
 bindkey '^e' autosuggest-accept '^w' autosuggest-execute '^u' autosuggest-toggle
 bindkey '^[l' vi-forward-word
 
-# Alt+s: toggle sudo in front of the line (or the previous command when empty)
-_sudo() {
+# Alt+s: toggle sudo in front of the line (or the previous command when empty). Not named _sudo:
+# that is zsh's completion for sudo, and Tab after "sudo " would run this instead
+toggle-sudo() {
 	[[ -z $BUFFER ]] && BUFFER="$(fc -ln -1)"
 	if [[ $BUFFER == sudo\ * ]]; then BUFFER="${BUFFER#sudo }"; else BUFFER="sudo $BUFFER"; fi
 	CURSOR=$#BUFFER
 }
-zle -N _sudo
-bindkey '^[s' _sudo
+zle -N toggle-sudo
+bindkey '^[s' toggle-sudo
