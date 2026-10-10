@@ -34,3 +34,9 @@ t() { tmux -L "$SOCK" "$@"; }
 	[[ $output == *' w '*'split-window -h -c "#{pane_current_path}"'* ]]
 	[[ $output == *' s '*'split-window -v -c "#{pane_current_path}"'* ]]
 }
+
+@test "i3 and sway start tmux detached at login, so the saved sessions are there to attach to" {
+	local line='exec --no-startup-id tmux has-session 2>/dev/null || tmux new-session -d'
+	grep -qxF "$line" "$BATS_TEST_DIRNAME/../.config/i3/conf.d/autostart.conf"
+	grep -qxF "$line" "$BATS_TEST_DIRNAME/../.config/sway/desktop/startup.conf"
+}

@@ -35,6 +35,8 @@ and tmux-sessionx.
 
 ## Sessions
 
+tmux starts in the background when you log in (i3's and sway's autostart), so the saved
+sessions are already there: `tmux attach -t <name>`, or `tmux attach` and the sessionx picker.
 Sessions are saved every 15 minutes and restored when tmux starts (continuum +
 resurrect, including pane contents and nvim sessions). Auto-save only runs when this is
 the only tmux server, so separate environments don't overwrite each other's saves.
