@@ -5,7 +5,7 @@ import qs
 import qs.services
 import qs.widgets
 
-// A small card at the top right (or the end of a vertical bar) for what just changed: the volume,
+// A slim pill at the top right (or the end of a vertical bar) for what just changed: the volume,
 // the mic, the brightness, Caps Lock or Num Lock. It slides in, then out after osd.timeout.
 PopupWindow {
 	id: root
@@ -67,96 +67,53 @@ PopupWindow {
 			color: Qt.alpha("black", 0.4)
 		}
 
+		// a slim pill: the icon, then the level as a thin bar and its percentage (Caps Lock and Num
+		// Lock: their name and on or off)
 		Rectangle {
 			id: card
 
-			x: root.pad + (root.open ? 0 : 36)
+			x: root.pad + (root.open ? 0 : 24)
 			y: root.pad
-			width: 300
-			height: 72
-			radius: 16
+			width: row.implicitWidth + 32
+			height: 40
+			radius: height / 2
 			color: Qt.alpha(Theme.bg, 0.96)
 			border.width: 1
 			border.color: Qt.alpha(Theme.border, 0.7)
 
 			Behavior on x {
 				NumberAnimation {
-					duration: 280
+					duration: 240
 					easing.type: Easing.OutCubic
 				}
 			}
 
-			Rectangle {
-				id: badge
+			Row {
+				id: row
 
-				anchors.left: parent.left
-				anchors.leftMargin: 16
+				x: 16
 				anchors.verticalCenter: parent.verticalCenter
-				width: 40
-				height: 40
-				radius: 20
-				color: Qt.alpha(root.tint, 0.16)
+				spacing: 12
 
 				Glyph {
-					anchors.centerIn: parent
-					font.pixelSize: 20
+					anchors.verticalCenter: parent.verticalCenter
+					font.pixelSize: 17
 					color: root.tint
 					glyph: ({
-							volume: root.muted ? Icons.g("volume-off") : Panel.osdValue < 0.34 ? Icons.g("volume-3") : Panel.osdValue < 0.67 ? Icons.g("volume-2") : Icons.g("volume"),
+							volume: root.muted ? Icons.g("volume-off") : Panel.osdValue < 0.5 ? Icons.g("volume-2") : Icons.g("volume"),
 							mic: root.muted ? Icons.g("microphone-off") : Icons.g("microphone"),
 							brightness: Icons.g("brightness-up"),
 							caps: Icons.g("arrow-big-up-line"),
 							num: Icons.g("hash")
 						})[root.kind] ?? ""
 				}
-			}
-
-			Column {
-				anchors.left: badge.right
-				anchors.leftMargin: 14
-				anchors.right: parent.right
-				anchors.rightMargin: 18
-				anchors.verticalCenter: parent.verticalCenter
-				spacing: 9
-
-				Item {
-					width: parent.width
-					height: title.implicitHeight
-
-					Text {
-						id: title
-
-						text: ({
-								volume: "Volume",
-								mic: "Microphone",
-								brightness: "Brightness",
-								caps: "Caps Lock",
-								num: "Num Lock"
-							})[root.kind] ?? ""
-						color: Theme.fg
-						font.family: Theme.fontHeading
-						font.hintingPreference: Theme.hinting
-						font.pixelSize: Theme.px(15)
-						font.weight: Font.DemiBold
-					}
-
-					Text {
-						anchors.right: parent.right
-						anchors.baseline: title.baseline
-						text: root.level ? (root.muted ? "Muted" : Math.round(Panel.osdValue * 100) + "%") : (root.muted ? "Off" : "On")
-						color: root.muted ? Theme.fgMuted : Theme.primary
-						font.family: Theme.fontSans
-						font.hintingPreference: Theme.hinting
-						font.pixelSize: Theme.textBody
-						font.weight: Font.Medium
-					}
-				}
 
 				Rectangle {
 					visible: root.level
-					width: parent.width
-					height: 5
-					radius: 3
+					anchors.verticalCenter: parent.verticalCenter
+					width: 150
+					height: 4
+					radius: 2
 					color: Qt.alpha(Theme.overlay, 0.8)
 
 					Rectangle {
@@ -175,13 +132,16 @@ PopupWindow {
 				}
 
 				Text {
-					visible: !root.level
-					text: root.kind === "caps" ? (root.muted ? "Typing in lower case" : "Typing in capitals") : (root.muted ? "The keypad moves the cursor" : "The keypad types numbers")
-					color: Theme.fgMuted
+					anchors.verticalCenter: parent.verticalCenter
+					width: root.level ? 36 : implicitWidth
+					horizontalAlignment: root.level ? Text.AlignRight : Text.AlignLeft
+					text: root.level ? (root.muted ? "off" : Math.round(Panel.osdValue * 100) + "%") : `${root.kind === "caps" ? "Caps Lock" : "Num Lock"} ${root.muted ? "off" : "on"}`
+					color: root.muted ? Theme.fgMuted : Theme.fg
 					font.family: Theme.fontSans
 					font.hintingPreference: Theme.hinting
-					font.weight: Theme.textWeight
 					font.pixelSize: Theme.textLabel
+					font.weight: Font.Medium
+					font.features: ({ tnum: 1 })
 				}
 			}
 		}

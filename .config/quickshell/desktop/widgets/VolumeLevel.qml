@@ -16,7 +16,7 @@ Item {
 		spacing: 6
 
 		Readout {
-			glyph: Icons.g(Audio.muted ? "volume-off" : Audio.volume < 0.34 ? "volume-3" : Audio.volume < 0.67 ? "volume-2" : "volume")
+			glyph: Icons.g(Audio.muted ? "volume-off" : Audio.volume < 0.5 ? "volume-2" : "volume")
 			label: "vol"
 			value: Audio.muted ? "mute" : Math.round(Audio.volume * 100) + "%"
 			tint: Audio.muted ? Theme.fgMuted : Theme.fg
