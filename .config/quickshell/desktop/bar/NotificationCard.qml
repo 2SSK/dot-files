@@ -14,11 +14,11 @@ import qs.widgets
 Rectangle {
 	id: root
 
-	required property Notification notification
+	required property var notification // a live Notification (a popup) or a history entry
 	property bool popup: false
 	readonly property bool hovered: hover.hovered
 	readonly property bool critical: notification?.urgency === NotificationUrgency.Critical
-	readonly property var buttons: (notification?.actions ?? []).filter(a => a.identifier !== "default")
+	readonly property var buttons: Notifications.actionsOf(notification).filter(a => a.identifier !== "default")
 	property real now: Date.now()
 
 	signal finished
@@ -38,7 +38,7 @@ Rectangle {
 	}
 
 	function ago(): string {
-		const seconds = Math.max(0, (root.now - (Notifications.received[root.notification?.id] ?? root.now)) / 1000);
+		const seconds = Math.max(0, (root.now - Notifications.timeOf(root.notification)) / 1000);
 		return seconds < 60 ? "now" : seconds < 3600 ? `${Math.floor(seconds / 60)}m` : seconds < 86400 ? `${Math.floor(seconds / 3600)}h` : `${Math.floor(seconds / 86400)}d`;
 	}
 
@@ -50,7 +50,7 @@ Rectangle {
 		anchors.fill: parent
 		cursorShape: Qt.PointingHandCursor
 		onClicked: {
-			const action = (root.notification?.actions ?? []).find(a => a.identifier === "default");
+			const action = Notifications.actionsOf(root.notification).find(a => a.identifier === "default");
 			if (action)
 				action.invoke();
 			root.finished();
@@ -147,7 +147,7 @@ Rectangle {
 						anchors.fill: parent
 						anchors.margins: -6
 						cursorShape: Qt.PointingHandCursor
-						onClicked: root.notification?.dismiss()
+						onClicked: Notifications.dismiss(root.notification)
 					}
 				}
 			}
