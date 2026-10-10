@@ -54,5 +54,5 @@ A folder is a playlist: drop music into `~/Music/<name>/` and it appears in the 
 
 The Spotify app (AUR `spotify`) starts without ads from every launcher: `~/.local/share/applications/spotify.desktop`
 preloads [spotify-adblock](https://github.com/abba23/spotify-adblock), which blocks the ad servers
-without patching Spotify, so updates don't break it (unlike spicetify, which `packages/cleanup.sh`
-removes). Its block and allow lists are in `/etc/spotify-adblock/config.toml`.
+without patching Spotify, so updates don't break it (spicetify patched Spotify's files, which each
+update overwrote). Its block and allow lists are in `/etc/spotify-adblock/config.toml`.
