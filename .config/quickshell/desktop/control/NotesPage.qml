@@ -119,6 +119,7 @@ Item {
 						elide: Text.ElideRight
 						color: Theme.fg
 						font.family: Theme.fontSans
+						font.hintingPreference: Theme.hinting
 						font.pixelSize: 13
 						font.weight: Font.Medium
 					}
@@ -128,6 +129,7 @@ Item {
 						text: Qt.formatDateTime(new Date(entry.modelData.updated), new Date(entry.modelData.updated).toDateString() === new Date().toDateString() ? "hh:mm AP" : "d MMM")
 						color: Theme.fgMuted
 						font.family: Theme.fontSans
+						font.hintingPreference: Theme.hinting
 						font.pixelSize: 11
 					}
 				}
@@ -154,6 +156,7 @@ Item {
 			text: root.query ? "Nothing matches." : "No notes yet."
 			color: Theme.fgMuted
 			font.family: Theme.fontSans
+			font.hintingPreference: Theme.hinting
 			font.pixelSize: 12
 		}
 	}
@@ -178,6 +181,7 @@ Item {
 				text: "A new note"
 				color: Theme.fgMuted
 				font.family: Theme.fontSans
+				font.hintingPreference: Theme.hinting
 				font.pixelSize: 13
 			}
 
@@ -214,6 +218,7 @@ Item {
 								text: starter.modelData.label
 								color: Theme.fg
 								font.family: Theme.fontSans
+								font.hintingPreference: Theme.hinting
 								font.pixelSize: 12
 							}
 						}
@@ -251,8 +256,35 @@ Item {
 
 			readonly property var current: Notes.current
 			readonly property string noteId: Notes.selected
+			property string pendingId: ""
+			property string pendingBody: ""
+
+			// the body is kept once typing pauses, not at every key: each keep re-sorts the notes
+			// and redraws the list. Switching notes or closing keeps what's pending at once.
+			function typed(body: string): void {
+				pendingId = noteId;
+				pendingBody = body;
+				keep.restart();
+			}
+
+			function flush(): void {
+				if (keep.running) {
+					keep.stop();
+					Notes.update(pendingId, { body: pendingBody });
+				}
+			}
+
+			onNoteIdChanged: flush()
+			Component.onDestruction: flush()
 
 			spacing: 12
+
+			Timer {
+				id: keep
+
+				interval: 400
+				onTriggered: Notes.update(note.pendingId, { body: note.pendingBody })
+			}
 
 			TextInput {
 				id: titleField
@@ -262,6 +294,7 @@ Item {
 				color: Theme.fg
 				selectionColor: Qt.alpha(Theme.primary, 0.4)
 				font.family: Theme.fontSans
+				font.hintingPreference: Theme.hinting
 				font.pixelSize: 18
 				font.weight: Font.DemiBold
 				clip: true
@@ -315,6 +348,7 @@ Item {
 								text: typeChip.modelData.label
 								color: typeChip.on ? Theme.primaryText : Theme.fg
 								font.family: Theme.fontSans
+								font.hintingPreference: Theme.hinting
 								font.pixelSize: 12
 								font.weight: Font.Medium
 							}
@@ -402,8 +436,9 @@ Item {
 						color: Theme.fg
 						selectionColor: Qt.alpha(Theme.primary, 0.4)
 						font.family: Theme.fontSans
+						font.hintingPreference: Theme.hinting
 						font.pixelSize: 14
-						onTextChanged: if (activeFocus) Notes.update(note.noteId, { body: text })
+						onTextChanged: if (activeFocus) note.typed(text)
 						Component.onCompleted: if (note.current.title) forceActiveFocus()
 
 						Text {
@@ -449,8 +484,9 @@ Item {
 							color: Theme.fg
 							selectionColor: Qt.alpha(Theme.primary, 0.4)
 							font.family: Theme.fontMono
+							font.hintingPreference: Theme.hinting
 							font.pixelSize: 13
-							onTextChanged: if (activeFocus) Notes.update(note.noteId, { body: text })
+							onTextChanged: if (activeFocus) note.typed(text)
 							Component.onCompleted: if (note.current.title) forceActiveFocus()
 
 							Text {
@@ -481,6 +517,7 @@ Item {
 							text: copied ? "Copied" : "Copy"
 							color: copyHover.hovered ? Theme.primaryText : Theme.fg
 							font.family: Theme.fontSans
+							font.hintingPreference: Theme.hinting
 							font.pixelSize: 12
 							font.weight: Font.Medium
 
@@ -575,6 +612,7 @@ Item {
 								font.strikeout: line.modelData.done
 								color: line.modelData.done ? Theme.fgMuted : Theme.fg
 								font.family: Theme.fontSans
+								font.hintingPreference: Theme.hinting
 								font.pixelSize: 14
 							}
 

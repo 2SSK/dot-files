@@ -48,6 +48,8 @@ Singleton {
 			"cpu": 0xef8e,
 			"crop": 0xea85,
 			"device-desktop": 0xea89,
+			"eye": 0xea9a,
+			"eye-off": 0xecf0,
 			"external-link": 0xea99,
 			"file": 0xeaa4,
 			"file-code": 0xebd0,

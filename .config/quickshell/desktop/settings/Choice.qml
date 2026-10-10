@@ -51,6 +51,7 @@ Rectangle {
 					text: option.modelData.label
 					color: option.on ? Theme.primaryText : Theme.fg
 					font.family: Theme.fontSans
+					font.hintingPreference: Theme.hinting
 					font.pixelSize: 13
 					font.weight: Font.Medium
 				}

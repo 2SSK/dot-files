@@ -12,6 +12,7 @@ Column {
 	readonly property var actions: []
 
 	spacing: 16
+	Component.onCompleted: Power.refresh() // the profile chips show what TLP has now
 
 	SystemClock {
 		id: clock
@@ -28,6 +29,7 @@ Column {
 			text: hour < 5 ? "Good night" : hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening"
 			color: Theme.fg
 			font.family: Theme.fontSans
+			font.hintingPreference: Theme.hinting
 			font.pixelSize: 20
 			font.weight: Font.DemiBold
 		}
@@ -36,6 +38,7 @@ Column {
 			text: Qt.formatDateTime(clock.date, "dddd, d MMMM")
 			color: Theme.fgMuted
 			font.family: Theme.fontSans
+			font.hintingPreference: Theme.hinting
 			font.pixelSize: 13
 		}
 	}

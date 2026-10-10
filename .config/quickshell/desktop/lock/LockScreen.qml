@@ -46,6 +46,7 @@ Scope {
 
 	WlSessionLock {
 		locked: Lock.locked
+		onSecureChanged: Lock.secure = secure
 
 		WlSessionLockSurface {
 			id: surface
@@ -55,7 +56,7 @@ Scope {
 			SystemClock {
 				id: clock
 
-				precision: SystemClock.Seconds
+				precision: SystemClock.Minutes // the clock shows hh:mm
 			}
 
 			Image {
@@ -92,6 +93,7 @@ Scope {
 					text: Qt.formatTime(clock.date, "hh:mm AP").slice(0, 5) // 12-hour, as the bar (03:21)
 					color: Theme.fg
 					font.family: "Inter Display"
+					font.hintingPreference: Theme.hinting
 					font.weight: Font.Light
 					font.pixelSize: 128
 				}
@@ -101,6 +103,7 @@ Scope {
 					text: Qt.formatDate(clock.date, "dddd, d MMMM")
 					color: Qt.alpha(Theme.fg, 0.7)
 					font.family: Theme.fontSans
+					font.hintingPreference: Theme.hinting
 					font.pixelSize: 20
 				}
 
@@ -133,6 +136,7 @@ Scope {
 						passwordCharacter: "•"
 						color: Theme.fg
 						font.family: Theme.fontSans
+						font.hintingPreference: Theme.hinting
 						font.pixelSize: 18
 						font.letterSpacing: 2
 						focus: true
@@ -152,6 +156,7 @@ Scope {
 						text: root.checking ? "Checking…" : "Password"
 						color: Qt.alpha(Theme.fg, 0.4)
 						font.family: Theme.fontSans
+						font.hintingPreference: Theme.hinting
 						font.pixelSize: 14
 					}
 
@@ -171,6 +176,7 @@ Scope {
 					text: root.error
 					color: Theme.error
 					font.family: Theme.fontSans
+					font.hintingPreference: Theme.hinting
 					font.pixelSize: 13
 					opacity: root.error ? 1 : 0
 				}
@@ -183,6 +189,7 @@ Scope {
 				text: "Type to unlock"
 				color: Qt.alpha(Theme.fg, 0.35)
 				font.family: Theme.fontSans
+				font.hintingPreference: Theme.hinting
 				font.pixelSize: 13
 			}
 

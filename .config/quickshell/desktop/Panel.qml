@@ -16,68 +16,78 @@ Singleton {
 	property bool settingsOpen: false
 	property string settingsPage: "bar"
 	property bool controlOpen: false
+	property string controlPage: "home"
 	property bool clipboardOpen: false
-	property bool clipboardShown: false // lives on while it slides back into the bar
 	property bool authOpen: false // the password prompt (polkit), while an app asks
 	property bool captureOpen: false
-	property bool captureShown: false
 	property string captureAsk: "" // "shot" or "record": the panel only asks which screen
-	readonly property int captureWidth: 520
-	readonly property int captureHeight: 324
 	property bool launcherOpen: false
-	property bool launcherShown: false
 	property string launcherMode: "apps" // apps, emoji, files or themes
-	readonly property int launcherWidth: 640
-	readonly property int launcherHeight: 560
+	property bool wallpaperOpen: false
+	property var islands: ({}) // screen name -> the bar's rect on it (screen coordinates from its origin)
+
+	// The panels hanging from the bar: one open at a time. Each one's window (a Loader in shell.qml)
+	// follows *Shown, which trails *Open by an event-loop turn, so the panel being replaced is gone
+	// before the next one takes the keyboard.
+	readonly property var panels: ["control", "clipboard", "capture", "launcher", "wallpaper"]
+	property bool controlShown: false
+	property bool clipboardShown: false
+	property bool captureShown: false
+	property bool launcherShown: false
+	property bool wallpaperShown: false
+
+	// each panel's size, centred under the bar (the bar opens its outline there: hangingWidth)
+	readonly property int controlWidth: 760
+	readonly property int controlHeight: 640
+	readonly property int controlFillet: 18
 	readonly property int clipboardWidth: 920
 	readonly property int clipboardHeight: 580
-	property bool wallpaperOpen: false
-	property bool wallpaperShown: false
+	readonly property int captureWidth: 520
+	readonly property int captureHeight: 324
+	readonly property int launcherWidth: 640
+	readonly property int launcherHeight: 560
 	readonly property int wallpaperWidth: 720
 	readonly property int wallpaperHeight: 540
-	// the open panel hanging from the bar (its width; 0 for none): the bar opens its outline there
-	readonly property int hangingWidth: controlOpen ? controlWidth : clipboardOpen ? clipboardWidth : wallpaperOpen ? wallpaperWidth : launcherOpen ? launcherWidth : captureOpen ? captureWidth : authOpen ? 480 : 0
-	readonly property int hangingHeight: controlOpen ? controlHeight : clipboardOpen ? clipboardHeight : wallpaperOpen ? wallpaperHeight : launcherOpen ? launcherHeight : captureOpen ? captureHeight : authOpen ? 250 : 0
+	readonly property var sizes: ({
+			control: [controlWidth, controlHeight],
+			clipboard: [clipboardWidth, clipboardHeight],
+			wallpaper: [wallpaperWidth, wallpaperHeight],
+			launcher: [launcherWidth, launcherHeight],
+			capture: [captureWidth, captureHeight],
+			auth: [480, 250]
+		})
+	readonly property string hanging: authOpen ? "auth" : panels.find(p => root[p + "Open"]) ?? ""
+	readonly property int hangingWidth: sizes[hanging]?.[0] ?? 0
+	readonly property int hangingHeight: sizes[hanging]?.[1] ?? 0
+
+	// a panel opened closes the others (the password prompt closes them all)
+	function opened(name: string): void {
+		if (name === "auth" ? authOpen : root[name + "Open"])
+			panels.forEach(p => {
+				if (p !== name)
+					root[p + "Open"] = false;
+			});
+		settle.restart();
+	}
+
+	onControlOpenChanged: opened("control")
+	onClipboardOpenChanged: opened("clipboard")
+	onCaptureOpenChanged: opened("capture")
+	onLauncherOpenChanged: opened("launcher")
+	onWallpaperOpenChanged: opened("wallpaper")
+	onAuthOpenChanged: opened("auth")
+
+	Timer {
+		id: settle
+
+		interval: 0
+		onTriggered: root.panels.forEach(p => root[p + "Shown"] = root[p + "Open"])
+	}
 
 	// the capture panel; ask: "shot" or "record" to go straight to choosing a screen
 	function openCapture(ask: string): void {
 		captureAsk = ask === "shot" || ask === "record" ? ask : "";
 		captureOpen = true;
-	}
-
-	// the password prompt takes the place of any other panel
-	onAuthOpenChanged: if (authOpen) {
-		controlOpen = false;
-		clipboardOpen = false;
-		wallpaperOpen = false;
-		launcherOpen = false;
-		captureOpen = false;
-	}
-
-	onCaptureOpenChanged: {
-		if (captureOpen) {
-			controlOpen = false;
-			clipboardOpen = false;
-			wallpaperOpen = false;
-			launcherOpen = false;
-			showCapture.restart();
-		} else {
-			hideCapture.restart();
-		}
-	}
-
-	Timer {
-		id: showCapture
-
-		interval: 0
-		onTriggered: root.captureShown = root.captureOpen
-	}
-
-	Timer {
-		id: hideCapture
-
-		interval: 0
-		onTriggered: if (!root.captureOpen) root.captureShown = false
 	}
 
 	// the launcher on a mode; again on the same mode closes it
@@ -90,120 +100,6 @@ Singleton {
 		launcherOpen = true;
 	}
 
-	onLauncherOpenChanged: {
-		if (launcherOpen) {
-			controlOpen = false;
-			captureOpen = false;
-			clipboardOpen = false;
-			wallpaperOpen = false;
-			showLauncher.restart();
-		} else {
-			hideLauncher.restart();
-		}
-	}
-
-	Timer {
-		id: showLauncher
-
-		interval: 0
-		onTriggered: root.launcherShown = root.launcherOpen
-	}
-
-	Timer {
-		id: hideLauncher
-
-		interval: 0
-		onTriggered: if (!root.launcherOpen) root.launcherShown = false
-	}
-
-	onWallpaperOpenChanged: {
-		if (wallpaperOpen) {
-			controlOpen = false;
-			captureOpen = false;
-			clipboardOpen = false;
-			launcherOpen = false;
-			showWallpaper.restart();
-		} else {
-			hideWallpaper.restart();
-		}
-	}
-
-	Timer {
-		id: showWallpaper
-
-		interval: 0
-		onTriggered: root.wallpaperShown = root.wallpaperOpen
-	}
-
-	Timer {
-		id: hideWallpaper
-
-		interval: 0
-		onTriggered: if (!root.wallpaperOpen) root.wallpaperShown = false
-	}
-
-	onClipboardOpenChanged: {
-		if (clipboardOpen) {
-			controlOpen = false;
-			wallpaperOpen = false;
-			captureOpen = false;
-			launcherOpen = false;
-			showClipboard.restart();
-		} else {
-			hideClipboard.restart();
-		}
-	}
-
-	Timer {
-		id: showClipboard
-
-		interval: 0
-		onTriggered: root.clipboardShown = root.clipboardOpen
-	}
-
-	Timer {
-		id: hideClipboard
-
-		interval: 0
-		onTriggered: if (!root.clipboardOpen) root.clipboardShown = false
-	}
-	property var islands: ({}) // screen name -> the bar's rect on it (screen coordinates from its origin)
-	property string controlPage: "home"
-
-	// the control center's panel, centred under the bar, and the inverse curves joining it to the bar
-	readonly property int controlWidth: 760
-	readonly property int controlHeight: 640
-	readonly property int controlFillet: 18
-
-	// the control center's window lives on while it slides back into the bar
-	property bool controlShown: false
-
-	onControlOpenChanged: {
-		if (controlOpen) {
-			clipboardOpen = false;
-			captureOpen = false;
-			wallpaperOpen = false;
-			launcherOpen = false;
-			showControl.restart();
-		} else {
-			hideControl.restart();
-		}
-	}
-
-	Timer {
-		id: showControl
-
-		interval: 0
-		onTriggered: root.controlShown = root.controlOpen
-	}
-
-	Timer {
-		id: hideControl
-
-		interval: 0
-		onTriggered: if (!root.controlOpen) root.controlShown = false
-	}
-
 	// the control center, on a page (home, notifications, ...); again on the same page closes it
 	function toggleControl(page: string): void {
 		if (controlOpen && controlPage === page) {
@@ -213,6 +109,7 @@ Singleton {
 		controlPage = page;
 		controlOpen = true;
 	}
+
 	property string osdKind: "volume" // volume, mic, brightness, caps or num
 	property real osdValue: 0
 	property bool osdMuted: false

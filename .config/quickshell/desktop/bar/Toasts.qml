@@ -40,7 +40,10 @@ PopupWindow {
 		spacing: 10
 
 		Repeater {
-			model: Notifications.popups
+			// a ScriptModel keeps the toasts already up (and their timers) when another arrives
+			model: ScriptModel {
+				values: Notifications.popups
+			}
 
 			delegate: Item {
 				id: toast
@@ -69,8 +72,8 @@ PopupWindow {
 				}
 
 				Timer {
-					// the app's own timeout, in milliseconds as notify-send's -t
-					interval: toast.modelData.expireTimeout > 0 ? toast.modelData.expireTimeout : Config.notifications.timeout
+					// the app's own timeout (Quickshell gives it in seconds: notify-send -t 3000 is 3)
+					interval: toast.modelData.expireTimeout > 0 ? toast.modelData.expireTimeout * 1000 : Config.notifications.timeout
 					running: !toast.critical && toast.modelData.expireTimeout !== 0 && !card.hovered
 					onTriggered: Notifications.hide(toast.modelData)
 				}

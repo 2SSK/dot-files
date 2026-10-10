@@ -111,6 +111,7 @@ Rectangle {
 					elide: Text.ElideRight
 					color: Theme.fg
 					font.family: Theme.fontSans
+					font.hintingPreference: Theme.hinting
 					font.pixelSize: 14
 					font.weight: Font.DemiBold
 				}
@@ -124,6 +125,7 @@ Rectangle {
 					text: root.ago()
 					color: Theme.fgMuted
 					font.family: Theme.fontSans
+					font.hintingPreference: Theme.hinting
 					font.pixelSize: 11
 				}
 
@@ -159,6 +161,7 @@ Rectangle {
 				elide: Text.ElideRight
 				color: Theme.fgMuted
 				font.family: Theme.fontSans
+				font.hintingPreference: Theme.hinting
 				font.pixelSize: 12
 				lineHeight: 1.1
 			}
@@ -170,6 +173,7 @@ Rectangle {
 				visible: text !== ""
 				color: Qt.alpha(Theme.fgMuted, 0.8)
 				font.family: Theme.fontSans
+				font.hintingPreference: Theme.hinting
 				font.pixelSize: 11
 			}
 
@@ -198,6 +202,7 @@ Rectangle {
 							text: button.modelData.text
 							color: buttonHover.hovered ? Theme.primaryText : Theme.fg
 							font.family: Theme.fontSans
+							font.hintingPreference: Theme.hinting
 							font.pixelSize: 12
 							font.weight: Font.Medium
 						}

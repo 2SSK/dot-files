@@ -48,19 +48,20 @@ fade() { # <from> <to>: blended frames between them, then the new one
 
 # The login screen's background (sddm's shared folder is ours: a new file, then moved in place) and
 # the boot menu's (only GRUB's background file is ours: rewritten in place). Either is skipped when
-# system.sh hasn't set it up.
+# system.sh hasn't set it up. With --boot only GRUB's: the one tinted by the theme (theme calls it).
 screens() {
+	local only=${1:-}
 	local wallpaper sddm="${DESKTOP_SDDM_DIR:-/var/lib/desktop/sddm}" grub="${DESKTOP_GRUB_DIR:-}" dir colour tmp
 	wallpaper="$(readlink -f "$state/wallpaper" 2>/dev/null || true)"
 	[[ -f $wallpaper ]] || wallpaper="$fallback"
 	if [[ -z $grub ]]; then
 		for dir in /boot/grub/themes/desktop /boot/grub2/themes/desktop; do [[ -d $dir ]] && grub=$dir && break; done
 	fi
-	if [[ -d $sddm && -w $sddm ]]; then
+	if [[ $only != --boot && -d $sddm && -w $sddm ]]; then
 		login_background "$wallpaper" "$sddm/.background.new.jpg" && mv -f "$sddm/.background.new.jpg" "$sddm/background.jpg" &
 	fi
 	if [[ -n $grub && -w $grub/background.jpg ]]; then
-		colour="$(sed -n 's/^ *"bg": "\(#[0-9a-fA-F]\{6\}\)".*/\1/p' "$state/theme/palette.json" 2>/dev/null | head -1)"
+		colour="$(jq -r .ui.bg "$state/theme/palette.json" 2>/dev/null)"
 		tmp="$(mktemp --suffix=.jpg)"
 		{ boot_background "$wallpaper" "${colour:-#1a1b26}" "$tmp" && cat "$tmp" >"$grub/background.jpg"; rm -f "$tmp"; } &
 	fi
@@ -68,7 +69,7 @@ screens() {
 }
 
 case ${1:-} in
-screens) screens ;;
+screens) screens "${2:-}" ;;
 set)
 	[[ -f ${2:-} ]] || { echo "desktop-wallpaper: not an image: ${2:-}" >&2 && exit 2; }
 	mkdir -p "$state"

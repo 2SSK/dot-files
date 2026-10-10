@@ -46,20 +46,21 @@ gtk-3.0.css      gtk-3.0/gtk.css    -
 gtk-settings.ini gtk-3.0/settings.ini -
 gtk-settings.ini gtk-4.0/settings.ini -
 gtk-4.0.css      gtk-4.0/gtk.css    gtk_settings
-qt5ct.conf       qt5ct/qt5ct.conf   -
-qt6ct.conf       qt6ct/qt6ct.conf   -
+qtct.conf        qt5ct/qt5ct.conf   -
+qtct.conf        qt6ct/qt6ct.conf   -
 sddm-theme.conf  -                  sddm
 yazi-flavor.toml yazi/flavors/desktop.yazi/flavor.toml -
 silicon.tmTheme  yazi/flavors/desktop.yazi/tmtheme.xml -
 yazi-theme.toml  yazi/theme.toml    -
 eza-theme.yml    eza/theme.yml      -
-palette.json     -                  "$bin/desktop-wallpaper" screens
+palette.json     -                  "$bin/desktop-wallpaper" screens --boot
 EOF
 }
 
 link_config() { # <path under ~/.config> <rendered file>: apps that only read a fixed path get a link
 	local dest="${XDG_CONFIG_HOME:-$HOME/.config}/$1" src="$state/$2"
 	[[ -L $dest && $(readlink "$dest") == "$src" ]] && return 0
+	[[ -L $dest && $(readlink "$dest") == "$state"/* ]] && rm "$dest" # ours, to a file since renamed
 	if [[ -e $dest || -L $dest ]]; then # someone else's file: keep it, out of the way
 		local backup="${XDG_STATE_HOME:-$HOME/.local/state}/desktop/backup/theme"
 		mkdir -p "$backup/${1%/*}"

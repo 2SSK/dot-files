@@ -21,6 +21,7 @@ Rectangle {
 		text: root.text
 		color: root.accent ? Theme.primaryText : Theme.fg
 		font.family: Theme.fontSans
+		font.hintingPreference: Theme.hinting
 		font.pixelSize: 12
 		font.weight: Font.Medium
 	}

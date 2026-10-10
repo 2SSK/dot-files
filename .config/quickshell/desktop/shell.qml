@@ -60,8 +60,9 @@ ShellRoot {
 			if (Quickshell.env("WAYLAND_DISPLAY"))
 				Lock.locked = true;
 		}
+		// true once sway confirms the lock (desktop-lock waits for it before sleep goes ahead)
 		function locked(): bool {
-			return Lock.locked;
+			return Lock.secure;
 		}
 	}
 

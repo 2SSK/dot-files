@@ -54,6 +54,7 @@ Rectangle {
 			elide: Text.ElideRight
 			color: Theme.fg
 			font.family: Theme.fontSans
+			font.hintingPreference: Theme.hinting
 			font.pixelSize: 14
 			font.weight: root.active ? Font.DemiBold : Font.Medium
 		}
@@ -65,6 +66,7 @@ Rectangle {
 			elide: Text.ElideRight
 			color: root.active ? Theme.primary : Theme.fgMuted
 			font.family: Theme.fontSans
+			font.hintingPreference: Theme.hinting
 			font.pixelSize: 12
 		}
 	}

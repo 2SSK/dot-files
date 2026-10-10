@@ -114,6 +114,7 @@ HangingPanel {
 					text: (root.rotations.find(r => r.value === Config.wallpaper.rotate) ?? root.rotations[0]).label
 					color: rotate.on ? Theme.fg : Theme.fgMuted
 					font.family: Theme.fontSans
+					font.hintingPreference: Theme.hinting
 					font.pixelSize: 13
 				}
 
@@ -285,6 +286,7 @@ HangingPanel {
 					elide: Text.ElideRight
 					color: "white"
 					font.family: Theme.fontSans
+					font.hintingPreference: Theme.hinting
 					font.pixelSize: 12
 					font.weight: Font.DemiBold
 					opacity: hover.hovered || tile.picked && search.text ? 1 : 0
@@ -371,6 +373,7 @@ HangingPanel {
 		text: Wallpaper.files.length ? "Nothing matches." : "No images in " + Wallpaper.folders.join(", ")
 		color: Theme.fgMuted
 		font.family: Theme.fontSans
+		font.hintingPreference: Theme.hinting
 		font.pixelSize: 13
 	}
 
@@ -437,6 +440,7 @@ HangingPanel {
 						text: choice.modelData.label
 						color: choice.on ? Theme.primary : Theme.fg
 						font.family: Theme.fontSans
+						font.hintingPreference: Theme.hinting
 						font.pixelSize: 13
 						font.weight: choice.on ? Font.DemiBold : Font.Normal
 					}

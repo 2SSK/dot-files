@@ -367,7 +367,7 @@ Rectangle {
 			for (const name of ["BAT0", "BAT1", "BAT2"]) {
 				const dir = "/sys/class/power_supply/" + name + "/";
 				read(dir + "capacity", text => battery.percent = Number(text));
-				read(dir + "status", text => battery.charging = text === "Charging" || text === "Full");
+				read(dir + "status", text => battery.charging = ["Charging", "Full", "Not charging"].includes(text)); // not charging: held at the limit
 			}
 		}
 

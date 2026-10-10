@@ -254,6 +254,7 @@ HangingPanel {
 						elide: Text.ElideRight
 						color: Theme.fg
 						font.family: Theme.fontSans
+						font.hintingPreference: Theme.hinting
 						font.pixelSize: 14
 						font.weight: Font.Medium
 					}
@@ -265,6 +266,7 @@ HangingPanel {
 						elide: row.app ? Text.ElideRight : Text.ElideMiddle
 						color: Theme.fgMuted
 						font.family: Theme.fontSans
+						font.hintingPreference: Theme.hinting
 						font.pixelSize: 12
 					}
 				}
@@ -439,6 +441,7 @@ HangingPanel {
 						text: cell.emoji ? "" : cell.modelData.name
 						color: cell.colours.fg ?? Theme.fg
 						font.family: Theme.fontSans
+						font.hintingPreference: Theme.hinting
 						font.pixelSize: 13
 						font.weight: Font.DemiBold
 					}
@@ -477,6 +480,7 @@ HangingPanel {
 			text: search.text ? "Nothing matches." : root.mode === "files" ? "Nothing changed this week; type to search." : "Nothing here."
 			color: Theme.fgMuted
 			font.family: Theme.fontSans
+			font.hintingPreference: Theme.hinting
 			font.pixelSize: 13
 		}
 	}
@@ -493,6 +497,7 @@ HangingPanel {
 		text: root.mode === "emoji" && root.results[root.current] ? root.results[root.current].name : (root.modes.find(m => m.key === root.mode)?.hint ?? "")
 		color: Theme.fgMuted
 		font.family: Theme.fontSans
+		font.hintingPreference: Theme.hinting
 		font.pixelSize: 12
 	}
 }

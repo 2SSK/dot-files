@@ -135,6 +135,7 @@ PopupWindow {
 							})[root.kind] ?? ""
 						color: Theme.fg
 						font.family: Theme.fontSans
+						font.hintingPreference: Theme.hinting
 						font.pixelSize: 15
 						font.weight: Font.DemiBold
 					}
@@ -145,6 +146,7 @@ PopupWindow {
 						text: root.level ? (root.muted ? "Muted" : Math.round(Panel.osdValue * 100) + "%") : (root.muted ? "Off" : "On")
 						color: root.muted ? Theme.fgMuted : Theme.primary
 						font.family: Theme.fontSans
+						font.hintingPreference: Theme.hinting
 						font.pixelSize: 13
 						font.weight: Font.Medium
 					}
@@ -177,6 +179,7 @@ PopupWindow {
 					text: root.kind === "caps" ? (root.muted ? "Typing in lower case" : "Typing in capitals") : (root.muted ? "The keypad moves the cursor" : "The keypad types numbers")
 					color: Theme.fgMuted
 					font.family: Theme.fontSans
+					font.hintingPreference: Theme.hinting
 					font.pixelSize: 12
 				}
 			}

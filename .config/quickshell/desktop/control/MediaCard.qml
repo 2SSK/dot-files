@@ -26,6 +26,7 @@ Rectangle {
 		text: "Nothing playing"
 		color: Theme.fgMuted
 		font.family: Theme.fontSans
+		font.hintingPreference: Theme.hinting
 		font.pixelSize: 13
 	}
 
@@ -71,6 +72,7 @@ Rectangle {
 						text: Media.name(chip.modelData)
 						color: chip.on ? Theme.primaryText : Theme.fg
 						font.family: Theme.fontSans
+						font.hintingPreference: Theme.hinting
 						font.pixelSize: 12
 						font.weight: Font.Medium
 					}
@@ -134,6 +136,7 @@ Rectangle {
 			elide: Text.ElideRight
 			color: Theme.fg
 			font.family: Theme.fontSans
+			font.hintingPreference: Theme.hinting
 			font.pixelSize: 14
 			font.weight: Font.DemiBold
 		}
@@ -144,6 +147,7 @@ Rectangle {
 			elide: Text.ElideRight
 			color: Theme.fgMuted
 			font.family: Theme.fontSans
+			font.hintingPreference: Theme.hinting
 			font.pixelSize: 12
 		}
 

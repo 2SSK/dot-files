@@ -88,6 +88,7 @@ Line {
 			text: parent.label
 			color: Theme.primaryText
 			font.family: Theme.fontSans
+			font.hintingPreference: Theme.hinting
 			font.pixelSize: Theme.fontSize - 3
 			font.weight: Font.DemiBold
 		}

@@ -70,6 +70,7 @@ Column {
 					text: "Clear all"
 					color: clearHover.hovered && Notifications.history.length > 0 ? Theme.bg : Theme.fg
 					font.family: Theme.fontSans
+					font.hintingPreference: Theme.hinting
 					font.pixelSize: 13
 					font.weight: Font.Medium
 				}
@@ -129,6 +130,7 @@ Column {
 				text: root.filter === "all" ? "No notifications" : "Nothing from " + (root.filter === "older" ? "before yesterday" : root.filter)
 				color: Theme.fgMuted
 				font.family: Theme.fontSans
+				font.hintingPreference: Theme.hinting
 				font.pixelSize: 13
 			}
 		}

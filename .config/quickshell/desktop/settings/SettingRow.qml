@@ -28,6 +28,7 @@ Rectangle {
 			text: root.label
 			color: Theme.fg
 			font.family: Theme.fontSans
+			font.hintingPreference: Theme.hinting
 			font.pixelSize: 14
 			font.weight: Font.Medium
 		}
@@ -39,6 +40,7 @@ Rectangle {
 			wrapMode: Text.Wrap
 			color: Theme.fgMuted
 			font.family: Theme.fontSans
+			font.hintingPreference: Theme.hinting
 			font.pixelSize: 12
 		}
 	}

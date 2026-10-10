@@ -59,6 +59,7 @@ Rectangle {
 			elide: Text.ElideRight
 			color: root.on ? Theme.primaryText : Theme.fg
 			font.family: Theme.fontSans
+			font.hintingPreference: Theme.hinting
 			font.pixelSize: 13
 			font.weight: Font.DemiBold
 		}
@@ -69,6 +70,7 @@ Rectangle {
 			elide: Text.ElideRight
 			color: root.on ? Qt.alpha(Theme.primaryText, 0.75) : Theme.fgMuted
 			font.family: Theme.fontSans
+			font.hintingPreference: Theme.hinting
 			font.pixelSize: 11
 		}
 	}

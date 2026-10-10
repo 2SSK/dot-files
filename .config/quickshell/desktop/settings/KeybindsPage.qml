@@ -184,6 +184,7 @@ Column {
 					text: parent.modelData
 					color: Theme.fg
 					font.family: Theme.fontSans
+					font.hintingPreference: Theme.hinting
 					font.pixelSize: 12
 					font.weight: Font.Medium
 				}
@@ -210,6 +211,7 @@ Column {
 			elide: Text.ElideRight
 			color: Theme.fg
 			font.family: Theme.fontSans
+			font.hintingPreference: Theme.hinting
 			font.pixelSize: 13
 		}
 	}
@@ -252,6 +254,7 @@ Column {
 		text: "No i3 key config found in " + root.dir
 		color: Theme.fgMuted
 		font.family: Theme.fontSans
+		font.hintingPreference: Theme.hinting
 		font.pixelSize: 13
 	}
 }

@@ -35,7 +35,8 @@ Singleton {
 		Quickshell.execDetached([msg, "-q", "scratchpad show"]);
 	}
 
-	// one line per event; several often come at once (a move fires a few): reread once they settle
+	// one line per event: workspace and output events reread the workspaces, window events that
+	// change the list reread the tree
 	Process {
 		id: events
 
@@ -44,16 +45,27 @@ Singleton {
 		command: root.msg === "swaymsg" ? ["sh", "-c", `swaymsg -t subscribe -m '["workspace","window","output","mode"]' | jq -c --unbuffered .`] : [root.msg, "-t", "subscribe", "-m", '["workspace","window","output","mode"]']
 		stdout: SplitParser {
 			onRead: line => {
-				refresh.restart();
+				let data;
 				try {
-					const data = JSON.parse(line);
-					if (data.container)
-						root.windowEvent(data);
-					else if (data.pango_markup !== undefined)
-						root.mode = data.change; // a mode event
-					else if (data.change === "reload")
-						modeNow.running = true; // a workspace "reload" event: back to the default mode, unannounced
-				} catch (e) {}
+					data = JSON.parse(line);
+				} catch (e) {
+					return;
+				}
+				if (data.container) {
+					root.windowEvent(data);
+					// the tree only for what changes the window list or the scratchpad; focus (it follows
+					// the mouse) and titles (a terminal's change all the time) Windows patches itself
+					if (["new", "close", "move", "floating", "urgent"].includes(data.change))
+						treeLater.restart();
+					if (data.change === "urgent" || data.change === "move")
+						workspacesLater.restart();
+				} else if (data.pango_markup !== undefined) {
+					root.mode = data.change; // a mode event
+				} else {
+					workspacesLater.restart(); // a workspace or output event
+					if (data.change === "reload")
+						modeNow.running = true; // back to the default mode, unannounced
+				}
 			}
 		}
 		onExited: again.restart()
@@ -66,7 +78,8 @@ Singleton {
 		interval: 1000
 		onTriggered: {
 			events.running = true;
-			refresh.restart();
+			workspacesLater.restart();
+			treeLater.restart();
 			modeNow.running = true;
 		}
 	}
@@ -87,15 +100,21 @@ Singleton {
 		}
 	}
 
+	// several events often come at once (a move fires a few): each read waits for them to settle
 	Timer {
-		id: refresh
+		id: workspacesLater
 
 		interval: 40
 		running: true
-		onTriggered: {
-			workspaceList.running = true;
-			tree.running = true;
-		}
+		onTriggered: workspaceList.running = true
+	}
+
+	Timer {
+		id: treeLater
+
+		interval: 40
+		running: true
+		onTriggered: tree.running = true
 	}
 
 	Process {

@@ -15,6 +15,7 @@ Column {
 		text: root.title
 		color: Theme.fgMuted
 		font.family: Theme.fontSans
+		font.hintingPreference: Theme.hinting
 		font.pixelSize: 12
 		font.weight: Font.DemiBold
 		font.capitalization: Font.AllUppercase

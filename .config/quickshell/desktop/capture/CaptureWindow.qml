@@ -140,6 +140,7 @@ HangingPanel {
 				text: tile.label
 				color: tile.danger ? Theme.primaryText : Theme.fg
 				font.family: Theme.fontSans
+				font.hintingPreference: Theme.hinting
 				font.pixelSize: 13
 				font.weight: Font.Medium
 			}
@@ -174,6 +175,7 @@ HangingPanel {
 			text: parent.label
 			color: Theme.fg
 			font.family: Theme.fontSans
+			font.hintingPreference: Theme.hinting
 			font.pixelSize: 14
 			font.weight: Font.DemiBold
 		}
@@ -309,6 +311,7 @@ HangingPanel {
 				text: root.asking === "record" ? "Record which screen?" : "Screenshot which screen?"
 				color: Theme.fg
 				font.family: Theme.fontSans
+				font.hintingPreference: Theme.hinting
 				font.pixelSize: 14
 				font.weight: Font.DemiBold
 			}
@@ -371,6 +374,7 @@ HangingPanel {
 							text: `${monitor.index + 1}  ${monitor.modelData.name}`
 							color: Theme.fg
 							font.family: Theme.fontSans
+							font.hintingPreference: Theme.hinting
 							font.pixelSize: 13
 							font.weight: Font.DemiBold
 						}
@@ -380,6 +384,7 @@ HangingPanel {
 							text: `${monitor.modelData.width}×${monitor.modelData.height}`
 							color: Theme.fgMuted
 							font.family: Theme.fontSans
+							font.hintingPreference: Theme.hinting
 							font.pixelSize: 11
 						}
 					}
@@ -406,6 +411,7 @@ HangingPanel {
 		text: root.asking ? "←→ or 1–9 pick · Enter takes it · A all screens · Backspace back" : "←→↑↓ pick · Enter does it · R W S screenshot · Shift+R W S record"
 		color: Theme.fgMuted
 		font.family: Theme.fontSans
+		font.hintingPreference: Theme.hinting
 		font.pixelSize: 11
 	}
 }
