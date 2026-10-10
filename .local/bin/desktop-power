@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# The shell's power controls: TLP's profile and the battery's charge limit.
+#   desktop-power state                                  {"profile": "...", "limit": N} as JSON ("" and 0 without TLP or a battery)
+#   desktop-power profile performance|balanced|power-saver
+#   desktop-power limit <50-100>                         through desktop-charge-limit (root's)
+# Changes go through `sudo -n` (allowed without a password by `packages/system.sh power`), else
+# pkexec asks for the password (the shell's polkit prompt).
+set -euo pipefail
+
+root="${DESKTOP_POWER_ROOT:-}" # tests point this at a scratch directory
+
+as_root() {
+	sudo -n "$@" 2>/dev/null || pkexec "$@"
+}
+
+case ${1:-} in
+state)
+	# TLP's last profile: 0 performance, 1 balanced, 2 power saver (then the power source)
+	profile="" limit=0 index=""
+	read -r index _ 2>/dev/null <"$root/run/tlp/last_pwr" || true
+	case $index in 0) profile=performance ;; 1) profile=balanced ;; 2) profile=power-saver ;; esac
+	for battery in "$root"/sys/class/power_supply/BAT*/charge_control_end_threshold; do
+		[[ -r $battery ]] && read -r limit <"$battery" && break
+	done
+	printf '{"profile": "%s", "limit": %d}\n' "$profile" "$limit"
+	;;
+profile)
+	case ${2:-} in
+	performance | balanced | power-saver) as_root tlp "$2" >/dev/null ;;
+	*) echo "usage: desktop-power profile performance|balanced|power-saver" >&2 && exit 2 ;;
+	esac
+	;;
+limit)
+	if ! [[ ${2:-} =~ ^[1-9][0-9]{1,2}$ ]] || (($2 < 50 || $2 > 100)); then
+		echo "usage: desktop-power limit <50-100>" >&2 && exit 2
+	fi
+	as_root desktop-charge-limit "$2"
+	;;
+*) echo "usage: desktop-power state | profile <name> | limit <percent>" >&2 && exit 2 ;;
+esac

@@ -586,6 +586,18 @@ FloatingWindow {
 						onMoved: value => root.set("power", "batteryLow", Math.round(value))
 					}
 				}
+
+				// TLP keeps it (desktop-power): not a shell setting
+				SettingRow {
+					visible: Power.limit > 0
+					label: "Charge limit"
+					hint: "Charging stops here: a battery kept below full lasts longer. 100% before a trip."
+					Choice {
+						options: [60, 80, 85, 100].map(v => ({ value: v, label: v + "%" }))
+						value: Power.limit
+						onPicked: value => Power.setLimit(value)
+					}
+				}
 			}
 
 			// Timeshift: the system's snapshots (loaded each time the page opens)

@@ -4,7 +4,7 @@ import qs
 import qs.services
 import qs.widgets
 
-// Home: a greeting, quick toggles, the levels and the media player.
+// Home: a greeting, quick toggles, the power profile, the levels and the media player.
 Column {
 	id: root
 
@@ -102,15 +102,31 @@ Column {
 			available: NightLight.available
 			onClicked: NightLight.toggle()
 		}
+	}
 
-		Tile {
-			width: (parent.width - 10) / 2
-			glyph: Icons.g("app-window")
-			glyphRotation: Config.position === "top" ? 180 : 0
-			label: "Bar"
-			detail: Panel.barShown ? "Shown" : "Hidden"
-			on: Panel.barShown
-			onClicked: Panel.toggleBar()
+	// TLP's power profile, for now: the next plug or unplug goes back to balanced on the charger,
+	// the power saver on battery
+	Row {
+		visible: Power.available
+		width: parent.width
+		spacing: 8
+
+		Repeater {
+			model: [
+				{ name: "power-saver", label: "Quiet", glyph: "battery-4" },
+				{ name: "balanced", label: "Balanced", glyph: "adjustments-horizontal" },
+				{ name: "performance", label: "Performance", glyph: "flame" }
+			]
+
+			delegate: Chip {
+				required property var modelData
+
+				width: (root.width - 16) / 3
+				glyph: Icons.g(modelData.glyph)
+				label: modelData.label
+				on: Power.profile === modelData.name
+				onClicked: Power.setProfile(modelData.name)
+			}
 		}
 	}
 

@@ -17,10 +17,10 @@ root="${SYSTEM_ROOT:-}" # tests point this at a scratch directory
 
 changed=0
 
-put() { # <path under system/>: install it into / when missing or different
+put() { # <path under system/> [mode]: install it into / when missing or different
 	local dest="$root/$1"
 	cmp -s "$src/$1" "$dest" 2>/dev/null && return 0
-	sudo install -D -m 644 "$src/$1" "$dest"
+	sudo install -D -m "${2:-644}" "$src/$1" "$dest"
 	log_info installed path="/$1"
 	changed=1
 }
@@ -37,24 +37,29 @@ memory() {
 	sudo systemctl enable --now systemd-oomd.service
 }
 
-timeshift_list() { # the settings page lists snapshots without a password; making, deleting and restoring still ask
-	# sudo reads sudoers.d in name order and the last rule that matches wins: after the installer's
-	# "%wheel ALL=(ALL) ALL" (EndeavourOS's 10-installer), or that one asks for the password again
-	local rule tmp dest="$root/etc/sudoers.d/90-desktop-timeshift" first="$root/etc/sudoers.d/10-desktop-timeshift"
-	rule="$(id -un) ALL=(root) NOPASSWD: /usr/bin/timeshift --list --scripted"
-	if sudo test -e "$first"; then # where an earlier version put it, before the installer's rule
-		sudo rm -f "$first"
-		changed=1
-	fi
+sudoers() { # <file under /etc/sudoers.d> <comment> <rule>: install the rule, checked by visudo first
+	local tmp dest="$root/etc/sudoers.d/$1"
 	tmp="$(mktemp)"
-	printf '# packages/system.sh timeshift: the shell'"'"'s settings page reads the snapshot list\n%s\n' "$rule" >"$tmp"
+	printf '# %s\n%s\n' "$2" "$3" >"$tmp"
 	# sudoers.d is root's alone to read
 	if sudo cmp -s "$tmp" "$dest" 2>/dev/null; then rm -f "$tmp" && return 0; fi
 	visudo -cf "$tmp" >/dev/null || { rm -f "$tmp" && die sudoers_invalid path="$dest"; }
 	sudo install -D -m 440 "$tmp" "$dest"
 	rm -f "$tmp"
-	log_info installed path=/etc/sudoers.d/90-desktop-timeshift
+	log_info installed path="/etc/sudoers.d/$1"
 	changed=1
+}
+
+timeshift_list() { # the settings page lists snapshots without a password; making, deleting and restoring still ask
+	# sudo reads sudoers.d in name order and the last rule that matches wins: after the installer's
+	# "%wheel ALL=(ALL) ALL" (EndeavourOS's 10-installer), or that one asks for the password again
+	local first="$root/etc/sudoers.d/10-desktop-timeshift"
+	if sudo test -e "$first"; then # where an earlier version put it, before the installer's rule
+		sudo rm -f "$first"
+		changed=1
+	fi
+	sudoers 90-desktop-timeshift "packages/system.sh timeshift: the shell's settings page reads the snapshot list" \
+		"$(id -un) ALL=(root) NOPASSWD: /usr/bin/timeshift --list --scripted"
 }
 
 # What is kept: the last 3 days, one from about a week ago, and (timeshift-autosnap, its config in
@@ -135,6 +140,11 @@ subvolumes() {
 
 power() { # TLP alone (auto-cpufreq fights it over the CPU), with system/etc/tlp.d's settings
 	put etc/tlp.d/10-desktop.conf
+	# the shell's power controls (desktop-power): TLP's three profiles and the charge limit, without
+	# a password; the helper is root's, so the rule can't be pointed at anything else
+	put usr/local/bin/desktop-charge-limit 755
+	sudoers 90-desktop-power "packages/system.sh power: the shell's power profile and charge limit" \
+		"$(id -un) ALL=(root) NOPASSWD: /usr/bin/tlp performance, /usr/bin/tlp balanced, /usr/bin/tlp power-saver, /usr/local/bin/desktop-charge-limit"
 	if systemctl is-enabled --quiet auto-cpufreq.service 2>/dev/null; then
 		sudo systemctl disable --now auto-cpufreq.service
 		changed=1

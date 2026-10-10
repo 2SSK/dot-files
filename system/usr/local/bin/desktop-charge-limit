@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# /usr/local/bin/desktop-charge-limit, installed by packages/system.sh power: the battery stops
+# charging at <percent> (50-100), now and from TLP at every boot and unplug. Root's: the shell runs
+# it through `sudo -n` (packages/system.sh allows it without a password), so it takes nothing but a
+# whole percentage.
+#   desktop-charge-limit <percent>
+set -euo pipefail
+
+# tests point this at a scratch directory; never as root (sudo and pkexec drop it anyway)
+root="${DESKTOP_POWER_ROOT:-}"
+((EUID != 0)) || root=""
+
+# no leading zero: bash would read it as octal
+if ! [[ ${1:-} =~ ^[1-9][0-9]{1,2}$ ]] || (($1 < 50 || $1 > 100)); then
+	echo "usage: desktop-charge-limit <50-100>" >&2
+	exit 2
+fi
+limit=$1
+
+# TLP's names for the battery needn't be the kernel's (ASUS: BAT0 or BAT1), so both; a start
+# threshold of 0: most laptops (ASUS among them) only have a stop one
+mkdir -p "$root/etc/tlp.d"
+cat >"$root/etc/tlp.d/20-charge-limit.conf" <<CONF
+# Set from the shell's Settings → Power (desktop-charge-limit): charging stops here
+START_CHARGE_THRESH_BAT0=0
+STOP_CHARGE_THRESH_BAT0=$limit
+START_CHARGE_THRESH_BAT1=0
+STOP_CHARGE_THRESH_BAT1=$limit
+CONF
+
+for battery in "$root"/sys/class/power_supply/BAT*/charge_control_end_threshold; do
+	[[ -e $battery ]] && echo "$limit" >"$battery"
+done
+exit 0

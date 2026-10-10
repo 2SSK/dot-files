@@ -341,8 +341,17 @@ subvolume_fakes() { # btrfs makes folders and remembers them as subvolumes; the 
 	chmod +x "$BATS_TEST_TMPDIR"/bin/*
 	run "$SYSTEM" power
 	[ "$status" -eq 0 ]
-	grep -qx 'CPU_BOOST_ON_BAT=0' "$SYSTEM_ROOT/etc/tlp.d/10-desktop.conf"
-	grep -qx 'PLATFORM_PROFILE_ON_BAT=quiet' "$SYSTEM_ROOT/etc/tlp.d/10-desktop.conf"
+	local conf="$SYSTEM_ROOT/etc/tlp.d/10-desktop.conf"
+	# on the charger balanced (not flat out), on battery the quiet power saver without turbo
+	grep -qx 'TLP_PROFILE_AC=BAL' "$conf"
+	grep -qx 'TLP_PROFILE_BAT=SAV' "$conf"
+	grep -qx 'PLATFORM_PROFILE_ON_BAT=balanced' "$conf"
+	grep -qx 'CPU_BOOST_ON_SAV=0' "$conf"
+	grep -qx 'PLATFORM_PROFILE_ON_SAV=quiet' "$conf"
+	grep -qx 'STOP_CHARGE_THRESH_BAT1=85' "$conf"
+	# the shell's power page: the charge-limit helper, root's, and the passwordless rule for it and the profiles
+	[ -x "$SYSTEM_ROOT/usr/local/bin/desktop-charge-limit" ]
+	grep -qx "$(id -un) ALL=(root) NOPASSWD: /usr/bin/tlp performance, /usr/bin/tlp balanced, /usr/bin/tlp power-saver, /usr/local/bin/desktop-charge-limit" "$SYSTEM_ROOT/etc/sudoers.d/90-desktop-power"
 	grep -qx "systemctl disable --now auto-cpufreq.service" "$CALLS"
 	grep -qx "systemctl enable --now tlp.service" "$CALLS"
 	grep -qx "tlp start" "$CALLS"
@@ -352,8 +361,11 @@ subvolume_fakes() { # btrfs makes folders and remembers them as subvolumes; the 
 	# shellcheck disable=SC2016 # expands when the fake runs
 	printf '#!/bin/sh\necho "systemctl $*" >>"$CALLS"\ncase "$*" in *is-enabled*auto-cpufreq*) exit 1 ;; esac\n' >"$BATS_TEST_TMPDIR/bin/systemctl"
 	chmod +x "$BATS_TEST_TMPDIR"/bin/*
-	mkdir -p "$SYSTEM_ROOT/etc/tlp.d"
-	cp "$BATS_TEST_DIRNAME/../system/etc/tlp.d/10-desktop.conf" "$SYSTEM_ROOT/etc/tlp.d/"
+	# shellcheck disable=SC2016 # expands when the fake runs
+	printf '#!/bin/sh\necho "tlp $*" >>"$CALLS"\n' >"$BATS_TEST_TMPDIR/bin/tlp"
+	chmod +x "$BATS_TEST_TMPDIR/bin/tlp"
+	"$SYSTEM" power
+	rm -f "$CALLS"
 	run "$SYSTEM" power
 	[[ $output == *"already in place"* ]]
 	! grep -q -- "--now" "$CALLS"
