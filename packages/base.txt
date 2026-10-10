@@ -40,3 +40,6 @@ pavucontrol                 pavucontrol                 pavucontrol
 tlp                         tlp                         tlp
 tlp-rdw                     tlp-rdw                     tlp-rdw
 sddm                        sddm                        sddm
+# Spotify, its ads blocked by a preloaded library (.local/share/applications/spotify.desktop)
+aur:spotify                 -                           -
+aur:spotify-adblock         -                           -

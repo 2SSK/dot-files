@@ -49,3 +49,10 @@ A folder is a playlist: drop music into `~/Music/<name>/` and it appears in the 
 | `~/.local/state/mpd/` | Database, playback state |
 | `~/.config/rmpc/config.ron` | Tabs and keys |
 | `~/.local/state/desktop/theme/rmpc.ron` | Colours, rendered from the palette |
+
+## Spotify
+
+The Spotify app (AUR `spotify`) starts without ads from every launcher: `~/.local/share/applications/spotify.desktop`
+preloads [spotify-adblock](https://github.com/abba23/spotify-adblock), which blocks the ad servers
+without patching Spotify, so updates don't break it (unlike spicetify, which `packages/cleanup.sh`
+removes). Its block and allow lists are in `/etc/spotify-adblock/config.toml`.
