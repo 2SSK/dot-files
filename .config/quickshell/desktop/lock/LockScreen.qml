@@ -46,6 +46,7 @@ Scope {
 
 	WlSessionLock {
 		locked: Lock.locked
+		onSecureChanged: Lock.secure = secure
 
 		WlSessionLockSurface {
 			id: surface

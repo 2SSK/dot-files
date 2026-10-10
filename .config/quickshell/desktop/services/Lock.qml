@@ -7,5 +7,6 @@ import Quickshell
 // password unlocks it; if the shell stopped, the compositor would keep the screen locked. Locked
 // by `desktop-lock` (the power menu's Lock, swayidle, before sleep) over IPC. On X11 i3lock locks.
 Singleton {
-	property bool locked: false
+	property bool locked: false // asked for
+	property bool secure: false // the compositor confirmed it: the screen is covered
 }

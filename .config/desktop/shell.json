@@ -34,7 +34,7 @@
     },
     "nightLight": {
         "from": "19:00",
-        "schedule": false,
+        "schedule": true,
         "temperature": 4000,
         "to": "07:00"
     },
