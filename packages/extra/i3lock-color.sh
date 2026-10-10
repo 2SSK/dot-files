@@ -7,12 +7,6 @@ source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 version=2.13.c.5
 [[ $(i3lock --version 2>&1) == *"$version"* ]] && exit 0
 case "$(distro)" in
-debian)
-	sudo apt-get install -y --no-install-recommends autoconf automake gcc make pkgconf libpam0g-dev \
-		libcairo2-dev libfontconfig1-dev libxcb-composite0-dev libev-dev libx11-xcb-dev libxcb-xkb-dev \
-		libxcb-xinerama0-dev libxcb-randr0-dev libxcb-image0-dev libxcb-util-dev libxcb-xrm-dev \
-		libxkbcommon-dev libxkbcommon-x11-dev libjpeg-dev libgif-dev
-	;;
 fedora)
 	sudo dnf install -y autoconf automake gcc make pkgconf cairo-devel fontconfig-devel libev-devel \
 		libjpeg-turbo-devel libXinerama-devel libxkbcommon-devel libxkbcommon-x11-devel libXrandr-devel \

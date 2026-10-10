@@ -165,10 +165,8 @@ lid() { # closing the lid only locks; logind rereads its config on SIGHUP (a res
 }
 
 libvirt() {
-	# The daemons (per-driver sockets on Arch and Fedora, the monolithic libvirtd on Debian/Ubuntu)
-	local unit units=(libvirtd.socket)
-	systemctl list-unit-files virtqemud.socket >/dev/null 2>&1 &&
-		units=(virtqemud.socket virtnetworkd.socket virtstoraged.socket virtnodedevd.socket)
+	# The daemons: one socket per driver (Arch and Fedora)
+	local unit units=(virtqemud.socket virtnetworkd.socket virtstoraged.socket virtnodedevd.socket)
 	for unit in "${units[@]}"; do
 		systemctl is-enabled --quiet "$unit" 2>/dev/null && systemctl is-active --quiet "$unit" && continue
 		sudo systemctl enable --now "$unit"
@@ -342,9 +340,7 @@ grub_theme() { # install the theme and point GRUB at it; a no-op when nothing ch
 		grub_set GRUB_TERMINAL_OUTPUT '"gfxterm"'
 	fi
 	((changed)) || return 0
-	if command -v update-grub >/dev/null; then
-		sudo update-grub
-	elif command -v grub2-mkconfig >/dev/null; then
+	if command -v grub2-mkconfig >/dev/null; then # Fedora
 		sudo grub2-mkconfig -o "$root$boot/grub.cfg"
 	else
 		sudo grub-mkconfig -o "$root$boot/grub.cfg"

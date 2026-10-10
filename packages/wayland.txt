@@ -1,14 +1,14 @@
-# SwayFX / Wayland session. Columns: arch  debian(+ubuntu)  fedora (format: see base.txt)
-@swayfx                     @swayfx                     @swayfx
-foot                        foot                        foot
-swayidle                    swayidle                    swayidle
-swaylock                    swaylock                    swaylock
-grim                        grim                        grim
-slurp                       slurp                       slurp
-wl-clipboard                wl-clipboard                wl-clipboard
-wtype                       wtype                       wtype
-swaybg                      swaybg                      swaybg
-qt5-wayland                 qtwayland5                  qt5-qtwayland
-xdg-desktop-portal-wlr      xdg-desktop-portal-wlr      xdg-desktop-portal-wlr
-xdg-desktop-portal-gtk      xdg-desktop-portal-gtk      xdg-desktop-portal-gtk
-autotiling                  @autotiling                 @autotiling
+# SwayFX / Wayland session. Columns: arch  fedora (format: see base.txt)
+@swayfx                     @swayfx
+foot                        foot
+swayidle                    swayidle
+swaylock                    swaylock
+grim                        grim
+slurp                       slurp
+wl-clipboard                wl-clipboard
+wtype                       wtype
+swaybg                      swaybg
+qt5-wayland                 qt5-qtwayland
+xdg-desktop-portal-wlr      xdg-desktop-portal-wlr
+xdg-desktop-portal-gtk      xdg-desktop-portal-gtk
+autotiling                  @autotiling

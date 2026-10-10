@@ -27,6 +27,12 @@
     "brightness": {
         "step": 5
     },
+    "clipboard": {
+        "days": 30,
+        "images": 30,
+        "max": 200,
+        "persist": true
+    },
     "fonts": {
         "heading": "Inter",
         "mono": "JetBrainsMono Nerd Font",
@@ -49,7 +55,7 @@
         "timeout": 5000
     },
     "osd": {
-        "timeout": 1800
+        "timeout": 3000
     },
     "power": {
         "batteryLow": 25,

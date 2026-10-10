@@ -54,10 +54,10 @@ Singleton {
 		return emoji.filter(e => words.every(w => e.name.includes(w) || e.group.toLowerCase().includes(w)));
 	}
 
-	function pickEmoji(char: string): void {
-		adapter.emoji = [char, ...adapter.emoji.filter(c => c !== char)].slice(0, 24);
+	function pickEmoji(glyph: string): void { // not "char": a reserved word to Qt 6.8's parser
+		adapter.emoji = [glyph, ...adapter.emoji.filter(c => c !== glyph)].slice(0, 24);
 		state.writeAdapter();
-		Quickshell.execDetached(["sh", "-c", 'if [ -n "$WAYLAND_DISPLAY" ]; then wl-copy -- "$1"; else printf %s "$1" | xclip -selection clipboard -t UTF8_STRING; fi', "sh", char]);
+		Quickshell.execDetached(["sh", "-c", 'if [ -n "$WAYLAND_DISPLAY" ]; then wl-copy -- "$1"; else printf %s "$1" | xclip -selection clipboard -t UTF8_STRING; fi', "sh", glyph]);
 	}
 
 	function findFiles(query: string): void {
@@ -106,8 +106,8 @@ Singleton {
 		path: (Quickshell.env("XDG_DATA_HOME") || Quickshell.env("HOME") + "/.local/share") + "/desktop/emoji.tsv"
 		printErrors: false
 		onLoaded: root.emoji = text().split("\n").filter(l => l && !l.startsWith("#")).map(l => {
-			const [char, name, group] = l.split("\t");
-			return { char, name, group };
+			const [glyph, name, group] = l.split("\t");
+			return { char: glyph, name, group };
 		})
 	}
 

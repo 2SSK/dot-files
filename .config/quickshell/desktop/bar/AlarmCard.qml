@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Effects
 import Quickshell
 import qs
 import qs.services
@@ -46,11 +45,11 @@ PopupWindow {
 		radius: card.radius
 	}
 
-	RectangularShadow {
+	Shadow {
 		anchors.fill: card
 		radius: card.radius
 		blur: 24
-		offset.y: 4
+		offsetY: 4
 		color: Qt.alpha("black", 0.45)
 		opacity: card.opacity
 	}

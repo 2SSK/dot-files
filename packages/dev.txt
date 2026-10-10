@@ -1,13 +1,13 @@
-# Development: languages, containers, lint and test tools (opt-in: install.sh dev). Columns: arch  debian(+ubuntu)  fedora
-bats                        bats                        bats
-shellcheck                  shellcheck                  ShellCheck
-shfmt                       shfmt                       shfmt
-go                          golang-go                   golang
-gopls                       gopls                       golang-x-tools-gopls
-clang                       clangd                      clang-tools-extra
-pnpm                        @pnpm                       @pnpm
-docker                      docker.io                   moby-engine
-docker-compose              docker-compose              docker-compose
-docker-buildx               docker-buildx               docker-buildx
-ninja                       ninja-build                 ninja-build
-python-paramiko             python3-paramiko            python3-paramiko
+# Development: languages, containers, lint and test tools (opt-in: install.sh dev). Columns: arch  fedora
+bats                        bats
+shellcheck                  ShellCheck
+shfmt                       shfmt
+go                          golang
+gopls                       golang-x-tools-gopls
+clang                       clang-tools-extra
+pnpm                        @pnpm
+docker                      moby-engine
+docker-compose              docker-compose
+docker-buildx               docker-buildx
+ninja                       ninja-build
+python-paramiko             python3-paramiko

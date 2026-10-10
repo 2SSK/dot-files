@@ -7,7 +7,10 @@ source "$here/../../.local/lib/desktop/log.sh"
 
 # shellcheck disable=SC2034 # for the scripts that source this
 bin="$HOME/.local/bin"
-tmp="$(mktemp -d)"
+# on disk, not /tmp: /tmp is often RAM (tmpfs), too small for a build
+cache="${XDG_CACHE_HOME:-$HOME/.cache}"
+mkdir -p "$cache"
+tmp="$(mktemp -d -p "$cache" dot-files-build.XXXXXX)"
 trap 'rm -rf "$tmp"' EXIT
 
 fetch() { # <url> <sha256>: downloads into $tmp, prints the file's path
@@ -17,6 +20,6 @@ fetch() { # <url> <sha256>: downloads into $tmp, prints the file's path
 	echo "$out"
 }
 
-distro() { # arch, debian or fedora (as install.sh decides)
+distro() { # arch or fedora (as install.sh decides)
 	"$here/../install.sh" --distro
 }

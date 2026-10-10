@@ -1,7 +1,6 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
-import QtQuick.Effects
 import Quickshell
 import qs
 import qs.services
@@ -84,11 +83,11 @@ PopupWindow {
 				width: 170
 				height: 118
 
-				RectangularShadow {
+				Shadow {
 					anchors.fill: face
 					radius: face.radius
 					blur: 20
-					offset.y: 4
+					offsetY: 4
 					color: Qt.alpha("black", 0.4)
 				}
 

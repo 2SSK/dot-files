@@ -7,7 +7,6 @@ set -euo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 app=com.dec05eba.gpu_screen_recorder
 command -v flatpak >/dev/null || case "$(distro)" in
-	debian) sudo apt-get install -y flatpak ;;
 	fedora) sudo dnf install -y flatpak ;;
 esac
 flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo

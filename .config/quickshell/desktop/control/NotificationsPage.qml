@@ -20,9 +20,9 @@ Column {
 	property string filter: "all"
 
 	// days since midnight today when it arrived: 0 today, 1 yesterday, ...
-	function age(notification: Notification): int {
+	function age(notification: var): int {
 		const midnight = new Date().setHours(0, 0, 0, 0);
-		const when = Notifications.received[notification.id] ?? Date.now();
+		const when = Notifications.timeOf(notification);
 		return when >= midnight ? 0 : Math.ceil((midnight - when) / 86400000);
 	}
 
@@ -97,11 +97,11 @@ Column {
 			model: root.shown
 
 			delegate: NotificationCard {
-				required property Notification modelData
+				required property var modelData
 
 				width: parent.width
 				notification: modelData
-				onFinished: modelData.dismiss()
+				onFinished: Notifications.dismiss(modelData)
 			}
 		}
 	}
