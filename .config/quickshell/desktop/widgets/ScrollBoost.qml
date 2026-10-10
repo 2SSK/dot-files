@@ -2,7 +2,8 @@ import QtQuick
 
 // Faster, smooth wheel and touchpad scrolling for the Flickable (ListView, GridView) it sits in:
 // X sends few, coarse steps (desktop-input slows them for apps), so the shell's own lists go
-// further per step, easing to each stop instead of jumping.
+// further per step, easing to each stop instead of jumping. Each stop is on a whole pixel, so the
+// text in the view stays sharp.
 WheelHandler {
 	id: root
 
@@ -17,7 +18,8 @@ WheelHandler {
 		const top = view.originY;
 		const bottom = view.originY + Math.max(0, view.contentHeight - view.height);
 		const from = glide.running ? glide.to : view.contentY;
-		const to = Math.max(top, Math.min(bottom, from - dy));
+		// whole pixels: text in a view stopped between two blurs (a touchpad step is fractional)
+		const to = Math.round(Math.max(top, Math.min(bottom, from - dy)));
 		// already at that end (or nothing to scroll): the view around this one scrolls instead
 		if (to === from) {
 			event.accepted = false;
@@ -26,6 +28,15 @@ WheelHandler {
 		glide.to = to;
 		glide.restart();
 		event.accepted = true;
+	}
+
+	// a drag or flick ends where it ends: onto a whole pixel too
+	property Connections snap: Connections {
+		target: root.view
+
+		function onMovementEnded(): void {
+			root.view.contentY = Math.round(root.view.contentY);
+		}
 	}
 
 	property NumberAnimation glide: NumberAnimation {

@@ -51,6 +51,8 @@ Singleton {
 						root.windowEvent(data);
 					else if (data.pango_markup !== undefined)
 						root.mode = data.change; // a mode event
+					else if (data.change === "reload")
+						modeNow.running = true; // a workspace "reload" event: back to the default mode, unannounced
 				} catch (e) {}
 			}
 		}
@@ -65,6 +67,23 @@ Singleton {
 		onTriggered: {
 			events.running = true;
 			refresh.restart();
+			modeNow.running = true;
+		}
+	}
+
+	// the binding mode as it is now: a reload (sway's, i3's) resets it without a mode event, which
+	// left the bar showing "VM keys" after one
+	Process {
+		id: modeNow
+
+		running: true
+		command: [root.msg, "-t", "get_binding_state"]
+		stdout: StdioCollector {
+			onStreamFinished: {
+				try {
+					root.mode = JSON.parse(text).name;
+				} catch (e) {}
+			}
 		}
 	}
 

@@ -587,15 +587,27 @@ FloatingWindow {
 					}
 				}
 
-				// TLP keeps it (desktop-power): not a shell setting
+				// TLP keeps it (desktop-power): not a shell setting. Shown as dragged, applied once let go
 				SettingRow {
 					visible: Power.limit > 0
 					label: "Charge limit"
-					hint: "Charging stops here: a battery kept below full lasts longer. 100% before a trip."
-					Choice {
-						options: [60, 80, 85, 100].map(v => ({ value: v, label: v + "%" }))
-						value: Power.limit
-						onPicked: value => Power.setLimit(value)
+					hint: "Charging stops here (85% by default): a battery kept below full lasts longer. 100% before a trip."
+					Range {
+						id: chargeLimit
+
+						property int dragged: 0 // while dragging; 0 shows the battery's own
+
+						from: 50
+						to: 100
+						step: 5
+						value: dragged || Power.limit
+						format: v => Math.round(v) + " %"
+						onMoved: value => dragged = Math.round(value)
+						onReleased: value => {
+							if (dragged && dragged !== Power.limit)
+								Power.setLimit(dragged);
+							dragged = 0;
+						}
 					}
 				}
 			}
