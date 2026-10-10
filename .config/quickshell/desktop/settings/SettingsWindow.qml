@@ -15,6 +15,7 @@ FloatingWindow {
 	id: root
 
 	property string page: Panel.settingsPage
+	onPageChanged: if (page === "power") Power.refresh() // the charge limit, as the battery has it now
 	property string family: ""
 	property string mode: ""
 	property var families: []

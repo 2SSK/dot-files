@@ -24,21 +24,31 @@ Column {
 		return d > 0 ? `${d}d ${h}h ${m}m` : h > 0 ? `${h}h ${m}m` : `${m}m`;
 	}
 
+	// each card's figures by key: the Repeaters' models are the fixed keys, so a tick updates the
+	// cards in place instead of rebuilding them (and their graphs) every 2 s
+	readonly property var cards: ({
+			cpu: { glyph: Icons.g("gauge"), label: "CPU", value: Math.round(Stats.cpu * 100) + "%", history: Stats.cpuHistory, max: 1, show: true },
+			memory: { glyph: Icons.g("cpu"), label: "Memory", value: `${Stats.memUsed.toFixed(1)} / ${Stats.memTotal.toFixed(1)} GiB`, history: Stats.memHistory, max: 1, show: true },
+			temperature: { glyph: Icons.g("flame"), label: "Temperature", value: Math.round(Stats.temp) + " °C", history: Stats.tempHistory, max: 100, show: Stats.temp >= 0 },
+			disk: { label: "Disk", value: `${Stats.diskUsed.toFixed(0)} / ${Stats.diskTotal.toFixed(0)} GiB`, ratio: Stats.diskTotal > 0 ? Stats.diskUsed / Stats.diskTotal : 0 },
+			up: { label: "Up", value: root.uptime(Stats.uptime) },
+			load: { label: "Load", value: Stats.load },
+			gpu: { glyph: Icons.g("device-desktop"), label: "GPU", value: Stats.gpuName ? `${Stats.gpuName}  ${Math.round(Stats.gpu * 100)}%` : "None found", detail: (Stats.gpuName === "Intel" ? `${Math.round(Stats.gpuFreq)} MHz` : "") + (Stats.dgpuStatus ? `${Stats.gpuName === "Intel" ? "  ·  " : ""}NVIDIA ${Stats.dgpuAwake ? (Stats.dgpu || "awake") : "asleep"}` : ""), history: Stats.gpuHistory, second: [], max: 1 },
+			network: { glyph: Icons.g("wifi"), label: "Network", value: "↓ " + root.speed(Stats.netDown), detail: "↑ " + root.speed(Stats.netUp), history: Stats.netDownHistory, second: Stats.netUpHistory, max: Math.max(65536, ...Stats.netDownHistory, ...Stats.netUpHistory) }
+		})
+
 	spacing: 12
 
 	Repeater {
-		model: [
-			{ glyph: Icons.g("gauge"), label: "CPU", value: Math.round(Stats.cpu * 100) + "%", history: Stats.cpuHistory, max: 1, show: true },
-			{ glyph: Icons.g("cpu"), label: "Memory", value: `${Stats.memUsed.toFixed(1)} / ${Stats.memTotal.toFixed(1)} GiB`, history: Stats.memHistory, max: 1, show: true },
-			{ glyph: Icons.g("flame"), label: "Temperature", value: Math.round(Stats.temp) + " °C", history: Stats.tempHistory, max: 100, show: Stats.temp >= 0 }
-		]
+		model: ["cpu", "memory", "temperature"]
 
 		delegate: Rectangle {
 			id: card
 
-			required property var modelData
+			required property string modelData
+			readonly property var info: root.cards[modelData]
 
-			visible: modelData.show
+			visible: info.show
 			width: parent.width
 			height: 104
 			radius: 14
@@ -50,8 +60,8 @@ Column {
 				anchors.right: parent.right
 				anchors.bottom: parent.bottom
 				height: 56
-				values: card.modelData.history
-				max: card.modelData.max
+				values: card.info.history
+				max: card.info.max
 			}
 
 			Row {
@@ -60,14 +70,14 @@ Column {
 				spacing: 10
 
 				Glyph {
-					glyph: card.modelData.glyph
+					glyph: card.info.glyph
 					font.pixelSize: 18
 					color: Theme.primary
 				}
 
 				Text {
 					anchors.verticalCenter: parent.verticalCenter
-					text: card.modelData.label
+					text: card.info.label
 					color: Theme.fgMuted
 					font.family: Theme.fontSans
 					font.pixelSize: 13
@@ -79,7 +89,7 @@ Column {
 				anchors.right: parent.right
 				anchors.rightMargin: 16
 				y: 14
-				text: card.modelData.value
+				text: card.info.value
 				font.pixelSize: 15
 			}
 		}
@@ -90,16 +100,13 @@ Column {
 		spacing: 12
 
 		Repeater {
-			model: [
-				{ label: "Disk", value: `${Stats.diskUsed.toFixed(0)} / ${Stats.diskTotal.toFixed(0)} GiB`, ratio: Stats.diskTotal > 0 ? Stats.diskUsed / Stats.diskTotal : 0 },
-				{ label: "Up", value: root.uptime(Stats.uptime) },
-				{ label: "Load", value: Stats.load }
-			]
+			model: ["disk", "up", "load"]
 
 			delegate: Rectangle {
 				id: tile
 
-				required property var modelData
+				required property string modelData
+				readonly property var info: root.cards[modelData]
 
 				width: (parent.width - 24) / 3
 				height: 76
@@ -113,7 +120,7 @@ Column {
 					spacing: 6
 
 					Text {
-						text: tile.modelData.label
+						text: tile.info.label
 						color: Theme.fgMuted
 						font.family: Theme.fontSans
 						font.pixelSize: 12
@@ -123,19 +130,19 @@ Column {
 						width: parent.width
 						horizontalAlignment: Text.AlignLeft
 						elide: Text.ElideRight
-						text: tile.modelData.value
+						text: tile.info.value
 						font.pixelSize: 14
 					}
 
 					Rectangle {
-						visible: tile.modelData.ratio !== undefined
+						visible: tile.info.ratio !== undefined
 						width: parent.width
 						height: 4
 						radius: 2
 						color: Qt.alpha(Theme.overlay, 0.9)
 
 						Rectangle {
-							width: parent.width * (tile.modelData.ratio ?? 0)
+							width: parent.width * (tile.info.ratio ?? 0)
 							height: parent.height
 							radius: 2
 							color: Theme.primary
@@ -152,15 +159,13 @@ Column {
 		spacing: 12
 
 		Repeater {
-			model: [
-				{ glyph: Icons.g("device-desktop"), label: "GPU", value: Stats.gpuName ? `${Stats.gpuName}  ${Math.round(Stats.gpu * 100)}%` : "None found", detail: (Stats.gpuName === "Intel" ? `${Math.round(Stats.gpuFreq)} MHz` : "") + (Stats.dgpuStatus ? `${Stats.gpuName === "Intel" ? "  ·  " : ""}NVIDIA ${Stats.dgpuAwake ? (Stats.dgpu || "awake") : "asleep"}` : ""), history: Stats.gpuHistory, second: [], max: 1 },
-				{ glyph: Icons.g("wifi"), label: "Network", value: "↓ " + root.speed(Stats.netDown), detail: "↑ " + root.speed(Stats.netUp), history: Stats.netDownHistory, second: Stats.netUpHistory, max: Math.max(65536, ...Stats.netDownHistory, ...Stats.netUpHistory) }
-			]
+			model: ["gpu", "network"]
 
 			delegate: Rectangle {
 				id: half
 
-				required property var modelData
+				required property string modelData
+				readonly property var info: root.cards[modelData]
 
 				width: (parent.width - 12) / 2
 				height: 118
@@ -173,18 +178,18 @@ Column {
 					anchors.right: parent.right
 					anchors.bottom: parent.bottom
 					height: 48
-					values: half.modelData.history
-					max: half.modelData.max
+					values: half.info.history
+					max: half.info.max
 				}
 
 				Graph {
-					visible: half.modelData.second.length > 0
+					visible: half.info.second.length > 0
 					anchors.left: parent.left
 					anchors.right: parent.right
 					anchors.bottom: parent.bottom
 					height: 48
-					values: half.modelData.second
-					max: half.modelData.max
+					values: half.info.second
+					max: half.info.max
 					tint: Theme.secondary
 				}
 
@@ -194,14 +199,14 @@ Column {
 					spacing: 10
 
 					Glyph {
-						glyph: half.modelData.glyph
+						glyph: half.info.glyph
 						font.pixelSize: 18
 						color: Theme.primary
 					}
 
 					Text {
 						anchors.verticalCenter: parent.verticalCenter
-						text: half.modelData.label
+						text: half.info.label
 						color: Theme.fgMuted
 						font.family: Theme.fontSans
 						font.pixelSize: 13
@@ -213,7 +218,7 @@ Column {
 					anchors.right: parent.right
 					anchors.rightMargin: 16
 					y: 14
-					text: half.modelData.value
+					text: half.info.value
 					font.pixelSize: 14
 				}
 
@@ -221,7 +226,7 @@ Column {
 					anchors.right: parent.right
 					anchors.rightMargin: 16
 					y: 40
-					text: half.modelData.detail
+					text: half.info.detail
 					color: Theme.fgMuted
 					font.family: Theme.fontSans
 					font.pixelSize: 12

@@ -6,6 +6,7 @@ import Quickshell.Io
 
 // CPU and memory use (/proc) and the CPU temperature (hwmon: coretemp, k10temp, ...), every 2 s,
 // with the last two minutes of each for graphs; the root disk, uptime and load for the monitor page.
+// The GPU, network, uptime and load are only read while that page is open (detail).
 // Also the GPU (an AMD card's busy %, else Intel's clock against its top clock, from sysfs) and the
 // network (the real interfaces' bytes in /proc/net/dev, as speeds). A discrete NVIDIA card is only
 // asked (nvidia-smi) while it's awake anyway and the monitor page is open (detail): asking wakes
@@ -66,6 +67,10 @@ Singleton {
 		}
 		cpuHistory = remember(cpuHistory, cpu);
 		memHistory = remember(memHistory, mem);
+
+		// the rest only the monitor page shows: read while it's open
+		if (detail === 0)
+			return;
 
 		if (gpuFile) {
 			gpuReading.reload();

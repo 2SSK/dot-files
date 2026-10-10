@@ -12,6 +12,7 @@ Column {
 	readonly property var actions: []
 
 	spacing: 16
+	Component.onCompleted: Power.refresh() // the profile chips show what TLP has now
 
 	SystemClock {
 		id: clock
