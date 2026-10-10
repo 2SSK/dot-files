@@ -120,13 +120,16 @@ open in a vertical / horizontal split, `Tab` select several, `Esc` close.
 
 | Key | Action |
 | --- | --- |
-| `Tab` | Accept the Copilot suggestion (or jump in a snippet) |
-| `Ctrl+]` | Reject the suggestion |
+| `Ctrl+a` / `Tab` | Accept the Copilot suggestion (`Tab` jumps in a snippet first) |
+| `Ctrl+r` / `Ctrl+]` | Reject the suggestion |
 | `Alt+n` / `Alt+p` | Next / previous suggestion |
 | `Alt+r` | Ask Copilot for a new suggestion |
 | `Ctrl+Space` | Open the completion menu |
 | `Ctrl+j/k`, `Enter`, `Ctrl+e` | Move, accept, close the menu |
 | `Ctrl+b/f` | Scroll the docs |
+
+With no suggestion showing, `Ctrl+a` and `Ctrl+r` keep their usual insert-mode meaning (the last
+insert again; paste a register).
 
 ### Windows `Space s`, tabs `Space t`, UI `Space u`
 
