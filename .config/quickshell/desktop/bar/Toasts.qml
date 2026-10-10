@@ -1,10 +1,10 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
-import QtQuick.Effects
 import Quickshell
 import Quickshell.Services.Notifications
 import qs
+import qs.widgets
 import qs.services
 
 // Notification popups, stacked at the top right under the OSD card, on the focused screen. Each
@@ -54,11 +54,11 @@ PopupWindow {
 				width: card.implicitWidth
 				height: card.implicitHeight
 
-				RectangularShadow {
+				Shadow {
 					anchors.fill: card
 					radius: card.radius
 					blur: 22
-					offset.y: 4
+					offsetY: 4
 					color: Qt.alpha("black", 0.4)
 				}
 
