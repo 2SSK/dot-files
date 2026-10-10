@@ -130,33 +130,15 @@ HangingPanel {
 					{ glyph: Icons.g("power"), act: () => { Panel.controlOpen = false; Panel.openPower(); } }
 				]
 
-				delegate: Rectangle {
-					id: action
-
+				delegate: IconButton {
 					required property var modelData
 
-					width: 42
-					height: 42
+					size: 42
 					radius: 12
-					color: actionHover.hovered ? Qt.alpha(Theme.fg, 0.08) : "transparent"
-
-					Glyph {
-						anchors.centerIn: parent
-						glyph: action.modelData.glyph
-						font.pixelSize: 18
-						font.weight: Font.Normal
-						color: Theme.fg
-					}
-
-					HoverHandler {
-						id: actionHover
-					}
-
-					MouseArea {
-						anchors.fill: parent
-						cursorShape: Qt.PointingHandCursor
-						onClicked: action.modelData.act()
-					}
+					glyph: modelData.glyph
+					glyphSize: 18
+					hoverAlpha: 0.08
+					onClicked: modelData.act()
 				}
 			}
 		}
@@ -191,36 +173,17 @@ HangingPanel {
 			Repeater {
 				model: [...(page.item?.actions ?? []).filter(a => a.show !== false), { glyph: Icons.g("x"), on: false, act: () => Panel.controlOpen = false }]
 
-				delegate: Rectangle {
-					id: button
-
+				delegate: IconButton {
 					required property var modelData
 
-					width: 38
-					height: 38
+					size: 38
 					radius: 11
-					color: modelData.on ? Theme.primary : buttonHover.hovered ? Qt.alpha(Theme.fg, 0.1) : Qt.alpha(Theme.surface, 0.7)
-					border.width: modelData.on ? 0 : 1
-					border.color: Qt.alpha(Theme.border, 0.7)
-
-					Glyph {
-						anchors.centerIn: parent
-						glyph: button.modelData.glyph
-						font.pixelSize: 15
-						font.weight: Font.Normal
-						color: button.modelData.on ? Theme.primaryText : Theme.fg
-						filled: button.modelData.on ?? false
-					}
-
-					HoverHandler {
-						id: buttonHover
-					}
-
-					MouseArea {
-						anchors.fill: parent
-						cursorShape: Qt.PointingHandCursor
-						onClicked: button.modelData.act()
-					}
+					glyph: modelData.glyph
+					glyphSize: 15
+					on: modelData.on ?? false
+					bordered: true
+					idle: Qt.alpha(Theme.surface, 0.7)
+					onClicked: modelData.act()
 				}
 			}
 		}

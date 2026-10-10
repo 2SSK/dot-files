@@ -193,36 +193,16 @@ Rectangle {
 						{ glyph: Icons.g("player-skip-forward"), enabled: root.player?.canGoNext ?? false, act: () => root.player.next() }
 					]
 
-					delegate: Rectangle {
-						id: button
-
+					delegate: IconButton {
 						required property var modelData
 
-						width: modelData.main ? 34 : 30
-						height: width
-						radius: width / 2
-						opacity: modelData.enabled ? 1 : 0.4
-						color: modelData.main ? Theme.primary : buttonHover.hovered ? Qt.alpha(Theme.fg, 0.1) : "transparent"
-
-						Glyph {
-							anchors.centerIn: parent
-							glyph: button.modelData.glyph
-							filled: true
-							font.pixelSize: 16
-							font.weight: Font.Normal
-							color: button.modelData.main ? Theme.primaryText : Theme.fg
-						}
-
-						HoverHandler {
-							id: buttonHover
-						}
-
-						MouseArea {
-							anchors.fill: parent
-							enabled: button.modelData.enabled
-							cursorShape: Qt.PointingHandCursor
-							onClicked: button.modelData.act()
-						}
+						size: modelData.main ? 34 : 30
+						glyph: modelData.glyph
+						filled: true
+						on: modelData.main ?? false
+						enabled: modelData.enabled
+						opacity: enabled ? 1 : 0.4
+						onClicked: modelData.act()
 					}
 				}
 			}

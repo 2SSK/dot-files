@@ -26,6 +26,12 @@ Singleton {
 	readonly property bool island: bar.style === "island"
 
 	// write shell.json soon after the last change (sliders change many times a second)
+	// a setting changed and kept: Config.set("bar", "style", "island")
+	function set(group: string, key: string, value: var): void {
+		root[group][key] = value;
+		save();
+	}
+
 	function save(): void {
 		saveTimer.restart();
 	}

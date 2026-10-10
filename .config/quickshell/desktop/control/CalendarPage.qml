@@ -193,33 +193,20 @@ Column {
 			font.weight: Font.DemiBold
 		}
 
-		Rectangle {
+		IconButton {
 			anchors.right: parent.right
 			anchors.verticalCenter: parent.verticalCenter
-			width: 30
-			height: 30
+			size: 30
 			radius: 10
-			color: root.adding ? Theme.primary : addHover.hovered ? Qt.alpha(Theme.fg, 0.1) : Qt.alpha(Theme.surface, 0.8)
-
-			Glyph {
-				anchors.centerIn: parent
-				glyph: Icons.g(root.adding ? "x" : "plus")
-				font.pixelSize: 15
-				color: root.adding ? Theme.primaryText : Theme.fg
-			}
-
-			HoverHandler {
-				id: addHover
-			}
-
-			MouseArea {
-				anchors.fill: parent
-				cursorShape: Qt.PointingHandCursor
-				onClicked: {
-					root.adding = !root.adding;
-					if (root.adding)
-						dayComposer.focusField();
-				}
+			glyph: Icons.g(root.adding ? "x" : "plus")
+			glyphSize: 15
+			on: root.adding
+			filled: false
+			idle: Qt.alpha(Theme.surface, 0.8)
+			onClicked: {
+				root.adding = !root.adding;
+				if (root.adding)
+					dayComposer.focusField();
 			}
 		}
 	}
