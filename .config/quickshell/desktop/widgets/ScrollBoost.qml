@@ -17,7 +17,13 @@ WheelHandler {
 		const top = view.originY;
 		const bottom = view.originY + Math.max(0, view.contentHeight - view.height);
 		const from = glide.running ? glide.to : view.contentY;
-		glide.to = Math.max(top, Math.min(bottom, from - dy));
+		const to = Math.max(top, Math.min(bottom, from - dy));
+		// already at that end (or nothing to scroll): the view around this one scrolls instead
+		if (to === from) {
+			event.accepted = false;
+			return;
+		}
+		glide.to = to;
 		glide.restart();
 		event.accepted = true;
 	}
