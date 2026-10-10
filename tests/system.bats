@@ -352,7 +352,7 @@ subvolume_fakes() { # btrfs makes folders and remembers them as subvolumes; the 
 	grep -qx 'PLATFORM_PROFILE_ON_BAT=balanced' "$conf"
 	grep -qx 'CPU_BOOST_ON_SAV=0' "$conf"
 	grep -qx 'PLATFORM_PROFILE_ON_SAV=quiet' "$conf"
-	grep -qx 'STOP_CHARGE_THRESH_BAT1=85' "$conf"
+	grep -qx 'STOP_CHARGE_THRESH_BAT1=80' "$conf"
 	# the shell's power page: the charge-limit helper, root's, and the passwordless rule for it and the profiles
 	[ -x "$SYSTEM_ROOT/usr/local/bin/desktop-charge-limit" ]
 	grep -qx "$(id -un) ALL=(root) NOPASSWD: /usr/bin/tlp performance, /usr/bin/tlp balanced, /usr/bin/tlp power-saver, /usr/local/bin/desktop-charge-limit" "$SYSTEM_ROOT/etc/sudoers.d/90-desktop-power"

@@ -591,7 +591,7 @@ FloatingWindow {
 				SettingRow {
 					visible: Power.limit > 0
 					label: "Charge limit"
-					hint: "Charging stops here (85% by default): a battery kept below full lasts longer. 100% before a trip."
+					hint: "Charging stops here (80% by default; some ASUS laptops only keep 40, 60 or 80): a battery kept below full lasts longer. 100% before a trip."
 					Range {
 						id: chargeLimit
 
