@@ -1,36 +1,36 @@
-# Terminal and tools. Columns: arch  debian(+ubuntu)  fedora (format: see base.txt)
-zsh                         zsh                         zsh
-tmux                        tmux                        tmux
-neovim                      neovim                      neovim
-vim                         vim                         vim-enhanced
-git                         git                         git
-git-delta                   git-delta                   git-delta
-git-lfs                     git-lfs                     git-lfs
-make                        make                        make
-gcc                         gcc                         gcc
-tree-sitter-cli             @tree-sitter-cli            @tree-sitter-cli
-stow                        stow                        stow
-jq                          jq                          jq
-unzip                       unzip                       unzip
-python                      python3                     python3
-nodejs                      nodejs                      nodejs
-npm                         npm                         npm
-fd                          fd-find                     fd-find
-eza                         eza                         eza
-fzf                         fzf                         fzf
-ripgrep                     ripgrep                     ripgrep
-bat                         bat                         bat
-zoxide                      zoxide                      zoxide
-starship                    starship                    @starship
-lazygit                     lazygit                     @lazygit
-lazydocker                  @lazydocker                 @lazydocker
-yazi                        @yazi                       @yazi
-cava                        cava                        cava
-fastfetch                   fastfetch                   fastfetch
-btop                        btop                        btop
-pgcli                       pgcli                       pgcli
-aur:pspg                    pspg                        pspg
-ttyper                      @ttyper                     @ttyper
-uv                          @uv                         uv
-aur:claude-code             @claude-code                @claude-code
-aur:opencode-bin            @opencode                   @opencode
+# Terminal and tools. Columns: arch  fedora (format: see base.txt)
+zsh                         zsh
+tmux                        tmux
+neovim                      neovim
+vim                         vim-enhanced
+git                         git
+git-delta                   git-delta
+git-lfs                     git-lfs
+make                        make
+gcc                         gcc
+tree-sitter-cli             @tree-sitter-cli
+stow                        stow
+jq                          jq
+unzip                       unzip
+python                      python3
+nodejs                      nodejs
+npm                         npm
+fd                          fd-find
+eza                         eza
+fzf                         fzf
+ripgrep                     ripgrep
+bat                         bat
+zoxide                      zoxide
+starship                    @starship
+lazygit                     @lazygit
+lazydocker                  @lazydocker
+yazi                        @yazi
+cava                        cava
+fastfetch                   fastfetch
+btop                        btop
+pgcli                       pgcli
+aur:pspg                    pspg
+ttyper                      @ttyper
+uv                          uv
+aur:claude-code             @claude-code
+aur:opencode-bin            @opencode

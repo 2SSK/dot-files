@@ -20,55 +20,34 @@ detect_distro() {
 	source "${OS_RELEASE:-/etc/os-release}"
 	for id in $ID $ID_LIKE; do
 		case $id in
-		arch | debian | fedora) echo "$id" && return ;;
-		ubuntu) echo debian && return ;;
+		arch | fedora) echo "$id" && return ;;
 		esac
 	done
-	log_error unsupported_distro id="$ID" id_like="$ID_LIKE"
+	log_error unsupported_distro id="$ID" id_like="$ID_LIKE" msg="supported: Arch (and derivatives) and Fedora"
 	exit 3
 }
 
-# The Qt this system's package manager offers (major.minor; empty for none): the desktop shell
-# (Quickshell) needs 6.6 or newer, which decides whether a Debian-family or Fedora release can run
-# it. apt has no lists on a fresh cloud image, so it updates them once when it has nothing.
-qt_offered() { # <distro>
-	local v=''
-	case $1 in
-	debian)
-		v="$(apt-cache policy qt6-base-dev 2>/dev/null | awk '/Candidate:/ && $2 != "(none)" { print $2; exit }')"
-		if [[ -z $v ]]; then
-			sudo apt-get update -qq >/dev/null 2>&1 || true
-			v="$(apt-cache policy qt6-base-dev 2>/dev/null | awk '/Candidate:/ && $2 != "(none)" { print $2; exit }')"
-		fi
-		;;
-	fedora) v="$(dnf -q repoquery --latest-limit 1 --qf '%{version}\n' qt6-qtbase 2>/dev/null | sort -V | tail -1)" ;;
-	esac
-	[[ $v =~ ^([0-9]+\.[0-9]+) ]] && echo "${BASH_REMATCH[1]}"
-}
-
-# Can this system run the desktop? Arch always; elsewhere when Qt 6.6 or newer is on offer. Exits 4,
-# saying why and what works, when it can't (setup.sh asks before changing anything).
+# Can this system run the desktop? Arch always; Fedora when it offers Qt 6.6 or newer (Quickshell
+# needs it: Fedora 41 and later). Exits 4, saying why, when it can't; another distro is refused by
+# detect_distro (exit 3). setup.sh asks before changing anything.
 check() {
-	local distro qt NAME='' VERSION_ID=''
+	local distro qt VERSION_ID=''
 	distro="$(detect_distro)"
 	[[ $distro == arch ]] && return 0
 	# shellcheck source=/dev/null
 	source "${OS_RELEASE:-/etc/os-release}"
-	qt="$(qt_offered "$distro")"
+	qt="$(dnf -q repoquery --latest-limit 1 --qf '%{version}\n' qt6-qtbase 2>/dev/null | sort -V | tail -1)"
+	[[ $qt =~ ^([0-9]+\.[0-9]+) ]] && qt=${BASH_REMATCH[1]}
 	if [[ -n $qt && $(printf '%s\n' 6.6 "$qt" | sort -V | head -1) == 6.6 ]]; then
 		return 0
 	fi
-	cat >&2 <<EOM
-${NAME:-This system} ${VERSION_ID} offers ${qt:+Qt $qt}${qt:-no Qt 6}; the desktop shell (Quickshell) needs Qt 6.6 or newer.
-Supported: Arch (and derivatives), Fedora 41 or newer, Debian 13 or newer, Ubuntu 25.04 or newer,
-and Linux Mint once it's based on Ubuntu 26.04. setup.sh --no-packages still links the dotfiles.
-EOM
+	echo "Fedora ${VERSION_ID} offers ${qt:+Qt $qt}${qt:-no Qt 6}; the desktop shell (Quickshell) needs Qt 6.6 or newer (Fedora 41+)." >&2
 	exit 4
 }
 
 column() { # <distro> <layer>
 	local col
-	case $1 in arch) col=1 ;; debian) col=2 ;; fedora) col=3 ;; esac
+	case $1 in arch) col=1 ;; fedora) col=2 ;; esac
 	awk -v c="$col" '{ sub(/#.*/, "") } NF { print $c }' "$here/$2.txt"
 }
 
@@ -79,7 +58,6 @@ install_native() { # <distro> <pkg...>
 	# Arch supports installs only together with a full upgrade: -S alone fails on a stale
 	# database (404 for replaced versions), -Sy alone risks a partial upgrade
 	arch) sudo pacman -Syu --needed --noconfirm "$@" ;;
-	debian) sudo apt-get update && sudo apt-get install -y "$@" ;;
 	fedora) sudo dnf install -y "$@" ;;
 	esac
 }

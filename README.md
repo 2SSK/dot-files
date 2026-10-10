@@ -15,9 +15,8 @@ My Arch Linux desktop: **sway (swayfx)** and **i3** sharing one config, with a
 
 ## Install
 
-Runs on **Arch** (and derivatives such as EndeavourOS), **Fedora 41+**, **Debian 13+** and
-**Ubuntu 25.04+**: the desktop shell needs Qt 6.6 or newer, so Linux Mint 22 and Ubuntu 24.04
-(Qt 6.4) can't run it yet. `setup.sh` checks this before changing anything.
+Runs on **Arch** (and derivatives such as EndeavourOS) and **Fedora 41+**. `setup.sh` checks
+this before changing anything.
 
 ```sh
 git clone https://github.com/2SSK/dot-files ~/dot-files

@@ -7,7 +7,6 @@ source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 version=1.9.3 # the newest on PyPI (GitHub tags run ahead)
 command -v autotiling >/dev/null && exit 0
 command -v pipx >/dev/null || case "$(distro)" in
-	debian) sudo apt-get install -y pipx ;;
 	fedora) sudo dnf install -y pipx ;;
 esac
 pipx install --quiet "autotiling==$version"

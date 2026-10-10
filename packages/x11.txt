@@ -1,26 +1,26 @@
-# i3 / Xorg session. Columns: arch  debian(+ubuntu)  fedora (format: see base.txt)
-i3-wm                       i3-wm                       i3
-xorg-server                 xserver-xorg                xorg-x11-server-Xorg
-xorg-xinput                 xinput                      xinput
-picom                       picom                       picom
-feh                         feh                         feh
-maim                        maim                        maim
-slop                        slop                        slop
-xclip                       xclip                       xclip
-xdotool                     xdotool                     xdotool
-xss-lock                    xss-lock                    xss-lock
-aur:i3lock-color            @i3lock-color               @i3lock-color
-xsettingsd                  xsettingsd                  xsettingsd
-dex                         dex                         dex-autostart
-xorg-xset                   x11-xserver-utils           xset
-xorg-xrandr                 x11-xserver-utils           xrandr
+# i3 / Xorg session. Columns: arch  fedora (format: see base.txt)
+i3-wm                       i3
+xorg-server                 xorg-x11-server-Xorg
+xorg-xinput                 xinput
+picom                       picom
+feh                         feh
+maim                        maim
+slop                        slop
+xclip                       xclip
+xdotool                     xdotool
+xss-lock                    xss-lock
+aur:i3lock-color            @i3lock-color
+xsettingsd                  xsettingsd
+dex                         dex-autostart
+xorg-xset                   xset
+xorg-xrandr                 xrandr
 # st, the X11 backup terminal: built by packages/extra/st.sh (gcc also provides cpp for xrdb #include)
-gcc                         gcc                         gcc
-pkgconf                     pkg-config                  pkgconf-pkg-config
-patch                       patch                       patch
-make                        make                        make
-libxft                      libxft-dev                  libXft-devel
--                           libx11-dev                  libX11-devel
-xorg-xrdb                   x11-xserver-utils           xrdb
-@st                         @st                         @st
-autotiling                  @autotiling                 @autotiling
+gcc                         gcc
+pkgconf                     pkgconf-pkg-config
+patch                       patch
+make                        make
+libxft                      libXft-devel
+-                           libX11-devel
+xorg-xrdb                   xrdb
+@st                         @st
+autotiling                  @autotiling

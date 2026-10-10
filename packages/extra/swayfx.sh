@@ -8,19 +8,13 @@ here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source-path=SCRIPTDIR/../.. source=.local/lib/desktop/log.sh
 source "$here/../../.local/lib/desktop/log.sh"
 
-# Fedora: the swayfx project's COPR. Debian and Ubuntu ship no SwayFX (and its scenefx needs a newer
-# wlroots than they have): plain sway there; the effects are left out (desktop/look.conf).
+# Fedora: the swayfx project's COPR.
 if command -v dnf >/dev/null; then
 	rpm -q swayfx >/dev/null 2>&1 && exit 0
 	sudo dnf install -y dnf5-plugins >/dev/null 2>&1 || sudo dnf install -y dnf-plugins-core
 	sudo dnf copr enable -y swayfx/swayfx
 	sudo dnf install -y --allowerasing swayfx
 	log_info installed name=swayfx via=copr
-	exit 0
-fi
-if command -v apt-get >/dev/null; then
-	dpkg -s sway >/dev/null 2>&1 || sudo apt-get install -y sway
-	log_info installed name=sway msg='no SwayFX for Debian or Ubuntu: plain sway, without the effects'
 	exit 0
 fi
 pacman -Qq swayfx >/dev/null 2>&1 && exit 0
