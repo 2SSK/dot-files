@@ -87,6 +87,8 @@ Column {
 		const i3 = { "reload": "Reload i3's config", "restart": "Restart i3 in place", "exit": "Log out" };
 		if (i3[cmd])
 			return { group: "i3", label: i3[cmd] };
+		if (/^exec\s+(?:--no-startup-id\s+)?desktop-capture shot region$/.test(cmd))
+			return { group: "Shell", label: "Screenshot a region (panels stay open)" };
 		if ((m = cmd.match(/^exec\s+(?:--no-startup-id\s+)?(.*)$/)))
 			return { group: "Apps", label: m[1] === "$term" ? "Terminal" : `Run ${m[1]}` };
 		return { group: "i3", label: cmd };
