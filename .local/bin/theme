@@ -73,17 +73,14 @@ link_config() { # <path under ~/.config> <rendered file>: apps that only read a 
 	ln -s "$src" "$dest"
 }
 
-gtk_settings() { # what GTK on Wayland and libadwaita read (GTK on X11 reads xsettingsd)
+gtk_settings() { # what GTK on Wayland and libadwaita read (GTK on X11 reads xsettingsd); the
+	# cursor and fonts, which no theme changes, setup.sh sets once
 	local schema=org.gnome.desktop.interface dark=0
 	gsettings list-schemas | grep -qx "$schema" || return 0
 	[[ $mode == dark ]] && dark=1
 	gsettings set "$schema" color-scheme "$( ((dark)) && echo prefer-dark || echo prefer-light)"
 	gsettings set "$schema" gtk-theme "$( ((dark)) && echo adw-gtk3-dark || echo adw-gtk3)"
 	gsettings set "$schema" icon-theme "Tela-circle-blue-$mode"
-	gsettings set "$schema" cursor-theme Bibata-Modern-Ice
-	gsettings set "$schema" cursor-size 24
-	gsettings set "$schema" font-name 'Inter 11'
-	gsettings set "$schema" monospace-font-name 'JetBrainsMono Nerd Font 11'
 }
 
 sddm() { # the login screen's colours, in the folder packages/system.sh sddm shares with it
