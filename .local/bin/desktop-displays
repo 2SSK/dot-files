@@ -4,11 +4,36 @@
 # was unplugged but is still on is turned off. Then the wallpaper is drawn again across them all.
 #   desktop-displays apply   arrange now
 #   desktop-displays watch   arrange now and whenever a screen is plugged in or out (i3 starts it)
+#   desktop-displays rehome  every workspace back on its screen (i3 or sway): the first connected one
+#                            its `workspace N output ...` line in workspaces.conf names. The window
+#                            manager applies those lines only when a workspace is made, so one left
+#                            on the panel while a monitor was away stayed there; the shell runs this
+#                            whenever a screen comes or goes
 set -euo pipefail
 
-[[ -n ${DISPLAY:-} ]] || exit 0
+rehome() {
+	local msg=i3-msg conf="${DESKTOP_WORKSPACES_CONF:-${XDG_CONFIG_HOME:-$HOME/.config}/i3/conf.d/workspaces.conf}"
+	[[ -n ${SWAYSOCK:-} ]] && msg=swaymsg
+	[[ -r $conf ]] || return 0
+	local active focused num on target out
+	active=" $($msg -t get_outputs | jq -r '[.[] | select(.active) | .name] | join(" ")') "
+	focused="$($msg -t get_workspaces | jq -r '.[] | select(.focused) | .num')"
+	local moved=0
+	while read -r num on; do
+		target=""
+		# shellcheck disable=SC2013 # the line's words: the screens, in order
+		for out in $(sed -n "s/^workspace $num output //p" "$conf"); do
+			[[ $active == *" $out "* ]] && target=$out && break
+		done
+		[[ -n $target && $target != "$on" ]] || continue
+		$msg -q "workspace number $num; move workspace to output $target"
+		moved=1
+	done < <($msg -t get_workspaces | jq -r '.[] | select(.num > 0) | "\(.num) \(.output)"')
+	((moved == 0)) || [[ -z $focused ]] || $msg -q "workspace number $focused"
+}
 
 apply() {
+	[[ -n ${DISPLAY:-} ]] || return 0
 	local line name state geometry internal='' externals=() off=() args=() previous
 	while read -r line; do
 		[[ $line =~ ^([A-Za-z0-9-]+)\ (connected|disconnected)(\ primary)?\ ?([0-9]+x[0-9]+\+[0-9]+\+[0-9]+)? ]] || continue
@@ -35,14 +60,17 @@ apply() {
 
 case ${1:-apply} in
 apply) apply ;;
+rehome) rehome ;;
 watch)
+	[[ -n ${DISPLAY:-} ]] || exit 0
 	apply
 	# a drm change event per plug or unplug (several at once): arrange once they settle
 	udevadm monitor --udev --subsystem-match=drm 2>/dev/null | while read -r line; do
 		[[ $line == *change* ]] || continue
 		while read -r -t 1 _; do :; done
 		apply || true
+		rehome || true
 	done
 	;;
-*) echo "usage: desktop-displays apply|watch" >&2 && exit 2 ;;
+*) echo "usage: desktop-displays apply|watch|rehome" >&2 && exit 2 ;;
 esac
