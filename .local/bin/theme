@@ -27,7 +27,10 @@ current() { # prints "<family> <mode>"; tokyonight dark until a theme is set
 	echo "$family $mode"
 }
 
-# One row per app: rendered file, link under ~/.config (or -), reload command (or -). Adding an app:
+# One row per app: rendered file, link under ~/.config (or -), reload command (or -). The switch
+# returns once each reload has run, except GRUB's background (a blur): it finishes on its own. Sway
+# takes the window colours as commands, live; reloading its whole config froze the screen a moment
+# (i3 can only reload). Adding an app:
 # a template in share/desktop/templates and a row here. kitty gets colours over its socket and picom
 # isn't reset: both would visibly redraw. tmux re-sources everything so its plugins re-apply.
 consumers() {
@@ -38,7 +41,7 @@ foot.ini         -                  pkill -$([[ $mode == dark ]] && echo USR1 ||
 cava             -                  pkill -USR2 -x cava
 nvim.lua         -                  pkill -USR1 -x nvim
 tmux.conf        -                  tmux info && tmux source-file "${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf"
-i3.conf          -                  if [[ -n ${SWAYSOCK:-} ]]; then swaymsg -q reload; else i3-msg -t get_version && i3-msg -q reload; fi
+i3.conf          -                  if [[ -n ${SWAYSOCK:-} ]]; then swaymsg -q "$(grep '^client\.' "$state/i3.conf" | paste -sd';')"; else i3-msg -t get_version && i3-msg -q reload; fi
 picom.conf       -                  -
 xsettingsd.conf  -                  pkill -HUP -x xsettingsd
 st.Xresources    -                  [[ -n ${DISPLAY:-} && -r $HOME/.Xresources ]] && xrdb -merge "$HOME/.Xresources" && pkill -USR1 -x st
@@ -53,7 +56,7 @@ yazi-flavor.toml yazi/flavors/desktop.yazi/flavor.toml -
 silicon.tmTheme  yazi/flavors/desktop.yazi/tmtheme.xml -
 yazi-theme.toml  yazi/theme.toml    -
 eza-theme.yml    eza/theme.yml      -
-palette.json     -                  "$bin/desktop-wallpaper" screens --boot
+palette.json     -                  setsid -f "$bin/desktop-wallpaper" screens --boot
 EOF
 }
 
