@@ -17,8 +17,6 @@ log() {
     (( ${rank[$level]:-3} >= ${rank[${DESKTOP_LOG_LEVEL:-warn}]:-2} )) || return 0
 
     local line="level=$level event=$event"
-    [[ -n ${DESKTOP_DISPLAY:-} ]] && line+=" backend=$DESKTOP_DISPLAY"
-    [[ -n ${DESKTOP_WM:-} ]] && line+=" wm=$DESKTOP_WM"
 
     local kv
     for kv in "$@"; do

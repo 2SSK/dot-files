@@ -3,10 +3,10 @@ pragma Singleton
 import QtQuick
 import Quickshell
 
-// The shell's icons: Tabler, by the names noctalia uses where it has one, loaded from fonts/ beside the config, so nothing has
-// to be installed. g(name) gives a glyph by its Tabler name (https://tabler.io/icons); Glyph draws
-// it, filled where Tabler has a filled version and the Glyph asks for one. Adding an icon: its
-// codepoint from Tabler's tabler-icons.css, below (and its -filled one, if any, in `filledCodes`).
+// The shell's icons: Tabler, loaded from fonts/ beside the config, so nothing has to be installed.
+// g(name) gives a glyph by its Tabler name (https://tabler.io/icons); Glyph draws it, filled where
+// Tabler has a filled version and the Glyph asks for one. Adding an icon: its codepoint from
+// Tabler's tabler-icons.css, below (and its -filled one, if any, in `filledCodes`).
 Singleton {
 	id: root
 
@@ -16,7 +16,6 @@ Singleton {
 			"adjustments": 0xea03,
 			"adjustments-horizontal": 0xec38,
 			"alarm": 0xea04,
-			"alarm-snooze": 0xf632,
 			"app-window": 0xefe6,
 			"apps": 0xebb6,
 			"arrow-big-up-line": 0xefee,
@@ -33,7 +32,6 @@ Singleton {
 			"bluetooth-off": 0xeceb,
 			"brightness-up": 0xeb7e,
 			"calendar": 0xea53,
-			"calendar-event": 0xea52,
 			"camera": 0xea54,
 			"check": 0xea5e,
 			"checkbox": 0xeba6,
@@ -42,7 +40,6 @@ Singleton {
 			"chevron-left": 0xea60,
 			"chevron-right": 0xea61,
 			"clipboard": 0xea6f,
-			"clock-hour-4": 0xf319,
 			"code": 0xea77,
 			"copy": 0xea7a,
 			"cpu": 0xef8e,
@@ -86,7 +83,6 @@ Singleton {
 			"power": 0xeb0d,
 			"refresh": 0xeb13,
 			"reload": 0xf3ae,
-			"repeat": 0xeb72,
 			"settings": 0xeb20,
 			"stack-2": 0xeef7,
 			"sun": 0xeb30,
@@ -94,7 +90,6 @@ Singleton {
 			"video": 0xed22,
 			"volume": 0xeb51,
 			"volume-2": 0xeb4f,
-			"volume-3": 0xeb50,
 			"volume-off": 0xf1c3,
 			"wifi": 0xeb52,
 			"wifi-off": 0xecfa,
@@ -106,7 +101,6 @@ Singleton {
 	readonly property var filledCodes: ({
 			"adjustments": 0xf6ec,
 			"alarm": 0xf709,
-			"alarm-snooze": 0xf70c,
 			"app-window": 0xf71a,
 			"apps": 0xf6f1,
 			"arrow-big-up-line": 0xf6d0,
@@ -119,7 +113,6 @@ Singleton {
 			"brightness-up": 0xfb24,
 			"calendar": 0xfb27,
 			"camera": 0xfa37,
-			"clock-hour-4": 0xfe5f,
 			"device-desktop": 0x1004a,
 			"file": 0xf747,
 			"gauge": 0xfc2c,

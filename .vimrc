@@ -16,17 +16,18 @@ set backspace=indent,eol,start iskeyword+=- conceallevel=0
 set spelllang=en_us,de_de,es_es
 set laststatus=2 statusline=%f%=%l/%L
 
-" Colours: the desktop theme (rendered by `theme`), transparent background. vim only handles
-" signals on the next keypress, so a timer checks once a second whether the theme changed.
+" Colours: the desktop theme (colors/desktop.vim builds them from its palette), transparent
+" background. vim only handles signals on the next keypress, so a timer checks once a second
+" whether the theme changed.
 set termguicolors
 syntax on
-let s:theme = (empty($XDG_STATE_HOME) ? $HOME . '/.local/state' : $XDG_STATE_HOME) . '/desktop/theme/vim.vim'
+let s:theme = (empty($XDG_STATE_HOME) ? $HOME . '/.local/state' : $XDG_STATE_HOME) . '/desktop/theme/palette.json'
 let s:theme_time = -1
 function! s:ApplyTheme(...) abort
 	let l:time = getftime(s:theme)
 	if l:time == s:theme_time | return | endif
 	let s:theme_time = l:time
-	if l:time < 0 | colorscheme default | else | execute 'source' fnameescape(s:theme) | endif
+	if l:time < 0 | colorscheme default | else | colorscheme desktop | endif
 	if a:0 | redraw! | endif
 endfunction
 call s:ApplyTheme()

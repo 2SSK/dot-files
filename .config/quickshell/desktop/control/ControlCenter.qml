@@ -27,8 +27,30 @@ HangingPanel {
 	panelWidth: Panel.controlWidth
 	panelHeight: Panel.controlHeight
 	onDismissed: Panel.controlOpen = false
-	// on Home, the media keys: Space plays or pauses, ← → skip
+	// between pages: Ctrl+Tab (Shift: back) or Ctrl+PgDn/PgUp, Alt+1…8 straight to one; on Home,
+	// the media keys: Space plays or pauses, ← → skip
+	function turn(by: int): void {
+		const at = pages.findIndex(p => p.key === Panel.controlPage);
+		Panel.controlPage = pages[(Math.max(0, at) + by + pages.length) % pages.length].key;
+	}
+
 	onKeyPressed: event => {
+		const ctrl = event.modifiers & Qt.ControlModifier;
+		if (ctrl && (event.key === Qt.Key_Tab || event.key === Qt.Key_PageDown)) {
+			turn(1);
+			event.accepted = true;
+			return;
+		}
+		if (ctrl && (event.key === Qt.Key_Backtab || event.key === Qt.Key_PageUp)) {
+			turn(-1);
+			event.accepted = true;
+			return;
+		}
+		if ((event.modifiers & Qt.AltModifier) && event.key >= Qt.Key_1 && event.key < Qt.Key_1 + pages.length) {
+			Panel.controlPage = pages[event.key - Qt.Key_1].key;
+			event.accepted = true;
+			return;
+		}
 		const player = Media.player;
 		if (Panel.controlPage !== "home" || !player)
 			return;

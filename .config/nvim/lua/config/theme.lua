@@ -1,12 +1,28 @@
--- Follow the desktop theme: `theme` renders ~/.local/state/desktop/theme/nvim.lua and sends
--- SIGUSR1; every running nvim reloads colors/desktop.lua.
+-- Follow the desktop theme: colors/desktop.lua builds a base16 scheme from the theme's palette
+-- (~/.local/state/desktop/theme/palette.json); `theme` sends SIGUSR1 and every nvim reloads it.
 local M = {}
 
-local state = (vim.env.XDG_STATE_HOME or (vim.env.HOME .. "/.local/state")) .. "/desktop/theme/nvim.lua"
+local state = (vim.env.XDG_STATE_HOME or (vim.env.HOME .. "/.local/state")) .. "/desktop/theme/palette.json"
 
+-- { background, palette (base00..base0F), ui (the theme's roles) }, or nil without a theme
 function M.read()
-	local ok, theme = pcall(dofile, state)
-	return ok and type(theme) == "table" and theme or nil
+	local ok, p = pcall(function()
+		return vim.json.decode(table.concat(vim.fn.readfile(state), "\n"))
+	end)
+	if not ok or type(p) ~= "table" or type(p.ui) ~= "table" then
+		return nil
+	end
+	local u, a = p.ui, p.ansi or {}
+	return {
+		background = p.mode,
+		palette = {
+			base00 = u.bg, base01 = u.surface, base02 = u.selection, base03 = u.fg_muted,
+			base04 = u.fg_muted, base05 = u.fg, base06 = u.fg, base07 = u.fg,
+			base08 = u.error, base09 = u.accent, base0A = u.warning, base0B = u.success,
+			base0C = a.c6, base0D = u.primary, base0E = u.secondary, base0F = a.c9,
+		},
+		ui = u,
+	}
 end
 
 function M.apply()

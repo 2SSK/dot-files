@@ -1,11 +1,10 @@
 # shellcheck shell=bash
 # Aliases shared by bash and zsh.
 
-# eza when installed (icons, git column, tree), in the desktop theme's colours (eza/theme.yml,
-# rendered by theme): LS_COLORS would override that file, so eza runs without it. Else coloured
-# GNU ls with LS_COLORS.
+# eza when installed (icons, git column, tree), else coloured GNU ls; both in the terminal's
+# colours, so they follow the theme.
 if command -v eza >/dev/null; then
-	alias ls='LS_COLORS= eza --group-directories-first --icons=auto'
+	alias ls='eza --group-directories-first --icons=auto'
 	alias ll='ls -l --git' la='ll -a' lt='ls --tree --level=2' l='ls -la --git'
 else
 	alias ls='ls --color=auto --group-directories-first -h'
@@ -17,8 +16,9 @@ alias grep='grep --color=auto' diff='diff --color=auto' ip='ip -color=auto'
 alias cp='cp -iv' mv='mv -iv' rm='rm -Iv' mkdir='mkdir -pv'
 alias cl='clear' e='exit' rel='exec $SHELL'
 alias vi='nvim' lg='lazygit' ldc='lazydocker' ff='fastfetch' tt='ttyper'
-# -u: always UTF-8, so icons render even when the locale lacks it (LANG=en_IN instead of en_IN.UTF-8)
-alias tmux='tmux -u' t='tmux -u' tl='tmux ls' ta='tmux -u attach -t' tn='tmux -u new -s' tk='tmux kill-session -t' td='tmux detach'
+# no -u: with it, zsh's tmux completion took the flag for a subcommand ("subcommand -u not known"),
+# and a UTF-8 locale gives tmux UTF-8 anyway
+alias t='tmux' tl='tmux ls' ta='tmux attach -t' tn='tmux new -s' tk='tmux kill-session -t' td='tmux detach'
 alias lazydocker='CONFIG_DIR="$XDG_STATE_HOME/desktop/theme/lazydocker" lazydocker' # config rendered from the theme
 alias top='btop'
 alias cava='cava -p "$XDG_STATE_HOME/desktop/theme/cava"' # config rendered from the theme

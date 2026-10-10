@@ -19,5 +19,6 @@ Label {
 
 	text: Qt.formatDateTime(clock.date, Config.vertical ? "hh\nmm" : "hh:mm AP ddd, MMM dd")
 	lineHeight: 0.9
-	font.weight: Font.Medium
+	font.family: Theme.fontBar
+	font.weight: Theme.barWeight
 }

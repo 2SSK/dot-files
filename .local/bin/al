@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# al: drop the MIT LICENSE template (~/.local/share/templates) into the current project, this year's.
+set -euo pipefail
+src="${XDG_DATA_HOME:-$HOME/.local/share}/templates/LICENSE"
+[[ -e LICENSE ]] && { echo "al: LICENSE is already here" >&2 && exit 1; }
+sed "s/^Copyright (c) [0-9]\{4\}/Copyright (c) $(date +%Y)/" "$src" >LICENSE
+echo "LICENSE added ($(date +%Y))"

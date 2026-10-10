@@ -5,7 +5,9 @@
 set -euo pipefail
 
 [[ -n ${SWAYSOCK:-} ]] || exit 0
-[[ $(swaymsg -t get_version) == *swayfx* ]] || exit 0
+# SwayFX names itself only in `sway --version` (its IPC version reply is just the number)
+[[ $(sway --version 2>/dev/null) == swayfx* ]] || exit 0
 conf="${XDG_CONFIG_HOME:-$HOME/.config}/sway/effects.conf"
 commands="$(grep -vE '^\s*(#|$)' "$conf" | paste -sd';')"
-swaymsg -q -- "$commands"
+swaymsg -r -- "$commands" | grep -q '"success": false' && echo "desktop-effects: sway refused some of effects.conf" >&2
+exit 0

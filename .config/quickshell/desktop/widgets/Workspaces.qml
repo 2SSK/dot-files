@@ -87,10 +87,10 @@ Line {
 			anchors.centerIn: parent
 			text: parent.label
 			color: Theme.primaryText
-			font.family: Theme.fontHeading
+			font.family: Theme.fontBar
 			font.hintingPreference: Theme.hinting
 			font.pixelSize: Theme.fontSize - 3
-			font.weight: Font.DemiBold
+			font.weight: Theme.barWeight
 		}
 	}
 }

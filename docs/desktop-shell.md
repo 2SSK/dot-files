@@ -1,7 +1,7 @@
 # Desktop shell (Quickshell)
 
 `qs -c desktop`, started by sway (`.config/sway/desktop/startup.conf`) and i3 (`.config/i3/conf.d/autostart.conf`). Sources: `.config/quickshell/desktop/`.
-Colours come from the desktop theme (see [theme.md](theme.md)); icons are Tabler, as noctalia's
+Colours come from the desktop theme (see [theme.md](theme.md)); icons are Tabler
 (filled versions for active states; the font sits in `fonts/` beside the config, MIT licensed;
 names in `Icons.qml`), apps' own icons come from the GTK icon theme (Tela Circle); settings from
 `~/.config/desktop/shell.json`, stowed from the repo, which applies as soon as it's saved.
@@ -16,7 +16,9 @@ windows that only catch clicks, like the power menu's, are left out.
 ## Control center
 
 A panel that drops out of the middle of the bar, in its colour: an icon sidebar of pages, a header with
-the page's title, its buttons and ✕, then the page. The bar's widgets open their page:
+the page's title, its buttons and ✕, then the page. The bar's widgets open their page; from the
+keyboard, **Ctrl+Tab** / **Ctrl+Shift+Tab** (or Ctrl+PgDn / PgUp) turn the pages and **Alt+1…8**
+jump to one, in the sidebar's order:
 
 | Page | Opened by | What's there |
 | --- | --- | --- |

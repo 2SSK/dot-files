@@ -6,9 +6,9 @@ import qs
 import qs.services
 import qs.widgets
 
-// The power menu: a row of tiles floating under the bar (or beside a vertical one), as noctalia's
-// session menu. Arrows or the mouse pick, Enter or a click runs (twice for Log Out, Reboot and Shut
-// Down), 1–5 jump to a tile, Escape closes; i3's "power" mode hands it the keys.
+// The power menu: a row of tiles floating under the bar (or beside a vertical one). Arrows or the
+// mouse pick, Enter or a click runs (twice for Log Out, Reboot and Shut Down), 1–5 jump to a tile,
+// Escape closes; i3's "power" mode hands it the keys.
 PopupWindow {
 	id: root
 

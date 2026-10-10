@@ -15,11 +15,11 @@ every open nvim and vim switches.
 | `lua/config/theme.lua`, `colors/desktop.lua` | Desktop theme: palette → mini.base16, transparency, live reload |
 | `plugin/floatterminal.lua` | Floating terminal |
 | `lazy-lock.json` | Pinned plugin versions |
-| `~/.vimrc` | vim: options, keys, netrw, the theme's `vim.vim` |
+| `~/.vimrc`, `~/.vim/colors/desktop.vim` | vim: options, keys, netrw; the theme's colours |
 
-The theme engine renders `nvim.lua` (base16 palette), `vim.vim` and `silicon.tmTheme` into
-`~/.local/state/desktop/theme/`. nvim reloads on SIGUSR1 from `theme`; vim checks the file
-once a second.
+Both build their colorscheme `desktop` from the theme's `palette.json`
+(`~/.local/state/desktop/theme/`): nvim as base16, reloaded on SIGUSR1 from `theme`; vim checks the
+file once a second.
 
 ## Look
 
