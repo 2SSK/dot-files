@@ -53,7 +53,7 @@ Column {
 			anchors.verticalCenter: parent.verticalCenter
 			text: Qt.formatDate(new Date(root.year, root.month, 1), "MMMM yyyy")
 			color: Theme.fg
-			font.family: Theme.fontSans
+			font.family: Theme.fontHeading
 			font.hintingPreference: Theme.hinting
 			font.pixelSize: Theme.px(16)
 			font.weight: Font.DemiBold
@@ -125,7 +125,7 @@ Column {
 					verticalAlignment: Text.AlignVCenter
 					text: Qt.locale().dayName((root.first + index) % 7, Locale.ShortFormat).slice(0, 2)
 					color: Theme.fgMuted
-					font.family: Theme.fontSans
+					font.family: Theme.fontHeading
 					font.hintingPreference: Theme.hinting
 					font.pixelSize: Theme.textLabel
 					font.weight: Font.DemiBold

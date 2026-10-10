@@ -69,6 +69,10 @@ Singleton {
 			}
 			property JsonObject fonts: JsonObject {
 				property real scale: 1.15 // the shell's text against its base sizes (Settings → Appearance)
+				property string sans: "Inter" // the interface
+				property string heading: "Inter" // titles, labels on tiles, anything semibold or bold
+				property string mono: "JetBrainsMono Nerd Font" // code, the clipboard's text
+				property int weight: 500 // body text: 400 regular, 500 medium, 600 semibold
 			}
 			property JsonObject notifications: JsonObject {
 				property int timeout: 5000 // ms a popup stays, unless the app sets its own

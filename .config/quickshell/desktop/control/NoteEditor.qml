@@ -50,7 +50,7 @@ Column {
 		text: note.current.title
 		color: Theme.fg
 		selectionColor: Qt.alpha(Theme.primary, 0.4)
-		font.family: Theme.fontSans
+		font.family: Theme.fontHeading
 		font.hintingPreference: Theme.hinting
 		font.pixelSize: Theme.px(18)
 		font.weight: Font.DemiBold

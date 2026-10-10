@@ -13,12 +13,23 @@ Column {
 
 	spacing: 22
 
-	property string family: ""
+	property string family: "" // what the buttons show: the choice, at once
 	property string mode: ""
 	property var families: []
+	property string applied: "" // "family mode" the last switch made (or being made)
 
-	function theme(args: var): void {
-		apply.command = ["theme", ...args];
+	// a click shows at once; the switch (render, then reload every app) runs behind, one at a time:
+	// clicks made meanwhile only change what runs next, so a burst ends on the last choice
+	function choose(family: string, mode: string): void {
+		page.family = family;
+		page.mode = mode;
+		if (!apply.running)
+			run();
+	}
+
+	function run(): void {
+		applied = `${family} ${mode}`;
+		apply.command = ["theme", "set", family, "--mode", mode];
 		apply.running = true;
 	}
 
@@ -32,8 +43,6 @@ Column {
 	}
 
 	Process {
-		id: current
-
 		running: true
 		command: ["theme", "current"]
 		stdout: StdioCollector {
@@ -41,6 +50,7 @@ Column {
 				const [family, mode] = text.trim().split(" ");
 				page.family = family;
 				page.mode = mode;
+				page.applied = `${family} ${mode}`;
 			}
 		}
 	}
@@ -48,7 +58,8 @@ Column {
 	Process {
 		id: apply
 
-		onExited: current.running = true
+		// a newer choice came in while this one ran: switch to it now
+		onExited: if (`${page.family} ${page.mode}` !== page.applied) page.run()
 	}
 
 	Section {
@@ -59,7 +70,7 @@ Column {
 			Choice {
 				options: [{ value: "dark", label: "Dark" }, { value: "light", label: "Light" }]
 				value: page.mode
-				onPicked: value => page.theme(["mode", value])
+				onPicked: value => page.choose(page.family, value)
 			}
 		}
 
@@ -84,10 +95,22 @@ Column {
 					border.width: on ? 0 : 1
 					border.color: Qt.alpha(Theme.border, 0.6)
 
+					Behavior on color {
+						ColorAnimation {
+							duration: 160
+						}
+					}
+
 					Text {
 						anchors.centerIn: parent
 						text: swatch.modelData
 						color: swatch.on ? Theme.primaryText : Theme.fg
+
+						Behavior on color {
+							ColorAnimation {
+								duration: 160
+							}
+						}
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
 						font.pixelSize: Theme.textBody
@@ -101,7 +124,7 @@ Column {
 					MouseArea {
 						anchors.fill: parent
 						cursorShape: Qt.PointingHandCursor
-						onClicked: page.theme(["set", swatch.modelData])
+						onClicked: page.choose(swatch.modelData, page.mode)
 					}
 				}
 			}
@@ -165,11 +188,43 @@ Column {
 	}
 
 	Section {
-		title: "Text"
+		title: "Fonts"
+
+		FontRow {
+			label: "Interface"
+			hint: "Most of the shell's text."
+			value: Theme.fontSans
+			onPicked: family => Config.set("fonts", "sans", family)
+		}
+
+		FontRow {
+			label: "Headings"
+			hint: "Titles, tile names, the clock and other semibold text."
+			value: Theme.fontHeading
+			onPicked: family => Config.set("fonts", "heading", family)
+		}
+
+		FontRow {
+			label: "Code"
+			hint: "The clipboard's text, code notes."
+			value: Theme.fontMono
+			mono: true
+			onPicked: family => Config.set("fonts", "mono", family)
+		}
 
 		SettingRow {
-			label: "Text size"
-			hint: "The shell's text. 115% reads like the terminal and GTK apps here."
+			label: "Weight"
+			hint: "Of body text; headings keep theirs."
+			Choice {
+				options: [{ value: 400, label: "Regular" }, { value: 500, label: "Medium" }, { value: 600, label: "Semibold" }]
+				value: Theme.textWeight
+				onPicked: value => Config.set("fonts", "weight", value)
+			}
+		}
+
+		SettingRow {
+			label: "Size"
+			hint: "115% reads like the terminal and GTK apps here."
 			Range {
 				from: 0.9
 				to: 1.4

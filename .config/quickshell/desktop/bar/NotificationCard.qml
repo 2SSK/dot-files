@@ -110,7 +110,7 @@ Rectangle {
 					text: root.notification?.summary ?? ""
 					elide: Text.ElideRight
 					color: Theme.fg
-					font.family: Theme.fontSans
+					font.family: Theme.fontHeading
 					font.hintingPreference: Theme.hinting
 					font.pixelSize: Theme.textBody
 					font.weight: Font.DemiBold

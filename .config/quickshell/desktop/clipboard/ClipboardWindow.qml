@@ -247,7 +247,7 @@ HangingPanel {
 				anchors.verticalCenter: parent.verticalCenter
 				text: !root.entry ? "" : root.entry.kind === "image" ? "Image" : root.entry.kind === "files" ? (root.entry.paths.length === 1 ? "File" : `${root.entry.paths.length} files`) : `Text · ${root.entry.text.length} characters`
 				color: Theme.fgMuted
-				font.family: Theme.fontSans
+				font.family: Theme.fontHeading
 				font.hintingPreference: Theme.hinting
 				font.pixelSize: Theme.textLabel
 				font.weight: Font.DemiBold

@@ -286,7 +286,7 @@ HangingPanel {
 					text: root.label(tile.modelData)
 					elide: Text.ElideRight
 					color: "white"
-					font.family: Theme.fontSans
+					font.family: Theme.fontHeading
 					font.hintingPreference: Theme.hinting
 					font.pixelSize: Theme.textLabel
 					font.weight: Font.DemiBold

@@ -25,14 +25,16 @@ Singleton {
 	readonly property color warning: ui.warning ?? "#e0af68"
 	readonly property color secondary: ui.secondary ?? "#bb9af7"
 
-	readonly property string fontSans: "Inter"
-	readonly property string fontMono: "JetBrainsMono Nerd Font"
+	// the fonts and body weight, from Settings → Appearance → Fonts
+	readonly property string fontSans: Config.fonts.sans || "Inter"
+	readonly property string fontHeading: Config.fonts.heading || fontSans
+	readonly property string fontMono: Config.fonts.mono || "JetBrainsMono Nerd Font"
 	// every text asks for full hinting: Qt on Wayland ignores fontconfig's (slight), and the shell's
 	// windows get no subpixel smoothing, so small text looked soft; full snaps stems to whole pixels
 	readonly property int hinting: Font.PreferFullHinting
 	// body text a step heavier than regular: Qt blends text linearly (kitty boosts its contrast), so
 	// regular strokes at 12-14 px read thin and faint beside the terminal; headings set their own
-	readonly property int textWeight: Font.Medium
+	readonly property int textWeight: Config.fonts.weight || Font.Medium
 	// Text sizes, all through textScale (Settings → Appearance → Text size) so the shell reads like
 	// the rest of the desktop: the terminal is 14 pt (about 19 px), GTK apps Inter 11 at 125%. px(n)
 	// scales a base size; the common ones are named: times and hints, buttons and chips, lists and

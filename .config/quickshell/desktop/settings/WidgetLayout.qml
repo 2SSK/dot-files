@@ -155,7 +155,7 @@ Item {
 						y: 12
 						text: column.modelData.title
 						color: Theme.fgMuted
-						font.family: Theme.fontSans
+						font.family: Theme.fontHeading
 						font.hintingPreference: Theme.hinting
 						font.pixelSize: Theme.textLabel
 						font.weight: Font.DemiBold

@@ -174,7 +174,7 @@ HangingPanel {
 			anchors.verticalCenter: parent.verticalCenter
 			text: parent.label
 			color: Theme.fg
-			font.family: Theme.fontSans
+			font.family: Theme.fontHeading
 			font.hintingPreference: Theme.hinting
 			font.pixelSize: Theme.textBody
 			font.weight: Font.DemiBold
@@ -310,7 +310,7 @@ HangingPanel {
 				anchors.verticalCenter: parent.verticalCenter
 				text: root.asking === "record" ? "Record which screen?" : "Screenshot which screen?"
 				color: Theme.fg
-				font.family: Theme.fontSans
+				font.family: Theme.fontHeading
 				font.hintingPreference: Theme.hinting
 				font.pixelSize: Theme.textBody
 				font.weight: Font.DemiBold
@@ -373,7 +373,7 @@ HangingPanel {
 							anchors.horizontalCenter: parent.horizontalCenter
 							text: `${monitor.index + 1}  ${monitor.modelData.name}`
 							color: Theme.fg
-							font.family: Theme.fontSans
+							font.family: Theme.fontHeading
 							font.hintingPreference: Theme.hinting
 							font.pixelSize: Theme.textBody
 							font.weight: Font.DemiBold

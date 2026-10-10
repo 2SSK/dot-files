@@ -159,7 +159,7 @@ HangingPanel {
 			anchors.verticalCenter: parent.verticalCenter
 			text: page.item?.title ?? ""
 			color: Theme.primary
-			font.family: Theme.fontSans
+			font.family: Theme.fontHeading
 			font.hintingPreference: Theme.hinting
 			font.pixelSize: Theme.px(18)
 			font.weight: Font.DemiBold

@@ -58,7 +58,7 @@ Rectangle {
 			text: root.label
 			elide: Text.ElideRight
 			color: root.on ? Theme.primaryText : Theme.fg
-			font.family: Theme.fontSans
+			font.family: Theme.fontHeading
 			font.hintingPreference: Theme.hinting
 			font.pixelSize: Theme.textBody
 			font.weight: Font.DemiBold

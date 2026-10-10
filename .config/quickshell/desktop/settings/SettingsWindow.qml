@@ -69,7 +69,7 @@ FloatingWindow {
 			y: 22
 			text: "Settings"
 			color: Theme.fg
-			font.family: Theme.fontSans
+			font.family: Theme.fontHeading
 			font.hintingPreference: Theme.hinting
 			font.pixelSize: Theme.px(20)
 			font.weight: Font.DemiBold
@@ -164,7 +164,7 @@ FloatingWindow {
 		Text {
 			text: root.pages.find(p => p.key === root.page)?.title ?? ""
 			color: Theme.fg
-			font.family: Theme.fontSans
+			font.family: Theme.fontHeading
 			font.hintingPreference: Theme.hinting
 			font.pixelSize: Theme.px(22)
 			font.weight: Font.DemiBold

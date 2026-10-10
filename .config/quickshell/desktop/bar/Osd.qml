@@ -134,7 +134,7 @@ PopupWindow {
 								num: "Num Lock"
 							})[root.kind] ?? ""
 						color: Theme.fg
-						font.family: Theme.fontSans
+						font.family: Theme.fontHeading
 						font.hintingPreference: Theme.hinting
 						font.pixelSize: Theme.px(15)
 						font.weight: Font.DemiBold

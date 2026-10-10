@@ -48,7 +48,7 @@ HangingPanel {
 				anchors.verticalCenter: parent.verticalCenter
 				text: "Authentication required"
 				color: Theme.fg
-				font.family: Theme.fontSans
+				font.family: Theme.fontHeading
 				font.hintingPreference: Theme.hinting
 				font.pixelSize: Theme.px(17)
 				font.weight: Font.DemiBold

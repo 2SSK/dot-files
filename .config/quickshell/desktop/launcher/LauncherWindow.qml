@@ -441,7 +441,7 @@ HangingPanel {
 						anchors.bottomMargin: 10
 						text: cell.emoji ? "" : cell.modelData.name
 						color: cell.colours.fg ?? Theme.fg
-						font.family: Theme.fontSans
+						font.family: Theme.fontHeading
 						font.hintingPreference: Theme.hinting
 						font.pixelSize: Theme.textBody
 						font.weight: Font.DemiBold

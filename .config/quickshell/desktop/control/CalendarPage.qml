@@ -153,7 +153,7 @@ Column {
 	component Heading: Text {
 		topPadding: 4
 		color: Theme.fgMuted
-		font.family: Theme.fontSans
+		font.family: Theme.fontHeading
 		font.hintingPreference: Theme.hinting
 		font.pixelSize: Theme.textLabel
 		font.weight: Font.DemiBold
@@ -190,7 +190,7 @@ Column {
 			anchors.verticalCenter: parent.verticalCenter
 			text: Qt.formatDate(root.chosen, "dddd, d MMMM")
 			color: Theme.fg
-			font.family: Theme.fontSans
+			font.family: Theme.fontHeading
 			font.hintingPreference: Theme.hinting
 			font.pixelSize: Theme.textBody
 			font.weight: Font.DemiBold

@@ -84,7 +84,7 @@ Item {
 							anchors.centerIn: parent
 							text: root.priorities[choice.modelData].letter
 							color: choice.on ? Theme.bg : choice.colour
-							font.family: Theme.fontSans
+							font.family: Theme.fontHeading
 							font.hintingPreference: Theme.hinting
 							font.pixelSize: Theme.textBody
 							font.weight: Font.Bold
@@ -232,7 +232,7 @@ Item {
 						anchors.centerIn: parent
 						text: item.level.letter
 						color: item.level.colour
-						font.family: Theme.fontSans
+						font.family: Theme.fontHeading
 						font.hintingPreference: Theme.hinting
 						font.pixelSize: Theme.textLabel
 						font.weight: Font.Bold
