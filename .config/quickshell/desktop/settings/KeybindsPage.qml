@@ -72,6 +72,8 @@ Column {
 			return { group: "Windows", label: `Move window ${m[1]}` };
 		if ((m = cmd.match(/^move window to output (\w+)$/)))
 			return { group: "Windows", label: `Move window to the ${m[1]} monitor` };
+		if ((m = cmd.match(/^move workspace to output (\w+)$/)))
+			return { group: "Workspaces", label: `Move workspace to the ${m[1]} monitor` };
 		const windows = {
 			"kill": "Close window", "fullscreen toggle": "Fullscreen", "floating toggle": "Float or tile the window",
 			"focus parent": "Focus the parent container", "focus mode_toggle": "Focus between tiled and floating",
