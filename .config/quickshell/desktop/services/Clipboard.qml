@@ -3,13 +3,15 @@ pragma Singleton
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import qs
 
 // Clipboard history, newest first: text, images and files, as `desktop-clipboard watch` reports
-// each copy. Text stays in memory and images in the runtime folder (RAM, gone at logout), so
-// passwords and screenshots never reach the disk; a password manager's copies are left out.
-// Pinned entries are kept in ~/.local/state/desktop/clipboard/ (a folder only you can read; a
-// pinned image is copied there). Copying an entry back puts it on the clipboard as what it was:
-// an image pastes as an image, files paste as attachments.
+// each copy. Like shell history it outlasts a reboot (Config.clipboard.persist): kept in
+// ~/.local/state/desktop/clipboard/ (a folder only you can read), at most `max` entries, none older
+// than `days`, the newest `images` pictures, a copy that's already there moving to the top. A
+// password manager's copies are never kept. With persist off, text stays in memory and images in
+// the runtime folder (RAM). Pinned entries are kept apart and never expire. Copying an entry back
+// puts it on the clipboard as what it was: an image pastes as an image, files as attachments.
 //
 // An entry: { kind: "text" | "image" | "files", text, path, paths, time }
 Singleton {
@@ -19,7 +21,15 @@ Singleton {
 	property var history: []
 	// pins from before images and files were kept are text, without a kind
 	readonly property var pins: adapter.pins.map(p => p.kind ? p : Object.assign({ kind: "text" }, p))
-	readonly property int maxImages: 30
+	readonly property bool persist: Config.clipboard.persist
+	readonly property int maxImages: Config.clipboard.images
+	readonly property string images: folder + "/images" // kept pictures (pinned ones sit in folder)
+
+	// what's kept: the newest `max`, none older than `days`
+	function trim(list: var): var {
+		const oldest = Date.now() - Config.clipboard.days * 86400000;
+		return list.filter(h => h && h.kind && (h.time ?? 0) >= oldest).slice(0, Config.clipboard.max);
+	}
 
 	// what makes two entries the same
 	function key(e: var): string {
@@ -35,12 +45,44 @@ Singleton {
 		if (!e || !e.kind)
 			return;
 		const k = key(e);
-		const next = [Object.assign({}, e, { time: Date.now() }), ...history.filter(h => key(h) !== k)].slice(0, 100);
+		const next = trim([Object.assign({}, e, { time: Date.now() }), ...history.filter(h => key(h) !== k)]);
 		// only the newest images stay, their files too
 		const images = next.filter(h => h.kind === "image");
 		for (const old of images.slice(maxImages))
 			forget(old);
 		history = next.filter(h => h.kind !== "image" || images.indexOf(h) < maxImages);
+	}
+
+	// the history kept on disk, a moment after it changes
+	onHistoryChanged: if (persist && loaded) saveLater.restart()
+	property bool loaded: false
+
+	Timer {
+		id: saveLater
+
+		interval: 800
+		onTriggered: {
+			saved.entries = root.history;
+			historyFile.writeAdapter();
+		}
+	}
+
+	FileView {
+		id: historyFile
+
+		path: root.persist ? root.folder + "/history.json" : ""
+		printErrors: false
+		onLoaded: {
+			root.history = root.trim(saved.entries);
+			root.loaded = true;
+		}
+		onLoadFailed: root.loaded = true // none yet
+
+		JsonAdapter {
+			id: saved
+
+			property var entries: []
+		}
 	}
 
 	// copy an entry back, as what it was (it comes back to the top through the watch)
@@ -85,9 +127,9 @@ Singleton {
 		history = [];
 	}
 
-	// an image's file in the runtime folder goes with its entry (a pinned copy stays)
+	// an image's file goes with its entry (a pinned copy, directly in the folder, stays)
 	function forget(e: var): void {
-		if (e.kind === "image" && e.path.indexOf(root.folder) !== 0)
+		if (e.kind === "image" && (e.path.indexOf(root.images + "/") === 0 || e.path.indexOf(root.folder) !== 0))
 			Quickshell.execDetached(["rm", "-f", e.path]);
 	}
 
@@ -97,6 +139,7 @@ Singleton {
 
 		running: true
 		command: ["desktop-clipboard", "watch"]
+		environment: root.persist ? { DESKTOP_CLIPBOARD_IMAGES: root.images } : {}
 		stdout: SplitParser {
 			onRead: line => {
 				try {
@@ -117,7 +160,7 @@ Singleton {
 
 	Process {
 		running: true
-		command: ["sh", "-c", 'mkdir -p "$1" && chmod 700 "$1"', "sh", root.folder]
+		command: ["sh", "-c", 'mkdir -p "$1/images" && chmod 700 "$1" "$1/images"', "sh", root.folder]
 	}
 
 	FileView {

@@ -24,7 +24,8 @@ import sys
 from urllib.parse import quote, unquote, urlparse
 
 WAYLAND = bool(os.environ.get("WAYLAND_DISPLAY"))
-FOLDER = os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "desktop", "clipboard")
+# images: where the shell keeps its history (DESKTOP_CLIPBOARD_IMAGES, to outlast a reboot), else RAM
+FOLDER = os.environ.get("DESKTOP_CLIPBOARD_IMAGES") or os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "desktop", "clipboard")
 TEXT_TYPES = ("UTF8_STRING", "text/plain;charset=utf-8", "text/plain", "STRING", "TEXT")
 IMAGE_TYPES = {"image/png": "png", "image/jpeg": "jpg", "image/webp": "webp", "image/gif": "gif", "image/bmp": "bmp"}
 SECRET = "x-kde-passwordManagerHint"

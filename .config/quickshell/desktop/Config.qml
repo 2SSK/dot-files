@@ -19,6 +19,7 @@ Singleton {
 	readonly property JsonObject idle: adapter.idle
 	readonly property JsonObject wallpaper: adapter.wallpaper
 	readonly property JsonObject fonts: adapter.fonts
+	readonly property JsonObject clipboard: adapter.clipboard
 	// i3 docks only at the top or bottom (a side dock takes the whole screen), so on X11 a side
 	// position falls back to the top; sway places the bar on any edge
 	readonly property bool wayland: !!Quickshell.env("WAYLAND_DISPLAY")
@@ -73,6 +74,12 @@ Singleton {
 				property string heading: "Inter" // titles, labels on tiles, anything semibold or bold
 				property string mono: "JetBrainsMono Nerd Font" // code, the clipboard's text
 				property int weight: 500 // body text: 400 regular, 500 medium, 600 semibold
+			}
+			property JsonObject clipboard: JsonObject {
+				property bool persist: true // the history outlasts a reboot (like shell history)
+				property int max: 200 // entries kept, newest first
+				property int days: 30 // older ones go
+				property int images: 30 // of them pictures (each a file)
 			}
 			property JsonObject notifications: JsonObject {
 				property int timeout: 5000 // ms a popup stays, unless the app sets its own
