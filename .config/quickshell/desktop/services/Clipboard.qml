@@ -138,8 +138,9 @@ Singleton {
 		id: watcher
 
 		running: true
-		command: ["desktop-clipboard", "watch"]
-		environment: root.persist ? { DESKTOP_CLIPBOARD_IMAGES: root.images } : {}
+		// where pictures go, on the command line (Process.environment wouldn't take it): kept with
+		// the history, or (empty) the helper's RAM folder
+		command: ["env", "DESKTOP_CLIPBOARD_IMAGES=" + (root.persist ? root.images : ""), "desktop-clipboard", "watch"]
 		stdout: SplitParser {
 			onRead: line => {
 				try {
