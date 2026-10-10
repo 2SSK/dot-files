@@ -1,0 +1,8 @@
+# Started by sway (.config/sway/desktop/startup.conf): brings up graphical-session.target, which
+# the screen-sharing portal (xdg-desktop-portal-wlr) and other session services wait for.
+[Unit]
+Description=Sway compositor session
+Requires=graphical-session.target
+BindsTo=graphical-session.target
+Wants=graphical-session-pre.target
+After=graphical-session-pre.target
