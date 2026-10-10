@@ -67,7 +67,8 @@ Rectangle {
 			color: root.active ? Theme.primary : Theme.fgMuted
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
-			font.pixelSize: 12
+			font.weight: Theme.textWeight
+			font.pixelSize: 13
 		}
 	}
 

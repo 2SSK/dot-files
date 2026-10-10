@@ -115,7 +115,8 @@ HangingPanel {
 					color: rotate.on ? Theme.fg : Theme.fgMuted
 					font.family: Theme.fontSans
 					font.hintingPreference: Theme.hinting
-					font.pixelSize: 13
+					font.weight: Theme.textWeight
+					font.pixelSize: 14
 				}
 
 				Glyph {
@@ -287,7 +288,7 @@ HangingPanel {
 					color: "white"
 					font.family: Theme.fontSans
 					font.hintingPreference: Theme.hinting
-					font.pixelSize: 12
+					font.pixelSize: 13
 					font.weight: Font.DemiBold
 					opacity: hover.hovered || tile.picked && search.text ? 1 : 0
 					layer.enabled: true
@@ -374,7 +375,8 @@ HangingPanel {
 		color: Theme.fgMuted
 		font.family: Theme.fontSans
 		font.hintingPreference: Theme.hinting
-		font.pixelSize: 13
+		font.weight: Theme.textWeight
+		font.pixelSize: 14
 	}
 
 	// the rotate choices, under the chip; a click elsewhere closes them
@@ -441,7 +443,7 @@ HangingPanel {
 						color: choice.on ? Theme.primary : Theme.fg
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
-						font.pixelSize: 13
+						font.pixelSize: 14
 						font.weight: choice.on ? Font.DemiBold : Font.Normal
 					}
 

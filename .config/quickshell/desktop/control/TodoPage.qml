@@ -86,7 +86,7 @@ Item {
 							color: choice.on ? Theme.bg : choice.colour
 							font.family: Theme.fontSans
 							font.hintingPreference: Theme.hinting
-							font.pixelSize: 13
+							font.pixelSize: 14
 							font.weight: Font.Bold
 						}
 
@@ -112,7 +112,8 @@ Item {
 			color: Theme.fgMuted
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
-			font.pixelSize: 13
+			font.weight: Theme.textWeight
+			font.pixelSize: 14
 		}
 
 		Repeater {
@@ -233,7 +234,7 @@ Item {
 						color: item.level.colour
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
-						font.pixelSize: 12
+						font.pixelSize: 13
 						font.weight: Font.Bold
 					}
 
@@ -259,6 +260,7 @@ Item {
 					color: item.modelData.done ? Theme.fgMuted : Theme.fg
 					font.family: Theme.fontSans
 					font.hintingPreference: Theme.hinting
+					font.weight: Theme.textWeight
 					font.pixelSize: 14
 				}
 

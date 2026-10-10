@@ -106,7 +106,7 @@ Column {
 						color: typeChip.on ? Theme.primaryText : Theme.fg
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
-						font.pixelSize: 12
+						font.pixelSize: 13
 						font.weight: Font.Medium
 					}
 				}
@@ -194,6 +194,7 @@ Column {
 				selectionColor: Qt.alpha(Theme.primary, 0.4)
 				font.family: Theme.fontSans
 				font.hintingPreference: Theme.hinting
+				font.weight: Theme.textWeight
 				font.pixelSize: 14
 				onTextChanged: if (activeFocus) note.typed(text)
 				Component.onCompleted: if (note.current.title) forceActiveFocus()
@@ -242,7 +243,8 @@ Column {
 					selectionColor: Qt.alpha(Theme.primary, 0.4)
 					font.family: Theme.fontMono
 					font.hintingPreference: Theme.hinting
-					font.pixelSize: 13
+					font.weight: Theme.textWeight
+					font.pixelSize: 14
 					onTextChanged: if (activeFocus) note.typed(text)
 					Component.onCompleted: if (note.current.title) forceActiveFocus()
 
@@ -275,7 +277,7 @@ Column {
 					color: copyHover.hovered ? Theme.primaryText : Theme.fg
 					font.family: Theme.fontSans
 					font.hintingPreference: Theme.hinting
-					font.pixelSize: 12
+					font.pixelSize: 13
 					font.weight: Font.Medium
 
 					Timer {
@@ -370,6 +372,7 @@ Column {
 						color: line.modelData.done ? Theme.fgMuted : Theme.fg
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
+						font.weight: Theme.textWeight
 						font.pixelSize: 14
 					}
 

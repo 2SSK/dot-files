@@ -157,7 +157,7 @@ Item {
 						color: Theme.fgMuted
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
-						font.pixelSize: 12
+						font.pixelSize: 13
 						font.weight: Font.DemiBold
 					}
 
@@ -223,7 +223,8 @@ Item {
 									color: Theme.fg
 									font.family: Theme.fontSans
 									font.hintingPreference: Theme.hinting
-									font.pixelSize: 13
+									font.weight: Theme.textWeight
+									font.pixelSize: 14
 								}
 
 								MouseArea {
@@ -300,7 +301,8 @@ Item {
 			color: Theme.fgMuted
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
-			font.pixelSize: 12
+			font.weight: Theme.textWeight
+			font.pixelSize: 13
 		}
 
 		Flow {
@@ -329,7 +331,7 @@ Item {
 						color: Theme.fg
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
-						font.pixelSize: 12
+						font.pixelSize: 13
 						font.weight: Font.Medium
 					}
 
@@ -368,7 +370,7 @@ Item {
 			color: Theme.primaryText
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
-			font.pixelSize: 13
+			font.pixelSize: 14
 			font.weight: Font.Medium
 		}
 	}

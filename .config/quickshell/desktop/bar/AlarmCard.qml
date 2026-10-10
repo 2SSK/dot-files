@@ -177,7 +177,7 @@ PopupWindow {
 						color: button.modelData.accent ? Theme.primaryText : Theme.fg
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
-						font.pixelSize: 13
+						font.pixelSize: 14
 						font.weight: Font.DemiBold
 					}
 

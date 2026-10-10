@@ -182,7 +182,8 @@ Scope {
 					color: Theme.fgMuted
 					font.family: Theme.fontSans
 					font.hintingPreference: Theme.hinting
-					font.pixelSize: 13
+					font.weight: Theme.textWeight
+					font.pixelSize: 14
 				}
 
 				MouseArea {

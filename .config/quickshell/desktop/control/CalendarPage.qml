@@ -104,6 +104,7 @@ Column {
 				color: Theme.fg
 				font.family: Theme.fontSans
 				font.hintingPreference: Theme.hinting
+				font.weight: Theme.textWeight
 				font.pixelSize: 14
 			}
 
@@ -114,7 +115,8 @@ Column {
 				color: entry.modelData.sub === "Snoozed" ? Theme.primary : Theme.fgMuted
 				font.family: Theme.fontSans
 				font.hintingPreference: Theme.hinting
-				font.pixelSize: 12
+				font.weight: Theme.textWeight
+				font.pixelSize: 13
 			}
 		}
 
@@ -153,7 +155,7 @@ Column {
 		color: Theme.fgMuted
 		font.family: Theme.fontSans
 		font.hintingPreference: Theme.hinting
-		font.pixelSize: 12
+		font.pixelSize: 13
 		font.weight: Font.DemiBold
 		font.capitalization: Font.AllUppercase
 		font.letterSpacing: 0.6
@@ -167,7 +169,8 @@ Column {
 		color: Theme.fgMuted
 		font.family: Theme.fontSans
 		font.hintingPreference: Theme.hinting
-		font.pixelSize: 13
+		font.weight: Theme.textWeight
+		font.pixelSize: 14
 	}
 
 	// --- Calendar ---

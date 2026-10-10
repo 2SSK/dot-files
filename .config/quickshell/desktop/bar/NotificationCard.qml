@@ -126,7 +126,8 @@ Rectangle {
 					color: Theme.fgMuted
 					font.family: Theme.fontSans
 					font.hintingPreference: Theme.hinting
-					font.pixelSize: 11
+					font.weight: Theme.textWeight
+					font.pixelSize: 12
 				}
 
 				// close: dismissed for good
@@ -162,7 +163,8 @@ Rectangle {
 				color: Theme.fgMuted
 				font.family: Theme.fontSans
 				font.hintingPreference: Theme.hinting
-				font.pixelSize: 12
+				font.weight: Theme.textWeight
+				font.pixelSize: 13
 				lineHeight: 1.1
 			}
 
@@ -174,7 +176,8 @@ Rectangle {
 				color: Qt.alpha(Theme.fgMuted, 0.8)
 				font.family: Theme.fontSans
 				font.hintingPreference: Theme.hinting
-				font.pixelSize: 11
+				font.weight: Theme.textWeight
+				font.pixelSize: 12
 			}
 
 			Row {
@@ -203,7 +206,7 @@ Rectangle {
 							color: buttonHover.hovered ? Theme.primaryText : Theme.fg
 							font.family: Theme.fontSans
 							font.hintingPreference: Theme.hinting
-							font.pixelSize: 12
+							font.pixelSize: 13
 							font.weight: Font.Medium
 						}
 

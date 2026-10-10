@@ -64,7 +64,8 @@ HangingPanel {
 			color: Theme.fgMuted
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
-			font.pixelSize: 13
+			font.weight: Theme.textWeight
+			font.pixelSize: 14
 		}
 
 		TextField {
@@ -101,7 +102,8 @@ HangingPanel {
 				color: root.flow?.supplementaryIsError ? Theme.error : Theme.fgMuted
 				font.family: Theme.fontSans
 				font.hintingPreference: Theme.hinting
-				font.pixelSize: 12
+				font.weight: Theme.textWeight
+				font.pixelSize: 13
 			}
 
 			Chip {

@@ -104,6 +104,7 @@ Scope {
 					color: Qt.alpha(Theme.fg, 0.7)
 					font.family: Theme.fontSans
 					font.hintingPreference: Theme.hinting
+					font.weight: Theme.textWeight
 					font.pixelSize: 20
 				}
 
@@ -137,6 +138,7 @@ Scope {
 						color: Theme.fg
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
+						font.weight: Theme.textWeight
 						font.pixelSize: 18
 						font.letterSpacing: 2
 						focus: true
@@ -157,6 +159,7 @@ Scope {
 						color: Qt.alpha(Theme.fg, 0.4)
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
+						font.weight: Theme.textWeight
 						font.pixelSize: 14
 					}
 
@@ -177,7 +180,8 @@ Scope {
 					color: Theme.error
 					font.family: Theme.fontSans
 					font.hintingPreference: Theme.hinting
-					font.pixelSize: 13
+					font.weight: Theme.textWeight
+					font.pixelSize: 14
 					opacity: root.error ? 1 : 0
 				}
 			}
@@ -190,7 +194,8 @@ Scope {
 				color: Qt.alpha(Theme.fg, 0.35)
 				font.family: Theme.fontSans
 				font.hintingPreference: Theme.hinting
-				font.pixelSize: 13
+				font.weight: Theme.textWeight
+				font.pixelSize: 14
 			}
 
 			Connections {
