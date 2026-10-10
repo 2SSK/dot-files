@@ -34,6 +34,22 @@ return {
 		keys = { { "<leader>gx", "<cmd>GitConflictListQf<CR>", desc = "List conflicts" } },
 	},
 	{
+		-- during a merge: ours | result | theirs side by side, the result editable in the middle
+		-- (g<C-x> cycles the layouts, one of them adds the base; same keys as git-conflict inside)
+		"sindrets/diffview.nvim",
+		cmd = { "DiffviewOpen", "DiffviewFileHistory" },
+		opts = { view = { merge_tool = { layout = "diff3_horizontal" } } },
+		keys = {
+			{
+				"<leader>gm",
+				function()
+					vim.cmd(require("diffview.lib").get_current_view() and "DiffviewClose" or "DiffviewOpen")
+				end,
+				desc = "Merge / diff view (toggle)",
+			},
+		},
+	},
+	{
 		"michaelrommel/nvim-silicon",
 		main = "nvim-silicon",
 		cmd = "Silicon",
