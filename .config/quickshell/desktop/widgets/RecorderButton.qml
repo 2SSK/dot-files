@@ -21,13 +21,13 @@ Item {
 		onTriggered: root.seconds = Math.floor((Date.now() - Recorder.started.getTime()) / 1000)
 	}
 
-	// recording: a soft red pill behind the camera and the clock
+	// recording: a soft red pill behind the camera and the clock; on a side bar as wide as fits in it
+	// (padding the clock's width there made it wider than the bar)
 	Rectangle {
-		anchors.fill: parent
-		anchors.margins: -5
-		anchors.leftMargin: -8
-		anchors.rightMargin: -8
-		radius: height / 2
+		anchors.centerIn: parent
+		width: Config.vertical ? Config.bar.size - Theme.barInset : parent.width + 16
+		height: parent.height + (Config.vertical ? 16 : 10)
+		radius: Math.min(width, height) / 2
 		color: Qt.alpha(Theme.error, 0.18)
 		border.width: 1
 		border.color: Qt.alpha(Theme.error, 0.5)
@@ -77,7 +77,7 @@ Item {
 			visible: Recorder.recording
 			text: `${Math.floor(root.seconds / 60)}:${String(root.seconds % 60).padStart(2, "0")}`
 			color: Theme.error
-			font.pixelSize: Config.vertical ? Theme.fontSize - 3 : Theme.fontSize
+			font.pixelSize: Config.vertical ? Theme.fontSize - 5 : Theme.fontSize // "10:00" fits a side bar's pill
 		}
 	}
 
