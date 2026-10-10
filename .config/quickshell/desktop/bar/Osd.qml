@@ -132,14 +132,14 @@ PopupWindow {
 
 				Text {
 					anchors.verticalCenter: parent.verticalCenter
-					width: root.level ? 36 : implicitWidth
+					width: root.level ? 42 : implicitWidth // "100%" in bold
 					horizontalAlignment: root.level ? Text.AlignRight : Text.AlignLeft
 					text: root.level ? (root.muted ? "off" : Math.round(Panel.osdValue * 100) + "%") : `${root.kind === "caps" ? "Caps Lock" : "Num Lock"} ${root.muted ? "off" : "on"}`
 					color: root.muted ? Theme.fgMuted : Theme.fg
 					font.family: Theme.fontSans
 					font.hintingPreference: Theme.hinting
 					font.pixelSize: Theme.textLabel
-					font.weight: Font.Medium
+					font.weight: Font.Bold
 					font.features: ({ tnum: 1 })
 				}
 			}
