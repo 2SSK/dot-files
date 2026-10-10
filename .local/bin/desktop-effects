@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# SwayFX's effects (~/.config/sway/effects.conf) sent to the running compositor as commands, when
+# it is SwayFX: sway runs this at startup and on each reload. Plain sway has no such commands.
+#   desktop-effects
+set -euo pipefail
+
+[[ -n ${SWAYSOCK:-} ]] || exit 0
+[[ $(swaymsg -t get_version) == *swayfx* ]] || exit 0
+conf="${XDG_CONFIG_HOME:-$HOME/.config}/sway/effects.conf"
+commands="$(grep -vE '^\s*(#|$)' "$conf" | paste -sd';')"
+swaymsg -q -- "$commands"

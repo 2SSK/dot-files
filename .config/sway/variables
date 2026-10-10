@@ -1,23 +1,10 @@
-# What i3's files (included after this) don't set: the variables they use, the cursor, and
-# swayfx's look, the same as i3 + picom: rounded corners, soft shadows, blur behind translucent
-# windows. Font, gaps, borders and title alignment come from i3's look.conf.
+# What i3's files (included after this) don't set: the variables they use and the cursor. Font,
+# gaps, borders and title alignment come from i3's look.conf; SwayFX's effects from effects.conf.
 set $mod Mod4
 set $term kitty
 
 set $cursor_theme Bibata-Modern-Ice
 seat * xcursor_theme $cursor_theme 24
-
-corner_radius 12
-shadows enable
-shadow_blur_radius 24
-shadow_offset 0 6
-shadow_color          #00000052
-shadow_inactive_color #00000033
-blur enable
-blur_passes 2
-blur_radius 5
-animation_duration_ms 180
-default_dim_inactive 0
 
 titlebar_padding 12 6
 
