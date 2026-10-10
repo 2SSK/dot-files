@@ -343,12 +343,72 @@ Rectangle {
 		}
 	}
 
-	// Power: reboot and shut down
+	// The battery, read from sysfs: SDDM has no battery of its own to offer. Reading a file needs
+	// QML_XHR_ALLOW_FILE_READ in the greeter's environment (packages/system.sh sddm sets it);
+	// without it, or without a battery, nothing shows.
+	QtObject {
+		id: battery
+
+		property int percent: -1
+		property bool charging: false
+		readonly property string glyph: charging ? "󰂄" : percent >= 90 ? "󰁹" : percent >= 70 ? "󰂁" : percent >= 50 ? "󰁿" : percent >= 30 ? "󰁽" : percent >= 15 ? "󰁻" : "󰂎"
+
+		function read(file: string, done: var): void {
+			const request = new XMLHttpRequest();
+			request.onreadystatechange = () => {
+				if (request.readyState === XMLHttpRequest.DONE && request.responseText)
+					done(request.responseText.trim());
+			};
+			request.open("GET", "file://" + file);
+			request.send();
+		}
+
+		function refresh(): void {
+			for (const name of ["BAT0", "BAT1", "BAT2"]) {
+				const dir = "/sys/class/power_supply/" + name + "/";
+				read(dir + "capacity", text => battery.percent = Number(text));
+				read(dir + "status", text => battery.charging = text === "Charging" || text === "Full");
+			}
+		}
+
+		Component.onCompleted: refresh()
+	}
+
+	Timer {
+		interval: 30000
+		running: true
+		repeat: true
+		onTriggered: battery.refresh()
+	}
+
+	// Power: the battery, reboot and shut down
 	Row {
 		anchors.right: parent.right
 		anchors.bottom: parent.bottom
 		anchors.margins: 32
 		spacing: 22
+
+		Row {
+			visible: battery.percent >= 0
+			anchors.verticalCenter: parent.verticalCenter
+			spacing: 8
+
+			Text {
+				anchors.verticalCenter: parent.verticalCenter
+				text: battery.glyph
+				color: battery.percent <= 15 && !battery.charging ? config.error : config.fgMuted
+				font.family: config.fontMono
+				font.pixelSize: 22
+			}
+
+			Text {
+				anchors.verticalCenter: parent.verticalCenter
+				text: battery.percent + "%"
+				color: config.fgMuted
+				font.family: config.font
+				font.pixelSize: 15
+			}
+		}
 
 		Repeater {
 			model: [

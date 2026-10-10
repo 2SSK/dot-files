@@ -327,6 +327,8 @@ grub_theme() { # install the theme and point GRUB at it; a no-op when nothing ch
 	done
 
 	grub_set GRUB_THEME "\"$boot/themes/desktop/theme.txt\""
+	# one entry per system: the other kernels (LTS) and the fallback images under Advanced options
+	grub_set GRUB_DISABLE_SUBMENU false
 	# A serial console (cloud images, servers) stays: GRUB_TERMINAL sets input and output at once, so
 	# it is split into its input and an output that adds the themed screen to the serial port
 	local serial
@@ -434,6 +436,10 @@ sddm_theme() { # the login screen in the desktop theme; theme set keeps its colo
 		install_if_changed "$tmp.conf" "$root/etc/sddm.conf.d/10-desktop.conf"
 		rm -f "$tmp.conf"
 	fi
+	# the theme shows the battery, read from /sys: QML reads local files only when this is set
+	printf '[General]\nGreeterEnvironment=QML_XHR_ALLOW_FILE_READ=1\n' >"$tmp.conf"
+	install_if_changed "$tmp.conf" "$root/etc/sddm.conf.d/20-desktop-greeter.conf"
+	rm -f "$tmp.conf"
 }
 
 case ${1:-} in

@@ -128,6 +128,8 @@ grub_fakes() { # a palette, /etc/default/grub, and fake font/image/grub tools
 	grep -qx 'GRUB_THEME="/boot/grub/themes/desktop/theme.txt"' "$SYSTEM_ROOT/etc/default/grub"
 	grep -qx 'GRUB_GFXMODE=auto' "$SYSTEM_ROOT/etc/default/grub"
 	grep -qx 'GRUB_TERMINAL_OUTPUT="gfxterm"' "$SYSTEM_ROOT/etc/default/grub"
+	# one entry per distro; the other kernels and fallbacks under Advanced options
+	grep -qx 'GRUB_DISABLE_SUBMENU=false' "$SYSTEM_ROOT/etc/default/grub"
 	grep -q "grub-mkconfig -o $SYSTEM_ROOT/boot/grub/grub.cfg" "$CALLS"
 	rm "$CALLS"
 	run "$SYSTEM" grub
@@ -181,6 +183,8 @@ sddm_fakes() { # a rendered theme, and a fake magick that copies the image
 	[ -f "$dir/Main.qml" ]
 	[ -f "$dir/metadata.desktop" ]
 	grep -qx 'Current=desktop' "$SYSTEM_ROOT/etc/sddm.conf.d/10-desktop.conf"
+	# the theme reads the battery from sysfs, which QML only allows with this in the greeter's environment
+	grep -qx 'GreeterEnvironment=QML_XHR_ALLOW_FILE_READ=1' "$SYSTEM_ROOT/etc/sddm.conf.d/20-desktop-greeter.conf"
 }
 
 @test "sddm: colours and wallpaper live in a folder the user owns, so theme set can update them" {
@@ -342,8 +346,8 @@ subvolume_fakes() { # btrfs makes folders and remembers them as subvolumes; the 
 	run "$SYSTEM" power
 	[ "$status" -eq 0 ]
 	local conf="$SYSTEM_ROOT/etc/tlp.d/10-desktop.conf"
-	# on the charger balanced (not flat out), on battery the quiet power saver without turbo
-	grep -qx 'TLP_PROFILE_AC=BAL' "$conf"
+	# quiet (the power saver, without turbo) on the charger and on battery
+	grep -qx 'TLP_PROFILE_AC=SAV' "$conf"
 	grep -qx 'TLP_PROFILE_BAT=SAV' "$conf"
 	grep -qx 'PLATFORM_PROFILE_ON_BAT=balanced' "$conf"
 	grep -qx 'CPU_BOOST_ON_SAV=0' "$conf"
