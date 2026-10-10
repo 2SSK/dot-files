@@ -1,13 +1,17 @@
 import QtQuick
 import qs
+import qs.widgets
 
-// A one-line text field with a placeholder; accepted(text) on Enter.
+// A one-line text field with a placeholder; accepted(text) on Enter. A password field can be
+// revealable: an eye at its end shows what's typed.
 Rectangle {
 	id: root
 
 	property alias text: input.text
 	property string placeholder
 	property bool password
+	property bool revealable
+	property bool revealed
 	signal accepted(string text)
 	signal keyPressed(var event) // before the field's own handling: accept it to take the key
 
@@ -26,9 +30,9 @@ Rectangle {
 
 		anchors.fill: parent
 		anchors.leftMargin: 14
-		anchors.rightMargin: 14
+		anchors.rightMargin: eye.visible ? eye.width + 18 : 14
 		verticalAlignment: TextInput.AlignVCenter
-		echoMode: root.password ? TextInput.Password : TextInput.Normal
+		echoMode: root.password && !root.revealed ? TextInput.Password : TextInput.Normal
 		color: Theme.fg
 		selectionColor: Qt.alpha(Theme.primary, 0.4)
 		font.family: Theme.fontSans
@@ -37,6 +41,32 @@ Rectangle {
 		activeFocusOnTab: true
 		onAccepted: root.accepted(text)
 		Keys.onPressed: event => root.keyPressed(event)
+	}
+
+	Glyph {
+		id: eye
+
+		visible: root.password && root.revealable
+		anchors.right: parent.right
+		anchors.rightMargin: 14
+		anchors.verticalCenter: parent.verticalCenter
+		glyph: Icons.g(root.revealed ? "eye-off" : "eye")
+		font.pixelSize: 16
+		font.weight: Font.Normal
+		color: eyeArea.containsMouse ? Theme.fg : Theme.fgMuted
+
+		MouseArea {
+			id: eyeArea
+
+			anchors.fill: parent
+			anchors.margins: -8
+			hoverEnabled: true
+			cursorShape: Qt.PointingHandCursor
+			onClicked: {
+				root.revealed = !root.revealed;
+				input.forceActiveFocus(); // keep typing
+			}
+		}
 	}
 
 	Text {

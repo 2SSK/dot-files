@@ -9,7 +9,9 @@ import Quickshell.Networking
 Singleton {
 	id: root
 
-	readonly property bool wifiAvailable: Networking.wifiHardwareEnabled && Networking.devices.values.some(d => d.type === DeviceType.Wifi)
+	readonly property bool wifiAvailable: Networking.wifiHardwareEnabled && wifiCard
+	readonly property bool wifiCard: Networking.devices.values.some(d => d.type === DeviceType.Wifi)
+	readonly property bool wifiBlocked: wifiCard && !Networking.wifiHardwareEnabled // the radio switch, or rfkill
 	readonly property bool wifi: Networking.wifiEnabled
 	readonly property string network: Array.from(Networking.devices.values).filter(d => d.type === DeviceType.Wifi).reduce((all, d) => all.concat(Array.from(d.networks.values)), []).find(n => n.connected)?.name ?? ""
 

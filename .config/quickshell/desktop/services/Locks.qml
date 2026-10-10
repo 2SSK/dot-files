@@ -17,6 +17,8 @@ Singleton {
 	property bool ready: false
 
 	function read(file: FileView): bool {
+		if (!file)
+			return false; // a reload tearing the shell down mid-tick
 		file.reload();
 		return file.text().trim() !== "0";
 	}
@@ -50,7 +52,7 @@ Singleton {
 	}
 
 	Timer {
-		interval: 200
+		interval: 500
 		running: root.capsLed !== "" || root.numLed !== ""
 		repeat: true
 		onTriggered: {
