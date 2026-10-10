@@ -34,6 +34,8 @@
         "persist": true
     },
     "fonts": {
+        "bar": "JetBrainsMono Nerd Font",
+        "barWeight": 600,
         "heading": "Inter",
         "mono": "JetBrainsMono Nerd Font",
         "sans": "Inter",

@@ -3,6 +3,10 @@
 My Arch Linux desktop: **sway (swayfx)** and **i3** sharing one config, with a
 [Quickshell](https://quickshell.org) desktop shell, and one theme that colours everything.
 
+[![The desktop: the bar and control center over a koi wallpaper (click to play the 4-minute preview)](docs/preview.jpg)](docs/preview.mp4)
+
+<p align="center"><a href="docs/preview.mp4">▶ Watch the preview</a> (4 min)</p>
+
 - **Desktop shell** (`qs -c desktop`): a floating "island" bar per screen, control center (Wi-Fi,
   Bluetooth, power profiles, media, calendar, notes, todo), launcher, clipboard history,
   notifications, screenshots and recording, wallpapers, lock screen and settings, the same on

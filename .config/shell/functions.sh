@@ -114,3 +114,9 @@ myip() {
 	ip -4 route get 1.1.1.1 | awk '{ for (i = 1; i < NF; i++) if ($i == "src") print "Local:    " $(i + 1) }'
 	printf 'External: %s\n' "$(curl -fsS --max-time 5 ifconfig.me)"
 }
+share() {
+    local url
+    url=$(curl -fsS -F "reqtype=fileupload" -F "fileToUpload=@$1" https://catbox.moe/user/api.php) || return 1
+    printf '%s\n' "$url"
+    printf '%s' "$url" | wl-copy
+}
