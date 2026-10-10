@@ -85,7 +85,7 @@ Singleton {
 				property int timeout: 5000 // ms a popup stays, unless the app sets its own
 			}
 			property JsonObject osd: JsonObject {
-				property int timeout: 1800 // ms
+				property int timeout: 3000 // ms the OSD stays
 			}
 			property JsonObject audio: JsonObject {
 				property int step: 5 // percent
