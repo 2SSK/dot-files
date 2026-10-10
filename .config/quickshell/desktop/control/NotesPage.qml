@@ -251,8 +251,35 @@ Item {
 
 			readonly property var current: Notes.current
 			readonly property string noteId: Notes.selected
+			property string pendingId: ""
+			property string pendingBody: ""
+
+			// the body is kept once typing pauses, not at every key: each keep re-sorts the notes
+			// and redraws the list. Switching notes or closing keeps what's pending at once.
+			function typed(body: string): void {
+				pendingId = noteId;
+				pendingBody = body;
+				keep.restart();
+			}
+
+			function flush(): void {
+				if (keep.running) {
+					keep.stop();
+					Notes.update(pendingId, { body: pendingBody });
+				}
+			}
+
+			onNoteIdChanged: flush()
+			Component.onDestruction: flush()
 
 			spacing: 12
+
+			Timer {
+				id: keep
+
+				interval: 400
+				onTriggered: Notes.update(note.pendingId, { body: note.pendingBody })
+			}
 
 			TextInput {
 				id: titleField
@@ -403,7 +430,7 @@ Item {
 						selectionColor: Qt.alpha(Theme.primary, 0.4)
 						font.family: Theme.fontSans
 						font.pixelSize: 14
-						onTextChanged: if (activeFocus) Notes.update(note.noteId, { body: text })
+						onTextChanged: if (activeFocus) note.typed(text)
 						Component.onCompleted: if (note.current.title) forceActiveFocus()
 
 						Text {
@@ -450,7 +477,7 @@ Item {
 							selectionColor: Qt.alpha(Theme.primary, 0.4)
 							font.family: Theme.fontMono
 							font.pixelSize: 13
-							onTextChanged: if (activeFocus) Notes.update(note.noteId, { body: text })
+							onTextChanged: if (activeFocus) note.typed(text)
 							Component.onCompleted: if (note.current.title) forceActiveFocus()
 
 							Text {

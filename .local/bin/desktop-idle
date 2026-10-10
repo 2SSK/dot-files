@@ -32,10 +32,10 @@ apply() { # <dim> <lock> <off>
 pidfile="${XDG_RUNTIME_DIR:-/tmp}/desktop-dim.pid"
 
 dim() {
-	local was now step
+	local was now step sleeper=""
 	was="$(brightnessctl get)"
 	echo $$ >"$pidfile"
-	trap 'brightnessctl -q set "$was"; rm -f "$pidfile"; exit 0' TERM INT
+	trap 'brightnessctl -q set "$was"; rm -f "$pidfile"; [[ -n $sleeper ]] && kill "$sleeper" 2>/dev/null; exit 0' TERM INT
 	# a quarter of where it was, in 20 steps over two seconds
 	for step in $(seq 1 20); do
 		now=$((was - (was - was / 4) * step / 20))
@@ -43,7 +43,9 @@ dim() {
 		sleep 0.1
 	done
 	# stay dim until stopped
-	while :; do sleep 1 & wait $!; done
+	sleep infinity & # one sleep, not a wakeup a second: undim's signal ends the wait (and it)
+	sleeper=$!
+	wait "$sleeper"
 }
 
 case ${1:-} in
