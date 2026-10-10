@@ -38,7 +38,7 @@ Singleton {
 
 	// each panel's size, centred under the bar (the bar opens its outline there: hangingWidth)
 	readonly property int controlWidth: 760
-	readonly property int controlHeight: 640
+	readonly property int controlHeight: 700 // the home page with two players and 115% text
 	readonly property int controlFillet: 18
 	readonly property int clipboardWidth: 920
 	readonly property int clipboardHeight: 580

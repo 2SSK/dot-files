@@ -14,7 +14,11 @@ Column {
 	id: root
 
 	readonly property string title: "Wi-Fi"
-	readonly property var actions: [{ glyph: Connectivity.wifi ? Icons.g("wifi") : Icons.g("wifi-off"), on: Connectivity.wifi, act: () => Connectivity.toggleWifi() }]
+	readonly property var actions: [
+		{ glyph: Icons.g("refresh"), on: scanning, act: () => rescan(), show: Connectivity.wifi },
+		{ glyph: Connectivity.wifi ? Icons.g("wifi") : Icons.g("wifi-off"), on: Connectivity.wifi, act: () => Connectivity.toggleWifi() }
+	]
+	property bool scanning: false // a refresh asked for, lit for a few seconds while NetworkManager scans
 	readonly property var devices: Array.from(Networking.devices.values).filter(d => d.type === DeviceType.Wifi)
 	readonly property var networks: devices.reduce((all, d) => all.concat(Array.from(d.networks.values)), []).filter(n => n.name).sort((a, b) => (b.connected - a.connected) || (b.signalStrength - a.signalStrength))
 	property var asking: null // the network waiting for a password
@@ -24,12 +28,29 @@ Column {
 		devices.forEach(d => d.scannerEnabled = on);
 	}
 
+	// the refresh button: a scan now (NetworkManager's own, allowed for the logged-in user), and the
+	// scanner restarted so the list picks it up
+	function rescan(): void {
+		scanning = true;
+		scanLit.restart();
+		Quickshell.execDetached(["nmcli", "device", "wifi", "rescan"]);
+		scan(false);
+		scan(true);
+	}
+
 	spacing: 8
 
 	// scan while open, also on a card that appears or Wi-Fi turned on after it opened
 	onDevicesChanged: scan(Connectivity.wifi)
 	Component.onCompleted: scan(Connectivity.wifi)
 	Component.onDestruction: scan(false)
+
+	Timer {
+		id: scanLit
+
+		interval: 4000
+		onTriggered: root.scanning = false
+	}
 
 	Connections {
 		target: Connectivity

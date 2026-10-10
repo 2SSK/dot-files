@@ -27,6 +27,13 @@
     "brightness": {
         "step": 5
     },
+    "fonts": {
+        "heading": "Inter",
+        "mono": "JetBrainsMono Nerd Font",
+        "sans": "Inter",
+        "scale": 1.15,
+        "weight": 500
+    },
     "idle": {
         "dim": 4,
         "lock": 5,

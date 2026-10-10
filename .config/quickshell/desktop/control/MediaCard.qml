@@ -1,5 +1,6 @@
 import QtQuick
 import Quickshell.Services.Mpris
+import Quickshell.Widgets
 import qs
 import qs.services
 import qs.widgets
@@ -92,7 +93,9 @@ Rectangle {
 		}
 	}
 
-	Rectangle {
+	// the album art: clipped to the rounded corners (a plain clip is square), and decoded at the
+	// size it's shown (a 640 px cover squeezed into 88 px by the GPU came out grainy)
+	ClippingRectangle {
 		id: cover
 
 		visible: root.player !== null
@@ -102,7 +105,6 @@ Rectangle {
 		height: 88
 		radius: 12
 		color: Qt.alpha(Theme.primary, 0.14)
-		clip: true
 
 		Glyph {
 			anchors.centerIn: parent
@@ -117,7 +119,10 @@ Rectangle {
 
 			anchors.fill: parent
 			source: root.player?.trackArtUrl ?? ""
+			sourceSize: Qt.size(cover.width * 2, cover.height * 2) // twice: a clean downscale either side
 			fillMode: Image.PreserveAspectCrop
+			smooth: true
+			mipmap: true
 			asynchronous: true
 		}
 	}
