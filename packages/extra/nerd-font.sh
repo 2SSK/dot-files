@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # JetBrains Mono Nerd Font where the distro has none: pinned release into ~/.local/share/fonts.
 set -euo pipefail
+# shellcheck source-path=SCRIPTDIR source=lib.sh
 source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 version=3.5.1
 dir="$HOME/.local/share/fonts/JetBrainsMonoNerd"

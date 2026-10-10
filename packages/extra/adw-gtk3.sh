@@ -2,6 +2,7 @@
 # adw-gtk3 (GTK 3 apps in the libadwaita look) where the distro has none: pinned release into
 # ~/.local/share/themes.
 set -euo pipefail
+# shellcheck source-path=SCRIPTDIR source=lib.sh
 source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 version=6.5
 dir="$HOME/.local/share/themes"

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # rmpc, the music player (mpd client), where the distro has none: pinned static release.
 set -euo pipefail
+# shellcheck source-path=SCRIPTDIR source=lib.sh
 source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 version=0.11.0
 [[ $("$bin/rmpc" --version 2>/dev/null) == *"$version"* ]] && exit 0

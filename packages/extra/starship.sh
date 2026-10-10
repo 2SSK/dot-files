@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # starship (the prompt) where the distro has none: pinned static release.
 set -euo pipefail
+# shellcheck source-path=SCRIPTDIR source=lib.sh
 source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 version=1.26.0
 [[ $("$bin/starship" --version 2>/dev/null) == *"$version"* ]] && exit 0

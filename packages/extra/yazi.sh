@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # yazi (and ya), the terminal file manager, where the distro has none: pinned static release.
 set -euo pipefail
+# shellcheck source-path=SCRIPTDIR source=lib.sh
 source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 version=26.9.1
 [[ $("$bin/yazi" --version 2>/dev/null) == *"$version"* ]] && exit 0

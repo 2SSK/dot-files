@@ -2,6 +2,7 @@
 # i3lock-color (the themed i3 lock screen) where the distro has no package: built from the pinned
 # source into /usr/local, its PAM file in /etc/pam.d.
 set -euo pipefail
+# shellcheck source-path=SCRIPTDIR source=lib.sh
 source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 version=2.13.c.5
 [[ $(i3lock --version 2>&1) == *"$version"* ]] && exit 0

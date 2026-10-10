@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # lazygit where the distro has none: pinned release.
 set -euo pipefail
+# shellcheck source-path=SCRIPTDIR source=lib.sh
 source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 version=0.66.0
 [[ $("$bin/lazygit" --version 2>/dev/null) == *"version=$version"* ]] && exit 0

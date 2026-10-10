@@ -3,6 +3,7 @@
 # from Flathub (for you), and a gpu-screen-recorder command in ~/.local/bin that runs it, so the
 # capture panel and desktop-capture find it as on Arch.
 set -euo pipefail
+# shellcheck source-path=SCRIPTDIR source=lib.sh
 source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 app=com.dec05eba.gpu_screen_recorder
 command -v flatpak >/dev/null || case "$(distro)" in

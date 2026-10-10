@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # The Bibata Modern Ice cursor where the distro has none: pinned release into ~/.local/share/icons.
 set -euo pipefail
+# shellcheck source-path=SCRIPTDIR source=lib.sh
 source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 version=2.0.7
 dir="$HOME/.local/share/icons/Bibata-Modern-Ice"

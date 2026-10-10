@@ -2,6 +2,7 @@
 # mpd-mpris (media keys and the bar for mpd) where the distro has none: pinned release, and its
 # user service (the Arch package ships one).
 set -euo pipefail
+# shellcheck source-path=SCRIPTDIR source=lib.sh
 source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 version=0.4.4
 unit="$HOME/.config/systemd/user/mpd-mpris.service"
