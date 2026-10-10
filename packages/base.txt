@@ -29,3 +29,14 @@ timeshift                   timeshift                   timeshift
 aur:timeshift-autosnap      -                           -
 zram-generator              systemd-zram-generator      zram-generator
 -                           systemd-oomd                -
+# what the shell talks to: Wi-Fi, Bluetooth, the battery, the admin-password prompt, the mixer
+networkmanager              network-manager             NetworkManager
+bluez                       bluez                       bluez
+bluez-utils                 -                           -
+upower                      upower                      upower
+polkit                      polkit-1                    polkit
+pavucontrol                 pavucontrol                 pavucontrol
+# laptop power (packages/system.sh power) and the login screen (packages/system.sh sddm)
+tlp                         tlp                         tlp
+tlp-rdw                     tlp-rdw                     tlp-rdw
+sddm                        sddm                        sddm

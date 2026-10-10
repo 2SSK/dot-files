@@ -120,7 +120,7 @@ main() {
 	fi
 
 	local -a layers=()
-	local distro='' vm=0 safety=0 docker=0 screens=0
+	local distro='' vm=0 safety=0 docker=0 screens=0 laptop=0 snapshots=0
 	if ((packages)); then
 		distro="$("$repo/packages/install.sh" --distro)"
 		step "Packages for $distro"
@@ -141,6 +141,14 @@ main() {
 		printf '  %s%s%s\n' "$dim" 'zram compresses little-used memory instead of killing apps when RAM fills up;' "$reset"
 		printf '  %s%s%s\n' "$dim" 'systemd-oomd stops only the runaway app before the desktop freezes.' "$reset"
 		if confirm 'Turn on the memory safety net (zram + systemd-oomd)?' y; then safety=1; fi
+		# a laptop: TLP in quiet mode with an 80% charge limit, and closing the lid only locks
+		if compgen -G '/sys/class/power_supply/BAT*' >/dev/null; then
+			if confirm 'Set up the laptop (quiet power, 80% charge limit, the lid locks)?' y; then laptop=1; fi
+		fi
+		# Timeshift, once its disk is chosen: 3 daily and 1 weekly snapshot, one before each upgrade
+		if [[ -f /etc/timeshift/timeshift.json ]]; then
+			if confirm 'Keep Timeshift snapshots (3 daily, 1 weekly, one before each upgrade)?' y; then snapshots=1; fi
+		fi
 		# the boot menu and login screen in the desktop theme, where GRUB and sddm are in use
 		if [[ -f /etc/default/grub ]] || command -v sddm >/dev/null; then
 			if confirm 'Theme the boot menu (GRUB) and the login screen (sddm)?' y; then screens=1; fi
@@ -158,6 +166,8 @@ main() {
 	((safety)) && system+=('memory safety net (zram, systemd-oomd)')
 	((vm)) && system+=('libvirt services, default network, firewall zone, libvirt group')
 	((docker)) && system+=('docker service + docker group')
+	((laptop)) && system+=('TLP quiet power, 80% charge limit, lid locks')
+	((snapshots)) && system+=('Timeshift schedule')
 	((screens)) && system+=('boot menu and login screen themes')
 	((${#system[@]} == 0)) || row 'System (sudo)' "$(printf '%s; ' "${system[@]}" | sed 's/; $//')"
 	row 'Existing files' "$(case $policy in none) echo none ;; backup) echo "${#found[@]} → $backup" ;; *) echo "${#found[@]} deleted" ;; esac)"
@@ -178,11 +188,13 @@ main() {
 		"$repo/packages/plugins.sh"
 		ok 'zsh and bash plugins at their pinned tags'
 		enable_services
-		if ((safety || vm || docker)); then
+		if ((safety || vm || docker || laptop || snapshots)); then
 			step 'System'
 			((safety == 0)) || "$repo/packages/system.sh" memory
 			((vm == 0)) || "$repo/packages/system.sh" libvirt
 			((docker == 0)) || "$repo/packages/system.sh" docker
+			((laptop == 0)) || { "$repo/packages/system.sh" power && "$repo/packages/system.sh" lid; }
+			((snapshots == 0)) || "$repo/packages/system.sh" timeshift
 			ok 'system configured'
 		fi
 	fi
