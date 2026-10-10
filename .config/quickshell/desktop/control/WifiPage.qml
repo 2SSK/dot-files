@@ -48,6 +48,7 @@ Column {
 		wrapMode: Text.Wrap
 		color: Theme.fgMuted
 		font.family: Theme.fontSans
+		font.hintingPreference: Theme.hinting
 		font.pixelSize: 13
 	}
 
@@ -133,6 +134,7 @@ Column {
 				text: entry.failure
 				color: Theme.error
 				font.family: Theme.fontSans
+				font.hintingPreference: Theme.hinting
 				font.pixelSize: 12
 			}
 

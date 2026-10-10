@@ -178,6 +178,7 @@ HangingPanel {
 			text: page.item?.title ?? ""
 			color: Theme.primary
 			font.family: Theme.fontSans
+			font.hintingPreference: Theme.hinting
 			font.pixelSize: 18
 			font.weight: Font.DemiBold
 		}

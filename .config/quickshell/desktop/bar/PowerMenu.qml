@@ -125,6 +125,7 @@ PopupWindow {
 						text: tile.armed ? "Again to " + tile.modelData.label.toLowerCase() : tile.modelData.label
 						color: tile.ink
 						font.family: Theme.fontSans
+						font.hintingPreference: Theme.hinting
 						font.pixelSize: 15
 						font.weight: Font.Medium
 					}
@@ -145,6 +146,7 @@ PopupWindow {
 						text: tile.index + 1
 						color: tile.ink
 						font.family: Theme.fontMono
+						font.hintingPreference: Theme.hinting
 						font.pixelSize: 11
 						font.weight: Font.Bold
 					}

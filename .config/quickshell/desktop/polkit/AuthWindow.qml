@@ -49,6 +49,7 @@ HangingPanel {
 				text: "Authentication required"
 				color: Theme.fg
 				font.family: Theme.fontSans
+				font.hintingPreference: Theme.hinting
 				font.pixelSize: 17
 				font.weight: Font.DemiBold
 			}
@@ -62,6 +63,7 @@ HangingPanel {
 			elide: Text.ElideRight
 			color: Theme.fgMuted
 			font.family: Theme.fontSans
+			font.hintingPreference: Theme.hinting
 			font.pixelSize: 13
 		}
 
@@ -98,6 +100,7 @@ HangingPanel {
 				elide: Text.ElideRight
 				color: root.flow?.supplementaryIsError ? Theme.error : Theme.fgMuted
 				font.family: Theme.fontSans
+				font.hintingPreference: Theme.hinting
 				font.pixelSize: 12
 			}
 

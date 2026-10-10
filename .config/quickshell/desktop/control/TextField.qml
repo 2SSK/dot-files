@@ -36,6 +36,7 @@ Rectangle {
 		color: Theme.fg
 		selectionColor: Qt.alpha(Theme.primary, 0.4)
 		font.family: Theme.fontSans
+		font.hintingPreference: Theme.hinting
 		font.pixelSize: 14
 		clip: true
 		activeFocusOnTab: true
@@ -77,6 +78,7 @@ Rectangle {
 		text: root.placeholder
 		color: Theme.fgMuted
 		font.family: Theme.fontSans
+		font.hintingPreference: Theme.hinting
 		font.pixelSize: 14
 	}
 }

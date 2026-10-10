@@ -85,6 +85,7 @@ Item {
 							text: root.priorities[choice.modelData].letter
 							color: choice.on ? Theme.bg : choice.colour
 							font.family: Theme.fontSans
+							font.hintingPreference: Theme.hinting
 							font.pixelSize: 13
 							font.weight: Font.Bold
 						}
@@ -110,6 +111,7 @@ Item {
 			text: "Nothing to do."
 			color: Theme.fgMuted
 			font.family: Theme.fontSans
+			font.hintingPreference: Theme.hinting
 			font.pixelSize: 13
 		}
 
@@ -230,6 +232,7 @@ Item {
 						text: item.level.letter
 						color: item.level.colour
 						font.family: Theme.fontSans
+						font.hintingPreference: Theme.hinting
 						font.pixelSize: 12
 						font.weight: Font.Bold
 					}
@@ -255,6 +258,7 @@ Item {
 					font.strikeout: item.modelData.done
 					color: item.modelData.done ? Theme.fgMuted : Theme.fg
 					font.family: Theme.fontSans
+					font.hintingPreference: Theme.hinting
 					font.pixelSize: 14
 				}
 
@@ -312,6 +316,7 @@ Item {
 			elide: Text.ElideRight
 			color: Theme.primaryText
 			font.family: Theme.fontSans
+			font.hintingPreference: Theme.hinting
 			font.pixelSize: 14
 			font.weight: Font.Medium
 		}

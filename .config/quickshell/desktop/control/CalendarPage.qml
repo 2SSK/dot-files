@@ -103,6 +103,7 @@ Column {
 				elide: Text.ElideRight
 				color: Theme.fg
 				font.family: Theme.fontSans
+				font.hintingPreference: Theme.hinting
 				font.pixelSize: 14
 			}
 
@@ -112,6 +113,7 @@ Column {
 				text: entry.modelData.sub ?? ""
 				color: entry.modelData.sub === "Snoozed" ? Theme.primary : Theme.fgMuted
 				font.family: Theme.fontSans
+				font.hintingPreference: Theme.hinting
 				font.pixelSize: 12
 			}
 		}
@@ -150,6 +152,7 @@ Column {
 		topPadding: 4
 		color: Theme.fgMuted
 		font.family: Theme.fontSans
+		font.hintingPreference: Theme.hinting
 		font.pixelSize: 12
 		font.weight: Font.DemiBold
 		font.capitalization: Font.AllUppercase
@@ -163,6 +166,7 @@ Column {
 		horizontalAlignment: Text.AlignHCenter
 		color: Theme.fgMuted
 		font.family: Theme.fontSans
+		font.hintingPreference: Theme.hinting
 		font.pixelSize: 13
 	}
 
@@ -184,6 +188,7 @@ Column {
 			text: Qt.formatDate(root.chosen, "dddd, d MMMM")
 			color: Theme.fg
 			font.family: Theme.fontSans
+			font.hintingPreference: Theme.hinting
 			font.pixelSize: 14
 			font.weight: Font.DemiBold
 		}

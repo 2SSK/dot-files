@@ -119,6 +119,7 @@ Item {
 						elide: Text.ElideRight
 						color: Theme.fg
 						font.family: Theme.fontSans
+						font.hintingPreference: Theme.hinting
 						font.pixelSize: 13
 						font.weight: Font.Medium
 					}
@@ -128,6 +129,7 @@ Item {
 						text: Qt.formatDateTime(new Date(entry.modelData.updated), new Date(entry.modelData.updated).toDateString() === new Date().toDateString() ? "hh:mm AP" : "d MMM")
 						color: Theme.fgMuted
 						font.family: Theme.fontSans
+						font.hintingPreference: Theme.hinting
 						font.pixelSize: 11
 					}
 				}
@@ -154,6 +156,7 @@ Item {
 			text: root.query ? "Nothing matches." : "No notes yet."
 			color: Theme.fgMuted
 			font.family: Theme.fontSans
+			font.hintingPreference: Theme.hinting
 			font.pixelSize: 12
 		}
 	}
@@ -178,6 +181,7 @@ Item {
 				text: "A new note"
 				color: Theme.fgMuted
 				font.family: Theme.fontSans
+				font.hintingPreference: Theme.hinting
 				font.pixelSize: 13
 			}
 
@@ -214,6 +218,7 @@ Item {
 								text: starter.modelData.label
 								color: Theme.fg
 								font.family: Theme.fontSans
+								font.hintingPreference: Theme.hinting
 								font.pixelSize: 12
 							}
 						}
@@ -289,6 +294,7 @@ Item {
 				color: Theme.fg
 				selectionColor: Qt.alpha(Theme.primary, 0.4)
 				font.family: Theme.fontSans
+				font.hintingPreference: Theme.hinting
 				font.pixelSize: 18
 				font.weight: Font.DemiBold
 				clip: true
@@ -342,6 +348,7 @@ Item {
 								text: typeChip.modelData.label
 								color: typeChip.on ? Theme.primaryText : Theme.fg
 								font.family: Theme.fontSans
+								font.hintingPreference: Theme.hinting
 								font.pixelSize: 12
 								font.weight: Font.Medium
 							}
@@ -429,6 +436,7 @@ Item {
 						color: Theme.fg
 						selectionColor: Qt.alpha(Theme.primary, 0.4)
 						font.family: Theme.fontSans
+						font.hintingPreference: Theme.hinting
 						font.pixelSize: 14
 						onTextChanged: if (activeFocus) note.typed(text)
 						Component.onCompleted: if (note.current.title) forceActiveFocus()
@@ -476,6 +484,7 @@ Item {
 							color: Theme.fg
 							selectionColor: Qt.alpha(Theme.primary, 0.4)
 							font.family: Theme.fontMono
+							font.hintingPreference: Theme.hinting
 							font.pixelSize: 13
 							onTextChanged: if (activeFocus) note.typed(text)
 							Component.onCompleted: if (note.current.title) forceActiveFocus()
@@ -508,6 +517,7 @@ Item {
 							text: copied ? "Copied" : "Copy"
 							color: copyHover.hovered ? Theme.primaryText : Theme.fg
 							font.family: Theme.fontSans
+							font.hintingPreference: Theme.hinting
 							font.pixelSize: 12
 							font.weight: Font.Medium
 
@@ -602,6 +612,7 @@ Item {
 								font.strikeout: line.modelData.done
 								color: line.modelData.done ? Theme.fgMuted : Theme.fg
 								font.family: Theme.fontSans
+								font.hintingPreference: Theme.hinting
 								font.pixelSize: 14
 							}
 

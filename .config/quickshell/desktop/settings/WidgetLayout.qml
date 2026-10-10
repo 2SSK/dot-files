@@ -156,6 +156,7 @@ Item {
 						text: column.modelData.title
 						color: Theme.fgMuted
 						font.family: Theme.fontSans
+						font.hintingPreference: Theme.hinting
 						font.pixelSize: 12
 						font.weight: Font.DemiBold
 					}
@@ -221,6 +222,7 @@ Item {
 									elide: Text.ElideRight
 									color: Theme.fg
 									font.family: Theme.fontSans
+									font.hintingPreference: Theme.hinting
 									font.pixelSize: 13
 								}
 
@@ -297,6 +299,7 @@ Item {
 			text: "Not on the bar: drag one into a column"
 			color: Theme.fgMuted
 			font.family: Theme.fontSans
+			font.hintingPreference: Theme.hinting
 			font.pixelSize: 12
 		}
 
@@ -325,6 +328,7 @@ Item {
 						text: root.names[spare.modelData] ?? spare.modelData
 						color: Theme.fg
 						font.family: Theme.fontSans
+						font.hintingPreference: Theme.hinting
 						font.pixelSize: 12
 						font.weight: Font.Medium
 					}
@@ -363,6 +367,7 @@ Item {
 			text: root.names[root.dragName] ?? root.dragName
 			color: Theme.primaryText
 			font.family: Theme.fontSans
+			font.hintingPreference: Theme.hinting
 			font.pixelSize: 13
 			font.weight: Font.Medium
 		}

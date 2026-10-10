@@ -5,6 +5,7 @@ import qs
 Text {
 	color: Theme.fg
 	font.family: Theme.fontSans
+	font.hintingPreference: Theme.hinting
 	font.pixelSize: Theme.fontSize
 	font.weight: Font.DemiBold
 	font.features: ({ tnum: 1 })

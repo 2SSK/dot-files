@@ -27,6 +27,9 @@ Singleton {
 
 	readonly property string fontSans: "Inter"
 	readonly property string fontMono: "JetBrainsMono Nerd Font"
+	// every text asks for full hinting: Qt on Wayland ignores fontconfig's (slight), and the shell's
+	// windows get no subpixel smoothing, so small text looked soft; full snaps stems to whole pixels
+	readonly property int hinting: Font.PreferFullHinting
 	readonly property int fontSize: Math.round(Config.bar.size * 0.4) // 16 px at a 40 px bar
 	// capsules sit this far inside the bar on every side, so their round ends run parallel to the
 	// island's: a capsule's radius is the bar's less this gap

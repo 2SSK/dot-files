@@ -169,6 +169,7 @@ Scope {
 					wrapMode: Text.Wrap
 					color: Theme.fg
 					font.family: Theme.fontSans
+					font.hintingPreference: Theme.hinting
 					font.pixelSize: 16
 					font.weight: card.front ? Font.DemiBold : Font.Normal
 				}
@@ -180,6 +181,7 @@ Scope {
 					text: (card.entry?.name ?? card.modelData.cls) + "  ·  " + card.modelData.workspace
 					color: Theme.fgMuted
 					font.family: Theme.fontSans
+					font.hintingPreference: Theme.hinting
 					font.pixelSize: 13
 				}
 

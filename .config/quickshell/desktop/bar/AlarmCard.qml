@@ -134,6 +134,7 @@ PopupWindow {
 				text: root.alarm?.label ?? ""
 				color: Theme.fg
 				font.family: Theme.fontSans
+				font.hintingPreference: Theme.hinting
 				font.pixelSize: 16
 				font.weight: Font.DemiBold
 			}
@@ -175,6 +176,7 @@ PopupWindow {
 						text: button.modelData.label
 						color: button.modelData.accent ? Theme.primaryText : Theme.fg
 						font.family: Theme.fontSans
+						font.hintingPreference: Theme.hinting
 						font.pixelSize: 13
 						font.weight: Font.DemiBold
 					}

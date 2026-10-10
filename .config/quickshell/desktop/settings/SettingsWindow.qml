@@ -114,6 +114,7 @@ FloatingWindow {
 			text: "Settings"
 			color: Theme.fg
 			font.family: Theme.fontSans
+			font.hintingPreference: Theme.hinting
 			font.pixelSize: 20
 			font.weight: Font.DemiBold
 		}
@@ -159,6 +160,7 @@ FloatingWindow {
 							text: entry.modelData.title
 							color: entry.on ? Theme.primaryText : Theme.fg
 							font.family: Theme.fontSans
+							font.hintingPreference: Theme.hinting
 							font.pixelSize: 14
 							font.weight: Font.Medium
 						}
@@ -186,6 +188,7 @@ FloatingWindow {
 			text: "Saved to ~/.config/desktop/shell.json"
 			color: Theme.fgMuted
 			font.family: Theme.fontSans
+			font.hintingPreference: Theme.hinting
 			font.pixelSize: 11
 		}
 	}
@@ -205,6 +208,7 @@ FloatingWindow {
 			text: root.pages.find(p => p.key === root.page)?.title ?? ""
 			color: Theme.fg
 			font.family: Theme.fontSans
+			font.hintingPreference: Theme.hinting
 			font.pixelSize: 22
 			font.weight: Font.DemiBold
 		}
@@ -316,6 +320,7 @@ FloatingWindow {
 							text: "Auto"
 							color: Theme.fg
 							font.family: Theme.fontSans
+							font.hintingPreference: Theme.hinting
 							font.pixelSize: 13
 						}
 
@@ -379,6 +384,7 @@ FloatingWindow {
 								text: swatch.modelData
 								color: swatch.on ? Theme.primaryText : Theme.fg
 								font.family: Theme.fontSans
+								font.hintingPreference: Theme.hinting
 								font.pixelSize: 14
 								font.weight: Font.Medium
 							}

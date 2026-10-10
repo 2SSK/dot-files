@@ -177,6 +177,7 @@ HangingPanel {
 						textFormat: Text.PlainText
 						color: Theme.fg
 						font.family: row.modelData.kind === "text" ? Theme.fontMono : Theme.fontSans
+						font.hintingPreference: Theme.hinting
 						font.pixelSize: 13
 					}
 
@@ -185,6 +186,7 @@ HangingPanel {
 						text: (row.modelData.pinned ? "Pinned · " : "") + (row.modelData.kind === "files" ? `${row.modelData.paths.length} file${row.modelData.paths.length > 1 ? "s" : ""} · ` : row.modelData.kind === "image" ? "Image · " : "") + root.ago(row.modelData.time)
 						color: row.modelData.pinned ? Theme.primary : Theme.fgMuted
 						font.family: Theme.fontSans
+						font.hintingPreference: Theme.hinting
 						font.pixelSize: 11
 					}
 				}
@@ -200,6 +202,7 @@ HangingPanel {
 			text: search.text ? "Nothing matches." : "Copy something (text, an image, a file): it shows up here."
 			color: Theme.fgMuted
 			font.family: Theme.fontSans
+			font.hintingPreference: Theme.hinting
 			font.pixelSize: 13
 		}
 	}
@@ -231,6 +234,7 @@ HangingPanel {
 				text: !root.entry ? "" : root.entry.kind === "image" ? "Image" : root.entry.kind === "files" ? (root.entry.paths.length === 1 ? "File" : `${root.entry.paths.length} files`) : `Text · ${root.entry.text.length} characters`
 				color: Theme.fgMuted
 				font.family: Theme.fontSans
+				font.hintingPreference: Theme.hinting
 				font.pixelSize: 12
 				font.weight: Font.DemiBold
 			}
@@ -261,6 +265,7 @@ HangingPanel {
 					wrapMode: Text.WrapAnywhere
 					color: Theme.fg
 					font.family: Theme.fontMono
+					font.hintingPreference: Theme.hinting
 					font.pixelSize: 12
 				}
 			}
@@ -298,6 +303,7 @@ HangingPanel {
 							text: root.fileName(parent.parent.modelData)
 							color: Theme.fg
 							font.family: Theme.fontSans
+							font.hintingPreference: Theme.hinting
 							font.pixelSize: 13
 						}
 
@@ -305,6 +311,7 @@ HangingPanel {
 							text: parent.parent.modelData.slice(0, parent.parent.modelData.lastIndexOf("/")).replace(Quickshell.env("HOME"), "~")
 							color: Theme.fgMuted
 							font.family: Theme.fontSans
+							font.hintingPreference: Theme.hinting
 							font.pixelSize: 11
 						}
 					}
@@ -370,6 +377,7 @@ HangingPanel {
 			text: "Nothing selected."
 			color: Theme.fgMuted
 			font.family: Theme.fontSans
+			font.hintingPreference: Theme.hinting
 			font.pixelSize: 13
 		}
 	}

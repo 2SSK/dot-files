@@ -62,6 +62,7 @@ Column {
 			text: Timeshift.working + " (Timeshift asks for your password first)"
 			color: Theme.primary
 			font.family: Theme.fontSans
+			font.hintingPreference: Theme.hinting
 			font.pixelSize: 12
 		}
 	}
@@ -81,6 +82,7 @@ Column {
 				text: Timeshift.state === "rule" ? "Listing snapshots needs root. Run packages/system.sh timeshift once to allow just the list without a password, or show it now with your password." : "Couldn't read the snapshots."
 				color: Theme.fgMuted
 				font.family: Theme.fontSans
+				font.hintingPreference: Theme.hinting
 				font.pixelSize: 13
 			}
 
@@ -96,6 +98,7 @@ Column {
 			text: "Reading the snapshots…"
 			color: Theme.fgMuted
 			font.family: Theme.fontSans
+			font.hintingPreference: Theme.hinting
 			font.pixelSize: 13
 		}
 
@@ -104,6 +107,7 @@ Column {
 			text: "No snapshots yet."
 			color: Theme.fgMuted
 			font.family: Theme.fontSans
+			font.hintingPreference: Theme.hinting
 			font.pixelSize: 13
 		}
 
@@ -136,6 +140,7 @@ Column {
 						text: root.when(snapshot.modelData.name)
 						color: Theme.fg
 						font.family: Theme.fontSans
+						font.hintingPreference: Theme.hinting
 						font.pixelSize: 14
 						font.weight: Font.Medium
 					}
@@ -144,6 +149,7 @@ Column {
 						text: [snapshot.modelData.tags.split("").filter(t => root.kinds[t]).map(t => root.kinds[t]).join(", "), snapshot.modelData.comment].filter(s => s).join("  ·  ")
 						color: Theme.fgMuted
 						font.family: Theme.fontSans
+						font.hintingPreference: Theme.hinting
 						font.pixelSize: 12
 					}
 				}

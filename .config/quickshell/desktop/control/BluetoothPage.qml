@@ -30,6 +30,7 @@ Column {
 		text: !Connectivity.bluetoothAvailable ? "No Bluetooth here (it needs BlueZ and an adapter)." : !Connectivity.bluetooth ? "Bluetooth is off." : "No devices yet: the refresh button scans for them."
 		color: Theme.fgMuted
 		font.family: Theme.fontSans
+		font.hintingPreference: Theme.hinting
 		font.pixelSize: 13
 	}
 

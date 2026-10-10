@@ -80,6 +80,7 @@ Column {
 					text: card.info.label
 					color: Theme.fgMuted
 					font.family: Theme.fontSans
+					font.hintingPreference: Theme.hinting
 					font.pixelSize: 13
 					font.weight: Font.Medium
 				}
@@ -123,6 +124,7 @@ Column {
 						text: tile.info.label
 						color: Theme.fgMuted
 						font.family: Theme.fontSans
+						font.hintingPreference: Theme.hinting
 						font.pixelSize: 12
 					}
 
@@ -209,6 +211,7 @@ Column {
 						text: half.info.label
 						color: Theme.fgMuted
 						font.family: Theme.fontSans
+						font.hintingPreference: Theme.hinting
 						font.pixelSize: 13
 						font.weight: Font.Medium
 					}
@@ -229,6 +232,7 @@ Column {
 					text: half.info.detail
 					color: Theme.fgMuted
 					font.family: Theme.fontSans
+					font.hintingPreference: Theme.hinting
 					font.pixelSize: 12
 				}
 			}
