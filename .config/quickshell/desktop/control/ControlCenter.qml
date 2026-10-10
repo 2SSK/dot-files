@@ -190,6 +190,8 @@ HangingPanel {
 	}
 
 	Flickable {
+		id: view
+
 		ScrollBoost {}
 
 		anchors.left: header.left
@@ -197,14 +199,16 @@ HangingPanel {
 		anchors.top: header.bottom
 		anchors.topMargin: 14
 		anchors.bottom: parent.bottom
-		contentHeight: page.implicitHeight + 16
+		contentHeight: page.height + 16
 		clip: true
 		boundsBehavior: Flickable.StopAtBounds
 
+		// a page sizes to its content, or (fill: Notes) takes the whole panel, never less than it needs
 		Loader {
 			id: page
 
 			width: parent.width
+			height: item?.fill ? Math.max(item.implicitHeight, view.height - 16) : (item?.implicitHeight ?? 0)
 			sourceComponent: (root.pages.find(p => p.key === Panel.controlPage) ?? root.pages[0]).component
 		}
 	}
