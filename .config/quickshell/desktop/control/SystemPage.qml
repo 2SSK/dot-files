@@ -91,7 +91,7 @@ Column {
 				anchors.rightMargin: 16
 				y: 14
 				text: card.info.value
-				font.pixelSize: 15
+				font.pixelSize: Theme.px(15)
 			}
 		}
 	}

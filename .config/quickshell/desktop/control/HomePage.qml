@@ -30,7 +30,7 @@ Column {
 			color: Theme.fg
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
-			font.pixelSize: 20
+			font.pixelSize: Theme.px(20)
 			font.weight: Font.DemiBold
 		}
 

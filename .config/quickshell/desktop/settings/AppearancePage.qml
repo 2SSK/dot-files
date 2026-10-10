@@ -163,4 +163,22 @@ Column {
 			}
 		}
 	}
+
+	Section {
+		title: "Text"
+
+		SettingRow {
+			label: "Text size"
+			hint: "The shell's text. 115% reads like the terminal and GTK apps here."
+			Range {
+				from: 0.9
+				to: 1.4
+				step: 0.05
+				value: Config.fonts.scale
+				format: v => Math.round(v * 100) + " %"
+				onMoved: value => Config.set("fonts", "scale", value)
+			}
+		}
+	}
+
 }

@@ -52,7 +52,7 @@ Column {
 		selectionColor: Qt.alpha(Theme.primary, 0.4)
 		font.family: Theme.fontSans
 		font.hintingPreference: Theme.hinting
-		font.pixelSize: 18
+		font.pixelSize: Theme.px(18)
 		font.weight: Font.DemiBold
 		clip: true
 		onTextEdited: Notes.update(note.noteId, { title: text })

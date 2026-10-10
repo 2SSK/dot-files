@@ -50,7 +50,7 @@ HangingPanel {
 				color: Theme.fg
 				font.family: Theme.fontSans
 				font.hintingPreference: Theme.hinting
-				font.pixelSize: 17
+				font.pixelSize: Theme.px(17)
 				font.weight: Font.DemiBold
 			}
 		}

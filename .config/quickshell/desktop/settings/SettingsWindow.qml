@@ -71,7 +71,7 @@ FloatingWindow {
 			color: Theme.fg
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
-			font.pixelSize: 20
+			font.pixelSize: Theme.px(20)
 			font.weight: Font.DemiBold
 		}
 
@@ -166,7 +166,7 @@ FloatingWindow {
 			color: Theme.fg
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
-			font.pixelSize: 22
+			font.pixelSize: Theme.px(22)
 			font.weight: Font.DemiBold
 		}
 

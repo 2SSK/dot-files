@@ -95,7 +95,7 @@ Scope {
 					font.family: "Inter Display"
 					font.hintingPreference: Theme.hinting
 					font.weight: Font.Light
-					font.pixelSize: 128
+					font.pixelSize: Theme.px(128)
 				}
 
 				Text {
@@ -105,7 +105,7 @@ Scope {
 					font.family: Theme.fontSans
 					font.hintingPreference: Theme.hinting
 					font.weight: Theme.textWeight
-					font.pixelSize: 20
+					font.pixelSize: Theme.px(20)
 				}
 
 				Item {
@@ -139,7 +139,7 @@ Scope {
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
 						font.weight: Theme.textWeight
-						font.pixelSize: 18
+						font.pixelSize: Theme.px(18)
 						font.letterSpacing: 2
 						focus: true
 						enabled: !root.checking

@@ -135,7 +135,7 @@ PopupWindow {
 				color: Theme.fg
 				font.family: Theme.fontSans
 				font.hintingPreference: Theme.hinting
-				font.pixelSize: 16
+				font.pixelSize: Theme.px(16)
 				font.weight: Font.DemiBold
 			}
 
