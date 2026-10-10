@@ -4,6 +4,7 @@ import qs
 
 // "10:18 AM Fri, Oct 09"; a vertical bar shows hours over minutes. A click opens the calendar.
 Label {
+	font.family: Theme.fontBar
 	SystemClock {
 		id: clock
 

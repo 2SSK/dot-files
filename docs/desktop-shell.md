@@ -16,7 +16,9 @@ windows that only catch clicks, like the power menu's, are left out.
 ## Control center
 
 A panel that drops out of the middle of the bar, in its colour: an icon sidebar of pages, a header with
-the page's title, its buttons and ✕, then the page. The bar's widgets open their page:
+the page's title, its buttons and ✕, then the page. The bar's widgets open their page; from the
+keyboard, **Ctrl+Tab** / **Ctrl+Shift+Tab** (or Ctrl+PgDn / PgUp) turn the pages and **Alt+1…8**
+jump to one, in the sidebar's order:
 
 | Page | Opened by | What's there |
 | --- | --- | --- |

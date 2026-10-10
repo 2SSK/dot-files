@@ -23,12 +23,16 @@ Line {
 	}
 
 	Label {
+
+		font.family: Theme.fontBar
 		visible: !Config.island && !Config.vertical
 		text: root.label
 		color: Theme.primary
 	}
 
 	Label {
+
+		font.family: Theme.fontBar
 		id: value
 
 		visible: root.value !== ""

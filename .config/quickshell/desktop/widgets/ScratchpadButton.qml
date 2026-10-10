@@ -28,6 +28,8 @@ Item {
 		}
 
 		Label {
+
+			font.family: Theme.fontBar
 			text: WindowManager.scratchpad
 			color: root.out ? Theme.primary : hover.containsMouse ? Theme.fg : Theme.fgMuted
 			font.pixelSize: Theme.fontSize - 1

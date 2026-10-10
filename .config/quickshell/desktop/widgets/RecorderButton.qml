@@ -72,6 +72,8 @@ Item {
 		}
 
 		Label {
+
+			font.family: Theme.fontBar
 			visible: Recorder.recording
 			text: `${Math.floor(root.seconds / 60)}:${String(root.seconds % 60).padStart(2, "0")}`
 			color: Theme.error

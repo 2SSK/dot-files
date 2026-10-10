@@ -73,6 +73,7 @@ Singleton {
 				property string sans: "Inter" // the interface
 				property string heading: "Inter" // titles, labels on tiles, anything semibold or bold
 				property string mono: "JetBrainsMono Nerd Font" // code, the clipboard's text
+				property string bar: "JetBrainsMono Nerd Font" // the bar's clock, figures and labels
 				property int weight: 500 // body text: 400 regular, 500 medium, 600 semibold
 			}
 			property JsonObject clipboard: JsonObject {

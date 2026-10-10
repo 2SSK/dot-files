@@ -205,6 +205,13 @@ Column {
 		}
 
 		FontRow {
+			label: "Bar"
+			hint: "The clock, figures and labels on the bar."
+			value: Theme.fontBar
+			onPicked: family => Config.set("fonts", "bar", family)
+		}
+
+		FontRow {
 			label: "Code"
 			hint: "The clipboard's text, code notes."
 			value: Theme.fontMono
