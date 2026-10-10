@@ -39,7 +39,7 @@ palette.json     -                  qs -c desktop ipc call theme reload
 kitty.conf       -                  for s in "${XDG_RUNTIME_DIR:-/run/user/$UID}"/kitty-*; do [[ -S $s ]] && kitten @ --to "unix:$s" set-colors --all --configured "$state/kitty.conf"; done
 foot.ini         -                  pkill -$([[ $mode == dark ]] && echo USR1 || echo USR2) -x foot
 cava             -                  pkill -USR2 -x cava
-nvim.lua         -                  pkill -USR1 -x nvim
+palette.json     -                  pkill -USR1 -x nvim
 tmux.conf        -                  tmux info && tmux source-file "${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf"
 i3.conf          -                  if [[ -n ${SWAYSOCK:-} ]]; then swaymsg -q "$(grep '^client\.' "$state/i3.conf" | paste -sd';')"; else i3-msg -t get_version && i3-msg -q reload; fi
 picom.conf       -                  -

@@ -48,7 +48,8 @@ Palette values are copied from each project's official ports, with attribution i
 | GTK 4 / libadwaita | libadwaita's CSS variables in the rendered `gtk-4.0.css` (`~/.config/gtk-4.0/gtk.css` links to it); `gsettings` color-scheme | Dark/light live; colours on app restart |
 | Qt 5 / Qt 6 | `QT_QPA_PLATFORMTHEME=qt5ct` (qt6ct answers to it too); `~/.config/qt{5,6}ct/qt{5,6}ct.conf` link to rendered configs: Fusion, the rendered `qt-colors.conf`, Tela icons, Inter | On app restart |
 | Quickshell (bar, panels, lock) | Reads the rendered `palette.json` | Live (`qs ipc call theme reload`) |
-| nvim, vim | The rendered `nvim.lua` / `vim.vim` (colorscheme `desktop`) | nvim live (SIGUSR1); vim within a second |
+| nvim | Builds its colorscheme `desktop` from `palette.json` | Live (SIGUSR1) |
+| vim | The rendered `vim.vim` (colorscheme `desktop`) | Within a second |
 | yazi, eza | `~/.config/yazi/` and `~/.config/eza/` link to the rendered flavor and theme | Next start |
 | rmpc, pspg, opencode | Their rendered configs (`rmpc.ron`; `PSPG_CONF`; `OPENCODE_CONFIG_DIR`) | Next start |
 | Login screen (SDDM), boot menu (GRUB) | SDDM: the rendered `sddm-theme.conf`, copied to its shared folder; GRUB: its background tinted by the palette | SDDM next login; GRUB's tint at once, its colours with `packages/system.sh grub` |
@@ -72,7 +73,7 @@ reload command or `-`).
 | `~/.local/share/desktop/templates/` | One template per rendered target |
 | `~/.local/state/desktop/theme/current` | `family=` and `mode=` of the active theme |
 | `~/.local/state/desktop/theme/palette.json` | Active variant for apps that read JSON |
-| `~/.local/state/desktop/theme/` `kitty.conf`, `foot.ini`, `i3.conf`, `picom.conf`, `xsettingsd.conf`, `st.Xresources`, `cava`, `tmux.conf`, `git.conf`, `lazygit.yml`, `lazydocker/`, `pspg/`, `rmpc.ron`, `nvim.lua`, `vim.vim`, `silicon.tmTheme` | Rendered configs |
+| `~/.local/state/desktop/theme/` `kitty.conf`, `foot.ini`, `i3.conf`, `picom.conf`, `xsettingsd.conf`, `st.Xresources`, `cava`, `tmux.conf`, `git.conf`, `lazygit.yml`, `lazydocker/`, `pspg/`, `rmpc.ron`, `vim.vim`, `silicon.tmTheme` | Rendered configs |
 
 ## Fonts
 

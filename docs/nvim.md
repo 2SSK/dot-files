@@ -17,9 +17,9 @@ every open nvim and vim switches.
 | `lazy-lock.json` | Pinned plugin versions |
 | `~/.vimrc` | vim: options, keys, netrw, the theme's `vim.vim` |
 
-The theme engine renders `nvim.lua` (base16 palette), `vim.vim` and `silicon.tmTheme` into
-`~/.local/state/desktop/theme/`. nvim reloads on SIGUSR1 from `theme`; vim checks the file
-once a second.
+nvim builds a base16 colorscheme from the theme's `palette.json` and reloads it on SIGUSR1 from
+`theme`; vim sources the rendered `vim.vim` and checks it once a second (both in
+`~/.local/state/desktop/theme/`).
 
 ## Look
 
