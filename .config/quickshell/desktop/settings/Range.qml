@@ -2,7 +2,7 @@ import QtQuick
 import qs
 
 // A slider from `from` to `to` in `step`s, with the value shown by `format`; moved(value) while
-// dragging or clicking.
+// dragging or clicking, released(value) once let go (for what's costly to apply at every step).
 Row {
 	id: root
 
@@ -12,6 +12,7 @@ Row {
 	property real value
 	property var format: v => v
 	signal moved(real value)
+	signal released(real value)
 
 	spacing: 12
 
@@ -62,11 +63,13 @@ Row {
 			}
 			onPressed: event => pick(event.x)
 			onPositionChanged: event => pick(event.x)
+			onReleased: root.released(root.value)
 		}
 	}
 
+	// on a whole pixel: centred, Inter's line height would put it between two, blurred
 	Text {
-		anchors.verticalCenter: parent.verticalCenter
+		y: Math.round((track.height - height) / 2)
 		width: 56
 		horizontalAlignment: Text.AlignRight
 		text: root.format(root.value)

@@ -48,12 +48,18 @@ return {
 				end,
 			})
 
-			-- Copilot as ghost text: Tab accepts (completion.lua). Sign in once with :LspCopilotSignIn.
+			-- Copilot as ghost text. Sign in once with :LspCopilotSignIn.
+			--   Tab or Alt+l  accept (Tab: after a snippet jump, else an indent)   Alt+h  reject
+			--   Alt+n / Alt+p  next / previous suggestion                          Alt+r  ask again
 			vim.lsp.inline_completion.enable()
 			local function dismiss()
 				vim.lsp.inline_completion.enable(false, { bufnr = 0 })
 				vim.lsp.inline_completion.enable(true, { bufnr = 0 })
 			end
+			vim.keymap.set("i", "<M-l>", function()
+				vim.lsp.inline_completion.get()
+			end, { desc = "Accept Copilot suggestion" })
+			vim.keymap.set("i", "<M-h>", dismiss, { desc = "Reject Copilot suggestion" })
 			vim.keymap.set("i", "<C-]>", dismiss, { desc = "Reject Copilot suggestion" })
 			vim.keymap.set("i", "<M-n>", function()
 				vim.lsp.inline_completion.select({ count = 1 })

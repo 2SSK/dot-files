@@ -586,6 +586,30 @@ FloatingWindow {
 						onMoved: value => root.set("power", "batteryLow", Math.round(value))
 					}
 				}
+
+				// TLP keeps it (desktop-power): not a shell setting. Shown as dragged, applied once let go
+				SettingRow {
+					visible: Power.limit > 0
+					label: "Charge limit"
+					hint: "Charging stops here (80% by default; some ASUS laptops only keep 40, 60 or 80): a battery kept below full lasts longer. 100% before a trip."
+					Range {
+						id: chargeLimit
+
+						property int dragged: 0 // while dragging; 0 shows the battery's own
+
+						from: 50
+						to: 100
+						step: 5
+						value: dragged || Power.limit
+						format: v => Math.round(v) + " %"
+						onMoved: value => dragged = Math.round(value)
+						onReleased: value => {
+							if (dragged && dragged !== Power.limit)
+								Power.setLimit(dragged);
+							dragged = 0;
+						}
+					}
+				}
 			}
 
 			// Timeshift: the system's snapshots (loaded each time the page opens)

@@ -1,6 +1,9 @@
+//@ pragma NativeTextRendering
 // The desktop shell (qs -c desktop): one bar per screen, which grows into the OSD and the power
 // menu. Settings: Config (~/.config/desktop/shell.json); colours: Theme (the desktop theme).
 // Keys reach it over IPC: qs -c desktop ipc call <target> <function> (see i3's keys.conf).
+// Text is drawn with the system font rasteriser (fontconfig hinting), not Qt Quick's distance-field
+// glyphs, which look soft at bar sizes: the pragma above.
 import QtQuick
 import Quickshell
 import Quickshell.Io

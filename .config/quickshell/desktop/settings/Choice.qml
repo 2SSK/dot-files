@@ -31,7 +31,8 @@ Rectangle {
 				required property var modelData
 				readonly property bool on: root.value === modelData.value
 
-				width: Math.max(64, label.implicitWidth + 24)
+				// whole pixels throughout: a fractional width would shift every option after it
+				width: Math.max(64, Math.ceil(label.implicitWidth) + 24)
 				height: 28
 				radius: 8
 				color: on ? Theme.primary : hover.hovered ? Qt.alpha(Theme.fg, 0.08) : "transparent"
@@ -45,7 +46,8 @@ Rectangle {
 				Text {
 					id: label
 
-					anchors.centerIn: parent
+					x: Math.round((parent.width - width) / 2)
+					y: Math.round((parent.height - height) / 2)
 					text: option.modelData.label
 					color: option.on ? Theme.primaryText : Theme.fg
 					font.family: Theme.fontSans
