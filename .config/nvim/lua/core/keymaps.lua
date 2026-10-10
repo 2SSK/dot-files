@@ -8,6 +8,8 @@ map("n", "<leader>w", "<cmd>w<CR>", { desc = "Save" })
 map("n", "<leader>q", "<cmd>q<CR>", { desc = "Quit" })
 map("n", "<leader>Q", "<cmd>qa<CR>", { desc = "Quit all" })
 
+map("n", "<leader>nh", "<cmd>nohlsearch<CR>", { desc = "Clear search highlight" })
+
 map("n", "<leader>sv", "<C-w>v", { desc = "Split vertically" })
 map("n", "<leader>sh", "<C-w>s", { desc = "Split horizontally" })
 map("n", "<leader>se", "<C-w>=", { desc = "Equalise splits" })
