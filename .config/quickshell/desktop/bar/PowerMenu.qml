@@ -126,7 +126,7 @@ PopupWindow {
 						color: tile.ink
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
-						font.pixelSize: 15
+						font.pixelSize: Theme.px(15)
 						font.weight: Font.Medium
 					}
 				}
@@ -147,7 +147,7 @@ PopupWindow {
 						color: tile.ink
 						font.family: Theme.fontMono
 						font.hintingPreference: Theme.hinting
-						font.pixelSize: 11
+						font.pixelSize: Theme.textCaption
 						font.weight: Font.Bold
 					}
 				}

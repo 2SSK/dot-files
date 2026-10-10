@@ -27,7 +27,8 @@ Rectangle {
 		color: Theme.fgMuted
 		font.family: Theme.fontSans
 		font.hintingPreference: Theme.hinting
-		font.pixelSize: 13
+		font.weight: Theme.textWeight
+		font.pixelSize: Theme.textBody
 	}
 
 	// the players, when there are several
@@ -73,7 +74,7 @@ Rectangle {
 						color: chip.on ? Theme.primaryText : Theme.fg
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
-						font.pixelSize: 12
+						font.pixelSize: Theme.textLabel
 						font.weight: Font.Medium
 					}
 				}
@@ -135,9 +136,9 @@ Rectangle {
 			text: root.player?.trackTitle || root.player?.identity || ""
 			elide: Text.ElideRight
 			color: Theme.fg
-			font.family: Theme.fontSans
+			font.family: Theme.fontHeading
 			font.hintingPreference: Theme.hinting
-			font.pixelSize: 14
+			font.pixelSize: Theme.textBody
 			font.weight: Font.DemiBold
 		}
 
@@ -148,7 +149,8 @@ Rectangle {
 			color: Theme.fgMuted
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
-			font.pixelSize: 12
+			font.weight: Theme.textWeight
+			font.pixelSize: Theme.textLabel
 		}
 
 		// progress, where the player reports it
@@ -177,7 +179,7 @@ Rectangle {
 				visible: root.player?.lengthSupported ?? false
 				text: `${root.time(root.player?.position ?? 0)} / ${root.time(root.player?.length ?? 0)}`
 				color: Theme.fgMuted
-				font.pixelSize: 11
+				font.pixelSize: Theme.textCaption
 				font.weight: Font.Medium
 			}
 
@@ -193,36 +195,16 @@ Rectangle {
 						{ glyph: Icons.g("player-skip-forward"), enabled: root.player?.canGoNext ?? false, act: () => root.player.next() }
 					]
 
-					delegate: Rectangle {
-						id: button
-
+					delegate: IconButton {
 						required property var modelData
 
-						width: modelData.main ? 34 : 30
-						height: width
-						radius: width / 2
-						opacity: modelData.enabled ? 1 : 0.4
-						color: modelData.main ? Theme.primary : buttonHover.hovered ? Qt.alpha(Theme.fg, 0.1) : "transparent"
-
-						Glyph {
-							anchors.centerIn: parent
-							glyph: button.modelData.glyph
-							filled: true
-							font.pixelSize: 16
-							font.weight: Font.Normal
-							color: button.modelData.main ? Theme.primaryText : Theme.fg
-						}
-
-						HoverHandler {
-							id: buttonHover
-						}
-
-						MouseArea {
-							anchors.fill: parent
-							enabled: button.modelData.enabled
-							cursorShape: Qt.PointingHandCursor
-							onClicked: button.modelData.act()
-						}
+						size: modelData.main ? 34 : 30
+						glyph: modelData.glyph
+						filled: true
+						on: modelData.main ?? false
+						enabled: modelData.enabled
+						opacity: enabled ? 1 : 0.4
+						onClicked: modelData.act()
 					}
 				}
 			}

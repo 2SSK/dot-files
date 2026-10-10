@@ -95,7 +95,7 @@ Scope {
 					font.family: "Inter Display"
 					font.hintingPreference: Theme.hinting
 					font.weight: Font.Light
-					font.pixelSize: 128
+					font.pixelSize: Theme.px(128)
 				}
 
 				Text {
@@ -104,7 +104,8 @@ Scope {
 					color: Qt.alpha(Theme.fg, 0.7)
 					font.family: Theme.fontSans
 					font.hintingPreference: Theme.hinting
-					font.pixelSize: 20
+					font.weight: Theme.textWeight
+					font.pixelSize: Theme.px(20)
 				}
 
 				Item {
@@ -137,7 +138,8 @@ Scope {
 						color: Theme.fg
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
-						font.pixelSize: 18
+						font.weight: Theme.textWeight
+						font.pixelSize: Theme.px(18)
 						font.letterSpacing: 2
 						focus: true
 						enabled: !root.checking
@@ -157,7 +159,8 @@ Scope {
 						color: Qt.alpha(Theme.fg, 0.4)
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
-						font.pixelSize: 14
+						font.weight: Theme.textWeight
+						font.pixelSize: Theme.textBody
 					}
 
 					SequentialAnimation on anchors.horizontalCenterOffset {
@@ -177,7 +180,8 @@ Scope {
 					color: Theme.error
 					font.family: Theme.fontSans
 					font.hintingPreference: Theme.hinting
-					font.pixelSize: 13
+					font.weight: Theme.textWeight
+					font.pixelSize: Theme.textBody
 					opacity: root.error ? 1 : 0
 				}
 			}
@@ -190,7 +194,8 @@ Scope {
 				color: Qt.alpha(Theme.fg, 0.35)
 				font.family: Theme.fontSans
 				font.hintingPreference: Theme.hinting
-				font.pixelSize: 13
+				font.weight: Theme.textWeight
+				font.pixelSize: Theme.textBody
 			}
 
 			Connections {

@@ -120,7 +120,7 @@ main() {
 	fi
 
 	local -a layers=()
-	local distro='' vm=0 safety=0 docker=0 screens=0
+	local distro='' system=0
 	if ((packages)); then
 		distro="$("$repo/packages/install.sh" --distro)"
 		step "Packages for $distro"
@@ -132,19 +132,15 @@ main() {
 		show_layer 'cli (terminal tools)' cli
 		if confirm 'Install the terminal tools?' y; then layers+=(cli); fi
 		show_layer 'vm (virtual machines: libvirt, virt-manager)' vm
-		if confirm 'Install the virtual machine tools?' y; then layers+=(vm) && vm=1; fi
+		if confirm 'Install the virtual machine tools?' y; then layers+=(vm); fi
 		show_layer 'dev (go, gopls, clangd, pnpm, docker, lint and test tools)' dev
-		if ((dev)) || confirm 'Install the development tools?' n; then layers+=(dev) && docker=1; fi
+		if ((dev)) || confirm 'Install the development tools?' n; then layers+=(dev); fi
 	fi
 
 	if ((packages)); then
-		printf '  %s%s%s\n' "$dim" 'zram compresses little-used memory instead of killing apps when RAM fills up;' "$reset"
-		printf '  %s%s%s\n' "$dim" 'systemd-oomd stops only the runaway app before the desktop freezes.' "$reset"
-		if confirm 'Turn on the memory safety net (zram + systemd-oomd)?' y; then safety=1; fi
-		# the boot menu and login screen in the desktop theme, where GRUB and sddm are in use
-		if [[ -f /etc/default/grub ]] || command -v sddm >/dev/null; then
-			if confirm 'Theme the boot menu (GRUB) and the login screen (sddm)?' y; then screens=1; fi
-		fi
+		printf '  %s%s%s\n' "$dim" 'zram and systemd-oomd (memory never freezes the desktop), then what applies here:' "$reset"
+		printf '  %s%s%s\n' "$dim" 'laptop power (quiet, 80% charge limit) and lid, Timeshift, GRUB and login screen, VMs, docker' "$reset"
+		if confirm 'Set up the system parts (packages/system.sh, asks for sudo)?' y; then system=1; fi
 	fi
 
 	local shell=0
@@ -154,12 +150,7 @@ main() {
 	step 'Plan'
 	row 'Packages' "$( ((packages)) && echo "${layers[*]} + shell plugins" || echo skip)"
 	[[ $distro != arch ]] || row '' 'includes a full system upgrade (pacman -Syu), as Arch requires'
-	local system=()
-	((safety)) && system+=('memory safety net (zram, systemd-oomd)')
-	((vm)) && system+=('libvirt services, default network, firewall zone, libvirt group')
-	((docker)) && system+=('docker service + docker group')
-	((screens)) && system+=('boot menu and login screen themes')
-	((${#system[@]} == 0)) || row 'System (sudo)' "$(printf '%s; ' "${system[@]}" | sed 's/; $//')"
+	((system == 0)) || row 'System (sudo)' 'zram + oomd, and laptop power, lid, Timeshift, GRUB, login screen, VMs, docker where they apply'
 	row 'Existing files' "$(case $policy in none) echo none ;; backup) echo "${#found[@]} → $backup" ;; *) echo "${#found[@]} deleted" ;; esac)"
 	row 'Stow' "$repo → $HOME"
 	local family mode
@@ -178,13 +169,6 @@ main() {
 		"$repo/packages/plugins.sh"
 		ok 'zsh and bash plugins at their pinned tags'
 		enable_services
-		if ((safety || vm || docker)); then
-			step 'System'
-			((safety == 0)) || "$repo/packages/system.sh" memory
-			((vm == 0)) || "$repo/packages/system.sh" libvirt
-			((docker == 0)) || "$repo/packages/system.sh" docker
-			ok 'system configured'
-		fi
 	fi
 
 	if [[ -f $repo/.gitmodules ]]; then
@@ -216,11 +200,11 @@ main() {
 		warn 'python3 missing; theme not rendered'
 	fi
 
-	if ((screens)); then # after the theme: both are built from it
-		step 'Boot menu and login screen'
-		[[ ! -f /etc/default/grub ]] || "$repo/packages/system.sh" grub
-		! command -v sddm >/dev/null || "$repo/packages/system.sh" sddm
-		ok "in the $family $mode theme; the login screen follows theme set, the boot menu needs packages/system.sh grub"
+	if ((system)); then # after the packages and the theme: GRUB and the login screen are built from it
+		step 'System'
+		row 'Parts' "$("$repo/packages/system.sh" --plan)"
+		"$repo/packages/system.sh"
+		ok 'system set up (run packages/system.sh again any time: it only changes what differs)'
 	fi
 
 	if ((shell)); then

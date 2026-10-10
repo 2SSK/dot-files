@@ -28,9 +28,9 @@ Column {
 
 			text: hour < 5 ? "Good night" : hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening"
 			color: Theme.fg
-			font.family: Theme.fontSans
+			font.family: Theme.fontHeading
 			font.hintingPreference: Theme.hinting
-			font.pixelSize: 20
+			font.pixelSize: Theme.px(20)
 			font.weight: Font.DemiBold
 		}
 
@@ -39,7 +39,8 @@ Column {
 			color: Theme.fgMuted
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
-			font.pixelSize: 13
+			font.weight: Theme.textWeight
+			font.pixelSize: Theme.textBody
 		}
 	}
 

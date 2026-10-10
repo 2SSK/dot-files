@@ -1,5 +1,7 @@
 # i3 / Xorg session. Columns: arch  debian(+ubuntu)  fedora (format: see base.txt)
 i3-wm                       i3-wm                       i3
+xorg-server                 xserver-xorg                xorg-x11-server-Xorg
+xorg-xinput                 xinput                      xinput
 picom                       picom                       picom
 feh                         feh                         feh
 maim                        maim                        maim

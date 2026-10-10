@@ -189,7 +189,8 @@ HangingPanel {
 						color: Theme.fg
 						font.family: row.modelData.kind === "text" ? Theme.fontMono : Theme.fontSans
 						font.hintingPreference: Theme.hinting
-						font.pixelSize: 13
+						font.weight: Theme.textWeight
+						font.pixelSize: Theme.textBody
 					}
 
 					Text {
@@ -198,7 +199,8 @@ HangingPanel {
 						color: row.modelData.pinned ? Theme.primary : Theme.fgMuted
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
-						font.pixelSize: 11
+						font.weight: Theme.textWeight
+						font.pixelSize: Theme.textCaption
 					}
 				}
 			}
@@ -214,7 +216,8 @@ HangingPanel {
 			color: Theme.fgMuted
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
-			font.pixelSize: 13
+			font.weight: Theme.textWeight
+			font.pixelSize: Theme.textBody
 		}
 	}
 
@@ -244,9 +247,9 @@ HangingPanel {
 				anchors.verticalCenter: parent.verticalCenter
 				text: !root.entry ? "" : root.entry.kind === "image" ? "Image" : root.entry.kind === "files" ? (root.entry.paths.length === 1 ? "File" : `${root.entry.paths.length} files`) : `Text · ${root.entry.text.length} characters`
 				color: Theme.fgMuted
-				font.family: Theme.fontSans
+				font.family: Theme.fontHeading
 				font.hintingPreference: Theme.hinting
-				font.pixelSize: 12
+				font.pixelSize: Theme.textLabel
 				font.weight: Font.DemiBold
 			}
 		}
@@ -277,7 +280,8 @@ HangingPanel {
 					color: Theme.fg
 					font.family: Theme.fontMono
 					font.hintingPreference: Theme.hinting
-					font.pixelSize: 12
+					font.weight: Theme.textWeight
+					font.pixelSize: Theme.textLabel
 				}
 			}
 
@@ -315,7 +319,8 @@ HangingPanel {
 							color: Theme.fg
 							font.family: Theme.fontSans
 							font.hintingPreference: Theme.hinting
-							font.pixelSize: 13
+							font.weight: Theme.textWeight
+							font.pixelSize: Theme.textBody
 						}
 
 						Text {
@@ -323,7 +328,8 @@ HangingPanel {
 							color: Theme.fgMuted
 							font.family: Theme.fontSans
 							font.hintingPreference: Theme.hinting
-							font.pixelSize: 11
+							font.weight: Theme.textWeight
+							font.pixelSize: Theme.textCaption
 						}
 					}
 				}
@@ -389,7 +395,8 @@ HangingPanel {
 			color: Theme.fgMuted
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
-			font.pixelSize: 13
+			font.weight: Theme.textWeight
+			font.pixelSize: Theme.textBody
 		}
 	}
 

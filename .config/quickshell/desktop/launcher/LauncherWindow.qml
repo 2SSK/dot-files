@@ -255,7 +255,7 @@ HangingPanel {
 						color: Theme.fg
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
-						font.pixelSize: 14
+						font.pixelSize: Theme.textBody
 						font.weight: Font.Medium
 					}
 
@@ -267,7 +267,8 @@ HangingPanel {
 						color: Theme.fgMuted
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
-						font.pixelSize: 12
+						font.weight: Theme.textWeight
+						font.pixelSize: Theme.textLabel
 					}
 				}
 
@@ -440,9 +441,9 @@ HangingPanel {
 						anchors.bottomMargin: 10
 						text: cell.emoji ? "" : cell.modelData.name
 						color: cell.colours.fg ?? Theme.fg
-						font.family: Theme.fontSans
+						font.family: Theme.fontHeading
 						font.hintingPreference: Theme.hinting
-						font.pixelSize: 13
+						font.pixelSize: Theme.textBody
 						font.weight: Font.DemiBold
 					}
 
@@ -481,7 +482,8 @@ HangingPanel {
 			color: Theme.fgMuted
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
-			font.pixelSize: 13
+			font.weight: Theme.textWeight
+			font.pixelSize: Theme.textBody
 		}
 	}
 
@@ -498,6 +500,7 @@ HangingPanel {
 		color: Theme.fgMuted
 		font.family: Theme.fontSans
 		font.hintingPreference: Theme.hinting
-		font.pixelSize: 12
+		font.weight: Theme.textWeight
+		font.pixelSize: Theme.textLabel
 	}
 }

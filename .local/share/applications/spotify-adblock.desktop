@@ -1,0 +1,5 @@
+[Desktop Entry]
+# spotify-adblock's own entry, hidden: spotify.desktop here already starts Spotify through it
+Type=Application
+Name=Spotify (adblock)
+Hidden=true

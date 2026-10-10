@@ -65,6 +65,8 @@ Singleton {
 					workspacesLater.restart(); // a workspace or output event
 					if (data.change === "reload")
 						modeNow.running = true; // back to the default mode, unannounced
+					else if (data.current === undefined && data.change === "unspecified")
+						rehomeLater.restart(); // a screen came or went: workspaces back to their screens
 				}
 			}
 		}
@@ -107,6 +109,15 @@ Singleton {
 		interval: 40
 		running: true
 		onTriggered: workspaceList.running = true
+	}
+
+	// once the screens have settled: the window manager applies workspaces.conf's screens only to
+	// new workspaces, so desktop-displays moves the ones a monitor's absence left elsewhere
+	Timer {
+		id: rehomeLater
+
+		interval: 1500
+		onTriggered: Quickshell.execDetached(["desktop-displays", "rehome"])
 	}
 
 	Timer {

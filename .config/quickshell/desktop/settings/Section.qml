@@ -14,9 +14,9 @@ Column {
 		bottomPadding: 6
 		text: root.title
 		color: Theme.fgMuted
-		font.family: Theme.fontSans
+		font.family: Theme.fontHeading
 		font.hintingPreference: Theme.hinting
-		font.pixelSize: 12
+		font.pixelSize: Theme.textLabel
 		font.weight: Font.DemiBold
 		font.capitalization: Font.AllUppercase
 		font.letterSpacing: 0.8

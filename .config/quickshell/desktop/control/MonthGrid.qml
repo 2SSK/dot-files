@@ -53,9 +53,9 @@ Column {
 			anchors.verticalCenter: parent.verticalCenter
 			text: Qt.formatDate(new Date(root.year, root.month, 1), "MMMM yyyy")
 			color: Theme.fg
-			font.family: Theme.fontSans
+			font.family: Theme.fontHeading
 			font.hintingPreference: Theme.hinting
-			font.pixelSize: 16
+			font.pixelSize: Theme.px(16)
 			font.weight: Font.DemiBold
 		}
 
@@ -125,9 +125,9 @@ Column {
 					verticalAlignment: Text.AlignVCenter
 					text: Qt.locale().dayName((root.first + index) % 7, Locale.ShortFormat).slice(0, 2)
 					color: Theme.fgMuted
-					font.family: Theme.fontSans
+					font.family: Theme.fontHeading
 					font.hintingPreference: Theme.hinting
-					font.pixelSize: 12
+					font.pixelSize: Theme.textLabel
 					font.weight: Font.DemiBold
 				}
 			}
@@ -162,8 +162,8 @@ Column {
 						color: day.today ? Theme.primaryText : day.inMonth ? Theme.fg : Qt.alpha(Theme.fgMuted, 0.5)
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
-						font.pixelSize: 13
-						font.weight: day.today ? Font.Bold : Font.Normal
+						font.pixelSize: Theme.textBody
+						font.weight: day.today ? Font.Bold : Font.DemiBold // semibold: solid numbers in the grid
 						font.features: ({ tnum: 1 })
 					}
 

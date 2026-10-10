@@ -3,6 +3,7 @@ pragma Singleton
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import qs
 
 // Notes, kept on this machine in ~/.local/share/desktop/notes/notes.json, in a folder only you can
 // read (they may hold connection strings and the like; each save writes a fresh file, so the folder
@@ -31,6 +32,22 @@ Singleton {
 	function addSnippet(text: string): string {
 		const first = text.trim().split("\n")[0];
 		return create("code", text, first.length > 48 ? first.slice(0, 48) + "…" : first);
+	}
+
+	// what a note can be, its colour tags, and how the list names one (NotesPage, NoteEditor)
+	readonly property var types: [
+		{ key: "text", glyph: Icons.g("note"), label: "Text" },
+		{ key: "checklist", glyph: Icons.g("checkbox"), label: "Checklist" },
+		{ key: "code", glyph: Icons.g("code"), label: "Code" }
+	]
+	readonly property var tags: ({ none: Theme.fgMuted, red: Theme.error, yellow: Theme.warning, green: Theme.success, blue: Theme.primary, purple: Theme.secondary })
+
+	function glyph(type: string): string {
+		return types.find(t => t.key === type)?.glyph ?? types[0].glyph;
+	}
+
+	function heading(note: var): string {
+		return note.title || (note.type === "checklist" ? (note.items?.[0]?.text ?? "") : note.body.trim().split("\n")[0]) || "Untitled";
 	}
 
 	function update(id: string, change: var): void {

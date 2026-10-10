@@ -81,7 +81,7 @@ Column {
 					color: Theme.fgMuted
 					font.family: Theme.fontSans
 					font.hintingPreference: Theme.hinting
-					font.pixelSize: 13
+					font.pixelSize: Theme.textBody
 					font.weight: Font.Medium
 				}
 			}
@@ -91,7 +91,7 @@ Column {
 				anchors.rightMargin: 16
 				y: 14
 				text: card.info.value
-				font.pixelSize: 15
+				font.pixelSize: Theme.px(15)
 			}
 		}
 	}
@@ -125,7 +125,8 @@ Column {
 						color: Theme.fgMuted
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
-						font.pixelSize: 12
+						font.weight: Theme.textWeight
+						font.pixelSize: Theme.textLabel
 					}
 
 					Label {
@@ -133,7 +134,7 @@ Column {
 						horizontalAlignment: Text.AlignLeft
 						elide: Text.ElideRight
 						text: tile.info.value
-						font.pixelSize: 14
+						font.pixelSize: Theme.textBody
 					}
 
 					Rectangle {
@@ -212,7 +213,7 @@ Column {
 						color: Theme.fgMuted
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
-						font.pixelSize: 13
+						font.pixelSize: Theme.textBody
 						font.weight: Font.Medium
 					}
 				}
@@ -222,7 +223,7 @@ Column {
 					anchors.rightMargin: 16
 					y: 14
 					text: half.info.value
-					font.pixelSize: 14
+					font.pixelSize: Theme.textBody
 				}
 
 				Text {
@@ -233,7 +234,8 @@ Column {
 					color: Theme.fgMuted
 					font.family: Theme.fontSans
 					font.hintingPreference: Theme.hinting
-					font.pixelSize: 12
+					font.weight: Theme.textWeight
+					font.pixelSize: Theme.textLabel
 				}
 			}
 		}

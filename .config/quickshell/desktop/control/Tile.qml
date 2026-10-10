@@ -58,9 +58,9 @@ Rectangle {
 			text: root.label
 			elide: Text.ElideRight
 			color: root.on ? Theme.primaryText : Theme.fg
-			font.family: Theme.fontSans
+			font.family: Theme.fontHeading
 			font.hintingPreference: Theme.hinting
-			font.pixelSize: 13
+			font.pixelSize: Theme.textBody
 			font.weight: Font.DemiBold
 		}
 
@@ -71,7 +71,8 @@ Rectangle {
 			color: root.on ? Qt.alpha(Theme.primaryText, 0.75) : Theme.fgMuted
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
-			font.pixelSize: 11
+			font.weight: Theme.textWeight
+			font.pixelSize: Theme.textCaption
 		}
 	}
 

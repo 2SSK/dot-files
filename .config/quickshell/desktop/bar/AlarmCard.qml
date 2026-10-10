@@ -133,16 +133,16 @@ PopupWindow {
 			Text {
 				text: root.alarm?.label ?? ""
 				color: Theme.fg
-				font.family: Theme.fontSans
+				font.family: Theme.fontHeading
 				font.hintingPreference: Theme.hinting
-				font.pixelSize: 16
+				font.pixelSize: Theme.px(16)
 				font.weight: Font.DemiBold
 			}
 
 			Label {
 				text: root.alarm?.time ?? ""
 				color: Theme.fgMuted
-				font.pixelSize: 13
+				font.pixelSize: Theme.textLabel
 				font.weight: Font.Medium
 			}
 		}
@@ -175,9 +175,9 @@ PopupWindow {
 						anchors.centerIn: parent
 						text: button.modelData.label
 						color: button.modelData.accent ? Theme.primaryText : Theme.fg
-						font.family: Theme.fontSans
+						font.family: Theme.fontHeading
 						font.hintingPreference: Theme.hinting
-						font.pixelSize: 13
+						font.pixelSize: Theme.textBody
 						font.weight: Font.DemiBold
 					}
 

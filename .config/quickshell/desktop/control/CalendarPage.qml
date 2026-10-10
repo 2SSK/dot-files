@@ -93,7 +93,7 @@ Column {
 				visible: !!entry.modelData.time
 				text: entry.modelData.time ?? ""
 				color: Theme.primary
-				font.pixelSize: 13
+				font.pixelSize: Theme.textLabel
 			}
 
 			Text {
@@ -104,7 +104,8 @@ Column {
 				color: Theme.fg
 				font.family: Theme.fontSans
 				font.hintingPreference: Theme.hinting
-				font.pixelSize: 14
+				font.weight: Theme.textWeight
+				font.pixelSize: Theme.textBody
 			}
 
 			Text {
@@ -114,7 +115,8 @@ Column {
 				color: entry.modelData.sub === "Snoozed" ? Theme.primary : Theme.fgMuted
 				font.family: Theme.fontSans
 				font.hintingPreference: Theme.hinting
-				font.pixelSize: 12
+				font.weight: Theme.textWeight
+				font.pixelSize: Theme.textLabel
 			}
 		}
 
@@ -151,9 +153,9 @@ Column {
 	component Heading: Text {
 		topPadding: 4
 		color: Theme.fgMuted
-		font.family: Theme.fontSans
+		font.family: Theme.fontHeading
 		font.hintingPreference: Theme.hinting
-		font.pixelSize: 12
+		font.pixelSize: Theme.textLabel
 		font.weight: Font.DemiBold
 		font.capitalization: Font.AllUppercase
 		font.letterSpacing: 0.6
@@ -167,7 +169,8 @@ Column {
 		color: Theme.fgMuted
 		font.family: Theme.fontSans
 		font.hintingPreference: Theme.hinting
-		font.pixelSize: 13
+		font.weight: Theme.textWeight
+		font.pixelSize: Theme.textBody
 	}
 
 	// --- Calendar ---
@@ -187,39 +190,26 @@ Column {
 			anchors.verticalCenter: parent.verticalCenter
 			text: Qt.formatDate(root.chosen, "dddd, d MMMM")
 			color: Theme.fg
-			font.family: Theme.fontSans
+			font.family: Theme.fontHeading
 			font.hintingPreference: Theme.hinting
-			font.pixelSize: 14
+			font.pixelSize: Theme.textBody
 			font.weight: Font.DemiBold
 		}
 
-		Rectangle {
+		IconButton {
 			anchors.right: parent.right
 			anchors.verticalCenter: parent.verticalCenter
-			width: 30
-			height: 30
+			size: 30
 			radius: 10
-			color: root.adding ? Theme.primary : addHover.hovered ? Qt.alpha(Theme.fg, 0.1) : Qt.alpha(Theme.surface, 0.8)
-
-			Glyph {
-				anchors.centerIn: parent
-				glyph: Icons.g(root.adding ? "x" : "plus")
-				font.pixelSize: 15
-				color: root.adding ? Theme.primaryText : Theme.fg
-			}
-
-			HoverHandler {
-				id: addHover
-			}
-
-			MouseArea {
-				anchors.fill: parent
-				cursorShape: Qt.PointingHandCursor
-				onClicked: {
-					root.adding = !root.adding;
-					if (root.adding)
-						dayComposer.focusField();
-				}
+			glyph: Icons.g(root.adding ? "x" : "plus")
+			glyphSize: 15
+			on: root.adding
+			filled: false
+			idle: Qt.alpha(Theme.surface, 0.8)
+			onClicked: {
+				root.adding = !root.adding;
+				if (root.adding)
+					dayComposer.focusField();
 			}
 		}
 	}

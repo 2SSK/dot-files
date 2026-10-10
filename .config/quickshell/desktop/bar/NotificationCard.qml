@@ -110,9 +110,9 @@ Rectangle {
 					text: root.notification?.summary ?? ""
 					elide: Text.ElideRight
 					color: Theme.fg
-					font.family: Theme.fontSans
+					font.family: Theme.fontHeading
 					font.hintingPreference: Theme.hinting
-					font.pixelSize: 14
+					font.pixelSize: Theme.textBody
 					font.weight: Font.DemiBold
 				}
 
@@ -126,7 +126,8 @@ Rectangle {
 					color: Theme.fgMuted
 					font.family: Theme.fontSans
 					font.hintingPreference: Theme.hinting
-					font.pixelSize: 11
+					font.weight: Theme.textWeight
+					font.pixelSize: Theme.textCaption
 				}
 
 				// close: dismissed for good
@@ -162,7 +163,8 @@ Rectangle {
 				color: Theme.fgMuted
 				font.family: Theme.fontSans
 				font.hintingPreference: Theme.hinting
-				font.pixelSize: 12
+				font.weight: Theme.textWeight
+				font.pixelSize: Theme.textLabel
 				lineHeight: 1.1
 			}
 
@@ -174,7 +176,8 @@ Rectangle {
 				color: Qt.alpha(Theme.fgMuted, 0.8)
 				font.family: Theme.fontSans
 				font.hintingPreference: Theme.hinting
-				font.pixelSize: 11
+				font.weight: Theme.textWeight
+				font.pixelSize: Theme.textCaption
 			}
 
 			Row {
@@ -203,7 +206,7 @@ Rectangle {
 							color: buttonHover.hovered ? Theme.primaryText : Theme.fg
 							font.family: Theme.fontSans
 							font.hintingPreference: Theme.hinting
-							font.pixelSize: 12
+							font.pixelSize: Theme.textLabel
 							font.weight: Font.Medium
 						}
 

@@ -3,7 +3,8 @@
 # subvolumes it leaves out), the GRUB theme and the login screen. Installs
 # the tracked files under system/ into / and enables services; a no-op when everything is already
 # in place.
-# usage: system.sh memory|libvirt|docker|lid|power|timeshift|subvolumes|grub [--preview]|sddm
+# usage: system.sh            every part that applies to this machine (system.sh --plan lists them)
+#        system.sh <part>...  just those: memory power lid timeshift grub sddm libvirt docker subvolumes
 set -euo pipefail
 
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -442,16 +443,48 @@ sddm_theme() { # the login screen in the desktop theme; theme set keeps its colo
 	rm -f "$tmp.conf"
 }
 
+# The parts that apply to this machine, in the order they run: what `system.sh` alone sets up.
+# subvolumes is never among them: it moves folders' data, so it runs only when named.
+plan() {
+	local parts=(memory)
+	compgen -G "$root/sys/class/power_supply/BAT*" >/dev/null && parts+=(power lid)
+	[[ -f $root/etc/timeshift/timeshift.json ]] && parts+=(timeshift)
+	[[ -f $root/etc/default/grub ]] && parts+=(grub)
+	[[ -x $root/usr/bin/sddm ]] && parts+=(sddm)
+	[[ -x $root/usr/bin/virsh ]] && parts+=(libvirt)
+	[[ -x $root/usr/bin/dockerd ]] && parts+=(docker)
+	echo "${parts[*]}"
+}
+
+usage() {
+	echo 'usage: system.sh [--plan | part...]   parts: memory power lid timeshift grub sddm libvirt docker subvolumes' >&2
+	echo '       system.sh grub --preview         (no args: every part that applies here; see --plan)' >&2
+	exit 2
+}
+
 case ${1:-} in
-memory) memory ;;
-libvirt) libvirt ;;
-docker) docker_daemon ;;
-lid) lid ;;
-power) power ;;
-timeshift) timeshift ;;
-subvolumes) subvolumes ;;
-grub) if [[ ${2:-} == --preview ]]; then grub_preview && exit 0; fi; grub_theme ;;
-sddm) sddm_theme ;;
-*) echo 'usage: system.sh memory|libvirt|docker|lid|power|timeshift|subvolumes|grub [--preview]|sddm' >&2 && exit 2 ;;
+--plan) plan && exit 0 ;;
+-h | --help) usage ;;
+grub) if [[ ${2:-} == --preview ]]; then grub_preview && exit 0; fi ;;
 esac
-if ((changed)); then log_info system part="$1"; else echo "$1: already in place"; fi
+
+parts=("$@")
+((${#parts[@]})) || read -ra parts <<<"$(plan)"
+for part in "${parts[@]}"; do
+	case $part in memory | power | lid | timeshift | grub | sddm | libvirt | docker | subvolumes) ;; *) usage ;; esac
+done
+for part in "${parts[@]}"; do
+	changed=0
+	case $part in
+	memory) memory ;;
+	libvirt) libvirt ;;
+	docker) docker_daemon ;;
+	lid) lid ;;
+	power) power ;;
+	timeshift) timeshift ;;
+	subvolumes) subvolumes ;;
+	grub) grub_theme ;;
+	sddm) sddm_theme ;;
+	esac
+	if ((changed)); then log_info system part="$part"; else echo "$part: already in place"; fi
+done

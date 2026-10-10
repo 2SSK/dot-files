@@ -84,9 +84,9 @@ Item {
 							anchors.centerIn: parent
 							text: root.priorities[choice.modelData].letter
 							color: choice.on ? Theme.bg : choice.colour
-							font.family: Theme.fontSans
+							font.family: Theme.fontHeading
 							font.hintingPreference: Theme.hinting
-							font.pixelSize: 13
+							font.pixelSize: Theme.textBody
 							font.weight: Font.Bold
 						}
 
@@ -112,7 +112,8 @@ Item {
 			color: Theme.fgMuted
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
-			font.pixelSize: 13
+			font.weight: Theme.textWeight
+			font.pixelSize: Theme.textBody
 		}
 
 		Repeater {
@@ -231,9 +232,9 @@ Item {
 						anchors.centerIn: parent
 						text: item.level.letter
 						color: item.level.colour
-						font.family: Theme.fontSans
+						font.family: Theme.fontHeading
 						font.hintingPreference: Theme.hinting
-						font.pixelSize: 12
+						font.pixelSize: Theme.textLabel
 						font.weight: Font.Bold
 					}
 
@@ -259,7 +260,8 @@ Item {
 					color: item.modelData.done ? Theme.fgMuted : Theme.fg
 					font.family: Theme.fontSans
 					font.hintingPreference: Theme.hinting
-					font.pixelSize: 14
+					font.weight: Theme.textWeight
+					font.pixelSize: Theme.textBody
 				}
 
 				Glyph {
@@ -317,7 +319,7 @@ Item {
 			color: Theme.primaryText
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
-			font.pixelSize: 14
+			font.pixelSize: Theme.textBody
 			font.weight: Font.Medium
 		}
 	}

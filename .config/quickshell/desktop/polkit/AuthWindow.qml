@@ -48,9 +48,9 @@ HangingPanel {
 				anchors.verticalCenter: parent.verticalCenter
 				text: "Authentication required"
 				color: Theme.fg
-				font.family: Theme.fontSans
+				font.family: Theme.fontHeading
 				font.hintingPreference: Theme.hinting
-				font.pixelSize: 17
+				font.pixelSize: Theme.px(17)
 				font.weight: Font.DemiBold
 			}
 		}
@@ -64,7 +64,8 @@ HangingPanel {
 			color: Theme.fgMuted
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
-			font.pixelSize: 13
+			font.weight: Theme.textWeight
+			font.pixelSize: Theme.textBody
 		}
 
 		TextField {
@@ -101,7 +102,8 @@ HangingPanel {
 				color: root.flow?.supplementaryIsError ? Theme.error : Theme.fgMuted
 				font.family: Theme.fontSans
 				font.hintingPreference: Theme.hinting
-				font.pixelSize: 12
+				font.weight: Theme.textWeight
+				font.pixelSize: Theme.textLabel
 			}
 
 			Chip {

@@ -18,6 +18,7 @@ Singleton {
 	readonly property JsonObject nightLight: adapter.nightLight
 	readonly property JsonObject idle: adapter.idle
 	readonly property JsonObject wallpaper: adapter.wallpaper
+	readonly property JsonObject fonts: adapter.fonts
 	// i3 docks only at the top or bottom (a side dock takes the whole screen), so on X11 a side
 	// position falls back to the top; sway places the bar on any edge
 	readonly property bool wayland: !!Quickshell.env("WAYLAND_DISPLAY")
@@ -26,6 +27,12 @@ Singleton {
 	readonly property bool island: bar.style === "island"
 
 	// write shell.json soon after the last change (sliders change many times a second)
+	// a setting changed and kept: Config.set("bar", "style", "island")
+	function set(group: string, key: string, value: var): void {
+		root[group][key] = value;
+		save();
+	}
+
 	function save(): void {
 		saveTimer.restart();
 	}
@@ -59,6 +66,13 @@ Singleton {
 				property var left: ["workspaces", "scratchpad", "stats"]
 				property var center: ["clock"]
 				property var right: ["tray", "brightness", "tools", "recorder", "battery", "wifi", "bluetooth", "notifications", "power"]
+			}
+			property JsonObject fonts: JsonObject {
+				property real scale: 1.15 // the shell's text against its base sizes (Settings → Appearance)
+				property string sans: "Inter" // the interface
+				property string heading: "Inter" // titles, labels on tiles, anything semibold or bold
+				property string mono: "JetBrainsMono Nerd Font" // code, the clipboard's text
+				property int weight: 500 // body text: 400 regular, 500 medium, 600 semibold
 			}
 			property JsonObject notifications: JsonObject {
 				property int timeout: 5000 // ms a popup stays, unless the app sets its own

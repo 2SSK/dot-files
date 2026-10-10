@@ -18,10 +18,12 @@ My Arch Linux desktop: **sway (swayfx)** and **i3** sharing one config, with a
 ```sh
 git clone https://github.com/2SSK/dot-files ~/dot-files
 cd ~/dot-files
-./setup.sh                 # packages, shell plugins, stow into ~, login shell (asks first)
-packages/system.sh power   # then the system parts you want (each asks for sudo):
-packages/system.sh memory  #   memory, power, lid, timeshift, grub, sddm, libvirt, docker
+./setup.sh   # asks first: packages, shell plugins, links into ~, the theme, zsh, and the system
+             # parts (zram, laptop power and lid, Timeshift, GRUB and login screen, VMs, docker)
 ```
+
+The system parts run as one: `packages/system.sh` sets up everything that applies to the machine
+(`--plan` lists it), or name parts to run just those (`packages/system.sh power grub`).
 
 `setup.sh --help` lists its options (`--wm sway|i3|both`, `--dev`, `-y`). Everything is linked
 with [GNU Stow](https://www.gnu.org/software/stow/): `stow .` links, `stow -R .` restows,
