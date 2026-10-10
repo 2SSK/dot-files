@@ -27,8 +27,8 @@ detect_distro() {
 	exit 3
 }
 
-# Can this system run the desktop? Arch always; Fedora when it offers Qt 6.6 or newer (Quickshell
-# needs it: Fedora 41 and later). Exits 4, saying why, when it can't; another distro is refused by
+# Can this system run the desktop? Arch always; Fedora when it offers Qt 6.9 or newer (the shell
+# needs it: Fedora 43 and later). Exits 4, saying why, when it can't; another distro is refused by
 # detect_distro (exit 3). setup.sh asks before changing anything.
 check() {
 	local distro qt VERSION_ID=''
@@ -38,10 +38,10 @@ check() {
 	source "${OS_RELEASE:-/etc/os-release}"
 	qt="$(dnf -q repoquery --latest-limit 1 --qf '%{version}\n' qt6-qtbase 2>/dev/null | sort -V | tail -1)"
 	[[ $qt =~ ^([0-9]+\.[0-9]+) ]] && qt=${BASH_REMATCH[1]}
-	if [[ -n $qt && $(printf '%s\n' 6.6 "$qt" | sort -V | head -1) == 6.6 ]]; then
+	if [[ -n $qt && $(printf '%s\n' 6.9 "$qt" | sort -V | head -1) == 6.9 ]]; then
 		return 0
 	fi
-	echo "Fedora ${VERSION_ID} offers ${qt:+Qt $qt}${qt:-no Qt 6}; the desktop shell (Quickshell) needs Qt 6.6 or newer (Fedora 41+)." >&2
+	echo "Fedora ${VERSION_ID} offers ${qt:+Qt $qt}${qt:-no Qt 6}; the desktop shell needs Qt 6.9 or newer (Fedora 43+)." >&2
 	exit 4
 }
 

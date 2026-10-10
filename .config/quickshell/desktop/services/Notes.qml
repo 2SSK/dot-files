@@ -8,8 +8,7 @@ import qs
 // Notes, kept on this machine in ~/.local/share/desktop/notes/notes.json, in a folder only you can
 // read (they may hold connection strings and the like; each save writes a fresh file, so the folder
 // keeps them private rather than the file's mode). A note: { id, title, type, tag, pinned, body, items, updated }
-// with type text, checklist or code; a checklist keeps [{ text, done }] in items. The old single
-// scratch note (notes.md) becomes the first note.
+// with type text, checklist or code; a checklist keeps [{ text, done }] in items.
 Singleton {
 	id: root
 
@@ -79,21 +78,12 @@ Singleton {
 		path: root.folder + "/notes/notes.json"
 		blockLoading: true
 		printErrors: false
-		onLoadFailed: legacy.reload() // no notes yet: bring over the old scratch note
 
 		JsonAdapter {
 			id: adapter
 
 			property var notes: []
 		}
-	}
-
-	FileView {
-		id: legacy
-
-		path: root.folder + "/notes.md"
-		printErrors: false
-		onLoaded: if (root.notes.length === 0 && text().trim()) root.create("text", text(), "Scratch note")
 	}
 
 	// the private folder, before anything is written

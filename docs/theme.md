@@ -32,7 +32,7 @@ Palette values are copied from each project's official ports, with attribution i
 
 | App | How | When it updates |
 | --- | --- | --- |
-| kitty | `include` of the rendered `kitty.conf` | Live (SIGUSR1) |
+| kitty | `include` of the rendered `kitty.conf` | Live (`kitten @ set-colors` on each kitty) |
 | foot | `include` of the rendered `foot.ini` with dark and light variants | Mode live (SIGUSR1/2); family in new windows |
 | st | `~/.Xresources` includes the rendered `st.Xresources`; `xrdb -merge` + SIGUSR1 (reload patch) | Live on X11 |
 | tmux | `source-file` of the rendered `tmux.conf` | Live (re-sourced) |
@@ -41,13 +41,17 @@ Palette values are copied from each project's official ports, with attribution i
 | lazydocker | `lazydocker` alias sets `CONFIG_DIR` to the rendered `lazydocker/` | Next start |
 | starship, fzf, zsh autosuggestions, `ls`, bat, btop, yazi, fastfetch, pgcli | The terminal's 16 ANSI colours | With the terminal |
 | cava | `cava` alias loads the rendered config (gradient from the ANSI colours) | Live (SIGUSR2) |
-| i3 window borders | `include` of the rendered `i3.conf` | Live (`i3-msg reload`) |
-| picom (i3): shadow colours | Started with the rendered `picom.conf` | Live (SIGUSR1) |
+| i3 / sway window borders | `include` of the rendered `i3.conf` | Live (i3: `i3-msg reload`; sway: its colours sent as commands) |
+| picom (i3): shadow colours | Started with the rendered `picom.conf` | At its next start |
 | GTK theme, icons, cursor, fonts | X11: xsettingsd reads the rendered `xsettingsd.conf`; Wayland: `gsettings` (org.gnome.desktop.interface). adw-gtk3, Tela-circle-blue dark/light, Bibata-Modern-Ice, Inter / JetBrains Mono | Live |
 | GTK 3 | adw-gtk3 (dark or light) with its named colours from the rendered `gtk-3.0.css` (`~/.config/gtk-3.0/gtk.css` links to it); `settings.ini` (both GTK versions) from `gtk-settings.ini` | Dark/light live; colours on app restart |
 | GTK 4 / libadwaita | libadwaita's CSS variables in the rendered `gtk-4.0.css` (`~/.config/gtk-4.0/gtk.css` links to it); `gsettings` color-scheme | Dark/light live; colours on app restart |
 | Qt 5 / Qt 6 | `QT_QPA_PLATFORMTHEME=qt5ct` (qt6ct answers to it too); `~/.config/qt{5,6}ct/qt{5,6}ct.conf` link to rendered configs: Fusion, the rendered `qt-colors.conf`, Tela icons, Inter | On app restart |
-| Quickshell, sway borders | `palette.json` and further templates | Coming in later stages |
+| Quickshell (bar, panels, lock) | Reads the rendered `palette.json` | Live (`qs ipc call theme reload`) |
+| nvim, vim | The rendered `nvim.lua` / `vim.vim` (colorscheme `desktop`) | nvim live (SIGUSR1); vim within a second |
+| yazi, eza | `~/.config/yazi/` and `~/.config/eza/` link to the rendered flavor and theme | Next start |
+| rmpc, pspg, opencode | Their rendered configs (`rmpc.ron`; `PSPG_CONF`; `OPENCODE_CONFIG_DIR`) | Next start |
+| Login screen (SDDM), boot menu (GRUB) | SDDM: the rendered `sddm-theme.conf`, copied to its shared folder; GRUB: its background tinted by the palette | SDDM next login; GRUB's tint at once, its colours with `packages/system.sh grub` |
 
 ## How a switch works
 

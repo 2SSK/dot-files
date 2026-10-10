@@ -39,10 +39,6 @@ packages() {
 	# what the repo installs stays, even where it came in as another package's dependency
 	mapfile -t keep < <(repo_packages | grep -vxF -f <(listed "$here/remove.txt") | installed)
 	((${#keep[@]} == 0)) || sudo pacman -D --asexplicit "${keep[@]}" >/dev/null
-	# a service whose package goes is stopped first (auto-cpufreq: TLP manages power)
-	if systemctl is-enabled --quiet auto-cpufreq.service 2>/dev/null; then
-		sudo systemctl disable --now auto-cpufreq.service
-	fi
 	mapfile -t remove < <(listed "$here/remove.txt" | installed --exact)
 	if ((${#remove[@]})); then
 		log_info removing count="${#remove[@]}"
@@ -52,12 +48,6 @@ packages() {
 	if ((${#orphans[@]})); then
 		log_info orphans count="${#orphans[@]}"
 		sudo pacman -Rns "${orphans[@]}"
-	fi
-	# cmatrix 2.0 paints black behind the rain; the git build draws on the terminal's background
-	if pacman -Qq cmatrix >/dev/null 2>&1 && ! pacman -Qq cmatrix-git >/dev/null 2>&1 && command -v yay >/dev/null; then
-		# the two conflict, and yay's question defaults to no: the old one goes first
-		sudo pacman -R cmatrix
-		yay -S cmatrix-git
 	fi
 }
 

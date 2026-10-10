@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Quickshell (the desktop shell) on Fedora: the errornointernet COPR, the same release as Arch's
-# package (install.sh --check makes sure Fedora's Qt is new enough).
+# package (install.sh --check makes sure Fedora's Qt is new enough: 6.9+).
 set -euo pipefail
 # shellcheck source-path=SCRIPTDIR source=lib.sh
 source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"

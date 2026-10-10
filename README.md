@@ -15,7 +15,7 @@ My Arch Linux desktop: **sway (swayfx)** and **i3** sharing one config, with a
 
 ## Install
 
-Runs on **Arch** (and derivatives such as EndeavourOS) and **Fedora 41+**. `setup.sh` checks
+Runs on **Arch** (and derivatives such as EndeavourOS) and **Fedora 43+**. `setup.sh` checks
 this before changing anything.
 
 ```sh
