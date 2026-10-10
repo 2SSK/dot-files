@@ -46,11 +46,15 @@ HangingPanel {
 		return s < 60 ? "now" : s < 3600 ? `${Math.floor(s / 60)}m` : s < 86400 ? `${Math.floor(s / 3600)}h` : `${Math.floor(s / 86400)}d`;
 	}
 
-	function choose(): void {
+	// put the entry back on the clipboard and close; paste: also paste it into the window you were in
+	// (Enter, a double click), as Ctrl+V or a terminal's Ctrl+Shift+V would (desktop-paste)
+	function choose(paste: bool): void {
 		if (!entry)
 			return;
 		Clipboard.copy(entry);
 		Panel.clipboardOpen = false;
+		if (paste)
+			Quickshell.execDetached(["desktop-paste"]);
 	}
 
 	name: "clipboard"
@@ -76,7 +80,14 @@ HangingPanel {
 			width: parent.width
 			placeholder: "Search the clipboard"
 			Component.onCompleted: focusField()
-			onAccepted: root.choose()
+			onAccepted: root.choose(true)
+			// Shift+Enter only copies
+			onKeyPressed: event => {
+				if ((event.key === Qt.Key_Return || event.key === Qt.Key_Enter) && (event.modifiers & Qt.ShiftModifier)) {
+					root.choose(false);
+					event.accepted = true;
+				}
+			}
 			onTextChanged: root.current = 0
 			Keys.onUpPressed: root.current = Math.max(0, root.current - 1)
 			Keys.onDownPressed: root.current = Math.min(root.entries.length - 1, root.current + 1)
@@ -125,7 +136,7 @@ HangingPanel {
 					anchors.fill: parent
 					cursorShape: Qt.PointingHandCursor
 					onClicked: root.current = row.index
-					onDoubleClicked: root.choose()
+					onDoubleClicked: root.choose(true)
 				}
 
 				// a thumbnail for a picture, else an icon for its kind
@@ -333,7 +344,7 @@ HangingPanel {
 				glyph: Icons.g("copy")
 				label: "Copy"
 				on: true
-				onClicked: root.choose()
+				onClicked: root.choose(false)
 			}
 
 			Chip {

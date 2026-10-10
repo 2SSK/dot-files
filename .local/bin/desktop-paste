@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Paste the clipboard into the focused window, as if typed: the clipboard panel runs it after
+# putting an entry back, once the panel has closed and the focus is back on the window. Terminals
+# paste on Ctrl+Shift+V (Ctrl+V is a key of their own there), everything else on Ctrl+V.
+#   desktop-paste
+# Wayland: wtype (sway's virtual keyboard). X11: xdotool.
+set -euo pipefail
+
+sleep "${DESKTOP_PASTE_DELAY:-0.25}" # the panel closing, and the copy landing
+
+terminal() { # <app id or class>
+	[[ ${1,,} =~ ^(kitty|foot|footclient|alacritty|st|st-256color|xterm|urxvt|wezterm|org\.wezfurlong\.wezterm|ghostty|com\.mitchellh\.ghostty|konsole|org\.kde\.konsole|gnome-terminal-server|org\.gnome\.ptyxis|tilix)$ ]]
+}
+
+if [[ -n ${WAYLAND_DISPLAY:-} ]]; then
+	app="$(swaymsg -t get_tree | jq -r '.. | objects | select(.focused? == true) | .app_id // .window_properties.class // empty' | head -1)"
+	if terminal "$app"; then
+		wtype -M ctrl -M shift -k v -m shift -m ctrl
+	else
+		wtype -M ctrl -k v -m ctrl
+	fi
+else
+	app="$(xdotool getactivewindow getwindowclassname 2>/dev/null || true)"
+	if terminal "$app"; then
+		xdotool key --clearmodifiers ctrl+shift+v
+	else
+		xdotool key --clearmodifiers ctrl+v
+	fi
+fi

@@ -37,8 +37,9 @@ say so and their bar icons hide.
 
 `$mod+Shift+c` or the clipboard icon: the history of what you copied (text, images and files,
 pinned ones first) on the left, the selected one in full on the right: the text, the picture, the
-files. Type to search, ↑ ↓ to pick, Enter (or Copy) puts it back on the clipboard as what it was
-and closes: an image pastes as an image (into Claude Code, opencode, a chat), files paste as
+files. Type to search, ↑ ↓ to pick. Enter (or a double click) puts it back on the clipboard and
+pastes it into the window you were in (Ctrl+Shift+V in a terminal, Ctrl+V elsewhere); Shift+Enter
+or Copy only puts it back. Either way it goes back as what it was and the panel closes: an image pastes as an image (into Claude Code, opencode, a chat), files paste as
 attachments. Pin, Open (images, files), Save as a note (text) and Remove sit under the preview;
 Clear empties the history (pins stay).
 
