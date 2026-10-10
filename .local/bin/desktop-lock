@@ -7,11 +7,10 @@
 # Wayland (sway): the shell's own lock screen (Quickshell's session lock), else swaylock.
 set -euo pipefail
 
+# the theme's colours (rrggbb), in one read; tokyonight's without a theme
 palette="${XDG_STATE_HOME:-$HOME/.local/state}/desktop/theme/palette.json"
-colour() { # <ui role>: rrggbb from the theme, with a fallback
-	python3 -c 'import json, sys; print(json.load(open(sys.argv[1]))["ui"][sys.argv[2]].lstrip("#"))' "$palette" "$1" 2>/dev/null || echo "$2"
-}
-bg="$(colour bg 1a1b26)" fg="$(colour fg c0caf5)" primary="$(colour primary 7aa2f7)" error="$(colour error f7768e)"
+read -r bg fg primary error < <(jq -r '.ui | [.bg, .fg, .primary, .error] | map(ltrimstr("#")) | join(" ")' "$palette" 2>/dev/null) ||
+	read -r bg fg primary error <<<"1a1b26 c0caf5 7aa2f7 f7768e"
 
 if [[ -n ${WAYLAND_DISPLAY:-} ]]; then
 	# the shell's session lock; once it holds the screen this returns (sleep may go ahead)

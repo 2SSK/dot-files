@@ -21,7 +21,7 @@ wayland() { [[ -n ${WAYLAND_DISPLAY:-} ]]; }
 # the selection's colour: the theme's accent ("r,g,b" from 0 to 1 for slop)
 accent() {
 	local palette="${XDG_STATE_HOME:-$HOME/.local/state}/desktop/theme/palette.json" hex
-	hex="$(sed -n 's/^ *"primary": "#\([0-9a-fA-F]\{6\}\)".*/\1/p' "$palette" 2>/dev/null | head -1)"
+	hex="$(jq -r '.ui.primary | ltrimstr("#")' "$palette" 2>/dev/null)"
 	hex=${hex:-7aa2f7}
 	printf '%s,%s,%s' "$(awk "BEGIN{printf \"%.2f\", $((16#${hex:0:2}))/255}")" \
 		"$(awk "BEGIN{printf \"%.2f\", $((16#${hex:2:2}))/255}")" "$(awk "BEGIN{printf \"%.2f\", $((16#${hex:4:2}))/255}")"
