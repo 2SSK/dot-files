@@ -65,7 +65,7 @@ HangingPanel {
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
 			font.weight: Theme.textWeight
-			font.pixelSize: 14
+			font.pixelSize: Theme.textBody
 		}
 
 		TextField {
@@ -103,7 +103,7 @@ HangingPanel {
 				font.family: Theme.fontSans
 				font.hintingPreference: Theme.hinting
 				font.weight: Theme.textWeight
-				font.pixelSize: 13
+				font.pixelSize: Theme.textLabel
 			}
 
 			Chip {

@@ -147,7 +147,7 @@ PopupWindow {
 						color: tile.ink
 						font.family: Theme.fontMono
 						font.hintingPreference: Theme.hinting
-						font.pixelSize: 12
+						font.pixelSize: Theme.textCaption
 						font.weight: Font.Bold
 					}
 				}

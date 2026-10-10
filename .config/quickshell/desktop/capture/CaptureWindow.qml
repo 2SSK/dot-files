@@ -141,7 +141,7 @@ HangingPanel {
 				color: tile.danger ? Theme.primaryText : Theme.fg
 				font.family: Theme.fontSans
 				font.hintingPreference: Theme.hinting
-				font.pixelSize: 14
+				font.pixelSize: Theme.textBody
 				font.weight: Font.Medium
 			}
 		}
@@ -176,7 +176,7 @@ HangingPanel {
 			color: Theme.fg
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
-			font.pixelSize: 14
+			font.pixelSize: Theme.textBody
 			font.weight: Font.DemiBold
 		}
 	}
@@ -312,7 +312,7 @@ HangingPanel {
 				color: Theme.fg
 				font.family: Theme.fontSans
 				font.hintingPreference: Theme.hinting
-				font.pixelSize: 14
+				font.pixelSize: Theme.textBody
 				font.weight: Font.DemiBold
 			}
 		}
@@ -375,7 +375,7 @@ HangingPanel {
 							color: Theme.fg
 							font.family: Theme.fontSans
 							font.hintingPreference: Theme.hinting
-							font.pixelSize: 14
+							font.pixelSize: Theme.textBody
 							font.weight: Font.DemiBold
 						}
 
@@ -386,7 +386,7 @@ HangingPanel {
 							font.family: Theme.fontSans
 							font.hintingPreference: Theme.hinting
 							font.weight: Theme.textWeight
-							font.pixelSize: 12
+							font.pixelSize: Theme.textCaption
 						}
 					}
 
@@ -414,6 +414,6 @@ HangingPanel {
 		font.family: Theme.fontSans
 		font.hintingPreference: Theme.hinting
 		font.weight: Theme.textWeight
-		font.pixelSize: 12
+		font.pixelSize: Theme.textCaption
 	}
 }

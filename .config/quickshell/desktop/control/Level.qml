@@ -45,6 +45,6 @@ Item {
 		horizontalAlignment: Text.AlignRight
 		text: root.muted ? "off" : Math.round(root.value * 100) + "%"
 		color: root.muted ? Theme.fgMuted : Theme.fg
-		font.pixelSize: 13
+		font.pixelSize: Theme.textLabel
 	}
 }

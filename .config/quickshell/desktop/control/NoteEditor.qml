@@ -106,7 +106,7 @@ Column {
 						color: typeChip.on ? Theme.primaryText : Theme.fg
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
-						font.pixelSize: 13
+						font.pixelSize: Theme.textLabel
 						font.weight: Font.Medium
 					}
 				}
@@ -195,7 +195,7 @@ Column {
 				font.family: Theme.fontSans
 				font.hintingPreference: Theme.hinting
 				font.weight: Theme.textWeight
-				font.pixelSize: 14
+				font.pixelSize: Theme.textBody
 				onTextChanged: if (activeFocus) note.typed(text)
 				Component.onCompleted: if (note.current.title) forceActiveFocus()
 
@@ -244,7 +244,7 @@ Column {
 					font.family: Theme.fontMono
 					font.hintingPreference: Theme.hinting
 					font.weight: Theme.textWeight
-					font.pixelSize: 14
+					font.pixelSize: Theme.textBody
 					onTextChanged: if (activeFocus) note.typed(text)
 					Component.onCompleted: if (note.current.title) forceActiveFocus()
 
@@ -277,7 +277,7 @@ Column {
 					color: copyHover.hovered ? Theme.primaryText : Theme.fg
 					font.family: Theme.fontSans
 					font.hintingPreference: Theme.hinting
-					font.pixelSize: 13
+					font.pixelSize: Theme.textLabel
 					font.weight: Font.Medium
 
 					Timer {
@@ -373,7 +373,7 @@ Column {
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
 						font.weight: Theme.textWeight
-						font.pixelSize: 14
+						font.pixelSize: Theme.textBody
 					}
 
 					Glyph {

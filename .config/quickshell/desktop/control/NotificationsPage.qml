@@ -71,7 +71,7 @@ Column {
 					color: clearHover.hovered && Notifications.history.length > 0 ? Theme.bg : Theme.fg
 					font.family: Theme.fontSans
 					font.hintingPreference: Theme.hinting
-					font.pixelSize: 14
+					font.pixelSize: Theme.textBody
 					font.weight: Font.Medium
 				}
 			}
@@ -132,7 +132,7 @@ Column {
 				font.family: Theme.fontSans
 				font.hintingPreference: Theme.hinting
 				font.weight: Theme.textWeight
-				font.pixelSize: 14
+				font.pixelSize: Theme.textBody
 			}
 		}
 	}

@@ -93,7 +93,7 @@ Column {
 				visible: !!entry.modelData.time
 				text: entry.modelData.time ?? ""
 				color: Theme.primary
-				font.pixelSize: 13
+				font.pixelSize: Theme.textLabel
 			}
 
 			Text {
@@ -105,7 +105,7 @@ Column {
 				font.family: Theme.fontSans
 				font.hintingPreference: Theme.hinting
 				font.weight: Theme.textWeight
-				font.pixelSize: 14
+				font.pixelSize: Theme.textBody
 			}
 
 			Text {
@@ -116,7 +116,7 @@ Column {
 				font.family: Theme.fontSans
 				font.hintingPreference: Theme.hinting
 				font.weight: Theme.textWeight
-				font.pixelSize: 13
+				font.pixelSize: Theme.textLabel
 			}
 		}
 
@@ -155,7 +155,7 @@ Column {
 		color: Theme.fgMuted
 		font.family: Theme.fontSans
 		font.hintingPreference: Theme.hinting
-		font.pixelSize: 13
+		font.pixelSize: Theme.textLabel
 		font.weight: Font.DemiBold
 		font.capitalization: Font.AllUppercase
 		font.letterSpacing: 0.6
@@ -170,7 +170,7 @@ Column {
 		font.family: Theme.fontSans
 		font.hintingPreference: Theme.hinting
 		font.weight: Theme.textWeight
-		font.pixelSize: 14
+		font.pixelSize: Theme.textBody
 	}
 
 	// --- Calendar ---
@@ -192,7 +192,7 @@ Column {
 			color: Theme.fg
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
-			font.pixelSize: 14
+			font.pixelSize: Theme.textBody
 			font.weight: Font.DemiBold
 		}
 

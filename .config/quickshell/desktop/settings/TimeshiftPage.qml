@@ -64,7 +64,7 @@ Column {
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
 			font.weight: Theme.textWeight
-			font.pixelSize: 13
+			font.pixelSize: Theme.textLabel
 		}
 	}
 
@@ -85,7 +85,7 @@ Column {
 				font.family: Theme.fontSans
 				font.hintingPreference: Theme.hinting
 				font.weight: Theme.textWeight
-				font.pixelSize: 14
+				font.pixelSize: Theme.textBody
 			}
 
 			Chip {
@@ -102,7 +102,7 @@ Column {
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
 			font.weight: Theme.textWeight
-			font.pixelSize: 14
+			font.pixelSize: Theme.textBody
 		}
 
 		Text {
@@ -112,7 +112,7 @@ Column {
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
 			font.weight: Theme.textWeight
-			font.pixelSize: 14
+			font.pixelSize: Theme.textBody
 		}
 
 		Repeater {
@@ -145,7 +145,7 @@ Column {
 						color: Theme.fg
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
-						font.pixelSize: 14
+						font.pixelSize: Theme.textBody
 						font.weight: Font.Medium
 					}
 
@@ -155,7 +155,7 @@ Column {
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
 						font.weight: Theme.textWeight
-						font.pixelSize: 13
+						font.pixelSize: Theme.textLabel
 					}
 				}
 

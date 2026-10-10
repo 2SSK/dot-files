@@ -40,7 +40,7 @@ Row {
 		color: Theme.fg
 		font.family: Theme.fontSans
 		font.hintingPreference: Theme.hinting
-		font.pixelSize: 14
+		font.pixelSize: Theme.textBody
 		font.weight: Font.Medium
 		font.features: ({ tnum: 1 })
 	}

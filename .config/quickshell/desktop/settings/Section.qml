@@ -16,7 +16,7 @@ Column {
 		color: Theme.fgMuted
 		font.family: Theme.fontSans
 		font.hintingPreference: Theme.hinting
-		font.pixelSize: 13
+		font.pixelSize: Theme.textLabel
 		font.weight: Font.DemiBold
 		font.capitalization: Font.AllUppercase
 		font.letterSpacing: 0.8

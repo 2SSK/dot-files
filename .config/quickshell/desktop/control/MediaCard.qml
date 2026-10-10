@@ -28,7 +28,7 @@ Rectangle {
 		font.family: Theme.fontSans
 		font.hintingPreference: Theme.hinting
 		font.weight: Theme.textWeight
-		font.pixelSize: 14
+		font.pixelSize: Theme.textBody
 	}
 
 	// the players, when there are several
@@ -74,7 +74,7 @@ Rectangle {
 						color: chip.on ? Theme.primaryText : Theme.fg
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
-						font.pixelSize: 13
+						font.pixelSize: Theme.textLabel
 						font.weight: Font.Medium
 					}
 				}
@@ -138,7 +138,7 @@ Rectangle {
 			color: Theme.fg
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
-			font.pixelSize: 14
+			font.pixelSize: Theme.textBody
 			font.weight: Font.DemiBold
 		}
 
@@ -150,7 +150,7 @@ Rectangle {
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
 			font.weight: Theme.textWeight
-			font.pixelSize: 13
+			font.pixelSize: Theme.textLabel
 		}
 
 		// progress, where the player reports it
@@ -179,7 +179,7 @@ Rectangle {
 				visible: root.player?.lengthSupported ?? false
 				text: `${root.time(root.player?.position ?? 0)} / ${root.time(root.player?.length ?? 0)}`
 				color: Theme.fgMuted
-				font.pixelSize: 11
+				font.pixelSize: Theme.textCaption
 				font.weight: Font.Medium
 			}
 

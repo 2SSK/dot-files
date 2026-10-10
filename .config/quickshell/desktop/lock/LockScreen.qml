@@ -160,7 +160,7 @@ Scope {
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
 						font.weight: Theme.textWeight
-						font.pixelSize: 14
+						font.pixelSize: Theme.textBody
 					}
 
 					SequentialAnimation on anchors.horizontalCenterOffset {
@@ -181,7 +181,7 @@ Scope {
 					font.family: Theme.fontSans
 					font.hintingPreference: Theme.hinting
 					font.weight: Theme.textWeight
-					font.pixelSize: 14
+					font.pixelSize: Theme.textBody
 					opacity: root.error ? 1 : 0
 				}
 			}
@@ -195,7 +195,7 @@ Scope {
 				font.family: Theme.fontSans
 				font.hintingPreference: Theme.hinting
 				font.weight: Theme.textWeight
-				font.pixelSize: 14
+				font.pixelSize: Theme.textBody
 			}
 
 			Connections {

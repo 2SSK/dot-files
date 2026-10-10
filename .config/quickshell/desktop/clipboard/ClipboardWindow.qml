@@ -190,7 +190,7 @@ HangingPanel {
 						font.family: row.modelData.kind === "text" ? Theme.fontMono : Theme.fontSans
 						font.hintingPreference: Theme.hinting
 						font.weight: Theme.textWeight
-						font.pixelSize: 14
+						font.pixelSize: Theme.textBody
 					}
 
 					Text {
@@ -200,7 +200,7 @@ HangingPanel {
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
 						font.weight: Theme.textWeight
-						font.pixelSize: 12
+						font.pixelSize: Theme.textCaption
 					}
 				}
 			}
@@ -217,7 +217,7 @@ HangingPanel {
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
 			font.weight: Theme.textWeight
-			font.pixelSize: 14
+			font.pixelSize: Theme.textBody
 		}
 	}
 
@@ -249,7 +249,7 @@ HangingPanel {
 				color: Theme.fgMuted
 				font.family: Theme.fontSans
 				font.hintingPreference: Theme.hinting
-				font.pixelSize: 13
+				font.pixelSize: Theme.textLabel
 				font.weight: Font.DemiBold
 			}
 		}
@@ -281,7 +281,7 @@ HangingPanel {
 					font.family: Theme.fontMono
 					font.hintingPreference: Theme.hinting
 					font.weight: Theme.textWeight
-					font.pixelSize: 13
+					font.pixelSize: Theme.textLabel
 				}
 			}
 
@@ -320,7 +320,7 @@ HangingPanel {
 							font.family: Theme.fontSans
 							font.hintingPreference: Theme.hinting
 							font.weight: Theme.textWeight
-							font.pixelSize: 14
+							font.pixelSize: Theme.textBody
 						}
 
 						Text {
@@ -329,7 +329,7 @@ HangingPanel {
 							font.family: Theme.fontSans
 							font.hintingPreference: Theme.hinting
 							font.weight: Theme.textWeight
-							font.pixelSize: 12
+							font.pixelSize: Theme.textCaption
 						}
 					}
 				}
@@ -396,7 +396,7 @@ HangingPanel {
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
 			font.weight: Theme.textWeight
-			font.pixelSize: 14
+			font.pixelSize: Theme.textBody
 		}
 	}
 

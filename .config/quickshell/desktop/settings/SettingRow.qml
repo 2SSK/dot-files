@@ -29,7 +29,7 @@ Rectangle {
 			color: Theme.fg
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
-			font.pixelSize: 14
+			font.pixelSize: Theme.textBody
 			font.weight: Font.Medium
 		}
 
@@ -42,7 +42,7 @@ Rectangle {
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
 			font.weight: Theme.textWeight
-			font.pixelSize: 13
+			font.pixelSize: Theme.textLabel
 		}
 	}
 

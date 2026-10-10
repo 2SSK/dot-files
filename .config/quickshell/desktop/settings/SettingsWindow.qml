@@ -117,7 +117,7 @@ FloatingWindow {
 							color: entry.on ? Theme.primaryText : Theme.fg
 							font.family: Theme.fontSans
 							font.hintingPreference: Theme.hinting
-							font.pixelSize: 14
+							font.pixelSize: Theme.textBody
 							font.weight: Font.Medium
 						}
 					}
@@ -146,7 +146,7 @@ FloatingWindow {
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
 			font.weight: Theme.textWeight
-			font.pixelSize: 12
+			font.pixelSize: Theme.textCaption
 		}
 	}
 

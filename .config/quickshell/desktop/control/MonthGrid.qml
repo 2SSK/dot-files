@@ -127,7 +127,7 @@ Column {
 					color: Theme.fgMuted
 					font.family: Theme.fontSans
 					font.hintingPreference: Theme.hinting
-					font.pixelSize: 13
+					font.pixelSize: Theme.textLabel
 					font.weight: Font.DemiBold
 				}
 			}
@@ -162,8 +162,8 @@ Column {
 						color: day.today ? Theme.primaryText : day.inMonth ? Theme.fg : Qt.alpha(Theme.fgMuted, 0.5)
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
-						font.pixelSize: 14
-						font.weight: day.today ? Font.Bold : Font.Normal
+						font.pixelSize: Theme.textBody
+						font.weight: day.today ? Font.Bold : Font.DemiBold // semibold: solid numbers in the grid
 						font.features: ({ tnum: 1 })
 					}
 

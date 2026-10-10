@@ -33,6 +33,11 @@ Singleton {
 	// body text a step heavier than regular: Qt blends text linearly (kitty boosts its contrast), so
 	// regular strokes at 12-14 px read thin and faint beside the terminal; headings set their own
 	readonly property int textWeight: Font.Medium
+	// the text sizes most of the shell uses (headings and the bar set their own): times and hints,
+	// buttons and chips, then lists and fields. Nothing smaller than 12 px reads well here.
+	readonly property int textCaption: 12
+	readonly property int textLabel: 13
+	readonly property int textBody: 14
 	readonly property int fontSize: Math.round(Config.bar.size * 0.4) // 16 px at a 40 px bar
 	// capsules sit this far inside the bar on every side, so their round ends run parallel to the
 	// island's: a capsule's radius is the bar's less this gap

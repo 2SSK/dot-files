@@ -147,7 +147,7 @@ PopupWindow {
 						color: root.muted ? Theme.fgMuted : Theme.primary
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
-						font.pixelSize: 14
+						font.pixelSize: Theme.textBody
 						font.weight: Font.Medium
 					}
 				}
@@ -181,7 +181,7 @@ PopupWindow {
 					font.family: Theme.fontSans
 					font.hintingPreference: Theme.hinting
 					font.weight: Theme.textWeight
-					font.pixelSize: 13
+					font.pixelSize: Theme.textLabel
 				}
 			}
 		}

@@ -255,7 +255,7 @@ HangingPanel {
 						color: Theme.fg
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
-						font.pixelSize: 14
+						font.pixelSize: Theme.textBody
 						font.weight: Font.Medium
 					}
 
@@ -268,7 +268,7 @@ HangingPanel {
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
 						font.weight: Theme.textWeight
-						font.pixelSize: 13
+						font.pixelSize: Theme.textLabel
 					}
 				}
 
@@ -443,7 +443,7 @@ HangingPanel {
 						color: cell.colours.fg ?? Theme.fg
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
-						font.pixelSize: 14
+						font.pixelSize: Theme.textBody
 						font.weight: Font.DemiBold
 					}
 
@@ -483,7 +483,7 @@ HangingPanel {
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
 			font.weight: Theme.textWeight
-			font.pixelSize: 14
+			font.pixelSize: Theme.textBody
 		}
 	}
 
@@ -501,6 +501,6 @@ HangingPanel {
 		font.family: Theme.fontSans
 		font.hintingPreference: Theme.hinting
 		font.weight: Theme.textWeight
-		font.pixelSize: 13
+		font.pixelSize: Theme.textLabel
 	}
 }

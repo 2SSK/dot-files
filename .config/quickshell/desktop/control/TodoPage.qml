@@ -86,7 +86,7 @@ Item {
 							color: choice.on ? Theme.bg : choice.colour
 							font.family: Theme.fontSans
 							font.hintingPreference: Theme.hinting
-							font.pixelSize: 14
+							font.pixelSize: Theme.textBody
 							font.weight: Font.Bold
 						}
 
@@ -113,7 +113,7 @@ Item {
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
 			font.weight: Theme.textWeight
-			font.pixelSize: 14
+			font.pixelSize: Theme.textBody
 		}
 
 		Repeater {
@@ -234,7 +234,7 @@ Item {
 						color: item.level.colour
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
-						font.pixelSize: 13
+						font.pixelSize: Theme.textLabel
 						font.weight: Font.Bold
 					}
 
@@ -261,7 +261,7 @@ Item {
 					font.family: Theme.fontSans
 					font.hintingPreference: Theme.hinting
 					font.weight: Theme.textWeight
-					font.pixelSize: 14
+					font.pixelSize: Theme.textBody
 				}
 
 				Glyph {
@@ -319,7 +319,7 @@ Item {
 			color: Theme.primaryText
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
-			font.pixelSize: 14
+			font.pixelSize: Theme.textBody
 			font.weight: Font.Medium
 		}
 	}

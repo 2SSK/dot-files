@@ -106,7 +106,7 @@ Item {
 						color: Theme.fg
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
-						font.pixelSize: 14
+						font.pixelSize: Theme.textBody
 						font.weight: Font.Medium
 					}
 
@@ -117,7 +117,7 @@ Item {
 						font.family: Theme.fontSans
 						font.hintingPreference: Theme.hinting
 						font.weight: Theme.textWeight
-						font.pixelSize: 12
+						font.pixelSize: Theme.textCaption
 					}
 				}
 
@@ -145,7 +145,7 @@ Item {
 			font.family: Theme.fontSans
 			font.hintingPreference: Theme.hinting
 			font.weight: Theme.textWeight
-			font.pixelSize: 13
+			font.pixelSize: Theme.textLabel
 		}
 	}
 
@@ -171,7 +171,7 @@ Item {
 				font.family: Theme.fontSans
 				font.hintingPreference: Theme.hinting
 				font.weight: Theme.textWeight
-				font.pixelSize: 14
+				font.pixelSize: Theme.textBody
 			}
 
 			Row {
@@ -209,7 +209,7 @@ Item {
 								font.family: Theme.fontSans
 								font.hintingPreference: Theme.hinting
 								font.weight: Theme.textWeight
-								font.pixelSize: 13
+								font.pixelSize: Theme.textLabel
 							}
 						}
 
