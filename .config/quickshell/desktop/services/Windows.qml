@@ -118,10 +118,14 @@ Singleton {
 
 		function onWindowEvent(data: var): void {
 			const id = data.container?.id;
-			if (data.change === "focus" && id !== undefined && !(data.container.name ?? "").startsWith("Desktop "))
+			if (data.change === "focus" && id !== undefined && !(data.container.name ?? "").startsWith("Desktop ")) {
 				root.mru = [id, ...root.mru.filter(m => m !== id)].slice(0, 100);
+				root.windows = root.windows.map(w => w.focused === (w.id === id) ? w : Object.assign({}, w, { focused: w.id === id }));
+			}
 			else if (data.change === "close")
 				root.mru = root.mru.filter(m => m !== id);
+			else if (data.change === "title" && root.windows.some(w => w.id === id))
+				root.windows = root.windows.map(w => w.id === id ? Object.assign({}, w, { title: data.container.name ?? "" }) : w);
 		}
 
 		// the window list, from the tree WindowManager reads after each change (no second read)
