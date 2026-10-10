@@ -114,9 +114,56 @@ myip() {
 	ip -4 route get 1.1.1.1 | awk '{ for (i = 1; i < NF; i++) if ($i == "src") print "Local:    " $(i + 1) }'
 	printf 'External: %s\n' "$(curl -fsS --max-time 5 ifconfig.me)"
 }
+
+# share [-t 1h|12h|24h|72h] <file|folder>... : upload to catbox.moe, print the links and copy them.
+# A folder goes as a .tar.gz, piped text (`git diff | share`) as paste.txt. -t: litterbox instead,
+# which deletes it after that time (and takes up to 1 GB instead of 200 MB).
 share() {
-    local url
-    url=$(curl -fsS -F "reqtype=fileupload" -F "fileToUpload=@$1" https://catbox.moe/user/api.php) || return 1
-    printf '%s\n' "$url"
-    printf '%s' "$url" | wl-copy
+	local api="https://catbox.moe/user/api.php" max=200 expiry="" tmp f name url urls="" nl=$'\n'
+	local -a opts=(-fS -F reqtype=fileupload)
+	if [[ ${1:-} == -t ]]; then
+		[[ ${2:-} =~ ^(1|12|24|72)h$ ]] || { echo "share: -t takes 1h, 12h, 24h or 72h" >&2 && return 2; }
+		api="https://litterbox.catbox.moe/resources/internals/api.php" max=1024 expiry=$2
+		opts+=(-F "time=$expiry")
+		shift 2
+	fi
+	if (($# == 0)) && [[ -t 0 ]]; then
+		echo "usage: share [-t 1h|12h|24h|72h] <file|folder>...   or: <command> | share" >&2
+		return 2
+	fi
+	if [[ -t 2 ]]; then opts+=(--progress-bar); else opts+=(-s); fi
+	tmp="$(mktemp -d)" || return
+	if (($# == 0)); then
+		cat >"$tmp/paste.txt"
+		set -- "$tmp/paste.txt"
+	fi
+	for f in "$@"; do
+		if [[ -d $f ]]; then # a folder: packed first
+			f="$(realpath -- "$f")" name="$(basename -- "$f")"
+			tar -C "$(dirname -- "$f")" -czf "$tmp/$name.tar.gz" -- "$name" || continue
+			f="$tmp/$name.tar.gz"
+		elif [[ ! -f $f ]]; then
+			echo "share: no such file: $f" >&2
+			continue
+		fi
+		if (($(stat -c %s -- "$f") > max * 1024 * 1024)); then
+			echo "share: $f is over $max MB${expiry:+ even for litterbox}" >&2
+			[[ -n $expiry ]] || echo "  share -t 72h takes up to 1 GB" >&2
+			continue
+		fi
+		url="$(curl "${opts[@]}" -F "fileToUpload=@\"$f\"" "$api")"
+		if [[ $url != https://* ]]; then # catbox answers errors as text
+			echo "share: $f failed${url:+: $url}" >&2
+			continue
+		fi
+		printf '%s\n' "$url"
+		urls+="${urls:+$nl}$url" # (zsh keeps $'\n' literal inside quotes)
+	done
+	rm -rf -- "$tmp"
+	[[ -n $urls ]] || return 1
+	if [[ -n ${WAYLAND_DISPLAY:-} ]]; then
+		printf '%s' "$urls" | wl-copy
+	else
+		printf '%s' "$urls" | xclip -selection clipboard
+	fi && echo "copied${expiry:+ (deleted after $expiry)}" >&2
 }
