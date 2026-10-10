@@ -122,6 +122,8 @@ main() {
 	local -a layers=()
 	local distro='' system=0
 	if ((packages)); then
+		# before anything else: whether this system can run the desktop (Quickshell needs Qt 6.6+)
+		"$repo/packages/install.sh" --check || exit 4
 		distro="$("$repo/packages/install.sh" --distro)"
 		step "Packages for $distro"
 		show_layer 'base (always)' base

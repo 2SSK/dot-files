@@ -34,7 +34,7 @@ networkmanager              network-manager             NetworkManager
 bluez                       bluez                       bluez
 bluez-utils                 -                           -
 upower                      upower                      upower
-polkit                      polkit-1                    polkit
+polkit                      polkitd                     polkit
 pavucontrol                 pavucontrol                 pavucontrol
 # laptop power (packages/system.sh power) and the login screen (packages/system.sh sddm)
 tlp                         tlp                         tlp
