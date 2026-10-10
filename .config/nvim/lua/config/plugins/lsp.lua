@@ -49,17 +49,28 @@ return {
 			})
 
 			-- Copilot as ghost text. Sign in once with :LspCopilotSignIn.
-			--   Tab or Alt+l  accept (Tab: after a snippet jump, else an indent)   Alt+h  reject
-			--   Alt+n / Alt+p  next / previous suggestion                          Alt+r  ask again
+			--   Ctrl+a or Tab  accept     Ctrl+r or Ctrl+]  reject     Alt+n / Alt+p  next / previous
+			--   Alt+r  ask again. With no suggestion showing, Ctrl+a and Ctrl+r do what they always do
+			--   in insert mode (the last insert again; a register).
 			vim.lsp.inline_completion.enable()
+			local shown = vim.api.nvim_create_namespace("nvim.lsp.inline_completion")
+			local function showing()
+				return #vim.api.nvim_buf_get_extmarks(0, shown, 0, -1, { limit = 1 }) > 0
+			end
 			local function dismiss()
 				vim.lsp.inline_completion.enable(false, { bufnr = 0 })
 				vim.lsp.inline_completion.enable(true, { bufnr = 0 })
 			end
-			vim.keymap.set("i", "<M-l>", function()
-				vim.lsp.inline_completion.get()
-			end, { desc = "Accept Copilot suggestion" })
-			vim.keymap.set("i", "<M-h>", dismiss, { desc = "Reject Copilot suggestion" })
+			vim.keymap.set("i", "<C-a>", function()
+				return vim.lsp.inline_completion.get() and "" or "<C-a>"
+			end, { expr = true, desc = "Accept Copilot suggestion" })
+			vim.keymap.set("i", "<C-r>", function()
+				if not showing() then
+					return "<C-r>"
+				end
+				vim.schedule(dismiss)
+				return ""
+			end, { expr = true, desc = "Reject Copilot suggestion" })
 			vim.keymap.set("i", "<C-]>", dismiss, { desc = "Reject Copilot suggestion" })
 			vim.keymap.set("i", "<M-n>", function()
 				vim.lsp.inline_completion.select({ count = 1 })

@@ -17,6 +17,8 @@ xorg-xrandr                 x11-xserver-utils           xrandr
 # st, the X11 backup terminal: built by packages/extra/st.sh (gcc also provides cpp for xrdb #include)
 gcc                         gcc                         gcc
 pkgconf                     pkg-config                  pkgconf-pkg-config
+patch                       patch                       patch
+make                        make                        make
 libxft                      libxft-dev                  libXft-devel
 -                           libx11-dev                  libX11-devel
 xorg-xrdb                   x11-xserver-utils           xrdb

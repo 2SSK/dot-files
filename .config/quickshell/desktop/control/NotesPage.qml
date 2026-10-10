@@ -21,7 +21,8 @@ Item {
 	property string query: ""
 	readonly property var shown: Notes.sorted.filter(n => !query || [n.title, n.body, ...(n.items ?? []).map(i => i.text)].join("\n").toLowerCase().includes(query.toLowerCase()))
 
-	implicitHeight: 540
+	readonly property bool fill: true // the whole height of the control center (ControlCenter)
+	implicitHeight: 540 // the least it needs
 
 	// the list
 	Column {

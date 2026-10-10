@@ -72,6 +72,7 @@ prune_links() {
 }
 
 # User services from the packages: mpd plays music, mpd-mpris exposes it to media keys and the bar.
+# Run after stow: mpd reads its config from the links. One that won't start is a warning, not a stop.
 enable_services() {
 	local unit units=()
 	systemctl --user show-environment >/dev/null 2>&1 || { warn 'no systemd user session; services not enabled' && return 0; }
@@ -81,8 +82,11 @@ enable_services() {
 	((${#units[@]})) || return 0
 	step 'Enabling user services'
 	systemctl --user daemon-reload
-	systemctl --user enable --now "${units[@]}"
-	ok "running: ${units[*]}"
+	if systemctl --user enable --now "${units[@]}"; then
+		ok "running: ${units[*]}"
+	else
+		warn "enabled, but not all started: systemctl --user status ${units[*]}"
+	fi
 }
 
 main() {
@@ -122,6 +126,8 @@ main() {
 	local -a layers=()
 	local distro='' system=0
 	if ((packages)); then
+		# before anything else: whether this system can run the desktop (Quickshell needs Qt 6.6+)
+		"$repo/packages/install.sh" --check || exit 4
 		distro="$("$repo/packages/install.sh" --distro)"
 		step "Packages for $distro"
 		show_layer 'base (always)' base
@@ -168,7 +174,6 @@ main() {
 		step 'Installing shell plugins'
 		"$repo/packages/plugins.sh"
 		ok 'zsh and bash plugins at their pinned tags'
-		enable_services
 	fi
 
 	if [[ -f $repo/.gitmodules ]]; then
@@ -191,6 +196,9 @@ main() {
 	prune_links
 	(cd "$repo" && stow .) # target and --no-folding come from .stowrc
 	ok "stowed into $HOME"
+
+	# after the links: mpd reads its config from them
+	((packages == 0)) || enable_services
 
 	step 'Theme'
 	if command -v python3 >/dev/null; then

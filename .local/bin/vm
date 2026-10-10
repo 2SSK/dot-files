@@ -51,6 +51,7 @@ help_for() { # <command>
 			                             includes --gui
 			  --gui                      a window instead of a serial console
 			  --pkgs "<a b>"             more packages, in the distro's names
+			  --key <file.pub>           an SSH public key that may log in as you (repeatable)
 			  --force                    even if the laptop would keep under 2 GiB free
 
 			Asks for the password of your user in the VM (VM_PASSWORD skips the prompt).
@@ -225,6 +226,13 @@ user_data() { # <name> <password hash> <gui 0|1> <desktop 0|1> <share tags> <pac
 		    shell: /bin/bash
 		    lock_passwd: false
 		    passwd: "$hash"
+	EOF
+	if ((${#ssh_keys[@]})); then # --key: logins with these keys (password logins stay off)
+		echo '    ssh_authorized_keys:'
+		local key
+		for key in "${ssh_keys[@]}"; do echo "      - \"$(cat "$key")\""; done
+	fi
+	cat <<-EOF
 		ssh_pwauth: false
 		package_update: true
 		package_upgrade: true
@@ -254,15 +262,16 @@ cmd_create() {
 	[[ -n $name && $name != -* ]] || { help_for create >&2 && exit 2; }
 	shift
 	local image=arch cpus=2 mem=4G disk=30G gui=0 desktop=0 force=0
-	local shares=() pkgs=(qemu-guest-agent) extra=() tags='' share
+	local shares=() pkgs=(qemu-guest-agent) extra=() tags='' share ssh_keys=()
 	while (($#)); do
 		case $1 in
-		--image | --cpus | --mem | --disk | --share | --pkgs) [[ $# -ge 2 ]] || die missing_value option="$1" ;;&
+		--image | --cpus | --mem | --disk | --share | --pkgs | --key) [[ $# -ge 2 ]] || die missing_value option="$1" ;;&
 		--image) image=$2 && shift ;;
 		--cpus) cpus=$2 && shift ;;
 		--mem) mem=$2 && shift ;;
 		--disk) disk=$2 && shift ;;
 		--share) shares+=("$2") && shift ;;
+		--key) [[ -r $2 ]] || die no_key path="$2"; ssh_keys+=("$2") && shift ;;
 		--pkgs) read -ra extra <<<"$2" && pkgs+=("${extra[@]}") && shift ;;
 		--gui) gui=1 ;;
 		--desktop) gui=1 desktop=1 ;;
