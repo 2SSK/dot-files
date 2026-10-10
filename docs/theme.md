@@ -39,7 +39,7 @@ Palette values are copied from each project's official ports, with attribution i
 | git, delta | `[include]` of the rendered `git.conf` | Next command |
 | lazygit | `LG_CONFIG_FILE` merges the rendered `lazygit.yml` | Next start |
 | lazydocker | `lazydocker` alias sets `CONFIG_DIR` to the rendered `lazydocker/` | Next start |
-| starship, fzf, zsh autosuggestions, `ls`, bat, btop, yazi, fastfetch, pgcli | The terminal's 16 ANSI colours | With the terminal |
+| starship, fzf, zsh autosuggestions, `ls` / eza, bat, btop, fastfetch, pgcli | The terminal's 16 ANSI colours | With the terminal |
 | cava | `cava` alias loads the rendered config (gradient from the ANSI colours) | Live (SIGUSR2) |
 | i3 / sway window borders | `include` of the rendered `i3.conf` | Live (i3: `i3-msg reload`; sway: its colours sent as commands) |
 | picom (i3): shadow colours | Started with the rendered `picom.conf` | At its next start |
@@ -50,7 +50,7 @@ Palette values are copied from each project's official ports, with attribution i
 | Quickshell (bar, panels, lock) | Reads the rendered `palette.json` | Live (`qs ipc call theme reload`) |
 | nvim | Builds its colorscheme `desktop` from `palette.json` | Live (SIGUSR1) |
 | vim | The rendered `vim.vim` (colorscheme `desktop`) | Within a second |
-| yazi, eza | `~/.config/yazi/` and `~/.config/eza/` link to the rendered flavor and theme | Next start |
+| yazi | `~/.config/yazi/` links to the rendered flavor | Next start |
 | rmpc, pspg, opencode | Their rendered configs (`rmpc.ron`; `PSPG_CONF`; `OPENCODE_CONFIG_DIR`) | Next start |
 | Login screen (SDDM), boot menu (GRUB) | SDDM: the rendered `sddm-theme.conf`, copied to its shared folder; GRUB: its background tinted by the palette | SDDM next login; GRUB's tint at once, its colours with `packages/system.sh grub` |
 
