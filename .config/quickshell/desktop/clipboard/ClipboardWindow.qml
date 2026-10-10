@@ -81,10 +81,13 @@ HangingPanel {
 			placeholder: "Search the clipboard"
 			Component.onCompleted: focusField()
 			onAccepted: root.choose(true)
-			// Shift+Enter only copies
+			// Shift+Enter only copies; Ctrl+N / Ctrl+P move down / up, as in a shell or fzf
 			onKeyPressed: event => {
 				if ((event.key === Qt.Key_Return || event.key === Qt.Key_Enter) && (event.modifiers & Qt.ShiftModifier)) {
 					root.choose(false);
+					event.accepted = true;
+				} else if ((event.key === Qt.Key_N || event.key === Qt.Key_P) && (event.modifiers & Qt.ControlModifier)) {
+					root.current = event.key === Qt.Key_N ? Math.min(root.entries.length - 1, root.current + 1) : Math.max(0, root.current - 1);
 					event.accepted = true;
 				}
 			}
