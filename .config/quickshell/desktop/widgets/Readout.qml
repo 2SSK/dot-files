@@ -23,18 +23,18 @@ Line {
 	}
 
 	Label {
-
 		font.family: Theme.fontBar
+		font.weight: Theme.barWeight
 		visible: !Config.island && !Config.vertical
 		text: root.label
 		color: Theme.primary
 	}
 
 	Label {
-
-		font.family: Theme.fontBar
 		id: value
 
+		font.family: Theme.fontBar
+		font.weight: Theme.barWeight
 		visible: root.value !== ""
 		width: Math.max(implicitWidth, widest.width)
 		text: root.value

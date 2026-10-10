@@ -63,12 +63,11 @@ Line {
 			spacing: root.spacing
 
 			Label {
-
 				font.family: Theme.fontBar
 				visible: !Config.island && !Config.bar.capsules && slot.present && slot.follows
 				text: Config.vertical ? "—" : "|"
 				color: Theme.border
-				font.weight: Font.Normal
+				font.weight: Theme.barWeight
 			}
 
 			Item {

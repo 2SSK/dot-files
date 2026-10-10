@@ -211,6 +211,15 @@ Column {
 			onPicked: family => Config.set("fonts", "bar", family)
 		}
 
+		SettingRow {
+			label: "Bar weight"
+			Choice {
+				options: [{ value: 500, label: "Medium" }, { value: 600, label: "Semibold" }]
+				value: Theme.barWeight
+				onPicked: value => Config.set("fonts", "barWeight", value)
+			}
+		}
+
 		FontRow {
 			label: "Code"
 			hint: "The clipboard's text, code notes."

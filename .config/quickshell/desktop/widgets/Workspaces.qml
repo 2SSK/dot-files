@@ -90,7 +90,7 @@ Line {
 			font.family: Theme.fontBar
 			font.hintingPreference: Theme.hinting
 			font.pixelSize: Theme.fontSize - 3
-			font.weight: Font.DemiBold
+			font.weight: Theme.barWeight
 		}
 	}
 }

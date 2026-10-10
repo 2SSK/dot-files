@@ -30,6 +30,7 @@ Singleton {
 	readonly property string fontHeading: Config.fonts.heading || fontSans
 	readonly property string fontMono: Config.fonts.mono || "JetBrainsMono Nerd Font"
 	readonly property string fontBar: Config.fonts.bar || fontMono
+	readonly property int barWeight: Config.fonts.barWeight || Font.DemiBold
 	// every text asks for full hinting: Qt on Wayland ignores fontconfig's (slight), and the shell's
 	// windows get no subpixel smoothing, so small text looked soft; full snaps stems to whole pixels
 	readonly property int hinting: Font.PreferFullHinting

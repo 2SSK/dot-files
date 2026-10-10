@@ -4,7 +4,6 @@ import qs
 
 // "10:18 AM Fri, Oct 09"; a vertical bar shows hours over minutes. A click opens the calendar.
 Label {
-	font.family: Theme.fontBar
 	SystemClock {
 		id: clock
 
@@ -20,5 +19,6 @@ Label {
 
 	text: Qt.formatDateTime(clock.date, Config.vertical ? "hh\nmm" : "hh:mm AP ddd, MMM dd")
 	lineHeight: 0.9
-	font.weight: Font.Medium
+	font.family: Theme.fontBar
+	font.weight: Theme.barWeight
 }
