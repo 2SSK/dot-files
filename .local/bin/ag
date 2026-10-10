@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# ag: drop the AGENTS.md template (~/.local/share/templates) into the current project.
+set -euo pipefail
+src="${XDG_DATA_HOME:-$HOME/.local/share}/templates/AGENTS.md"
+[[ -e AGENTS.md ]] && { echo "ag: AGENTS.md is already here" >&2 && exit 1; }
+cp "$src" AGENTS.md
+echo "AGENTS.md added"
