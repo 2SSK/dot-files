@@ -9,9 +9,8 @@ import qs
 import qs.services
 import qs.widgets
 
-// The lock screen on Wayland, on every screen: the wallpaper blurred and dimmed, a large light
-// clock (12-hour, as the bar) and the date, a password field as a quiet pill of dots, a hint at the
-// bottom. Enter checks the password (PAM, lock/pam/lock); a wrong one shakes the field and says so.
+// The lock screen on Wayland, on every screen: the wallpaper blurred, a clock and the date, and a
+// password field checked through PAM (lock/pam/lock).
 Scope {
 	id: root
 
@@ -26,7 +25,7 @@ Scope {
 		pam.start();
 	}
 
-	// beside the lock: the lock itself takes only its surfaces
+	// outside the lock, which takes only its surfaces
 	PamContext {
 		id: pam
 
@@ -77,7 +76,6 @@ Scope {
 		}
 	}
 
-	// Locking: the desktop fades to black first, on every screen, above everything
 	LazyLoader {
 		active: Lock.curtain
 
@@ -129,10 +127,9 @@ Scope {
 			SystemClock {
 				id: clock
 
-				precision: SystemClock.Minutes // the clock shows hh:mm
+				precision: SystemClock.Minutes
 			}
 
-			// what shows, fading in from black as it locks and out before it unlocks
 			Item {
 				id: scene
 
@@ -207,7 +204,6 @@ Scope {
 						height: 40
 					}
 
-					// the password, as dots in a quiet pill
 					Rectangle {
 						id: field
 

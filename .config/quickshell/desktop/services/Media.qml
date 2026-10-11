@@ -18,8 +18,7 @@ Singleton {
 		return p?.identity || p?.dbusName?.replace("org.mpris.MediaPlayer2.", "").split(".")[0] || "Player";
 	}
 
-	// players report their position only when asked: once a second while the control center (the
-	// media card, the only place showing it) is open
+	// players report their position only when asked, so ask once a second while the media card shows
 	Timer {
 		interval: 1000
 		running: (root.player?.isPlaying ?? false) && Panel.controlOpen

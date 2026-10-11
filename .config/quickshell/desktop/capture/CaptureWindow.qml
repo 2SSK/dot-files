@@ -6,12 +6,8 @@ import qs
 import qs.services
 import qs.widgets
 
-// Capture, dropping out of the bar (a HangingPanel): a screenshot or a recording of a region (drag
-// a rectangle; the only thing done with the mouse), the focused window, or a screen. Keys: the
-// arrows pick a tile and Enter does it; R, W, S take a screenshot straight away, with Shift they
-// record. Choosing a screen: the arrows or 1–9 pick one, A all of them, Enter takes it, Escape or
-// Backspace goes back. A screenshot is saved and copied to the clipboard. With more than one monitor, Screen
-// shows a small map of them to pick one (or all). While recording, Record becomes Stop.
+// Capture, a HangingPanel: a screenshot or recording of a region, the focused window or a screen.
+// R, W, S act at once (with Shift they record); a screenshot is saved and copied to the clipboard.
 HangingPanel {
 	id: root
 
@@ -37,7 +33,6 @@ HangingPanel {
 	panelWidth: Panel.sizes.capture.width
 	panelHeight: Panel.sizes.capture.height
 	onDismissed: Panel.captureOpen = false
-	// the screen picked to begin with: the one this panel is on
 	onAskingChanged: monitor = Math.max(0, sortedScreens.findIndex(s => s.name === screen.name))
 	Component.onCompleted: monitor = Math.max(0, sortedScreens.findIndex(s => s.name === screen.name))
 	onKeyPressed: event => {
@@ -113,7 +108,6 @@ HangingPanel {
 		}
 	}
 
-	// --- screenshot and record ---
 
 	Column {
 		visible: !root.asking
@@ -192,7 +186,6 @@ HangingPanel {
 		}
 	}
 
-	// --- which screen: a map of the monitors as they're arranged ---
 
 	ScreenPicker {
 		visible: root.asking !== ""
@@ -207,7 +200,6 @@ HangingPanel {
 		onTake: screen => Capture.take(root.asking, "screen", screen)
 	}
 
-	// what the keys do
 	UiText {
 		x: 16
 		anchors.bottom: parent.bottom

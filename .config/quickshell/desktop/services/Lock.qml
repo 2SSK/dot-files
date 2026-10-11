@@ -3,11 +3,8 @@ pragma Singleton
 import QtQuick
 import Quickshell
 
-// The lock on Wayland (sway): Quickshell's session lock (LockScreen), the screen locked until your
-// password unlocks it; if the shell stopped, the compositor would keep the screen locked. Locked
-// by `desktop-lock` (the power menu's Lock, swayidle, before sleep) over IPC. On X11 i3lock locks.
-// Smooth both ways: lock() fades the desktop to black, then locks (the lock screen fades in from
-// black, as the compositor's own blank frame is); unlock() fades the lock screen out, then unlocks.
+// The session lock on Wayland (on X11 i3lock locks); if the shell stops, the compositor keeps the
+// screen locked. lock() fades the desktop to black first, unlock() fades the lock screen out first.
 Singleton {
 	id: root
 

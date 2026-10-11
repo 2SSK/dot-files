@@ -40,7 +40,6 @@ Rectangle {
 		onDoubleClicked: row.activated()
 	}
 
-	// a thumbnail for a picture, else an icon for its kind
 	Item {
 		id: lead
 

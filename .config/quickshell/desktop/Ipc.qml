@@ -3,18 +3,17 @@ import Quickshell
 import Quickshell.Io
 import qs.services
 
-// The shell's IPC: what i3's and sway's keys (keys.conf) and the scripts in ~/.local/bin ask for, as
-// qs -c desktop ipc call <target> <function> [argument]. Each hands over to a service or Panel;
-// docs/desktop-shell.md lists them.
+// The shell's IPC: what keys.conf and the scripts in ~/.local/bin ask for, as
+// qs -c desktop ipc call <target> <function> [argument]. docs/desktop-shell.md lists them.
 Scope {
 	IpcHandler {
 		target: "lock"
 
 		function lock(): void {
 			if (Config.wayland)
-				Lock.lock(); // fades to black, then locks
+				Lock.lock();
 		}
-		// true once sway confirms the lock (desktop-lock waits for it before sleep goes ahead)
+		// true once sway confirms the lock, which desktop-lock waits for before sleep goes ahead
 		function locked(): bool {
 			return Lock.secure;
 		}
@@ -83,7 +82,6 @@ Scope {
 		function close(): void {
 			Panel.controlOpen = false;
 		}
-		// a page, closing it when it's already showing (keys: todo, notes)
 		function page(page: string): void {
 			Panel.toggleControl(page);
 		}
@@ -97,7 +95,7 @@ Scope {
 		}
 	}
 
-	// screenshots and recordings: region, window or screen (a screen asks which when there are several)
+	// mode is region, window or screen
 	IpcHandler {
 		target: "capture"
 
@@ -131,13 +129,12 @@ Scope {
 		function cancel(): void {
 			Windows.close();
 		}
-		// the ring's order, most recent first (for checking it)
+		// the ring's titles, most recent first, for checking it
 		function list(): string {
 			return Windows.windows.map(w => w.title).join("\n");
 		}
 	}
 
-	// apps, emoji, files or themes; again on the same one closes it
 	IpcHandler {
 		target: "launcher"
 
@@ -185,7 +182,7 @@ Scope {
 		function toggle(): void {
 			Panel.settingsOpen = !Panel.settingsOpen;
 		}
-		// a page (bar, appearance, notifications, levels, power, timeshift, keys); again on the same one closes it
+		// a page such as bar, appearance, notifications, levels, power, timeshift or keys
 		function page(page: string): void {
 			if (Panel.settingsOpen && Panel.settingsPage === page) {
 				Panel.settingsOpen = false;

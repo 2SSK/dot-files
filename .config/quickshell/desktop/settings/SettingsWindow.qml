@@ -7,9 +7,8 @@ import qs
 import qs.services
 import qs.widgets
 
-// The settings window: a sidebar of pages, each a column of settings that apply at once and are
-// written to ~/.config/desktop/shell.json (in the repo). A real window, so i3 floats it (see
-// look.conf) and the keyboard works. Escape or focusing another window closes it.
+// The settings window, written to ~/.config/desktop/shell.json. A real window, so i3 floats it (see
+// look.conf) and the keyboard works.
 FloatingWindow {
 	id: root
 
@@ -39,15 +38,13 @@ FloatingWindow {
 	color: Theme.bg
 	onVisibleChanged: if (!visible) Panel.settingsOpen = false
 
-	// Escape closes it: here when nothing has the focus, and on the header and the pages below for a
-	// field that has it (keys travel up from the field, never to a sibling like this one)
+	// Escape closes it here when nothing has focus; keys travel up from a field, never to a sibling like this
 	Item {
 		anchors.fill: parent
 		focus: true
 		Keys.onEscapePressed: Panel.settingsOpen = false
 	}
 
-	// sidebar
 	Rectangle {
 		id: sidebar
 
@@ -133,7 +130,6 @@ FloatingWindow {
 		}
 	}
 
-	// the page's title (and the Keys page's search), fixed above what scrolls
 	Column {
 		id: header
 
@@ -184,7 +180,7 @@ FloatingWindow {
 			width: content.width - 64
 			spacing: 22
 
-			// the page showing, made when picked (Keys stays, to keep its search)
+			// made when picked (Keys stays, to keep its search)
 			Loader {
 				visible: item !== null // none on Keys: no gap above it
 				width: parent.width
@@ -227,7 +223,6 @@ FloatingWindow {
 				}
 			}
 
-			// Keys: every binding, read from i3's config
 			KeybindsPage {
 				visible: root.page === "keys"
 				width: parent.width

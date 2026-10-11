@@ -5,9 +5,8 @@ import qs
 import qs.services
 import qs.widgets
 
-// Timeshift: the system's snapshots, newest first, each with its kind (on demand, boot, hourly,
-// daily, weekly, monthly) and comment; a snapshot now, with a comment; delete one (a second press
-// confirms). Making and deleting ask for the password; restoring is Timeshift's own app's job.
+// Timeshift: the system's snapshots, newest first; make one or delete one (a second press confirms).
+// Making and deleting ask for the password; restoring is Timeshift's own app's job.
 Column {
 	id: root
 

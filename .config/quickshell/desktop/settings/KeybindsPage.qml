@@ -6,11 +6,8 @@ import Quickshell.Io
 import qs
 import qs.widgets
 
-// Every key binding, read from i3's own config (keys.conf, workspaces.conf, resize.conf), so the
-// list can't drift from what the keys do: each one in plain words, grouped (shell, windows,
-// workspaces, apps, i3), the ten workspace keys folded into one row. Bindings inside a mode (the
-// power menu's, the switcher's, resizing) and the keys inside the shell's own panels are listed by
-// hand at the end. The settings window's search narrows it all.
+// Every key binding, read from i3's own config so the list can't drift from what the keys do.
+// Bindings inside a mode and the keys of the shell's own panels are listed by hand at the end.
 Column {
 	id: root
 
@@ -42,7 +39,6 @@ Column {
 		return combo.split("+").map(k => names[k] ?? (k.length === 1 ? k.toUpperCase() : k));
 	}
 
-	// what a binding does, in words, and its group
 	function describe(cmd: string): var {
 		cmd = cmd.replace(/;\s*mode\s+"[^"]*"\s*$/, "").trim();
 		const shell = cmd.match(/^\$shell\s+(\S+)\s+(\S+)\s*(.*)$/);

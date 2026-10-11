@@ -4,9 +4,8 @@ import QtQuick
 import Quickshell
 import qs.services
 
-// Shell state: whether the bar is shown (or peeking while hidden), the OSD card (a level or lock
-// that just changed) and the power menu. While the power menu is open i3 is in mode "power", which sends its keys back over IPC
-// (keys.conf): an X11 popup can't take the keyboard itself.
+// Shell state: the bar, the OSD card, the hanging panels and the power menu. While the power menu is
+// open i3 is in mode "power" and sends its keys back over IPC, since an X11 popup can't take the keyboard.
 Singleton {
 	id: root
 
@@ -19,7 +18,7 @@ Singleton {
 	property bool controlOpen: false
 	property string controlPage: "home"
 	property bool clipboardOpen: false
-	property bool authOpen: false // the password prompt (polkit), while an app asks
+	property bool authOpen: false // the polkit password prompt
 	property bool captureOpen: false
 	property string captureAsk: "" // "shot" or "record": the panel only asks which screen
 	property bool launcherOpen: false
@@ -27,9 +26,8 @@ Singleton {
 	property bool wallpaperOpen: false
 	property var islands: ({}) // screen name -> the bar's rect on it (screen coordinates from its origin)
 
-	// The panels hanging from the bar: one open at a time. Each one's window (a Loader in shell.qml)
-	// follows *Shown, which trails *Open by an event-loop turn, so the panel being replaced is gone
-	// before the next one takes the keyboard.
+	// One panel open at a time. Each window follows *Shown, which trails *Open by an event-loop turn,
+	// so the panel being replaced is gone before the next one takes the keyboard.
 	readonly property var panels: ["control", "clipboard", "capture", "launcher", "wallpaper"]
 	property bool controlShown: false
 	property bool clipboardShown: false
@@ -37,8 +35,7 @@ Singleton {
 	property bool launcherShown: false
 	property bool wallpaperShown: false
 
-	// each panel's size, centred under the bar (the bar opens its outline there: hangingWidth), and
-	// the curves where a panel meets the bar
+	// each panel's size, centred under the bar, which opens its outline there (hangingWidth)
 	readonly property var sizes: ({
 			control: Qt.size(760, 700), // the home page with two players and 115% text
 			clipboard: Qt.size(920, 580),
@@ -52,7 +49,6 @@ Singleton {
 	readonly property int hangingWidth: sizes[hanging]?.width ?? 0
 	property string hangingScreen: "" // the screen a panel hangs on (pinned as it opens: HangingPanel)
 
-	// a panel opened closes the others (the password prompt closes them all)
 	function opened(name: string): void {
 		if (name === "auth" ? authOpen : root[name + "Open"])
 			panels.forEach(p => {
@@ -76,13 +72,12 @@ Singleton {
 		onTriggered: root.panels.forEach(p => root[p + "Shown"] = root[p + "Open"])
 	}
 
-	// the capture panel; ask: "shot" or "record" to go straight to choosing a screen
+	// ask is "shot" or "record" to go straight to choosing a screen
 	function openCapture(ask: string): void {
 		captureAsk = ask === "shot" || ask === "record" ? ask : "";
 		captureOpen = true;
 	}
 
-	// the launcher on a mode; again on the same mode closes it
 	function toggleLauncher(mode: string): void {
 		if (launcherOpen && launcherMode === mode) {
 			launcherOpen = false;
@@ -92,12 +87,10 @@ Singleton {
 		launcherOpen = true;
 	}
 
-	// the control center is open on this page
 	function showing(page: string): bool {
 		return controlOpen && controlPage === page;
 	}
 
-	// the control center, on a page (home, notifications, ...); again on the same page closes it
 	function toggleControl(page: string): void {
 		if (controlOpen && controlPage === page) {
 			controlOpen = false;

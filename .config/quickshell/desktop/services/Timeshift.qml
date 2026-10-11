@@ -4,10 +4,8 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-// Timeshift's snapshots for the settings page, through desktop-timeshift: the list (without a
-// password once `packages/system.sh timeshift` allowed it; else on request, asking), making one
-// with a comment, deleting one (both ask for the password: the shell's polkit prompt), and
-// Timeshift's own app for restoring.
+// Timeshift's snapshots for the settings page through desktop-timeshift. Listing needs no password
+// once `packages/system.sh timeshift` allowed it; making and deleting ask through the polkit prompt.
 Singleton {
 	id: root
 

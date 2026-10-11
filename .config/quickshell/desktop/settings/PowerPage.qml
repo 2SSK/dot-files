@@ -5,7 +5,7 @@ import qs
 import qs.services
 import qs.widgets
 
-// Settings → Power: The power menu, what idle does, and the battery (low warning and charge limit).
+// Settings → Power: the power menu, what idle does, and the battery.
 Column {
 	id: page
 
@@ -71,7 +71,7 @@ Column {
 			}
 		}
 
-		// TLP keeps it (desktop-power): not a shell setting. Shown as dragged, applied once let go
+		// TLP keeps the charge limit (desktop-power), not shell.json; it applies once let go
 		SettingRow {
 			visible: Power.limit > 0
 			label: "Charge limit"

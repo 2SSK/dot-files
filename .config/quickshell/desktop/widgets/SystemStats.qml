@@ -9,7 +9,6 @@ Line {
 	vertical: Config.vertical
 	spacing: Config.vertical ? 6 : 9
 
-	// a click opens the system monitor
 	TapHandler {
 		onTapped: Panel.toggleControl("system")
 	}

@@ -6,19 +6,18 @@ import qs
 import qs.services
 import qs.widgets
 
-// Settings → Appearance: The theme (family and dark or light, through the theme command) and the night light.
+// Settings → Appearance: the theme (family and dark or light, through the theme command) and the night light.
 Column {
 	id: page
 
 	spacing: 22
 
-	property string family: "" // what the buttons show: the choice, at once
+	property string family: ""
 	property string mode: ""
 	property var families: []
 	property string applied: "" // "family mode" the last switch made (or being made)
 
-	// a click shows at once; the switch (render, then reload every app) runs behind, one at a time:
-	// clicks made meanwhile only change what runs next, so a burst ends on the last choice
+	// the switch (render, then reload every app) runs one at a time, so a burst of clicks ends on the last
 	function choose(family: string, mode: string): void {
 		page.family = family;
 		page.mode = mode;
@@ -32,7 +31,6 @@ Column {
 		apply.running = true;
 	}
 
-	// the themes, and which one is on (read when this page opens)
 	Process {
 		running: true
 		command: ["theme", "list"]

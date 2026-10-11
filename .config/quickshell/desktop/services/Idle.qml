@@ -5,10 +5,8 @@ import Quickshell
 import Quickshell.Io
 import qs
 
-// When idle (Settings → Power): the screen dims, locks, then switches off after idle.dim, .lock
-// and .off minutes (0: never). X11 (i3): desktop-idle sets X's timers, at start and on every change
-// (xss-lock dims and locks). Wayland (sway): the shell runs swayidle with them, restarted on a
-// change; it also locks before sleep and on loginctl lock-session (the power menu's Lock, the lid).
+// Idle dim, lock and screen off after idle.dim, .lock and .off minutes (0: never). On i3 desktop-idle
+// sets X's timers; on sway the shell runs swayidle, which also locks before sleep and on lock-session.
 Singleton {
 	id: root
 
@@ -17,11 +15,8 @@ Singleton {
 	// swayidle's arguments: each timeout counts from when you stopped
 	readonly property var swayidle: {
 		const [dim, lock, off] = times;
-		// one swayidle per display: a shell restart leaves the last one running, so it goes first
-		// (KILL: it handles TERM in its event loop, which an orphan no longer runs). Only this
-		// display's: another sway's (a nested or test one) keeps its own, and doesn't take this
-		// one's. Without it nothing locks on sway (the power menu's Lock and the lid go through it
-		// too): say so, loudly
+		// One swayidle per display: a shell restart leaves this display's last one running, so it goes first,
+		// with KILL since an orphan no longer runs the event loop that handles TERM. Without it nothing locks.
 		const missing = 'notify-send -u critical -a Lock "The screen can\'t lock" "swayidle isn\'t installed: Lock, the lid, idle and sleep do nothing on sway. Install it: pacman -S swayidle (Arch) or dnf install swayidle (Fedora)"';
 		const args = ["sh", "-c", `command -v swayidle >/dev/null || { ${missing}; exit 127; }; for p in $(pgrep -u "$(id -u)" -x swayidle); do tr "\\0" "\\n" <"/proc/$p/environ" 2>/dev/null | grep -qx "WAYLAND_DISPLAY=$WAYLAND_DISPLAY" && kill -KILL "$p"; done; exec swayidle "$@"`, "sh", "-w"];
 		if (dim > 0 && (lock === 0 || dim < lock))

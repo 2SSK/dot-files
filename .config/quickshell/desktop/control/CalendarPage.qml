@@ -7,12 +7,8 @@ import qs.services
 import qs.settings
 import qs.widgets
 
-// The calendar, in two views (the header's buttons switch them):
-//   Calendar: a month; the chosen day's events, reminders and the alarms ringing that day below,
-//     and a small + that opens a line to add one to it (Composer).
-//   Reminders & alarms: a line to add one on any day (its date chip opens a small month), then the
-//     reminders coming up and every alarm, with its switch.
-// Events and reminders are kept by Events, alarms by Alarms; ✕ (on hover) removes one.
+// The calendar in two views: a month with the chosen day's events, reminders and alarms below,
+// and the reminders coming up with every alarm. Each has a line to add one.
 Column {
 	id: root
 
@@ -26,7 +22,6 @@ Column {
 	property bool adding: false
 	readonly property var repeats: ({ once: "Once", daily: "Every day", weekdays: "Weekdays" })
 
-	// the chosen day: events and reminders (all-day first, then by time) with its alarms among them
 	readonly property var dayEntries: {
 		Events.events;
 		Alarms.alarms;
@@ -34,7 +29,6 @@ Column {
 		const alarms = Alarms.on(chosen).map(a => ({ kind: "alarm", id: a.id, time: a.time, text: a.label, sub: a.repeat === "once" ? "" : repeats[a.repeat] }));
 		return [...events, ...alarms].sort((a, b) => (a.time || "") < (b.time || "") ? -1 : 1);
 	}
-	// reminders from today on, by when
 	readonly property var upcoming: {
 		const today = Events.key(new Date());
 		return Events.events.filter(e => e.time && e.date >= today).sort((a, b) => a.date + a.time < b.date + b.time ? -1 : 1);
@@ -58,7 +52,6 @@ Column {
 	onViewChanged: adding = false
 	spacing: 12
 
-	// one thing on a day: its icon, time, text and a note; ✕ on hover; alarms have their switch
 	component Entry: Rectangle {
 		id: entry
 
@@ -165,8 +158,6 @@ Column {
 		font.pixelSize: Theme.textBody
 	}
 
-	// --- Calendar ---
-
 	MonthGrid {
 		visible: root.view === "calendar"
 		width: parent.width
@@ -217,8 +208,6 @@ Column {
 
 		delegate: Entry {}
 	}
-
-	// --- Reminders & alarms ---
 
 	Composer {
 		visible: root.view === "upcoming"

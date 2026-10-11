@@ -5,14 +5,8 @@ import Quickshell
 import Quickshell.Io
 import qs
 
-// The wallpaper: the images in wallpaper.folders (shell.json; a folder each deep: theme folders
-// such as ~/Wallpaper-Bank/tokyonight are matched to the theme), the one set, and rotation
-// (wallpaper.rotate: off, 5m, 1h, 1d, or boot for a new one each boot; that one is picked while
-// the system shuts down, by desktop-wallpaper next-boot, so the login screen has it). Setting one points
-// ~/.local/state/desktop/wallpaper at it (the lock screen and sddm read that too); the backdrop
-// (sway) or desktop-wallpaper's feh (i3) fades over to it. A change made elsewhere (desktop-wallpaper
-// in a terminal, the shutdown pick) is seen through wallpaper-changed. The last change is
-// remembered, so a rotation keeps its pace across restarts.
+// The wallpaper: the images in wallpaper.folders, the one set, and rotation. Setting one points
+// ~/.local/state/desktop/wallpaper at it, which the lock screen and sddm read too.
 Singleton {
 	id: root
 
@@ -21,14 +15,13 @@ Singleton {
 	readonly property var folders: (Config.wallpaper.folders ?? []).map(f => f.replace(/^~/, home))
 	readonly property int every: ({ "5m": 300, "1h": 3600, "1d": 86400 })[Config.wallpaper.rotate] ?? 0 // s
 	property var files: []
-	// the ones in a folder named after the current theme (~/Wallpaper-Bank/tokyonight/...)
+	// theme folders such as ~/Wallpaper-Bank/tokyonight match the theme's family
 	readonly property string family: Theme.palette.meta?.family ?? ""
 	readonly property var themeFiles: files.filter(f => f.split("/").slice(-2, -1)[0] === family)
 	property string current: ""
 	property real changed: 0 // when it last changed (ms)
 	property string pending: "" // picked while the last one was still fading in
 
-	// one at a time: a pick made while the last one still fades in follows it
 	function set(path: string): void {
 		if (!path || path === current)
 			return;
@@ -42,7 +35,6 @@ Singleton {
 		apply.running = true;
 	}
 
-	// a different one, at random: from the current theme's folder when it has some
 	function shuffle(): void {
 		const pool = themeFiles.length > 1 ? themeFiles : files;
 		const others = pool.filter(f => f !== current);
@@ -78,7 +70,7 @@ Singleton {
 		}
 	}
 
-	// where things stand: the image set, and when it changed (again whenever it changes)
+	// changes made elsewhere (a terminal, the shutdown pick) show up through wallpaper-changed
 	Process {
 		id: look
 
@@ -100,7 +92,6 @@ Singleton {
 		onFileChanged: look.running = true
 	}
 
-	// rotation, checked every minute against the last change
 	Timer {
 		interval: 60000
 		running: root.every > 0

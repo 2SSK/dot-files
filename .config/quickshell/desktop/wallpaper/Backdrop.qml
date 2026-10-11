@@ -4,9 +4,8 @@ import Quickshell.Wayland
 import qs
 import qs.services
 
-// The wallpaper on sway, drawn by the shell on the background layer, one per screen: a new one
-// loads out of sight, then fades in over the old. The theme's background shows until the first
-// one is in, so a login fades in rather than popping. i3 has no such layer: feh draws it there.
+// The wallpaper on sway, drawn on the background layer per screen, fading in over the old one.
+// i3 has no such layer: feh draws it there.
 PanelWindow {
 	id: root
 
@@ -18,7 +17,7 @@ PanelWindow {
 		return image === one ? two : one;
 	}
 
-	// the fade under way, cut short: what it was fading in is now simply shown
+	// cut a running fade short: what it was fading in is simply shown
 	function settle(): void {
 		fade.stop();
 		front.opacity = 1;

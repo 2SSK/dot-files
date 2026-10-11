@@ -6,21 +6,12 @@ import Quickshell.Wayland
 import qs
 import qs.services
 
-// A panel that hangs from the middle of the bar, in its colour, joined to it by inverse curves
-// (the bar opens its outline there: Panel.hangingWidth). It is drawn in a window as big as the
-// screen, so a click beside the panel lands on it and closes it, and it shows at once, without
-// animation. Escape, a click beside it, or (X11) another window's focus asks to close (dismissed).
-// The control center, clipboard, launcher, wallpaper, capture and password panels use it.
-//
-// The window depends on the session. Wayland (sway): a layer surface over the screen with the
-// keyboard to itself, placed exactly, no window rules. X11 (i3): a real window, as X11 popups can't
-// take the keyboard; unshaped, so the pointer never leaves it and i3's focus-follows-mouse can't
-// hand the focus back to the window below (a shaped one flickered as it opened). The panel's
-// contents live in one item, moved into whichever window is made.
+// A panel hanging from the middle of the bar, joined to it by inverse curves, drawn in a window as big
+// as the screen so a click beside it lands there and closes it. The shell's dropdown panels use it.
 Scope {
 	id: root
 
-	required property string name // the X11 window's title is "Desktop <name>"
+	required property string name
 	property bool open
 	property int panelWidth: 760
 	property int panelHeight: 640
@@ -30,29 +21,22 @@ Scope {
 	signal keyPressed(var event) // keys nothing inside took; an Escape the panel doesn't take closes it
 
 	readonly property bool wayland: Config.wayland
-	// the screen it opened on, kept while it's open: focus moving to another monitor (on sway it
-	// follows the pointer) doesn't carry it along
+	// pinned to the screen it opened on: focus moving to another monitor doesn't carry it along
 	readonly property ShellScreen focusedScreen: Quickshell.screens.find(s => s.name === WindowManager.focusedOutput) ?? Quickshell.screens[0]
 	property ShellScreen pinned: null
 	readonly property ShellScreen screen: pinned ?? focusedScreen
-	readonly property bool below: Config.position !== "bottom" // hangs below the bar, else above it
+	readonly property bool below: Config.position !== "bottom"
 	readonly property rect island: Panel.islands[screen.name] ?? Qt.rect(0, 0, screen.width, 0)
-	// a bar on the left or right: the panel floats beside it, centred on it, kept on the screen
 	readonly property bool side: Config.vertical
 	readonly property int sideGap: 10
-	// centred under the bar, flush with it (or beside a side bar)
 	readonly property real px: side ? (Config.position === "left" ? island.x + island.width + sideGap : island.x - panelWidth - sideGap) : Math.round(island.x + (island.width - panelWidth) / 2)
 	readonly property real py: side ? Math.round(Math.max(sideGap, Math.min(screen.height - panelHeight - sideGap, island.y + (island.height - panelHeight) / 2))) : !Panel.barShown ? (below ? 0 : screen.height - panelHeight) : below ? island.y + island.height : island.y - panelHeight
-	// the curves where it joins a horizontal bar; none beside a side bar, which it doesn't touch
 	readonly property int fillet: side ? 0 : Panel.fillet
-	// the bar's colour and see-through as much, so the panel reads as part of it: on sway SwayFX blurs
-	// behind it as behind the bar (effects.conf, desktop-panel). X11: solid, as nothing is blurred
-	// behind a window as big as the screen and what's under would show through
+	// SwayFX blurs behind it as behind the bar; X11 is solid, as nothing blurs behind a screen-sized window
 	readonly property color fill: wayland ? Qt.alpha(Theme.bg, Config.bar.opacity) : Theme.bg
 	readonly property string title: "Desktop " + name
 
-	// the keyboard (X11): i3 focuses a new window itself; ask too once it has the window (its "new"
-	// event below), and again shortly in case that came first
+	// X11: i3 focuses a new window itself; ask too once it has it, and again shortly in case that came first
 	function takeFocus(): void {
 		if (!wayland)
 			WindowManager.command(`[title="^${root.title}$"] focus`);
@@ -70,7 +54,6 @@ Scope {
 	}
 	Component.onDestruction: if (Panel.hangingScreen === pinned?.name) Panel.hangingScreen = ""
 
-	// i3: focus once it has the window; another window taking the focus closes it
 	FocusWatch {
 		title: root.title
 		active: !root.wayland
@@ -78,8 +61,7 @@ Scope {
 		onFocusLost: root.dismissed()
 	}
 
-	// what the panels put in: moved into the window's card once that exists. A focus scope, so the
-	// focus the panel gave a field as it was made (a search, a password) comes back with it
+	// a focus scope, so the focus the panel gave a field as it was made comes back once it's moved
 	FocusScope {
 		id: inner
 
@@ -94,7 +76,6 @@ Scope {
 		}
 	}
 
-	// the panel under the bar, its curves, and the area beside it that closes it on a click
 	component Layout: Item {
 		anchors.fill: parent
 
@@ -117,9 +98,8 @@ Scope {
 			height: root.panelHeight
 			visible: root.open
 
-			// inverse curves where the panel meets the bar, so the bar's edge flows into it
 			Repeater {
-				model: root.side ? [] : [-1, 1] // left, right (none beside a side bar)
+				model: root.side ? [] : [-1, 1]
 
 				delegate: Canvas {
 					id: curve
@@ -127,7 +107,6 @@ Scope {
 					required property int modelData
 					property color tint: root.fill
 
-					// beside the panel's edge at the bar, where it joins it
 					x: modelData < 0 ? 0 : root.fillet + root.panelWidth
 					y: root.below ? 0 : root.panelHeight - height
 					width: root.fillet
@@ -135,12 +114,11 @@ Scope {
 					transform: Scale {
 						origin.x: curve.width / 2
 						origin.y: curve.height / 2
-						xScale: curve.modelData // the left one is drawn mirrored
+						xScale: curve.modelData
 						yScale: root.below ? 1 : -1
 					}
 					onTintChanged: requestPaint()
-					// drawn for the right side under a top bar: the corner where the panel's edge
-					// (x 0) meets the bar (y 0), filled up to a quarter circle one radius out from it
+					// drawn for the right side under a top bar
 					onPaint: {
 						const ctx = getContext("2d");
 						const r = width;
@@ -182,7 +160,7 @@ Scope {
 		}
 	}
 
-	// Wayland: a layer surface over the whole screen, with the keyboard to itself
+	// Wayland: a layer surface, which takes the keyboard and is placed exactly without window rules
 	LazyLoader {
 		active: root.wayland && root.visible
 
@@ -204,7 +182,8 @@ Scope {
 		}
 	}
 
-	// X11: a window as big as the screen (look.conf floats it at the screen's corner)
+	// X11: a real window, as X11 popups can't take the keyboard; unshaped, so i3's focus-follows-mouse
+	// can't hand the focus back to the window below. look.conf floats it at the screen's corner.
 	LazyLoader {
 		active: !root.wayland && root.visible
 
@@ -212,8 +191,7 @@ Scope {
 			title: root.title
 			implicitWidth: root.screen.width
 			implicitHeight: root.screen.height
-			// a fixed size: i3 floats such a window as it takes it, instead of tiling it for a
-			// moment first (which flashed the other windows' borders and layout)
+			// a fixed size makes i3 float it at once instead of tiling it first (which flashed the layout)
 			minimumSize: Qt.size(root.screen.width, root.screen.height)
 			maximumSize: Qt.size(root.screen.width, root.screen.height)
 			color: "transparent"

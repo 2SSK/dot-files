@@ -7,14 +7,8 @@ import qs
 import qs.services
 import qs.widgets
 
-// The launcher, dropping out of the bar (a HangingPanel): one search over four modes, Tab and
-// Shift+Tab (or the chips) switch them. Arrows move, Enter picks:
-//   Apps: launches it (the ones used most come first).
-//   Emoji: copies it (recent ones first; search by name or group).
-//   Files: copies the file itself, to paste as an attachment in a chat or mail; Ctrl+Enter opens
-//     it (text in nvim, web pages and PDFs in the browser, the rest in their app); Shift+Enter
-//     copies its path, Ctrl+Shift+Enter its content; the row's buttons do the same.
-//   Themes: applies it, and stays open to try another; the sun/moon switches dark and light.
+// The launcher, dropping out of the bar (a HangingPanel): one search over apps, emoji, files and
+// themes, switched with Tab, Shift+Tab or the chips.
 HangingPanel {
 	id: root
 
@@ -86,8 +80,6 @@ HangingPanel {
 		findLater.stop();
 	}
 
-	// Files starts at ~/ (your recent files): type a name to search your files, a dot for your
-	// dotfiles (~/.), or another path (/etc/, /tmp/)
 	function prepare(): void {
 		if (mode === "files")
 			Launcher.findFiles(search.text);
@@ -133,7 +125,6 @@ HangingPanel {
 		}
 	}
 
-	// the modes
 	Row {
 		id: tabs
 
@@ -158,7 +149,6 @@ HangingPanel {
 		}
 	}
 
-	// dark or light, beside the theme chips
 	Chip {
 		visible: root.mode === "themes"
 		anchors.right: parent.right
@@ -178,7 +168,6 @@ HangingPanel {
 		height: parent.height - y - footer.height - 14
 		clip: true
 
-		// apps and files: a list
 		ListView {
 			id: list
 
@@ -207,7 +196,6 @@ HangingPanel {
 			}
 		}
 
-		// emoji and themes: a grid
 		GridView {
 			id: grid
 
@@ -272,7 +260,6 @@ HangingPanel {
 					}
 				}
 
-				// a theme: a small window in its colours
 				ThemeCard {
 					visible: !cell.emoji
 					anchors.fill: parent
@@ -294,7 +281,6 @@ HangingPanel {
 		}
 	}
 
-	// what Enter does, or the emoji's name
 	UiText {
 		id: footer
 

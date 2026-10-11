@@ -8,9 +8,8 @@ import qs
 import qs.services
 import qs.widgets
 
-// One notification: the app's image or icon, the title, the text, how long ago and from which
-// app, a close button, and the app's actions. A click runs its default action. Used by the popups
-// and the notification centre.
+// One notification: the app's image or icon, title, text, age and app, a close button and actions.
+// A click runs its default action. Used by the popups and the notification centre.
 Rectangle {
 	id: root
 
@@ -60,7 +59,6 @@ Rectangle {
 		width: parent.width - 28
 		spacing: 12
 
-		// the app's image, else its icon, else a bell
 		Item {
 			width: 36
 			height: 36

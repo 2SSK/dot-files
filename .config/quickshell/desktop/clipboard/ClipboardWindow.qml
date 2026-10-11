@@ -6,11 +6,8 @@ import qs
 import qs.services
 import qs.widgets
 
-// The clipboard, dropping out of the bar (a HangingPanel): the history on the left (text, images
-// and files; pinned first), what's selected in full on the right (the text, the picture, the
-// files). Type to search; ↑ ↓ pick; Enter copies it back as what it was and closes (an image
-// pastes as an image, files as attachments). Under the preview: copy, pin, open (images, files) or
-// save as a note (text), remove.
+// The clipboard, a HangingPanel: the history on the left, pinned first, the selected entry in full on
+// the right. Enter copies it back as what it was (an image as an image, files as files) and closes.
 HangingPanel {
 	id: root
 
@@ -35,8 +32,7 @@ HangingPanel {
 		return e.text.trim().split("\n")[0];
 	}
 
-	// put the entry back on the clipboard and close; paste: also paste it into the window you were in
-	// (Enter, a double click), as Ctrl+V or a terminal's Ctrl+Shift+V would (desktop-paste)
+	// put the entry back and close; paste also pastes it as Ctrl+V or Ctrl+Shift+V would (desktop-paste)
 	function choose(paste: bool): void {
 		if (!entry)
 			return;
@@ -53,7 +49,6 @@ HangingPanel {
 	onDismissed: Panel.clipboardOpen = false
 	onEntriesChanged: current = Math.min(current, Math.max(0, entries.length - 1))
 
-	// --- the list ---
 
 	Item {
 		id: left
@@ -121,7 +116,6 @@ HangingPanel {
 		}
 	}
 
-	// --- the preview ---
 
 	ClipboardPreview {
 		id: preview
@@ -136,7 +130,7 @@ HangingPanel {
 		onCopied: root.choose(false)
 	}
 
-	// clear the history (pins stay): top right, beside the preview's title
+	// clear the history; pins stay
 	Chip {
 		anchors.right: preview.right
 		anchors.rightMargin: 12

@@ -5,9 +5,8 @@ import qs
 import qs.services
 import qs.widgets
 
-// One line to add something to a day: what it is (a click steps event → reminder → alarm), the
-// day (with datePicker, a chip that opens a small month), a time (reminders and alarms), the text,
-// and for an alarm how often. Enter adds it (added()).
+// One line to add an event, reminder or alarm to a day, with its time, its text and for an alarm
+// how often. Enter adds it.
 Column {
 	id: root
 
@@ -103,7 +102,6 @@ Column {
 		}
 	}
 
-	// the day, picked from a small month
 	MonthGrid {
 		visible: root.picking
 		width: parent.width

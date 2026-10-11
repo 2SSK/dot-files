@@ -7,15 +7,14 @@ import qs
 import qs.services
 import qs.widgets
 
-// A row of the launcher's list: an app (its icon, name and description) or a file (its kind, name
-// and folder, and while it's picked or under the pointer: open, attach, copy its path, copy it). A
-// path search lists folders too (ending in /): a click opens a terminal there.
+// A row of the launcher's list: an app, a file (with open, attach and copy buttons while picked or
+// hovered), or with a path search a folder, which a click opens a terminal in.
 Item {
 	id: row
 
 	required property var modelData
 	required property int index
-	property bool selected // the one Enter acts on
+	property bool selected
 	signal moved // the pointer moved over it: select it
 	signal picked(string action) // open (an app, or a file in its app), file, path or content
 	readonly property bool app: typeof modelData !== "string"
@@ -83,7 +82,6 @@ Item {
 		}
 	}
 
-	// a file: open, copy its path, copy its content
 	Row {
 		id: tools
 

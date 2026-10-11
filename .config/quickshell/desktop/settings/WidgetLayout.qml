@@ -4,10 +4,8 @@ import QtQuick
 import qs
 import qs.widgets
 
-// The bar's three parts as columns of widgets. Drag a widget to reorder it or move it to another
-// part; drag it out of the columns (or click ✕) to take it off the bar; drag one of the spare
-// widgets below into a column to add it. The columns share one height (the longest one's, up to
-// a cap) and scroll on their own past it, following a drag held near their top or bottom.
+// The bar's three parts as columns of widgets: drag to reorder, move, add a spare one or take one off.
+// The columns share one height up to a cap and scroll past it, also during a drag held near an edge.
 Item {
 	id: root
 
@@ -47,12 +45,11 @@ Item {
 	readonly property int longest: Math.max(Config.bar.left.length, Config.bar.center.length, Config.bar.right.length)
 	readonly property int columnHeight: Math.min(320, Math.max(200, listTop + pad + (longest + 1) * step + 8))
 
-	// the widget being dragged: its name, the part it came from ("" for a spare one) and its place
+	// the widget being dragged: dragFrom is "" for a spare one
 	property string dragName: ""
 	property string dragFrom: ""
 	property int dragIndex: -1
 	property point dragAt
-	// where it would land
 	property string dropPart: ""
 	property int dropIndex: -1
 
@@ -172,7 +169,6 @@ Item {
 						clip: true
 						boundsBehavior: Flickable.StopAtBounds
 
-						// where the dragged widget would go
 						Rectangle {
 							visible: column.hot
 							x: 8
@@ -259,7 +255,6 @@ Item {
 						}
 					}
 
-					// a scrollbar, when the column holds more than it shows
 					Rectangle {
 						visible: list.contentHeight > list.height
 						x: parent.width - 5
@@ -339,7 +334,6 @@ Item {
 		}
 	}
 
-	// the dragged widget, under the pointer
 	Rectangle {
 		visible: root.dragName !== ""
 		z: 10

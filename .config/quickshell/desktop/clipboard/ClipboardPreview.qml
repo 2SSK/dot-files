@@ -11,7 +11,7 @@ import qs.widgets
 Rectangle {
 	id: preview
 
-	property var entry: null // the entry shown, or none
+	property var entry: null
 	signal copied // Copy: back on the clipboard (and the panel closes)
 
 	radius: 14
@@ -35,7 +35,6 @@ Rectangle {
 		}
 	}
 
-	// what it is, in full
 	Item {
 		x: 16
 		y: head.y + head.height + 10
@@ -106,7 +105,6 @@ Rectangle {
 		}
 	}
 
-	// what can be done with it
 	Row {
 		id: actions
 

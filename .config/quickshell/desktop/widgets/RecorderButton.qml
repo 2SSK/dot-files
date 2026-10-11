@@ -11,8 +11,7 @@ Item {
 	implicitWidth: line.implicitWidth
 	implicitHeight: line.implicitHeight
 
-	// recording: a soft red pill behind the camera and the clock; on a side bar as wide as fits in it
-	// (padding the clock's width there made it wider than the bar)
+	// on a side bar the pill is as wide as fits (padding the clock's width made it wider than the bar)
 	Rectangle {
 		anchors.centerIn: parent
 		width: Config.vertical ? Config.bar.size - Theme.barInset : parent.width + 16

@@ -5,28 +5,20 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Services.Notifications
 
-// The notification daemon: apps' notifications arrive here and show as popups (Toasts). The
-// history (the control center's Notifications tab) is the shell's own record of each, kept until
-// you dismiss it or clear them all, and across reboots (the newest 100, two weeks): apps close
-// their notifications themselves (a browser, so Teams or Slack in one, as soon as it shows; others
-// mark theirs transient), and those used to vanish from the history unseen. An action button works
-// while the app's notification is still open. Do Not Disturb keeps them out of the popups, except
-// critical ones; they still reach the history.
-//
-// A history entry: { key, id, appName, appIcon, summary, body, image, urgency, time }
+// The notification daemon: popups (Toasts) and a history the shell keeps itself, across reboots,
+// since apps close their notifications (browsers at once, others as transient) and they vanished unseen.
 Singleton {
 	id: root
 
 	readonly property string file: (Quickshell.env("XDG_STATE_HOME") || Quickshell.env("HOME") + "/.local/state") + "/desktop/notifications.json"
 	property bool dnd: false
 	property int unread: 0
-	property var popups: [] // live notifications shown as popups now, newest first
-	property var history: [] // the record, newest first
+	property var popups: []
+	property var history: []
 	property var live: ({}) // entry key -> its notification, while the app keeps it open
 	property var keys: ({}) // a live notification's id -> its entry key
 	property bool loaded: false
 
-	// the entry's or notification's time, actions, and key
 	function timeOf(n: var): real {
 		return n?.time ?? history.find(e => e.key === keys[n?.id])?.time ?? Date.now();
 	}
@@ -39,7 +31,6 @@ Singleton {
 		popups = popups.filter(n => n && n !== notification);
 	}
 
-	// dismissed for good: out of the history, and closed if the app still has it open
 	function dismiss(n: var): void {
 		const key = n?.key ?? keys[n?.id];
 		live[key]?.dismiss();
@@ -96,8 +87,7 @@ Singleton {
 		}
 	}
 
-	// the record on disk, a moment after it changes: what stays meaningful after a restart (an
-	// app's image exists only while its notification is open; the icon stands in)
+	// an app's image exists only while its notification is open, so only file images are saved
 	onHistoryChanged: if (loaded) saveLater.restart()
 
 	Timer {

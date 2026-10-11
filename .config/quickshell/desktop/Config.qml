@@ -20,15 +20,13 @@ Singleton {
 	readonly property JsonObject wallpaper: adapter.wallpaper
 	readonly property JsonObject fonts: adapter.fonts
 	readonly property JsonObject clipboard: adapter.clipboard
-	// i3 docks only at the top or bottom (a side dock takes the whole screen), so on X11 a side
-	// position falls back to the top; sway places the bar on any edge
+	// i3 docks a bar only at the top or bottom, so on X11 a side position falls back to the top
 	readonly property bool wayland: !!Quickshell.env("WAYLAND_DISPLAY")
 	readonly property string position: wayland || bar.position === "top" || bar.position === "bottom" ? bar.position : "top"
 	readonly property bool vertical: position === "left" || position === "right"
 	readonly property bool island: bar.style === "island"
 
 	// write shell.json soon after the last change (sliders change many times a second)
-	// a setting changed and kept: Config.set("bar", "style", "island")
 	function set(group: string, key: string, value: var): void {
 		root[group][key] = value;
 		save();
@@ -59,7 +57,7 @@ Singleton {
 
 			property JsonObject bar: JsonObject {
 				property string style: "island" // island: a floating pill; static: the whole edge
-				property bool capsules: true // each widget in a soft capsule
+				property bool capsules: true
 				property string position: "top" // top, bottom, left or right
 				property int size: 34
 				property real opacity: 0.85
@@ -69,16 +67,16 @@ Singleton {
 				property var right: ["tray", "brightness", "tools", "recorder", "battery", "wifi", "bluetooth", "notifications", "power"]
 			}
 			property JsonObject fonts: JsonObject {
-				property real scale: 1.15 // the shell's text against its base sizes (Settings → Appearance)
-				property string sans: "Inter" // the interface
+				property real scale: 1.15 // the shell's text against its base sizes
+				property string sans: "Inter"
 				property string heading: "Inter" // titles, labels on tiles, anything semibold or bold
 				property string mono: "JetBrainsMono Nerd Font" // code, the clipboard's text
-				property string bar: "JetBrainsMono Nerd Font" // the bar's clock, figures and labels
+				property string bar: "JetBrainsMono Nerd Font"
 				property int barWeight: 600 // the bar's text: 500 medium, 600 semibold
 				property int weight: 500 // body text: 400 regular, 500 medium, 600 semibold
 			}
 			property JsonObject clipboard: JsonObject {
-				property bool persist: true // the history outlasts a reboot (like shell history)
+				property bool persist: true // the history outlasts a reboot
 				property int max: 200 // entries kept, newest first
 				property int days: 30 // older ones go
 				property int images: 30 // of them pictures (each a file)

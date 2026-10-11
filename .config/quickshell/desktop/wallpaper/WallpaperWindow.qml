@@ -6,10 +6,8 @@ import qs
 import qs.services
 import qs.widgets
 
-// Wallpapers, dropping out of the bar (a HangingPanel). Type to search by name; ↑ ↓ move, Enter
-// sets one, a click too; the desktop fades over to it. The first chip shows the current theme's
-// folder (~/Wallpaper-Bank/<theme>/, the default) or all of them. The rotate chip picks how often a
-// new one comes (never, 5 minutes, hourly, daily, each boot); shuffle sets one at random.
+// Wallpapers, dropping out of the bar (a HangingPanel): search by name, the current theme's folder
+// or all of them, a rotate chip for how often a new one comes, and shuffle.
 HangingPanel {
 	id: root
 
@@ -20,7 +18,6 @@ HangingPanel {
 		{ value: "1d", label: "Daily" },
 		{ value: "boot", label: "Each boot" }
 	]
-	// the current theme's folder (when it has wallpapers), or all of them
 	property bool all: Wallpaper.themeFiles.length === 0
 	readonly property var shown: {
 		const words = search.text.toLowerCase().split(/\s+/).filter(w => w);
@@ -41,10 +38,9 @@ HangingPanel {
 	panelHeight: Panel.sizes.wallpaper.height
 	onDismissed: Panel.wallpaperOpen = false
 	onShownChanged: current = Math.max(0, Math.min(current, shown.length - 1))
-	// the folders as they are now: images deleted, added or moved since the last look
+	// rescan, for images deleted, added or moved since the last look
 	Component.onCompleted: Wallpaper.scan()
 
-	// search, rotate, shuffle, close
 	Row {
 		id: header
 
@@ -68,7 +64,6 @@ HangingPanel {
 			Keys.onBacktabPressed: grid.moveCurrentIndexLeft()
 		}
 
-		// the theme's folder or all of them
 		Chip {
 			id: scope
 
@@ -83,7 +78,6 @@ HangingPanel {
 			}
 		}
 
-		// how often a new one comes; a click opens the choices
 		Rectangle {
 			id: rotate
 
@@ -227,7 +221,6 @@ HangingPanel {
 		color: Theme.fgMuted
 	}
 
-	// the rotate choices, under the chip; a click elsewhere closes them
 	MouseArea {
 		anchors.fill: parent
 		visible: menu.open

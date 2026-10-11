@@ -7,8 +7,7 @@ import qs
 import qs.widgets
 
 // The shell's password prompt for apps asking for admin rights (polkit: pkexec, Timeshift, ...),
-// dropping out of the bar like the other panels. What is asked, the password (Enter), Cancel or
-// Escape; a wrong password shakes it and says so, and it asks again.
+// dropping out of the bar like the other panels.
 HangingPanel {
 	id: root
 

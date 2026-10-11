@@ -4,10 +4,8 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-// What the launcher picks from. Apps: the desktop entries, ranked by how well the name matches and
-// how often each was launched. Emoji: the list in ~/.local/share/desktop/emoji.tsv (from Unicode),
-// recent ones first. Files: desktop-file find. Themes: theme list --json. Use counts and recent
-// emoji are kept in ~/.local/state/desktop/launcher.json.
+// What the launcher picks from: apps ranked by match and launch count, emoji, files and themes.
+// Use counts and recent emoji are kept in ~/.local/state/desktop/launcher.json.
 Singleton {
 	id: root
 

@@ -2,9 +2,8 @@ import QtQuick
 import Quickshell
 import qs.services
 
-// i3's and sway's window events about a window of ours, by its title: arrived() once the window
-// manager has it, focusLost() when another named window takes the focus (after this one's own
-// mapping has settled, which fires a focus event too).
+// i3's and sway's window events for one of our windows, by title: arrived() once the window manager
+// has it, focusLost() when another window takes the focus after its own mapping (which fires one too).
 Scope {
 	id: root
 

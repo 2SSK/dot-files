@@ -5,15 +5,13 @@ import Quickshell
 import Quickshell.Io
 import qs
 
-// A warmer screen at night, through gammastep (X11 and Wayland alike): on by hand from the control
-// center, or by itself between nightLight.from and .to when nightLight.schedule is on (a click
-// during those hours turns it off until they end). nightLight.temperature sets how warm. gammastep
-// fades in as it starts and back as it stops.
+// A warmer screen at night through gammastep, on by hand or between nightLight.from and .to when
+// the schedule is on; a click during those hours turns it off until they end.
 Singleton {
 	id: root
 
 	property bool available: false
-	property bool manual: false // on now, by hand
+	property bool manual: false
 	property bool skipped: false // off by hand during the scheduled hours
 	property bool inHours: false
 	readonly property int temperature: Config.nightLight.temperature
@@ -54,15 +52,13 @@ Singleton {
 		onExited: code => root.available = code === 0
 	}
 
-	// a warm screen for as long as this runs: -l 0:0 and the same day and night warmth, so the
-	// position of the sun doesn't matter
+	// -l 0:0 with the same day and night warmth, so the position of the sun doesn't matter
 	Process {
 		id: gamma
 
 		command: ["gammastep", "-P", "-l", "0:0", "-t", `${root.temperature}:${root.temperature}`]
 	}
 
-	// stop, then start again with the new warmth (or not at all)
 	Timer {
 		id: restart
 

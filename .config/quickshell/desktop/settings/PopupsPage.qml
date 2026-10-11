@@ -3,7 +3,7 @@ import qs
 import qs.services
 import qs.widgets
 
-// Settings → Popups: Notification popups: where and how long they show.
+// Settings → Popups: where notification popups show and for how long.
 Column {
 	id: page
 

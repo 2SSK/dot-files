@@ -4,8 +4,8 @@ import QtQuick
 import qs
 import qs.widgets
 
-// The wallpaper picker's rotation choices (never, 5 minutes, hourly, daily, each boot), dropping
-// from its chip: the one in use ticked; a pick is saved to shell.json and closes it.
+// The wallpaper picker's rotation choices, dropping from its chip; a pick is saved to shell.json
+// and closes it.
 Rectangle {
 	id: menu
 

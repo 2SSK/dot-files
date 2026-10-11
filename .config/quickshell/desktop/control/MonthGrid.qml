@@ -6,9 +6,8 @@ import qs
 import qs.services
 import qs.widgets
 
-// A month: its name with ‹ ›, then the days from the start of the week holding the 1st. Today is
-// filled with the accent, the chosen day ringed, days of the neighbouring months faint, a dot under
-// days with something on (events, reminders, alarms). A click picks a day (picked(day)).
+// A month from the start of the week holding the 1st: today filled, the chosen day ringed, a dot
+// under days with something on. A click picks a day.
 Column {
 	id: root
 

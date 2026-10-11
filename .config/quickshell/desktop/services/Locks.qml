@@ -5,17 +5,14 @@ import Quickshell
 import Quickshell.Io
 import qs
 
-// Caps Lock and Num Lock, read from the keyboard LEDs in /sys (the same on X11 and Wayland, and no
-// key bindings needed); a change shows in the OSD. Every keyboard's LEDs count (on when any is: the
-// window manager keeps them in step), and the list is looked at again every 10 s: a keyboard that
-// reconnects (Bluetooth, a replug, waking up) comes back under a new name, and watching only the
-// one found at startup missed its changes.
+// Caps Lock and Num Lock from the keyboard LEDs in /sys, the same on X11 and Wayland. The LED list
+// is rescanned every 10 s since a keyboard that reconnects comes back under a new name.
 Singleton {
 	id: root
 
 	property bool caps: false
 	property bool num: false
-	property var leds: [] // every keyboard's caps and num lock LED folders
+	property var leds: []
 	property bool ready: false
 
 	function lit(kind: string): bool {

@@ -5,10 +5,8 @@ import Quickshell
 import qs
 import qs.services
 
-// This screen's workspaces as dots, no numbers: the ones with windows, and the one you're on (i3
-// and sway drop a workspace once it's empty and left). The one showing on this screen is a wide
-// pill, in the accent where the focus is (dimmer on another monitor); an urgent one is red; a click
-// switches. Read from WindowManager, which follows i3's own events.
+// This screen's workspaces as dots: the one showing is a wide pill, in the accent where the focus is;
+// an urgent one is red. i3 and sway drop a workspace once it's empty and left.
 Line {
 	id: root
 

@@ -4,9 +4,8 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-// Todo items, kept on this machine in ~/.local/share/desktop/todo.json: { id, text, done, priority,
-// rank } with priority high, medium or low and rank their order by hand. `sorted` puts open ones
-// first, by priority then rank, then done ones.
+// Todo items, kept on this machine in ~/.local/share/desktop/todo.json, with priority high, medium
+// or low and rank their order by hand.
 Singleton {
 	id: root
 
@@ -31,15 +30,13 @@ Singleton {
 			update(id, { done: !item.done });
 	}
 
-	// high → medium → low → high
 	function cyclePriority(id: string): void {
 		const item = items.find(i => i.id === id);
 		if (item)
 			update(id, { priority: ({ high: "medium", medium: "low", low: "high" })[item.priority] });
 	}
 
-	// a drag: the task goes to `index` in the sorted list and takes the priority of the tasks it
-	// lands among (the one after it, else the one before), so the list stays grouped
+	// a dragged task takes the priority of the tasks it lands among, so the list stays grouped
 	function move(id: string, index: int): void {
 		const list = sorted.filter(item => item.id !== id);
 		const moved = items.find(item => item.id === id);

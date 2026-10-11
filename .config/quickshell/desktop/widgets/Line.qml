@@ -1,8 +1,7 @@
 import QtQuick
 
-// Lays its children out along the bar: a row on a horizontal bar, a column on a vertical one. Its
-// size counts only the visible children and the gaps between them (a Grid's own size kept a gap
-// after the last one and left room for hidden ones, which pushed capsules' content off centre).
+// Lays its children out along the bar. Its size counts only the visible children and their gaps: a Grid
+// kept a gap after the last one and room for hidden ones, which put capsules' content off centre.
 Item {
 	id: root
 

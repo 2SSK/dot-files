@@ -6,9 +6,8 @@ import qs
 import qs.services
 import qs.widgets
 
-// The power menu: a row of tiles floating under the bar (or beside a vertical one). Arrows or the
-// mouse pick, Enter or a click runs (twice for Log Out, Reboot and Shut Down), 1–5 jump to a tile,
-// Escape closes; i3's "power" mode hands it the keys.
+// The power menu, a row of tiles under the bar. Arrows or the mouse pick, Enter or a click runs (twice
+// for Log Out, Reboot and Shut Down), 1–5 jump; i3's "power" mode hands it the keys.
 PopupWindow {
 	id: root
 
@@ -48,7 +47,6 @@ PopupWindow {
 	Row {
 		id: tiles
 
-		// under the bar (beside a vertical one), dropping in by its y
 		x: root.position === "left" ? root.reach + 12 : root.position === "right" ? root.width - root.reach - 12 - width : (root.width - width) / 2
 		y: (root.position === "top" ? root.reach + 12 : root.position === "bottom" ? root.height - root.reach - 12 - height : (root.height - height) / 2) + (root.open ? 0 : -12)
 		spacing: 10
@@ -128,7 +126,6 @@ PopupWindow {
 					}
 				}
 
-				// the number key for this tile
 				Rectangle {
 					anchors.top: parent.top
 					anchors.right: parent.right

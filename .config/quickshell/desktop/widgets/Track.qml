@@ -1,9 +1,8 @@
 import QtQuick
 import qs
 
-// A slider's track: filled up to `ratio` (0–1), a knob on it, dragged or clicked anywhere along it.
-// dragged(ratio) as it moves, released once let go. Level (volume, brightness) and Range (settings)
-// put their icon, steps and label around it.
+// A slider's track filled up to `ratio` (0–1) with a knob, dragged or clicked anywhere along it;
+// dragged(ratio) as it moves, released once let go.
 Item {
 	id: root
 

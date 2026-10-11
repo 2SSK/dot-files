@@ -6,8 +6,8 @@ import qs
 import qs.services
 import qs.widgets
 
-// A wallpaper in the picker's grid: the picture with rounded corners (shown as soon as it loads), its
-// name on hover, a ring and a tick on the one set, a thinner ring on the one picked with the keys.
+// A wallpaper in the picker's grid: the picture with rounded corners, its name on hover, a ring and
+// a tick on the one set, a thinner ring on the one picked with the keys.
 Item {
 	id: tile
 
@@ -17,7 +17,7 @@ Item {
 	property bool picked // the one Enter sets (the keys' pick)
 	property string label // its name, shown on hover or when picked while searching
 	property bool searching
-	signal chosen // clicked: set it
+	signal chosen
 
 	width: GridView.view.cellWidth
 	height: GridView.view.cellHeight
@@ -36,7 +36,6 @@ Item {
 			}
 		}
 
-		// the picture, its corners rounded by a mask
 		Image {
 			id: picture
 
@@ -71,7 +70,6 @@ Item {
 			maskSource: corners
 		}
 
-		// its name, on hover or when picked with the keys: plain text with a soft shadow
 		UiText {
 			anchors.left: parent.left
 			anchors.right: parent.right
@@ -101,7 +99,6 @@ Item {
 			}
 		}
 
-		// set: a ring and a tick; picked with the keys: a thin ring
 		Rectangle {
 			anchors.fill: parent
 			anchors.margins: -3

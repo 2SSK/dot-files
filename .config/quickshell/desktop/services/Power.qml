@@ -4,11 +4,8 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-// TLP's power profile (the control center's chips) and the battery's charge limit (Settings →
-// Power). Read straight from the files: TLP's state (/run/tlp/last_pwr, watched) and the battery's
-// limit in sysfs (which can't be watched: reread on plugging in or out, after a change, and when a
-// page showing it opens). Changes go through desktop-power: without a password once
-// `packages/system.sh power` allowed it, else the polkit prompt asks.
+// TLP's power profile and the battery's charge limit, read from /run/tlp/last_pwr and sysfs (which
+// can't be watched, so it's reread). Changes go through desktop-power, which may ask through polkit.
 Singleton {
 	id: root
 
@@ -68,7 +65,6 @@ Singleton {
 		onLoadFailed: root.profile = ""
 	}
 
-	// the first battery with a charge limit
 	Process {
 		running: true
 		command: ["sh", "-c", "ls /sys/class/power_supply/BAT*/charge_control_end_threshold 2>/dev/null | head -1"]

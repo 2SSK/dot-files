@@ -5,16 +5,15 @@ import Quickshell
 import Quickshell.Services.UPower
 import qs
 
-// Battery warnings: a notification (3 s) when the charge falls to power.batteryLow (25% by
-// default) while not charging, and again at 10%. Each fires once on the way down; plugging in, or
-// charging back above, re-arms it.
+// Battery warnings at power.batteryLow while not charging, and again at 10%. Each fires once on
+// the way down; plugging in, or charging back above, re-arms it.
 Singleton {
 	id: root
 
 	readonly property UPowerDevice device: UPower.displayDevice
 	readonly property bool present: device?.isLaptopBattery ?? false
 	readonly property real percent: (device?.percentage ?? 0) <= 1 ? (device?.percentage ?? 0) * 100 : device.percentage
-	// on the charger: charging, full, or held at the charge limit (pending)
+	// PendingCharge is the battery held at its charge limit, still on the charger
 	readonly property bool charging: [UPowerDeviceState.Charging, UPowerDeviceState.FullyCharged, UPowerDeviceState.PendingCharge].includes(device?.state)
 	readonly property int threshold: Config.power.batteryLow
 	property bool warned: false

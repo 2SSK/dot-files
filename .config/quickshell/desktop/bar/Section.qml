@@ -5,9 +5,8 @@ import Quickshell
 import qs
 import qs.widgets
 
-// The widgets named for one part of the bar (bar.left, bar.center, bar.right in shell.json). Each
-// sits in a soft capsule (bar.capsules; a widget may tint its own with a `capsule` colour); without
-// capsules the static style separates them with a thin bar, as polybar did.
+// The widgets named for one part of the bar in shell.json, each in a soft capsule (bar.capsules);
+// without capsules the static style separates them with a thin bar, as polybar did.
 Line {
 	id: root
 

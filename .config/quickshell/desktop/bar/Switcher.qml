@@ -8,13 +8,8 @@ import qs
 import qs.services
 import qs.widgets
 
-// The window switcher (Alt+Tab): the open windows as rounded cards on a ring, most recent first.
-// The ring turns to bring the next one to the front; cards further round shrink, fade and turn
-// away. Releasing Alt switches to the front one, Escape cancels, a click picks one. A quick tap
-// switches to the last window without showing the ring. The window manager's "switcher" mode
-// steps it on Tab. Letting go of Alt: on i3 the shell watches X for it (desktop-key-release; its
-// popup can't take the keyboard); on sway a layer surface takes the keyboard while switching (sway
-// won't run a release binding after another key), so the release, Enter and Escape reach it.
+// The Alt+Tab window switcher, the open windows as cards on a ring, most recent first. Releasing Alt
+// switches to the front one, Escape cancels, and a quick tap switches to the last window unseen.
 Scope {
 	id: root
 
@@ -188,7 +183,7 @@ Scope {
 		}
 	}
 
-	// X11: a popup over the bar's screen
+	// X11: a popup can't take the keyboard, so the shell watches X for Alt's release (desktop-key-release)
 	LazyLoader {
 		active: !Config.wayland && root.mapped
 
@@ -205,7 +200,8 @@ Scope {
 		}
 	}
 
-	// Wayland: a layer surface holding the keyboard from the first Tab, so Alt's release comes here
+	// Wayland: a layer surface holds the keyboard from the first Tab, so Alt's release comes here
+	// (sway won't run a release binding after another key)
 	LazyLoader {
 		active: Config.wayland && root.here && (Windows.switching || root.mapped)
 

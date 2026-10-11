@@ -11,7 +11,7 @@ Column {
 	readonly property string title: "System monitor"
 	readonly property var actions: []
 
-	// while this page is open the NVIDIA card may be asked about (Stats.detail)
+	// the NVIDIA card is only queried while this page is open (Stats.detail)
 	Component.onCompleted: Stats.detail++
 	Component.onDestruction: Stats.detail--
 
@@ -24,8 +24,7 @@ Column {
 		return d > 0 ? `${d}d ${h}h ${m}m` : h > 0 ? `${h}h ${m}m` : `${m}m`;
 	}
 
-	// each card's figures by key: the Repeaters' models are the fixed keys, so a tick updates the
-	// cards in place instead of rebuilding them (and their graphs) every 2 s
+	// fixed keys for the Repeaters, so a tick updates the cards in place instead of rebuilding their graphs
 	readonly property var cards: ({
 			cpu: { glyph: Icons.g("gauge"), label: "CPU", value: Math.round(Stats.cpu * 100) + "%", history: Stats.cpuHistory, max: 1, show: true },
 			memory: { glyph: Icons.g("cpu"), label: "Memory", value: `${Stats.memUsed.toFixed(1)} / ${Stats.memTotal.toFixed(1)} GiB`, history: Stats.memHistory, max: 1, show: true },
@@ -150,7 +149,6 @@ Column {
 		}
 	}
 
-	// the GPU and the network, side by side, each with its last two minutes
 	Row {
 		width: parent.width
 		spacing: 12

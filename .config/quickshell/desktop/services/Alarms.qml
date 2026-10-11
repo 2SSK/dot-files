@@ -4,19 +4,15 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-// Alarms, kept on this machine in ~/.local/share/desktop/alarms.json: { id, time (HH:mm), label,
-// repeat (once, daily or weekdays), date (yyyy-MM-dd: the day a once alarm rings; "" for the next
-// time it comes), enabled, fired (the last minute it rang, "yyyy-MM-ddTHH:mm"),
-// snooze (when a snoozed one rings again, ms, or 0) }. A ringing alarm shows a card (AlarmCard)
-// and plays the alarm sound every few seconds until it's stopped or snoozed, for 5 minutes at most.
+// Alarms, kept in ~/.local/share/desktop/alarms.json. An entry's fired is the last minute it rang
+// (yyyy-MM-ddTHH:mm) and snooze when a snoozed one rings again, in ms since the epoch (0 for none).
 Singleton {
 	id: root
 
 	readonly property var alarms: [...adapter.alarms].sort((a, b) => a.time < b.time ? -1 : 1)
-	property var ringing: null // the alarm ringing now
+	property var ringing: null
 	readonly property string sound: "/usr/share/sounds/freedesktop/stereo/alarm-clock-elapsed.oga"
 
-	// date: the day for a once alarm (ignored for repeating ones)
 	function add(time: string, label: string, repeat: string, date: var): bool {
 		if (!/^\d{1,2}:\d{2}$/.test(time.trim()))
 			return false;
@@ -25,8 +21,6 @@ Singleton {
 		return true;
 	}
 
-	// whether it rings on a day: a once alarm on its date (or, undated, today), a daily one every
-	// day, a weekdays one Monday to Friday
 	function ringsOn(alarm: var, day: date): bool {
 		if (alarm.repeat === "daily")
 			return true;
@@ -35,7 +29,6 @@ Singleton {
 		return (alarm.date || Qt.formatDate(new Date(), "yyyy-MM-dd")) === Qt.formatDate(day, "yyyy-MM-dd");
 	}
 
-	// the enabled ones ringing on a day, by time
 	function on(day: date): var {
 		return alarms.filter(a => a.enabled && ringsOn(a, day));
 	}
@@ -70,7 +63,6 @@ Singleton {
 		chime.running = true;
 	}
 
-	// due ones ring: at their minute on their days (once: then it's off), or when a snooze ends
 	Timer {
 		interval: 15000
 		running: true
@@ -98,7 +90,6 @@ Singleton {
 		}
 	}
 
-	// the sound, again every few seconds while it rings
 	Process {
 		id: chime
 
@@ -113,7 +104,6 @@ Singleton {
 		onTriggered: if (root.ringing) chime.running = true
 	}
 
-	// no one to stop it: it gives up after 5 minutes
 	Timer {
 		id: rang
 

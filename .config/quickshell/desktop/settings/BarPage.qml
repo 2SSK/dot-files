@@ -3,7 +3,7 @@ import qs
 import qs.services
 import qs.widgets
 
-// Settings → Bar: The bar: its look, and its widgets in the three parts.
+// Settings → Bar: its look, and its widgets in the three parts.
 Column {
 	id: page
 

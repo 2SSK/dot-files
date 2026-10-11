@@ -4,9 +4,8 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-// Calendar events, kept on this machine in ~/.local/share/desktop/events.json: { id, date
-// (yyyy-MM-dd), time (HH:mm, or "" for all day), text, notified }. One with a time is a reminder:
-// a notification when it's due, once.
+// Calendar events, kept on this machine in ~/.local/share/desktop/events.json. One with a time is a
+// reminder and notifies once when it's due.
 Singleton {
 	id: root
 
@@ -16,7 +15,6 @@ Singleton {
 		return Qt.formatDate(date, "yyyy-MM-dd");
 	}
 
-	// a day's events, all-day ones first, then by time
 	function on(date: date): var {
 		const k = key(date);
 		return events.filter(e => e.date === k).sort((a, b) => (a.time || "") < (b.time || "") ? -1 : 1);
@@ -43,7 +41,7 @@ Singleton {
 		file.writeAdapter();
 	}
 
-	// reminders: due ones (in the last hour, so a late start still shows them) notify once
+	// due within the last hour, so a late start still shows them
 	Timer {
 		interval: 30000
 		running: true

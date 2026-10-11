@@ -7,9 +7,8 @@ import qs
 import qs.widgets
 import qs.services
 
-// Notification popups, stacked at the top right under the OSD card, on the focused screen. Each
-// leaves after its timeout (5 s unless the app says otherwise), not while hovered; critical ones
-// stay until closed. Leaving the popups keeps them in the history.
+// Notification popups at the top right under the OSD card, on the focused screen. Each leaves after
+// its timeout unless hovered, critical ones stay until closed, and all stay in the history.
 PopupWindow {
 	id: root
 
@@ -24,8 +23,7 @@ PopupWindow {
 	anchor.rect.y: (Config.position === "top" ? bar.height : 0) - 14 + below
 	implicitWidth: 360 + 2 * pad
 	implicitHeight: Math.max(1, stack.implicitHeight) + 2 * pad
-	// not while the control center shows the notifications, which lists them anyway; over its other
-	// pages they still show (a screenshot taken with it open says so)
+	// not over the control center's notifications, which lists them anyway
 	visible: focused && Notifications.popups.length > 0 && !Panel.showing("notifications")
 	color: "transparent"
 	mask: Region {
@@ -73,8 +71,7 @@ PopupWindow {
 				}
 
 				Timer {
-					// the app's own timeout. Quickshell 0.3 passes milliseconds (notify-send -t 3000 is
-					// 3000) though its docs say seconds: a value under 1000 is taken as seconds
+					// Quickshell 0.3 passes milliseconds though its docs say seconds; under 1000 is taken as seconds
 					readonly property real given: toast.modelData.expireTimeout
 
 					interval: given > 0 ? (given < 1000 ? given * 1000 : given) : Config.notifications.timeout

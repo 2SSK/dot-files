@@ -5,11 +5,8 @@ import Quickshell
 import Quickshell.Io
 import qs
 
-// The open windows, most recently focused first (the switcher's ring), and the switcher's state.
-// The list is reread from i3's tree (sway's on Wayland) whenever a window changes; the order comes
-// from focus events. While switching, i3 is in mode "switcher", which sends its keys back over IPC
-// (keys.conf): Alt+Tab steps on. Letting go of Alt switches: i3 can't see that (Alt was pressed
-// before its mode began), so desktop-key-release waits for it.
+// The open windows, most recently focused first, and the switcher's state. i3 can't see Alt let go
+// (it was pressed before the switcher mode began), so desktop-key-release waits for it.
 Singleton {
 	id: root
 
@@ -69,7 +66,6 @@ Singleton {
 				return;
 			const cls = node.window_properties?.class ?? node.app_id ?? "";
 			const name = node.name ?? "";
-			// the shell's own windows (named quickshell, or "Desktop …") aren't switched to
 			if ((node.window || node.app_id !== undefined && node.pid) && !/quickshell/i.test(cls) && name !== "quickshell" && !name.startsWith("Desktop "))
 				found.push({ id: node.id, title: name, cls, instance: node.window_properties?.instance ?? cls, workspace, focused: node.focused });
 			for (const child of [...(node.nodes ?? []), ...(node.floating_nodes ?? [])])
@@ -129,7 +125,7 @@ Singleton {
 				root.windows = root.windows.map(w => w.id === id ? Object.assign({}, w, { title: data.container.name ?? "" }) : w);
 		}
 
-		// the window list, from the tree WindowManager reads after each change (no second read)
+		// the tree WindowManager reads after each change, so no second read
 		function onTreeRead(tree: var): void {
 			root.read(tree);
 		}

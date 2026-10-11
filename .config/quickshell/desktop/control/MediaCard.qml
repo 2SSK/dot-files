@@ -28,7 +28,6 @@ Rectangle {
 		color: Theme.fgMuted
 	}
 
-	// the players, when there are several
 	Row {
 		id: switcher
 
@@ -146,7 +145,6 @@ Rectangle {
 			font.pixelSize: Theme.textLabel
 		}
 
-		// progress, where the player reports it
 		Rectangle {
 			visible: root.player?.lengthSupported ?? false
 			width: parent.width

@@ -3,10 +3,8 @@ pragma Singleton
 import QtQuick
 import Quickshell
 
-// The shell's icons: Tabler, loaded from fonts/ beside the config, so nothing has to be installed.
-// g(name) gives a glyph by its Tabler name (https://tabler.io/icons); Glyph draws it, filled where
-// Tabler has a filled version and the Glyph asks for one. Adding an icon: its codepoint from
-// Tabler's tabler-icons.css, below (and its -filled one, if any, in `filledCodes`).
+// The shell's icons: Tabler, loaded from fonts/ beside the config. A new icon's codepoint comes from
+// Tabler's tabler-icons.css (and its -filled one, if any, goes in `filledCodes`).
 Singleton {
 	id: root
 
@@ -97,8 +95,7 @@ Singleton {
 			"x": 0xeb55,
 			"zzz": 0xf228
 		})
-	// outline name -> its -filled version's codepoint, where that draws (some are empty in this font,
-	// home and microphone among them)
+	// only where the -filled glyph draws: some are empty in this font, home and microphone among them
 	readonly property var filledCodes: ({
 			"adjustments": 0xf6ec,
 			"alarm": 0xf709,
@@ -133,7 +130,6 @@ Singleton {
 			"sun": 0xf6a9,
 			"trash": 0xf783
 		})
-	// outline glyph -> filled glyph
 	readonly property var filledGlyphs: {
 		const map = {};
 		for (const name in filledCodes)
@@ -145,7 +141,6 @@ Singleton {
 		return codes[name] ? String.fromCodePoint(codes[name]) : "";
 	}
 
-	// the filled version of a glyph where Tabler has one, else the glyph itself
 	function filled(glyph: string): string {
 		return filledGlyphs[glyph] ?? glyph;
 	}

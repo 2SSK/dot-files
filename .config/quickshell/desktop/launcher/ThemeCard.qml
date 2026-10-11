@@ -11,8 +11,8 @@ Rectangle {
 
 	property var colours: ({}) // the theme's ui colours, in the mode shown
 	property string name
-	property bool applied // the theme in use
-	property bool selected // the one Enter applies
+	property bool applied
+	property bool selected
 	property bool hovered
 
 	radius: 14

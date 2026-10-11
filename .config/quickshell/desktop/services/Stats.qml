@@ -4,13 +4,8 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-// CPU and memory use (/proc) and the CPU temperature (hwmon: coretemp, k10temp, ...), every 2 s,
-// with the last two minutes of each for graphs; the root disk, uptime and load for the monitor page.
-// The GPU, network, uptime and load are only read while that page is open (detail).
-// Also the GPU (an AMD card's busy %, else Intel's clock against its top clock, from sysfs) and the
-// network (the real interfaces' bytes in /proc/net/dev, as speeds). A discrete NVIDIA card is only
-// asked (nvidia-smi) while it's awake anyway and the monitor page is open (detail): asking wakes
-// it, and polling would keep it awake.
+// CPU, memory and temperature every 2 s with two minutes of history; GPU, network, uptime and load only
+// while the monitor page is open. A discrete NVIDIA card is asked only while awake, as asking wakes it.
 Singleton {
 	id: root
 
@@ -68,7 +63,6 @@ Singleton {
 		cpuHistory = remember(cpuHistory, cpu);
 		memHistory = remember(memHistory, mem);
 
-		// the rest only the monitor page shows: read while it's open
 		if (detail === 0)
 			return;
 
@@ -121,7 +115,6 @@ Singleton {
 		blockLoading: true
 	}
 
-	// the CPU package sensor, else the x86 package thermal zone
 	Process {
 		running: true
 		command: ["sh", "-c", "for h in /sys/class/hwmon/hwmon*; do case $(cat $h/name) in coretemp|k10temp|zenpower|cpu_thermal) echo $h/temp1_input; exit;; esac; done; for z in /sys/class/thermal/thermal_zone*; do [ \"$(cat $z/type)\" = x86_pkg_temp ] && echo $z/temp && exit; done"]
@@ -138,7 +131,6 @@ Singleton {
 		printErrors: false
 	}
 
-	// the GPUs: an AMD card's busy %, else Intel's clocks; a discrete NVIDIA card's power status
 	Process {
 		running: true
 		command: ["sh", "-c", 'for c in /sys/class/drm/card[0-9]*; do d=$c/device; case $(cat $d/vendor 2>/dev/null) in 0x1002) [ -r $d/gpu_busy_percent ] && echo "gpu AMD $d/gpu_busy_percent 0";; 0x8086) [ -r $c/gt_act_freq_mhz ] && echo "gpu Intel $c/gt_act_freq_mhz $(cat $c/gt_max_freq_mhz)";; 0x10de) echo "dgpu $(readlink -f $d)/power/runtime_status";; esac; done']
@@ -207,7 +199,6 @@ Singleton {
 		blockLoading: true
 	}
 
-	// the root disk, every 30 s
 	Process {
 		id: disk
 

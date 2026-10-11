@@ -1,10 +1,8 @@
 import QtQuick
 import qs
 
-// A button in the bar: an icon that turns the accent colour, filled, while what it opens shows. With
-// `page`, a control center page: a click opens it there (again closes it), and it is active while
-// that page shows; otherwise `active` and the clicked signal are the caller's. A click lands a few
-// pixels around the icon too.
+// A bar button, an icon in the accent colour while what it opens shows. With `page` a click opens
+// or closes that control center page; otherwise `active` and clicked are the caller's.
 Glyph {
 	id: root
 

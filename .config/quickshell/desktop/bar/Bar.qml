@@ -4,12 +4,8 @@ import Quickshell
 import qs
 import qs.services
 
-// One screen's bar, on any edge. Island: a rounded pill floating off the edge, waybar-like. Static:
-// the whole edge, polybar-like. i3 reserves a dock's full window, so the window is only as big as
-// the bar; the OSD card and the power menu are popups over the windows.
-// Hidden (Panel.barShown), the bar slides off the edge and the window shrinks to a pixel, so i3
-// gives the room back while the popups still have a window to hang from; the pointer at that edge
-// brings the bar back over the windows for a moment (Peek).
+// One screen's bar on any edge, an island or the whole edge. The window is only as big as the bar, as
+// i3 reserves a dock's full window; hidden, it shrinks to a pixel so i3 gives the room back.
 PanelWindow {
 	id: bar
 
@@ -21,8 +17,7 @@ PanelWindow {
 	readonly property int gap: Config.island ? 6 : 0 // the island's distance from the screen edge
 	readonly property real edgeLength: vertical ? modelData.height : modelData.width
 	property bool docked: true // the window at full size; false only once the bar has slid away
-	// the island's share of the edge: bar.length, or by the screen's width (more of a narrow one);
-	// never shorter than its content, never longer than the edge
+	// the island's share of the edge, more of a narrow screen, between its content and the whole edge
 	readonly property real share: Config.bar.length > 0 ? Config.bar.length : edgeLength < 1500 ? 0.8 : edgeLength < 2200 ? 0.55 : 0.42
 	readonly property real length: !Config.island ? edgeLength : Math.min(edgeLength - 2 * gap, Math.max(content.naturalLength, share * edgeLength))
 
@@ -34,14 +29,12 @@ PanelWindow {
 	implicitWidth: vertical ? (docked ? size + gap : 1) : 0
 	implicitHeight: vertical ? 0 : docked ? size + gap : 1
 	color: "transparent"
-	// the window's shape: the bar with its rounded ends (picom blurs only inside it), or the
-	// one-pixel edge while hidden
+	// the bar with its rounded ends (picom blurs only inside it), or the one-pixel edge while hidden
 	mask: Region {
 		item: bar.docked ? shape : edge
 		radius: bar.docked ? shape.radius : 0
 	}
 
-	// the one-pixel edge left while hidden
 	MouseArea {
 		id: edge
 
@@ -77,7 +70,6 @@ PanelWindow {
 	Rectangle {
 		id: shape
 
-		// off the edge while hidden
 		readonly property real away: Panel.barShown ? 0 : (bar.size + bar.gap + 8) * (bar.position === "top" || bar.position === "left" ? -1 : 1)
 
 		opacity: Panel.barShown ? 1 : 0

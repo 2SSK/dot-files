@@ -6,9 +6,8 @@ import qs
 import qs.services
 import qs.widgets
 
-// Notes: a searchable list (pinned first, then the latest) beside the note being edited. A note is
-// text, a checklist or code, with a colour tag; the header makes a new one, pins or deletes it.
-// Kept on this machine only (see Notes).
+// Notes: a searchable list (pinned first, then the latest) beside the note being edited, kept on
+// this machine only (see Notes).
 Item {
 	id: root
 
@@ -24,7 +23,6 @@ Item {
 	readonly property bool fill: true // the whole height of the control center (ControlCenter)
 	implicitHeight: 540 // the least it needs
 
-	// the list
 	Column {
 		id: side
 
@@ -140,7 +138,6 @@ Item {
 		}
 	}
 
-	// the note
 	Rectangle {
 		anchors.left: side.right
 		anchors.leftMargin: 12
@@ -149,7 +146,6 @@ Item {
 		radius: 14
 		color: Qt.alpha(Theme.surface, 0.6)
 
-		// nothing chosen: start one
 		Column {
 			anchors.centerIn: parent
 			visible: Notes.current === null

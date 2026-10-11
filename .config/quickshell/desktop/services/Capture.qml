@@ -4,13 +4,12 @@ import QtQuick
 import Quickshell
 import qs
 
-// Screenshots and recordings, from the capture panel (F12) or its IPC: a dragged region, the
-// focused window or a screen. A screen with more than one monitor connected asks which (the
-// panel's map of them). The panel is closed and gone before anything is taken.
+// Screenshots and recordings, from the capture panel (F12) or its IPC. With several monitors a
+// screen capture asks which; the panel is closed and gone before anything is taken.
 Singleton {
 	id: root
 
-	property var pending: null // { kind, mode, monitor, geometry }
+	property var pending: null
 
 	// kind: shot or record; mode: region, window or screen
 	function start(kind: string, mode: string): void {

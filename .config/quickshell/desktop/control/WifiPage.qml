@@ -7,9 +7,8 @@ import qs
 import qs.services
 import qs.widgets
 
-// Wi-Fi: networks by signal (the connected one first). A click connects; when NetworkManager has no
-// password for it (a new network, or a saved one whose password changed) it asks, with an eye to
-// show what's typed. Failures show under the network. Scans while the page is open and Wi-Fi is on.
+// Wi-Fi: networks by signal, the connected one first. A click connects, asking for a password when
+// NetworkManager has none for it; failures show under the network.
 Column {
 	id: root
 
@@ -21,15 +20,14 @@ Column {
 	property bool scanning: false // a refresh asked for, lit for a few seconds while NetworkManager scans
 	readonly property var devices: Array.from(Networking.devices.values).filter(d => d.type === DeviceType.Wifi)
 	readonly property var networks: devices.reduce((all, d) => all.concat(Array.from(d.networks.values)), []).filter(n => n.name).sort((a, b) => (b.connected - a.connected) || (b.signalStrength - a.signalStrength))
-	property var asking: null // the network waiting for a password
+	property var asking: null
 	property var failed: null // the network whose last try failed, and why: { network, reason }
 
 	function scan(on: bool): void {
 		devices.forEach(d => d.scannerEnabled = on);
 	}
 
-	// the refresh button: a scan now (NetworkManager's own, allowed for the logged-in user), and the
-	// scanner restarted so the list picks it up
+	// nmcli's rescan is allowed for the logged-in user; restarting the scanner makes the list pick it up
 	function rescan(): void {
 		scanning = true;
 		scanLit.restart();
@@ -71,8 +69,8 @@ Column {
 	}
 
 	Repeater {
-		// a ScriptModel keeps each row while signal strengths reorder the list: a plain array would
-		// rebuild them all, wiping a password being typed
+		// a ScriptModel keeps each row as signal strengths reorder them; a plain array would rebuild them all,
+		// wiping a password being typed
 		model: ScriptModel {
 			values: Connectivity.wifi ? root.networks : []
 		}
@@ -125,7 +123,7 @@ Column {
 					if (entry.modelData.connected || entry.modelData.stateChanging)
 						return;
 					if (entry.asking) {
-						root.asking = null; // a second click folds the prompt away
+						root.asking = null;
 						return;
 					}
 					root.failed = null;

@@ -5,15 +5,8 @@ import Quickshell
 import Quickshell.Io
 import qs
 
-// Clipboard history, newest first: text, images and files, as `desktop-clipboard watch` reports
-// each copy. Like shell history it outlasts a reboot (Config.clipboard.persist): kept in
-// ~/.local/state/desktop/clipboard/ (a folder only you can read), at most `max` entries, none older
-// than `days`, the newest `images` pictures, a copy that's already there moving to the top. A
-// password manager's copies are never kept. With persist off, text stays in memory and images in
-// the runtime folder (RAM). Pinned entries are kept apart and never expire. Copying an entry back
-// puts it on the clipboard as what it was: an image pastes as an image, files as attachments.
-//
-// An entry: { kind: "text" | "image" | "files", text, path, paths, time }
+// Clipboard history, newest first, from `desktop-clipboard watch`. Kept in a private folder when
+// persist is on, else text in memory and images in the runtime folder (RAM).
 Singleton {
 	id: root
 
@@ -25,13 +18,11 @@ Singleton {
 	readonly property int maxImages: Config.clipboard.images
 	readonly property string images: folder + "/images" // kept pictures (pinned ones sit in folder)
 
-	// what's kept: the newest `max`, none older than `days`
 	function trim(list: var): var {
 		const oldest = Date.now() - Config.clipboard.days * 86400000;
 		return list.filter(h => h && h.kind && (h.time ?? 0) >= oldest).slice(0, Config.clipboard.max);
 	}
 
-	// what makes two entries the same
 	function key(e: var): string {
 		return e.kind === "image" ? "image:" + e.path.replace(/^.*\//, "") : e.kind === "files" ? "files:" + e.paths.join("\n") : "text:" + e.text;
 	}
@@ -46,14 +37,12 @@ Singleton {
 			return;
 		const k = key(e);
 		const next = trim([Object.assign({}, e, { time: Date.now() }), ...history.filter(h => key(h) !== k)]);
-		// only the newest images stay, their files too
 		const images = next.filter(h => h.kind === "image");
 		for (const old of images.slice(maxImages))
 			forget(old);
 		history = next.filter(h => h.kind !== "image" || images.indexOf(h) < maxImages);
 	}
 
-	// the history kept on disk, a moment after it changes
 	onHistoryChanged: if (persist && loaded) saveLater.restart()
 	property bool loaded: false
 
@@ -85,7 +74,7 @@ Singleton {
 		}
 	}
 
-	// copy an entry back, as what it was (it comes back to the top through the watch)
+	// the watch brings it back to the top
 	function copy(e: var): void {
 		if (e.kind === "image")
 			Quickshell.execDetached(["desktop-clipboard", "copy", "image", e.path]);
@@ -127,19 +116,17 @@ Singleton {
 		history = [];
 	}
 
-	// an image's file goes with its entry (a pinned copy, directly in the folder, stays)
+	// a pinned copy sits directly in the folder and stays
 	function forget(e: var): void {
 		if (e.kind === "image" && (e.path.indexOf(root.images + "/") === 0 || e.path.indexOf(root.folder) !== 0))
 			Quickshell.execDetached(["rm", "-f", e.path]);
 	}
 
-	// every copy, as it happens
 	Process {
 		id: watcher
 
 		running: true
-		// where pictures go, on the command line (Process.environment wouldn't take it): kept with
-		// the history, or (empty) the helper's RAM folder
+		// on the command line since Process.environment wouldn't take it; empty is the helper's RAM folder
 		command: ["env", "DESKTOP_CLIPBOARD_IMAGES=" + (root.persist ? root.images : ""), "desktop-clipboard", "watch"]
 		stdout: SplitParser {
 			onRead: line => {
@@ -151,7 +138,7 @@ Singleton {
 		onExited: again.restart()
 	}
 
-	// the watch stopped (no display yet, a restart of X): start it again
+	// the watch stops with no display yet or when X restarts
 	Timer {
 		id: again
 

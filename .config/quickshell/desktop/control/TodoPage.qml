@@ -5,10 +5,8 @@ import qs
 import qs.services
 import qs.widgets
 
-// Todo: pick a priority and add with Enter. Open tasks come first, high to low, then done ones;
-// drag a task (anywhere on it) to reorder it (among another priority's tasks it takes theirs), a
-// click on its H / M / L changes it, the circle ticks it off, ✕ removes it. The header's button
-// clears the done ones.
+// Todo: open tasks first, high to low, then done ones. Drag a task to reorder it; dropped among
+// another priority's tasks it takes theirs.
 Item {
 	id: root
 
@@ -20,7 +18,7 @@ Item {
 			low: { letter: "L", colour: Theme.fgMuted }
 		})
 	property string priority: "medium" // for the next task
-	// a drag: the task, the pointer (in this page) and where it would land in the sorted list
+	// a drag in progress, its pointer in this page's coordinates
 	property string dragId: ""
 	property real dragY: 0
 	property int dropIndex: -1
@@ -58,7 +56,6 @@ Item {
 				}
 			}
 
-			// the next task's priority
 			Row {
 				id: picker
 
@@ -143,7 +140,6 @@ Item {
 					color: Theme.primary
 				}
 
-				// the grip, a hint that the row drags
 				Glyph {
 					id: handle
 
@@ -156,8 +152,7 @@ Item {
 					color: Theme.fgMuted
 				}
 
-				// the whole row drags: a press that moves more than a few pixels starts it (a plain click
-				// still reaches the circle, the H / M / L and ✕ above this)
+				// a press that moves a few pixels starts a drag; a plain click still reaches the controls above
 				MouseArea {
 					property real pressY: 0
 
@@ -210,7 +205,6 @@ Item {
 					}
 				}
 
-				// the priority: a click changes it
 				Rectangle {
 					id: badge
 
@@ -276,7 +270,6 @@ Item {
 		}
 	}
 
-	// the dragged task, under the pointer; and the landing line after the last task
 	Rectangle {
 		visible: root.dragId !== "" && root.dropIndex === rows.count
 		x: 0

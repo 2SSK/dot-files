@@ -27,8 +27,6 @@ HangingPanel {
 	panelWidth: Panel.sizes.control.width
 	panelHeight: Panel.sizes.control.height
 	onDismissed: Panel.controlOpen = false
-	// between pages: Ctrl+Tab (Shift: back) or Ctrl+PgDn/PgUp, Alt+1…8 straight to one; on Home,
-	// the media keys: Space plays or pauses, ← → skip
 	function turn(by: int): void {
 		const at = pages.findIndex(p => p.key === Panel.controlPage);
 		Panel.controlPage = pages[(Math.max(0, at) + by + pages.length) % pages.length].key;
@@ -67,7 +65,6 @@ HangingPanel {
 
 	Component.onCompleted: if (Panel.controlPage === "notifications") Notifications.unread = 0
 
-	// seen: the bell's dot goes
 	Connections {
 		target: Panel
 
@@ -77,7 +74,6 @@ HangingPanel {
 		}
 	}
 
-	// sidebar
 	Rectangle {
 		id: sidebar
 
@@ -139,7 +135,6 @@ HangingPanel {
 			}
 		}
 
-		// settings and the power menu, at the bottom
 		Column {
 			anchors.horizontalCenter: parent.horizontalCenter
 			anchors.bottom: parent.bottom
@@ -166,7 +161,6 @@ HangingPanel {
 		}
 	}
 
-	// header: the page's title, its buttons, and close
 	Item {
 		id: header
 
@@ -224,7 +218,7 @@ HangingPanel {
 		clip: true
 		boundsBehavior: Flickable.StopAtBounds
 
-		// a page sizes to its content, or (fill: Notes) takes the whole panel, never less than it needs
+		// a page sizes to its content, or with fill (Notes) takes the whole panel
 		Loader {
 			id: page
 

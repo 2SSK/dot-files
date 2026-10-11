@@ -4,11 +4,8 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-// The shell's line to i3 (or sway): the workspaces, the focused monitor, the scratchpad, window
-// events, and commands. Not through Quickshell.I3, whose connections drop and then leave the bar
-// stale and commands ignored: a long-lived `i3-msg -t subscribe -m` says when something changed
-// (started again if i3 restarts or the connection goes), then the workspaces and the tree are
-// reread; commands go through i3-msg.
+// The shell's line to i3 or sway, through a long-lived subscribe and i3-msg rather than Quickshell.I3,
+// whose connections drop and leave the bar stale and commands ignored.
 Singleton {
 	id: root
 
@@ -20,9 +17,8 @@ Singleton {
 	property string mode: "default" // i3's binding mode (passthrough, resize, power, switcher...)
 
 	signal windowEvent(var data) // i3's window events: { change, container: { id, name, ... } }
-	signal treeRead(var tree) // the whole window tree, reread after each change
+	signal treeRead(var tree)
 
-	// a command for the window manager: through i3-msg, as Quickshell.I3's own connection drops them
 	function command(cmd: string): void {
 		Quickshell.execDetached([msg, "-q", cmd]);
 	}
@@ -35,8 +31,6 @@ Singleton {
 		Quickshell.execDetached([msg, "-q", "scratchpad show"]);
 	}
 
-	// one line per event: workspace and output events reread the workspaces, window events that
-	// change the list reread the tree
 	Process {
 		id: events
 
@@ -53,8 +47,7 @@ Singleton {
 				}
 				if (data.container) {
 					root.windowEvent(data);
-					// the tree only for what changes the window list or the scratchpad; focus (it follows
-					// the mouse) and titles (a terminal's change all the time) Windows patches itself
+					// focus follows the mouse and terminals retitle constantly, so Windows patches those itself
 					if (["new", "close", "move", "floating", "urgent"].includes(data.change))
 						treeLater.restart();
 					if (data.change === "urgent" || data.change === "move")
@@ -73,7 +66,7 @@ Singleton {
 		onExited: again.restart()
 	}
 
-	// the connection went (i3 restarted or reloaded): back in a moment, and reread meanwhile
+	// i3 restarted or reloaded and the connection went
 	Timer {
 		id: again
 
@@ -86,8 +79,7 @@ Singleton {
 		}
 	}
 
-	// the binding mode as it is now: a reload (sway's, i3's) resets it without a mode event, which
-	// left the bar showing "VM keys" after one
+	// a reload resets the binding mode without a mode event, which left the bar showing "VM keys"
 	Process {
 		id: modeNow
 
@@ -141,8 +133,6 @@ Singleton {
 		}
 	}
 
-	// the tree: the scratchpad (a scratchpad window's floating container keeps a scratchpad_state
-	// other than "none", hidden in __i3_scratch or shown), and for the window switcher (treeRead)
 	Process {
 		id: tree
 

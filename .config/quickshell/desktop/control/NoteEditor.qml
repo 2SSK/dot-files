@@ -6,8 +6,8 @@ import qs
 import qs.services
 import qs.widgets
 
-// The note being edited (Notes → NotesPage, beside the list): its title, type and colour tag, then
-// the text, the code (with a copy button) or the checklist. The body is kept once typing pauses.
+// The note being edited, beside the list in NotesPage: its title, type and colour tag, then the
+// text, the code or the checklist.
 Column {
 	id: note
 
@@ -16,8 +16,7 @@ Column {
 	property string pendingId: ""
 	property string pendingBody: ""
 
-	// the body is kept once typing pauses, not at every key: each keep re-sorts the notes
-	// and redraws the list. Switching notes or closing keeps what's pending at once.
+	// kept once typing pauses, not at every key, since each keep re-sorts the notes and redraws the list
 	function typed(body: string): void {
 		pendingId = noteId;
 		pendingBody = body;
@@ -57,7 +56,6 @@ Column {
 		clip: true
 		onTextEdited: Notes.update(note.noteId, { title: text })
 		Component.onCompleted: if (!text) forceActiveFocus()
-		// Enter (or Tab) goes on to the note itself
 		Keys.onReturnPressed: body.item?.focusBody()
 		Keys.onEnterPressed: body.item?.focusBody()
 		KeyNavigation.tab: body.item
@@ -70,7 +68,6 @@ Column {
 		}
 	}
 
-	// type and tag
 	Row {
 		spacing: 6
 
@@ -113,7 +110,6 @@ Column {
 					anchors.fill: parent
 					cursorShape: Qt.PointingHandCursor
 					onClicked: {
-						// a text note's lines become checklist items, and back
 						const change = { type: typeChip.modelData.key };
 						if (change.type === "checklist" && note.current.type !== "checklist")
 							change.items = note.current.body.split("\n").filter(l => l.trim()).map(text => ({ text, done: false }));
@@ -255,7 +251,6 @@ Column {
 				}
 			}
 
-			// copy the whole snippet
 			Rectangle {
 				anchors.right: parent.right
 				anchors.top: parent.top

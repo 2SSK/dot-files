@@ -4,9 +4,8 @@ import QtQuick
 import qs
 import qs.widgets
 
-// A font setting: the row shows the font in use, written in it; a click opens the installed fonts
-// below (each in its own face), searchable, and picking one sets it. mono: only monospaced-looking
-// families (by name: mono, code, console, term), for code.
+// A font setting: the font in use, written in it; a click opens the installed fonts, searchable.
+// mono lists only monospaced-looking families, by name (mono, code, console, term).
 Column {
 	id: root
 
@@ -83,7 +82,6 @@ Column {
 		}
 	}
 
-	// the fonts, while open
 	Rectangle {
 		visible: root.open
 		width: parent.width

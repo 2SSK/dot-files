@@ -1,9 +1,8 @@
 import QtQuick
 import qs
 
-// A glyph and a value. The static style uses a word in the accent colour instead of the glyph,
-// as polybar did ("cpu 12%"); a vertical bar stacks them. The value keeps the width of `widest`
-// (e.g. "88%") with even-width digits, so the bar doesn't shift as it changes.
+// A glyph and a value; the static style shows an accent word instead ("cpu 12%"). The value keeps the
+// width of `widest` with even-width digits, so the bar doesn't shift as it changes.
 Line {
 	id: root
 

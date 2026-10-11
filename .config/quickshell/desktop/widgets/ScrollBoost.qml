@@ -1,9 +1,7 @@
 import QtQuick
 
-// Faster, smooth wheel and touchpad scrolling for the Flickable (ListView, GridView) it sits in:
-// X sends few, coarse steps (desktop-input slows them for apps), so the shell's own lists go
-// further per step, easing to each stop instead of jumping. Each stop is on a whole pixel, so the
-// text in the view stays sharp.
+// Faster, smooth wheel and touchpad scrolling for the Flickable it sits in: X sends few, coarse steps
+// (desktop-input slows them for apps), so the shell's lists go further per step and ease to each stop.
 WheelHandler {
 	id: root
 

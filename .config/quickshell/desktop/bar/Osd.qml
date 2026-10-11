@@ -19,8 +19,7 @@ PopupWindow {
 	readonly property color tint: muted ? Theme.fgMuted : Theme.primary
 	readonly property int pad: 28 // room for the shadow
 
-	// mapped when it opens, so it lands above every window (X stacks by mapping order), and unmapped
-	// once it has faded
+	// mapped on open so it lands above every window (X stacks by mapping order), unmapped once faded
 	property bool shown: false
 
 	onOpenChanged: open ? shown = true : hide.restart()
@@ -44,8 +43,7 @@ PopupWindow {
 		radius: card.radius // the shape picom blurs behind
 	}
 
-	// card and shadow fade in together; the card slides by its x (the window's shape follows
-	// geometry, not transforms)
+	// the card slides by its x, as the window's shape follows geometry, not transforms
 	Item {
 		id: slide
 
@@ -66,8 +64,6 @@ PopupWindow {
 			color: Qt.alpha("black", 0.4)
 		}
 
-		// a slim pill: the icon, then the level as a thin bar and its percentage (Caps Lock and Num
-		// Lock: their name and on or off)
 		Rectangle {
 			id: card
 

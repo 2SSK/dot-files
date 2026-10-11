@@ -102,8 +102,7 @@ Column {
 		}
 	}
 
-	// TLP's power profile, for now: the next plug or unplug goes back to balanced on the charger,
-	// the power saver on battery
+	// TLP's profile holds until the next plug or unplug resets it to balanced or the power saver
 	Row {
 		visible: Power.available
 		width: parent.width

@@ -48,8 +48,7 @@ PopupWindow {
 	implicitHeight: vertical ? bar.height : reach
 	visible: shown
 	color: "transparent"
-	// the bar's rounded shape (picom blurs inside it) and the strip between it and the screen edge,
-	// where the pointer arrived
+	// the bar's rounded shape (picom blurs inside it) and the strip to the edge where the pointer came
 	mask: Region {
 		item: replica
 		radius: replica.radius
@@ -60,8 +59,7 @@ PopupWindow {
 		}
 	}
 
-	// the bar and the strip between it and the screen edge, where the pointer arrived: hovering
-	// anywhere here keeps the bar out
+	// hovering the bar or the strip to the screen edge keeps it out
 	Item {
 		id: zone
 

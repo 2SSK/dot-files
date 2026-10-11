@@ -3,7 +3,7 @@ import qs
 import qs.services
 import qs.widgets
 
-// Settings → Levels: Volume and brightness: their steps and the on-screen display.
+// Settings → Levels: volume and brightness steps and the on-screen display.
 Column {
 	id: page
 

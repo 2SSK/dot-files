@@ -1,9 +1,8 @@
 import QtQuick
 import qs
 
-// A button that is an icon: round by default (set radius for a rounded square); `on` fills it with
-// the accent and the icon with its filled version; a hover tints it. The control center's header
-// and sidebar, the media controls, the calendar's add button and the level sliders' icons.
+// A round icon button (set radius for a rounded square); `on` fills it with the accent and the icon
+// with its filled version, and a hover tints it.
 Rectangle {
 	id: root
 
