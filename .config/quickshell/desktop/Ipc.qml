@@ -12,7 +12,7 @@ Scope {
 
 		function lock(): void {
 			if (Config.wayland)
-				Lock.locked = true;
+				Lock.lock(); // fades to black, then locks
 		}
 		// true once sway confirms the lock (desktop-lock waits for it before sleep goes ahead)
 		function locked(): bool {

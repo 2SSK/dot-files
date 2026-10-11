@@ -17,11 +17,13 @@ Singleton {
 	// swayidle's arguments: each timeout counts from when you stopped
 	readonly property var swayidle: {
 		const [dim, lock, off] = times;
-		// one swayidle: a shell restart leaves the last one running, so it goes first (KILL: it
-		// handles TERM in its event loop, which an orphan no longer runs). Without it nothing locks
-		// on sway (the power menu's Lock and the lid go through it too): say so, loudly
+		// one swayidle per display: a shell restart leaves the last one running, so it goes first
+		// (KILL: it handles TERM in its event loop, which an orphan no longer runs). Only this
+		// display's: another sway's (a nested or test one) keeps its own, and doesn't take this
+		// one's. Without it nothing locks on sway (the power menu's Lock and the lid go through it
+		// too): say so, loudly
 		const missing = 'notify-send -u critical -a Lock "The screen can\'t lock" "swayidle isn\'t installed: Lock, the lid, idle and sleep do nothing on sway. Install it: pacman -S swayidle (Arch) or dnf install swayidle (Fedora)"';
-		const args = ["sh", "-c", `command -v swayidle >/dev/null || { ${missing}; exit 127; }; pkill -KILL -u "$(id -u)" -x swayidle; exec swayidle "$@"`, "sh", "-w"];
+		const args = ["sh", "-c", `command -v swayidle >/dev/null || { ${missing}; exit 127; }; for p in $(pgrep -u "$(id -u)" -x swayidle); do tr "\\0" "\\n" <"/proc/$p/environ" 2>/dev/null | grep -qx "WAYLAND_DISPLAY=$WAYLAND_DISPLAY" && kill -KILL "$p"; done; exec swayidle "$@"`, "sh", "-w"];
 		if (dim > 0 && (lock === 0 || dim < lock))
 			args.push("timeout", String(dim * 60), "desktop-idle dim", "resume", "desktop-idle undim");
 		if (lock > 0)

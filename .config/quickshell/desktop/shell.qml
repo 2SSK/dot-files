@@ -20,6 +20,14 @@ import qs
 import qs.services
 
 ShellRoot {
+	// No reload while the screen is locked: a reload with the session lock held crashes Quickshell,
+	// leaving the compositor's red "locker gone" screen. An edit made meanwhile applies after unlocking.
+	Binding {
+		target: Quickshell
+		property: "watchFiles"
+		value: !Lock.locked
+	}
+
 	// services that watch on their own, started with the shell
 	readonly property var watchers: [Locks, Recorder, Notifications, Clipboard, Events, Alarms, Wallpaper, Windows, Battery, NightLight, Idle]
 

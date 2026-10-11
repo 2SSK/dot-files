@@ -36,7 +36,7 @@ Scope {
 		onCompleted: result => {
 			if (result === PamResult.Success) {
 				root.password = "";
-				Lock.locked = false;
+				Lock.unlock();
 			} else {
 				root.password = "";
 				root.error = "Wrong password";
@@ -45,14 +45,86 @@ Scope {
 		onError: root.error = "Couldn't check the password"
 	}
 
+	// the picture itself, not the link to it: images are cached by their address, and the link's
+	// would keep showing the wallpaper before last
+	readonly property string wallpaperSource: Wallpaper.current ? "file://" + Wallpaper.current : ""
+
+	// the wallpaper, decoded before any lock (and kept), so the lock's own copy is ready on its first
+	// frame rather than popping in a moment after
+	Image {
+		visible: false
+		source: root.wallpaperSource
+		sourceSize.width: 1280
+		asynchronous: true
+	}
+
+	// The lock outlives a reload of the shell (a config edit reloads it): a reload while locked takes
+	// the lock straight back, rather than leaving the compositor's red "locker gone" screen
+	PersistentProperties {
+		id: kept
+
+		reloadableId: "lockscreen"
+		property bool locked: false
+	}
+
+	Component.onCompleted: if (kept.locked) Lock.locked = true // and the rest of the shell knows
+
+	Connections {
+		target: Lock
+
+		function onLockedChanged(): void {
+			kept.locked = Lock.locked;
+		}
+	}
+
+	// Locking: the desktop fades to black first, on every screen, above everything
+	LazyLoader {
+		active: Lock.curtain
+
+		Variants {
+			model: Quickshell.screens
+
+			PanelWindow {
+				required property ShellScreen modelData
+
+				screen: modelData
+				anchors {
+					top: true
+					bottom: true
+					left: true
+					right: true
+				}
+				exclusionMode: ExclusionMode.Ignore
+				WlrLayershell.layer: WlrLayer.Overlay
+				WlrLayershell.namespace: "desktop-curtain"
+				color: "transparent"
+				mask: Region {} // nothing to click
+
+				Rectangle {
+					anchors.fill: parent
+					color: "black"
+
+					NumberAnimation on opacity {
+						from: 0
+						to: 1
+						duration: 200
+						easing.type: Easing.InOutQuad
+					}
+				}
+			}
+		}
+	}
+
 	WlSessionLock {
-		locked: Lock.locked
+		// locked from its first moment after a reload (it takes the held lock over as it's made: made
+		// unlocked, it would unlock the screen)
+		locked: Lock.locked || kept.locked
 		onSecureChanged: Lock.secure = secure
 
 		WlSessionLockSurface {
 			id: surface
 
-			color: Theme.bg
+			color: "black" // as the curtain before it and the compositor's blank frame between
 
 			SystemClock {
 				id: clock
@@ -60,126 +132,153 @@ Scope {
 				precision: SystemClock.Minutes // the clock shows hh:mm
 			}
 
-			Image {
-				id: wallpaper
+			// what shows, fading in from black as it locks and out before it unlocks
+			Item {
+				id: scene
+
+				property bool shown: false
 
 				anchors.fill: parent
-				source: "file://" + (Quickshell.env("XDG_STATE_HOME") || Quickshell.env("HOME") + "/.local/state") + "/desktop/wallpaper"
-				fillMode: Image.PreserveAspectCrop
-				sourceSize.width: 1280
-				asynchronous: true
-				visible: false
-			}
+				opacity: shown && !Lock.leaving ? 1 : 0
+				Component.onCompleted: shown = true
 
-			MultiEffect {
-				anchors.fill: parent
-				source: wallpaper
-				blurEnabled: true
-				blur: 1
-				blurMax: 64
-			}
-
-			Rectangle {
-				anchors.fill: parent
-				color: Qt.alpha(Theme.bg, 0.55)
-			}
-
-			Column {
-				anchors.centerIn: parent
-				anchors.verticalCenterOffset: -40
-				spacing: 10
-
-				UiText {
-					anchors.horizontalCenter: parent.horizontalCenter
-					text: Qt.formatTime(clock.date, "hh:mm AP").slice(0, 5) // 12-hour, as the bar (03:21)
-					font.family: "Inter Display"
-					font.weight: Font.Light
-					font.pixelSize: Theme.px(128)
+				Behavior on opacity {
+					NumberAnimation {
+						duration: 260
+						easing.type: Easing.OutCubic
+					}
 				}
 
-				UiText {
-					anchors.horizontalCenter: parent.horizontalCenter
-					text: Qt.formatDate(clock.date, "dddd, d MMMM")
-					color: Qt.alpha(Theme.fg, 0.7)
-					font.pixelSize: Theme.px(20)
+				Image {
+					id: wallpaper
+
+					anchors.fill: parent
+					source: root.wallpaperSource
+					fillMode: Image.PreserveAspectCrop
+					sourceSize.width: 1280
+					asynchronous: true
+					visible: false
 				}
 
-				Item {
-					width: 1
-					height: 40
-				}
+				// the lock fades in over the theme's colour: no blink from a picture or text popping in
+				MultiEffect {
+					anchors.fill: parent
+					source: wallpaper
+					blurEnabled: true
+					blur: 1
+					blurMax: 64
+					opacity: wallpaper.status === Image.Ready ? 1 : 0
 
-				// the password, as dots in a quiet pill
-				Rectangle {
-					id: field
-
-					anchors.horizontalCenter: parent.horizontalCenter
-					width: 300
-					height: 46
-					radius: height / 2
-					color: Qt.alpha(Theme.surface, 0.6)
-					border.width: 1
-					border.color: root.error ? Theme.error : input.activeFocus && root.password ? Qt.alpha(Theme.primary, 0.8) : Qt.alpha(Theme.fg, 0.15)
-
-					TextInput {
-						id: input
-
-						anchors.fill: parent
-						anchors.leftMargin: 20
-						anchors.rightMargin: 20
-						verticalAlignment: TextInput.AlignVCenter
-						horizontalAlignment: TextInput.AlignHCenter
-						echoMode: TextInput.Password
-						passwordCharacter: "•"
-						color: Theme.fg
-						font.family: Theme.fontSans
-						font.hintingPreference: Theme.hinting
-						font.weight: Theme.textWeight
-						font.pixelSize: Theme.px(18)
-						font.letterSpacing: 2
-						focus: true
-						enabled: !root.checking
-						text: root.password
-						onTextEdited: {
-							root.password = text;
-							root.error = "";
+					Behavior on opacity {
+						NumberAnimation {
+							duration: 320
+							easing.type: Easing.OutCubic
 						}
-						onAccepted: root.submit()
-						Keys.onEscapePressed: root.password = ""
+					}
+				}
+
+				Rectangle {
+					anchors.fill: parent
+					color: Qt.alpha(Theme.bg, 0.55)
+				}
+
+				Column {
+					anchors.centerIn: parent
+					anchors.verticalCenterOffset: -40
+					spacing: 10
+
+					UiText {
+						anchors.horizontalCenter: parent.horizontalCenter
+						text: Qt.formatTime(clock.date, "hh:mm AP").slice(0, 5) // 12-hour, as the bar (03:21)
+						font.family: "Inter Display"
+						font.weight: Font.Light
+						font.pixelSize: Theme.px(128)
 					}
 
 					UiText {
-						anchors.centerIn: parent
-						visible: !root.password
-						text: root.checking ? "Checking…" : "Password"
-						color: Qt.alpha(Theme.fg, 0.4)
+						anchors.horizontalCenter: parent.horizontalCenter
+						text: Qt.formatDate(clock.date, "dddd, d MMMM")
+						color: Qt.alpha(Theme.fg, 0.7)
+						font.pixelSize: Theme.px(20)
 					}
 
-					SequentialAnimation on anchors.horizontalCenterOffset {
-						id: shake
+					Item {
+						width: 1
+						height: 40
+					}
 
-						running: false
-						loops: 2
-						NumberAnimation { to: -10; duration: 45 }
-						NumberAnimation { to: 10; duration: 90 }
-						NumberAnimation { to: 0; duration: 45 }
+					// the password, as dots in a quiet pill
+					Rectangle {
+						id: field
+
+						anchors.horizontalCenter: parent.horizontalCenter
+						width: 300
+						height: 46
+						radius: height / 2
+						color: Qt.alpha(Theme.surface, 0.6)
+						border.width: 1
+						border.color: root.error ? Theme.error : input.activeFocus && root.password ? Qt.alpha(Theme.primary, 0.8) : Qt.alpha(Theme.fg, 0.15)
+
+						TextInput {
+							id: input
+
+							anchors.fill: parent
+							anchors.leftMargin: 20
+							anchors.rightMargin: 20
+							verticalAlignment: TextInput.AlignVCenter
+							horizontalAlignment: TextInput.AlignHCenter
+							echoMode: TextInput.Password
+							passwordCharacter: "•"
+							color: Theme.fg
+							font.family: Theme.fontSans
+							font.hintingPreference: Theme.hinting
+							font.weight: Theme.textWeight
+							font.pixelSize: Theme.px(18)
+							font.letterSpacing: 2
+							focus: true
+							enabled: !root.checking
+							text: root.password
+							onTextEdited: {
+								root.password = text;
+								root.error = "";
+							}
+							onAccepted: root.submit()
+							Keys.onEscapePressed: root.password = ""
+						}
+
+						UiText {
+							anchors.centerIn: parent
+							visible: !root.password
+							text: root.checking ? "Checking…" : "Password"
+							color: Qt.alpha(Theme.fg, 0.4)
+						}
+
+						SequentialAnimation on anchors.horizontalCenterOffset {
+							id: shake
+
+							running: false
+							loops: 2
+							NumberAnimation { to: -10; duration: 45 }
+							NumberAnimation { to: 10; duration: 90 }
+							NumberAnimation { to: 0; duration: 45 }
+						}
+					}
+
+					UiText {
+						anchors.horizontalCenter: parent.horizontalCenter
+						text: root.error
+						color: Theme.error
+						opacity: root.error ? 1 : 0
 					}
 				}
 
 				UiText {
 					anchors.horizontalCenter: parent.horizontalCenter
-					text: root.error
-					color: Theme.error
-					opacity: root.error ? 1 : 0
+					anchors.bottom: parent.bottom
+					anchors.bottomMargin: 48
+					text: "Type to unlock"
+					color: Qt.alpha(Theme.fg, 0.35)
 				}
-			}
-
-			UiText {
-				anchors.horizontalCenter: parent.horizontalCenter
-				anchors.bottom: parent.bottom
-				anchors.bottomMargin: 48
-				text: "Type to unlock"
-				color: Qt.alpha(Theme.fg, 0.35)
 			}
 
 			Connections {
