@@ -4,7 +4,6 @@ import QtQuick
 import Quickshell
 import Quickshell.Widgets
 import qs
-import qs.control
 import qs.services
 import qs.widgets
 
@@ -70,8 +69,8 @@ HangingPanel {
 
 	name: "launcher"
 	open: Panel.launcherOpen
-	panelWidth: Panel.launcherWidth
-	panelHeight: Panel.launcherHeight
+	panelWidth: Panel.sizes.launcher.width
+	panelHeight: Panel.sizes.launcher.height
 	onDismissed: Panel.launcherOpen = false
 	onResultsChanged: current = Math.min(current, Math.max(0, results.length - 1))
 	onModeChanged: {
@@ -194,131 +193,10 @@ HangingPanel {
 				border.color: Qt.alpha(Theme.primary, 0.5)
 			}
 
-			delegate: Item {
-				id: row
-
-				required property var modelData
-				required property int index
-				readonly property bool app: typeof modelData !== "string"
-				readonly property string path: typeof modelData === "string" ? modelData : ""
-				readonly property string fileName: path.slice(path.lastIndexOf("/") + 1)
-				readonly property string ext: fileName.includes(".") ? fileName.slice(fileName.lastIndexOf(".") + 1).toLowerCase() : ""
-				readonly property string kind: /^(png|jpe?g|webp|gif|svg)$/.test(ext) ? "photo" : ext === "pdf" ? "file-type-pdf" : /^(md|txt|org|rst|)$/.test(ext) ? "file-text" : "file-code"
-
-				width: ListView.view.width
-				height: 50
-
-				HoverHandler {
-					id: rowHover
-
-					// the row under the pointer once it moves (not one that opened under a still pointer)
-					property point from
-					onHoveredChanged: from = point.position
-					onPointChanged: if (hovered && Math.abs(point.position.x - from.x) + Math.abs(point.position.y - from.y) > 3) root.current = row.index
-				}
-
-				MouseArea {
-					anchors.fill: parent
-					cursorShape: Qt.PointingHandCursor
-					onClicked: root.pick(row.index, root.mode === "files" ? "file" : "open")
-				}
-
-				IconImage {
-					id: icon
-
-					visible: row.app
-					x: 12
-					anchors.verticalCenter: parent.verticalCenter
-					implicitSize: 30
-					source: row.app ? Quickshell.iconPath(row.modelData.icon, "application-x-executable") : ""
-					asynchronous: true
-				}
-
-				Glyph {
-					visible: !row.app
-					x: 16
-					anchors.verticalCenter: parent.verticalCenter
-					glyph: Icons.g(row.kind)
-					font.pixelSize: 20
-					color: Theme.primary
-				}
-
-				Column {
-					x: 54
-					anchors.verticalCenter: parent.verticalCenter
-					width: parent.width - x - (tools.visible ? tools.width + 16 : 12)
-					spacing: 1
-
-					Text {
-						width: parent.width
-						text: row.app ? row.modelData.name : row.fileName
-						elide: Text.ElideRight
-						color: Theme.fg
-						font.family: Theme.fontSans
-						font.hintingPreference: Theme.hinting
-						font.pixelSize: Theme.textBody
-						font.weight: Font.Medium
-					}
-
-					Text {
-						width: parent.width
-						visible: text !== ""
-						text: row.app ? (row.modelData.genericName || row.modelData.comment || "") : row.path.slice(0, row.path.lastIndexOf("/")).replace(Quickshell.env("HOME"), "~")
-						elide: row.app ? Text.ElideRight : Text.ElideMiddle
-						color: Theme.fgMuted
-						font.family: Theme.fontSans
-						font.hintingPreference: Theme.hinting
-						font.weight: Theme.textWeight
-						font.pixelSize: Theme.textLabel
-					}
-				}
-
-				// a file: open, copy its path, copy its content
-				Row {
-					id: tools
-
-					visible: !row.app && (rowHover.hovered || root.current === row.index)
-					anchors.right: parent.right
-					anchors.rightMargin: 10
-					anchors.verticalCenter: parent.verticalCenter
-					spacing: 4
-
-					Repeater {
-						model: [
-							{ glyph: "external-link", action: "open" },
-							{ glyph: "paperclip", action: "file" },
-							{ glyph: "link", action: "path" },
-							{ glyph: "copy", action: "content" }
-						]
-
-						delegate: Rectangle {
-							id: tool
-
-							required property var modelData
-
-							width: 30
-							height: 30
-							radius: 9
-							color: toolHover.hovered ? Qt.alpha(Theme.fg, 0.12) : "transparent"
-
-							Glyph {
-								anchors.centerIn: parent
-								glyph: Icons.g(tool.modelData.glyph)
-								font.pixelSize: 15
-							}
-
-							HoverHandler {
-								id: toolHover
-							}
-
-							MouseArea {
-								anchors.fill: parent
-								cursorShape: Qt.PointingHandCursor
-								onClicked: root.pick(row.index, tool.modelData.action)
-							}
-						}
-					}
-				}
+			delegate: ResultRow {
+				selected: root.current === index
+				onMoved: root.current = index
+				onPicked: action => root.pick(index, action)
 			}
 		}
 
@@ -356,13 +234,10 @@ HangingPanel {
 				width: grid.cellWidth
 				height: grid.cellHeight
 
-				HoverHandler {
+				PointerPick {
 					id: cellHover
 
-					// the row under the pointer once it moves (not one that opened under a still pointer)
-					property point from
-					onHoveredChanged: from = point.position
-					onPointChanged: if (hovered && Math.abs(point.position.x - from.x) + Math.abs(point.position.y - from.y) > 3) root.current = cell.index
+					onMoved: root.current = cell.index
 				}
 
 				MouseArea {
@@ -391,105 +266,29 @@ HangingPanel {
 				}
 
 				// a theme: a small window in its colours
-				Rectangle {
+				ThemeCard {
 					visible: !cell.emoji
 					anchors.fill: parent
 					anchors.margins: 6
-					radius: 14
-					color: cell.colours.bg ?? "transparent"
-					border.width: cell.applied ? 3 : root.current === cell.index ? 2 : 1
-					border.color: cell.applied ? Theme.primary : root.current === cell.index ? Qt.alpha(Theme.fg, 0.6) : Qt.alpha(Theme.border, 0.8)
-					scale: cellHover.hovered ? 1.03 : 1
-
-					Behavior on scale {
-						NumberAnimation {
-							duration: 140
-							easing.type: Easing.OutCubic
-						}
-					}
-
-					Rectangle {
-						x: 10
-						y: 10
-						width: parent.width - 20
-						height: 14
-						radius: 7
-						color: cell.colours.surface ?? "transparent"
-
-						Row {
-							anchors.verticalCenter: parent.verticalCenter
-							x: 6
-							spacing: 4
-
-							Repeater {
-								model: ["primary", "secondary", "accent", "success", "error"]
-
-								delegate: Rectangle {
-									required property string modelData
-
-									width: 6
-									height: 6
-									radius: 3
-									color: cell.colours[modelData] ?? "transparent"
-								}
-							}
-						}
-					}
-
-					Text {
-						x: 12
-						anchors.bottom: parent.bottom
-						anchors.bottomMargin: 10
-						text: cell.emoji ? "" : cell.modelData.name
-						color: cell.colours.fg ?? Theme.fg
-						font.family: Theme.fontHeading
-						font.hintingPreference: Theme.hinting
-						font.pixelSize: Theme.textBody
-						font.weight: Font.DemiBold
-					}
-
-					Rectangle {
-						anchors.right: parent.right
-						anchors.bottom: parent.bottom
-						anchors.margins: 10
-						width: 20
-						height: 20
-						radius: 10
-						color: cell.colours.primary ?? "transparent"
-						scale: cell.applied ? 1 : 0
-
-						Behavior on scale {
-							NumberAnimation {
-								duration: 200
-								easing.type: Easing.OutBack
-							}
-						}
-
-						Glyph {
-							anchors.centerIn: parent
-							glyph: Icons.g("check")
-							font.pixelSize: 12
-							color: cell.colours.on_primary ?? Theme.primaryText
-						}
-					}
+					colours: cell.colours
+					name: cell.emoji ? "" : cell.modelData.name
+					applied: cell.applied
+					selected: root.current === cell.index
+					hovered: cellHover.hovered
 				}
 			}
 		}
 
-		Text {
+		UiText {
 			anchors.centerIn: parent
 			visible: root.results.length === 0 && !(root.mode === "files" && Launcher.searching)
 			text: search.text ? "Nothing matches." : root.mode === "files" ? "Nothing changed this week; type to search." : "Nothing here."
 			color: Theme.fgMuted
-			font.family: Theme.fontSans
-			font.hintingPreference: Theme.hinting
-			font.weight: Theme.textWeight
-			font.pixelSize: Theme.textBody
 		}
 	}
 
 	// what Enter does, or the emoji's name
-	Text {
+	UiText {
 		id: footer
 
 		x: 18
@@ -499,9 +298,6 @@ HangingPanel {
 		elide: Text.ElideRight
 		text: root.mode === "emoji" && root.results[root.current] ? root.results[root.current].name : (root.modes.find(m => m.key === root.mode)?.hint ?? "")
 		color: Theme.fgMuted
-		font.family: Theme.fontSans
-		font.hintingPreference: Theme.hinting
-		font.weight: Theme.textWeight
 		font.pixelSize: Theme.textLabel
 	}
 }

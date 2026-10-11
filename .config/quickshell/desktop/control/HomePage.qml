@@ -23,24 +23,18 @@ Column {
 	Column {
 		spacing: 2
 
-		Text {
+		UiText {
 			readonly property int hour: clock.date.getHours()
 
 			text: hour < 5 ? "Good night" : hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening"
-			color: Theme.fg
 			font.family: Theme.fontHeading
-			font.hintingPreference: Theme.hinting
 			font.pixelSize: Theme.px(20)
 			font.weight: Font.DemiBold
 		}
 
-		Text {
+		UiText {
 			text: Qt.formatDateTime(clock.date, "dddd, d MMMM")
 			color: Theme.fgMuted
-			font.family: Theme.fontSans
-			font.hintingPreference: Theme.hinting
-			font.weight: Theme.textWeight
-			font.pixelSize: Theme.textBody
 		}
 	}
 

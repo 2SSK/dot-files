@@ -7,6 +7,8 @@ lib="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")/../lib/desktop" && pw
 source "$lib/log.sh"
 # shellcheck source-path=SCRIPTDIR/../.. source=.local/lib/desktop/screens.sh
 source "$lib/screens.sh"
+# shellcheck source-path=SCRIPTDIR/../.. source=.local/lib/desktop/state.sh
+source "$lib/state.sh"
 
 themes="$lib/../../share/desktop/themes"
 state="${XDG_STATE_HOME:-$HOME/.local/state}/desktop/theme"
@@ -18,13 +20,6 @@ usage: theme set <family> [--mode dark|light]
        theme list [--json]
        theme current
 EOF
-}
-
-current() { # prints "<family> <mode>"; tokyonight dark until a theme is set
-	local family=tokyonight mode=dark
-	# shellcheck disable=SC1091 # family=/mode= written by theme_render.py
-	[[ -r $state/current ]] && source "$state/current"
-	echo "$family $mode"
 }
 
 # One row per app: rendered file, link under ~/.config (or -), reload command (or -). The switch
@@ -111,7 +106,7 @@ apply() { # <family> <mode>
 
 main() {
 	local family mode
-	read -r family mode < <(current)
+	read -r family mode < <(current_theme)
 	case ${1:-} in
 	set)
 		[[ -n ${2:-} ]] || { usage >&2 && exit 2; }

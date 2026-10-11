@@ -1,10 +1,8 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
-import QtQuick.Effects
 import Quickshell
 import qs
-import qs.control
 import qs.services
 import qs.widgets
 
@@ -27,20 +25,20 @@ HangingPanel {
 	readonly property var shown: {
 		const words = search.text.toLowerCase().split(/\s+/).filter(w => w);
 		return (all ? Wallpaper.files : Wallpaper.themeFiles).filter(f => {
-			const name = f.slice(f.lastIndexOf("/") + 1).toLowerCase();
+			const name = Format.fileName(f).toLowerCase();
 			return words.every(w => name.includes(w));
 		});
 	}
 	property int current: Math.max(0, shown.indexOf(Wallpaper.current))
 
 	function label(path: string): string {
-		return path.slice(path.lastIndexOf("/") + 1).replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ");
+		return Format.fileName(path).replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ");
 	}
 
 	name: "wallpaper"
 	open: Panel.wallpaperOpen
-	panelWidth: Panel.wallpaperWidth
-	panelHeight: Panel.wallpaperHeight
+	panelWidth: Panel.sizes.wallpaper.width
+	panelHeight: Panel.sizes.wallpaper.height
 	onDismissed: Panel.wallpaperOpen = false
 	onShownChanged: current = Math.max(0, Math.min(current, shown.length - 1))
 	// the folders as they are now: images deleted, added or moved since the last look
@@ -111,14 +109,10 @@ HangingPanel {
 					color: rotate.on ? Theme.primary : Theme.fgMuted
 				}
 
-				Text {
+				UiText {
 					anchors.verticalCenter: parent.verticalCenter
 					text: (root.rotations.find(r => r.value === Config.wallpaper.rotate) ?? root.rotations[0]).label
 					color: rotate.on ? Theme.fg : Theme.fgMuted
-					font.family: Theme.fontSans
-					font.hintingPreference: Theme.hinting
-					font.weight: Theme.textWeight
-					font.pixelSize: Theme.textBody
 				}
 
 				Glyph {
@@ -212,162 +206,18 @@ HangingPanel {
 		highlightFollowsCurrentItem: false
 		boundsBehavior: Flickable.StopAtBounds
 
-		delegate: Item {
-			id: tile
-
-			required property string modelData
-			required property int index
-			readonly property bool on: Wallpaper.current === modelData
-			readonly property bool picked: root.current === index
-
-			width: grid.cellWidth
-			height: grid.cellHeight
-
-			Item {
-				id: frame
-
-				anchors.fill: parent
-				anchors.margins: 6
-				scale: hover.hovered ? 1.03 : 1
-
-				Behavior on scale {
-					NumberAnimation {
-						duration: 160
-						easing.type: Easing.OutCubic
-					}
-				}
-
-				// the picture, its corners rounded by a mask
-				Image {
-					id: picture
-
-					anchors.fill: parent
-					visible: false
-					source: "file://" + tile.modelData
-					sourceSize.width: 360
-					fillMode: Image.PreserveAspectCrop
-					asynchronous: true
-					cache: true
-				}
-
-				Rectangle {
-					id: corners
-
-					anchors.fill: parent
-					visible: false
-					layer.enabled: true
-					radius: 12
-				}
-
-				Rectangle {
-					anchors.fill: parent
-					radius: 12
-					color: Qt.alpha(Theme.surface, 0.8)
-				}
-
-				MultiEffect {
-					anchors.fill: parent
-					source: picture
-					maskEnabled: true
-					maskSource: corners
-					opacity: picture.status === Image.Ready ? 1 : 0
-
-					Behavior on opacity {
-						NumberAnimation {
-							duration: 200
-						}
-					}
-				}
-
-				// its name, on hover or when picked with the keys: plain text with a soft shadow
-				Text {
-					anchors.left: parent.left
-					anchors.right: parent.right
-					anchors.bottom: parent.bottom
-					anchors.margins: 10
-					text: root.label(tile.modelData)
-					elide: Text.ElideRight
-					color: "white"
-					font.family: Theme.fontHeading
-					font.hintingPreference: Theme.hinting
-					font.pixelSize: Theme.textLabel
-					font.weight: Font.DemiBold
-					opacity: hover.hovered || tile.picked && search.text ? 1 : 0
-					layer.enabled: true
-					layer.effect: MultiEffect {
-						shadowEnabled: true
-						shadowColor: "black"
-						shadowOpacity: 0.8
-						shadowBlur: 0.6
-						shadowVerticalOffset: 1
-						shadowHorizontalOffset: 0
-					}
-
-					Behavior on opacity {
-						NumberAnimation {
-							duration: 150
-						}
-					}
-				}
-
-				// set: a ring and a tick; picked with the keys: a thin ring
-				Rectangle {
-					anchors.fill: parent
-					anchors.margins: -3
-					radius: 15
-					color: "transparent"
-					border.width: tile.on ? 3 : tile.picked ? 2 : 0
-					border.color: tile.on ? Theme.primary : Qt.alpha(Theme.fg, 0.6)
-
-					Behavior on border.width {
-						NumberAnimation {
-							duration: 160
-						}
-					}
-				}
-
-				Rectangle {
-					anchors.right: parent.right
-					anchors.top: parent.top
-					anchors.margins: 8
-					width: 24
-					height: 24
-					radius: 12
-					color: Theme.primary
-					scale: tile.on ? 1 : 0
-
-					Behavior on scale {
-						NumberAnimation {
-							duration: 220
-							easing.type: Easing.OutBack
-						}
-					}
-
-					Glyph {
-						anchors.centerIn: parent
-						glyph: Icons.g("check")
-						font.pixelSize: 14
-						color: Theme.primaryText
-					}
-				}
-			}
-
-			HoverHandler {
-				id: hover
-			}
-
-			MouseArea {
-				anchors.fill: parent
-				cursorShape: Qt.PointingHandCursor
-				onClicked: {
-					root.current = tile.index;
-					Wallpaper.set(tile.modelData);
-				}
+		delegate: WallpaperTile {
+			picked: root.current === index
+			label: root.label(modelData)
+			searching: search.text !== ""
+			onChosen: {
+				root.current = index;
+				Wallpaper.set(modelData);
 			}
 		}
 	}
 
-	Text {
+	UiText {
 		anchors.centerIn: grid
 		visible: root.shown.length === 0
 		width: grid.width - 40
@@ -375,10 +225,6 @@ HangingPanel {
 		wrapMode: Text.Wrap
 		text: Wallpaper.files.length ? "Nothing matches." : "No images in " + Wallpaper.folders.join(", ")
 		color: Theme.fgMuted
-		font.family: Theme.fontSans
-		font.hintingPreference: Theme.hinting
-		font.weight: Theme.textWeight
-		font.pixelSize: Theme.textBody
 	}
 
 	// the rotate choices, under the chip; a click elsewhere closes them
@@ -388,92 +234,12 @@ HangingPanel {
 		onClicked: menu.open = false
 	}
 
-	Rectangle {
+	RotateMenu {
 		id: menu
-
-		property bool open: false
 
 		x: header.x + rotate.x
 		y: header.y + header.height + (open ? 6 : 0)
 		width: Math.max(rotate.width, 150)
-		height: choices.implicitHeight + 12
-		radius: 12
-		color: Theme.surface
-		border.width: 1
-		border.color: Qt.alpha(Theme.border, 0.8)
-		opacity: open ? 1 : 0
-		visible: opacity > 0
-
-		Behavior on opacity {
-			NumberAnimation {
-				duration: 150
-			}
-		}
-
-		Behavior on y {
-			NumberAnimation {
-				duration: 180
-				easing.type: Easing.OutCubic
-			}
-		}
-
-		Column {
-			id: choices
-
-			x: 6
-			y: 6
-			width: parent.width - 12
-
-			Repeater {
-				model: root.rotations
-
-				delegate: Rectangle {
-					id: choice
-
-					required property var modelData
-					readonly property bool on: Config.wallpaper.rotate === modelData.value
-
-					width: choices.width
-					height: 32
-					radius: 8
-					color: choiceHover.hovered ? Qt.alpha(Theme.fg, 0.08) : "transparent"
-
-					Text {
-						x: 10
-						anchors.verticalCenter: parent.verticalCenter
-						text: choice.modelData.label
-						color: choice.on ? Theme.primary : Theme.fg
-						font.family: Theme.fontSans
-						font.hintingPreference: Theme.hinting
-						font.pixelSize: Theme.textBody
-						font.weight: choice.on ? Font.DemiBold : Font.Normal
-					}
-
-					Glyph {
-						visible: choice.on
-						anchors.right: parent.right
-						anchors.rightMargin: 10
-						anchors.verticalCenter: parent.verticalCenter
-						glyph: Icons.g("check")
-						font.pixelSize: 13
-						color: Theme.primary
-					}
-
-					HoverHandler {
-						id: choiceHover
-					}
-
-					MouseArea {
-						anchors.fill: parent
-						cursorShape: Qt.PointingHandCursor
-						onClicked: {
-							Config.wallpaper.rotate = choice.modelData.value;
-							Config.save();
-							menu.open = false;
-						}
-					}
-				}
-			}
-		}
+		choices: root.rotations
 	}
 }

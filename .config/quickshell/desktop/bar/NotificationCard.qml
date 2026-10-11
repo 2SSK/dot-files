@@ -37,11 +37,6 @@ Rectangle {
 		onTriggered: root.now = Date.now()
 	}
 
-	function ago(): string {
-		const seconds = Math.max(0, (root.now - Notifications.timeOf(root.notification)) / 1000);
-		return seconds < 60 ? "now" : seconds < 3600 ? `${Math.floor(seconds / 60)}m` : seconds < 86400 ? `${Math.floor(seconds / 3600)}h` : `${Math.floor(seconds / 86400)}d`;
-	}
-
 	HoverHandler {
 		id: hover
 	}
@@ -103,30 +98,24 @@ Rectangle {
 				width: parent.width
 				height: summary.implicitHeight
 
-				Text {
+				UiText {
 					id: summary
 
 					width: parent.width - meta.width - 30
 					text: root.notification?.summary ?? ""
 					elide: Text.ElideRight
-					color: Theme.fg
 					font.family: Theme.fontHeading
-					font.hintingPreference: Theme.hinting
-					font.pixelSize: Theme.textBody
 					font.weight: Font.DemiBold
 				}
 
-				Text {
+				UiText {
 					id: meta
 
 					anchors.right: parent.right
 					anchors.rightMargin: 24
 					anchors.baseline: summary.baseline
-					text: root.ago()
+					text: Format.ago(Notifications.timeOf(root.notification), root.now)
 					color: Theme.fgMuted
-					font.family: Theme.fontSans
-					font.hintingPreference: Theme.hinting
-					font.weight: Theme.textWeight
 					font.pixelSize: Theme.textCaption
 				}
 
@@ -152,7 +141,7 @@ Rectangle {
 				}
 			}
 
-			Text {
+			UiText {
 				width: parent.width
 				visible: text !== ""
 				text: root.notification?.body ?? ""
@@ -161,22 +150,16 @@ Rectangle {
 				maximumLineCount: root.popup ? 4 : 3
 				elide: Text.ElideRight
 				color: Theme.fgMuted
-				font.family: Theme.fontSans
-				font.hintingPreference: Theme.hinting
-				font.weight: Theme.textWeight
 				font.pixelSize: Theme.textLabel
 				lineHeight: 1.1
 			}
 
-			Text {
+			UiText {
 				width: parent.width
 				horizontalAlignment: Text.AlignRight
 				text: root.notification?.appName ?? ""
 				visible: text !== ""
 				color: Qt.alpha(Theme.fgMuted, 0.8)
-				font.family: Theme.fontSans
-				font.hintingPreference: Theme.hinting
-				font.weight: Theme.textWeight
 				font.pixelSize: Theme.textCaption
 			}
 
@@ -198,14 +181,12 @@ Rectangle {
 						radius: 13
 						color: buttonHover.hovered ? Theme.primary : Qt.alpha(Theme.overlay, 0.9)
 
-						Text {
+						UiText {
 							id: label
 
 							anchors.centerIn: parent
 							text: button.modelData.text
 							color: buttonHover.hovered ? Theme.primaryText : Theme.fg
-							font.family: Theme.fontSans
-							font.hintingPreference: Theme.hinting
 							font.pixelSize: Theme.textLabel
 							font.weight: Font.Medium
 						}

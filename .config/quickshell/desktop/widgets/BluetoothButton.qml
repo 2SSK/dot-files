@@ -3,20 +3,10 @@ import qs
 import qs.services
 
 // Bluetooth: on, off or connected (accent); opens the Bluetooth page.
-Glyph {
-	glyph: Connectivity.bluetooth ? Icons.g("bluetooth") : Icons.g("bluetooth-off")
-	color: Panel.controlOpen && Panel.controlPage === "bluetooth" ? Theme.primary : Theme.fg
-	filled: Panel.controlOpen && Panel.controlPage === "bluetooth"
-	font.pixelSize: Theme.iconSize - 1
-	font.weight: Font.Normal
+BarButton {
 	readonly property bool present: Connectivity.bluetoothAvailable
 
+	glyph: Connectivity.bluetooth ? Icons.g("bluetooth") : Icons.g("bluetooth-off")
+	page: "bluetooth"
 	visible: present
-
-	MouseArea {
-		anchors.fill: parent
-		anchors.margins: -6
-		cursorShape: Qt.PointingHandCursor
-		onClicked: Panel.toggleControl("bluetooth")
-	}
 }

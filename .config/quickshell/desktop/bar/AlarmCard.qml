@@ -129,11 +129,9 @@ PopupWindow {
 			anchors.verticalCenter: parent.verticalCenter
 			spacing: 2
 
-			Text {
+			UiText {
 				text: root.alarm?.label ?? ""
-				color: Theme.fg
 				font.family: Theme.fontHeading
-				font.hintingPreference: Theme.hinting
 				font.pixelSize: Theme.px(16)
 				font.weight: Font.DemiBold
 			}
@@ -168,15 +166,13 @@ PopupWindow {
 					radius: 17
 					color: modelData.accent ? Theme.primary : buttonHover.hovered ? Qt.alpha(Theme.fg, 0.12) : Qt.alpha(Theme.overlay, 0.9)
 
-					Text {
+					UiText {
 						id: buttonLabel
 
 						anchors.centerIn: parent
 						text: button.modelData.label
 						color: button.modelData.accent ? Theme.primaryText : Theme.fg
 						font.family: Theme.fontHeading
-						font.hintingPreference: Theme.hinting
-						font.pixelSize: Theme.textBody
 						font.weight: Font.DemiBold
 					}
 

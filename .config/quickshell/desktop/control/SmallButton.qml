@@ -1,5 +1,6 @@
 import QtQuick
 import qs
+import qs.widgets
 
 // A small pill button with a word on it.
 Rectangle {
@@ -14,14 +15,12 @@ Rectangle {
 	radius: 14
 	color: accent ? (hover.hovered ? Qt.lighter(Theme.primary, 1.1) : Theme.primary) : hover.hovered ? Qt.alpha(Theme.fg, 0.12) : Qt.alpha(Theme.overlay, 0.9)
 
-	Text {
+	UiText {
 		id: label
 
 		anchors.centerIn: parent
 		text: root.text
 		color: root.accent ? Theme.primaryText : Theme.fg
-		font.family: Theme.fontSans
-		font.hintingPreference: Theme.hinting
 		font.pixelSize: Theme.textLabel
 		font.weight: Font.Medium
 	}

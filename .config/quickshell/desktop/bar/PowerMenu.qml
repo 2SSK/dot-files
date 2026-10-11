@@ -119,12 +119,10 @@ PopupWindow {
 						color: tile.ink
 					}
 
-					Text {
+					UiText {
 						anchors.horizontalCenter: parent.horizontalCenter
 						text: tile.armed ? "Again to " + tile.modelData.label.toLowerCase() : tile.modelData.label
 						color: tile.ink
-						font.family: Theme.fontSans
-						font.hintingPreference: Theme.hinting
 						font.pixelSize: Theme.px(15)
 						font.weight: Font.Medium
 					}
@@ -140,12 +138,11 @@ PopupWindow {
 					radius: 4
 					color: tile.armed || tile.selected ? Qt.alpha(Theme.primaryText, 0.2) : Qt.alpha(Theme.overlay, 0.9)
 
-					Text {
+					UiText {
 						anchors.centerIn: parent
 						text: tile.index + 1
 						color: tile.ink
 						font.family: Theme.fontMono
-						font.hintingPreference: Theme.hinting
 						font.pixelSize: Theme.textCaption
 						font.weight: Font.Bold
 					}

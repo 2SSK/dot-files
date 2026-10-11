@@ -63,15 +63,12 @@ Column {
 					color: clearHover.hovered && Notifications.history.length > 0 ? Theme.bg : Theme.fg
 				}
 
-				Text {
+				UiText {
 					id: clearLabel
 
 					anchors.verticalCenter: parent.verticalCenter
 					text: "Clear all"
 					color: clearHover.hovered && Notifications.history.length > 0 ? Theme.bg : Theme.fg
-					font.family: Theme.fontSans
-					font.hintingPreference: Theme.hinting
-					font.pixelSize: Theme.textBody
 					font.weight: Font.Medium
 				}
 			}
@@ -125,14 +122,10 @@ Column {
 				color: Theme.fgMuted
 			}
 
-			Text {
+			UiText {
 				anchors.horizontalCenter: parent.horizontalCenter
 				text: root.filter === "all" ? "No notifications" : "Nothing from " + (root.filter === "older" ? "before yesterday" : root.filter)
 				color: Theme.fgMuted
-				font.family: Theme.fontSans
-				font.hintingPreference: Theme.hinting
-				font.weight: Theme.textWeight
-				font.pixelSize: Theme.textBody
 			}
 		}
 	}

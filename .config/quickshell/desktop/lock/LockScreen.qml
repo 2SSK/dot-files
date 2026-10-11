@@ -7,6 +7,7 @@ import Quickshell.Services.Pam
 import Quickshell.Wayland
 import qs
 import qs.services
+import qs.widgets
 
 // The lock screen on Wayland, on every screen: the wallpaper blurred and dimmed, a large light
 // clock (12-hour, as the bar) and the date, a password field as a quiet pill of dots, a hint at the
@@ -88,23 +89,18 @@ Scope {
 				anchors.verticalCenterOffset: -40
 				spacing: 10
 
-				Text {
+				UiText {
 					anchors.horizontalCenter: parent.horizontalCenter
 					text: Qt.formatTime(clock.date, "hh:mm AP").slice(0, 5) // 12-hour, as the bar (03:21)
-					color: Theme.fg
 					font.family: "Inter Display"
-					font.hintingPreference: Theme.hinting
 					font.weight: Font.Light
 					font.pixelSize: Theme.px(128)
 				}
 
-				Text {
+				UiText {
 					anchors.horizontalCenter: parent.horizontalCenter
 					text: Qt.formatDate(clock.date, "dddd, d MMMM")
 					color: Qt.alpha(Theme.fg, 0.7)
-					font.family: Theme.fontSans
-					font.hintingPreference: Theme.hinting
-					font.weight: Theme.textWeight
 					font.pixelSize: Theme.px(20)
 				}
 
@@ -152,15 +148,11 @@ Scope {
 						Keys.onEscapePressed: root.password = ""
 					}
 
-					Text {
+					UiText {
 						anchors.centerIn: parent
 						visible: !root.password
 						text: root.checking ? "Checking…" : "Password"
 						color: Qt.alpha(Theme.fg, 0.4)
-						font.family: Theme.fontSans
-						font.hintingPreference: Theme.hinting
-						font.weight: Theme.textWeight
-						font.pixelSize: Theme.textBody
 					}
 
 					SequentialAnimation on anchors.horizontalCenterOffset {
@@ -174,28 +166,20 @@ Scope {
 					}
 				}
 
-				Text {
+				UiText {
 					anchors.horizontalCenter: parent.horizontalCenter
 					text: root.error
 					color: Theme.error
-					font.family: Theme.fontSans
-					font.hintingPreference: Theme.hinting
-					font.weight: Theme.textWeight
-					font.pixelSize: Theme.textBody
 					opacity: root.error ? 1 : 0
 				}
 			}
 
-			Text {
+			UiText {
 				anchors.horizontalCenter: parent.horizontalCenter
 				anchors.bottom: parent.bottom
 				anchors.bottomMargin: 48
 				text: "Type to unlock"
 				color: Qt.alpha(Theme.fg, 0.35)
-				font.family: Theme.fontSans
-				font.hintingPreference: Theme.hinting
-				font.weight: Theme.textWeight
-				font.pixelSize: Theme.textBody
 			}
 
 			Connections {

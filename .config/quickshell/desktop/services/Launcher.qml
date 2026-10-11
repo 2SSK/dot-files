@@ -57,7 +57,7 @@ Singleton {
 	function pickEmoji(glyph: string): void { // not "char": a reserved word to Qt 6.8's parser
 		adapter.emoji = [glyph, ...adapter.emoji.filter(c => c !== glyph)].slice(0, 24);
 		state.writeAdapter();
-		Quickshell.execDetached(["sh", "-c", 'if [ -n "$WAYLAND_DISPLAY" ]; then wl-copy -- "$1"; else printf %s "$1" | xclip -selection clipboard -t UTF8_STRING; fi', "sh", glyph]);
+		Clipboard.copy({ kind: "text", text: glyph });
 	}
 
 	function findFiles(query: string): void {

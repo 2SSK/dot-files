@@ -2,7 +2,6 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import qs
-import qs.control
 import qs.widgets
 
 // A font setting: the row shows the font in use, written in it; a click opens the installed fonts
@@ -40,7 +39,7 @@ Column {
 				}
 			}
 
-			Text {
+			UiText {
 				id: name
 
 				x: 14
@@ -48,11 +47,7 @@ Column {
 				anchors.verticalCenter: parent.verticalCenter
 				text: root.value
 				elide: Text.ElideRight
-				color: Theme.fg
 				font.family: root.value
-				font.hintingPreference: Theme.hinting
-				font.pixelSize: Theme.textBody
-				font.weight: Theme.textWeight
 			}
 
 			Glyph {
@@ -138,7 +133,7 @@ Column {
 				radius: 9
 				color: on ? Qt.alpha(Theme.primary, 0.18) : entryHover.hovered ? Qt.alpha(Theme.fg, 0.08) : "transparent"
 
-				Text {
+				UiText {
 					x: 12
 					width: parent.width - 24
 					anchors.verticalCenter: parent.verticalCenter
@@ -146,8 +141,6 @@ Column {
 					elide: Text.ElideRight
 					color: entry.on ? Theme.primary : Theme.fg
 					font.family: entry.modelData
-					font.hintingPreference: Theme.hinting
-					font.pixelSize: Theme.textBody
 				}
 
 				HoverHandler {

@@ -177,14 +177,11 @@ Column {
 				border.width: 1
 				border.color: Qt.alpha(Theme.border, 0.9)
 
-				Text {
+				UiText {
 					id: key
 
 					anchors.centerIn: parent
 					text: parent.modelData
-					color: Theme.fg
-					font.family: Theme.fontSans
-					font.hintingPreference: Theme.hinting
 					font.pixelSize: Theme.textLabel
 					font.weight: Font.Medium
 				}
@@ -203,17 +200,12 @@ Column {
 			list: parent.modelData.keys
 		}
 
-		Text {
+		UiText {
 			x: 230
 			width: parent.width - x
 			anchors.verticalCenter: parent.verticalCenter
 			text: parent.modelData.label
 			elide: Text.ElideRight
-			color: Theme.fg
-			font.family: Theme.fontSans
-			font.hintingPreference: Theme.hinting
-			font.weight: Theme.textWeight
-			font.pixelSize: Theme.textBody
 		}
 	}
 
@@ -250,13 +242,9 @@ Column {
 		}
 	}
 
-	Text {
+	UiText {
 		visible: root.bindings.length === 0
 		text: "No i3 key config found in " + root.dir
 		color: Theme.fgMuted
-		font.family: Theme.fontSans
-		font.hintingPreference: Theme.hinting
-		font.weight: Theme.textWeight
-		font.pixelSize: Theme.textBody
 	}
 }

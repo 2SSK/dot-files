@@ -157,7 +157,7 @@ Scope {
 					asynchronous: true
 				}
 
-				Text {
+				UiText {
 					anchors.top: icon.bottom
 					anchors.topMargin: 16
 					anchors.horizontalCenter: parent.horizontalCenter
@@ -167,23 +167,16 @@ Scope {
 					elide: Text.ElideRight
 					maximumLineCount: 2
 					wrapMode: Text.Wrap
-					color: Theme.fg
-					font.family: Theme.fontSans
-					font.hintingPreference: Theme.hinting
 					font.pixelSize: Theme.px(16)
 					font.weight: card.front ? Font.DemiBold : Font.Normal
 				}
 
-				Text {
+				UiText {
 					anchors.bottom: parent.bottom
 					anchors.bottomMargin: 18
 					anchors.horizontalCenter: parent.horizontalCenter
 					text: (card.entry?.name ?? card.modelData.cls) + "  ·  " + card.modelData.workspace
 					color: Theme.fgMuted
-					font.family: Theme.fontSans
-					font.hintingPreference: Theme.hinting
-					font.weight: Theme.textWeight
-					font.pixelSize: Theme.textBody
 				}
 
 				MouseArea {
@@ -197,7 +190,7 @@ Scope {
 
 	// X11: a popup over the bar's screen
 	LazyLoader {
-		active: !Quickshell.env("WAYLAND_DISPLAY") && root.mapped
+		active: !Config.wayland && root.mapped
 
 		PopupWindow {
 			anchor.window: root.bar
@@ -214,7 +207,7 @@ Scope {
 
 	// Wayland: a layer surface holding the keyboard from the first Tab, so Alt's release comes here
 	LazyLoader {
-		active: !!Quickshell.env("WAYLAND_DISPLAY") && root.here && (Windows.switching || root.mapped)
+		active: Config.wayland && root.here && (Windows.switching || root.mapped)
 
 		PanelWindow {
 			screen: root.bar.screen

@@ -1,5 +1,6 @@
 import QtQuick
 import qs
+import qs.widgets
 
 // A titled group of settings rows.
 Column {
@@ -10,12 +11,11 @@ Column {
 	width: parent?.width ?? 0
 	spacing: 4
 
-	Text {
+	UiText {
 		bottomPadding: 6
 		text: root.title
 		color: Theme.fgMuted
 		font.family: Theme.fontHeading
-		font.hintingPreference: Theme.hinting
 		font.pixelSize: Theme.textLabel
 		font.weight: Font.DemiBold
 		font.capitalization: Font.AllUppercase

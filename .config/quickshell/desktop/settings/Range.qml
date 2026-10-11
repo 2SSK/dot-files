@@ -32,15 +32,11 @@ Row {
 	}
 
 	// on a whole pixel: centred, Inter's line height would put it between two, blurred
-	Text {
+	UiText {
 		y: Math.round((track.height - height) / 2)
 		width: 56
 		horizontalAlignment: Text.AlignRight
 		text: root.format(root.value)
-		color: Theme.fg
-		font.family: Theme.fontSans
-		font.hintingPreference: Theme.hinting
-		font.pixelSize: Theme.textBody
 		font.weight: Font.Medium
 		font.features: ({ tnum: 1 })
 	}

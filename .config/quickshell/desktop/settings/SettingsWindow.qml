@@ -4,7 +4,6 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import qs
-import qs.control
 import qs.services
 import qs.widgets
 
@@ -28,19 +27,9 @@ FloatingWindow {
 
 
 	// another window taking the focus closes it
-	Connections {
-		target: WindowManager
-
-		function onWindowEvent(data: var): void {
-			const name = data.container?.name ?? "";
-			// a named window other than this one, once it has settled (its own mapping fires focus too)
-			if (data.change === "focus" && name && name !== root.title && opened.elapsed() > 600)
-				Panel.settingsOpen = false;
-		}
-	}
-
-	ElapsedTimer {
-		id: opened
+	FocusWatch {
+		title: root.title
+		onFocusLost: Panel.settingsOpen = false
 	}
 
 	title: "Desktop settings"
@@ -66,13 +55,11 @@ FloatingWindow {
 		height: parent.height
 		color: Qt.alpha(Theme.surface, 0.5)
 
-		Text {
+		UiText {
 			x: 22
 			y: 22
 			text: "Settings"
-			color: Theme.fg
 			font.family: Theme.fontHeading
-			font.hintingPreference: Theme.hinting
 			font.pixelSize: Theme.px(20)
 			font.weight: Font.DemiBold
 		}
@@ -113,13 +100,10 @@ FloatingWindow {
 							filled: entry.on
 						}
 
-						Text {
+						UiText {
 							anchors.verticalCenter: parent.verticalCenter
 							text: entry.modelData.title
 							color: entry.on ? Theme.primaryText : Theme.fg
-							font.family: Theme.fontSans
-							font.hintingPreference: Theme.hinting
-							font.pixelSize: Theme.textBody
 							font.weight: Font.Medium
 						}
 					}
@@ -137,7 +121,7 @@ FloatingWindow {
 			}
 		}
 
-		Text {
+		UiText {
 			x: 22
 			anchors.bottom: parent.bottom
 			anchors.bottomMargin: 18
@@ -145,9 +129,6 @@ FloatingWindow {
 			wrapMode: Text.Wrap
 			text: "Saved to ~/.config/desktop/shell.json"
 			color: Theme.fgMuted
-			font.family: Theme.fontSans
-			font.hintingPreference: Theme.hinting
-			font.weight: Theme.textWeight
 			font.pixelSize: Theme.textCaption
 		}
 	}
@@ -164,11 +145,9 @@ FloatingWindow {
 		spacing: 16
 		Keys.onEscapePressed: Panel.settingsOpen = false
 
-		Text {
+		UiText {
 			text: root.pages.find(p => p.key === root.page)?.title ?? ""
-			color: Theme.fg
 			font.family: Theme.fontHeading
-			font.hintingPreference: Theme.hinting
 			font.pixelSize: Theme.px(22)
 			font.weight: Font.DemiBold
 		}

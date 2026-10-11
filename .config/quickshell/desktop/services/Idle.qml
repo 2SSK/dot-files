@@ -12,7 +12,7 @@ import qs
 Singleton {
 	id: root
 
-	readonly property bool wayland: !!Quickshell.env("WAYLAND_DISPLAY")
+	readonly property bool wayland: Config.wayland
 	readonly property var times: [Config.idle.dim, Config.idle.lock, Config.idle.off]
 	// swayidle's arguments: each timeout counts from when you stopped
 	readonly property var swayidle: {

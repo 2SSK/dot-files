@@ -75,13 +75,10 @@ Column {
 					color: Theme.primary
 				}
 
-				Text {
+				UiText {
 					anchors.verticalCenter: parent.verticalCenter
 					text: card.info.label
 					color: Theme.fgMuted
-					font.family: Theme.fontSans
-					font.hintingPreference: Theme.hinting
-					font.pixelSize: Theme.textBody
 					font.weight: Font.Medium
 				}
 			}
@@ -120,12 +117,9 @@ Column {
 					width: parent.width - 28
 					spacing: 6
 
-					Text {
+					UiText {
 						text: tile.info.label
 						color: Theme.fgMuted
-						font.family: Theme.fontSans
-						font.hintingPreference: Theme.hinting
-						font.weight: Theme.textWeight
 						font.pixelSize: Theme.textLabel
 					}
 
@@ -207,13 +201,10 @@ Column {
 						color: Theme.primary
 					}
 
-					Text {
+					UiText {
 						anchors.verticalCenter: parent.verticalCenter
 						text: half.info.label
 						color: Theme.fgMuted
-						font.family: Theme.fontSans
-						font.hintingPreference: Theme.hinting
-						font.pixelSize: Theme.textBody
 						font.weight: Font.Medium
 					}
 				}
@@ -226,15 +217,12 @@ Column {
 					font.pixelSize: Theme.textBody
 				}
 
-				Text {
+				UiText {
 					anchors.right: parent.right
 					anchors.rightMargin: 16
 					y: 40
 					text: half.info.detail
 					color: Theme.fgMuted
-					font.family: Theme.fontSans
-					font.hintingPreference: Theme.hinting
-					font.weight: Theme.textWeight
 					font.pixelSize: Theme.textLabel
 				}
 			}

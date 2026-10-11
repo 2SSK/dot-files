@@ -3,12 +3,9 @@ import qs
 import qs.services
 
 // Opens the todo list; a dot while tasks are open.
-Glyph {
+BarButton {
 	glyph: Icons.g("checklist")
-	color: Panel.controlOpen && Panel.controlPage === "todo" ? Theme.primary : Theme.fg
-	filled: Panel.controlOpen && Panel.controlPage === "todo"
-	font.pixelSize: Theme.iconSize - 1
-	font.weight: Font.Normal
+	page: "todo"
 
 	Rectangle {
 		visible: Todo.open > 0
@@ -18,12 +15,5 @@ Glyph {
 		height: 6
 		radius: 3
 		color: Theme.primary
-	}
-
-	MouseArea {
-		anchors.fill: parent
-		anchors.margins: -6
-		cursorShape: Qt.PointingHandCursor
-		onClicked: Panel.toggleControl("todo")
 	}
 }

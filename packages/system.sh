@@ -12,6 +12,8 @@ here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$here/../.local/lib/desktop/log.sh"
 # shellcheck source-path=SCRIPTDIR/.. source=.local/lib/desktop/screens.sh
 source "$here/../.local/lib/desktop/screens.sh"
+# shellcheck source-path=SCRIPTDIR/.. source=.local/lib/desktop/state.sh
+source "$here/../.local/lib/desktop/state.sh"
 ((EUID != 0)) || die run_as_user msg='run it as your user: it reads your theme and calls sudo itself'
 src="$here/../system"
 root="${SYSTEM_ROOT:-}" # tests point this at a scratch directory
@@ -248,14 +250,13 @@ n = int.from_bytes(d[i:i + 4], "big"); print(d[i + 4:i + 4 + n].split(b"\0")[0].
 }
 
 grub_build() { # <dir> <grub-mkfont>: the theme from the current palette (its dark colours), no root
-	local out=$1 state="${XDG_STATE_HOME:-$HOME/.local/state}/desktop" family=tokyonight mode=dark
-	# shellcheck disable=SC1091 # family=/mode= of the current theme, written by theme_render.py
-	[[ -r $state/theme/current ]] && source "$state/theme/current"
+	local out=$1 family mode
+	read -r family mode < <(current_theme)
 	python3 "$here/../.local/lib/desktop/theme_render.py" render "$family" "$mode" # a render from before the template
 	mkdir -p "$out"
 	grub_font "$2" 'Inter:style=Medium' 22 Desktop "$out/menu.pf2"
 	grub_font "$2" 'Inter:style=Regular' 15 DesktopHint "$out/hint.pf2"
-	boot_theme "$state/theme/grub-theme.txt" "$out"
+	boot_theme "$desktop_state/theme/grub-theme.txt" "$out"
 }
 
 # The boot menu: the theme (theme set keeps its theme.txt and background in step, so those two are
@@ -356,17 +357,9 @@ grub_preview() { # the theme in a small QEMU machine, in a window (no root, noth
 	qemu-system-x86_64 -m 256 -cdrom "$tmp/preview.iso" -vga std -name 'GRUB preview'
 }
 
-install_if_changed() { # <file> <destination>: install as root when missing or different
-	cmp -s "$1" "$2" 2>/dev/null && return 0
-	sudo install -D -m 644 "$1" "$2"
-	changed=1
-}
-
 sddm_theme() { # the login screen in the desktop theme; theme set keeps its colours in step
-	local state="${XDG_STATE_HOME:-$HOME/.local/state}/desktop" dir=usr/share/sddm/themes/desktop
-	local family=tokyonight mode=dark
-	# shellcheck disable=SC1091 # family=/mode= of the current theme, written by theme_render.py
-	[[ -r $state/theme/current ]] && source "$state/theme/current"
+	local state="$desktop_state" dir=usr/share/sddm/themes/desktop family mode
+	read -r family mode < <(current_theme)
 	# a render from before this template existed lacks it; an unchanged render is a no-op
 	python3 "$here/../.local/lib/desktop/theme_render.py" render "$family" "$mode"
 	put $dir/Main.qml
@@ -382,8 +375,7 @@ sddm_theme() { # the login screen in the desktop theme; theme set keeps its colo
 	cmp -s "$state/theme/sddm-theme.conf" "$root$shared/theme.conf" || { install -m 644 "$state/theme/sddm-theme.conf" "$root$shared/theme.conf" && changed=1; }
 
 	local wallpaper tmp
-	wallpaper="$(readlink -f "$state/wallpaper" 2>/dev/null || true)"
-	[[ -f $wallpaper ]] || wallpaper="$here/../.local/share/desktop/wallpapers/cat-mocha-lavender_19.jpg"
+	wallpaper="$(current_wallpaper)"
 	tmp="$(mktemp --suffix=.jpg)"
 	# shellcheck disable=SC2064 # expand now: tmp is local
 	trap "rm -f '$tmp'" RETURN
@@ -405,14 +397,9 @@ sddm_theme() { # the login screen in the desktop theme; theme set keeps its colo
 			changed=1
 		fi
 	else
-		printf '[Theme]\nCurrent=desktop\n' >"$tmp.conf"
-		install_if_changed "$tmp.conf" "$root/etc/sddm.conf.d/10-desktop.conf"
-		rm -f "$tmp.conf"
+		put etc/sddm.conf.d/10-desktop.conf
 	fi
-	# the theme shows the battery, read from /sys: QML reads local files only when this is set
-	printf '[General]\nGreeterEnvironment=QML_XHR_ALLOW_FILE_READ=1\n' >"$tmp.conf"
-	install_if_changed "$tmp.conf" "$root/etc/sddm.conf.d/20-desktop-greeter.conf"
-	rm -f "$tmp.conf"
+	put etc/sddm.conf.d/20-desktop-greeter.conf # the battery on the login screen
 }
 
 # The parts that apply to this machine, in the order they run: what `system.sh` alone sets up.

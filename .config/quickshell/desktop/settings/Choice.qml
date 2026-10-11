@@ -2,6 +2,7 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import qs
+import qs.widgets
 
 // Segmented buttons: one of `options` ({ value, label }) is `value`; a click calls picked(value).
 Rectangle {
@@ -43,16 +44,13 @@ Rectangle {
 					}
 				}
 
-				Text {
+				UiText {
 					id: label
 
 					x: Math.round((parent.width - width) / 2)
 					y: Math.round((parent.height - height) / 2)
 					text: option.modelData.label
 					color: option.on ? Theme.primaryText : Theme.fg
-					font.family: Theme.fontSans
-					font.hintingPreference: Theme.hinting
-					font.pixelSize: Theme.textBody
 					font.weight: Font.Medium
 				}
 

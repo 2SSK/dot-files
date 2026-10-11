@@ -36,28 +36,19 @@ Singleton {
 	property bool launcherShown: false
 	property bool wallpaperShown: false
 
-	// each panel's size, centred under the bar (the bar opens its outline there: hangingWidth)
-	readonly property int controlWidth: 760
-	readonly property int controlHeight: 700 // the home page with two players and 115% text
-	readonly property int controlFillet: 18
-	readonly property int clipboardWidth: 920
-	readonly property int clipboardHeight: 580
-	readonly property int captureWidth: 520
-	readonly property int captureHeight: 324
-	readonly property int launcherWidth: 640
-	readonly property int launcherHeight: 560
-	readonly property int wallpaperWidth: 720
-	readonly property int wallpaperHeight: 540
+	// each panel's size, centred under the bar (the bar opens its outline there: hangingWidth), and
+	// the curves where a panel meets the bar
 	readonly property var sizes: ({
-			control: [controlWidth, controlHeight],
-			clipboard: [clipboardWidth, clipboardHeight],
-			wallpaper: [wallpaperWidth, wallpaperHeight],
-			launcher: [launcherWidth, launcherHeight],
-			capture: [captureWidth, captureHeight],
-			auth: [480, 250]
+			control: Qt.size(760, 700), // the home page with two players and 115% text
+			clipboard: Qt.size(920, 580),
+			wallpaper: Qt.size(720, 540),
+			launcher: Qt.size(640, 560),
+			capture: Qt.size(520, 324),
+			auth: Qt.size(480, 250)
 		})
+	readonly property int fillet: 18
 	readonly property string hanging: authOpen ? "auth" : panels.find(p => root[p + "Open"]) ?? ""
-	readonly property int hangingWidth: sizes[hanging]?.[0] ?? 0
+	readonly property int hangingWidth: sizes[hanging]?.width ?? 0
 	property string hangingScreen: "" // the screen a panel hangs on (pinned as it opens: HangingPanel)
 
 	// a panel opened closes the others (the password prompt closes them all)
@@ -98,6 +89,11 @@ Singleton {
 		}
 		launcherMode = mode || "apps";
 		launcherOpen = true;
+	}
+
+	// the control center is open on this page
+	function showing(page: string): bool {
+		return controlOpen && controlPage === page;
 	}
 
 	// the control center, on a page (home, notifications, ...); again on the same page closes it
@@ -143,14 +139,14 @@ Singleton {
 		selected = 0;
 		armed = -1;
 		view = "power";
-		Quickshell.execDetached([Quickshell.env("SWAYSOCK") ? "swaymsg" : "i3-msg", "-q", 'mode "power"']);
+		WindowManager.command('mode "power"');
 	}
 
 	function closePower(): void {
 		if (view === "power")
 			view = "";
 		armed = -1;
-		Quickshell.execDetached([Quickshell.env("SWAYSOCK") ? "swaymsg" : "i3-msg", "-q", 'mode "default"']);
+		WindowManager.command('mode "default"');
 	}
 
 	function togglePower(): void {
@@ -189,7 +185,7 @@ Singleton {
 		// the locker (desktop-lock, run by xss-lock on X11) locks for lock-session and before sleep
 		Quickshell.execDetached({
 			lock: ["loginctl", "lock-session"],
-			logout: Quickshell.env("SWAYSOCK") ? ["swaymsg", "exit"] : ["i3-msg", "exit"],
+			logout: [WindowManager.msg, "exit"],
 			suspend: ["systemctl", "suspend"],
 			reboot: ["systemctl", "reboot"],
 			poweroff: ["systemctl", "poweroff"]

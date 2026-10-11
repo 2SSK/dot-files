@@ -18,6 +18,16 @@ Singleton {
 	readonly property string folder: (Quickshell.env("XDG_VIDEOS_DIR") || Quickshell.env("HOME") + "/Videos") + "/Recordings"
 	property string file: ""
 	property date started: new Date(0)
+	// how long it has been recording, ticking once a second meanwhile (the bar and the capture panel)
+	property int seconds: 0
+
+	Timer {
+		running: root.recording
+		interval: 1000
+		repeat: true
+		triggeredOnStart: true
+		onTriggered: root.seconds = Math.floor((Date.now() - root.started.getTime()) / 1000)
+	}
 
 	function toggle(): void {
 		if (process.running)

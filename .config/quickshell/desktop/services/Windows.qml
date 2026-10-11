@@ -3,6 +3,7 @@ pragma Singleton
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import qs
 
 // The open windows, most recently focused first (the switcher's ring), and the switcher's state.
 // The list is reread from i3's tree (sway's on Wayland) whenever a window changes; the order comes
@@ -28,7 +29,7 @@ Singleton {
 			switching = true;
 			selected = (by > 0 ? Math.min(1, n - 1) : n - 1);
 			showLater.restart();
-			ctrl.running = !Quickshell.env("WAYLAND_DISPLAY");
+			ctrl.running = !Config.wayland;
 			return;
 		}
 		selected = (selected + by + n) % n;

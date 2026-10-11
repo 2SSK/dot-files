@@ -14,13 +14,14 @@
 # X11: feh, through a few half-size blended frames made in parallel (feh has no transitions).
 set -euo pipefail
 
-state="${XDG_STATE_HOME:-$HOME/.local/state}/desktop"
 here="$(dirname "$(readlink -f "$0")")"
-fallback="$here/../share/desktop/wallpapers/cat-mocha-lavender_19.jpg"
 frames=(25 50 75)
 
 # shellcheck source-path=SCRIPTDIR/.. source=.local/lib/desktop/screens.sh
 source "$here/../lib/desktop/screens.sh"
+# shellcheck source-path=SCRIPTDIR/.. source=.local/lib/desktop/state.sh
+source "$here/../lib/desktop/state.sh"
+state="$desktop_state"
 
 draw() { # <image>: X11 only (the shell draws it on Wayland)
 	[[ -n ${WAYLAND_DISPLAY:-} ]] || feh --no-fehbg --bg-fill "$1"
@@ -46,8 +47,7 @@ fade() { # <from> <to>: blended frames between them, then the new one
 # Skipped when packages/system.sh hasn't set it up.
 screens() {
 	local wallpaper sddm="${DESKTOP_SDDM_DIR:-/var/lib/desktop/sddm}"
-	wallpaper="$(readlink -f "$state/wallpaper" 2>/dev/null || true)"
-	[[ -f $wallpaper ]] || wallpaper="$fallback"
+	wallpaper="$(current_wallpaper)"
 	[[ -d $sddm && -w $sddm ]] || return 0
 	login_background "$wallpaper" "$sddm/.background.new.jpg" && mv -f "$sddm/.background.new.jpg" "$sddm/background.jpg"
 }
@@ -66,11 +66,9 @@ next_boot() {
 	[[ $(systemctl is-system-running 2>/dev/null || true) == stopping ]] || return 0
 	local conf="${XDG_CONFIG_HOME:-$HOME/.config}/desktop/shell.json"
 	[[ $(jq -r '.wallpaper.rotate // "off"' "$conf" 2>/dev/null) == boot ]] || return 0
-	# shellcheck disable=SC2034 # mode: set by the theme's current file, kept local
-	local family=tokyonight mode current next all=() pool=() file
-	# shellcheck disable=SC1091 # family= and mode= of the current theme
-	[[ -r $state/theme/current ]] && source "$state/theme/current"
-	current="$(readlink -f "$state/wallpaper" 2>/dev/null || true)"
+	local family current next all=() pool=() file
+	read -r family _ < <(current_theme)
+	current="$(current_wallpaper)"
 	mapfile -t all < <(images)
 	# from the theme's own folder (~/Wallpaper-Bank/<family>/) when it has a choice, as the shell does
 	for file in "${all[@]}"; do [[ $(basename "$(dirname "$file")") == "$family" ]] && pool+=("$file"); done
@@ -88,7 +86,7 @@ next-boot) next_boot ;;
 set)
 	[[ -f ${2:-} ]] || { echo "desktop-wallpaper: not an image: ${2:-}" >&2 && exit 2; }
 	mkdir -p "$state"
-	from="$(readlink -f "$state/wallpaper" 2>/dev/null || echo "$fallback")"
+	from="$(current_wallpaper)"
 	fade "$from" "$2"
 	draw "$2"
 	ln -sfn "$2" "$state/wallpaper"
@@ -96,8 +94,7 @@ set)
 	screens
 	;;
 restore)
-	current="$(readlink -f "$state/wallpaper" 2>/dev/null || true)"
-	[[ -f $current ]] || current="$fallback"
+	current="$(current_wallpaper)"
 	draw "$current"
 	;;
 *)

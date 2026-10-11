@@ -60,7 +60,7 @@ Column {
 		}
 	}
 
-	Text {
+	UiText {
 		visible: !Connectivity.wifiAvailable || !Connectivity.wifi
 		width: parent.width
 		topPadding: 30
@@ -68,10 +68,6 @@ Column {
 		text: Connectivity.wifiBlocked ? "Wi-Fi is blocked (the airplane-mode key, or rfkill)." : !Connectivity.wifiAvailable ? "No Wi-Fi here (it needs NetworkManager and a Wi-Fi card)." : "Wi-Fi is off."
 		wrapMode: Text.Wrap
 		color: Theme.fgMuted
-		font.family: Theme.fontSans
-		font.hintingPreference: Theme.hinting
-		font.weight: Theme.textWeight
-		font.pixelSize: Theme.textBody
 	}
 
 	Repeater {
@@ -150,14 +146,11 @@ Column {
 				}
 			}
 
-			Text {
+			UiText {
 				visible: entry.failure !== ""
 				leftPadding: 16
 				text: entry.failure
 				color: Theme.error
-				font.family: Theme.fontSans
-				font.hintingPreference: Theme.hinting
-				font.weight: Theme.textWeight
 				font.pixelSize: Theme.textLabel
 			}
 

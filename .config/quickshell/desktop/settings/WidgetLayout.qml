@@ -150,13 +150,12 @@ Item {
 					border.width: hot ? 1 : 0
 					border.color: Theme.primary
 
-					Text {
+					UiText {
 						x: 14
 						y: 12
 						text: column.modelData.title
 						color: Theme.fgMuted
 						font.family: Theme.fontHeading
-						font.hintingPreference: Theme.hinting
 						font.pixelSize: Theme.textLabel
 						font.weight: Font.DemiBold
 					}
@@ -213,18 +212,13 @@ Item {
 									color: Theme.fgMuted
 								}
 
-								Text {
+								UiText {
 									anchors.left: handle.right
 									anchors.leftMargin: 6
 									anchors.right: close.left
 									anchors.verticalCenter: parent.verticalCenter
 									text: root.names[chip.modelData] ?? chip.modelData
 									elide: Text.ElideRight
-									color: Theme.fg
-									font.family: Theme.fontSans
-									font.hintingPreference: Theme.hinting
-									font.weight: Theme.textWeight
-									font.pixelSize: Theme.textBody
 								}
 
 								MouseArea {
@@ -295,13 +289,10 @@ Item {
 			}
 		}
 
-		Text {
+		UiText {
 			visible: root.unused.length > 0
 			text: "Not on the bar: drag one into a column"
 			color: Theme.fgMuted
-			font.family: Theme.fontSans
-			font.hintingPreference: Theme.hinting
-			font.weight: Theme.textWeight
 			font.pixelSize: Theme.textLabel
 		}
 
@@ -323,14 +314,11 @@ Item {
 					opacity: root.dragName === modelData && !root.dragFrom ? 0.35 : 1
 					color: spareArea.containsMouse ? Qt.alpha(Theme.overlay, 0.95) : Qt.alpha(Theme.overlay, 0.6)
 
-					Text {
+					UiText {
 						id: label
 
 						anchors.centerIn: parent
 						text: root.names[spare.modelData] ?? spare.modelData
-						color: Theme.fg
-						font.family: Theme.fontSans
-						font.hintingPreference: Theme.hinting
 						font.pixelSize: Theme.textLabel
 						font.weight: Font.Medium
 					}
@@ -362,15 +350,12 @@ Item {
 		radius: 9
 		color: Theme.primary
 
-		Text {
+		UiText {
 			id: ghostLabel
 
 			anchors.centerIn: parent
 			text: root.names[root.dragName] ?? root.dragName
 			color: Theme.primaryText
-			font.family: Theme.fontSans
-			font.hintingPreference: Theme.hinting
-			font.pixelSize: Theme.textBody
 			font.weight: Font.Medium
 		}
 	}

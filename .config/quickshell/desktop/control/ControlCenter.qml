@@ -24,8 +24,8 @@ HangingPanel {
 
 	name: "control center"
 	open: Panel.controlOpen
-	panelWidth: Panel.controlWidth
-	panelHeight: Panel.controlHeight
+	panelWidth: Panel.sizes.control.width
+	panelHeight: Panel.sizes.control.height
 	onDismissed: Panel.controlOpen = false
 	// between pages: Ctrl+Tab (Shift: back) or Ctrl+PgDn/PgUp, Alt+1…8 straight to one; on Home,
 	// the media keys: Space plays or pauses, ← → skip
@@ -177,12 +177,11 @@ HangingPanel {
 		y: 14
 		height: 42
 
-		Text {
+		UiText {
 			anchors.verticalCenter: parent.verticalCenter
 			text: page.item?.title ?? ""
 			color: Theme.primary
 			font.family: Theme.fontHeading
-			font.hintingPreference: Theme.hinting
 			font.pixelSize: Theme.px(18)
 			font.weight: Font.DemiBold
 		}

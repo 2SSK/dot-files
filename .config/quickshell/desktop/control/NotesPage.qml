@@ -100,24 +100,17 @@ Item {
 					anchors.verticalCenter: parent.verticalCenter
 					spacing: 2
 
-					Text {
+					UiText {
 						width: parent.width
 						text: Notes.heading(entry.modelData)
 						elide: Text.ElideRight
-						color: Theme.fg
-						font.family: Theme.fontSans
-						font.hintingPreference: Theme.hinting
-						font.pixelSize: Theme.textBody
 						font.weight: Font.Medium
 					}
 
-					Text {
+					UiText {
 						width: parent.width
 						text: Qt.formatDateTime(new Date(entry.modelData.updated), new Date(entry.modelData.updated).toDateString() === new Date().toDateString() ? "hh:mm AP" : "d MMM")
 						color: Theme.fgMuted
-						font.family: Theme.fontSans
-						font.hintingPreference: Theme.hinting
-						font.weight: Theme.textWeight
 						font.pixelSize: Theme.textCaption
 					}
 				}
@@ -137,15 +130,12 @@ Item {
 			}
 		}
 
-		Text {
+		UiText {
 			visible: root.shown.length === 0
 			width: parent.width
 			horizontalAlignment: Text.AlignHCenter
 			text: root.query ? "Nothing matches." : "No notes yet."
 			color: Theme.fgMuted
-			font.family: Theme.fontSans
-			font.hintingPreference: Theme.hinting
-			font.weight: Theme.textWeight
 			font.pixelSize: Theme.textLabel
 		}
 	}
@@ -165,14 +155,10 @@ Item {
 			visible: Notes.current === null
 			spacing: 12
 
-			Text {
+			UiText {
 				anchors.horizontalCenter: parent.horizontalCenter
 				text: "A new note"
 				color: Theme.fgMuted
-				font.family: Theme.fontSans
-				font.hintingPreference: Theme.hinting
-				font.weight: Theme.textWeight
-				font.pixelSize: Theme.textBody
 			}
 
 			Row {
@@ -203,13 +189,9 @@ Item {
 								color: Theme.fg
 							}
 
-							Text {
+							UiText {
 								anchors.horizontalCenter: parent.horizontalCenter
 								text: starter.modelData.label
-								color: Theme.fg
-								font.family: Theme.fontSans
-								font.hintingPreference: Theme.hinting
-								font.weight: Theme.textWeight
 								font.pixelSize: Theme.textLabel
 							}
 						}

@@ -214,9 +214,9 @@ x_resize() {
 	EOF
 }
 
-user_data() { # <name> <password hash> <gui 0|1> <desktop 0|1> <share tags> <packages...>
-	local name=$1 hash=$2 gui=$3 desktop=$4 tags=$5 tag
-	shift 5
+user_data() { # <name> <password hash> <gui 0|1> <desktop 0|1> <share tags> <key files, one a line> <packages...>
+	local name=$1 hash=$2 gui=$3 desktop=$4 tags=$5 keys=$6 tag
+	shift 6
 	cat <<-EOF
 		#cloud-config
 		hostname: $name
@@ -227,10 +227,10 @@ user_data() { # <name> <password hash> <gui 0|1> <desktop 0|1> <share tags> <pac
 		    lock_passwd: false
 		    passwd: "$hash"
 	EOF
-	if ((${#ssh_keys[@]})); then # --key: logins with these keys (password logins stay off)
+	if [[ -n $keys ]]; then # --key: logins with these keys (password logins stay off)
 		echo '    ssh_authorized_keys:'
 		local key
-		for key in "${ssh_keys[@]}"; do echo "      - \"$(cat "$key")\""; done
+		while IFS= read -r key; do echo "      - \"$(cat "$key")\""; done <<<"$keys"
 	fi
 	cat <<-EOF
 		ssh_pwauth: false
@@ -338,7 +338,7 @@ cmd_create() {
 	seed="$(mktemp)"
 	# shellcheck disable=SC2064 # expand now: seed is local and gone by exit time
 	trap "rm -f -- ${seed@Q}" EXIT
-	user_data "$name" "$hash" "$gui" "$desktop" "$tags" "${pkgs[@]}" >"$seed"
+	user_data "$name" "$hash" "$gui" "$desktop" "$tags" "$( ((${#ssh_keys[@]})) && printf '%s\n' "${ssh_keys[@]}")" "${pkgs[@]}" >"$seed"
 
 	# Disk: a thin copy on top of the distro's base image
 	base="$(base_volume "$url")"

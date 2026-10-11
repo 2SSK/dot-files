@@ -20,8 +20,8 @@ listed() { # <file>...: the package names in the files, one per line (comments a
 	grep -hvE '^[[:space:]]*(#|$)' "$@" | awk '{ print $1 }'
 }
 
-repo_packages() { # the arch column of the install lists, without the aur: and @ (built here) marks
-	awk '!/^#/ && NF { n = $1; sub(/^(aur:|@)/, "", n); if (n != "-") print n }' "$here"/*.txt
+repo_packages() { # what the install lists name for Arch (install.sh reads them), without the aur: and @ marks
+	"$here/install.sh" --list arch | sed -E 's/^(aur:|@)//' | grep -vxe '-'
 }
 
 installed() { # [--exact]: the installed packages for the names on stdin. A name can be another

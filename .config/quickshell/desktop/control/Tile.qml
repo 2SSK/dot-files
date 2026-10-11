@@ -53,25 +53,20 @@ Rectangle {
 		anchors.verticalCenter: parent.verticalCenter
 		spacing: 2
 
-		Text {
+		UiText {
 			width: parent.width
 			text: root.label
 			elide: Text.ElideRight
 			color: root.on ? Theme.primaryText : Theme.fg
 			font.family: Theme.fontHeading
-			font.hintingPreference: Theme.hinting
-			font.pixelSize: Theme.textBody
 			font.weight: Font.DemiBold
 		}
 
-		Text {
+		UiText {
 			width: parent.width
 			text: root.detail
 			elide: Text.ElideRight
 			color: root.on ? Qt.alpha(Theme.primaryText, 0.75) : Theme.fgMuted
-			font.family: Theme.fontSans
-			font.hintingPreference: Theme.hinting
-			font.weight: Theme.textWeight
 			font.pixelSize: Theme.textCaption
 		}
 	}

@@ -29,7 +29,7 @@ Scope {
 	signal dismissed
 	signal keyPressed(var event) // keys nothing inside took; an Escape the panel doesn't take closes it
 
-	readonly property bool wayland: !!Quickshell.env("WAYLAND_DISPLAY")
+	readonly property bool wayland: Config.wayland
 	// the screen it opened on, kept while it's open: focus moving to another monitor (on sway it
 	// follows the pointer) doesn't carry it along
 	readonly property ShellScreen focusedScreen: Quickshell.screens.find(s => s.name === WindowManager.focusedOutput) ?? Quickshell.screens[0]
@@ -44,7 +44,7 @@ Scope {
 	readonly property real px: side ? (Config.position === "left" ? island.x + island.width + sideGap : island.x - panelWidth - sideGap) : Math.round(island.x + (island.width - panelWidth) / 2)
 	readonly property real py: side ? Math.round(Math.max(sideGap, Math.min(screen.height - panelHeight - sideGap, island.y + (island.height - panelHeight) / 2))) : !Panel.barShown ? (below ? 0 : screen.height - panelHeight) : below ? island.y + island.height : island.y - panelHeight
 	// the curves where it joins a horizontal bar; none beside a side bar, which it doesn't touch
-	readonly property int fillet: side ? 0 : Panel.controlFillet
+	readonly property int fillet: side ? 0 : Panel.fillet
 	// the bar's colour and see-through as much, so the panel reads as part of it: on sway SwayFX blurs
 	// behind it as behind the bar (effects.conf, desktop-panel). X11: solid, as nothing is blurred
 	// behind a window as big as the screen and what's under would show through
@@ -64,28 +64,18 @@ Scope {
 		onTriggered: root.takeFocus()
 	}
 
-	ElapsedTimer {
-		id: opened
-	}
-
 	Component.onCompleted: {
 		pinned = focusedScreen;
 		Panel.hangingScreen = pinned.name; // the bar there opens its outline for it
 	}
 	Component.onDestruction: if (Panel.hangingScreen === pinned?.name) Panel.hangingScreen = ""
 
-	// i3's window events: focus once it has the window; another window taking the focus closes it
-	Connections {
-		target: WindowManager
-		enabled: !root.wayland
-
-		function onWindowEvent(data: var): void {
-			const name = data.container?.name ?? "";
-			if (data.change === "new" && name === root.title)
-				root.takeFocus();
-			else if (data.change === "focus" && name && name !== root.title && opened.elapsed() > 600)
-				root.dismissed();
-		}
+	// i3: focus once it has the window; another window taking the focus closes it
+	FocusWatch {
+		title: root.title
+		active: !root.wayland
+		onArrived: root.takeFocus()
+		onFocusLost: root.dismissed()
 	}
 
 	// what the panels put in: moved into the window's card once that exists. A focus scope, so the

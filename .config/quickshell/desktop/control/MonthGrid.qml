@@ -49,12 +49,10 @@ Column {
 		width: parent.width
 		height: 32
 
-		Text {
+		UiText {
 			anchors.verticalCenter: parent.verticalCenter
 			text: Qt.formatDate(new Date(root.year, root.month, 1), "MMMM yyyy")
-			color: Theme.fg
 			font.family: Theme.fontHeading
-			font.hintingPreference: Theme.hinting
 			font.pixelSize: Theme.px(16)
 			font.weight: Font.DemiBold
 		}
@@ -156,13 +154,10 @@ Column {
 						border.color: Theme.primary
 					}
 
-					Text {
+					UiText {
 						anchors.centerIn: parent
 						text: day.modelData.getDate()
 						color: day.today ? Theme.primaryText : day.inMonth ? Theme.fg : Qt.alpha(Theme.fgMuted, 0.5)
-						font.family: Theme.fontSans
-						font.hintingPreference: Theme.hinting
-						font.pixelSize: Theme.textBody
 						font.weight: day.today ? Font.Bold : Font.DemiBold // semibold: solid numbers in the grid
 						font.features: ({ tnum: 1 })
 					}

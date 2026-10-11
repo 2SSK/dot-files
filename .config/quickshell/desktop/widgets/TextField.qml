@@ -1,6 +1,5 @@
 import QtQuick
 import qs
-import qs.widgets
 
 // A one-line text field with a placeholder; accepted(text) on Enter. A password field can be
 // revealable: an eye at its end shows what's typed.
@@ -71,16 +70,12 @@ Rectangle {
 		}
 	}
 
-	Text {
+	UiText {
 		anchors.left: parent.left
 		anchors.leftMargin: 14
 		anchors.verticalCenter: parent.verticalCenter
 		visible: input.text === ""
 		text: root.placeholder
 		color: Theme.fgMuted
-		font.family: Theme.fontSans
-		font.hintingPreference: Theme.hinting
-		font.weight: Theme.textWeight
-		font.pixelSize: Theme.textBody
 	}
 }

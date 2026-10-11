@@ -4,7 +4,6 @@ import QtQuick
 import Quickshell
 import Quickshell.Services.Polkit
 import qs
-import qs.control
 import qs.widgets
 
 // The shell's password prompt for apps asking for admin rights (polkit: pkexec, Timeshift, ...),
@@ -22,8 +21,8 @@ HangingPanel {
 
 	name: "authentication"
 	open: Panel.authOpen
-	panelWidth: 480
-	panelHeight: 250
+	panelWidth: Panel.sizes.auth.width
+	panelHeight: Panel.sizes.auth.height
 	onDismissed: cancel()
 	Component.onCompleted: password.focusField()
 
@@ -44,28 +43,22 @@ HangingPanel {
 				color: Theme.primary
 			}
 
-			Text {
+			UiText {
 				anchors.verticalCenter: parent.verticalCenter
 				text: "Authentication required"
-				color: Theme.fg
 				font.family: Theme.fontHeading
-				font.hintingPreference: Theme.hinting
 				font.pixelSize: Theme.px(17)
 				font.weight: Font.DemiBold
 			}
 		}
 
-		Text {
+		UiText {
 			width: parent.width
 			text: root.flow?.message ?? ""
 			wrapMode: Text.Wrap
 			maximumLineCount: 3
 			elide: Text.ElideRight
 			color: Theme.fgMuted
-			font.family: Theme.fontSans
-			font.hintingPreference: Theme.hinting
-			font.weight: Theme.textWeight
-			font.pixelSize: Theme.textBody
 		}
 
 		TextField {
@@ -94,15 +87,12 @@ HangingPanel {
 			width: parent.width
 			height: 34
 
-			Text {
+			UiText {
 				anchors.verticalCenter: parent.verticalCenter
 				width: parent.width - cancelChip.width - 12
 				text: root.flow?.supplementaryMessage ?? ""
 				elide: Text.ElideRight
 				color: root.flow?.supplementaryIsError ? Theme.error : Theme.fgMuted
-				font.family: Theme.fontSans
-				font.hintingPreference: Theme.hinting
-				font.weight: Theme.textWeight
 				font.pixelSize: Theme.textLabel
 			}
 

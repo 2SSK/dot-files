@@ -1,6 +1,5 @@
 import QtQuick
 import qs
-import qs.control
 import qs.services
 import qs.widgets
 
@@ -79,14 +78,9 @@ Column {
 					onToggled: checked => Config.set("bar", "length", checked ? 0 : 0.55)
 				}
 
-				Text {
+				UiText {
 					anchors.verticalCenter: parent.verticalCenter
 					text: "Auto"
-					color: Theme.fg
-					font.family: Theme.fontSans
-					font.hintingPreference: Theme.hinting
-					font.weight: Theme.textWeight
-					font.pixelSize: Theme.textBody
 				}
 
 				Range {

@@ -10,7 +10,8 @@
                                           {"kind": "files", "paths": [...]}
                                         nothing for what a password manager marks as a password
   desktop-clipboard copy text           stdin, as text
-  desktop-clipboard copy image <path>   the picture, as an image (pastes into a chat as one)
+  desktop-clipboard copy image <path> [type]  the picture, as an image (pastes into a chat as one);
+                                        its type from the file's extension unless given
   desktop-clipboard copy files <path>...  as a file manager copies files: their file:// URIs as
                                         text/uri-list alone, so a chat or mail attaches them
 """
@@ -91,8 +92,8 @@ def put(kind, data):
 def copy(args):
     if args[:1] == ["text"]:
         put("UTF8_STRING" if not WAYLAND else "text/plain;charset=utf-8", sys.stdin.buffer.read())
-    elif args[:1] == ["image"] and len(args) == 2:
-        kind = next((t for t, ext in IMAGE_TYPES.items() if args[1].endswith("." + ext)), "image/png")
+    elif args[:1] == ["image"] and len(args) in (2, 3):
+        kind = args[2] if len(args) == 3 else next((t for t, ext in IMAGE_TYPES.items() if args[1].endswith("." + ext)), "image/png")
         with open(args[1], "rb") as f:
             put(kind, f.read())
     elif args[:1] == ["files"] and len(args) > 1:

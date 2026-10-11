@@ -4,11 +4,13 @@ import qs.services
 
 // The bell: a dot when something new arrived, struck through while Do Not Disturb is on. A click
 // opens the control center's notifications, a right click toggles Do Not Disturb.
-Glyph {
+BarButton {
 	glyph: Notifications.dnd ? Icons.g("bell-off") : Icons.g("bell")
-	color: Panel.controlOpen && Panel.controlPage === "notifications" ? Theme.primary : Notifications.dnd ? Theme.fgMuted : Theme.fg
-	filled: Panel.controlOpen && Panel.controlPage === "notifications"
+	page: "notifications"
+	idleColor: Notifications.dnd ? Theme.fgMuted : Theme.fg
 	font.pixelSize: Theme.iconSize
+	buttons: Qt.LeftButton | Qt.RightButton
+	onClicked: Notifications.dnd = !Notifications.dnd // the right button (the left one opens the page)
 
 	Rectangle {
 		visible: Notifications.unread > 0 && !Notifications.dnd
@@ -19,13 +21,5 @@ Glyph {
 		height: 7
 		radius: 4
 		color: Theme.primary
-	}
-
-	MouseArea {
-		anchors.fill: parent
-		anchors.margins: -6
-		acceptedButtons: Qt.LeftButton | Qt.RightButton
-		cursorShape: Qt.PointingHandCursor
-		onClicked: event => event.button === Qt.RightButton ? Notifications.dnd = !Notifications.dnd : Panel.toggleControl("notifications")
 	}
 }

@@ -1,6 +1,5 @@
 import QtQuick
 import qs
-import qs.widgets
 
 // A small rounded button: an optional icon and a label; on fills it with the accent.
 Rectangle {
@@ -40,14 +39,11 @@ Rectangle {
 			color: root.on ? Theme.primaryText : Theme.fg
 		}
 
-		Text {
+		UiText {
 			visible: root.label !== ""
 			anchors.verticalCenter: parent.verticalCenter
 			text: root.label
 			color: root.on ? Theme.primaryText : Theme.fg
-			font.family: Theme.fontSans
-			font.hintingPreference: Theme.hinting
-			font.pixelSize: Theme.textBody
 			font.weight: root.on ? Font.DemiBold : Font.Normal
 		}
 	}

@@ -8,7 +8,8 @@
 #       gpu-screen-recorder at 60 fps with the system sound, into <file>; prints "recording" as it
 #       starts, then runs in the foreground (exec), so SIGINT ends it and finishes the file.
 # A cancelled region (Escape, or a right click) exits 1 and does nothing.
-# X11: slop, maim, xclip, xdotool. Wayland: slurp, grim, wl-copy; a window records via the portal.
+# X11: slop, maim, xdotool. Wayland: slurp, grim; a window records via the portal. The clipboard:
+# desktop-clipboard.
 set -euo pipefail
 
 usage() {
@@ -72,15 +73,14 @@ shot() { # <mode> [--monitor NAME --geometry G | --focused]
 		window) grim -g "$(swaymsg -t get_tree | jq -r '.. | select(.focused? == true) | .rect | "\(.x),\(.y) \(.width)x\(.height)"')" "$file" ;;
 		screen) if [[ -n $monitor ]]; then grim -o "$monitor" "$file"; else grim "$file"; fi ;;
 		esac
-		wl-copy --type image/png <"$file"
 	else
 		case $mode in
 		region) maim -u -g "$area" "$file" ;;
 		window) maim -u -i "$(xdotool getactivewindow)" "$file" ;;
 		screen) if [[ -n $geometry ]]; then maim -u -g "$geometry" "$file"; else maim -u "$file"; fi ;;
 		esac
-		xclip -selection clipboard -t image/png <"$file"
 	fi
+	desktop-clipboard copy image "$file"
 	notify-send -a Screenshot -t 3000 -i "$file" "Screenshot copied" "$file"
 }
 

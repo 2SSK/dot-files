@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Set up this machine from the repo: packages, submodules, stow into $HOME, login shell.
+# Set up this machine from the repo: packages, stow into $HOME, login shell.
 # Asks first, changes nothing until confirmed, and is safe to re-run.
 set -euo pipefail
 
@@ -175,12 +175,6 @@ main() {
 		step 'Installing shell plugins'
 		"$repo/packages/plugins.sh"
 		ok 'zsh and bash plugins at their pinned tags'
-	fi
-
-	if [[ -f $repo/.gitmodules ]]; then
-		step 'Updating submodules'
-		git -C "$repo" submodule update --init --recursive
-		ok 'submodules up to date'
 	fi
 
 	step 'Linking configs'

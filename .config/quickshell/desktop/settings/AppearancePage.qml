@@ -3,7 +3,6 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell.Io
 import qs
-import qs.control
 import qs.services
 import qs.widgets
 
@@ -101,7 +100,7 @@ Column {
 						}
 					}
 
-					Text {
+					UiText {
 						anchors.centerIn: parent
 						text: swatch.modelData
 						color: swatch.on ? Theme.primaryText : Theme.fg
@@ -111,9 +110,6 @@ Column {
 								duration: 160
 							}
 						}
-						font.family: Theme.fontSans
-						font.hintingPreference: Theme.hinting
-						font.pixelSize: Theme.textBody
 						font.weight: Font.Medium
 					}
 

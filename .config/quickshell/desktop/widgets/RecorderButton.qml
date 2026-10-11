@@ -8,18 +8,8 @@ import qs.services
 Item {
 	id: root
 
-	property int seconds: 0
-
 	implicitWidth: line.implicitWidth
 	implicitHeight: line.implicitHeight
-
-	Timer {
-		interval: 1000
-		running: Recorder.recording
-		repeat: true
-		triggeredOnStart: true
-		onTriggered: root.seconds = Math.floor((Date.now() - Recorder.started.getTime()) / 1000)
-	}
 
 	// recording: a soft red pill behind the camera and the clock; on a side bar as wide as fits in it
 	// (padding the clock's width there made it wider than the bar)
@@ -75,7 +65,7 @@ Item {
 			font.family: Theme.fontBar
 			font.weight: Theme.barWeight
 			visible: Recorder.recording
-			text: `${Math.floor(root.seconds / 60)}:${String(root.seconds % 60).padStart(2, "0")}`
+			text: Format.clock(Recorder.seconds)
 			color: Theme.error
 			font.pixelSize: Config.vertical ? Theme.fontSize - 5 : Theme.fontSize // "10:00" fits a side bar's pill
 		}

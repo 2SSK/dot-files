@@ -21,15 +21,11 @@ Rectangle {
 	radius: 16
 	color: Qt.alpha(Theme.surface, 0.8)
 
-	Text {
+	UiText {
 		visible: !root.player
 		anchors.centerIn: parent
 		text: "Nothing playing"
 		color: Theme.fgMuted
-		font.family: Theme.fontSans
-		font.hintingPreference: Theme.hinting
-		font.weight: Theme.textWeight
-		font.pixelSize: Theme.textBody
 	}
 
 	// the players, when there are several
@@ -67,14 +63,12 @@ Rectangle {
 						color: chip.on ? Theme.primaryText : Theme.primary
 					}
 
-					Text {
+					UiText {
 						id: chipLabel
 
 						anchors.verticalCenter: parent.verticalCenter
 						text: Media.name(chip.modelData)
 						color: chip.on ? Theme.primaryText : Theme.fg
-						font.family: Theme.fontSans
-						font.hintingPreference: Theme.hinting
 						font.pixelSize: Theme.textLabel
 						font.weight: Font.Medium
 					}
@@ -136,25 +130,19 @@ Rectangle {
 		anchors.verticalCenter: cover.verticalCenter
 		spacing: 6
 
-		Text {
+		UiText {
 			width: parent.width
 			text: root.player?.trackTitle || root.player?.identity || ""
 			elide: Text.ElideRight
-			color: Theme.fg
 			font.family: Theme.fontHeading
-			font.hintingPreference: Theme.hinting
-			font.pixelSize: Theme.textBody
 			font.weight: Font.DemiBold
 		}
 
-		Text {
+		UiText {
 			width: parent.width
 			text: root.player?.trackArtist ?? ""
 			elide: Text.ElideRight
 			color: Theme.fgMuted
-			font.family: Theme.fontSans
-			font.hintingPreference: Theme.hinting
-			font.weight: Theme.textWeight
 			font.pixelSize: Theme.textLabel
 		}
 

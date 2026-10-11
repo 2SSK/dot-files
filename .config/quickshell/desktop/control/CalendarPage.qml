@@ -96,26 +96,18 @@ Column {
 				font.pixelSize: Theme.textLabel
 			}
 
-			Text {
+			UiText {
 				anchors.verticalCenter: parent.verticalCenter
 				width: Math.min(implicitWidth, root.width - 260)
 				text: entry.modelData.text
 				elide: Text.ElideRight
-				color: Theme.fg
-				font.family: Theme.fontSans
-				font.hintingPreference: Theme.hinting
-				font.weight: Theme.textWeight
-				font.pixelSize: Theme.textBody
 			}
 
-			Text {
+			UiText {
 				anchors.verticalCenter: parent.verticalCenter
 				visible: text !== ""
 				text: entry.modelData.sub ?? ""
 				color: entry.modelData.sub === "Snoozed" ? Theme.primary : Theme.fgMuted
-				font.family: Theme.fontSans
-				font.hintingPreference: Theme.hinting
-				font.weight: Theme.textWeight
 				font.pixelSize: Theme.textLabel
 			}
 		}
@@ -186,13 +178,10 @@ Column {
 		width: parent.width
 		height: 30
 
-		Text {
+		UiText {
 			anchors.verticalCenter: parent.verticalCenter
 			text: Qt.formatDate(root.chosen, "dddd, d MMMM")
-			color: Theme.fg
 			font.family: Theme.fontHeading
-			font.hintingPreference: Theme.hinting
-			font.pixelSize: Theme.textBody
 			font.weight: Font.DemiBold
 		}
 

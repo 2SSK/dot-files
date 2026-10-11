@@ -6,9 +6,11 @@
 # background colour.
 # Wayland (sway): the shell's own lock screen (Quickshell's session lock), else swaylock.
 set -euo pipefail
+# shellcheck source-path=SCRIPTDIR/.. source=.local/lib/desktop/state.sh
+source "$(dirname "$(readlink -f "$0")")/../lib/desktop/state.sh"
 
 # the theme's colours (rrggbb), in one read; tokyonight's without a theme
-palette="${XDG_STATE_HOME:-$HOME/.local/state}/desktop/theme/palette.json"
+palette="$desktop_state/theme/palette.json"
 read -r bg fg primary error < <(jq -r '.ui | [.bg, .fg, .primary, .error] | map(ltrimstr("#")) | join(" ")' "$palette" 2>/dev/null) ||
 	read -r bg fg primary error <<<"1a1b26 c0caf5 7aa2f7 f7768e"
 
@@ -28,9 +30,8 @@ fi
 # The wallpaper, blurred (at a quarter size: fast, and as soft) and dimmed in the theme's
 # background colour, cached until either changes
 backdrop() {
-	local state="${XDG_STATE_HOME:-$HOME/.local/state}/desktop" wallpaper out
-	wallpaper="$(readlink -f "$state/wallpaper" 2>/dev/null || true)"
-	[[ -f $wallpaper ]] || wallpaper="$(dirname "$(readlink -f "$0")")/../share/desktop/wallpapers/cat-mocha-lavender_19.jpg"
+	local wallpaper out
+	wallpaper="$(current_wallpaper)"
 	[[ -f $wallpaper ]] && command -v magick >/dev/null || return 1
 	# one per wallpaper and colour: a switch to an older picture still gets its own
 	out="${XDG_CACHE_HOME:-$HOME/.cache}/desktop/lock-$bg-$(printf %s "$wallpaper" | md5sum | cut -c1-12).png"

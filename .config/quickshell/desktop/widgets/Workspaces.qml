@@ -81,14 +81,13 @@ Line {
 		radius: height / 2
 		color: Theme.primary
 
-		Text {
+		UiText {
 			id: modeLabel
 
 			anchors.centerIn: parent
 			text: parent.label
 			color: Theme.primaryText
 			font.family: Theme.fontBar
-			font.hintingPreference: Theme.hinting
 			font.pixelSize: Theme.fontSize - 3
 			font.weight: Theme.barWeight
 		}

@@ -10,7 +10,7 @@ layers_all=(base cli x11 wayland vm dev)
 layers_default=(base cli x11 wayland)
 
 usage() {
-	printf 'usage: install.sh [--dry-run] [layer...] | --distro | --check\nlayers: %s (default: %s); list format: see base.txt\n' \
+	printf 'usage: install.sh [--dry-run] [layer...] | --distro | --check | --list [arch|fedora]\nlayers: %s (default: %s); list format: see base.txt\n' \
 		"${layers_all[*]}" "${layers_default[*]}"
 }
 
@@ -98,6 +98,10 @@ main() {
 		--dry-run) dry_run=1 ;;
 		--distro) detect_distro && exit 0 ;;
 		--check) check && exit 0 ;;
+		--list) # every layer's entries for a distro (arch by default), marks (aur:, @) and all: cleanup.sh
+			for layer in "${layers_all[@]}"; do column "${2:-arch}" "$layer"; done
+			exit 0
+			;;
 		*)
 			[[ " ${layers_all[*]} " == *" $1 "* ]] || { usage >&2 && exit 2; }
 			layers+=("$1")

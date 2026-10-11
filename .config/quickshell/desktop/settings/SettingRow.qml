@@ -1,5 +1,6 @@
 import QtQuick
 import qs
+import qs.widgets
 
 // One setting: its name and a line about it on the left, the control on the right.
 Rectangle {
@@ -24,24 +25,17 @@ Rectangle {
 		anchors.verticalCenter: parent.verticalCenter
 		spacing: 3
 
-		Text {
+		UiText {
 			text: root.label
-			color: Theme.fg
-			font.family: Theme.fontSans
-			font.hintingPreference: Theme.hinting
-			font.pixelSize: Theme.textBody
 			font.weight: Font.Medium
 		}
 
-		Text {
+		UiText {
 			width: parent.width
 			visible: root.hint !== ""
 			text: root.hint
 			wrapMode: Text.Wrap
 			color: Theme.fgMuted
-			font.family: Theme.fontSans
-			font.hintingPreference: Theme.hinting
-			font.weight: Theme.textWeight
 			font.pixelSize: Theme.textLabel
 		}
 	}

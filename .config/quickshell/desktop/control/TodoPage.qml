@@ -80,13 +80,11 @@ Item {
 						radius: 10
 						color: on ? colour : Qt.alpha(colour, 0.14)
 
-						Text {
+						UiText {
 							anchors.centerIn: parent
 							text: root.priorities[choice.modelData].letter
 							color: choice.on ? Theme.bg : choice.colour
 							font.family: Theme.fontHeading
-							font.hintingPreference: Theme.hinting
-							font.pixelSize: Theme.textBody
 							font.weight: Font.Bold
 						}
 
@@ -103,17 +101,13 @@ Item {
 			}
 		}
 
-		Text {
+		UiText {
 			visible: Todo.items.length === 0
 			width: parent.width
 			topPadding: 24
 			horizontalAlignment: Text.AlignHCenter
 			text: "Nothing to do."
 			color: Theme.fgMuted
-			font.family: Theme.fontSans
-			font.hintingPreference: Theme.hinting
-			font.weight: Theme.textWeight
-			font.pixelSize: Theme.textBody
 		}
 
 		Repeater {
@@ -228,12 +222,11 @@ Item {
 					radius: 7
 					color: Qt.alpha(item.level.colour, 0.16)
 
-					Text {
+					UiText {
 						anchors.centerIn: parent
 						text: item.level.letter
 						color: item.level.colour
 						font.family: Theme.fontHeading
-						font.hintingPreference: Theme.hinting
 						font.pixelSize: Theme.textLabel
 						font.weight: Font.Bold
 					}
@@ -246,7 +239,7 @@ Item {
 					}
 				}
 
-				Text {
+				UiText {
 					id: label
 
 					anchors.left: badge.right
@@ -258,10 +251,6 @@ Item {
 					wrapMode: Text.Wrap
 					font.strikeout: item.modelData.done
 					color: item.modelData.done ? Theme.fgMuted : Theme.fg
-					font.family: Theme.fontSans
-					font.hintingPreference: Theme.hinting
-					font.weight: Theme.textWeight
-					font.pixelSize: Theme.textBody
 				}
 
 				Glyph {
@@ -308,7 +297,7 @@ Item {
 		radius: 12
 		color: Theme.primary
 
-		Text {
+		UiText {
 			anchors.left: parent.left
 			anchors.leftMargin: 16
 			anchors.right: parent.right
@@ -317,9 +306,6 @@ Item {
 			text: Todo.items.find(item => item.id === root.dragId)?.text ?? ""
 			elide: Text.ElideRight
 			color: Theme.primaryText
-			font.family: Theme.fontSans
-			font.hintingPreference: Theme.hinting
-			font.pixelSize: Theme.textBody
 			font.weight: Font.Medium
 		}
 	}

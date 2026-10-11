@@ -7,7 +7,5 @@ source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 version=0.3.2
 [[ $(quickshell --version 2>/dev/null) == *"$version"* ]] && exit 0
 
-sudo dnf install -y dnf5-plugins >/dev/null 2>&1 || sudo dnf install -y dnf-plugins-core
-sudo dnf copr enable -y errornointernet/quickshell
-sudo dnf install -y quickshell
+copr_install errornointernet/quickshell quickshell
 log_info installed name=quickshell version="$version"

@@ -1,16 +1,16 @@
 import QtQuick
-import Quickshell.Services.UPower
 import qs
+import qs.services
 
 // The laptop battery as a horizontal cell, by charge; a bolt on the charger (charging, full, or held
 // at the charge limit); red at or below power.batteryLow (Battery warns then), blinking from 10%.
 Readout {
 	id: root
 
-	readonly property UPowerDevice device: UPower.displayDevice
-	readonly property bool present: device?.isLaptopBattery ?? false
-	readonly property real percent: (device?.percentage ?? 0) <= 1 ? (device?.percentage ?? 0) * 100 : device.percentage
-	readonly property bool charging: [UPowerDeviceState.Charging, UPowerDeviceState.FullyCharged, UPowerDeviceState.PendingCharge].includes(device?.state)
+	// what the battery service reads (UPower's display device), so the two never disagree
+	readonly property bool present: Battery.present
+	readonly property real percent: Battery.percent
+	readonly property bool charging: Battery.charging
 	readonly property bool low: !charging && percent <= Config.power.batteryLow
 
 	visible: present

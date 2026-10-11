@@ -48,26 +48,19 @@ Rectangle {
 		anchors.verticalCenter: parent.verticalCenter
 		spacing: 2
 
-		Text {
+		UiText {
 			width: parent.width
 			text: root.label
 			elide: Text.ElideRight
-			color: Theme.fg
-			font.family: Theme.fontSans
-			font.hintingPreference: Theme.hinting
-			font.pixelSize: Theme.textBody
 			font.weight: root.active ? Font.DemiBold : Font.Medium
 		}
 
-		Text {
+		UiText {
 			width: parent.width
 			visible: text !== ""
 			text: root.detail
 			elide: Text.ElideRight
 			color: root.active ? Theme.primary : Theme.fgMuted
-			font.family: Theme.fontSans
-			font.hintingPreference: Theme.hinting
-			font.weight: Theme.textWeight
 			font.pixelSize: Theme.textLabel
 		}
 	}

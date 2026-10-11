@@ -99,13 +99,11 @@ Column {
 						color: typeChip.on ? Theme.primaryText : Theme.fg
 					}
 
-					Text {
+					UiText {
 						id: typeLabel
 
 						text: typeChip.modelData.label
 						color: typeChip.on ? Theme.primaryText : Theme.fg
-						font.family: Theme.fontSans
-						font.hintingPreference: Theme.hinting
 						font.pixelSize: Theme.textLabel
 						font.weight: Font.Medium
 					}
@@ -267,7 +265,7 @@ Column {
 				radius: 13
 				color: copyHover.hovered ? Theme.primary : Qt.alpha(Theme.overlay, 0.95)
 
-				Text {
+				UiText {
 					id: copyLabel
 
 					property bool copied: false
@@ -275,8 +273,6 @@ Column {
 					anchors.centerIn: parent
 					text: copied ? "Copied" : "Copy"
 					color: copyHover.hovered ? Theme.primaryText : Theme.fg
-					font.family: Theme.fontSans
-					font.hintingPreference: Theme.hinting
 					font.pixelSize: Theme.textLabel
 					font.weight: Font.Medium
 
@@ -361,7 +357,7 @@ Column {
 						}
 					}
 
-					Text {
+					UiText {
 						anchors.left: tick.right
 						anchors.leftMargin: 10
 						anchors.right: drop.left
@@ -370,10 +366,6 @@ Column {
 						elide: Text.ElideRight
 						font.strikeout: line.modelData.done
 						color: line.modelData.done ? Theme.fgMuted : Theme.fg
-						font.family: Theme.fontSans
-						font.hintingPreference: Theme.hinting
-						font.weight: Theme.textWeight
-						font.pixelSize: Theme.textBody
 					}
 
 					Glyph {

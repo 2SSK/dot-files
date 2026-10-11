@@ -2,7 +2,6 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import qs
-import qs.control
 import qs.services
 import qs.widgets
 
@@ -56,14 +55,11 @@ Column {
 			}
 		}
 
-		Text {
+		UiText {
 			visible: Timeshift.state === "working"
 			topPadding: 6
 			text: Timeshift.working + " (Timeshift asks for your password first)"
 			color: Theme.primary
-			font.family: Theme.fontSans
-			font.hintingPreference: Theme.hinting
-			font.weight: Theme.textWeight
 			font.pixelSize: Theme.textLabel
 		}
 	}
@@ -77,15 +73,11 @@ Column {
 			width: parent.width
 			spacing: 10
 
-			Text {
+			UiText {
 				width: parent.width
 				wrapMode: Text.Wrap
 				text: Timeshift.state === "rule" ? "Listing snapshots needs root. Run packages/system.sh timeshift once to allow just the list without a password, or show it now with your password." : "Couldn't read the snapshots."
 				color: Theme.fgMuted
-				font.family: Theme.fontSans
-				font.hintingPreference: Theme.hinting
-				font.weight: Theme.textWeight
-				font.pixelSize: Theme.textBody
 			}
 
 			Chip {
@@ -95,24 +87,16 @@ Column {
 			}
 		}
 
-		Text {
+		UiText {
 			visible: Timeshift.state === "loading"
 			text: "Reading the snapshots…"
 			color: Theme.fgMuted
-			font.family: Theme.fontSans
-			font.hintingPreference: Theme.hinting
-			font.weight: Theme.textWeight
-			font.pixelSize: Theme.textBody
 		}
 
-		Text {
+		UiText {
 			visible: Timeshift.state === "" && Timeshift.snapshots.length === 0
 			text: "No snapshots yet."
 			color: Theme.fgMuted
-			font.family: Theme.fontSans
-			font.hintingPreference: Theme.hinting
-			font.weight: Theme.textWeight
-			font.pixelSize: Theme.textBody
 		}
 
 		Repeater {
@@ -140,21 +124,14 @@ Column {
 					anchors.verticalCenter: parent.verticalCenter
 					spacing: 2
 
-					Text {
+					UiText {
 						text: root.when(snapshot.modelData.name)
-						color: Theme.fg
-						font.family: Theme.fontSans
-						font.hintingPreference: Theme.hinting
-						font.pixelSize: Theme.textBody
 						font.weight: Font.Medium
 					}
 
-					Text {
+					UiText {
 						text: [snapshot.modelData.tags.split("").filter(t => root.kinds[t]).map(t => root.kinds[t]).join(", "), snapshot.modelData.comment].filter(s => s).join("  ·  ")
 						color: Theme.fgMuted
-						font.family: Theme.fontSans
-						font.hintingPreference: Theme.hinting
-						font.weight: Theme.textWeight
 						font.pixelSize: Theme.textLabel
 					}
 				}

@@ -21,7 +21,7 @@ Column {
 
 	Component.onDestruction: if (Connectivity.adapter?.discovering) Connectivity.adapter.discovering = false
 
-	Text {
+	UiText {
 		visible: !Connectivity.bluetoothAvailable || !Connectivity.bluetooth || root.devices.length === 0
 		width: parent.width
 		topPadding: 30
@@ -29,10 +29,6 @@ Column {
 		wrapMode: Text.Wrap
 		text: !Connectivity.bluetoothAvailable ? "No Bluetooth here (it needs BlueZ and an adapter)." : !Connectivity.bluetooth ? "Bluetooth is off." : "No devices yet: the refresh button scans for them."
 		color: Theme.fgMuted
-		font.family: Theme.fontSans
-		font.hintingPreference: Theme.hinting
-		font.weight: Theme.textWeight
-		font.pixelSize: Theme.textBody
 	}
 
 	Repeater {
