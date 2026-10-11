@@ -9,7 +9,10 @@
 #   desktop-file path <file>      the full path, as text
 #   desktop-file content <file>   text as text, an image as an image, anything else as the file
 #                                 itself (pastes as an attachment)
-#   desktop-file find [query]     up to 60 matches, best first (fzf). The launcher starts it at ~/:
+#   desktop-file find [query]     up to 60 files and folders whose names hold every word typed
+#                                 (as Nautilus searches: not scattered letters, not the folder they're
+#                                 in), names starting with it first, then the shorter. The launcher
+#                                 starts it at ~/:
 #                                   ~/ (or nothing): your files changed in the last week, newest first
 #                                   ~/word (or word): your files matching it
 #                                   ~/.x: your dotfiles and dot-folders (in home itself)
@@ -48,24 +51,30 @@ editable() { # <mime type>
 	esac
 }
 
-# <folder> [query] [fd arguments...]: under the folder, relative to it (so a query matches the path
-# from there, not the folder's own name), best first (fzf); the folder put back in front. Dependency
-# folders are left out; dot-folders too, unless --hidden. A folder's list is kept 30 s (in memory,
-# under $XDG_RUNTIME_DIR), so typing re-ranks it rather than rescanning.
+# <folder> [query] [fd arguments...]: what's under the folder whose name holds every word of the
+# query (fzf --exact on the name alone), names starting with it first; the folder in front. Dependency
+# folders are left out; dot-folders too, unless --hidden. A folder's list is kept 2 minutes (in
+# memory, under $XDG_RUNTIME_DIR), so typing filters it rather than rescanning.
 search() {
 	local dir=${1%/} query=$2 list
 	shift 2
 	list="${XDG_RUNTIME_DIR:-/tmp}/desktop/files/$(printf '%s ' "$dir" "$@" | md5sum | cut -c1-16)"
-	if [[ ! -s $list || $(($(date +%s) - $(stat -c %Y "$list"))) -ge 30 ]]; then
+	if [[ ! -s $list || $(($(date +%s) - $(stat -c %Y "$list"))) -ge 120 ]]; then
 		mkdir -p "${list%/*}"
-		(cd "${dir:-/}" && fd --exclude node_modules --exclude __pycache__ --exclude target "$@" . 2>/dev/null) >"$list.new" || true
+		# each path beside its name (a folder's without its /): the name is matched, the path kept
+		(cd "${dir:-/}" && fd --exclude node_modules --exclude __pycache__ --exclude target "$@" . 2>/dev/null) |
+			awk '{ n = $0; sub(/\/$/, "", n); sub(/.*\//, "", n); print n "\t" $0 }' >"$list.new" || true
 		mv "$list.new" "$list"
 	fi
-	if [[ -z $query ]]; then cat "$list"; elif command -v fzf >/dev/null; then fzf --filter "$query" --scheme path <"$list"; else grep -iF -- "$query" "$list"; fi |
-		sed "s|^\./||; s|^|$dir/|"
+	if [[ -z $query ]]; then
+		cut -f2- "$list"
+	else
+		fzf --filter "$query" --exact --delimiter '\t' --nth 1 --tiebreak begin,length <"$list" | cut -f2-
+	fi | sed "s|^\./||; s|^|$dir/|"
 }
 
-recent() { # your files changed lately, newest first
+recent() { # your files changed lately, newest first; meanwhile your files' list, for the first word
+	(search "$HOME" "" >/dev/null 2>&1 &)
 	search "$HOME" "" --type f --changed-within 7d | tr '\n' '\0' | xargs -0r stat -c '%Y %n' | sort -rn | cut -d' ' -f2-
 }
 
@@ -82,10 +91,10 @@ find_files() { # [query]
 	"" | "$HOME" | "$HOME/") recent ;;
 	"$HOME"/*/*) in_folder ;;
 	"$HOME"/.*) search "$HOME" "${query#"$HOME/"}" --hidden --max-depth 1 --glob '.*' ;; # a dotfile in home
-	"$HOME"/*) search "$HOME" "${query#"$HOME/"}" --type f ;;                                # your files
+	"$HOME"/*) search "$HOME" "${query#"$HOME/"}" ;;                                         # your files
 	/*/*) in_folder ;;
 	/*) search / "${query#/}" --hidden --max-depth 2 ;; # /e: from the top
-	*) search "$HOME" "$query" --type f ;;
+	*) search "$HOME" "$query" ;;
 	esac | head -60
 }
 

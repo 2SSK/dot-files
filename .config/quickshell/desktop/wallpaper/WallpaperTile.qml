@@ -6,7 +6,7 @@ import qs
 import qs.services
 import qs.widgets
 
-// A wallpaper in the picker's grid: the picture with rounded corners (fading in once loaded), its
+// A wallpaper in the picker's grid: the picture with rounded corners (shown as soon as it loads), its
 // name on hover, a ring and a tick on the one set, a thinner ring on the one picked with the keys.
 Item {
 	id: tile
@@ -69,13 +69,6 @@ Item {
 			source: picture
 			maskEnabled: true
 			maskSource: corners
-			opacity: picture.status === Image.Ready ? 1 : 0
-
-			Behavior on opacity {
-				NumberAnimation {
-					duration: 200
-				}
-			}
 		}
 
 		// its name, on hover or when picked with the keys: plain text with a soft shadow
