@@ -9,14 +9,17 @@
 #   desktop-file path <file>      the full path, as text
 #   desktop-file content <file>   text as text, an image as an image, anything else as the file
 #                                 itself (pastes as an attachment)
-#   desktop-file find [query]     up to 60 files under $HOME matching it, best first (fzf), or the
-#                                 most recently changed without one; .git, caches and dependencies
-#                                 are left out. The list is cached for a minute.
+#   desktop-file find [query]     up to 60 matches, best first (fzf). The launcher starts it at ~/:
+#                                   ~/ (or nothing): your files changed in the last week, newest first
+#                                   ~/word (or word): your files matching it
+#                                   ~/.x: your dotfiles and dot-folders (in home itself)
+#                                   a path (~/.config/ni, /etc/pac, /tmp/): in that folder, what
+#                                   matches the rest, hidden ones too (folders end in /)
+#                                 Your files are home's visible ones: dot-folders (.config, .cache,
+#                                 .local: settings and app caches) and dependency folders aren't
+#                                 searched unless you type their path; fd's ignore file
+#                                 (~/.config/fd/ignore) leaves out more, such as tool data in ~/go.
 set -euo pipefail
-
-# left out of find, by name anywhere or by path under $HOME
-skip_names=(.git node_modules __pycache__ .venv target .cache .npm .cargo .rustup .mozilla .var Trash)
-skip_paths=(.local/share .local/state go/pkg .config/BraveSoftware .config/chromium .config/google-chrome)
 
 usage() {
 	echo "usage: desktop-file open|file|path|content <file> | find [query]" >&2
@@ -45,41 +48,45 @@ editable() { # <mime type>
 	esac
 }
 
-# every file under $HOME, relative to it; with --recent, those changed in the last week, newest
-# first
-files() {
-	local n fd_args=() find_args=()
-	for n in "${skip_names[@]}"; do fd_args+=(--exclude "$n") && find_args+=(-name "$n" -o); done
-	for n in "${skip_paths[@]}"; do fd_args+=(--exclude "/$n") && find_args+=(-path "./$n" -o); done
-	cd "$HOME"
-	if [[ ${1:-} == --recent ]]; then
-		if command -v fd >/dev/null; then
-			fd --type f --hidden --changed-within 7d "${fd_args[@]}" -0 . | xargs -0r stat -c '%Y %n'
-		else
-			find . \( "${find_args[@]}" -false \) -prune -o -type f -mtime -7 -printf '%T@ %p\n'
-		fi | sort -rn | cut -d' ' -f2- | sed 's|^\./||'
-	elif command -v fd >/dev/null; then
-		fd --type f --hidden "${fd_args[@]}" . | sed 's|^\./||'
-	else
-		find . \( "${find_args[@]}" -false \) -prune -o -type f -print | sed 's|^\./||'
+# <folder> [query] [fd arguments...]: under the folder, relative to it (so a query matches the path
+# from there, not the folder's own name), best first (fzf); the folder put back in front. Dependency
+# folders are left out; dot-folders too, unless --hidden. A folder's list is kept 30 s (in memory,
+# under $XDG_RUNTIME_DIR), so typing re-ranks it rather than rescanning.
+search() {
+	local dir=${1%/} query=$2 list
+	shift 2
+	list="${XDG_RUNTIME_DIR:-/tmp}/desktop/files/$(printf '%s ' "$dir" "$@" | md5sum | cut -c1-16)"
+	if [[ ! -s $list || $(($(date +%s) - $(stat -c %Y "$list"))) -ge 30 ]]; then
+		mkdir -p "${list%/*}"
+		(cd "${dir:-/}" && fd --exclude node_modules --exclude __pycache__ --exclude target "$@" . 2>/dev/null) >"$list.new" || true
+		mv "$list.new" "$list"
 	fi
+	if [[ -z $query ]]; then cat "$list"; elif command -v fzf >/dev/null; then fzf --filter "$query" --scheme path <"$list"; else grep -iF -- "$query" "$list"; fi |
+		sed "s|^\./||; s|^|$dir/|"
+}
+
+recent() { # your files changed lately, newest first
+	search "$HOME" "" --type f --changed-within 7d | tr '\n' '\0' | xargs -0r stat -c '%Y %n' | sort -rn | cut -d' ' -f2-
 }
 
 find_files() { # [query]
-	if [[ -z ${1:-} ]]; then
-		files --recent | head -60 | sed "s|^|$HOME/|"
-		return
-	fi
-	local cache="${XDG_RUNTIME_DIR:-/tmp}/desktop/files.list"
-	mkdir -p "${cache%/*}"
-	if [[ ! -s $cache || -n $(find "$cache" -mmin +1) ]]; then
-		files >"$cache.new" && mv "$cache.new" "$cache"
-	fi
-	if command -v fzf >/dev/null; then
-		fzf --filter "$1" --scheme path <"$cache"
-	else
-		grep -iF -- "$1" "$cache"
-	fi | head -60 | sed "s|^|$HOME/|"
+	local query=${1:-} dir
+	query="${query/#\~/$HOME}"
+	# a folder's path: in that folder (hidden too), what matches what follows its last /
+	in_folder() {
+		dir="${query%/*}"
+		[[ -d ${dir:-/} ]] || return 0
+		search "${dir:-/}" "${query##*/}" --hidden --max-depth 4
+	}
+	case $query in
+	"" | "$HOME" | "$HOME/") recent ;;
+	"$HOME"/*/*) in_folder ;;
+	"$HOME"/.*) search "$HOME" "${query#"$HOME/"}" --hidden --max-depth 1 --glob '.*' ;; # a dotfile in home
+	"$HOME"/*) search "$HOME" "${query#"$HOME/"}" --type f ;;                                # your files
+	/*/*) in_folder ;;
+	/*) search / "${query#/}" --hidden --max-depth 2 ;; # /e: from the top
+	*) search "$HOME" "$query" --type f ;;
+	esac | head -60
 }
 
 if [[ ${1:-} == find ]]; then

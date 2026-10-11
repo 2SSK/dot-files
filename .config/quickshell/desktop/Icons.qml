@@ -50,6 +50,7 @@ Singleton {
 			"external-link": 0xea99,
 			"file": 0xeaa4,
 			"file-code": 0xebd0,
+			"folder": 0xeaad,
 			"file-text": 0xeaa2,
 			"file-type-pdf": 0xfb10,
 			"flame": 0xec2c,

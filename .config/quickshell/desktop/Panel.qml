@@ -2,6 +2,7 @@ pragma Singleton
 
 import QtQuick
 import Quickshell
+import qs.services
 
 // Shell state: whether the bar is shown (or peeking while hidden), the OSD card (a level or lock
 // that just changed) and the power menu. While the power menu is open i3 is in mode "power", which sends its keys back over IPC

@@ -8,7 +8,8 @@ import qs.services
 import qs.widgets
 
 // A row of the launcher's list: an app (its icon, name and description) or a file (its kind, name
-// and folder, and while it's picked or under the pointer: open, attach, copy its path, copy it).
+// and folder, and while it's picked or under the pointer: open, attach, copy its path, copy it). A
+// path search lists folders too (ending in /): a click opens a terminal there.
 Item {
 	id: row
 
@@ -19,9 +20,10 @@ Item {
 	signal picked(string action) // open (an app, or a file in its app), file, path or content
 	readonly property bool app: typeof modelData !== "string"
 	readonly property string path: typeof modelData === "string" ? modelData : ""
-	readonly property string fileName: Format.fileName(path)
+	readonly property bool folder: path.endsWith("/")
+	readonly property string fileName: Format.fileName(path.replace(/\/$/, ""))
 	readonly property string ext: fileName.includes(".") ? fileName.slice(fileName.lastIndexOf(".") + 1).toLowerCase() : ""
-	readonly property string kind: /^(png|jpe?g|webp|gif|svg)$/.test(ext) ? "photo" : ext === "pdf" ? "file-type-pdf" : /^(md|txt|org|rst|)$/.test(ext) ? "file-text" : "file-code"
+	readonly property string kind: folder ? "folder" : /^(png|jpe?g|webp|gif|svg)$/.test(ext) ? "photo" : ext === "pdf" ? "file-type-pdf" : /^(md|txt|org|rst|)$/.test(ext) ? "file-text" : "file-code"
 
 	width: ListView.view.width
 	height: 50
@@ -35,7 +37,7 @@ Item {
 	MouseArea {
 		anchors.fill: parent
 		cursorShape: Qt.PointingHandCursor
-		onClicked: row.picked(row.app ? "open" : "file")
+		onClicked: row.picked(row.app || row.folder ? "open" : "file")
 	}
 
 	IconImage {
@@ -74,7 +76,7 @@ Item {
 		UiText {
 			width: parent.width
 			visible: text !== ""
-			text: row.app ? (row.modelData.genericName || row.modelData.comment || "") : Format.folder(row.path)
+			text: row.app ? (row.modelData.genericName || row.modelData.comment || "") : Format.folder(row.path.replace(/\/$/, ""))
 			elide: row.app ? Text.ElideRight : Text.ElideMiddle
 			color: Theme.fgMuted
 			font.pixelSize: Theme.textLabel

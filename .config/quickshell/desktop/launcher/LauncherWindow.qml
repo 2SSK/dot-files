@@ -74,16 +74,23 @@ HangingPanel {
 	onDismissed: Panel.launcherOpen = false
 	onResultsChanged: current = Math.min(current, Math.max(0, results.length - 1))
 	onModeChanged: {
-		search.text = "";
+		search.text = mode === "files" ? "~/" : "";
 		current = 0;
 		prepare();
-		findLater.stop(); // the cleared search queued one; prepare() has just run it
+		findLater.stop(); // the changed search queued one; prepare() has just run it
 	}
-	Component.onCompleted: prepare()
+	Component.onCompleted: {
+		if (mode === "files")
+			search.text = "~/";
+		prepare();
+		findLater.stop();
+	}
 
+	// Files starts at ~/ (your recent files): type a name to search your files, a dot for your
+	// dotfiles (~/.), or another path (/etc/, /tmp/)
 	function prepare(): void {
 		if (mode === "files")
-			Launcher.findFiles("");
+			Launcher.findFiles(search.text);
 		else if (mode === "themes")
 			Launcher.loadThemes();
 	}
@@ -92,7 +99,7 @@ HangingPanel {
 	Timer {
 		id: findLater
 
-		interval: 120
+		interval: 60
 		onTriggered: Launcher.findFiles(search.text)
 	}
 
@@ -103,7 +110,7 @@ HangingPanel {
 		y: 16
 		width: parent.width - 32
 		height: 42
-		placeholder: ({ apps: "Search apps", emoji: "Search emoji", files: "Search files in your home", themes: "Search themes" })[root.mode]
+		placeholder: ({ apps: "Search apps", emoji: "Search emoji", files: "~/ your files · ~/. your dotfiles · /etc/, /tmp/", themes: "Search themes" })[root.mode]
 		Component.onCompleted: focusField()
 		onTextChanged: {
 			root.current = 0;
@@ -282,7 +289,7 @@ HangingPanel {
 		UiText {
 			anchors.centerIn: parent
 			visible: root.results.length === 0 && !(root.mode === "files" && Launcher.searching)
-			text: search.text ? "Nothing matches." : root.mode === "files" ? "Nothing changed this week; type to search." : "Nothing here."
+			text: search.text && search.text !== "~/" ? "Nothing matches." : root.mode === "files" ? "Nothing changed this week: type a name, a dot for your dotfiles, or /etc/." : "Nothing here."
 			color: Theme.fgMuted
 		}
 	}
