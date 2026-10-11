@@ -1,0 +1,43 @@
+#! /bin/sh
+set -e
+# The boot menu's Linux entries, named plainly: Linux, Linux LTS, Linux (fallback). In place of
+# 10_linux (turned off, and kept off across grub updates by NoExtract in pacman.conf), whose names
+# start with the distro's. Arch's kernels keep their file names across updates, so these never go
+# stale; the kernel options come from /etc/default/grub as 10_linux's do. Installed by
+# packages/system.sh grub (Arch only: Fedora names its kernels by version and lists them itself).
+
+# shellcheck disable=SC1091,SC2154 # grub-mkconfig sets pkgdatadir
+. "$pkgdatadir/grub-mkconfig_lib"
+
+args="root=UUID=${GRUB_DEVICE_UUID} rw"
+subvol="$(make_system_path_relative_to_its_root /)"
+subvol="${subvol#/}"
+[ -z "$subvol" ] || args="$args rootflags=subvol=$subvol"
+args="$args ${GRUB_CMDLINE_LINUX} ${GRUB_CMDLINE_LINUX_DEFAULT}"
+
+boot="$(make_system_path_relative_to_its_root /boot)" # /@/boot: /boot as GRUB sees the disk
+prepare="$(prepare_grub_to_access_device "${GRUB_DEVICE_BOOT}" | grub_add_tab)"
+ucode=""
+for image in intel-ucode.img amd-ucode.img; do
+	[ ! -f "/boot/$image" ] || ucode="$ucode $boot/$image"
+done
+
+entry() { # <title> <kernel> <initramfs>: skipped when that kernel isn't installed
+	[ -f "/boot/$2" ] && [ -f "/boot/$3" ] || return 0
+	echo "Found $1: /boot/$2" >&2
+	cat <<EOF
+menuentry '$1' --class arch --class gnu-linux --class os {
+	load_video
+	set gfxpayload=${GRUB_GFXPAYLOAD_LINUX:-keep}
+	insmod gzio
+$prepare
+	echo 'Loading $1 ...'
+	linux $boot/$2 $args
+	initrd$ucode $boot/$3
+}
+EOF
+}
+
+entry 'Linux' vmlinuz-linux initramfs-linux.img
+entry 'Linux LTS' vmlinuz-linux-lts initramfs-linux-lts.img
+entry 'Linux (fallback)' vmlinuz-linux initramfs-linux-fallback.img

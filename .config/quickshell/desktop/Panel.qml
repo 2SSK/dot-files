@@ -58,6 +58,7 @@ Singleton {
 		})
 	readonly property string hanging: authOpen ? "auth" : panels.find(p => root[p + "Open"]) ?? ""
 	readonly property int hangingWidth: sizes[hanging]?.[0] ?? 0
+	property string hangingScreen: "" // the screen a panel hangs on (pinned as it opens: HangingPanel)
 
 	// a panel opened closes the others (the password prompt closes them all)
 	function opened(name: string): void {

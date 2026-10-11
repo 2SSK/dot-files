@@ -14,7 +14,7 @@ alias dir='dir --color=auto' vdir='vdir --color=auto'
 alias grep='grep --color=auto' diff='diff --color=auto' ip='ip -color=auto'
 
 alias cp='cp -iv' mv='mv -iv' rm='rm -Iv' mkdir='mkdir -pv'
-alias cl='clear' e='exit' rel='exec $SHELL'
+alias cl='clear' e='exit' rel='exec $SHELL' rmf='rm -rf'
 alias vi='nvim' lg='lazygit' ldc='lazydocker' ff='fastfetch' tt='ttyper'
 # no -u: with it, zsh's tmux completion took the flag for a subcommand ("subcommand -u not known"),
 # and a UTF-8 locale gives tmux UTF-8 anyway
@@ -30,9 +30,12 @@ alias gl='git log --graph --all --pretty=format:"%C(magenta)%h %C(white) %an  %a
 
 alias dco='docker compose' dps='docker ps' dpa='docker ps -a' dx='docker exec -it'
 
-# yay for repo and AUR alike: u upgrades everything, i installs, r removes with unneeded deps
+# u upgrades everything, i installs, r removes with what nothing else needs: yay (repo and AUR
+# alike) on Arch, dnf on Fedora
 if command -v yay >/dev/null; then
 	alias u='yay -Syu' i='yay -S' r='yay -Rns'
+elif command -v dnf >/dev/null; then
+	alias u='sudo dnf upgrade --refresh' i='sudo dnf install' r='sudo dnf remove'
 fi
 
 if [[ -n ${WAYLAND_DISPLAY:-} ]]; then

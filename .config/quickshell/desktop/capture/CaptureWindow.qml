@@ -56,7 +56,7 @@ HangingPanel {
 				Capture.take(asking, "screen", null);
 			else if (k === Qt.Key_Return || k === Qt.Key_Enter || k === Qt.Key_Space)
 				Capture.take(asking, "screen", sortedScreens[monitor]);
-			else if (k === Qt.Key_Backspace)
+			else if (k === Qt.Key_Backspace || k === Qt.Key_Escape)
 				asking = "";
 			else
 				return;

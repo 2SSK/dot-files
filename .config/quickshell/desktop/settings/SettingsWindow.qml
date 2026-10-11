@@ -50,6 +50,8 @@ FloatingWindow {
 	color: Theme.bg
 	onVisibleChanged: if (!visible) Panel.settingsOpen = false
 
+	// Escape closes it: here when nothing has the focus, and on the header and the pages below for a
+	// field that has it (keys travel up from the field, never to a sibling like this one)
 	Item {
 		anchors.fill: parent
 		focus: true
@@ -160,6 +162,7 @@ FloatingWindow {
 		anchors.rightMargin: 32
 		y: 28
 		spacing: 16
+		Keys.onEscapePressed: Panel.settingsOpen = false
 
 		Text {
 			text: root.pages.find(p => p.key === root.page)?.title ?? ""
@@ -192,6 +195,7 @@ FloatingWindow {
 		contentHeight: pageColumn.implicitHeight + 60
 		clip: true
 		boundsBehavior: Flickable.StopAtBounds
+		Keys.onEscapePressed: Panel.settingsOpen = false
 
 		Column {
 			id: pageColumn

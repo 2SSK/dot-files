@@ -3,10 +3,10 @@
 set -euo pipefail
 
 lib="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")/../lib/desktop" && pwd)"
-# shellcheck disable=SC2034 # used by the consumers' reload commands
-bin="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # shellcheck source-path=SCRIPTDIR/../.. source=.local/lib/desktop/log.sh
 source "$lib/log.sh"
+# shellcheck source-path=SCRIPTDIR/../.. source=.local/lib/desktop/screens.sh
+source "$lib/screens.sh"
 
 themes="$lib/../../share/desktop/themes"
 state="${XDG_STATE_HOME:-$HOME/.local/state}/desktop/theme"
@@ -28,10 +28,9 @@ current() { # prints "<family> <mode>"; tokyonight dark until a theme is set
 }
 
 # One row per app: rendered file, link under ~/.config (or -), reload command (or -). The switch
-# returns once each reload has run, except GRUB's background (a blur): it finishes on its own. Sway
-# takes the window colours as commands, live; reloading its whole config froze the screen a moment
-# (i3 can only reload). Adding an app:
-# a template in share/desktop/templates and a row here. kitty gets colours over its socket and picom
+# returns once each reload has run. Sway takes the window colours as commands, live; reloading its
+# whole config froze the screen a moment (i3 can only reload). Adding an app: a template in
+# share/desktop/templates and a row here. kitty gets colours over its socket and picom
 # isn't reset: both would visibly redraw. tmux re-sources everything so its plugins re-apply.
 consumers() {
 	cat <<'EOF'
@@ -52,10 +51,10 @@ gtk-4.0.css      gtk-4.0/gtk.css    gtk_settings
 qtct.conf        qt5ct/qt5ct.conf   -
 qtct.conf        qt6ct/qt6ct.conf   -
 sddm-theme.conf  -                  sddm
+grub-theme.txt   -                  boot_menu
 yazi-flavor.toml yazi/flavors/desktop.yazi/flavor.toml -
 silicon.tmTheme  yazi/flavors/desktop.yazi/tmtheme.xml -
 yazi-theme.toml  yazi/theme.toml    -
-palette.json     -                  setsid -f "$bin/desktop-wallpaper" screens --boot
 EOF
 }
 
@@ -81,6 +80,15 @@ gtk_settings() { # what GTK on Wayland and libadwaita read (GTK on X11 reads xse
 	gsettings set "$schema" color-scheme "$( ((dark)) && echo prefer-dark || echo prefer-light)"
 	gsettings set "$schema" gtk-theme "$( ((dark)) && echo adw-gtk3-dark || echo adw-gtk3)"
 	gsettings set "$schema" icon-theme "Tela-circle-blue-$mode"
+}
+
+boot_menu() { # the boot menu's theme and background, where packages/system.sh grub made them ours
+	local dir
+	# shellcheck disable=SC2086 # a list of folders
+	for dir in ${DESKTOP_GRUB_DIR:-/boot/grub/themes/desktop /boot/grub2/themes/desktop}; do
+		[[ -w $dir/theme.txt && -w $dir/background.png ]] && boot_theme "$state/grub-theme.txt" "$dir"
+	done
+	return 0
 }
 
 sddm() { # the login screen's colours, in the folder packages/system.sh sddm shares with it

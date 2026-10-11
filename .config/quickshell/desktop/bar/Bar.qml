@@ -128,7 +128,7 @@ PanelWindow {
 		Item {
 			id: outlineMask
 
-			readonly property bool gap: Panel.hangingWidth > 0 && !bar.vertical && WindowManager.focusedOutput === bar.modelData.name
+			readonly property bool gap: Panel.hangingWidth > 0 && !bar.vertical && (Panel.hangingScreen || WindowManager.focusedOutput) === bar.modelData.name
 			readonly property real gapWidth: Panel.hangingWidth + 2 * Panel.controlFillet
 			readonly property real gapX: (parent.width - gapWidth) / 2
 

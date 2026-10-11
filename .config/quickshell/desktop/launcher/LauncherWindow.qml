@@ -78,6 +78,7 @@ HangingPanel {
 		search.text = "";
 		current = 0;
 		prepare();
+		findLater.stop(); // the cleared search queued one; prepare() has just run it
 	}
 	Component.onCompleted: prepare()
 

@@ -27,19 +27,28 @@ Scope {
 	property bool visible: true // as a window's: the panels' loaders set it
 	default property alias content: inner.data
 	signal dismissed
-	signal keyPressed(var event) // keys nothing inside took (Escape closes)
+	signal keyPressed(var event) // keys nothing inside took; an Escape the panel doesn't take closes it
 
 	readonly property bool wayland: !!Quickshell.env("WAYLAND_DISPLAY")
-	readonly property ShellScreen screen: Quickshell.screens.find(s => s.name === WindowManager.focusedOutput) ?? Quickshell.screens[0]
+	// the screen it opened on, kept while it's open: focus moving to another monitor (on sway it
+	// follows the pointer) doesn't carry it along
+	readonly property ShellScreen focusedScreen: Quickshell.screens.find(s => s.name === WindowManager.focusedOutput) ?? Quickshell.screens[0]
+	property ShellScreen pinned: null
+	readonly property ShellScreen screen: pinned ?? focusedScreen
 	readonly property bool below: Config.position !== "bottom" // hangs below the bar, else above it
 	readonly property rect island: Panel.islands[screen.name] ?? Qt.rect(0, 0, screen.width, 0)
-	// centred under the bar, flush with it
-	readonly property real px: Math.round(island.x + (island.width - panelWidth) / 2)
-	readonly property real py: !Panel.barShown ? (below ? 0 : screen.height - panelHeight) : below ? island.y + island.height : island.y - panelHeight
-	readonly property int fillet: Panel.controlFillet
-	// the bar's colour, solid: nothing is blurred behind a window as big as the screen, so anything
-	// behind would show through a see-through panel
-	readonly property color fill: Theme.bg
+	// a bar on the left or right: the panel floats beside it, centred on it, kept on the screen
+	readonly property bool side: Config.vertical
+	readonly property int sideGap: 10
+	// centred under the bar, flush with it (or beside a side bar)
+	readonly property real px: side ? (Config.position === "left" ? island.x + island.width + sideGap : island.x - panelWidth - sideGap) : Math.round(island.x + (island.width - panelWidth) / 2)
+	readonly property real py: side ? Math.round(Math.max(sideGap, Math.min(screen.height - panelHeight - sideGap, island.y + (island.height - panelHeight) / 2))) : !Panel.barShown ? (below ? 0 : screen.height - panelHeight) : below ? island.y + island.height : island.y - panelHeight
+	// the curves where it joins a horizontal bar; none beside a side bar, which it doesn't touch
+	readonly property int fillet: side ? 0 : Panel.controlFillet
+	// the bar's colour and see-through as much, so the panel reads as part of it: on sway SwayFX blurs
+	// behind it as behind the bar (effects.conf, desktop-panel). X11: solid, as nothing is blurred
+	// behind a window as big as the screen and what's under would show through
+	readonly property color fill: wayland ? Qt.alpha(Theme.bg, Config.bar.opacity) : Theme.bg
 	readonly property string title: "Desktop " + name
 
 	// the keyboard (X11): i3 focuses a new window itself; ask too once it has the window (its "new"
@@ -58,6 +67,12 @@ Scope {
 	ElapsedTimer {
 		id: opened
 	}
+
+	Component.onCompleted: {
+		pinned = focusedScreen;
+		Panel.hangingScreen = pinned.name; // the bar there opens its outline for it
+	}
+	Component.onDestruction: if (Panel.hangingScreen === pinned?.name) Panel.hangingScreen = ""
 
 	// i3's window events: focus once it has the window; another window taking the focus closes it
 	Connections {
@@ -79,8 +94,14 @@ Scope {
 		id: inner
 
 		focus: true
-		Keys.onEscapePressed: root.dismissed()
-		Keys.onPressed: event => root.keyPressed(event)
+		// the panel first: Keys' own onEscapePressed would run before it and take every Escape
+		Keys.onPressed: event => {
+			root.keyPressed(event);
+			if (!event.accepted && event.key === Qt.Key_Escape) {
+				root.dismissed();
+				event.accepted = true;
+			}
+		}
 	}
 
 	// the panel under the bar, its curves, and the area beside it that closes it on a click
@@ -108,7 +129,7 @@ Scope {
 
 			// inverse curves where the panel meets the bar, so the bar's edge flows into it
 			Repeater {
-				model: [-1, 1] // left, right
+				model: root.side ? [] : [-1, 1] // left, right (none beside a side bar)
 
 				delegate: Canvas {
 					id: curve
@@ -150,10 +171,10 @@ Scope {
 				width: root.panelWidth
 				height: root.panelHeight
 				color: root.fill
-				topLeftRadius: root.below ? 0 : 18
-				topRightRadius: root.below ? 0 : 18
-				bottomLeftRadius: root.below ? 18 : 0
-				bottomRightRadius: root.below ? 18 : 0
+				topLeftRadius: root.below && !root.side ? 0 : 18
+				topRightRadius: root.below && !root.side ? 0 : 18
+				bottomLeftRadius: root.below || root.side ? 18 : 0
+				bottomRightRadius: root.below || root.side ? 18 : 0
 				clip: true
 
 				// clicks on the panel's own empty space stay on it (not the closing area behind)

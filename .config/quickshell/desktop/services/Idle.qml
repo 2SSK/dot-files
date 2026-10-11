@@ -20,7 +20,7 @@ Singleton {
 		// one swayidle: a shell restart leaves the last one running, so it goes first (KILL: it
 		// handles TERM in its event loop, which an orphan no longer runs). Without it nothing locks
 		// on sway (the power menu's Lock and the lid go through it too): say so, loudly
-		const missing = 'notify-send -u critical -a Lock "The screen can\'t lock" "swayidle isn\'t installed: Lock, the lid, idle and sleep do nothing on sway. sudo pacman -S swayidle"';
+		const missing = 'notify-send -u critical -a Lock "The screen can\'t lock" "swayidle isn\'t installed: Lock, the lid, idle and sleep do nothing on sway. Install it: pacman -S swayidle (Arch) or dnf install swayidle (Fedora)"';
 		const args = ["sh", "-c", `command -v swayidle >/dev/null || { ${missing}; exit 127; }; pkill -KILL -u "$(id -u)" -x swayidle; exec swayidle "$@"`, "sh", "-w"];
 		if (dim > 0 && (lock === 0 || dim < lock))
 			args.push("timeout", String(dim * 60), "desktop-idle dim", "resume", "desktop-idle undim");

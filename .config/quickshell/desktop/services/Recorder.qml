@@ -22,8 +22,8 @@ Singleton {
 	function toggle(): void {
 		if (process.running)
 			stop();
-		else
-			Panel.openCapture("record");
+		else // the capture panel; with several monitors straight at which one to record
+			Panel.openCapture(Quickshell.screens.length > 1 ? "record" : "");
 	}
 
 	function stop(): void {

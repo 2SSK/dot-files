@@ -64,7 +64,7 @@ and swayfx's touches for the shell. What differs underneath:
 | Idle | X's timers (`desktop-idle apply`) and xss-lock | swayidle, run by the shell with the same settings |
 | Alt+Tab ends | `desktop-key-release alt` watches X | the ring holds the keyboard and sees Alt let go |
 | Clipboard history | Qt's clipboard signal | `wl-paste --watch` |
-| Wallpaper | feh | swaybg (`swaymsg output * bg`), or swww's fade when it runs |
+| Wallpaper | feh | the shell's background layer (`wallpaper/Backdrop.qml`), cross-fading |
 | Screens, touchpad | `desktop-displays`, `desktop-input` | sway's `outputs` and `input` |
 
 ## Launcher
@@ -93,6 +93,7 @@ the default one; anything else in its default application. The emoji come from U
 | --- | --- |
 | F12 | the capture panel (again closes it): Screenshot or Record × Region, Window, Screen. The arrows pick a tile, Enter does it; R, W, S take a screenshot straight away, with Shift they record. Only Region uses the mouse: drag a rectangle (Escape or a right click cancels). Window is the focused one. Screen with more than one monitor: a map of them as they're arranged, the panel's own screen picked; the arrows or 1–9 pick, Enter takes it, A takes all, Backspace goes back |
 | `$mod+F12`, the camera in the bar | stops a recording, else opens the capture panel |
+| Ctrl+F12 / Shift+F12 | without the panel: drag a region / the whole screen you're on, saved and copied at once |
 
 A screenshot is saved to `~/Pictures/Screenshots` and copied to the clipboard as an image, ready
 to paste. A recording (gpu-screen-recorder, 60 fps, the system sound) goes to `~/Videos/Recordings`: a
@@ -148,20 +149,23 @@ again in 5 minutes (the list shows "Snoozed" meanwhile).
 ↑ ↓ (or Tab) to move, Enter or a click sets one; the set one has a ring and a tick. The chip beside
 the search picks rotation: never, every 5 minutes, hourly, daily or each boot; the shuffle button
 sets one at random. The images come from `wallpaper.folders` (shell.json; the repo's and
-`~/Wallpaper-Bank`).
+`~/Wallpaper-Bank`), from the current theme's folder when it has some (`~/Wallpaper-Bank/nord/`).
+
+Each boot's wallpaper is picked as the system shuts down, not at login: a user service
+(`desktop-wallpaper-next`) runs `desktop-wallpaper next-boot`, which sets the next one and redraws the
+login screen's background. So the login screen and the desktop start on it, with no change after
+you log in. A logout keeps the wallpaper; only a shutdown or reboot picks a new one.
 
 `desktop-wallpaper set <image>` does the setting: it points `~/.local/state/desktop/wallpaper` at it
-(the lock screen, sddm and GRUB use it too) and fades over to it. On X11 feh has no transitions, so
+(the lock screen and sddm use it too) and fades over to it. On X11 feh has no transitions, so
 it shows three half-size blended frames (made in parallel with ImageMagick) before the full image;
-on Wayland swww's fade when its daemon runs, else sway's background. `desktop-wallpaper restore`
-draws the remembered one at login.
+on Wayland the shell draws it itself, on the background layer of each screen, cross-fading over
+0.8 s (no wallpaper daemon), and follows a change made elsewhere (`wallpaper-changed`).
+`desktop-wallpaper restore` draws the remembered one at login on X11.
 
-The login screen and the boot menu follow the wallpaper too. They can't read the home folder, so
-`packages/system.sh sddm` and `grub` give you their background files (sddm's in
-`/var/lib/desktop/sddm`, GRUB's `background.jpg` in its theme folder), and every wallpaper change
-redraws them without sudo: sddm shows it as it is, GRUB blurred and dimmed in the theme's
-background colour (so `theme set` redraws GRUB's too). `desktop-wallpaper screens` redraws both by
-hand.
+The login screen follows the wallpaper too. It can't read the home folder, so
+`packages/system.sh sddm` gives you its background file (in `/var/lib/desktop/sddm`), and every
+wallpaper change redraws it without sudo. `desktop-wallpaper screens` redraws it by hand.
 
 ## Settings window
 
@@ -234,6 +238,8 @@ Hidden with `$mod+Shift+b`, the bar comes back over the windows while the pointe
 | F6, mic-mute key | microphone mute |
 | `$mod+F12` | stop a recording, else the capture panel |
 | F12 | capture panel: screenshots and recordings (F12 no longer reaches apps, e.g. browser dev tools) |
+| Ctrl+F12 | screenshot of a dragged region, no panel |
+| Shift+F12 | screenshot of the screen you're on, no panel |
 | `$mod+Shift+b` | hide / show the bar |
 | `$mod+n` | notifications (control center) |
 | `$mod+Shift+s` | settings |

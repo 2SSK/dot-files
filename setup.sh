@@ -71,12 +71,13 @@ prune_links() {
 	)
 }
 
-# User services from the packages: mpd plays music, mpd-mpris exposes it to media keys and the bar.
+# User services: mpd plays music, mpd-mpris exposes it to media keys and the bar, and
+# desktop-wallpaper-next picks the next boot's wallpaper as the system shuts down.
 # Run after stow: mpd reads its config from the links. One that won't start is a warning, not a stop.
 enable_services() {
 	local unit units=()
 	systemctl --user show-environment >/dev/null 2>&1 || { warn 'no systemd user session; services not enabled' && return 0; }
-	for unit in mpd.service mpd-mpris.service; do
+	for unit in mpd.service mpd-mpris.service desktop-wallpaper-next.service; do
 		systemctl --user cat "$unit" >/dev/null 2>&1 && units+=("$unit")
 	done
 	((${#units[@]})) || return 0
@@ -145,7 +146,7 @@ main() {
 
 	if ((packages)); then
 		printf '  %s%s%s\n' "$dim" 'zram and systemd-oomd (memory never freezes the desktop), then what applies here:' "$reset"
-		printf '  %s%s%s\n' "$dim" 'laptop power (quiet, 80% charge limit) and lid, Timeshift, GRUB and login screen, VMs, docker' "$reset"
+		printf '  %s%s%s\n' "$dim" 'laptop power (quiet, 80% charge limit) and lid, Timeshift, boot menu and login screen, VMs, docker' "$reset"
 		if confirm 'Set up the system parts (packages/system.sh, asks for sudo)?' y; then system=1; fi
 	fi
 
@@ -156,7 +157,7 @@ main() {
 	step 'Plan'
 	row 'Packages' "$( ((packages)) && echo "${layers[*]} + shell plugins" || echo skip)"
 	[[ $distro != arch ]] || row '' 'includes a full system upgrade (pacman -Syu), as Arch requires'
-	((system == 0)) || row 'System (sudo)' 'zram + oomd, and laptop power, lid, Timeshift, GRUB, login screen, VMs, docker where they apply'
+	((system == 0)) || row 'System (sudo)' 'zram + oomd, and laptop power, lid, Timeshift, boot menu, login screen, VMs, docker where they apply'
 	row 'Existing files' "$(case $policy in none) echo none ;; backup) echo "${#found[@]} → $backup" ;; *) echo "${#found[@]} deleted" ;; esac)"
 	row 'Stow' "$repo → $HOME"
 	local family mode
@@ -215,7 +216,7 @@ main() {
 		warn 'python3 missing; theme not rendered'
 	fi
 
-	if ((system)); then # after the packages and the theme: GRUB and the login screen are built from it
+	if ((system)); then # after the packages and the theme: the boot menu and the login screen are built from it
 		step 'System'
 		row 'Parts' "$("$repo/packages/system.sh" --plan)"
 		"$repo/packages/system.sh"

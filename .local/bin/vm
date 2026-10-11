@@ -423,7 +423,7 @@ cmd_revert() {
 
 cmd_rm() {
 	need_vm "${1:-}"
-	local yes
+	local yes reply
 	yes="$(flag -y "${2:-}")"
 	if ((!yes)); then
 		read -rp "delete $1 and its disk? [y/N] " reply

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Screenshots and screen recordings (the shell's capture panel and Print keys).
-#   desktop-capture shot region|window|screen [--monitor NAME --geometry WxH+X+Y]
-#       region: drag a rectangle; window: the focused one; screen: that monitor, else all of them.
+#   desktop-capture shot region|window|screen [--monitor NAME --geometry WxH+X+Y | --focused]
+#       region: drag a rectangle; window: the focused one; screen: that monitor (--focused: the one
+#       you're on), else all of them.
 #       Saved to ~/Pictures/Screenshots and copied to the clipboard as an image.
 #   desktop-capture record region|window|screen <file> [--monitor NAME]
 #       gpu-screen-recorder at 60 fps with the system sound, into <file>; prints "recording" as it
@@ -11,7 +12,7 @@
 set -euo pipefail
 
 usage() {
-	echo "usage: desktop-capture shot region|window|screen [--monitor NAME --geometry WxH+X+Y]" >&2
+	echo "usage: desktop-capture shot region|window|screen [--monitor NAME --geometry WxH+X+Y | --focused]" >&2
 	echo "       desktop-capture record region|window|screen <file> [--monitor NAME]" >&2
 	exit 2
 }
@@ -35,13 +36,24 @@ region() { # prints the dragged rectangle (slop's WxH+X+Y, slurp's "X,Y WxH"); f
 	fi
 }
 
-shot() { # <mode> [--monitor NAME --geometry G]
+focused() { # the monitor you're on: sway's by name, i3's by geometry (maim takes no name)
+	if wayland; then
+		monitor="$(swaymsg -t get_outputs | jq -r '.[] | select(.focused) | .name')"
+	else
+		local name
+		name="$(i3-msg -t get_workspaces | jq -r '.[] | select(.focused) | .output')"
+		geometry="$(i3-msg -t get_outputs | jq -r --arg n "$name" '.[] | select(.name == $n) | .rect | "\(.width)x\(.height)+\(.x)+\(.y)"')"
+	fi
+}
+
+shot() { # <mode> [--monitor NAME --geometry G | --focused]
 	local mode=$1 monitor='' geometry='' dir file area
 	shift
 	while (($#)); do
 		case $1 in
 		--monitor) monitor=${2:-} && shift ;;
 		--geometry) geometry=${2:-} && shift ;;
+		--focused) focused ;;
 		*) usage ;;
 		esac
 		shift

@@ -10,10 +10,10 @@ My Arch Linux desktop: **sway (swayfx)** and **i3** sharing one config, with a
   notifications, screenshots and recording, wallpapers, lock screen and settings, the same on
   sway and i3.
 - **One theme**: pick a palette (8 families, dark and light) and kitty, foot, nvim, tmux, GTK, Qt,
-  i3/sway, the shell, the login screen and GRUB follow it live.
+  i3/sway, the shell, the login screen and the boot menu follow it live.
 - **Terminal**: zsh, tmux (sessions restored at login), Neovim with LSP and Copilot, yazi.
 - **System**: TLP power profiles and an 80% charge limit, zram and systemd-oomd, Timeshift
-  snapshots, a themed GRUB and SDDM.
+  snapshots, a minimal themed boot menu (GRUB) and login screen (SDDM).
 
 ## Install
 
@@ -24,7 +24,7 @@ this before changing anything.
 git clone https://github.com/2SSK/dot-files ~/dot-files
 cd ~/dot-files
 ./setup.sh   # asks first: packages, shell plugins, links into ~, the theme, zsh, and the system
-             # parts (zram, laptop power and lid, Timeshift, GRUB and login screen, VMs, docker)
+             # parts (zram, laptop power and lid, Timeshift, boot menu and login screen, VMs, docker)
 ```
 
 The system parts run as one: `packages/system.sh` sets up everything that applies to the machine

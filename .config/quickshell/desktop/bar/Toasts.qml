@@ -24,8 +24,9 @@ PopupWindow {
 	anchor.rect.y: (Config.position === "top" ? bar.height : 0) - 14 + below
 	implicitWidth: 360 + 2 * pad
 	implicitHeight: Math.max(1, stack.implicitHeight) + 2 * pad
-	// not over the control center, which lists them anyway
-	visible: focused && Notifications.popups.length > 0 && !Panel.controlOpen
+	// not while the control center shows the notifications, which lists them anyway; over its other
+	// pages they still show (a screenshot taken with it open says so)
+	visible: focused && Notifications.popups.length > 0 && !(Panel.controlOpen && Panel.controlPage === "notifications")
 	color: "transparent"
 	mask: Region {
 		item: stack

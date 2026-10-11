@@ -35,6 +35,7 @@ installed() { # [--exact]: the installed packages for the names on stdin. A name
 }
 
 packages() {
+	command -v pacman >/dev/null || { echo "cleanup.sh packages: Arch only (Fedora: dnf autoremove)" >&2 && return 0; }
 	local keep remove orphans
 	# what the repo installs stays, even where it came in as another package's dependency
 	mapfile -t keep < <(repo_packages | grep -vxF -f <(listed "$here/remove.txt") | installed)

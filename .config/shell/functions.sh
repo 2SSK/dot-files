@@ -80,9 +80,23 @@ ssh() {
 	esac
 }
 
-# s: search the repos and the AUR, preview each package, install the ones picked (Tab marks several)
+# fssh [ssh args]: pick a host from ~/.ssh/config (the preview shows where it connects), ssh to it
+fssh() {
+	local host
+	host="$(awk 'tolower($1) == "host" { for (i = 2; i <= NF; i++) if ($i !~ /[*?!]/) print $i }' ~/.ssh/config 2>/dev/null |
+		fzf --prompt='ssh> ' --preview 'ssh -G {} 2>/dev/null | grep -E "^(user|hostname|port|identityfile) "' --preview-window=down:5)"
+	# shellcheck disable=SC2029 # extra arguments (ports, a command) are meant for ssh
+	[[ -n $host ]] && ssh "$host" "$@"
+}
+
+# s: search the repos (and the AUR), preview each package, install the ones picked (Tab marks several)
 s() {
-	yay -Slq | fzf --multi --preview 'yay -Sii {1}' --preview-window=down:75% | xargs -ro yay -S
+	if command -v yay >/dev/null; then
+		yay -Slq | fzf --multi --preview 'yay -Sii {1}' --preview-window=down:75% | xargs -ro yay -S
+	else # Fedora
+		dnf repoquery --qf '%{name}\n' 2>/dev/null | sort -u |
+			fzf --multi --preview 'dnf info {1}' --preview-window=down:75% | xargs -ro sudo dnf install
+	fi
 }
 
 mkcd() { mkdir -p -- "$1" && cd -- "$1" || return; }

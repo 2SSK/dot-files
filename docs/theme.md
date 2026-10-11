@@ -51,7 +51,8 @@ Palette values are copied from each project's official ports, with attribution i
 | nvim, vim | Build their colorscheme `desktop` from `palette.json` | nvim live (SIGUSR1); vim within a second |
 | yazi | `~/.config/yazi/` links to the rendered flavor | Next start |
 | rmpc, pspg, opencode | Their rendered configs (`rmpc.ron`; `PSPG_CONF`; `OPENCODE_CONFIG_DIR`) | Next start |
-| Login screen (SDDM), boot menu (GRUB) | SDDM: the rendered `sddm-theme.conf`, copied to its shared folder; GRUB: its background tinted by the palette | SDDM next login; GRUB's tint at once, its colours with `packages/system.sh grub` |
+| Login screen (SDDM) | The rendered `sddm-theme.conf`, copied to its shared folder | Next login |
+| Boot menu (GRUB) | The rendered `grub-theme.txt` and a background drawn from the palette, in its theme folder (always the family's dark colours) | Next boot |
 
 ## How a switch works
 
@@ -91,18 +92,28 @@ patch (`packages/extra/st.sh`), and reads its font, padding and colours from `~/
 `packages/system.sh sddm` (sudo) installs the `desktop` SDDM theme: your wallpaper blurred and dimmed,
 a large clock, a rounded password field (a wrong password shakes it), the session (click to switch)
 and suspend / reboot / power off. Colours and fonts come from the active theme (`sddm-theme.conf`).
-sddm can't read your home directory, so like GRUB it doesn't follow `theme set` by itself: run it
-again after a switch. An `/etc/sddm.conf` that names another theme is switched in place (the
+sddm can't read your home directory, so it doesn't follow `theme set` by itself: run it again
+after a switch. An `/etc/sddm.conf` that names another theme is switched in place (the
 original stays as `sddm.conf.pre-desktop`).
 
 ## Boot menu (GRUB)
 
-`packages/system.sh grub` (sudo) installs a minimal GRUB theme built from the active palette:
-the theme's background colour, a centred column of entries in Inter, the selected one on a
-rounded pill, and one hint line with the countdown. It sets `GRUB_THEME` and graphical output
-in `/etc/default/grub` (the original is kept as `grub.pre-desktop`; a serial console is left
-alone) and regenerates `grub.cfg` (`grub-mkconfig`, `update-grub` or `grub2-mkconfig`).
-GRUB can't follow the theme live: run it again after `theme set` to update the colours.
+`packages/system.sh grub` (sudo) installs a minimal boot menu: a dark gradient in the theme's
+colours (its background lightened toward its surface at the centre, darkened at the edges, a little
+grain against banding), a centred column of entries in Inter, the chosen one brighter, and the
+countdown below. It always uses the family's dark colours, so it never flashes bright. Its
+`theme.txt` and background are made yours, so `theme set` redraws them without sudo. It sets
+`GRUB_THEME` and graphical output in `/etc/default/grub` (the original is kept as
+`grub.pre-desktop`; a serial console is left alone) and regenerates `grub.cfg`.
+
+- **btrfs /boot:** the first entry boots by default instead of the last one chosen. GRUB can't write
+  its saved choice there ("sparse file not allowed").
+- **Arch:** the entries are named Linux, Linux LTS and Linux (fallback) by `/etc/grub.d/09_desktop`
+  (`system/etc/grub.d/`) in place of `10_linux`'s "EndeavourOS, with Linux …", which is turned off
+  and kept off across grub updates by `NoExtract` in `pacman.conf`. The firmware's own boot entries
+  (`GRUB_DISABLE_BOOTNEXT`) are hidden. If the new entries don't reach `grub.cfg`, GRUB's own come back.
+- **Preview** without installing anything: `packages/system.sh grub --preview` boots it in a small
+  QEMU window.
 
 ## GTK and Qt
 

@@ -7,10 +7,12 @@ import qs
 
 // The wallpaper: the images in wallpaper.folders (shell.json; a folder each deep: theme folders
 // such as ~/Wallpaper-Bank/tokyonight are matched to the theme), the one set, and rotation
-// (wallpaper.rotate: off, 5m, 1h, 1d, or boot for a new one each boot). Setting one points
-// ~/.local/state/desktop/wallpaper at it (the lock screen, sddm and GRUB read that too) and draws
-// it with a short fade (desktop-wallpaper). The last change is remembered, so a rotation keeps its
-// pace across restarts.
+// (wallpaper.rotate: off, 5m, 1h, 1d, or boot for a new one each boot; that one is picked while
+// the system shuts down, by desktop-wallpaper next-boot, so the login screen has it). Setting one points
+// ~/.local/state/desktop/wallpaper at it (the lock screen and sddm read that too); the backdrop
+// (sway) or desktop-wallpaper's feh (i3) fades over to it. A change made elsewhere (desktop-wallpaper
+// in a terminal, the shutdown pick) is seen through wallpaper-changed. The last change is
+// remembered, so a rotation keeps its pace across restarts.
 Singleton {
 	id: root
 
@@ -76,27 +78,26 @@ Singleton {
 		}
 	}
 
-	// where things stand: the image set, when it changed, and this boot's id against the last one seen
+	// where things stand: the image set, and when it changed (again whenever it changes)
 	Process {
+		id: look
+
 		running: true
-		command: ["sh", "-c", 'readlink "$1/wallpaper"; cat "$1/wallpaper-changed" 2>/dev/null || echo 0; cat /proc/sys/kernel/random/boot_id; cat "$1/wallpaper-boot" 2>/dev/null; cat /proc/sys/kernel/random/boot_id > "$1/wallpaper-boot"', "sh", root.state]
+		command: ["sh", "-c", 'readlink "$1/wallpaper"; cat "$1/wallpaper-changed" 2>/dev/null || echo 0', "sh", root.state]
 		stdout: StdioCollector {
 			onStreamFinished: {
-				const [current, changed, boot, lastBoot] = text.split("\n");
+				const [current, changed] = text.split("\n");
 				root.current = current ?? "";
 				root.changed = Number(changed) * 1000;
-				if (Config.wallpaper.rotate === "boot" && boot && boot !== lastBoot)
-					newBoot.restart();
 			}
 		}
 	}
 
-	// a new boot: a new wallpaper once the list is in
-	Timer {
-		id: newBoot
-
-		interval: 1500
-		onTriggered: root.shuffle()
+	FileView {
+		path: root.state + "/wallpaper-changed"
+		watchChanges: true
+		printErrors: false
+		onFileChanged: look.running = true
 	}
 
 	// rotation, checked every minute against the last change

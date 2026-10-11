@@ -43,6 +43,8 @@ HangingPanel {
 	panelHeight: Panel.wallpaperHeight
 	onDismissed: Panel.wallpaperOpen = false
 	onShownChanged: current = Math.max(0, Math.min(current, shown.length - 1))
+	// the folders as they are now: images deleted, added or moved since the last look
+	Component.onCompleted: Wallpaper.scan()
 
 	// search, rotate, shuffle, close
 	Row {

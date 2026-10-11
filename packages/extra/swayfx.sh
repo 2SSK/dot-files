@@ -24,7 +24,17 @@ tmp="$(mktemp -d)"
 trap 'rm -rf "$tmp"' EXIT
 git clone --quiet --depth 1 https://aur.archlinux.org/swayfx.git "$tmp"
 sed -i 's/"scenefx0\.5"/"scenefx"/' "$tmp/PKGBUILD"
-# swayfx replaces sway, and makepkg's --noconfirm would decline that swap
-if pacman -Qq sway >/dev/null 2>&1; then sudo pacman -Rdd --noconfirm sway; fi
-(cd "$tmp" && makepkg -si --noconfirm)
+# Built first; only then is sway swapped for it (pacman's --noconfirm would decline the swap, so sway
+# goes out by hand), so a failed build leaves sway as it was. Should the install still fail, sway
+# comes back: a session without a compositor is the one thing this mustn't leave behind.
+(cd "$tmp" && makepkg -s --noconfirm)
+had_sway=0
+if pacman -Qq sway >/dev/null 2>&1; then
+	had_sway=1
+	sudo pacman -Rdd --noconfirm sway
+fi
+if ! sudo pacman -U --noconfirm "$tmp"/swayfx-*.pkg.tar.*; then
+	((had_sway)) && sudo pacman -S --noconfirm sway
+	die swayfx_install msg='the built package would not install; sway is back'
+fi
 log_info built name=swayfx

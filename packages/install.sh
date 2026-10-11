@@ -68,19 +68,26 @@ install_aur() { # <pkg...>
 		sudo pacman -S --needed --noconfirm base-devel git
 		local tmp
 		tmp="$(mktemp -d)"
-		git clone --depth 1 https://aur.archlinux.org/yay-bin.git "$tmp"
-		(cd "$tmp" && makepkg -si --noconfirm)
+		# removed when the build fails too (set -e would exit past a RETURN trap)
+		if ! git clone --depth 1 https://aur.archlinux.org/yay-bin.git "$tmp" || ! (cd "$tmp" && makepkg -si --noconfirm); then
+			rm -rf "$tmp"
+			return 1
+		fi
 		rm -rf "$tmp"
 	fi
 	# AUR forks replace repo packages (i3lock-color → i3lock); --noconfirm
-	# declines that swap, so remove installed conflicts first. -dd: the fork provides them.
+	# declines that swap, so remove installed conflicts first. -dd: the fork provides them. yay builds
+	# and installs in one go, so a build that fails puts the removed packages back.
 	local c old=()
 	for c in $(yay -Si --aur "$@" | awk -F' : ' '/^Conflicts With/ && $2 != "None" { print $2 }'); do
 		c=${c%%[<>=]*}
 		[[ " $* " != *" $c "* && $(pacman -Qq "$c" 2>/dev/null) == "$c" ]] && old+=("$c")
 	done
 	((${#old[@]} == 0)) || sudo pacman -Rdd --noconfirm "${old[@]}"
-	yay -S --needed --noconfirm "$@"
+	if ! yay -S --needed --noconfirm "$@"; then
+		((${#old[@]} == 0)) || sudo pacman -S --needed --noconfirm "${old[@]}"
+		return 1
+	fi
 }
 
 main() {
