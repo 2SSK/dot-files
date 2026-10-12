@@ -129,20 +129,14 @@ myip() {
 	printf 'External: %s\n' "$(curl -fsS --max-time 5 ifconfig.me)"
 }
 
-# share [-t 1h|12h|24h|72h] <file|folder>... : upload to catbox.moe, print the links and copy them.
-# A folder goes as a .tar.gz, piped text (`git diff | share`) as paste.txt. -t: litterbox instead,
-# which deletes it after that time (and takes up to 1 GB instead of 200 MB).
+# share <file|folder>... : upload to x0.at, print the links and copy them. A folder goes as a
+# .tar.gz, piped text (`git diff | share`) as paste.txt. Up to 1 GB, kept 3 to 100 days (the
+# smaller, the longer). catbox now refuses scripts ("Invalid uploader") and 0x0.st takes no uploads.
 share() {
-	local api="https://catbox.moe/user/api.php" max=200 expiry="" tmp f name url urls="" nl=$'\n'
-	local -a opts=(-S --fail-with-body -F reqtype=fileupload) # an error keeps its reason (catbox says why in the body)
-	if [[ ${1:-} == -t ]]; then
-		[[ ${2:-} =~ ^(1|12|24|72)h$ ]] || { echo "share: -t takes 1h, 12h, 24h or 72h" >&2 && return 2; }
-		api="https://litterbox.catbox.moe/resources/internals/api.php" max=1024 expiry=$2
-		opts+=(-F "time=$expiry")
-		shift 2
-	fi
+	local api="https://x0.at" max=1024 tmp f name url urls="" nl=$'\n'
+	local -a opts=(-S --fail-with-body -A "share (dot-files)") # an error keeps its reason
 	if (($# == 0)) && [[ -t 0 ]]; then
-		echo "usage: share [-t 1h|12h|24h|72h] <file|folder>...   or: <command> | share" >&2
+		echo "usage: share <file|folder>...   or: <command> | share" >&2
 		return 2
 	fi
 	if [[ -t 2 ]]; then opts+=(--progress-bar); else opts+=(-s); fi
@@ -161,12 +155,12 @@ share() {
 			continue
 		fi
 		if (($(stat -c %s -- "$f") > max * 1024 * 1024)); then
-			echo "share: $f is over $max MB${expiry:+ even for litterbox}" >&2
-			[[ -n $expiry ]] || echo "  share -t 72h takes up to 1 GB" >&2
+			echo "share: $f is over $max MB" >&2
 			continue
 		fi
-		url="$(curl "${opts[@]}" -F "fileToUpload=@\"$f\"" "$api")"
-		if [[ $url != https://* ]]; then # catbox answers errors as text
+		url="$(curl "${opts[@]}" -F "file=@\"$f\"" "$api")"
+		url="${url%%[[:space:]]*}"
+		if [[ $url != https://* ]]; then
 			echo "share: $f failed${url:+: $url}" >&2
 			continue
 		fi
@@ -179,5 +173,5 @@ share() {
 		printf '%s' "$urls" | wl-copy
 	else
 		printf '%s' "$urls" | xclip -selection clipboard
-	fi && echo "copied${expiry:+ (deleted after $expiry)}" >&2
+	fi && echo "copied" >&2
 }
