@@ -43,6 +43,7 @@ gtk-3.0.css      gtk-3.0/gtk.css    -
 gtk-settings.ini gtk-3.0/settings.ini -
 gtk-settings.ini gtk-4.0/settings.ini -
 gtk-4.0.css      gtk-4.0/gtk.css    gtk_settings
+gtk-4.0.css      -                  nautilus_restart
 qtct.conf        qt5ct/qt5ct.conf   -
 qtct.conf        qt6ct/qt6ct.conf   -
 sddm-theme.conf  -                  sddm
@@ -75,6 +76,18 @@ gtk_settings() { # what GTK on Wayland and libadwaita read (GTK on X11 reads xse
 	gsettings set "$schema" color-scheme "$( ((dark)) && echo prefer-dark || echo prefer-light)"
 	gsettings set "$schema" gtk-theme "$( ((dark)) && echo adw-gtk3-dark || echo adw-gtk3)"
 	gsettings set "$schema" icon-theme "Tela-circle-blue-$mode"
+}
+
+nautilus_restart() { # libadwaita reads gtk.css only as it starts: a running Nautilus restarts, its
+	# windows reopened on the folders they showed (a moment's flicker, no lost place)
+	pgrep -x nautilus >/dev/null || return 0 # (asking it over D-Bus would start it)
+	local -a uris
+	mapfile -t uris < <(busctl --user --json=short get-property org.freedesktop.FileManager1 /org/freedesktop/FileManager1 \
+		org.freedesktop.FileManager1 OpenWindowsWithLocations | jq -r '.data[] | .[0] // empty')
+	nautilus --quit || true # non-zero even as it quits
+	for _ in $(seq 50); do pgrep -x nautilus >/dev/null || break; sleep 0.1; done
+	# in one go: one by one, they race the new Nautilus as it starts
+	((${#uris[@]} == 0)) || setsid -f nautilus --new-window "${uris[@]}" >/dev/null 2>&1
 }
 
 boot_menu() { # the boot menu's theme and background, where packages/system.sh grub made them ours
