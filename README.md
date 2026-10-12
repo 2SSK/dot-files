@@ -3,7 +3,16 @@
 My Arch Linux desktop: **sway (swayfx)** and **i3** sharing one config, with a
 [Quickshell](https://quickshell.org) desktop shell, and one theme that colours everything.
 
-![The desktop: bar, control center, wallpapers, settings and themes (a 4-minute tour at 4× speed)](docs/preview.gif)
+![The control center under the island bar](docs/screens/control-center.webp)
+
+| | |
+|:---:|:---:|
+| ![Launcher](docs/screens/launcher.webp) Launcher | ![File search](docs/screens/files.webp) Files, as Nautilus finds them |
+| ![Emoji](docs/screens/emoji.webp) Emoji, and a screenshot toast | ![Wallpapers](docs/screens/wallpapers.webp) Wallpapers |
+| ![Themes](docs/screens/themes.webp) Themes | ![Screenshot and recording](docs/screens/capture.webp) Screenshot and recording |
+| ![Settings](docs/screens/settings.webp) Settings | ![Bar at the bottom](docs/screens/bar-bottom.webp) The bar, full width at the bottom |
+| ![A light theme](docs/screens/light-theme.webp) A light theme | ![Keys](docs/screens/keys.webp) Every key, searchable |
+| ![Music](docs/screens/music.webp) Music (mpd) in the terminal | |
 
 - **Desktop shell** (`qs -c desktop`): a floating "island" bar per screen, control center (Wi-Fi,
   Bluetooth, power profiles, media, calendar, notes, todo), launcher, clipboard history,
