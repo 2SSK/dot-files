@@ -37,7 +37,7 @@ return {
 					map("n", "gt", function() Snacks.picker.lsp_type_definitions() end, "Type definition")
 					map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, "Code action")
 					map("n", "<leader>cr", vim.lsp.buf.rename, "Rename")
-					map("n", "<leader>cd", vim.diagnostic.open_float, "Line diagnostics")
+					map("n", "<leader>xd", vim.diagnostic.open_float, "Line diagnostics")
 					map("n", "<leader>cR", "<cmd>LspRestart<CR>", "Restart LSP")
 
 					local client = vim.lsp.get_client_by_id(event.data.client_id)
@@ -82,6 +82,13 @@ return {
 				dismiss()
 				vim.api.nvim_exec_autocmds("CursorMovedI", { buffer = 0 }) -- asks Copilot again
 			end, { desc = "New Copilot suggestion" })
+
+			-- Toggle ghost text on/off everywhere. <leader>cd
+			vim.keymap.set("n", "<leader>cd", function()
+				local enabled = not vim.lsp.inline_completion.is_enabled()
+				vim.lsp.inline_completion.enable(enabled)
+				vim.notify("Copilot suggestions " .. (enabled and "enabled" or "disabled"))
+			end, { desc = "Toggle Copilot suggestions" })
 
 			local servers = {
 				copilot = {},
