@@ -134,7 +134,7 @@ myip() {
 # which deletes it after that time (and takes up to 1 GB instead of 200 MB).
 share() {
 	local api="https://catbox.moe/user/api.php" max=200 expiry="" tmp f name url urls="" nl=$'\n'
-	local -a opts=(-fS -F reqtype=fileupload)
+	local -a opts=(-S --fail-with-body -F reqtype=fileupload) # an error keeps its reason (catbox says why in the body)
 	if [[ ${1:-} == -t ]]; then
 		[[ ${2:-} =~ ^(1|12|24|72)h$ ]] || { echo "share: -t takes 1h, 12h, 24h or 72h" >&2 && return 2; }
 		api="https://litterbox.catbox.moe/resources/internals/api.php" max=1024 expiry=$2
