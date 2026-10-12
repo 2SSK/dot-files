@@ -15,9 +15,10 @@ read -r bg fg primary error < <(jq -r '.ui | [.bg, .fg, .primary, .error] | map(
 	read -r bg fg primary error <<<"1a1b26 c0caf5 7aa2f7 f7768e"
 
 if [[ -n ${WAYLAND_DISPLAY:-} ]]; then
-	# the shell's session lock; once it holds the screen this returns (sleep may go ahead)
+	# the shell's session lock; once it holds the screen this returns (sleep may go ahead). About 4.5 s,
+	# past the shell's own 4 s give-up, so swaylock never races a lock still on its way
 	if qs -c desktop ipc call lock lock >/dev/null 2>&1; then
-		for _ in $(seq 20); do
+		for _ in $(seq 30); do
 			[[ $(qs -c desktop ipc call lock locked 2>/dev/null) == true ]] && exit 0
 			sleep 0.1
 		done

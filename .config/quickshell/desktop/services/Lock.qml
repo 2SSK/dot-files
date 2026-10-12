@@ -14,6 +14,11 @@ Singleton {
 	property bool leaving: false // the lock screen fading out, just before unlocking
 
 	function lock(): void {
+		if (leaving) { // asked again while the lock screen fades out: it stays
+			away.stop();
+			leaving = false;
+			return;
+		}
 		if (locked || curtain)
 			return;
 		curtain = true;
@@ -33,7 +38,25 @@ Singleton {
 		id: dark
 
 		interval: 220 // the curtain's fade
-		onTriggered: root.locked = true
+		onTriggered: {
+			root.locked = true;
+			refused.restart();
+		}
+	}
+
+	// Sway confirms a lock in well under a second, and refuses it while another locker (swaylock)
+	// holds the screen. A refused lock is given up, curtain and all, so the next lock() can work.
+	Timer {
+		id: refused
+
+		interval: 4000
+		onTriggered: {
+			if (!root.locked || root.secure)
+				return;
+			console.warn("Lock: sway refused the session lock (another locker holds the screen)");
+			root.locked = false;
+			root.curtain = false;
+		}
 	}
 
 	Timer {
