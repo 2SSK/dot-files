@@ -20,7 +20,9 @@ Singleton {
 		const missing = 'notify-send -u critical -a Lock "The screen can\'t lock" "swayidle isn\'t installed: Lock, the lid, idle and sleep do nothing on sway. Install it: pacman -S swayidle (Arch) or dnf install swayidle (Fedora)"';
 		const args = ["sh", "-c", `command -v swayidle >/dev/null || { ${missing}; exit 127; }; for p in $(pgrep -u "$(id -u)" -x swayidle); do tr "\\0" "\\n" <"/proc/$p/environ" 2>/dev/null | grep -qx "WAYLAND_DISPLAY=$WAYLAND_DISPLAY" && kill -KILL "$p"; done; exec swayidle "$@"`, "sh", "-w"];
 		if (dim > 0 && (lock === 0 || dim < lock))
-			args.push("timeout", String(dim * 60), "desktop-idle dim", "resume", "desktop-idle undim");
+			// dim stays running until undim stops it; in the background, since swayidle -w waits for each
+			// command, and a waiting swayidle neither undims nor locks
+			args.push("timeout", String(dim * 60), "desktop-idle dim &", "resume", "desktop-idle undim");
 		if (lock > 0)
 			args.push("timeout", String(lock * 60), "desktop-idle undim; desktop-lock");
 		if (off > 0)
