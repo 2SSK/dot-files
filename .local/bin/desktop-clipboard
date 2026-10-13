@@ -34,13 +34,21 @@ SECRET = "x-kde-passwordManagerHint"
 
 def types():
     command = ["wl-paste", "--list-types"] if WAYLAND else ["xclip", "-selection", "clipboard", "-o", "-t", "TARGETS"]
-    result = subprocess.run(command, capture_output=True)
+    try:
+        result = subprocess.run(command, capture_output=True, timeout=2)
+    except subprocess.TimeoutExpired:
+        return []
     return [t.strip() for t in result.stdout.decode(errors="replace").splitlines() if t.strip()]
 
 
 def read(kind):
     command = ["wl-paste", "--no-newline", "--type", kind] if WAYLAND else ["xclip", "-selection", "clipboard", "-o", "-t", kind]
-    return subprocess.run(command, capture_output=True).stdout
+    # An app may offer a type and never send it; the watcher runs one copy at a time, so a wait
+    # here would hold back every copy after it (a whole afternoon's, once)
+    try:
+        return subprocess.run(command, capture_output=True, timeout=5).stdout
+    except subprocess.TimeoutExpired:
+        return b""
 
 
 def store():
