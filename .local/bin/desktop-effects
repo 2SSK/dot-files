@@ -1,13 +1,19 @@
 #!/usr/bin/env bash
-# SwayFX's effects (~/.config/sway/effects.conf) sent to the running compositor as commands, when
-# it is SwayFX: sway runs this at startup and on each reload. Plain sway has no such commands.
+# SwayFX's effects (~/.config/sway/effects.conf) in sway's config, on SwayFX only: sway includes
+# ~/.local/state/desktop/sway-effects*.conf, and this links it there (or removes it on plain sway,
+# which has no such commands). Sway runs it at startup and on each reload; the first time it reloads
+# sway once to read it. (Sent as commands instead, `blur enable` sets only the focused window.)
 #   desktop-effects
 set -euo pipefail
 
 [[ -n ${SWAYSOCK:-} ]] || exit 0
+link="${XDG_STATE_HOME:-$HOME/.local/state}/desktop/sway-effects.conf"
 # SwayFX names itself only in `sway --version` (its IPC version reply is just the number)
-[[ $(sway --version 2>/dev/null) == swayfx* ]] || exit 0
-conf="${XDG_CONFIG_HOME:-$HOME/.config}/sway/effects.conf"
-commands="$(grep -vE '^\s*(#|$)' "$conf" | paste -sd';')"
-swaymsg -r -- "$commands" | grep -q '"success": false' && echo "desktop-effects: sway refused some of effects.conf" >&2
-exit 0
+if [[ $(sway --version 2>/dev/null) != swayfx* ]]; then
+	rm -f "$link"
+	exit 0
+fi
+[[ -e $link ]] && exit 0
+mkdir -p "${link%/*}"
+ln -sfn "${XDG_CONFIG_HOME:-$HOME/.config}/sway/effects.conf" "$link"
+swaymsg -q reload
