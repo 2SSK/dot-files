@@ -21,6 +21,7 @@ inter-font                  rsms-inter-fonts
 ttf-jetbrains-mono-nerd     @nerd-font
 noto-fonts-emoji            google-noto-color-emoji-fonts
 adw-gtk-theme               adw-gtk3-theme
+matugen                     -
 qt5ct                       qt5ct
 qt6ct                       qt6ct
 tela-circle-icon-theme-blue @tela-circle

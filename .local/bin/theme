@@ -12,6 +12,12 @@ source "$lib/state.sh"
 
 themes="$lib/../../share/desktop/themes"
 state="${XDG_STATE_HOME:-$HOME/.local/state}/desktop/theme"
+made="${XDG_STATE_HOME:-$HOME/.local/state}/desktop/themes" # families made here: matugen's
+
+matugen_theme() { # the matugen family, made from the wallpaper (Material You colours)
+	command -v matugen >/dev/null || { echo "theme: matugen isn't installed (Arch: pacman -S matugen)" >&2 && exit 1; }
+	python3 "$lib/matugen_theme.py" "$(current_wallpaper)" "$made/matugen.toml"
+}
 
 usage() {
 	cat <<'EOF'
@@ -19,6 +25,7 @@ usage: theme set <family> [--mode dark|light]
        theme mode dark|light|toggle
        theme list [--json]
        theme current
+       theme wallpaper   (after a wallpaper change: matugen's theme follows it)
 EOF
 }
 
@@ -48,6 +55,8 @@ qtct.conf        qt5ct/qt5ct.conf   -
 qtct.conf        qt6ct/qt6ct.conf   -
 sddm-theme.conf  -                  sddm
 grub-theme.txt   -                  boot_menu
+chromium-policy.json -              chromium
+firefox-userChrome.css -            firefox
 yazi-flavor.toml yazi/flavors/desktop.yazi/flavor.toml -
 silicon.tmTheme  yazi/flavors/desktop.yazi/tmtheme.xml -
 yazi-theme.toml  yazi/theme.toml    -
@@ -99,6 +108,27 @@ boot_menu() { # the boot menu's theme and background, where packages/system.sh g
 	return 0
 }
 
+chromium() { # Chrome's and Brave's colour (their managed policy, which they reread as it changes), in
+	# the folder packages/system.sh browsers made ours and linked from theirs
+	local dir="${DESKTOP_BROWSER_DIR:-/var/lib/desktop/browser}"
+	[[ -w $dir ]] || return 0
+	cmp -s "$state/chromium-policy.json" "$dir/theme.json" && return 0
+	install -m 644 "$state/chromium-policy.json" "$dir/.theme.json.new" && mv "$dir/.theme.json.new" "$dir/theme.json"
+}
+
+firefox() { # each Firefox profile reads the theme's userChrome.css (as it starts: a running one keeps
+	# its colours until it restarts), with the pref that lets it
+	local profile pref='user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);'
+	for profile in "$HOME"/.mozilla/firefox/*/ "${XDG_CONFIG_HOME:-$HOME/.config}"/mozilla/firefox/*/; do
+		[[ -f $profile/prefs.js ]] || continue
+		mkdir -p "$profile/chrome"
+		[[ $(readlink "$profile/chrome/userChrome.css") == "$state/firefox-userChrome.css" ]] ||
+			ln -sfn "$state/firefox-userChrome.css" "$profile/chrome/userChrome.css"
+		grep -qxF "$pref" "$profile/user.js" 2>/dev/null || echo "$pref" >>"$profile/user.js"
+	done
+	return 0
+}
+
 sddm() { # the login screen's colours, in the folder packages/system.sh sddm shares with it
 	local dir="${DESKTOP_SDDM_DIR:-/var/lib/desktop/sddm}"
 	[[ -w $dir ]] || return 0
@@ -130,6 +160,7 @@ main() {
 		elif [[ -n ${3:-} ]]; then
 			usage >&2 && exit 2
 		fi
+		[[ $family != matugen ]] || matugen_theme
 		apply "$family" "$mode"
 		;;
 	mode)
@@ -143,10 +174,17 @@ main() {
 	list)
 		[[ ${2:-} != --json ]] || exec python3 "$lib/theme_render.py" palettes
 		local f name
-		for f in "$themes"/*.toml; do
+		[[ -f $made/matugen.toml ]] || ! command -v matugen >/dev/null || matugen_theme
+		for f in "$themes"/*.toml "$made"/*.toml; do
+			[[ -f $f ]] || continue
 			name="$(basename "$f" .toml)"
 			if [[ $name == "$family" ]]; then echo "* $name"; else echo "  $name"; fi
-		done
+		done | sort -k1.3
+		;;
+	wallpaper)
+		command -v matugen >/dev/null || exit 0
+		matugen_theme
+		[[ $family != matugen ]] || apply matugen "$mode"
 		;;
 	current) echo "$family $mode" ;;
 	-h | --help) usage ;;

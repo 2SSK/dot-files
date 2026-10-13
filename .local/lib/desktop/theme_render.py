@@ -23,6 +23,8 @@ from string import Template
 
 SHARE = Path(__file__).resolve().parents[2] / "share/desktop"
 THEMES = SHARE / "themes"
+# families made on this machine (matugen's, from the wallpaper), beside the hand-made ones
+MADE = Path(os.environ.get("XDG_STATE_HOME") or Path.home() / ".local/state") / "desktop/themes"
 TEMPLATES = SHARE / "templates"
 MODES = ("dark", "light")
 ROLES = ("bg", "bg_alt", "surface", "overlay", "fg", "fg_muted", "primary", "on_primary", "secondary",
@@ -39,21 +41,31 @@ def targets():
     return sorted(str(p.relative_to(TEMPLATES)) for p in TEMPLATES.rglob("*") if p.is_file())
 
 
+def files():
+    """Every family's file by name; a made one doesn't hide a hand-made one of the same name."""
+    found = {p.stem: p for p in MADE.glob("*.toml")}
+    found.update({p.stem: p for p in THEMES.glob("*.toml")})
+    return dict(sorted(found.items()))
+
+
+def path_of(family):
+    path = files().get(family)
+    if path is None:
+        raise ThemeError(f"unknown theme '{family}' (known: {', '.join(files())})")
+    return path
+
+
 def load(family):
-    path = THEMES / f"{family}.toml"
-    if not path.is_file():
-        known = ", ".join(sorted(p.stem for p in THEMES.glob("*.toml")))
-        raise ThemeError(f"unknown theme '{family}' (known: {known})")
-    with path.open("rb") as f:
+    with path_of(family).open("rb") as f:
         return tomllib.load(f)
 
 
 def palettes():
     """Every family's name and its dark and light ui colours (the shell's theme picker)."""
     themes = []
-    for path in sorted(THEMES.glob("*.toml")):
-        theme = load(path.stem)
-        themes.append({"family": path.stem, "name": theme["meta"]["name"],
+    for family in files():
+        theme = load(family)
+        themes.append({"family": family, "name": theme["meta"]["name"],
                        **{mode: theme[mode]["ui"] for mode in ("dark", "light") if mode in theme}})
     return themes
 
@@ -109,7 +121,7 @@ def fingerprint(family, mode, state):
     """Everything a render depends on; an unchanged fingerprint means an identical render."""
     h = hashlib.sha256(f"{family}\0{mode}\0{state}\0".encode())
     h.update(Path(__file__).read_bytes())  # the renderer itself
-    h.update((THEMES / f"{family}.toml").read_bytes())
+    h.update(path_of(family).read_bytes())
     for target in targets():
         h.update(f"\0{target}\0".encode())
         h.update((TEMPLATES / target).read_bytes())
@@ -170,7 +182,7 @@ def main(argv):
             print(json.dumps(palettes()))
             return 0
         if argv[:1] == ["lint"]:
-            families = argv[1:] or sorted(p.stem for p in THEMES.glob("*.toml"))
+            families = argv[1:] or list(files())
             failed = False
             for family in families:
                 for problem in lint(load(family)):

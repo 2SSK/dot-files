@@ -62,6 +62,11 @@ images() {
 		done
 }
 
+recolour() { # matugen's theme follows the wallpaper (and is applied when it's the theme in use)
+	command -v matugen >/dev/null || return 0
+	setsid -f theme wallpaper >/dev/null 2>&1
+}
+
 next_boot() {
 	[[ $(systemctl is-system-running 2>/dev/null || true) == stopping ]] || return 0
 	local conf="${XDG_CONFIG_HOME:-$HOME/.config}/desktop/shell.json"
@@ -78,6 +83,12 @@ next_boot() {
 	ln -sfn "$next" "$state/wallpaper"
 	date +%s >"$state/wallpaper-changed"
 	screens
+	# shutting down: matugen's colours made and rendered for the next login, no app reloaded
+	if command -v matugen >/dev/null && [[ $family == matugen ]]; then
+		python3 "$here/../lib/desktop/matugen_theme.py" "$next" "$state/themes/matugen.toml" &&
+			python3 "$here/../lib/desktop/theme_render.py" render matugen "$(current_theme | cut -d' ' -f2)"
+	fi
+	return 0
 }
 
 case ${1:-} in
@@ -92,6 +103,7 @@ set)
 	ln -sfn "$2" "$state/wallpaper"
 	date +%s >"$state/wallpaper-changed"
 	screens
+	recolour
 	;;
 restore)
 	current="$(current_wallpaper)"

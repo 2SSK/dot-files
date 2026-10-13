@@ -402,6 +402,30 @@ sddm_theme() { # the login screen in the desktop theme; theme set keeps its colo
 	put etc/sddm.conf.d/20-desktop-greeter.conf # the battery on the login screen
 }
 
+browsers() { # Chrome, Chromium and Brave in the theme's colour: their managed policy links to a file in
+	# a folder the user owns, which theme set then updates without sudo (they reread it as it changes)
+	local shared=/var/lib/desktop/browser dir family mode
+	read -r family mode < <(current_theme)
+	python3 "$here/../.local/lib/desktop/theme_render.py" render "$family" "$mode"
+	if [[ ! -O $root$shared ]]; then
+		sudo install -d -o "$(id -un)" -g "$(id -gn)" -m 755 "$root$shared"
+		changed=1
+	fi
+	cmp -s "$desktop_state/theme/chromium-policy.json" "$root$shared/theme.json" ||
+		{ install -m 644 "$desktop_state/theme/chromium-policy.json" "$root$shared/theme.json" && changed=1; }
+	for dir in etc/opt/chrome etc/chromium etc/brave; do
+		case $dir in
+		etc/opt/chrome) [[ -x $root/usr/bin/google-chrome-stable ]] || continue ;;
+		etc/chromium) [[ -x $root/usr/bin/chromium ]] || continue ;;
+		etc/brave) [[ -x $root/usr/bin/brave ]] || compgen -G "$root/opt/brave*" >/dev/null || continue ;;
+		esac
+		[[ $(readlink "$root/$dir/policies/managed/desktop-theme.json") == "$shared/theme.json" ]] && continue
+		sudo install -d -m 755 "$root/$dir/policies/managed"
+		sudo ln -sfn "$shared/theme.json" "$root/$dir/policies/managed/desktop-theme.json"
+		changed=1
+	done
+}
+
 # The parts that apply to this machine, in the order they run: what `system.sh` alone sets up.
 # subvolumes is never among them: it moves folders' data, so it runs only when named.
 plan() {
@@ -410,13 +434,17 @@ plan() {
 	[[ -f $root/etc/timeshift/timeshift.json ]] && parts+=(timeshift)
 	[[ -f $root/etc/default/grub ]] && parts+=(grub)
 	[[ -x $root/usr/bin/sddm ]] && parts+=(sddm)
+	local browser
+	for browser in google-chrome-stable chromium brave; do
+		[[ -x $root/usr/bin/$browser ]] && { parts+=(browsers) && break; }
+	done
 	[[ -x $root/usr/bin/virsh ]] && parts+=(libvirt)
 	[[ -x $root/usr/bin/dockerd ]] && parts+=(docker)
 	echo "${parts[*]}"
 }
 
 usage() {
-	echo 'usage: system.sh [--plan | part...]   parts: memory power lid timeshift grub sddm libvirt docker subvolumes' >&2
+	echo 'usage: system.sh [--plan | part...]   parts: memory power lid timeshift grub sddm browsers libvirt docker subvolumes' >&2
 	echo '       system.sh grub --preview         (no args: every part that applies here; see --plan)' >&2
 	exit 2
 }
@@ -430,7 +458,7 @@ esac
 parts=("$@")
 ((${#parts[@]})) || read -ra parts <<<"$(plan)"
 for part in "${parts[@]}"; do
-	case $part in memory | power | lid | timeshift | grub | sddm | libvirt | docker | subvolumes) ;; *) usage ;; esac
+	case $part in memory | power | lid | timeshift | grub | sddm | browsers | libvirt | docker | subvolumes) ;; *) usage ;; esac
 done
 for part in "${parts[@]}"; do
 	changed=0
@@ -444,6 +472,7 @@ for part in "${parts[@]}"; do
 	subvolumes) subvolumes ;;
 	grub) grub_theme ;;
 	sddm) sddm_theme ;;
+	browsers) browsers ;;
 	esac
 	if ((changed)); then echo "$part: set up"; else echo "$part: already in place"; fi
 done
