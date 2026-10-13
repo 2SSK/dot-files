@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
-# SwayFX's effects (~/.config/sway/effects.conf) in sway's config, on SwayFX only: sway includes
-# ~/.local/state/desktop/sway-effects*.conf, and this links it there (or removes it on plain sway,
-# which has no such commands). Sway runs it at startup and on each reload; the first time it reloads
-# sway once to read it. (Sent as commands instead, `blur enable` sets only the focused window.)
+# Links ~/.config/sway/effects.conf where sway's config includes it, on SwayFX only (plain sway
+# would refuse it); the first time, sway reloads to read it. Run at startup and on each reload.
 #   desktop-effects
 set -euo pipefail
 

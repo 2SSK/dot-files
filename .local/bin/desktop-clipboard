@@ -43,8 +43,7 @@ def types():
 
 def read(kind):
     command = ["wl-paste", "--no-newline", "--type", kind] if WAYLAND else ["xclip", "-selection", "clipboard", "-o", "-t", kind]
-    # An app may offer a type and never send it; the watcher runs one copy at a time, so a wait
-    # here would hold back every copy after it (a whole afternoon's, once)
+    # an app may offer a type and never send it: waiting would stall every copy after it
     try:
         return subprocess.run(command, capture_output=True, timeout=5).stdout
     except subprocess.TimeoutExpired:
