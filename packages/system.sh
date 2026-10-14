@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# System-level setup (sudo): the memory safety net, libvirt, docker, the lid, power (TLP), snapshots
+# System-level setup (sudo): the memory safety net, a UTF-8 locale, libvirt, docker, the lid, power (TLP), snapshots
 # (Timeshift and the subvolumes it leaves out), the boot menu and the login screen. Installs the tracked files under
 # system/ into / and enables services; a no-op when everything is already in place.
 # usage: system.sh            every part that applies to this machine (system.sh --plan lists them)
-#        system.sh <part>...  just those: memory power lid timeshift grub sddm libvirt docker subvolumes
+#        system.sh <part>...  just those: memory locale services power lid timeshift grub sddm libvirt docker subvolumes
 #        system.sh grub --preview  the boot menu in a small QEMU window (nothing installed)
 set -euo pipefail
 
@@ -421,10 +421,31 @@ services() { # what the desktop expects running: the login screen, and Bluetooth
 	fi
 }
 
+locale() { # a UTF-8 system locale: ISO-8859 (en_IN alone) breaks icons and box drawing in terminals
+	local conf=$root/etc/locale.conf gen=$root/etc/locale.gen line name value want=() set=()
+	[[ -f $conf ]] && mapfile -t set < <(grep -E '^(LANG|LC_[A-Z]+)=' "$conf")
+	((${#set[@]})) || set=(LANG=en_US)
+	for line in "${set[@]}"; do
+		name=${line%%=*} value=${line#*=} && value=${value//\"/}
+		[[ ${value,,} == *.utf?8 ]] || changed=1
+		want+=("$name=${value%%.*}.UTF-8")
+	done
+	((changed)) || return 0
+	if [[ -f $gen ]]; then # Arch builds the locales it lists; Fedora ships them (glibc langpacks)
+		for line in "${want[@]}"; do
+			value=${line#*=} && value=${value%.UTF-8}
+			grep -qE "^${value}\.UTF-8 UTF-8" "$gen" || sudo sed -i -E "s/^#[[:space:]]*(${value}\.UTF-8 UTF-8)/\1/" "$gen"
+		done
+		sudo locale-gen >/dev/null
+	fi
+	sudo localectl set-locale "${want[@]}"
+	log_info locale_set locale="${want[0]#*=}" msg='takes effect at the next login'
+}
+
 # The parts that apply to this machine, in the order they run: what `system.sh` alone sets up.
 # subvolumes is never among them: it moves folders' data, so it runs only when named.
 plan() {
-	local parts=(memory services)
+	local parts=(memory locale services)
 	compgen -G "$root/sys/class/power_supply/BAT*" >/dev/null && parts+=(power lid)
 	[[ -f $root/etc/timeshift/timeshift.json ]] && parts+=(timeshift)
 	[[ -f $root/etc/default/grub ]] && parts+=(grub)
@@ -435,7 +456,7 @@ plan() {
 }
 
 usage() {
-	echo 'usage: system.sh [--plan | part...]   parts: memory services power lid timeshift grub sddm libvirt docker subvolumes' >&2
+	echo 'usage: system.sh [--plan | part...]   parts: memory locale services power lid timeshift grub sddm libvirt docker subvolumes' >&2
 	echo '       system.sh grub --preview         (no args: every part that applies here; see --plan)' >&2
 	exit 2
 }
@@ -449,12 +470,13 @@ esac
 parts=("$@")
 ((${#parts[@]})) || read -ra parts <<<"$(plan)"
 for part in "${parts[@]}"; do
-	case $part in memory | services | power | lid | timeshift | grub | sddm | libvirt | docker | subvolumes) ;; *) usage ;; esac
+	case $part in memory | locale | services | power | lid | timeshift | grub | sddm | libvirt | docker | subvolumes) ;; *) usage ;; esac
 done
 for part in "${parts[@]}"; do
 	changed=0
 	case $part in
 	memory) memory ;;
+	locale) locale ;;
 	services) services ;;
 	libvirt) libvirt ;;
 	docker) docker_daemon ;;

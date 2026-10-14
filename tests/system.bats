@@ -35,6 +35,37 @@ setup() {
 	[ ! -e "$CALLS" ]
 }
 
+locale_fakes() { # locale.gen as Arch ships it, and fake locale-gen/localectl
+	mkdir -p "$SYSTEM_ROOT/etc"
+	printf '#en_IN UTF-8  \n#en_IN.UTF-8 UTF-8  \nen_US.UTF-8 UTF-8  \n' >"$SYSTEM_ROOT/etc/locale.gen"
+	for tool in locale-gen localectl; do
+		# shellcheck disable=SC2016 # expands when the fake runs
+		printf '#!/bin/sh\necho "%s $*" >>"$CALLS"\n' "$tool" >"$BATS_TEST_TMPDIR/bin/$tool" && chmod +x "$BATS_TEST_TMPDIR/bin/$tool"
+	done
+}
+
+@test "locale: an ISO-8859 locale becomes UTF-8, built first, every variable kept" {
+	locale_fakes
+	printf 'LANG=en_IN\nLC_TIME="en_IN"\n' >"$SYSTEM_ROOT/etc/locale.conf"
+	run "$SYSTEM" locale
+	[ "$status" -eq 0 ]
+	grep -q '^en_IN.UTF-8 UTF-8' "$SYSTEM_ROOT/etc/locale.gen"
+	grep -q '^#en_IN UTF-8' "$SYSTEM_ROOT/etc/locale.gen" # the ISO-8859 one left alone
+	[ "$(cat "$CALLS")" = "locale-gen 
+localectl set-locale LANG=en_IN.UTF-8 LC_TIME=en_IN.UTF-8" ]
+}
+
+@test "locale: no locale.conf gets en_US.UTF-8; one already UTF-8 is left alone" {
+	locale_fakes
+	run "$SYSTEM" locale
+	grep -q 'localectl set-locale LANG=en_US.UTF-8' "$CALLS"
+	rm "$CALLS"
+	echo 'LANG=en_IN.UTF-8' >"$SYSTEM_ROOT/etc/locale.conf"
+	run "$SYSTEM" locale
+	[[ $output == *"already in place"* ]]
+	[ ! -e "$CALLS" ]
+}
+
 libvirt_fakes() { # <state>: "broken" (nothing set up) or "ok" (everything in place)
 	local bin="$BATS_TEST_TMPDIR/bin" ok=1
 	[ "$1" = ok ] || ok=0
@@ -437,7 +468,7 @@ subvolume_fakes() { # btrfs makes folders and remembers them as subvolumes; the 
 	touch "$SYSTEM_ROOT/etc/timeshift/timeshift.json" "$SYSTEM_ROOT/etc/default/grub"
 	run "$SYSTEM" --plan
 	[ "$status" -eq 0 ]
-	[[ " $output " == *" memory services power lid timeshift grub "* ]]
+	[[ " $output " == *" memory locale services power lid timeshift grub "* ]]
 	[[ $output != *libvirt* && $output != *subvolumes* ]]
 }
 

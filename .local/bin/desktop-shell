@@ -4,4 +4,12 @@
 # Xwayland), where the shell's panels can't work.
 set -euo pipefail
 [[ -z ${WAYLAND_DISPLAY:-} ]] || export QT_QPA_PLATFORM=wayland
+
+# Hybrid laptops: the shell draws on the GPU the screen hangs off. When that isn't NVIDIA, Mesa's EGL
+# alone, else NVIDIA's driver loads as well (~65 MB more, for nothing).
+drm="${DESKTOP_DRM_DIR:-/sys/class/drm}" mesa="${DESKTOP_EGL_DIR:-/usr/share/glvnd/egl_vendor.d}/50_mesa.json"
+for card in "$drm"/card[0-9]*; do
+	[[ $(cat "$card/device/boot_vga" 2>/dev/null) == 1 ]] || continue
+	[[ $(readlink "$card/device/driver") == */nvidia || ! -f $mesa ]] || export __EGL_VENDOR_LIBRARY_FILENAMES="$mesa"
+done
 exec qs -c desktop
