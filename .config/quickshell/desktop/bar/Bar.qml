@@ -103,7 +103,16 @@ PanelWindow {
 		x: !bar.vertical ? (parent.width - width) / 2 : (bar.position === "left" ? bar.gap : 0) + away
 		y: bar.vertical ? (parent.height - height) / 2 : (bar.position === "top" ? bar.gap : 0) + away
 		radius: Config.island ? bar.size / 2 : 0
-		color: Qt.alpha(Theme.bg, Config.bar.opacity)
+		// opaque while a panel hangs from it, as the panel is: one piece in one colour (see-through, each
+		// would show whatever is behind it, the wallpaper here and a window there)
+		color: Qt.alpha(Theme.bg, outlineMask.gap ? 1 : Config.bar.opacity)
+
+		Behavior on color {
+			ColorAnimation {
+				duration: Theme.normal
+				easing.type: Theme.curve
+			}
+		}
 
 		// the island's outline, with a gap where the open control center meets the bar
 		Rectangle {

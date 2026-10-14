@@ -32,8 +32,8 @@ Scope {
 	readonly property real px: side ? (Config.position === "left" ? island.x + island.width + sideGap : island.x - panelWidth - sideGap) : Math.round(island.x + (island.width - panelWidth) / 2)
 	readonly property real py: side ? Math.round(Math.max(sideGap, Math.min(screen.height - panelHeight - sideGap, island.y + (island.height - panelHeight) / 2))) : !Panel.barShown ? (below ? 0 : screen.height - panelHeight) : below ? island.y + island.height : island.y - panelHeight
 	readonly property int fillet: side ? 0 : Panel.fillet
-	// SwayFX blurs behind it as behind the bar; X11 is solid, as nothing blurs behind a screen-sized window
-	readonly property color fill: wayland ? Qt.alpha(Theme.bg, Config.bar.opacity) : Theme.bg
+	// opaque, and the bar it hangs from turns opaque with it (Bar.qml): one piece in one colour
+	readonly property color fill: Theme.bg
 	readonly property string title: "Desktop " + name
 
 	// X11: i3 focuses a new window itself; ask too once it has it, and again shortly in case that came first
