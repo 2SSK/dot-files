@@ -12,19 +12,10 @@ Column {
 	readonly property var actions: []
 
 	// the NVIDIA card is only queried while this page is open (Stats.detail)
-	// the detailed stats are read while it shows (the page is kept, hidden when closed)
-	property bool counted: false
-
-	function count(): void {
-		if (visible === counted)
-			return;
-		counted = visible;
-		Stats.detail += visible ? 1 : -1;
-	}
-
-	onVisibleChanged: count()
-	Component.onCompleted: count()
-	Component.onDestruction: if (counted) Stats.detail--
+	// the detailed stats are read while it shows (the page is kept: hidden while the panel is closed)
+	onVisibleChanged: Stats.detail += visible ? 1 : -1
+	Component.onCompleted: if (visible) Stats.detail++
+	Component.onDestruction: if (visible) Stats.detail--
 
 	function speed(bytes: real): string {
 		return bytes >= 1048576 ? (bytes / 1048576).toFixed(1) + " MB/s" : bytes >= 1024 ? Math.round(bytes / 1024) + " KB/s" : Math.round(bytes) + " B/s";

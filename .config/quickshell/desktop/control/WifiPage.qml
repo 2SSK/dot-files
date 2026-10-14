@@ -23,6 +23,10 @@ Column {
 	property var asking: null
 	property var failed: null // the network whose last try failed, and why: { network, reason }
 
+	// scans while it shows (the page is kept: hidden while the panel is closed or another page shows),
+	// also on a card that appears
+	readonly property bool looking: visible && Connectivity.wifi
+
 	function scan(on: bool): void {
 		devices.forEach(d => d.scannerEnabled = on);
 	}
@@ -38,11 +42,9 @@ Column {
 
 	spacing: 8
 
-	// scan while open, also on a card that appears or Wi-Fi turned on after it opened
-	// scans while it shows (the page is kept, hidden while the panel is closed or another page shows)
-	onVisibleChanged: scan(visible && Connectivity.wifi)
-	onDevicesChanged: scan(visible && Connectivity.wifi)
-	Component.onCompleted: scan(visible && Connectivity.wifi)
+	onLookingChanged: scan(looking)
+	onDevicesChanged: scan(looking)
+	Component.onCompleted: scan(looking)
 	Component.onDestruction: scan(false)
 
 	Timer {
@@ -50,14 +52,6 @@ Column {
 
 		interval: 4000
 		onTriggered: root.scanning = false
-	}
-
-	Connections {
-		target: Connectivity
-
-		function onWifiChanged(): void {
-			root.scan(root.visible && Connectivity.wifi);
-		}
 	}
 
 	UiText {

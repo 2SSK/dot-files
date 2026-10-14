@@ -23,7 +23,7 @@ HangingPanel {
 	]
 
 	readonly property string pageKey: pages.some(p => p.key === Panel.controlPage) ? Panel.controlPage : pages[0].key
-	property Item page: null // the page showing: its title and buttons go in the header
+	property Loader page: null // the page showing: its title and buttons go in the header
 
 	name: "control center"
 	open: Panel.controlOpen
@@ -176,7 +176,7 @@ HangingPanel {
 
 		UiText {
 			anchors.verticalCenter: parent.verticalCenter
-			text: root.page?.title ?? ""
+			text: root.page?.item?.title ?? ""
 			color: Theme.primary
 			font.family: Theme.fontHeading
 			font.pixelSize: Theme.px(18)
@@ -189,7 +189,7 @@ HangingPanel {
 			spacing: 8
 
 			Repeater {
-				model: [...(root.page?.actions ?? []).filter(a => a.show !== false), { glyph: Icons.g("x"), on: false, act: () => Panel.controlOpen = false }]
+				model: [...(root.page?.item?.actions ?? []).filter(a => a.show !== false), { glyph: Icons.g("x"), on: false, act: () => Panel.controlOpen = false }]
 
 				delegate: IconButton {
 					required property var modelData
@@ -217,7 +217,7 @@ HangingPanel {
 		anchors.top: header.bottom
 		anchors.topMargin: 14
 		anchors.bottom: parent.bottom
-		contentHeight: (root.page?.fill ? Math.max(root.page.implicitHeight, view.height - 16) : (root.page?.implicitHeight ?? 0)) + 16
+		contentHeight: (root.page?.height ?? 0) + 16
 		clip: true
 		boundsBehavior: Flickable.StopAtBounds
 
@@ -232,9 +232,11 @@ HangingPanel {
 				readonly property bool current: modelData.key === root.pageKey
 				property bool used: current
 
-				onCurrentChanged: if (current) used = true
-				onLoaded: if (current) root.page = item
-				onVisibleChanged: if (current && item) root.page = item
+				onCurrentChanged: if (current) {
+					used = true;
+					root.page = this;
+				}
+				Component.onCompleted: if (current) root.page = this
 				width: view.width
 				height: item?.fill ? Math.max(item.implicitHeight, view.height - 16) : (item?.implicitHeight ?? 0)
 				active: used

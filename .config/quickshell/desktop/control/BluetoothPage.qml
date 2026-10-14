@@ -20,6 +20,9 @@ Column {
 	readonly property var mine: named.filter(d => d.paired).sort((a, b) => (b.connected - a.connected) || a.name.localeCompare(b.name))
 	readonly property var nearby: named.filter(d => !d.paired).sort((a, b) => a.name.localeCompare(b.name))
 
+	// looks while it shows (the page is kept: hidden while the panel is closed or another page shows)
+	readonly property bool looking: visible && Connectivity.bluetooth
+
 	function scan(on: bool): void {
 		if (Connectivity.adapter && Connectivity.adapter.discovering !== on)
 			Connectivity.adapter.discovering = on;
@@ -34,18 +37,9 @@ Column {
 
 	spacing: 8
 
-	// looks while it shows (the page is kept, hidden while the panel is closed or another page shows)
-	onVisibleChanged: scan(visible && Connectivity.bluetooth)
-	Component.onCompleted: scan(visible && Connectivity.bluetooth)
+	onLookingChanged: scan(looking)
+	Component.onCompleted: scan(looking)
 	Component.onDestruction: scan(false)
-
-	Connections {
-		target: Connectivity
-
-		function onBluetoothChanged(): void {
-			root.scan(root.visible && Connectivity.bluetooth);
-		}
-	}
 
 	UiText {
 		visible: !Connectivity.bluetoothAvailable || !Connectivity.bluetooth || root.named.length === 0

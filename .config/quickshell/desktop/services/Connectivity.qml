@@ -30,13 +30,13 @@ Singleton {
 			adapter.enabled = !adapter.enabled;
 	}
 
-	// a device paired is trusted too, so it reconnects by itself
+	// each device: trusted once paired, so it reconnects by itself, and its battery said once when low
 	Instantiator {
 		model: Bluetooth.devices
 
 		delegate: Connections {
 			required property BluetoothDevice modelData
-			property bool warned: false // its battery low: said once, until it's charged again
+			property bool warned: false // until it's charged past 25% again
 
 			target: modelData
 
@@ -45,7 +45,7 @@ Singleton {
 					modelData.trusted = true;
 			}
 
-			// as it changes, and as the device connects or the shell starts with it already low
+			// as it changes, as it connects, and as the shell starts with it already low
 			function check(): void {
 				if (!modelData.connected || !modelData.batteryAvailable)
 					return;

@@ -20,7 +20,7 @@ if [[ -n ${WAYLAND_DISPLAY:-} ]]; then
 	if [[ -z $state ]]; then
 		bad "lock: the shell doesn't answer" "desktop-reload"
 	elif jq -e '(.curtain or .locked) and (.secure | not)' <<<"$state" >/dev/null; then
-		bad "lock: stuck half-way ($state)" "restart the shell"
+		bad "lock: stuck half-way ($state)" "desktop-reload"
 	else
 		ok "lock ready"
 	fi
@@ -32,7 +32,7 @@ if [[ -n ${WAYLAND_DISPLAY:-} ]]; then
 	done
 	read -ra idle <<<"$idle"
 	if ((${#idle[@]} != 1)); then
-		bad "idle: ${#idle[@]} swayidle for this display" "restart the shell: it runs exactly one"
+		bad "idle: ${#idle[@]} swayidle for this display" "desktop-reload (the shell runs exactly one)"
 	else
 		stuck=""
 		for c in $(pgrep -P "${idle[0]}"); do (($(age "$c") > 60)) && stuck="$(ps -o args= -p "$c")"; done
@@ -44,7 +44,7 @@ if [[ -n ${WAYLAND_DISPLAY:-} ]]; then
 	fi
 
 	if ! pgrep -f 'wl-paste --watch .*desktop-clipboard store' >/dev/null; then
-		bad "clipboard history: not watching" "the shell restarts it; if it doesn't, restart the shell"
+		bad "clipboard history: not watching" "desktop-reload"
 	else
 		stuck=""
 		for c in $(pgrep -f '^python3 .*desktop-clipboard store$'); do (($(age "$c") > 30)) && stuck=1; done
@@ -68,7 +68,7 @@ if bluetoothctl list 2>/dev/null | grep -q Controller; then
 	if pgrep -f 'bluetoothctl --agent' >/dev/null; then
 		ok "Bluetooth pairing agent running"
 	else
-		bad "no Bluetooth pairing agent: keyboards and earbuds can't pair" "restart the shell (it runs one)"
+		bad "no Bluetooth pairing agent: keyboards and earbuds can't pair" "desktop-reload (the shell runs one)"
 	fi
 fi
 

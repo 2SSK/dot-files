@@ -15,28 +15,15 @@ Scope {
 	property bool open
 	property int panelWidth: 760
 	property int panelHeight: 640
-	// how far out of the bar it is, 0 to 1: it unfolds as it opens and folds back as it closes, from
-	// the moment its window is on screen (mapping it would otherwise take the slide's first frames)
-	property bool ready: false
-	property real progress: open && ready ? 1 : 0
-
-	function track(window: QtObject): void {
-		if (window.backingWindowVisible)
-			Qt.callLater(() => root.ready = true); // a frame after it shows
-		else
-			ready = false;
-	}
-
-	Behavior on progress {
-		NumberAnimation {
-			duration: Theme.normal
-			easing.type: Theme.curve
-		}
-	}
 	default property alias content: inner.data
 	signal dismissed
 	signal opened // each time it opens: on sway it's made once and kept, so opening work goes here
 	signal keyPressed(var event) // keys nothing inside took; an Escape the panel doesn't take closes it
+
+	// how far out of the bar it is, 0 to 1: it unfolds as it opens and folds back as it closes, from
+	// the moment its window is on screen (mapping it would otherwise take the slide's first frames)
+	property bool ready: false
+	property real progress: open && ready ? 1 : 0
 
 	readonly property bool wayland: Config.wayland
 	// pinned to the screen it opened on: focus moving to another monitor doesn't carry it along
@@ -50,9 +37,21 @@ Scope {
 	readonly property real px: side ? (Config.position === "left" ? island.x + island.width + sideGap : island.x - panelWidth - sideGap) : Math.round(island.x + (island.width - panelWidth) / 2)
 	readonly property real py: side ? Math.round(Math.max(sideGap, Math.min(screen.height - panelHeight - sideGap, island.y + (island.height - panelHeight) / 2))) : !Panel.barShown ? (below ? 0 : screen.height - panelHeight) : below ? island.y + island.height : island.y - panelHeight
 	readonly property int fillet: side ? 0 : Panel.fillet
-	// opaque, and the bar it hangs from turns opaque with it (Bar.qml): one piece in one colour
-	readonly property color fill: Theme.bg
 	readonly property string title: "Desktop " + name
+
+	Behavior on progress {
+		NumberAnimation {
+			duration: Theme.normal
+			easing.type: Theme.curve
+		}
+	}
+
+	function track(window: QtObject): void {
+		if (window.backingWindowVisible)
+			Qt.callLater(() => root.ready = true); // a frame after it shows
+		else
+			ready = false;
+	}
 
 	// X11: i3 focuses a new window itself; ask too once it has it, and again shortly in case that came first
 	function takeFocus(): void {
@@ -141,7 +140,7 @@ Scope {
 						id: curve
 
 						required property int modelData
-						property color tint: root.fill
+						property color tint: Theme.bg
 
 						x: modelData < 0 ? 0 : root.fillet + root.panelWidth
 						y: root.below ? 0 : root.panelHeight - height
@@ -174,7 +173,7 @@ Scope {
 					x: root.fillet
 					width: root.panelWidth
 					height: root.panelHeight
-					color: root.fill
+					color: Theme.bg // opaque, as the bar turns while it hangs from it
 					topLeftRadius: root.below && !root.side ? 0 : 18
 					topRightRadius: root.below && !root.side ? 0 : 18
 					bottomLeftRadius: root.below || root.side ? 18 : 0
