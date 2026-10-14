@@ -36,6 +36,7 @@ Singleton {
 
 		delegate: Connections {
 			required property BluetoothDevice modelData
+			property bool warned: false // its battery low: said once, until it's charged again
 
 			target: modelData
 
@@ -43,6 +44,28 @@ Singleton {
 				if (modelData.paired && !modelData.trusted)
 					modelData.trusted = true;
 			}
+
+			// as it changes, and as the device connects or the shell starts with it already low
+			function check(): void {
+				if (!modelData.connected || !modelData.batteryAvailable)
+					return;
+				if (modelData.battery <= 0.15 && !warned) {
+					warned = true;
+					Quickshell.execDetached(["notify-send", "-a", "Bluetooth", `${modelData.name} battery low`, `${Math.round(modelData.battery * 100)}% left`]);
+				} else if (modelData.battery > 0.25) {
+					warned = false;
+				}
+			}
+
+			function onBatteryChanged(): void {
+				check();
+			}
+
+			function onConnectedChanged(): void {
+				check();
+			}
+
+			Component.onCompleted: check()
 		}
 	}
 

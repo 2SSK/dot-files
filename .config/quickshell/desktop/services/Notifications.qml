@@ -76,7 +76,8 @@ Singleton {
 			// a replacement (same id, newer text) takes the old entry's place
 			root.history = [entry, ...root.history.filter(e => !(e.id === notification.id && root.live[e.key] === notification && e.key !== key))].slice(0, 100);
 			root.unread++;
-			if (!root.dnd || notification.urgency === NotificationUrgency.Critical)
+			// held back while recording the screen too, so they don't end up in the video
+			if ((!root.dnd && !Recorder.recording) || notification.urgency === NotificationUrgency.Critical)
 				root.popups = [notification, ...root.popups.filter(n => n)].slice(0, 4);
 			notification.closed.connect(() => {
 				root.hide(notification);
