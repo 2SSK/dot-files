@@ -50,7 +50,12 @@ say "   setup.sh exit $setup_rc after $(( ($(date +%s) - start) / 60 )) min"
 say "== checks"
 in_vm 'bash -s' <<'EOF' | tee -a "$log"
 pass=0 fail=0
-check() { if eval "$2" >/dev/null 2>&1; then echo "  ok    $1"; pass=$((pass+1)); else echo "  FAIL  $1"; fail=$((fail+1)); fi; }
+check() {
+	local out
+	if out="$(eval "$2" 2>&1)"; then echo "  ok    $1"; pass=$((pass+1)); return; fi
+	echo "  FAIL  $1"; fail=$((fail+1))
+	printf '%s\n' "$out" | grep -v '^$' | head -6 | sed 's/^/          /'
+}
 check "configs linked into ~ (sway, i3, shell, nvim)" '[ -L ~/.config/sway/config ] && [ -L ~/.config/i3/config ] && [ -L ~/.config/quickshell/desktop/shell.qml ] && [ -L ~/.config/nvim/init.lua ]'
 check "theme rendered" '[ -f ~/.local/state/desktop/theme/palette.json ] && ~/.local/bin/theme current'
 for p in sway i3 qs kitty foot nvim tmux zsh fzf fd rg jq stow brightnessctl playerctl swayidle wl-copy; do
@@ -68,7 +73,7 @@ exec env QT_QPA_PLATFORM=wayland qs -c desktop > /tmp/qs.log 2>&1
 CONF
 (env -u WAYLAND_DISPLAY WLR_BACKENDS=headless WLR_LIBINPUT_NO_DEVICES=1 WLR_RENDERER=pixman sway -c /tmp/headless.conf >/tmp/sway.log 2>&1 &)
 sleep 25
-check "shell starts in sway" 'grep -q "Configuration Loaded" /tmp/qs.log'
+check "shell starts in sway" 'grep -q "Configuration Loaded" /tmp/qs.log || { tail -3 /tmp/sway.log; tail -3 /tmp/qs.log; false; }'
 check "shell log has no script errors" '! grep -E "TypeError|ReferenceError|is not defined|is not a type|Type .* unavailable" /tmp/qs.log'
 pkill -x sway
 echo "  -- $pass passed, $fail failed"

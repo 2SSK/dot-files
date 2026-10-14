@@ -35,7 +35,9 @@ memory() {
 	put etc/systemd/system/-.slice.d/10-oomd.conf
 	((changed)) || return 0
 	sudo systemctl daemon-reload
-	sudo systemctl start systemd-zram-setup@zram0.service
+	# now if it can be: right after a kernel upgrade (setup's own, on Arch) its module can't load until a reboot
+	sudo systemctl start systemd-zram-setup@zram0.service 2>/dev/null ||
+		log_warn zram_after_reboot msg='zram starts at the next boot'
 	sudo sysctl --quiet --load "$root/etc/sysctl.d/99-zram.conf" 2>/dev/null || true
 	sudo systemctl enable --now systemd-oomd.service
 }
