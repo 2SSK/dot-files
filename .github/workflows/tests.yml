@@ -12,5 +12,5 @@ jobs:
     timeout-minutes: 20
     steps:
       - run: pacman -Sy --noconfirm --needed git
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - run: tests/ci.sh
