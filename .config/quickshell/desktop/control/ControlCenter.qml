@@ -224,8 +224,8 @@ HangingPanel {
 
 			width: parent.width
 			height: item?.fill ? Math.max(item.implicitHeight, view.height - 16) : (item?.implicitHeight ?? 0)
-			// made as it opens and gone as it closes: a page's scans and polling run only while it shows
-			active: root.visible
+			// made as it opens and gone once it has folded away: a page's scans and polling run only while it shows
+			active: root.progress > 0
 			sourceComponent: (root.pages.find(p => p.key === Panel.controlPage) ?? root.pages[0]).component
 		}
 	}

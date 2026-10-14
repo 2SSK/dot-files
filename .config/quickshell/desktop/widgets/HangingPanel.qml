@@ -16,6 +16,15 @@ Scope {
 	property int panelWidth: 760
 	property int panelHeight: 640
 	property bool visible: true // as a window's: the panels' loaders set it
+	// how far out of the bar it is, 0 to 1: it unfolds as it opens and folds back as it closes
+	property real progress: open ? 1 : 0
+
+	Behavior on progress {
+		NumberAnimation {
+			duration: Theme.normal
+			easing.type: Theme.curve
+		}
+	}
 	default property alias content: inner.data
 	signal dismissed
 	signal opened // each time it opens: on sway it's made once and kept, so opening work goes here
@@ -107,65 +116,74 @@ Scope {
 			y: root.py
 			width: root.panelWidth + 2 * root.fillet
 			height: root.panelHeight
-			visible: root.open
+			visible: root.progress > 0
+			clip: true
 
-			Repeater {
-				model: root.side ? [] : [-1, 1]
+			Item {
+				width: parent.width
+				height: parent.height
+				x: root.side ? (Config.position === "left" ? -1 : 1) * width * (1 - root.progress) : 0
+				y: root.side ? 0 : (root.below ? -1 : 1) * height * (1 - root.progress)
+				opacity: root.progress
 
-				delegate: Canvas {
-					id: curve
+				Repeater {
+					model: root.side ? [] : [-1, 1]
 
-					required property int modelData
-					property color tint: root.fill
+					delegate: Canvas {
+						id: curve
 
-					x: modelData < 0 ? 0 : root.fillet + root.panelWidth
-					y: root.below ? 0 : root.panelHeight - height
-					width: root.fillet
-					height: root.fillet
-					transform: Scale {
-						origin.x: curve.width / 2
-						origin.y: curve.height / 2
-						xScale: curve.modelData
-						yScale: root.below ? 1 : -1
-					}
-					onTintChanged: requestPaint()
-					// drawn for the right side under a top bar
-					onPaint: {
-						const ctx = getContext("2d");
-						const r = width;
-						ctx.reset();
-						ctx.fillStyle = tint;
-						ctx.beginPath();
-						ctx.moveTo(0, 0);
-						ctx.lineTo(r, 0);
-						ctx.arc(r, r, r, -Math.PI / 2, Math.PI, true);
-						ctx.closePath();
-						ctx.fill();
+						required property int modelData
+						property color tint: root.fill
+
+						x: modelData < 0 ? 0 : root.fillet + root.panelWidth
+						y: root.below ? 0 : root.panelHeight - height
+						width: root.fillet
+						height: root.fillet
+						transform: Scale {
+							origin.x: curve.width / 2
+							origin.y: curve.height / 2
+							xScale: curve.modelData
+							yScale: root.below ? 1 : -1
+						}
+						onTintChanged: requestPaint()
+						// drawn for the right side under a top bar
+						onPaint: {
+							const ctx = getContext("2d");
+							const r = width;
+							ctx.reset();
+							ctx.fillStyle = tint;
+							ctx.beginPath();
+							ctx.moveTo(0, 0);
+							ctx.lineTo(r, 0);
+							ctx.arc(r, r, r, -Math.PI / 2, Math.PI, true);
+							ctx.closePath();
+							ctx.fill();
+						}
 					}
 				}
-			}
 
-			Rectangle {
-				x: root.fillet
-				width: root.panelWidth
-				height: root.panelHeight
-				color: root.fill
-				topLeftRadius: root.below && !root.side ? 0 : 18
-				topRightRadius: root.below && !root.side ? 0 : 18
-				bottomLeftRadius: root.below || root.side ? 18 : 0
-				bottomRightRadius: root.below || root.side ? 18 : 0
-				clip: true
+				Rectangle {
+					x: root.fillet
+					width: root.panelWidth
+					height: root.panelHeight
+					color: root.fill
+					topLeftRadius: root.below && !root.side ? 0 : 18
+					topRightRadius: root.below && !root.side ? 0 : 18
+					bottomLeftRadius: root.below || root.side ? 18 : 0
+					bottomRightRadius: root.below || root.side ? 18 : 0
+					clip: true
 
-				// clicks on the panel's own empty space stay on it (not the closing area behind)
-				MouseArea {
-					anchors.fill: parent
-					acceptedButtons: Qt.AllButtons
-				}
+					// clicks on the panel's own empty space stay on it (not the closing area behind)
+					MouseArea {
+						anchors.fill: parent
+						acceptedButtons: Qt.AllButtons
+					}
 
-				Item {
-					id: holder
+					Item {
+						id: holder
 
-					anchors.fill: parent
+						anchors.fill: parent
+					}
 				}
 			}
 		}
@@ -177,7 +195,7 @@ Scope {
 		active: root.wayland
 
 		PanelWindow {
-			visible: root.visible
+			visible: root.visible || root.progress > 0 // until it has folded away
 			screen: root.screen
 			anchors {
 				top: true
