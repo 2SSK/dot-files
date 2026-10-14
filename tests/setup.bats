@@ -31,6 +31,17 @@ setup() {
 	[ "$output" = mine ]
 }
 
+@test "a new machine without stow yet still finds the files in the way (the distro's .bashrc)" {
+	echo "# the distro's" >"$HOME/.bashrc"
+	mkdir -p "$HOME/.config/tmux" && ln -s "$REPO/.config/tmux/tmux.conf" "$HOME/.config/tmux/tmux.conf" # right: not in the way
+	sed -n '/^conflicts() {/,/^}/p' "$REPO/setup.sh" >"$BATS_TEST_TMPDIR/conflicts.sh"
+	mkdir -p "$BATS_TEST_TMPDIR/nostow" # setup's own tools, but no stow: as before the packages
+	for t in bash git grep sed paste readlink; do ln -s "$(type -P "$t")" "$BATS_TEST_TMPDIR/nostow/$t"; done
+	run env PATH="$BATS_TEST_TMPDIR/nostow" bash -c "repo='$REPO'; source '$BATS_TEST_TMPDIR/conflicts.sh'; conflicts"
+	[ "$status" -eq 0 ]
+	[ "$output" = .bashrc ]
+}
+
 @test "removes stale links into the repo, keeps foreign links" {
 	ln -s "$REPO/README.md" "$HOME/README.md"
 	ln -s "$REPO/gone.conf" "$HOME/gone.conf"
