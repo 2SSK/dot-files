@@ -26,7 +26,9 @@ start)
 	# its own D-Bus session: it mustn't take the notifications, the tray or the polkit agent from the
 	# live shell (it did, once, when the live one restarted while this ran)
 	# and no swayidle of its own: in this login session it would answer the live session's lock
+	# and no pairing agent of its own: it would take over the live shell's
 	mkdir -p "$T/bin" && printf '#!/bin/sh\nexec sleep infinity\n' >"$T/bin/swayidle" && chmod +x "$T/bin/swayidle"
+	cp "$T/bin/swayidle" "$T/bin/bluetoothctl"
 	printf '#!/bin/sh\nexec dbus-run-session -- env PATH=%s:"$PATH" XDG_STATE_HOME=%s XDG_CONFIG_HOME=%s QT_QPA_PLATFORM=wayland qs -p %s\n' "$T/bin" "$T/state" "$T/xdg" "$T/cfg" >"$T/run.sh"
 	chmod +x "$T/run.sh"
 	# no SwayFX effects: blur on a headless output stops drawing after a while (red, then nothing)

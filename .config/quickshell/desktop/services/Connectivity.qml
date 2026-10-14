@@ -3,6 +3,7 @@ pragma Singleton
 import QtQuick
 import Quickshell
 import Quickshell.Bluetooth
+import Quickshell.Io
 import Quickshell.Networking
 
 // Wi-Fi (NetworkManager) and Bluetooth (BlueZ): on or off, and what's connected.
@@ -27,5 +28,29 @@ Singleton {
 	function toggleBluetooth(): void {
 		if (adapter)
 			adapter.enabled = !adapter.enabled;
+	}
+
+	// a device paired is trusted too, so it reconnects by itself
+	Instantiator {
+		model: Bluetooth.devices
+
+		delegate: Connections {
+			required property BluetoothDevice modelData
+
+			target: modelData
+
+			function onPairedChanged(): void {
+				if (modelData.paired && !modelData.trusted)
+					modelData.trusted = true;
+			}
+		}
+	}
+
+	// The pairing agent: keyboards, earbuds and mice that ask to confirm a pairing need one to answer,
+	// and Quickshell has none. NoInputNoOutput pairs with no code to type or compare.
+	Process {
+		running: root.bluetoothAvailable
+		command: ["bluetoothctl", "--agent", "NoInputNoOutput"]
+		stdinEnabled: true // bluetoothctl quits when its input ends
 	}
 }

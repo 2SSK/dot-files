@@ -7,7 +7,7 @@ import qs
 import qs.services
 import qs.widgets
 
-// Wi-Fi: networks by signal, the connected one first. A click connects, asking for a password when
+// Wi-Fi: networks by signal (in bars; a lock on secured ones), the connected one first. A click connects, asking for a password when
 // NetworkManager has none for it; failures show under the network.
 Column {
 	id: root
@@ -115,9 +115,10 @@ Column {
 			}
 
 			ListRow {
-				glyph: Icons.g("wifi")
+				// the signal in bars
+				glyph: Icons.g(["wifi-0", "wifi-1", "wifi-2", "wifi"][Math.min(3, Math.floor(entry.modelData.signalStrength * 4))])
 				label: entry.modelData.name
-				detail: (entry.modelData.connected ? "Connected" : entry.modelData.stateChanging ? "Connecting…" : entry.modelData.known ? "Saved" : entry.open ? "Open" : entry.personal ? "Secured" : "Enterprise: use nmtui") + " · " + Math.round(entry.modelData.signalStrength * 100) + "%"
+				detail: entry.modelData.connected ? "Connected" : entry.modelData.stateChanging ? "Connecting…" : entry.modelData.known ? "Saved" : entry.open ? "Open" : entry.personal ? "Secured" : "Enterprise: use nmtui"
 				active: entry.modelData.connected
 				onClicked: {
 					if (entry.modelData.connected || entry.modelData.stateChanging)
@@ -129,6 +130,14 @@ Column {
 					root.failed = null;
 					root.asking = null;
 					entry.modelData.connect(); // asks for a password only if this fails for want of one
+				}
+
+				Glyph {
+					visible: !entry.open
+					anchors.verticalCenter: parent.verticalCenter
+					glyph: Icons.g("lock")
+					color: Theme.fgMuted
+					font.pixelSize: 14
 				}
 
 				SmallButton {

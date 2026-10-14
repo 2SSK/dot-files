@@ -64,6 +64,14 @@ if [[ -n ${WAYLAND_DISPLAY:-} ]]; then
 	fi
 fi
 
+if bluetoothctl list 2>/dev/null | grep -q Controller; then
+	if pgrep -f 'bluetoothctl --agent' >/dev/null; then
+		ok "Bluetooth pairing agent running"
+	else
+		bad "no Bluetooth pairing agent: keyboards and earbuds can't pair" "restart the shell (it runs one)"
+	fi
+fi
+
 if compgen -G '/sys/class/power_supply/BAT*' >/dev/null; then
 	if cmp -s "$(dirname "$(readlink -f "$0")")/../../system/etc/systemd/logind.conf.d/10-lid.conf" /etc/systemd/logind.conf.d/10-lid.conf; then
 		ok "closing the lid locks (no suspend)"
