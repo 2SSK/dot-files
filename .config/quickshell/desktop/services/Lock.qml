@@ -2,6 +2,7 @@ pragma Singleton
 
 import QtQuick
 import Quickshell
+import qs
 
 // The session lock on Wayland (on X11 i3lock locks); if the shell stops, the compositor keeps the
 // screen locked. lock() fades the desktop to black first, unlock() fades the lock screen out first.
@@ -27,19 +28,16 @@ Singleton {
 		dark.restart();
 	}
 
-	// Lock & Suspend: locked, the lock screen fades to black, then the laptop sleeps; it fades back in on waking
+	// Lock & Suspend: on sway the lock screen shows, fades to black, then the laptop sleeps, and it
+	// fades back in on waking; on i3, i3lock (run before sleep) can't fade, so it just sleeps
 	function suspend(): void {
+		if (!Config.wayland)
+			return Quickshell.execDetached(["systemctl", "suspend"]);
 		sleepy = true;
 		if (secure)
-			doze();
+			seen.restart();
 		else
 			lock();
-	}
-
-	function doze(): void {
-		sleepy = false;
-		dozing = true;
-		asleep.restart();
 	}
 
 	function unlock(): void {
@@ -54,7 +52,7 @@ Singleton {
 			return;
 		curtain = false; // under the lock now, and gone once it lifts
 		if (sleepy)
-			seen.restart(); // the lock screen shown a moment, then it dozes off
+			seen.restart();
 	}
 
 	Timer {
@@ -86,21 +84,25 @@ Singleton {
 		}
 	}
 
+	// the lock screen shown a moment, then it dozes off: the fade to black, then sleep
 	Timer {
 		id: seen
 
 		interval: 700
-		onTriggered: root.doze()
+		onTriggered: {
+			root.sleepy = false;
+			root.dozing = true;
+			asleep.restart();
+		}
 	}
 
-	// the fade to black, then sleep
 	Timer {
 		id: asleep
 
 		interval: 700
 		onTriggered: {
 			Quickshell.execDetached(["systemctl", "suspend"]);
-			wake.last = Date.now();
+			wake.since = wake.last = Date.now();
 			wake.start();
 		}
 	}
@@ -114,7 +116,6 @@ Singleton {
 
 		interval: 1000
 		repeat: true
-		onRunningChanged: if (running) since = Date.now()
 		onTriggered: {
 			const now = Date.now();
 			if (now - last > 4000 || now - since > 15000) {

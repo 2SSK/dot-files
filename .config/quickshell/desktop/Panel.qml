@@ -176,13 +176,12 @@ Singleton {
 	}
 
 	function execute(id: string): void {
-		if (id === "suspend" && Config.wayland)
-			return Lock.suspend(); // the lock screen fades out before the laptop sleeps
+		if (id === "suspend")
+			return Lock.suspend();
 		// the locker (desktop-lock, run by xss-lock on X11) locks for lock-session and before sleep
 		Quickshell.execDetached({
 			lock: ["loginctl", "lock-session"],
 			logout: [WindowManager.msg, "exit"],
-			suspend: ["systemctl", "suspend"],
 			reboot: ["systemctl", "reboot"],
 			poweroff: ["systemctl", "poweroff"]
 		}[id]);

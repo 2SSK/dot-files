@@ -54,13 +54,9 @@ show_layer() {
 		{ tr '\n' ' ' && echo; } | fold -s -w 76)
 }
 
-# Paths (relative to $HOME) where a real file or foreign link blocks a stow link. On a new machine
-# stow comes with the packages, after this is asked: then the repo's files are checked directly.
+# Paths (relative to $HOME) where a real file or foreign link blocks a stow link: the repo's files
+# that stow links (not in .stow-local-ignore), found without stow, which a new machine lacks yet.
 conflicts() {
-	if command -v stow >/dev/null; then
-		(cd "$repo" && stow -n . 2>&1 || true) | sed -n 's/.* over existing target \(.*\) since .*/\1/p'
-		return
-	fi
 	local ignore rel
 	ignore="$(grep -vE '^[[:space:]]*(#|$)' "$repo/.stow-local-ignore" | paste -sd'|')"
 	while IFS= read -r rel; do

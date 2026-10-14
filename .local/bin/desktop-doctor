@@ -20,7 +20,7 @@ if [[ -n ${WAYLAND_DISPLAY:-} ]]; then
 	if [[ -z $state ]]; then
 		bad "lock: the shell doesn't answer" "restart the shell (qs kill -c desktop, then start it)"
 	elif jq -e '(.curtain or .locked) and (.secure | not)' <<<"$state" >/dev/null; then
-		bad "lock: stuck half-way ($state)" "restart the shell; it gives a refused lock up after 4 s, so this shouldn't last"
+		bad "lock: stuck half-way ($state)" "restart the shell"
 	else
 		ok "lock ready"
 	fi

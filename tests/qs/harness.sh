@@ -31,7 +31,7 @@ start)
 	chmod +x "$T/run.sh"
 	# no SwayFX effects: blur on a headless output stops drawing after a while (red, then nothing)
 	{ echo "output HEADLESS-1 resolution 1600x1000"; echo "exec $T/run.sh > $T/qs.log 2>&1"; } >"$T/sway.conf"
-	displays() { for d in "$XDG_RUNTIME_DIR"/wayland-*; do [[ -S $d && ${d##*/} =~ ^wayland-[0-9]+$ ]] && echo "${d##*/}"; done; }
+	displays() { for d in "$XDG_RUNTIME_DIR"/wayland-*; do if [[ -S $d && ${d##*/} =~ ^wayland-[0-9]+$ ]]; then echo "${d##*/}"; fi; done; }
 	before=$(displays)
 	(env -u WAYLAND_DISPLAY -u SWAYSOCK -u DISPLAY WLR_BACKENDS=headless WLR_LIBINPUT_NO_DEVICES=1 systemd-run --user --scope -q -p MemoryMax=2G -p CPUQuota=200% sway -c "$T/sway.conf" >"$T/sway.log" 2>&1 &)
 	sleep 5
