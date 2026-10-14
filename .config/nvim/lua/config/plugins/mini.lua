@@ -9,6 +9,10 @@ return {
 				c = ai.gen_spec.treesitter({ a = "@class.outer", i = "@class.inner" }),
 			},
 		})
+		-- the scope under the cursor, drawn at once (no animation)
+		require("mini.indentscope").setup({
+			draw = { delay = 0, animation = require("mini.indentscope").gen_animation.none() },
+		})
 		require("mini.pairs").setup()
 		require("mini.surround").setup()
 		require("mini.move").setup() -- Alt+h/j/k/l moves the line or selection

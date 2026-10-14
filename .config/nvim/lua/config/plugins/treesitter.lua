@@ -1,5 +1,5 @@
--- nvim-treesitter (main branch) installs parsers with the tree-sitter CLI; highlighting,
--- indentation and folding are turned on per buffer.
+-- nvim-treesitter (main branch) installs parsers with the tree-sitter CLI; highlighting and
+-- indentation are turned on per buffer (folds: ufo.lua).
 local parsers = {
 	"bash", "c", "cpp", "css", "diff", "dockerfile", "go", "graphql", "html", "java", "javascript",
 	"json", "lua", "luadoc", "make", "markdown", "markdown_inline", "python", "query", "regex",
@@ -21,8 +21,6 @@ return {
 					return
 				end
 				vim.bo[event.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-				vim.wo.foldmethod = "expr"
-				vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 			end,
 		})
 	end,

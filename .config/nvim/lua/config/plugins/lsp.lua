@@ -39,12 +39,6 @@ return {
 					map("n", "<leader>cr", vim.lsp.buf.rename, "Rename")
 					map("n", "<leader>xd", vim.diagnostic.open_float, "Line diagnostics")
 					map("n", "<leader>cR", "<cmd>LspRestart<CR>", "Restart LSP")
-
-					local client = vim.lsp.get_client_by_id(event.data.client_id)
-					if client and client:supports_method("textDocument/foldingRange") then
-						vim.wo.foldmethod = "expr"
-						vim.wo.foldexpr = "v:lua.vim.lsp.foldexpr()"
-					end
 				end,
 			})
 

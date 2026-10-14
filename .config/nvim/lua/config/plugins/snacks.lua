@@ -5,11 +5,6 @@ return {
 	opts = {
 		dashboard = { enabled = true },
 		explorer = { enabled = true },
-		indent = { -- only the scope under the cursor
-			enabled = true,
-			indent = { enabled = false },
-			animate = { enabled = false },
-		},
 		input = { enabled = true },
 		notifier = { enabled = true },
 		zen = { enabled = true },

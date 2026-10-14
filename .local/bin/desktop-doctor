@@ -47,9 +47,9 @@ if [[ -n ${WAYLAND_DISPLAY:-} ]]; then
 		bad "clipboard history: not watching" "the shell restarts it; if it doesn't, restart the shell"
 	else
 		stuck=""
-		for c in $(pgrep -f 'desktop-clipboard store$'); do (($(age "$c") > 30)) && stuck=1; done
+		for c in $(pgrep -f '^python3 .*desktop-clipboard store$'); do (($(age "$c") > 30)) && stuck=1; done
 		if [[ -n $stuck ]]; then
-			bad "clipboard history: stuck on one copy" "pkill -f 'desktop-clipboard store\$'"
+			bad "clipboard history: stuck on one copy" "pkill -f '^python3 .*desktop-clipboard store\$'"
 		else
 			ok "clipboard history recording"
 		fi
