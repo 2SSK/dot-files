@@ -1,0 +1,16 @@
+# Lint and test on every push and pull request, in the same clean Arch container as tests/ci.sh
+# locally. The VM install test (tests/vm/repro.sh) is too slow for this: run it by hand.
+name: tests
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container: archlinux:latest
+    timeout-minutes: 20
+    steps:
+      - run: pacman -Sy --noconfirm --needed git
+      - uses: actions/checkout@v4
+      - run: tests/ci.sh
