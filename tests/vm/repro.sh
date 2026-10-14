@@ -48,6 +48,8 @@ setup_rc=$?
 say "   setup.sh exit $setup_rc after $(( ($(date +%s) - start) / 60 )) min"
 
 say "== checks"
+# the GPU, as a desktop login has it (an SSH session doesn't): sway renders through it
+in_vm 'sudo usermod -aG video,render $USER'
 in_vm 'bash -s' <<'EOF' | tee -a "$log"
 pass=0 fail=0
 check() {
@@ -62,6 +64,10 @@ for p in sway i3 qs kitty foot nvim tmux zsh fzf fd rg jq stow brightnessctl pla
 	check "installed: $p" "command -v $p"
 done
 check "login shell is zsh" '[ "$(getent passwd "$USER" | cut -d: -f7)" = "$(command -v zsh)" ]'
+# no screen in the VM: sway's headless backend, software rendering (mesa's llvmpipe)
+export WLR_BACKENDS=headless WLR_LIBINPUT_NO_DEVICES=1 WLR_RENDERER_ALLOW_SOFTWARE=1
+check "login screen enabled" '[ -L /etc/systemd/system/display-manager.service ]'
+check "Bluetooth enabled" 'systemctl is-enabled bluetooth.service'
 check "sway accepts its config" 'sway -C -c ~/.config/sway/config'
 check "i3 accepts its config" 'i3 -C -c ~/.config/i3/config'
 check "zsh starts clean" '[ -z "$(zsh -i -c exit 2>&1 | grep -v "^$")" ]'
@@ -71,7 +77,7 @@ cat >/tmp/headless.conf <<'CONF'
 output HEADLESS-1 resolution 1600x1000
 exec env QT_QPA_PLATFORM=wayland qs -c desktop > /tmp/qs.log 2>&1
 CONF
-(env -u WAYLAND_DISPLAY WLR_BACKENDS=headless WLR_LIBINPUT_NO_DEVICES=1 WLR_RENDERER=pixman sway -c /tmp/headless.conf >/tmp/sway.log 2>&1 &)
+(env -u WAYLAND_DISPLAY sway -c /tmp/headless.conf >/tmp/sway.log 2>&1 &)
 sleep 25
 check "shell starts in sway" 'grep -q "Configuration Loaded" /tmp/qs.log || { tail -3 /tmp/sway.log; tail -3 /tmp/qs.log; false; }'
 check "shell log has no script errors" '! grep -E "TypeError|ReferenceError|is not defined|is not a type|Type .* unavailable" /tmp/qs.log'

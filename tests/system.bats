@@ -437,7 +437,7 @@ subvolume_fakes() { # btrfs makes folders and remembers them as subvolumes; the 
 	touch "$SYSTEM_ROOT/etc/timeshift/timeshift.json" "$SYSTEM_ROOT/etc/default/grub"
 	run "$SYSTEM" --plan
 	[ "$status" -eq 0 ]
-	[[ " $output " == *" memory power lid timeshift grub "* ]]
+	[[ " $output " == *" memory services power lid timeshift grub "* ]]
 	[[ $output != *libvirt* && $output != *subvolumes* ]]
 }
 
@@ -454,4 +454,38 @@ subvolume_fakes() { # btrfs makes folders and remembers them as subvolumes; the 
 	[ "$(grep -c 'memory' <<<"$output")" -ge 1 ]
 	run "$SYSTEM" nonsense
 	[ "$status" -eq 2 ]
+}
+
+@test "services: a new machine gets its login screen, Bluetooth and NetworkManager" {
+	lib="$SYSTEM_ROOT/usr/lib/systemd/system" && mkdir -p "$lib"
+	touch "$lib/sddm.service" "$lib/bluetooth.service" "$lib/NetworkManager.service"
+	run "$SYSTEM" services
+	[ "$status" -eq 0 ]
+	grep -qx 'systemctl enable sddm.service' "$CALLS"
+	grep -qx 'systemctl enable --now bluetooth.service' "$CALLS"
+	grep -qx 'systemctl enable --now NetworkManager.service' "$CALLS"
+}
+
+@test "services: what's already enabled, and another login screen, are left alone" {
+	lib="$SYSTEM_ROOT/usr/lib/systemd/system" etc="$SYSTEM_ROOT/etc/systemd/system"
+	mkdir -p "$lib" "$etc/bluetooth.target.wants" "$etc/multi-user.target.wants"
+	touch "$lib/sddm.service" "$lib/bluetooth.service" "$lib/NetworkManager.service"
+	ln -s gdm.service "$etc/display-manager.service"
+	ln -s x "$etc/bluetooth.target.wants/bluetooth.service"
+	ln -s x "$etc/multi-user.target.wants/NetworkManager.service"
+	run "$SYSTEM" services
+	[ "$status" -eq 0 ]
+	[ ! -e "$CALLS" ]
+	[[ $output == *"services: already in place"* ]]
+}
+
+@test "services: with systemd-networkd running, NetworkManager isn't started beside it" {
+	lib="$SYSTEM_ROOT/usr/lib/systemd/system" etc="$SYSTEM_ROOT/etc/systemd/system"
+	mkdir -p "$lib" "$etc/multi-user.target.wants"
+	touch "$lib/NetworkManager.service"
+	ln -s x "$etc/multi-user.target.wants/systemd-networkd.service"
+	run "$SYSTEM" services
+	[ "$status" -eq 0 ]
+	! grep -q NetworkManager "$CALLS" 2>/dev/null
+	[[ $output == *"wifi_panel"* ]]
 }

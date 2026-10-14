@@ -404,10 +404,27 @@ sddm_theme() { # the login screen in the desktop theme; theme set keeps its colo
 	put etc/sddm.conf.d/20-desktop-greeter.conf # the battery on the login screen
 }
 
+services() { # what the desktop expects running: the login screen, and Bluetooth and Wi-Fi (the shell's panels)
+	local lib=$root/usr/lib/systemd/system etc=$root/etc/systemd/system
+	if [[ -f $lib/sddm.service && ! -L $etc/display-manager.service ]]; then
+		sudo systemctl enable sddm.service && changed=1
+	fi
+	if [[ -f $lib/bluetooth.service && ! -L $etc/bluetooth.target.wants/bluetooth.service ]]; then
+		sudo systemctl enable --now bluetooth.service && changed=1
+	fi
+	[[ -f $lib/NetworkManager.service && ! -L $etc/multi-user.target.wants/NetworkManager.service ]] || return 0
+	# two network managers fight over the links: one already here is left alone
+	if [[ -L $etc/multi-user.target.wants/systemd-networkd.service || -L $etc/multi-user.target.wants/connman.service ]]; then
+		log_warn wifi_panel msg='the Wi-Fi panel needs NetworkManager; this system runs another network manager'
+	else
+		sudo systemctl enable --now NetworkManager.service && changed=1
+	fi
+}
+
 # The parts that apply to this machine, in the order they run: what `system.sh` alone sets up.
 # subvolumes is never among them: it moves folders' data, so it runs only when named.
 plan() {
-	local parts=(memory)
+	local parts=(memory services)
 	compgen -G "$root/sys/class/power_supply/BAT*" >/dev/null && parts+=(power lid)
 	[[ -f $root/etc/timeshift/timeshift.json ]] && parts+=(timeshift)
 	[[ -f $root/etc/default/grub ]] && parts+=(grub)
@@ -418,7 +435,7 @@ plan() {
 }
 
 usage() {
-	echo 'usage: system.sh [--plan | part...]   parts: memory power lid timeshift grub sddm libvirt docker subvolumes' >&2
+	echo 'usage: system.sh [--plan | part...]   parts: memory services power lid timeshift grub sddm libvirt docker subvolumes' >&2
 	echo '       system.sh grub --preview         (no args: every part that applies here; see --plan)' >&2
 	exit 2
 }
@@ -432,12 +449,13 @@ esac
 parts=("$@")
 ((${#parts[@]})) || read -ra parts <<<"$(plan)"
 for part in "${parts[@]}"; do
-	case $part in memory | power | lid | timeshift | grub | sddm | libvirt | docker | subvolumes) ;; *) usage ;; esac
+	case $part in memory | services | power | lid | timeshift | grub | sddm | libvirt | docker | subvolumes) ;; *) usage ;; esac
 done
 for part in "${parts[@]}"; do
 	changed=0
 	case $part in
 	memory) memory ;;
+	services) services ;;
 	libvirt) libvirt ;;
 	docker) docker_daemon ;;
 	lid) lid ;;
