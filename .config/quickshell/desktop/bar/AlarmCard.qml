@@ -69,14 +69,15 @@ PopupWindow {
 
 		Behavior on y {
 			NumberAnimation {
-				duration: 260
-				easing.type: Easing.OutCubic
+				duration: Theme.normal
+				easing.type: Theme.curve
 			}
 		}
 
 		Behavior on opacity {
 			NumberAnimation {
-				duration: 200
+				duration: Theme.normal
+				easing.type: Theme.curve
 			}
 		}
 

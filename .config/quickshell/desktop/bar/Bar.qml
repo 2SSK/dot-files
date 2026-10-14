@@ -77,22 +77,23 @@ PanelWindow {
 		Behavior on x {
 			enabled: bar.vertical
 			NumberAnimation {
-				duration: 260
-				easing.type: Easing.OutCubic
+				duration: Theme.normal
+				easing.type: Theme.curve
 			}
 		}
 
 		Behavior on y {
 			enabled: !bar.vertical
 			NumberAnimation {
-				duration: 260
-				easing.type: Easing.OutCubic
+				duration: Theme.normal
+				easing.type: Theme.curve
 			}
 		}
 
 		Behavior on opacity {
 			NumberAnimation {
-				duration: 220
+				duration: Theme.normal
+				easing.type: Theme.curve
 			}
 		}
 

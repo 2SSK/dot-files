@@ -22,14 +22,15 @@ Rectangle {
 
 	Behavior on opacity {
 		NumberAnimation {
-			duration: 150
+			duration: Theme.normal
+			easing.type: Theme.curve
 		}
 	}
 
 	Behavior on y {
 		NumberAnimation {
-			duration: 180
-			easing.type: Easing.OutCubic
+			duration: Theme.normal
+			easing.type: Theme.curve
 		}
 	}
 

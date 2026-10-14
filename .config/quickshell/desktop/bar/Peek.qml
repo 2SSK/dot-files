@@ -90,15 +90,15 @@ PopupWindow {
 
 		Behavior on x {
 			NumberAnimation {
-				duration: 240
-				easing.type: Easing.OutCubic
+				duration: Theme.normal
+				easing.type: Theme.curve
 			}
 		}
 
 		Behavior on y {
 			NumberAnimation {
-				duration: 240
-				easing.type: Easing.OutCubic
+				duration: Theme.normal
+				easing.type: Theme.curve
 			}
 		}
 

@@ -94,7 +94,8 @@ Item {
 
 				Behavior on color {
 					ColorAnimation {
-						duration: 120
+						duration: Theme.quick
+						easing.type: Theme.curve
 					}
 				}
 

@@ -52,7 +52,8 @@ PopupWindow {
 
 		Behavior on opacity {
 			NumberAnimation {
-				duration: 200
+				duration: Theme.normal
+				easing.type: Theme.curve
 			}
 		}
 
@@ -78,8 +79,8 @@ PopupWindow {
 
 			Behavior on x {
 				NumberAnimation {
-					duration: 240
-					easing.type: Easing.OutCubic
+					duration: Theme.normal
+					easing.type: Theme.curve
 				}
 			}
 
@@ -119,8 +120,8 @@ PopupWindow {
 
 						Behavior on width {
 							NumberAnimation {
-								duration: 140
-								easing.type: Easing.OutCubic
+								duration: Theme.quick
+								easing.type: Theme.curve
 							}
 						}
 					}

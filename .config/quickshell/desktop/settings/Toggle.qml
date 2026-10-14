@@ -15,7 +15,8 @@ Rectangle {
 
 	Behavior on color {
 		ColorAnimation {
-			duration: 150
+			duration: Theme.quick
+			easing.type: Theme.curve
 		}
 	}
 
@@ -29,8 +30,8 @@ Rectangle {
 
 		Behavior on x {
 			NumberAnimation {
-				duration: 160
-				easing.type: Easing.OutCubic
+				duration: Theme.quick
+				easing.type: Theme.curve
 			}
 		}
 	}

@@ -23,8 +23,8 @@ Rectangle {
 
 	Behavior on scale {
 		NumberAnimation {
-			duration: 140
-			easing.type: Easing.OutCubic
+			duration: Theme.quick
+			easing.type: Theme.curve
 		}
 	}
 
@@ -78,8 +78,8 @@ Rectangle {
 
 		Behavior on scale {
 			NumberAnimation {
-				duration: 200
-				easing.type: Easing.OutBack
+				duration: Theme.normal
+				easing.type: Theme.curve
 			}
 		}
 

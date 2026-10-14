@@ -58,7 +58,7 @@ Singleton {
 	Timer {
 		id: dark
 
-		interval: 220 // the curtain's fade
+		interval: Theme.normal // the curtain's fade
 		onTriggered: {
 			root.locked = true;
 			refused.restart();
@@ -99,7 +99,7 @@ Singleton {
 	Timer {
 		id: asleep
 
-		interval: 700
+		interval: Theme.slow + 200 // once the fade to black is done
 		onTriggered: {
 			Quickshell.execDetached(["systemctl", "suspend"]);
 			wake.since = wake.last = Date.now();
@@ -129,7 +129,7 @@ Singleton {
 	Timer {
 		id: away
 
-		interval: 200 // the lock screen's fade out
+		interval: Theme.normal // the lock screen's fade out
 		onTriggered: {
 			root.locked = false;
 			root.leaving = false;

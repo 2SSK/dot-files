@@ -1,4 +1,5 @@
 import QtQuick
+import qs
 
 // Faster, smooth wheel and touchpad scrolling for the Flickable it sits in: X sends few, coarse steps
 // (desktop-input slows them for apps), so the shell's lists go further per step and ease to each stop.
@@ -40,7 +41,7 @@ WheelHandler {
 	property NumberAnimation glide: NumberAnimation {
 		target: root.view
 		property: "contentY"
-		duration: 140
-		easing.type: Easing.OutCubic
+		duration: Theme.quick
+		easing.type: Theme.curve
 	}
 }

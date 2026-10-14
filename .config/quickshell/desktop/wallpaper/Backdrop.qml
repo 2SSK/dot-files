@@ -83,8 +83,8 @@ PanelWindow {
 		target: root.front
 		property: "opacity"
 		to: 1
-		duration: 800
-		easing.type: Easing.InOutQuad
+		duration: Theme.slow * 2
+		easing.type: Theme.curve
 		onFinished: root.settle()
 	}
 }

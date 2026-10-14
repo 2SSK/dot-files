@@ -46,7 +46,8 @@ Scope {
 
 			Behavior on opacity {
 				NumberAnimation {
-					duration: 180
+					duration: Theme.normal
+					easing.type: Theme.curve
 				}
 			}
 		}
@@ -73,14 +74,15 @@ Scope {
 
 			Behavior on opacity {
 				NumberAnimation {
-					duration: 200
+					duration: Theme.normal
+					easing.type: Theme.curve
 				}
 			}
 
 			Behavior on scale {
 				NumberAnimation {
-					duration: 260
-					easing.type: Easing.OutCubic
+					duration: Theme.normal
+					easing.type: Theme.curve
 				}
 			}
 
@@ -137,7 +139,8 @@ Scope {
 
 					Behavior on border.width {
 						NumberAnimation {
-							duration: 160
+							duration: Theme.quick
+							easing.type: Theme.curve
 						}
 					}
 				}

@@ -118,8 +118,8 @@ HangingPanel {
 
 					Behavior on rotation {
 						NumberAnimation {
-							duration: 180
-							easing.type: Easing.OutCubic
+							duration: Theme.quick
+							easing.type: Theme.curve
 						}
 					}
 				}

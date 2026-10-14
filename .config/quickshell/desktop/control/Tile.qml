@@ -21,7 +21,8 @@ Rectangle {
 
 	Behavior on color {
 		ColorAnimation {
-			duration: 150
+			duration: Theme.quick
+			easing.type: Theme.curve
 		}
 	}
 

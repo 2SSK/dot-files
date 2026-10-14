@@ -39,6 +39,13 @@ Singleton {
 	// Text sizes scale with textScale to match the desktop: the terminal is 14 pt (about 19 px), GTK
 	// apps Inter 11 at 125%. The bar's own text follows the bar's height instead.
 	readonly property real textScale: Config.fonts.scale ?? 1.15
+	// Motion: three speeds and one curve (quick off the mark, settling gently, as macOS moves) for every
+	// animation: quick for hovers and presses, normal for fades and panels, slow for the lock and pictures
+	readonly property int quick: 120
+	readonly property int normal: 220
+	readonly property int slow: 400
+	readonly property int curve: Easing.OutCubic
+
 	readonly property int textCaption: px(12)
 	readonly property int textLabel: px(13)
 	readonly property int textBody: px(14)

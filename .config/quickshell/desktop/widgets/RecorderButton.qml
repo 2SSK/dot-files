@@ -24,7 +24,8 @@ Item {
 
 		Behavior on opacity {
 			NumberAnimation {
-				duration: 200
+				duration: Theme.normal
+				easing.type: Theme.curve
 			}
 		}
 	}

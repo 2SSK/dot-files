@@ -105,8 +105,8 @@ Scope {
 					NumberAnimation on opacity {
 						from: 0
 						to: 1
-						duration: 200
-						easing.type: Easing.InOutQuad
+						duration: Theme.normal
+						easing.type: Theme.curve
 					}
 				}
 			}
@@ -141,8 +141,8 @@ Scope {
 
 				Behavior on opacity {
 					NumberAnimation {
-						duration: Lock.dozing ? 650 : 260 // dozing off slowly, before sleep
-						easing.type: Lock.dozing ? Easing.InOutQuad : Easing.OutCubic
+						duration: Lock.dozing ? Theme.slow : Theme.normal
+						easing.type: Theme.curve
 					}
 				}
 
@@ -168,8 +168,8 @@ Scope {
 
 					Behavior on opacity {
 						NumberAnimation {
-							duration: 320
-							easing.type: Easing.OutCubic
+							duration: Theme.slow
+							easing.type: Theme.curve
 						}
 					}
 				}

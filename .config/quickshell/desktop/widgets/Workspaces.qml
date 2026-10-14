@@ -33,15 +33,15 @@ Line {
 
 			Behavior on implicitWidth {
 				NumberAnimation {
-					duration: 260
-					easing.type: Easing.OutCubic
+					duration: Theme.normal
+					easing.type: Theme.curve
 				}
 			}
 
 			Behavior on implicitHeight {
 				NumberAnimation {
-					duration: 260
-					easing.type: Easing.OutCubic
+					duration: Theme.normal
+					easing.type: Theme.curve
 				}
 			}
 
@@ -52,7 +52,8 @@ Line {
 
 				Behavior on color {
 					ColorAnimation {
-						duration: 180
+						duration: Theme.quick
+						easing.type: Theme.curve
 					}
 				}
 			}

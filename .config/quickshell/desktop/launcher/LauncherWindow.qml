@@ -254,8 +254,8 @@ HangingPanel {
 
 					Behavior on scale {
 						NumberAnimation {
-							duration: 120
-							easing.type: Easing.OutBack
+							duration: Theme.quick
+							easing.type: Theme.curve
 						}
 					}
 				}

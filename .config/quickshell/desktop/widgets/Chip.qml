@@ -20,7 +20,8 @@ Rectangle {
 
 	Behavior on color {
 		ColorAnimation {
-			duration: 140
+			duration: Theme.quick
+			easing.type: Theme.curve
 		}
 	}
 

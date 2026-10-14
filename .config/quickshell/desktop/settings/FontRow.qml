@@ -34,7 +34,8 @@ Column {
 
 			Behavior on color {
 				ColorAnimation {
-					duration: 140
+					duration: Theme.quick
+					easing.type: Theme.curve
 				}
 			}
 
@@ -60,8 +61,8 @@ Column {
 
 				Behavior on rotation {
 					NumberAnimation {
-						duration: 160
-						easing.type: Easing.OutCubic
+						duration: Theme.quick
+						easing.type: Theme.curve
 					}
 				}
 			}

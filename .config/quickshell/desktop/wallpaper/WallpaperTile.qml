@@ -31,8 +31,8 @@ Item {
 
 		Behavior on scale {
 			NumberAnimation {
-				duration: 160
-				easing.type: Easing.OutCubic
+				duration: Theme.quick
+				easing.type: Theme.curve
 			}
 		}
 
@@ -94,7 +94,8 @@ Item {
 
 			Behavior on opacity {
 				NumberAnimation {
-					duration: 150
+					duration: Theme.quick
+					easing.type: Theme.curve
 				}
 			}
 		}
@@ -109,7 +110,8 @@ Item {
 
 			Behavior on border.width {
 				NumberAnimation {
-					duration: 160
+					duration: Theme.quick
+					easing.type: Theme.curve
 				}
 			}
 		}
@@ -126,8 +128,8 @@ Item {
 
 			Behavior on scale {
 				NumberAnimation {
-					duration: 220
-					easing.type: Easing.OutBack
+					duration: Theme.normal
+					easing.type: Theme.curve
 				}
 			}
 

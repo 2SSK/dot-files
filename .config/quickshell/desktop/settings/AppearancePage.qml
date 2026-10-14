@@ -94,7 +94,8 @@ Column {
 
 					Behavior on color {
 						ColorAnimation {
-							duration: 160
+							duration: Theme.quick
+							easing.type: Theme.curve
 						}
 					}
 
@@ -105,7 +106,8 @@ Column {
 
 						Behavior on color {
 							ColorAnimation {
-								duration: 160
+								duration: Theme.quick
+								easing.type: Theme.curve
 							}
 						}
 						font.weight: Font.Medium
