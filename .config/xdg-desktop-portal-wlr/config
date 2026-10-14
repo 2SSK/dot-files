@@ -1,0 +1,5 @@
+# Screen sharing (Teams, Meet, OBS): which screen is picked by clicking it. Without a picker set the
+# portal looks for wofi/rofi/bemenu, none installed here, and every share fails with "no output found".
+[screencast]
+chooser_type=simple
+chooser_cmd=slurp -f %o -or
