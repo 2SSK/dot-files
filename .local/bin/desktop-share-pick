@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Screen sharing's picker (xdg-desktop-portal-wlr's chooser, dmenu type): the portal's sources come in
+# on stdin ("Monitor: eDP-1 …", "Window: <title> (<id>)"), the shell's capture panel asks which, and
+# the chosen line goes back on stdout; nothing printed declines. Without the shell: the first screen.
+set -uo pipefail
+dir="$(mktemp -d)" && trap 'rm -rf "$dir"' EXIT
+cat >"$dir/sources"
+mkfifo "$dir/answer"
+if qs -c desktop ipc call share pick "$dir" >/dev/null 2>&1; then
+	timeout 120 head -n1 "$dir/answer"
+else
+	grep -m1 '^Monitor: ' "$dir/sources"
+fi

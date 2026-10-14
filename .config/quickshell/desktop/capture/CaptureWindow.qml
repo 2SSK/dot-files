@@ -8,10 +8,13 @@ import qs.widgets
 
 // Capture, a HangingPanel: a screenshot or recording of a region, the focused window or a screen.
 // R, W, S act at once (with Shift they record); a screenshot is saved and copied to the clipboard.
+// Screen sharing (a call) asks here too what to share: SharePicker.
 HangingPanel {
 	id: root
 
 	property string asking: Panel.captureAsk // "shot" or "record": which screen?
+	readonly property bool sharing: Share.dir !== ""
+	property int source: 0 // the source picked when sharing
 	readonly property var modes: [
 		{ mode: "region", label: "Region", glyph: "crop", key: Qt.Key_R },
 		{ mode: "window", label: "Window", glyph: "app-window", key: Qt.Key_W },
@@ -35,8 +38,24 @@ HangingPanel {
 	onDismissed: Panel.captureOpen = false
 	onAskingChanged: monitor = Math.max(0, sortedScreens.findIndex(s => s.name === screen.name))
 	onOpened: monitor = Math.max(0, sortedScreens.findIndex(s => s.name === screen.name))
+	onSharingChanged: source = 0
 	onKeyPressed: event => {
 		const k = event.key;
+		if (sharing) {
+			const n = Share.sources.length;
+			if (k === Qt.Key_Up || k === Qt.Key_Backtab)
+				source = (source + n - 1) % n;
+			else if (k === Qt.Key_Down || k === Qt.Key_Tab)
+				source = (source + 1) % n;
+			else if (k >= Qt.Key_1 && k <= Qt.Key_9 && k - Qt.Key_1 < n)
+				Share.take(Share.sources[k - Qt.Key_1].line);
+			else if ((k === Qt.Key_Return || k === Qt.Key_Enter || k === Qt.Key_Space) && n)
+				Share.take(Share.sources[source].line);
+			else
+				return;
+			event.accepted = true;
+			return;
+		}
 		if (asking) {
 			const n = sortedScreens.length;
 			if (k === Qt.Key_Left || k === Qt.Key_Up)
@@ -110,7 +129,7 @@ HangingPanel {
 
 
 	Column {
-		visible: !root.asking
+		visible: !root.asking && !root.sharing
 		x: 16
 		y: 16
 		width: parent.width - 32
@@ -188,7 +207,7 @@ HangingPanel {
 
 
 	ScreenPicker {
-		visible: root.asking !== ""
+		visible: root.asking !== "" && !root.sharing
 		x: 16
 		y: 16
 		width: parent.width - 32
@@ -200,11 +219,21 @@ HangingPanel {
 		onTake: screen => Capture.take(root.asking, "screen", screen)
 	}
 
+	SharePicker {
+		visible: root.sharing
+		x: 16
+		y: 16
+		width: parent.width - 32
+		height: parent.height - 52
+		selected: root.source
+		onPointed: index => root.source = index
+	}
+
 	UiText {
 		x: 16
 		anchors.bottom: parent.bottom
 		anchors.bottomMargin: 10
-		text: root.asking ? "←→ or 1–9 pick · Enter takes it · A all screens · Esc back" : "←→↑↓ pick · Enter does it · R W S screenshot · Shift+R W S record"
+		text: root.sharing ? "↑↓ or 1–9 pick · Enter shares it · Esc declines" : root.asking ? "←→ or 1–9 pick · Enter takes it · A all screens · Esc back" : "←→↑↓ pick · Enter does it · R W S screenshot · Shift+R W S record"
 		color: Theme.fgMuted
 		font.pixelSize: Theme.textCaption
 	}

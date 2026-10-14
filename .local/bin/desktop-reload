@@ -9,7 +9,8 @@ if [[ $(timeout 3 qs -c desktop ipc call lock locked 2>/dev/null) == true ]]; th
 	echo "desktop-reload: the screen is locked; unlock first" >&2
 	exit 1
 fi
-if ! "$lib/shell-check.sh"; then
+# the config as the shell loads it (linked file by file: a new file not linked yet fails here)
+if ! "$lib/shell-check.sh" "${XDG_CONFIG_HOME:-$HOME/.config}/quickshell/desktop"; then
 	echo "desktop-reload: not reloaded, the running shell stays as it is" >&2
 	exit 1
 fi

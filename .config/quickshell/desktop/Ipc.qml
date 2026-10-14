@@ -120,6 +120,15 @@ Scope {
 		}
 	}
 
+	// desktop-share-pick, the screen-sharing portal's picker: <dir>/sources lists what can be shared
+	IpcHandler {
+		target: "share"
+
+		function pick(dir: string): void {
+			Share.pick(dir);
+		}
+	}
+
 	// the window switcher, driven by i3's "switcher" mode
 	IpcHandler {
 		target: "switcher"

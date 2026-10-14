@@ -1,5 +1,5 @@
-# Screen sharing (Teams, Meet, OBS): which screen is picked by clicking it. Without a picker set the
-# portal looks for wofi/rofi/bemenu, none installed here, and every share fails with "no output found".
+# Screen sharing (Teams, Meet, OBS): the shell's capture panel asks what to share, a screen or a
+# window (desktop-share-pick). Without a picker set the portal looks for wofi/rofi/bemenu.
 [screencast]
-chooser_type=simple
-chooser_cmd=slurp -f %o -or
+chooser_type=dmenu
+chooser_cmd="$HOME/.local/bin/desktop-share-pick"

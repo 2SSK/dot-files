@@ -101,6 +101,12 @@ region, the focused window, or one screen or all of them; while it runs the bar'
 and pulses on a red pill with the time (a click stops it), and the panel's Record row becomes Stop. `desktop-capture shot|record …` does the work (X11: slop, maim,
 xclip; Wayland: slurp, grim, wl-copy, and a window records through the portal).
 
+Screen sharing (Teams, Meet, OBS, and a window recording) goes through xdg-desktop-portal-wlr, which
+asks the capture panel what to share: the screens, then the open windows most recent first, with their
+app and workspace. The arrows or 1–9 pick, Enter or a click shares it, Escape declines.
+`desktop-share-pick` is the portal's picker (`.config/xdg-desktop-portal-wlr/config`); without the
+shell running it shares the first screen.
+
 ## Screens (i3)
 
 `desktop-displays` arranges screens as sway's outputs config does: the laptop panel at the left,
@@ -285,5 +291,5 @@ press while `power.confirm` is on. Nothing hibernates.
 ## IPC
 
 `qs -c desktop ipc call <target> <function>`: `audio up|down|mute|mic`, `brightness up|down`,
-`bar toggle`, `recorder toggle`, `notifications toggle|dnd|clear`, `settings toggle|page <bar|appearance|notifications|levels|power|timeshift|keys>`, `control toggle|open <page>|page <page>|close`, `clipboard toggle`, `wallpaper toggle|shuffle`, `launcher toggle <apps|emoji|files|themes>|close`, `switcher next|prev|commit|cancel|list`, `nightlight toggle`, `capture toggle|shot <region|window|screen>|record <region|window|screen>|stop`, `alarm stop|snooze`, `power open|toggle|close|next|prev|activate|pick <n>`,
+`bar toggle`, `recorder toggle`, `notifications toggle|dnd|clear`, `settings toggle|page <bar|appearance|notifications|levels|power|timeshift|keys>`, `control toggle|open <page>|page <page>|close`, `clipboard toggle`, `wallpaper toggle|shuffle`, `launcher toggle <apps|emoji|files|themes>|close`, `switcher next|prev|commit|cancel|list`, `nightlight toggle`, `capture toggle|shot <region|window|screen>|record <region|window|screen>|stop`, `share pick <dir>` (desktop-share-pick), `alarm stop|snooze`, `power open|toggle|close|next|prev|activate|pick <n>`,
 `theme reload`.
