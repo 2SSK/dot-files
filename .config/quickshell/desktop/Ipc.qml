@@ -14,8 +14,19 @@ Scope {
 				Lock.lock();
 		}
 		// true once sway confirms the lock, which desktop-lock waits for before sleep goes ahead
+		// Lock & Suspend: on sway the lock screen fades out first
+		function suspend(): void {
+			if (Config.wayland)
+				Lock.suspend();
+			else
+				Quickshell.execDetached(["systemctl", "suspend"]);
+		}
 		function locked(): bool {
 			return Lock.secure;
+		}
+		// what desktop-doctor checks: a lock half-way (curtain up, never confirmed) is stuck
+		function state(): string {
+			return JSON.stringify({ locked: Lock.locked, secure: Lock.secure, curtain: Lock.curtain, dozing: Lock.dozing });
 		}
 	}
 

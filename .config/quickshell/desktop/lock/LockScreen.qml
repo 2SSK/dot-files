@@ -136,13 +136,13 @@ Scope {
 				property bool shown: false
 
 				anchors.fill: parent
-				opacity: shown && !Lock.leaving ? 1 : 0
+				opacity: shown && !Lock.leaving && !Lock.dozing ? 1 : 0
 				Component.onCompleted: shown = true
 
 				Behavior on opacity {
 					NumberAnimation {
-						duration: 260
-						easing.type: Easing.OutCubic
+						duration: Lock.dozing ? 650 : 260 // dozing off slowly, before sleep
+						easing.type: Lock.dozing ? Easing.InOutQuad : Easing.OutCubic
 					}
 				}
 

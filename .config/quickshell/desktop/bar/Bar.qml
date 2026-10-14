@@ -15,7 +15,7 @@ PanelWindow {
 	readonly property bool vertical: Config.vertical
 	readonly property int size: Config.bar.size
 	readonly property int gap: Config.island ? 6 : 0 // the island's distance from the screen edge
-	readonly property real edgeLength: vertical ? modelData.height : modelData.width
+	readonly property real edgeLength: (vertical ? modelData?.height : modelData?.width) ?? 0 // 0 as its screen goes away
 	property bool docked: true // the window at full size; false only once the bar has slid away
 	// the island's share of the edge, more of a narrow screen, between its content and the whole edge
 	readonly property real share: Config.bar.length > 0 ? Config.bar.length : edgeLength < 1500 ? 0.8 : edgeLength < 2200 ? 0.55 : 0.42
@@ -45,7 +45,7 @@ PanelWindow {
 	}
 
 	// where the bar is, for the control center to hang from
-	readonly property rect island: Qt.rect(shape.x + (anchors.right && !anchors.left ? modelData.width - width : 0), shape.y + (anchors.bottom && !anchors.top ? modelData.height - height : 0), shape.width, shape.height)
+	readonly property rect island: Qt.rect(shape.x + (anchors.right && !anchors.left ? (modelData?.width ?? 0) - width : 0), shape.y + (anchors.bottom && !anchors.top ? (modelData?.height ?? 0) - height : 0), shape.width, shape.height)
 	onIslandChanged: Panel.islands = Object.assign({}, Panel.islands, { [modelData.name]: island })
 	Component.onCompleted: Panel.islands = Object.assign({}, Panel.islands, { [modelData.name]: island })
 

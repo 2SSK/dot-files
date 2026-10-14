@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+# Checks the parts of the desktop that have failed silently before, and says what to do about each.
+#   desktop-doctor        exit 1 when anything is wrong
+set -uo pipefail
+
+failed=0
+ok() { printf '  \e[32m✓\e[0m %s\n' "$1"; }
+bad() { printf '  \e[31m✗\e[0m %s\n      %s\n' "$1" "$2" && failed=1; }
+age() { ps -o etimes= -p "$1" 2>/dev/null | tr -d ' '; } # seconds a process has run
+ipc() { timeout 3 qs -c desktop ipc call "$@" 2>/dev/null; }
+
+if pgrep -fx 'qs -c desktop.*' >/dev/null; then
+	ok "shell running"
+else
+	bad "shell not running" "start it: qs -c desktop --no-duplicate --daemonize"
+fi
+
+if [[ -n ${WAYLAND_DISPLAY:-} ]]; then
+	state="$(ipc lock state)"
+	if [[ -z $state ]]; then
+		bad "lock: the shell doesn't answer" "restart the shell (qs kill -c desktop, then start it)"
+	elif jq -e '(.curtain or .locked) and (.secure | not)' <<<"$state" >/dev/null; then
+		bad "lock: stuck half-way ($state)" "restart the shell; it gives a refused lock up after 4 s, so this shouldn't last"
+	else
+		ok "lock ready"
+	fi
+
+	# one swayidle for this display, not waiting on a command (it then neither locks nor undims)
+	idle=""
+	for p in $(pgrep -u "$(id -u)" -x swayidle); do
+		tr '\0' '\n' <"/proc/$p/environ" 2>/dev/null | grep -qx "WAYLAND_DISPLAY=$WAYLAND_DISPLAY" && idle+="$p "
+	done
+	read -ra idle <<<"$idle"
+	if ((${#idle[@]} != 1)); then
+		bad "idle: ${#idle[@]} swayidle for this display" "restart the shell: it runs exactly one"
+	else
+		stuck=""
+		for c in $(pgrep -P "${idle[0]}"); do (($(age "$c") > 60)) && stuck="$(ps -o args= -p "$c")"; done
+		if [[ -n $stuck ]]; then
+			bad "idle: swayidle waits on '$stuck'" "nothing locks or undims meanwhile; kill that command"
+		else
+			ok "idle and lock-on-sleep listening"
+		fi
+	fi
+
+	if ! pgrep -f 'wl-paste --watch .*desktop-clipboard store' >/dev/null; then
+		bad "clipboard history: not watching" "the shell restarts it; if it doesn't, restart the shell"
+	else
+		stuck=""
+		for c in $(pgrep -f 'desktop-clipboard store$'); do (($(age "$c") > 30)) && stuck=1; done
+		if [[ -n $stuck ]]; then
+			bad "clipboard history: stuck on one copy" "pkill -f 'desktop-clipboard store\$'"
+		else
+			ok "clipboard history recording"
+		fi
+	fi
+
+	if [[ $(sway --version 2>/dev/null) == swayfx* ]]; then
+		if [[ -e ${XDG_STATE_HOME:-$HOME/.local/state}/desktop/sway-effects.conf ]]; then
+			ok "SwayFX effects in the config"
+		else
+			bad "SwayFX effects not linked: blur goes after a reload" "run desktop-effects"
+		fi
+	fi
+fi
+
+errors="$(timeout 5 qs -c desktop log 2>/dev/null | grep -cE 'TypeError|ReferenceError|is not defined|is not a type')"
+if ((errors)); then
+	bad "shell log: $errors script errors since it started" "qs -c desktop log | grep -E 'TypeError|ReferenceError'"
+else
+	ok "shell log clean"
+fi
+
+exit "$failed"
