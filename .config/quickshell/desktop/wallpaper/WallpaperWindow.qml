@@ -39,7 +39,11 @@ HangingPanel {
 	onDismissed: Panel.wallpaperOpen = false
 	onShownChanged: current = Math.max(0, Math.min(current, shown.length - 1))
 	// rescan, for images deleted, added or moved since the last look
-	Component.onCompleted: Wallpaper.scan()
+	onOpened: {
+		Wallpaper.scan();
+		search.text = "";
+		search.focusField();
+	}
 
 	Row {
 		id: header
@@ -55,7 +59,6 @@ HangingPanel {
 			width: parent.width - scope.width - rotate.width - buttons.width - 24
 			height: 38
 			placeholder: "Search wallpapers"
-			Component.onCompleted: focusField()
 			onAccepted: Wallpaper.set(root.shown[root.current] ?? "")
 			onTextChanged: root.current = 0
 			Keys.onUpPressed: grid.moveCurrentIndexUp()

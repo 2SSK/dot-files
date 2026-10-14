@@ -63,7 +63,7 @@ HangingPanel {
 		event.accepted = true;
 	}
 
-	Component.onCompleted: if (Panel.controlPage === "notifications") Notifications.unread = 0
+	onOpened: if (Panel.controlPage === "notifications") Notifications.unread = 0
 
 	Connections {
 		target: Panel
@@ -224,6 +224,8 @@ HangingPanel {
 
 			width: parent.width
 			height: item?.fill ? Math.max(item.implicitHeight, view.height - 16) : (item?.implicitHeight ?? 0)
+			// made as it opens and gone as it closes: a page's scans and polling run only while it shows
+			active: root.visible
 			sourceComponent: (root.pages.find(p => p.key === Panel.controlPage) ?? root.pages[0]).component
 		}
 	}

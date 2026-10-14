@@ -73,11 +73,12 @@ HangingPanel {
 		prepare();
 		findLater.stop(); // the changed search queued one; prepare() has just run it
 	}
-	Component.onCompleted: {
-		if (mode === "files")
-			search.text = "~/";
+	onOpened: {
+		search.text = mode === "files" ? "~/" : "";
+		current = 0;
 		prepare();
 		findLater.stop();
+		search.focusField();
 	}
 
 	function prepare(): void {
@@ -103,7 +104,6 @@ HangingPanel {
 		width: parent.width - 32
 		height: 42
 		placeholder: ({ apps: "Search apps", emoji: "Search emoji", files: "~/ your files · ~/. your dotfiles · /etc/, /tmp/", themes: "Search themes" })[root.mode]
-		Component.onCompleted: focusField()
 		onTextChanged: {
 			root.current = 0;
 			if (root.mode === "files")

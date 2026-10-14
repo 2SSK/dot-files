@@ -48,6 +48,11 @@ HangingPanel {
 	panelHeight: Panel.sizes.clipboard.height
 	onDismissed: Panel.clipboardOpen = false
 	onEntriesChanged: current = Math.min(current, Math.max(0, entries.length - 1))
+	onOpened: {
+		search.text = "";
+		current = 0;
+		search.focusField();
+	}
 
 
 	Item {
@@ -63,7 +68,6 @@ HangingPanel {
 
 			width: parent.width
 			placeholder: "Search the clipboard"
-			Component.onCompleted: focusField()
 			onAccepted: root.choose(true)
 			// Shift+Enter only copies; Ctrl+N / Ctrl+P move down / up, as in a shell or fzf
 			onKeyPressed: event => {

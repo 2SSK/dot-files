@@ -18,6 +18,7 @@ Scope {
 	property bool visible: true // as a window's: the panels' loaders set it
 	default property alias content: inner.data
 	signal dismissed
+	signal opened // each time it opens: on sway it's made once and kept, so opening work goes here
 	signal keyPressed(var event) // keys nothing inside took; an Escape the panel doesn't take closes it
 
 	readonly property bool wayland: Config.wayland
@@ -48,11 +49,21 @@ Scope {
 		onTriggered: root.takeFocus()
 	}
 
-	Component.onCompleted: {
+	function appear(): void {
 		pinned = focusedScreen;
 		Panel.hangingScreen = pinned.name; // the bar there opens its outline for it
+		inner.forceActiveFocus();
+		opened();
 	}
-	Component.onDestruction: if (Panel.hangingScreen === pinned?.name) Panel.hangingScreen = ""
+
+	function leave(): void {
+		if (Panel.hangingScreen === pinned?.name)
+			Panel.hangingScreen = "";
+	}
+
+	onVisibleChanged: visible ? appear() : leave()
+	Component.onCompleted: if (visible) appear()
+	Component.onDestruction: leave()
 
 	FocusWatch {
 		title: root.title
@@ -160,11 +171,13 @@ Scope {
 		}
 	}
 
-	// Wayland: a layer surface, which takes the keyboard and is placed exactly without window rules
+	// Wayland: a layer surface, which takes the keyboard and is placed exactly without window rules;
+	// made once and then shown and hidden, so opening doesn't build it all again
 	LazyLoader {
-		active: root.wayland && root.visible
+		active: root.wayland
 
 		PanelWindow {
+			visible: root.visible
 			screen: root.screen
 			anchors {
 				top: true

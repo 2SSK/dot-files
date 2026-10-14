@@ -34,7 +34,7 @@ HangingPanel {
 	panelHeight: Panel.sizes.capture.height
 	onDismissed: Panel.captureOpen = false
 	onAskingChanged: monitor = Math.max(0, sortedScreens.findIndex(s => s.name === screen.name))
-	Component.onCompleted: monitor = Math.max(0, sortedScreens.findIndex(s => s.name === screen.name))
+	onOpened: monitor = Math.max(0, sortedScreens.findIndex(s => s.name === screen.name))
 	onKeyPressed: event => {
 		const k = event.key;
 		if (asking) {

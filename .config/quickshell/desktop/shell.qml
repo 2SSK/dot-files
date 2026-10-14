@@ -41,19 +41,21 @@ ShellRoot {
 		Bar {}
 	}
 
+	// The panels: on sway built in the background at startup and then shown and hidden, so opening is
+	// instant; on i3 made for each opening (a window shown again would go through i3's rules again)
 	LazyLoader {
-		active: Panel.controlShown
+		activeAsync: Config.wayland || Panel.controlShown
 
 		ControlCenter {
-			visible: true
+			visible: Panel.controlShown
 		}
 	}
 
 	LazyLoader {
-		active: Panel.clipboardShown
+		activeAsync: Config.wayland || Panel.clipboardShown
 
 		ClipboardWindow {
-			visible: true
+			visible: Panel.clipboardShown
 		}
 	}
 
@@ -80,26 +82,26 @@ ShellRoot {
 	}
 
 	LazyLoader {
-		active: Panel.captureShown
+		activeAsync: Config.wayland || Panel.captureShown
 
 		CaptureWindow {
-			visible: true
+			visible: Panel.captureShown
 		}
 	}
 
 	LazyLoader {
-		active: Panel.launcherShown
+		activeAsync: Config.wayland || Panel.launcherShown
 
 		LauncherWindow {
-			visible: true
+			visible: Panel.launcherShown
 		}
 	}
 
 	LazyLoader {
-		active: Panel.wallpaperShown
+		activeAsync: Config.wayland || Panel.wallpaperShown
 
 		WallpaperWindow {
-			visible: true
+			visible: Panel.wallpaperShown
 		}
 	}
 
