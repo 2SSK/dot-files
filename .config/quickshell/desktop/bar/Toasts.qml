@@ -22,7 +22,9 @@ PopupWindow {
 	anchor.rect.x: bar.width - implicitWidth
 	anchor.rect.y: (Config.position === "top" ? bar.height : 0) - 14 + below
 	implicitWidth: 360 + 2 * pad
-	implicitHeight: Math.max(1, stack.implicitHeight) + 2 * pad
+	// a fixed height, room for the four it keeps: a popup that grows once shown keeps showing its old
+	// frame (a second toast never appeared); the mask lets clicks through around the cards
+	implicitHeight: 640 + 2 * pad
 	// not over the control center's notifications, which lists them anyway
 	visible: focused && Notifications.popups.length > 0 && !Panel.showing("notifications")
 	color: "transparent"
@@ -38,6 +40,15 @@ PopupWindow {
 		y: root.pad
 		spacing: 10
 
+		// the rest glide up into a gap a toast leaves
+		move: Transition {
+			NumberAnimation {
+				properties: "y"
+				duration: Theme.normal
+				easing.type: Theme.curve
+			}
+		}
+
 		Repeater {
 			// a ScriptModel keeps the toasts already up (and their timers) when another arrives
 			model: ScriptModel {
@@ -49,12 +60,39 @@ PopupWindow {
 
 				required property Notification modelData
 				readonly property bool critical: modelData.urgency === NotificationUrgency.Critical
+				// glides in from the right as it arrives, and out before it goes
+				property real shown: 0
+
+				function leave(): void {
+					if (gone.running)
+						return;
+					shown = 0;
+					gone.start();
+				}
 
 				width: card.implicitWidth
 				height: card.implicitHeight
+				opacity: shown
+				Component.onCompleted: shown = 1
+
+				Behavior on shown {
+					NumberAnimation {
+						duration: Theme.normal
+						easing.type: Theme.curve
+					}
+				}
+
+				Timer {
+					id: gone
+
+					interval: Theme.normal
+					onTriggered: Notifications.hide(toast.modelData)
+				}
 
 				Shadow {
 					anchors.fill: card
+					anchors.leftMargin: card.anchors.leftMargin
+					anchors.rightMargin: card.anchors.rightMargin
 					radius: card.radius
 					blur: 22
 					offsetY: 4
@@ -65,9 +103,11 @@ PopupWindow {
 					id: card
 
 					anchors.fill: parent
+					anchors.leftMargin: 24 * (1 - toast.shown)
+					anchors.rightMargin: -24 * (1 - toast.shown)
 					notification: toast.modelData
 					popup: true
-					onFinished: Notifications.hide(toast.modelData)
+					onFinished: toast.leave()
 				}
 
 				Timer {
@@ -76,7 +116,7 @@ PopupWindow {
 
 					interval: given > 0 ? (given < 1000 ? given * 1000 : given) : Config.notifications.timeout
 					running: !toast.critical && toast.modelData.expireTimeout !== 0 && !card.hovered
-					onTriggered: Notifications.hide(toast.modelData)
+					onTriggered: toast.leave()
 				}
 			}
 		}
