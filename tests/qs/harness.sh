@@ -4,7 +4,6 @@
 # Never touches the live shell, its settings or its state. Local tool, like the tests.
 #   harness.sh start | stop | reload | reload-ref <git ref> | ipc <target> <function> [arg]
 set -euo pipefail
-shopt -s extglob nullglob
 T="${XDG_CACHE_HOME:-$HOME/.cache}/qs-test"
 running() { pgrep -f "qs -p $T/cfg$" || true; }
 nested_sock() { ls "$XDG_RUNTIME_DIR"/sway-ipc.*.sock 2>/dev/null | while read -r s; do SWAYSOCK=$s swaymsg -t get_outputs 2>/dev/null | grep -q HEADLESS-1 && echo "$s"; done | head -1; }
@@ -32,7 +31,7 @@ start)
 	chmod +x "$T/run.sh"
 	# no SwayFX effects: blur on a headless output stops drawing after a while (red, then nothing)
 	{ echo "output HEADLESS-1 resolution 1600x1000"; echo "exec $T/run.sh > $T/qs.log 2>&1"; } >"$T/sway.conf"
-	displays() { for d in "$XDG_RUNTIME_DIR"/wayland-+([0-9]); do [[ -S $d ]] && echo "${d##*/}"; done; }
+	displays() { for d in "$XDG_RUNTIME_DIR"/wayland-*; do [[ -S $d && ${d##*/} =~ ^wayland-[0-9]+$ ]] && echo "${d##*/}"; done; }
 	before=$(displays)
 	(env -u WAYLAND_DISPLAY -u SWAYSOCK -u DISPLAY WLR_BACKENDS=headless WLR_LIBINPUT_NO_DEVICES=1 systemd-run --user --scope -q -p MemoryMax=2G -p CPUQuota=200% sway -c "$T/sway.conf" >"$T/sway.log" 2>&1 &)
 	sleep 5
