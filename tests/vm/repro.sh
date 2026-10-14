@@ -32,7 +32,7 @@ for _ in $(seq 120); do
 	sleep 5
 done
 [[ -n $ip ]] || { say "no address after 10 min"; exit 1; }
-in_vm 'cloud-init status --wait >/dev/null 2>&1; true'
+in_vm 'sudo timeout 900 cloud-init status --wait >/dev/null 2>&1; true' # (Fedora: only root may read it)
 say "   up at $ip"
 
 # Arch: this laptop's mirror list (the image's default mirror can be slow enough to stall a run)
