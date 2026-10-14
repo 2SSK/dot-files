@@ -50,6 +50,7 @@ Item {
 				width: parent.width - picker.width - 8
 				placeholder: "Add a task and press Enter"
 				Component.onCompleted: focusField()
+				onVisibleChanged: if (visible) focusField() // each time the page shows (it's kept)
 				onAccepted: text => {
 					Todo.add(text, root.priority);
 					field.text = "";

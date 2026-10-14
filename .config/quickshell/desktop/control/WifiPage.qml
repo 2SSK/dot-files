@@ -39,8 +39,10 @@ Column {
 	spacing: 8
 
 	// scan while open, also on a card that appears or Wi-Fi turned on after it opened
-	onDevicesChanged: scan(Connectivity.wifi)
-	Component.onCompleted: scan(Connectivity.wifi)
+	// scans while it shows (the page is kept, hidden while the panel is closed or another page shows)
+	onVisibleChanged: scan(visible && Connectivity.wifi)
+	onDevicesChanged: scan(visible && Connectivity.wifi)
+	Component.onCompleted: scan(visible && Connectivity.wifi)
 	Component.onDestruction: scan(false)
 
 	Timer {
@@ -54,7 +56,7 @@ Column {
 		target: Connectivity
 
 		function onWifiChanged(): void {
-			root.scan(Connectivity.wifi);
+			root.scan(root.visible && Connectivity.wifi);
 		}
 	}
 
@@ -79,7 +81,7 @@ Column {
 			id: entry
 
 			required property WifiNetwork modelData
-			readonly property int security: modelData.security
+			readonly property int security: modelData?.security
 			readonly property bool open: security === WifiSecurityType.Open || security === WifiSecurityType.Owe
 			// a password is all connectWithPsk takes: WPA/WPA2/WPA3 personal
 			readonly property bool personal: [WifiSecurityType.WpaPsk, WifiSecurityType.Wpa2Psk, WifiSecurityType.Sae].includes(security)
@@ -89,7 +91,7 @@ Column {
 			function join(psk: string): void {
 				root.failed = null;
 				root.asking = null;
-				modelData.connectWithPsk(psk);
+				modelData?.connectWithPsk(psk);
 			}
 
 			width: root.width
@@ -101,7 +103,7 @@ Column {
 				function onConnectionFailed(reason: int): void {
 					if (reason === ConnectionFailReason.NoSecrets && entry.personal) {
 						root.asking = entry.modelData; // no password, or a wrong one: ask
-						root.failed = entry.modelData.known ? { network: entry.modelData, reason: "The saved password didn't work." } : null;
+						root.failed = entry.modelData?.known ? { network: entry.modelData, reason: "The saved password didn't work." } : null;
 					} else {
 						root.failed = { network: entry.modelData, reason: ({
 								[ConnectionFailReason.NoSecrets]: "It needs a login this panel can't give: use nmtui.",
@@ -116,12 +118,12 @@ Column {
 
 			ListRow {
 				// the signal in bars
-				glyph: Icons.g(["wifi-0", "wifi-1", "wifi-2", "wifi"][Math.min(3, Math.floor(entry.modelData.signalStrength * 4))])
-				label: entry.modelData.name
-				detail: entry.modelData.connected ? "Connected" : entry.modelData.stateChanging ? "Connecting…" : entry.modelData.known ? "Saved" : entry.open ? "Open" : entry.personal ? "Secured" : "Enterprise: use nmtui"
-				active: entry.modelData.connected
+				glyph: Icons.g(["wifi-0", "wifi-1", "wifi-2", "wifi"][Math.min(3, Math.floor((entry.modelData?.signalStrength ?? 0) * 4))])
+				label: entry.modelData?.name ?? ""
+				detail: entry.modelData?.connected ? "Connected" : entry.modelData?.stateChanging ? "Connecting…" : entry.modelData?.known ? "Saved" : entry.open ? "Open" : entry.personal ? "Secured" : "Enterprise: use nmtui"
+				active: entry.modelData?.connected ?? false
 				onClicked: {
-					if (entry.modelData.connected || entry.modelData.stateChanging)
+					if (entry.modelData?.connected || entry.modelData?.stateChanging)
 						return;
 					if (entry.asking) {
 						root.asking = null;
@@ -129,7 +131,7 @@ Column {
 					}
 					root.failed = null;
 					root.asking = null;
-					entry.modelData.connect(); // asks for a password only if this fails for want of one
+					entry.modelData?.connect(); // asks for a password only if this fails for want of one
 				}
 
 				Glyph {
@@ -141,15 +143,15 @@ Column {
 				}
 
 				SmallButton {
-					visible: entry.modelData.connected
+					visible: entry.modelData?.connected ?? false
 					text: "Disconnect"
-					onClicked: entry.modelData.disconnect()
+					onClicked: entry.modelData?.disconnect()
 				}
 
 				SmallButton {
-					visible: entry.modelData.known && !entry.modelData.connected
+					visible: (entry.modelData?.known ?? false) && !entry.modelData?.connected
 					text: "Forget"
-					onClicked: entry.modelData.forget()
+					onClicked: entry.modelData?.forget()
 				}
 			}
 
@@ -170,7 +172,7 @@ Column {
 					id: password
 
 					width: parent.width - join.width - 8
-					placeholder: "Password for " + entry.modelData.name
+					placeholder: "Password for " + entry.modelData?.name
 					password: true
 					revealable: true
 					onVisibleChanged: {

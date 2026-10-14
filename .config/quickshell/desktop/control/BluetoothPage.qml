@@ -34,14 +34,16 @@ Column {
 
 	spacing: 8
 
-	Component.onCompleted: scan(Connectivity.bluetooth)
+	// looks while it shows (the page is kept, hidden while the panel is closed or another page shows)
+	onVisibleChanged: scan(visible && Connectivity.bluetooth)
+	Component.onCompleted: scan(visible && Connectivity.bluetooth)
 	Component.onDestruction: scan(false)
 
 	Connections {
 		target: Connectivity
 
 		function onBluetoothChanged(): void {
-			root.scan(Connectivity.bluetooth);
+			root.scan(root.visible && Connectivity.bluetooth);
 		}
 	}
 
@@ -67,22 +69,22 @@ Column {
 		required property BluetoothDevice modelData
 
 		width: root.width
-		glyph: root.glyphOf(modelData.icon)
-		label: modelData.name
-		detail: (modelData.connected ? "Connected" : modelData.pairing ? "Pairing…" : modelData.paired ? "Paired" : "Nearby") + (modelData.batteryAvailable ? ` · ${Math.round(modelData.battery * 100)}%` : "")
-		active: modelData.connected
-		onClicked: modelData.connected ? modelData.disconnect() : modelData.paired ? modelData.connect() : modelData.pair()
+		glyph: root.glyphOf(modelData?.icon ?? "")
+		label: modelData?.name ?? ""
+		detail: (modelData?.connected ? "Connected" : modelData?.pairing ? "Pairing…" : modelData?.paired ? "Paired" : "Nearby") + (modelData?.batteryAvailable ? ` · ${Math.round(modelData?.battery * 100)}%` : "")
+		active: modelData?.connected ?? false
+		onClicked: modelData?.connected ? modelData?.disconnect() : modelData?.paired ? modelData?.connect() : modelData?.pair()
 
 		SmallButton {
-			text: row.modelData.connected ? "Disconnect" : row.modelData.paired ? "Connect" : "Pair"
-			accent: !row.modelData.connected
+			text: row.modelData?.connected ? "Disconnect" : row.modelData?.paired ? "Connect" : "Pair"
+			accent: !row.modelData?.connected
 			onClicked: row.clicked()
 		}
 
 		SmallButton {
-			visible: row.modelData.paired && !row.modelData.connected
+			visible: (row.modelData?.paired ?? false) && !row.modelData?.connected
 			text: "Forget"
-			onClicked: row.modelData.forget()
+			onClicked: row.modelData?.forget()
 		}
 	}
 

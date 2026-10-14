@@ -22,6 +22,9 @@ HangingPanel {
 		{ key: "notes", glyph: Icons.g("notes"), component: notes }
 	]
 
+	readonly property string pageKey: pages.some(p => p.key === Panel.controlPage) ? Panel.controlPage : pages[0].key
+	property Item page: null // the page showing: its title and buttons go in the header
+
 	name: "control center"
 	open: Panel.controlOpen
 	panelWidth: Panel.sizes.control.width
@@ -173,7 +176,7 @@ HangingPanel {
 
 		UiText {
 			anchors.verticalCenter: parent.verticalCenter
-			text: page.item?.title ?? ""
+			text: root.page?.title ?? ""
 			color: Theme.primary
 			font.family: Theme.fontHeading
 			font.pixelSize: Theme.px(18)
@@ -186,7 +189,7 @@ HangingPanel {
 			spacing: 8
 
 			Repeater {
-				model: [...(page.item?.actions ?? []).filter(a => a.show !== false), { glyph: Icons.g("x"), on: false, act: () => Panel.controlOpen = false }]
+				model: [...(root.page?.actions ?? []).filter(a => a.show !== false), { glyph: Icons.g("x"), on: false, act: () => Panel.controlOpen = false }]
 
 				delegate: IconButton {
 					required property var modelData
@@ -214,19 +217,30 @@ HangingPanel {
 		anchors.top: header.bottom
 		anchors.topMargin: 14
 		anchors.bottom: parent.bottom
-		contentHeight: page.height + 16
+		contentHeight: (root.page?.fill ? Math.max(root.page.implicitHeight, view.height - 16) : (root.page?.implicitHeight ?? 0)) + 16
 		clip: true
 		boundsBehavior: Flickable.StopAtBounds
 
-		// a page sizes to its content, or with fill (Notes) takes the whole panel
-		Loader {
-			id: page
+		// Each page made the first time it shows and then kept, so neither opening nor switching builds
+		// one; a page's scans and polling run only while it's visible. It sizes to its content, or with
+		// fill (Notes) takes the whole panel.
+		Repeater {
+			model: root.pages
 
-			width: parent.width
-			height: item?.fill ? Math.max(item.implicitHeight, view.height - 16) : (item?.implicitHeight ?? 0)
-			// made as it opens and gone once it has folded away: a page's scans and polling run only while it shows
-			active: root.progress > 0
-			sourceComponent: (root.pages.find(p => p.key === Panel.controlPage) ?? root.pages[0]).component
+			delegate: Loader {
+				required property var modelData
+				readonly property bool current: modelData.key === root.pageKey
+				property bool used: current
+
+				onCurrentChanged: if (current) used = true
+				onLoaded: if (current) root.page = item
+				onVisibleChanged: if (current && item) root.page = item
+				width: view.width
+				height: item?.fill ? Math.max(item.implicitHeight, view.height - 16) : (item?.implicitHeight ?? 0)
+				active: used
+				visible: current
+				sourceComponent: modelData.component
+			}
 		}
 	}
 

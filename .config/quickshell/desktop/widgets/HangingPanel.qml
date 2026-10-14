@@ -16,8 +16,17 @@ Scope {
 	property int panelWidth: 760
 	property int panelHeight: 640
 	property bool visible: true // as a window's: the panels' loaders set it
-	// how far out of the bar it is, 0 to 1: it unfolds as it opens and folds back as it closes
-	property real progress: open ? 1 : 0
+	// how far out of the bar it is, 0 to 1: it unfolds as it opens and folds back as it closes, from
+	// the moment its window is on screen (mapping it would otherwise take the slide's first frames)
+	property bool ready: false
+	property real progress: open && ready ? 1 : 0
+
+	function track(window: QtObject): void {
+		if (window.backingWindowVisible)
+			Qt.callLater(() => root.ready = true); // a frame after it shows
+		else
+			ready = false;
+	}
 
 	Behavior on progress {
 		NumberAnimation {
@@ -197,6 +206,7 @@ Scope {
 		PanelWindow {
 			visible: root.visible || root.progress > 0 // until it has folded away
 			screen: root.screen
+			onBackingWindowVisibleChanged: root.track(this)
 			anchors {
 				top: true
 				bottom: true
@@ -227,6 +237,7 @@ Scope {
 			maximumSize: Qt.size(root.screen.width, root.screen.height)
 			color: "transparent"
 			onVisibleChanged: if (!visible) root.dismissed()
+			onBackingWindowVisibleChanged: root.track(this)
 
 			Layout {}
 		}
