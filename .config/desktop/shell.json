@@ -22,7 +22,7 @@
             "power"
         ],
         "size": 40,
-        "style": "island"
+        "style": "static"
     },
     "brightness": {
         "step": 5

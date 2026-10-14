@@ -1,34 +1,34 @@
-# feat: ✨ 
-# feat: 🔍 
-# feat: 🔗 
-# feat: 🔒 
+# feat: ✨ Add new functionality
+# feat: 🔍 Add inspection or diagnostic capabilities 
+# feat: 🔗 Add integrations or connections
+# feat: 🔒 Add security-related functionality
 
-# fix: 🐛 
-# fix: 🐞 
-# fix: 🩹 
-# fix: 🚑️ 
+# fix: 🐛 General bug fix
+# fix: 🐞 Alternative for a bug fix
+# fix: 🩹 Small, targeted correction
+# fix: 🚑️ Critical production or emergency fix
 
-# style: 💅 
-# style: 🎨 
-# style: 💄 
+# style: 💅 Formatting or stylistic changes without behavior changes
+# style: 🎨 Improve code structure or visual presentation without changing behavior
+# style: 💄 Cosmetic UI or output changes
 
-# ci: 🦊 
-# ci: 📦 
+# ci: 🦊 CI pipeline configuration, GitHub Actions or GitLab CI
+# ci: 📦 Dependency caching or CI artifact handling
 
-# deploy: 🚀 
-# deploy: 📦 
+# deploy: 🚀 Deployment and release automation
+# deploy: 📦 Packaging or distributing release artifacts
 
-# chore: 🧹 
-# chore: 🔧 
-# chore: ⚙️ 
-# docs: 📜 
+# chore: 🧹 Cleanup and removing unnecessary files
+# chore: 🔧 Configuration and development tooling
+# chore: ⚙️ General project configuration
+# docs: 📜  Documentation changes
 
-# refactor: 🔨 
-# perf: 🚀 
+# refactor: 🔨 Restructure code without changing intended behavior
+# perf: 🚀 Improve spped, memory usage or efficiency
 
-# test: 🚦 
-# debug: 🧪 
+# test: 🚦 Add or update tests
+# debug: 🧪 Add temporary diagnostics or debugging instrumentation
 
-# BREAKING CHANGE: 🚨 
-# BREAKING CHANGE: 💥 
-# BREAKING CHANGE: 💣 
+# BREAKING CHANGE: 🚨 A chane requiring users to adapt
+# BREAKING CHANGE: 💥 Incompatible API or CLI behavior change
+# BREAKING CHANGE: 💣 Another visual marker for a breaking change
