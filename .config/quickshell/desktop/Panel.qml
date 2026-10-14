@@ -26,14 +26,8 @@ Singleton {
 	property bool wallpaperOpen: false
 	property var islands: ({}) // screen name -> the bar's rect on it (screen coordinates from its origin)
 
-	// One panel open at a time. Each window follows *Shown, which trails *Open by an event-loop turn,
-	// so the panel being replaced is gone before the next one takes the keyboard.
+	// One panel open at a time (a panel takes the keyboard only while open, not while it folds away)
 	readonly property var panels: ["control", "clipboard", "capture", "launcher", "wallpaper"]
-	property bool controlShown: false
-	property bool clipboardShown: false
-	property bool captureShown: false
-	property bool launcherShown: false
-	property bool wallpaperShown: false
 
 	// each panel's size, centred under the bar, which opens its outline there (hangingWidth)
 	readonly property var sizes: ({
@@ -55,7 +49,6 @@ Singleton {
 				if (p !== name)
 					root[p + "Open"] = false;
 			});
-		settle.restart();
 	}
 
 	onControlOpenChanged: opened("control")
@@ -64,13 +57,6 @@ Singleton {
 	onLauncherOpenChanged: opened("launcher")
 	onWallpaperOpenChanged: opened("wallpaper")
 	onAuthOpenChanged: opened("auth")
-
-	Timer {
-		id: settle
-
-		interval: 0
-		onTriggered: root.panels.forEach(p => root[p + "Shown"] = root[p + "Open"])
-	}
 
 	// ask is "shot" or "record" to go straight to choosing a screen
 	function openCapture(ask: string): void {

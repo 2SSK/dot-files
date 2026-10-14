@@ -35,13 +35,14 @@ start)
 	{ echo "output HEADLESS-1 resolution 1600x1000"; echo "exec $T/run.sh > $T/qs.log 2>&1"; } >"$T/sway.conf"
 	displays() { for d in "$XDG_RUNTIME_DIR"/wayland-*; do if [[ -S $d && ${d##*/} =~ ^wayland-[0-9]+$ ]]; then echo "${d##*/}"; fi; done; }
 	before=$(displays)
-	(env -u WAYLAND_DISPLAY -u SWAYSOCK -u DISPLAY WLR_BACKENDS=headless WLR_LIBINPUT_NO_DEVICES=1 systemd-run --user --scope -q -p MemoryMax=2G -p CPUQuota=200% sway -c "$T/sway.conf" >"$T/sway.log" 2>&1 &)
+	(env -u WAYLAND_DISPLAY -u SWAYSOCK -u DISPLAY WLR_BACKENDS=headless WLR_LIBINPUT_NO_DEVICES=1 systemd-run --user --scope -q --unit=qs-harness -p MemoryMax=2G -p CPUQuota=200% sway -c "$T/sway.conf" >"$T/sway.log" 2>&1 &)
 	sleep 5
 	comm -13 <(echo "$before" | sort) <(displays | sort) | head -1 >"$T/display"
 	;;
 stop)
 	for p in $(running); do kill "$p"; done
 	for p in $(pgrep -f "sway -c $T/sway.conf" || true); do kill "$p"; done
+	systemctl --user stop qs-harness.scope 2>/dev/null || true # and what D-Bus started for it
 	;;
 reload) rm -rf "$T/cfg" && cp -r ~/dot-files/.config/quickshell/desktop "$T/cfg" && relaunch ;;
 reload-ref)

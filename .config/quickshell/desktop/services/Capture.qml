@@ -22,7 +22,7 @@ Singleton {
 	// screen: a ShellScreen, or null for all of them
 	function take(kind: string, mode: string, screen: var): void {
 		pending = { kind, mode, monitor: screen?.name ?? "", geometry: screen ? `${screen.width}x${screen.height}+${screen.x}+${screen.y}` : "" };
-		later.interval = Panel.captureOpen || Panel.captureShown ? 150 : 40; // the panel off screen first
+		later.interval = Panel.captureOpen ? Theme.normal + 60 : 40; // the panel folded off screen first
 		Panel.captureOpen = false;
 		later.restart();
 	}

@@ -15,7 +15,6 @@ Scope {
 	property bool open
 	property int panelWidth: 760
 	property int panelHeight: 640
-	property bool visible: true // as a window's: the panels' loaders set it
 	// how far out of the bar it is, 0 to 1: it unfolds as it opens and folds back as it closes, from
 	// the moment its window is on screen (mapping it would otherwise take the slide's first frames)
 	property bool ready: false
@@ -79,8 +78,8 @@ Scope {
 			Panel.hangingScreen = "";
 	}
 
-	onVisibleChanged: visible ? appear() : leave()
-	Component.onCompleted: if (visible) appear()
+	onOpenChanged: open ? appear() : leave()
+	Component.onCompleted: if (open) appear()
 	Component.onDestruction: leave()
 
 	FocusWatch {
@@ -204,7 +203,7 @@ Scope {
 		active: root.wayland
 
 		PanelWindow {
-			visible: root.visible || root.progress > 0 // until it has folded away
+			visible: root.open || root.progress > 0 // until it has folded away
 			screen: root.screen
 			onBackingWindowVisibleChanged: root.track(this)
 			anchors {
@@ -215,7 +214,7 @@ Scope {
 			}
 			exclusionMode: ExclusionMode.Ignore
 			WlrLayershell.layer: WlrLayer.Overlay
-			WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
+			WlrLayershell.keyboardFocus: root.open ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None // not while folding
 			WlrLayershell.namespace: "desktop-panel"
 			color: "transparent"
 
@@ -226,7 +225,7 @@ Scope {
 	// X11: a real window, as X11 popups can't take the keyboard; unshaped, so i3's focus-follows-mouse
 	// can't hand the focus back to the window below. look.conf floats it at the screen's corner.
 	LazyLoader {
-		active: !root.wayland && root.visible
+		active: !root.wayland && root.open
 
 		FloatingWindow {
 			title: root.title

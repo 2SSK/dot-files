@@ -17,12 +17,12 @@ import qs
 import qs.services
 
 ShellRoot {
-	// No reload while the screen is locked: a reload with the session lock held crashes Quickshell,
-	// leaving the compositor's red "locker gone" screen. An edit made meanwhile applies after unlocking.
+	// A saved file doesn't reload the running shell (a half-written change once hung it, and a reload
+	// while locked crashes it): desktop-reload checks that the config loads, then restarts the shell
 	Binding {
 		target: Quickshell
 		property: "watchFiles"
-		value: !Lock.locked
+		value: false
 	}
 
 	// services that watch on their own, started with the shell
@@ -44,19 +44,15 @@ ShellRoot {
 	// The panels: on sway built in the background at startup and then shown and hidden, so opening is
 	// instant; on i3 made for each opening (a window shown again would go through i3's rules again)
 	LazyLoader {
-		activeAsync: Config.wayland || Panel.controlShown
+		activeAsync: Config.wayland || Panel.controlOpen
 
-		ControlCenter {
-			visible: Panel.controlShown
-		}
+		ControlCenter {}
 	}
 
 	LazyLoader {
-		activeAsync: Config.wayland || Panel.clipboardShown
+		activeAsync: Config.wayland || Panel.clipboardOpen
 
-		ClipboardWindow {
-			visible: Panel.clipboardShown
-		}
+		ClipboardWindow {}
 	}
 
 	// the lock screen on Wayland (on X11 i3lock locks)
@@ -76,33 +72,26 @@ ShellRoot {
 		active: Panel.authOpen
 
 		AuthWindow {
-			visible: true
 			agent: polkit
 		}
 	}
 
 	LazyLoader {
-		activeAsync: Config.wayland || Panel.captureShown
+		activeAsync: Config.wayland || Panel.captureOpen
 
-		CaptureWindow {
-			visible: Panel.captureShown
-		}
+		CaptureWindow {}
 	}
 
 	LazyLoader {
-		activeAsync: Config.wayland || Panel.launcherShown
+		activeAsync: Config.wayland || Panel.launcherOpen
 
-		LauncherWindow {
-			visible: Panel.launcherShown
-		}
+		LauncherWindow {}
 	}
 
 	LazyLoader {
-		activeAsync: Config.wayland || Panel.wallpaperShown
+		activeAsync: Config.wayland || Panel.wallpaperOpen
 
-		WallpaperWindow {
-			visible: Panel.wallpaperShown
-		}
+		WallpaperWindow {}
 	}
 
 	LazyLoader {

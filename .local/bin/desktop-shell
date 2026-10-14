@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# The desktop shell (Quickshell), as the desktop-shell service runs it. On Wayland whatever the login
+# said: sway started from a console leaves XDG_SESSION_TYPE=tty, and Qt would then pick X11 (through
+# Xwayland), where the shell's panels can't work.
+set -euo pipefail
+[[ -z ${WAYLAND_DISPLAY:-} ]] || export QT_QPA_PLATFORM=wayland
+exec qs -c desktop

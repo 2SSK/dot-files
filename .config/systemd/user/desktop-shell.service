@@ -1,0 +1,14 @@
+# The desktop shell, started by sway (sway/desktop/startup.conf) and started again whenever it stops:
+# a crash costs a second, not the bar. A config that won't load gives up after five tries (and
+# desktop-reload checks one before using it). i3 starts the shell itself (i3/conf.d/autostart.conf).
+[Unit]
+Description=Desktop shell (Quickshell: bar, panels, notifications, lock screen)
+PartOf=graphical-session.target
+After=graphical-session.target
+StartLimitIntervalSec=30
+StartLimitBurst=5
+
+[Service]
+ExecStart=%h/.local/bin/desktop-shell
+Restart=always
+RestartSec=1

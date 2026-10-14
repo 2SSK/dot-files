@@ -12,13 +12,13 @@ ipc() { timeout 3 qs -c desktop ipc call "$@" 2>/dev/null; }
 if pgrep -fx 'qs -c desktop.*' >/dev/null; then
 	ok "shell running"
 else
-	bad "shell not running" "start it: qs -c desktop --no-duplicate --daemonize"
+	bad "shell not running" "systemctl --user restart desktop-shell (i3: qs -c desktop --daemonize)"
 fi
 
 if [[ -n ${WAYLAND_DISPLAY:-} ]]; then
 	state="$(ipc lock state)"
 	if [[ -z $state ]]; then
-		bad "lock: the shell doesn't answer" "restart the shell (qs kill -c desktop, then start it)"
+		bad "lock: the shell doesn't answer" "desktop-reload"
 	elif jq -e '(.curtain or .locked) and (.secure | not)' <<<"$state" >/dev/null; then
 		bad "lock: stuck half-way ($state)" "restart the shell"
 	else

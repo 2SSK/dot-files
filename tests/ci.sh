@@ -5,7 +5,10 @@ set -euo pipefail
 
 if [[ ${CI_SETUP:-1} == 1 ]] && command -v pacman >/dev/null; then
 	pacman -Syu --noconfirm --needed bash bats jq python python-pytest git stow \
-		zsh tmux fzf fd ripgrep imagemagick which diffutils procps-ng xz sudo >/dev/null
+		zsh tmux fzf fd ripgrep imagemagick which diffutils procps-ng xz sudo sway quickshell qt6-wayland \
+		dbus ttf-jetbrains-mono-nerd inter-font libcap >/dev/null
+	# a container can't run a binary with file capabilities, and sway's (cap_sys_nice) isn't needed here
+	setcap -r "$(command -v sway)" 2>/dev/null || true
 	# the static ShellCheck build: Arch's package pulls in a hundred Haskell libraries
 	curl -fsSL https://github.com/koalaman/shellcheck/releases/download/v0.10.0/shellcheck-v0.10.0.linux.x86_64.tar.xz |
 		tar -xJ -C /usr/local/bin --strip-components=1 shellcheck-v0.10.0/shellcheck
@@ -33,3 +36,7 @@ python3 -m pytest -q tests/test_theme_render.py
 
 echo "== bats"
 bats --jobs 1 tests/*.bats
+
+# the shell loads, with no script errors (no GPU here: software rendering)
+echo "== shell"
+WLR_RENDERER=pixman QT_QUICK_BACKEND=software .local/lib/desktop/shell-check.sh
