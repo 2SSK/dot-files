@@ -24,6 +24,7 @@
     { "type": "packages", "key": "󰏗" },
     { "type": "memory", "key": "󰍛", "format": "{used} / {total}" },
     { "type": "uptime", "key": "󰔟" },
+    { "type": "disk", "key": "󰃭", "folders": "/", "format": "{days} days ({create-time:10})" },
     "break",
     { "type": "colors", "symbol": "circle", "paddingLeft": 0 }
   ]
