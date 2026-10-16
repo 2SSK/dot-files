@@ -61,22 +61,33 @@ Column {
 		id: row
 
 		required property BluetoothDevice modelData
+		readonly property string trouble: Connectivity.trouble[modelData?.address ?? ""] ?? ""
+		readonly property bool repairing: Connectivity.repairing !== "" && Connectivity.repairing === modelData?.address
 
 		width: root.width
 		glyph: root.glyphOf(modelData?.icon ?? "")
 		label: modelData?.name ?? ""
-		detail: (modelData?.connected ? "Connected" : modelData?.pairing ? "Pairing…" : modelData?.paired ? "Paired" : "Nearby") + (modelData?.batteryAvailable ? ` · ${Math.round(modelData?.battery * 100)}%` : "")
+		detail: (repairing ? "Pairing again…" : trouble ? trouble : modelData?.connected ? "Connected" : modelData?.pairing ? "Pairing…" : modelData?.state === BluetoothDeviceState.Connecting ? "Connecting…" : modelData?.paired ? "Paired" : "Nearby") + (modelData?.batteryAvailable ? ` · ${Math.round(modelData?.battery * 100)}%` : "")
 		active: modelData?.connected ?? false
-		onClicked: modelData?.connected ? modelData?.disconnect() : modelData?.paired ? modelData?.connect() : modelData?.pair()
+		onClicked: modelData?.connected ? modelData?.disconnect() : modelData?.paired ? Connectivity.connectTo(modelData) : Connectivity.pairWith(modelData)
+
+		// a device in trouble: forgotten and paired again (and connected), the fix for a stale bond
+		SmallButton {
+			visible: row.trouble !== "" && !row.repairing
+			text: "Re-pair"
+			accent: true
+			onClicked: Connectivity.repair(row.modelData)
+		}
 
 		SmallButton {
+			visible: !row.trouble && !row.repairing
 			text: row.modelData?.connected ? "Disconnect" : row.modelData?.paired ? "Connect" : "Pair"
 			accent: !row.modelData?.connected
 			onClicked: row.clicked()
 		}
 
 		SmallButton {
-			visible: (row.modelData?.paired ?? false) && !row.modelData?.connected
+			visible: (row.modelData?.paired ?? false) && !row.modelData?.connected && !row.repairing
 			text: "Forget"
 			onClicked: row.modelData?.forget()
 		}

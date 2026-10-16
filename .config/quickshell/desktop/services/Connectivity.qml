@@ -30,17 +30,83 @@ Singleton {
 			adapter.enabled = !adapter.enabled;
 	}
 
-	// each device: trusted once paired, so it reconnects by itself, and its battery said once when low
+	// What went wrong with a device, by address, for the Bluetooth page to show and offer Re-pair:
+	// "Couldn't connect", "Keeps dropping", "Couldn't pair". A stale bond (the device lost its keys:
+	// reflashed, or its profile cleared) shows as any of them; forgetting and pairing again mends it.
+	property var trouble: ({})
+	property string repairing: "" // the address being re-paired: forgotten, paired again once seen
+	property BluetoothDevice trying: null // the device connecting, given connectTimer to get there
+
+	function setTrouble(address: string, what: string): void {
+		const t = Object.assign({}, trouble);
+		if (what)
+			t[address] = what;
+		else
+			delete t[address];
+		trouble = t;
+	}
+
+	function connectTo(device: BluetoothDevice): void {
+		setTrouble(device.address, "");
+		if (device.paired && !device.trusted)
+			device.trusted = true;
+		trying = device;
+		connectTimer.restart();
+		device.connect();
+	}
+
+	function pairWith(device: BluetoothDevice): void {
+		setTrouble(device.address, "");
+		device.pair();
+	}
+
+	function repair(device: BluetoothDevice): void {
+		setTrouble(device.address, "");
+		repairing = device.address;
+		repairTimer.restart();
+		if (adapter && !adapter.discovering)
+			adapter.discovering = true; // to see it again once forgotten
+		device.forget();
+	}
+
+	Timer {
+		id: connectTimer
+
+		interval: 12000
+		onTriggered: {
+			if (root.trying && !root.trying.connected)
+				root.setTrouble(root.trying.address, "Couldn't connect");
+			root.trying = null;
+		}
+	}
+
+	// pairing again didn't get there: the device still holds the old bond and turns the new one away
+	Timer {
+		id: repairTimer
+
+		interval: 30000
+		onTriggered: {
+			if (!root.repairing)
+				return;
+			root.setTrouble(root.repairing, "Clear its Bluetooth profile, then Pair");
+			root.repairing = "";
+		}
+	}
+
+	// each device: trusted while paired, so it reconnects by itself; its troubles noted; its battery
+	// said once when low
 	Instantiator {
 		model: Bluetooth.devices
 
 		delegate: Connections {
 			required property BluetoothDevice modelData
 			property bool warned: false // until it's charged past 25% again
+			property var drops: [] // when it disconnected lately
 
 			target: modelData
 
-			// and those paired before the shell started (or before this): untrusted, bluez turns their reconnects away
+			// untrusted, bluez turns its reconnects away: so as it pairs, as the shell starts with it
+			// paired, and if anything takes the trust away
 			function trust(): void {
 				if (modelData.paired && !modelData.trusted)
 					modelData.trusted = true;
@@ -48,6 +114,21 @@ Singleton {
 
 			function onPairedChanged(): void {
 				trust();
+				if (modelData.paired)
+					root.setTrouble(modelData.address, "");
+				if (!modelData.paired || modelData.address !== root.repairing)
+					return;
+				root.repairing = "";
+				root.connectTo(modelData);
+			}
+
+			function onTrustedChanged(): void {
+				trust();
+			}
+
+			function onPairingChanged(): void {
+				if (!modelData.pairing && !modelData.paired && modelData.address !== root.repairing)
+					root.setTrouble(modelData.address, "Couldn't pair");
 			}
 
 			// as it changes, as it connects, and as the shell starts with it already low
@@ -66,13 +147,25 @@ Singleton {
 				check();
 			}
 
+			// connected: its trouble is over; three drops in half a minute: it's looping (a stale bond)
 			function onConnectedChanged(): void {
 				check();
+				if (modelData.connected) {
+					root.setTrouble(modelData.address, "");
+					return;
+				}
+				const now = Date.now();
+				drops = [...drops.filter(t => now - t < 30000), now];
+				if (drops.length >= 3)
+					root.setTrouble(modelData.address, "Keeps dropping");
 			}
 
 			Component.onCompleted: {
 				trust();
 				check();
+				// back after Re-pair forgot it: pair again
+				if (modelData.address === root.repairing && !modelData.paired)
+					modelData.pair();
 			}
 		}
 	}

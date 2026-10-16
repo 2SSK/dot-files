@@ -27,7 +27,7 @@ jump to one, in the sidebar's order:
 | System monitor | cpu / mem / temp | CPU, memory and temperature with two minutes of history, disk, uptime, load |
 | Notifications | the bell, `$mod+n` | the history by day, Clear all; Do Not Disturb in the header |
 | Wi-Fi | the Wi-Fi icon | networks by signal: connect (a password for new secured ones), disconnect, forget; scans while open |
-| Bluetooth | the Bluetooth icon | devices: pair, connect, disconnect, forget, battery; the header scans |
+| Bluetooth | the Bluetooth icon | devices: pair, connect, disconnect, forget, battery; the header scans. Paired devices are kept trusted (so they reconnect by themselves); one that can't connect, keeps dropping or can't pair says so and offers Re-pair (forget, pair again, connect). If that fails too, clear the device's own Bluetooth profile (ZMK: `&bt BT_CLR`) and Pair |
 | Todo | the checklist icon, `$mod+Shift+t` | tasks with a priority (H/M/L, a click on it changes it), grouped high to low, done ones last; drag a task (anywhere on it) to reorder it (among another priority's tasks it takes theirs); kept in `~/.local/share/desktop/todo.json` |
 | Notes | the notebook icon, `$mod+Shift+n` | notes of three kinds (text, checklist, code with Copy) with a colour tag; new, pin and delete in the header, search beside the list; kept in `~/.local/share/desktop/notes/` (a private folder) |
 
