@@ -40,9 +40,14 @@ Singleton {
 
 			target: modelData
 
-			function onPairedChanged(): void {
+			// and those paired before the shell started (or before this): untrusted, bluez turns their reconnects away
+			function trust(): void {
 				if (modelData.paired && !modelData.trusted)
 					modelData.trusted = true;
+			}
+
+			function onPairedChanged(): void {
+				trust();
 			}
 
 			// as it changes, as it connects, and as the shell starts with it already low
@@ -65,7 +70,10 @@ Singleton {
 				check();
 			}
 
-			Component.onCompleted: check()
+			Component.onCompleted: {
+				trust();
+				check();
+			}
 		}
 	}
 
