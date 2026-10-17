@@ -404,13 +404,17 @@ sddm_theme() { # the login screen in the desktop theme; theme set keeps its colo
 	put etc/sddm.conf.d/20-desktop-greeter.conf # the battery on the login screen
 }
 
-services() { # what the desktop expects running: the login screen, and Bluetooth and Wi-Fi (the shell's panels)
+services() { # what the desktop expects running: the login screen, Bluetooth and Wi-Fi (the shell's panels), the modules cleanup
 	local lib=$root/usr/lib/systemd/system etc=$root/etc/systemd/system
 	if [[ -f $lib/sddm.service && ! -L $etc/display-manager.service ]]; then
 		sudo systemctl enable sddm.service && changed=1
 	fi
 	if [[ -f $lib/bluetooth.service && ! -L $etc/bluetooth.target.wants/bluetooth.service ]]; then
 		sudo systemctl enable --now bluetooth.service && changed=1
+	fi
+	# kernel-modules-hook's: the old kernel's kept modules cleared at the next boot
+	if [[ -f $lib/linux-modules-cleanup.service && ! -L $etc/basic.target.wants/linux-modules-cleanup.service ]]; then
+		sudo systemctl enable linux-modules-cleanup.service && changed=1
 	fi
 	[[ -f $lib/NetworkManager.service && ! -L $etc/multi-user.target.wants/NetworkManager.service ]] || return 0
 	# two network managers fight over the links: one already here is left alone

@@ -9,6 +9,14 @@ bad() { printf '  \e[31m✗\e[0m %s\n      %s\n' "$1" "$2" && failed=1; }
 age() { ps -o etimes= -p "$1" 2>/dev/null | tr -d ' '; } # seconds a process has run
 ipc() { timeout 3 qs -c desktop ipc call "$@" 2>/dev/null; }
 
+# Arch deletes the running kernel's modules when it upgrades: until a reboot nothing new loads
+# (a Bluetooth keyboard connects but never types: uhid), unless kernel-modules-hook kept them
+if [[ -d ${DESKTOP_MODULES_DIR:-/usr/lib/modules}/$(uname -r) ]]; then
+	ok "kernel modules in place"
+else
+	bad "kernel upgraded: $(uname -r)'s modules are gone (Bluetooth keyboards, USB drives…)" "reboot"
+fi
+
 if pgrep -fx 'qs -c desktop.*' >/dev/null; then
 	ok "shell running"
 else

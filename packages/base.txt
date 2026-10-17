@@ -36,6 +36,9 @@ bluez-utils                 -
 upower                      upower
 polkit                      polkit
 pavucontrol                 pavucontrol
+# a kernel upgrade keeps the running kernel's modules until the reboot (Arch deletes them, and a
+# Bluetooth keyboard needs uhid loaded on connect); Fedora keeps old kernels installed
+kernel-modules-hook         -
 # laptop power (packages/system.sh power) and the login screen (packages/system.sh sddm)
 tlp                         tlp
 tlp-rdw                     tlp-rdw

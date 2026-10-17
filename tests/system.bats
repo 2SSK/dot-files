@@ -510,6 +510,17 @@ subvolume_fakes() { # btrfs makes folders and remembers them as subvolumes; the 
 	[[ $output == *"services: already in place"* ]]
 }
 
+@test "services: kernel-modules-hook's cleanup enabled once (it clears an old kernel's kept modules)" {
+	lib="$SYSTEM_ROOT/usr/lib/systemd/system" etc="$SYSTEM_ROOT/etc/systemd/system"
+	mkdir -p "$lib" && touch "$lib/linux-modules-cleanup.service"
+	run "$SYSTEM" services
+	[ "$status" -eq 0 ]
+	grep -qx 'systemctl enable linux-modules-cleanup.service' "$CALLS"
+	rm "$CALLS" && mkdir -p "$etc/basic.target.wants" && ln -s x "$etc/basic.target.wants/linux-modules-cleanup.service"
+	run "$SYSTEM" services
+	[ ! -e "$CALLS" ]
+}
+
 @test "services: with systemd-networkd running, NetworkManager isn't started beside it" {
 	lib="$SYSTEM_ROOT/usr/lib/systemd/system" etc="$SYSTEM_ROOT/etc/systemd/system"
 	mkdir -p "$lib" "$etc/multi-user.target.wants"
