@@ -54,7 +54,7 @@ done
 
 # QML's own errors (services like pipewire may complain in a headless session: not the config's fault)
 errors="$(sed 's/\x1b\[[0-9;]*m//g' "$w/qs.log" 2>/dev/null |
-	grep -aE 'caused by|TypeError|ReferenceError|is not defined|is not a function|is not a type|Unable to assign|Cannot assign|Cannot read')"
+	grep -aE 'caused by|TypeError|ReferenceError|is not defined|is not a function|is not a type|Unable to assign|Cannot assign|Cannot read|Invalid property assignment|read-only property')"
 if [[ $result == "Configuration Loaded" && -z $errors ]]; then
 	echo "shell-check: loads clean"
 	exit 0

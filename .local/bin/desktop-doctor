@@ -88,7 +88,7 @@ if compgen -G '/sys/class/power_supply/BAT*' >/dev/null; then
 	fi
 fi
 
-errors="$(timeout 5 qs -c desktop log 2>/dev/null | grep -cE 'TypeError|ReferenceError|is not defined|is not a type')"
+errors="$(timeout 5 qs -c desktop log 2>/dev/null | grep -cE 'TypeError|ReferenceError|is not defined|is not a type|Invalid property assignment')"
 if ((errors)); then
 	bad "shell log: $errors script errors since it started" "qs -c desktop log | grep -E 'TypeError|ReferenceError'"
 else
