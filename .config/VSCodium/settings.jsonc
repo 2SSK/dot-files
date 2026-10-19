@@ -119,7 +119,7 @@
 		{ "before": ["leader", "s", "v"], "commands": ["workbench.action.splitEditorRight"] },
 		{ "before": ["leader", "s", "h"], "commands": ["workbench.action.splitEditorDown"] },
 		{ "before": ["leader", "s", "e"], "commands": ["workbench.action.evenEditorWidths"] },
-		{ "before": ["leader", "s", "t"], "commands": ["workbench.action.copyEditorToNewWindow"] },
+		{ "before": ["leader", "s", "t"], "commands": ["workbench.action.files.newUntitledFile"] },
 		{ "before": ["leader", "s", "x"], "commands": ["workbench.action.closeActiveEditor"] },
 		{ "before": ["<C-h>"], "commands": ["workbench.action.focusLeftGroup"] },
 		{ "before": ["<C-j>"], "commands": ["workbench.action.focusBelowGroup"] },
