@@ -6,8 +6,6 @@
 const MONTHS = ["चैत", "बैसाख", "जेठ", "असाढ़", "सावन", "भादो", "कुआर", "कातिक", "अगहन", "पूस", "माघ", "फागुन"];
 const RITUS = ["वसंत", "ग्रीष्म", "वर्षा", "शरद", "हेमंत", "शिशिर"]; // two months each, from चैत
 const SONGS = { 0: "चैता", 4: "कजरी", 5: "कजरी", 7: "छठ के गीत", 11: "फगुआ" };
-const WEEKDAYS = ["रविवार", "सोमवार", "मंगलवार", "बुधवार", "गुरुवार", "शुक्रवार", "शनिवार"];
-const GREGORIAN = ["जनवरी", "फ़रवरी", "मार्च", "अप्रैल", "मई", "जून", "जुलाई", "अगस्त", "सितंबर", "अक्टूबर", "नवंबर", "दिसंबर"];
 
 const SYNODIC = 29.530588853;
 const NEW_MOON = 2451550.09766; // 2000-01-06 18:14 UTC
@@ -38,23 +36,8 @@ function month(date) {
     return jd >= last + SYNODIC / 2 ? amanta(last + SYNODIC) : amanta(last);
 }
 
-function digits(n) {
-    return String(n).replace(/[0-9]/g, d => "०१२३४५६७८९"[d]);
-}
-
 // "कुआर · शरद ऋतु", with the season's songs when it has them: "चैत · वसंत ऋतु · चैता"
 function season(date) {
     const m = month(date);
     return [MONTHS[m], RITUS[Math.floor(m / 2)] + " ऋतु", SONGS[m]].filter(Boolean).join(" · ");
-}
-
-// "सोमवार, २० अक्टूबर"
-function hindiDate(date) {
-    return `${WEEKDAYS[date.getDay()]}, ${digits(date.getDate())} ${GREGORIAN[date.getMonth()]}`;
-}
-
-// राम राम in the morning, का हाल बा? the rest of the day
-function greeting(date) {
-    const h = date.getHours();
-    return h >= 4 && h < 12 ? "राम राम" : "का हाल बा?";
 }
