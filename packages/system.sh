@@ -145,6 +145,7 @@ subvolumes() {
 
 power() { # TLP alone (auto-cpufreq fights it over the CPU), with system/etc/tlp.d's settings
 	put etc/tlp.d/10-desktop.conf
+	put etc/modprobe.d/btusb.conf
 	# the shell's power controls (desktop-power): TLP's three profiles and the charge limit, without
 	# a password; the helper is root's, so the rule can't be pointed at anything else
 	put usr/local/bin/desktop-charge-limit 755
@@ -160,6 +161,12 @@ power() { # TLP alone (auto-cpufreq fights it over the CPU), with system/etc/tlp
 	fi
 	((changed)) || return 0
 	sudo tlp start >/dev/null # the settings now, not at the next plug or boot
+	# and the Bluetooth chip awake now (the module option holds from the next boot)
+	local d
+	for d in "$root"/sys/bus/usb/drivers/btusb/*:*; do
+		[[ -e $d/../power/control ]] && echo on | sudo tee "$d/../power/control" >/dev/null
+	done
+	return 0
 }
 
 lid() { # closing the lid only locks; logind rereads its config on SIGHUP (a restart would end sessions)

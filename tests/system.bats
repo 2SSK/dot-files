@@ -420,8 +420,15 @@ subvolume_fakes() { # btrfs makes folders and remembers them as subvolumes; the 
 	# shellcheck disable=SC2016
 	printf '#!/bin/sh\necho "tlp $*" >>"$CALLS"\n' >"$BATS_TEST_TMPDIR/bin/tlp"
 	chmod +x "$BATS_TEST_TMPDIR"/bin/*
+	# the Bluetooth chip, autosuspending now
+	local bt="$SYSTEM_ROOT/sys/bus/usb/devices/1-10"
+	mkdir -p "$bt/power" "$SYSTEM_ROOT/sys/bus/usb/drivers/btusb" && echo auto >"$bt/power/control"
+	ln -s "$bt/1-10:1.0" "$SYSTEM_ROOT/sys/bus/usb/drivers/btusb/1-10:1.0" && mkdir -p "$bt/1-10:1.0"
 	run "$SYSTEM" power
 	[ "$status" -eq 0 ]
+	# btusb never autosuspends it: from the next boot, and now
+	grep -qx 'options btusb enable_autosuspend=n' "$SYSTEM_ROOT/etc/modprobe.d/btusb.conf"
+	[ "$(cat "$bt/power/control")" = on ]
 	local conf="$SYSTEM_ROOT/etc/tlp.d/10-desktop.conf"
 	# quiet (the power saver, without turbo) on the charger and on battery
 	grep -qx 'TLP_PROFILE_AC=SAV' "$conf"
