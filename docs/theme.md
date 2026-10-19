@@ -51,6 +51,7 @@ Palette values are copied from each project's official ports, with attribution i
 | nvim, vim | Build their colorscheme `desktop` from `palette.json` | nvim live (SIGUSR1); vim within a second |
 | yazi | `~/.config/yazi/` links to the rendered flavor | Next start |
 | rmpc, pspg, opencode | Their rendered configs (`rmpc.ron`; `PSPG_CONF`; `OPENCODE_CONFIG_DIR`) | Next start |
+| VSCodium | The Desktop theme (a local extension whose theme file is the rendered `vscodium/desktop-color-theme.json`) | Next window reload |
 | Login screen (SDDM) | The rendered `sddm-theme.conf`, copied to its shared folder | Next login |
 | Boot menu (GRUB) | The rendered `grub-theme.txt` and a background drawn from the palette, in its theme folder (always the family's dark colours) | Next boot |
 

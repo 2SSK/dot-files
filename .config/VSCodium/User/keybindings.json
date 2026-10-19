@@ -1,0 +1,33 @@
+// VSCodium keys that work everywhere, the editor and the terminal alike:
+//   Ctrl+t        terminal: show or hide it (nvim: Ctrl+t)     Ctrl+b       the sidebar: show or hide
+//   Ctrl+Shift+t  a new terminal                               Ctrl+p       find a file by name
+//   Ctrl+\        split the terminal                           Ctrl+Shift+f search in files
+//   Alt+h / Alt+l the terminal pane to the left / right        Ctrl+Shift+w close this terminal
+// And the nvim way through lists: Ctrl+n/p in pickers and suggestions, j/k and a/A/r/d (new file,
+// new folder, rename, delete) in the file explorer, l opens; Ctrl+h/l back to the editor.
+[
+	{ "key": "ctrl+t", "command": "workbench.action.terminal.toggleTerminal" },
+	{ "key": "ctrl+shift+t", "command": "workbench.action.terminal.new" },
+	{ "key": "ctrl+\\", "command": "workbench.action.terminal.split", "when": "terminalFocus" },
+	{ "key": "ctrl+\\", "command": "workbench.action.terminal.split", "when": "!terminalFocus && terminalIsOpen" },
+	{ "key": "alt+h", "command": "workbench.action.terminal.focusPreviousPane", "when": "terminalFocus" },
+	{ "key": "alt+l", "command": "workbench.action.terminal.focusNextPane", "when": "terminalFocus" },
+	{ "key": "ctrl+shift+w", "command": "workbench.action.terminal.kill", "when": "terminalFocus" },
+	{ "key": "ctrl+h", "command": "workbench.action.focusActiveEditorGroup", "when": "terminalFocus" },
+	{ "key": "ctrl+b", "command": "workbench.action.toggleSidebarVisibility" },
+	{ "key": "ctrl+p", "command": "workbench.action.quickOpen", "when": "!inQuickOpen" },
+	{ "key": "ctrl+shift+f", "command": "workbench.action.findInFiles" },
+
+	{ "key": "ctrl+n", "command": "workbench.action.quickOpenSelectNext", "when": "inQuickOpen" },
+	{ "key": "ctrl+p", "command": "workbench.action.quickOpenSelectPrevious", "when": "inQuickOpen" },
+	{ "key": "ctrl+n", "command": "selectNextSuggestion", "when": "suggestWidgetVisible && textInputFocus" },
+	{ "key": "ctrl+p", "command": "selectPrevSuggestion", "when": "suggestWidgetVisible && textInputFocus" },
+	{ "key": "j", "command": "list.focusDown", "when": "listFocus && !inputFocus" },
+	{ "key": "k", "command": "list.focusUp", "when": "listFocus && !inputFocus" },
+	{ "key": "l", "command": "list.select", "when": "explorerViewletFocus && !inputFocus" },
+	{ "key": "a", "command": "explorer.newFile", "when": "explorerViewletFocus && !inputFocus" },
+	{ "key": "shift+a", "command": "explorer.newFolder", "when": "explorerViewletFocus && !inputFocus" },
+	{ "key": "r", "command": "renameFile", "when": "explorerViewletFocus && !inputFocus" },
+	{ "key": "d", "command": "deleteFile", "when": "explorerViewletFocus && !inputFocus" },
+	{ "key": "ctrl+l", "command": "workbench.action.focusActiveEditorGroup", "when": "sideBarFocus" }
+]

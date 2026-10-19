@@ -1,0 +1,685 @@
+// VSCodium: minimal, the desktop theme's colours (the "Desktop" theme, rendered by `theme`), vim keys
+// that follow ~/.config/nvim (Space leader, jk). Extensions: packages/vscodium.txt (packages/plugins.sh).
+{
+	"workbench.activityBar.location": "hidden",
+	"workbench.sideBar.location": "right",
+	"workbench.layoutControl.enabled": false,
+	"workbench.startupEditor": "none",
+	"workbench.tips.enabled": false,
+	"workbench.editor.enablePreview": false,
+	"workbench.editor.tabSizing": "shrink",
+	"workbench.tree.indent": 12,
+	"workbench.tree.renderIndentGuides": "none",
+	"workbench.tree.enableStickyScroll": false,
+	"window.titleBarStyle": "native",
+	"window.menuBarVisibility": "toggle",
+	"window.restoreWindows": "none",
+	"breadcrumbs.enabled": false,
+	"editor.fontFamily": "JetBrainsMono Nerd Font",
+	"editor.fontSize": 14,
+	"editor.lineHeight": 1.6,
+	"editor.minimap.enabled": false,
+	"editor.stickyScroll.enabled": false,
+	"editor.scrollbar.vertical": "hidden",
+	"editor.scrollbar.horizontal": "hidden",
+	"editor.overviewRulerBorder": false,
+	"editor.hideCursorInOverviewRuler": true,
+	"editor.renderLineHighlight": "line",
+	"editor.guides.indentation": false,
+	"editor.cursorSurroundingLines": 8,
+	"editor.cursorBlinking": "solid",
+	"editor.smoothScrolling": true,
+	"editor.wordWrap": "on",
+	"editor.lineNumbers": "relative",
+	"editor.padding.top": 8,
+	"terminal.integrated.fontFamily": "JetBrainsMono Nerd Font",
+	"terminal.integrated.fontSize": 13,
+	"explorer.compactFolders": false,
+	"explorer.decorations.badges": false,
+	"explorer.confirmDelete": false,
+	"explorer.confirmDragAndDrop": false,
+	"extensions.ignoreRecommendations": true,
+	// editing
+	"editor.tabSize": 2,
+	"editor.linkedEditing": true,
+	"editor.formatOnSave": true,
+	"files.autoSave": "onFocusChange",
+	"files.trimTrailingWhitespace": true,
+	"files.insertFinalNewline": true,
+	"git.autofetch": true,
+	"git.confirmSync": false,
+	"git.openRepositoryInParentFolders": "always",
+	"[javascript][typescript][javascriptreact][typescriptreact][json][css][html][markdown]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[jsonc]": {
+		"editor.defaultFormatter": "vscode.json-language-features"
+	},
+	"[python]": {
+		"editor.defaultFormatter": "detachhead.basedpyright"
+	},
+	"[yaml]": {
+		"editor.defaultFormatter": "redhat.vscode-yaml"
+	},
+	"redhat.telemetry.enabled": false,
+	// vim, as in ~/.vimrc and nvim: Space leader, jk out of insert mode, the system clipboard. Ctrl+b
+	// (sidebar), Ctrl+p (files) and Ctrl+t (terminal) are left to VSCodium (keybindings.json)
+	"vim.leader": "<space>",
+	"vim.useSystemClipboard": true,
+	"vim.hlsearch": true,
+	"vim.incsearch": true,
+	"vim.ignorecase": true,
+	"vim.smartcase": true,
+	"vim.useCtrlKeys": true,
+	"vim.handleKeys": {
+		"<C-b>": false,
+		"<C-p>": false,
+		"<C-t>": false
+	},
+	"vim.smartRelativeLine": true,
+	"vim.highlightedyank.enable": true,
+	"vim.highlightedyank.duration": 150,
+	"vim.timeout": 300,
+	"vim.insertModeKeyBindings": [
+		{
+			"before": [
+				"j",
+				"k"
+			],
+			"after": [
+				"<Esc>"
+			]
+		}
+	],
+	"vim.visualModeKeyBindingsNonRecursive": [
+		{
+			"before": [
+				"p"
+			],
+			"after": [
+				"\"",
+				"_",
+				"d",
+				"P"
+			]
+		},
+		{
+			"before": [
+				"<"
+			],
+			"commands": [
+				"editor.action.outdentLines"
+			]
+		},
+		{
+			"before": [
+				">"
+			],
+			"commands": [
+				"editor.action.indentLines"
+			]
+		},
+		{
+			"before": [
+				"leader",
+				"c",
+				"a"
+			],
+			"commands": [
+				"editor.action.quickFix"
+			]
+		},
+		{
+			"before": [
+				"leader",
+				"c",
+				"f"
+			],
+			"commands": [
+				"editor.action.formatSelection"
+			]
+		}
+	],
+	"vim.normalModeKeyBindingsNonRecursive": [
+		// editing (.vimrc): x doesn't yank, centred jumps, j/k through wrapped lines
+		{
+			"before": [
+				"x"
+			],
+			"after": [
+				"\"",
+				"_",
+				"x"
+			]
+		},
+		{
+			"before": [
+				"n"
+			],
+			"after": [
+				"n",
+				"z",
+				"z",
+				"z",
+				"v"
+			]
+		},
+		{
+			"before": [
+				"N"
+			],
+			"after": [
+				"N",
+				"z",
+				"z",
+				"z",
+				"v"
+			]
+		},
+		{
+			"before": [
+				"<C-d>"
+			],
+			"after": [
+				"<C-d>",
+				"z",
+				"z"
+			]
+		},
+		{
+			"before": [
+				"<C-u>"
+			],
+			"after": [
+				"<C-u>",
+				"z",
+				"z"
+			]
+		},
+		{
+			"before": [
+				"j"
+			],
+			"after": [
+				"g",
+				"j"
+			]
+		},
+		{
+			"before": [
+				"k"
+			],
+			"after": [
+				"g",
+				"k"
+			]
+		},
+		{
+			"before": [
+				"leader",
+				"n",
+				"h"
+			],
+			"commands": [
+				":nohlsearch"
+			]
+		},
+		{
+			"before": [
+				"leader",
+				"l",
+				"w"
+			],
+			"commands": [
+				"editor.action.toggleWordWrap"
+			]
+		},
+		{
+			"before": [
+				"leader",
+				"+"
+			],
+			"after": [
+				"<C-a>"
+			]
+		},
+		{
+			"before": [
+				"leader",
+				"-"
+			],
+			"after": [
+				"<C-x>"
+			]
+		},
+		// save and quit
+		{
+			"before": [
+				"leader",
+				"w"
+			],
+			"commands": [
+				"workbench.action.files.save"
+			]
+		},
+		{
+			"before": [
+				"leader",
+				"s",
+				"n"
+			],
+			"commands": [
+				"workbench.action.files.saveWithoutFormatting"
+			]
+		},
+		{
+			"before": [
+				"leader",
+				"q"
+			],
+			"commands": [
+				"workbench.action.closeActiveEditor"
+			]
+		},
+		{
+			"before": [
+				"leader",
+				"Q"
+			],
+			"commands": [
+				"workbench.action.closeAllEditors"
+			]
+		},
+		// files, search and the sidebar (nvim: snacks picker; .vimrc: Space e)
+		{
+			"before": [
+				"leader",
+				"e"
+			],
+			"commands": [
+				"workbench.action.toggleSidebarVisibility"
+			]
+		},
+		{
+			"before": [
+				"leader",
+				"f",
+				"f"
+			],
+			"commands": [
+				"workbench.action.quickOpen"
+			]
+		},
+		{
+			"before": [
+				"leader",
+				"f",
+				"r"
+			],
+			"commands": [
+				"workbench.action.openRecent"
+			]
+		},
+		{
+			"before": [
+				"leader",
+				"f",
+				"s"
+			],
+			"commands": [
+				"workbench.action.findInFiles"
+			]
+		},
+		{
+			"before": [
+				"leader",
+				"f",
+				"b"
+			],
+			"commands": [
+				"workbench.action.showAllEditors"
+			]
+		},
+		{
+			"before": [
+				"leader",
+				"/"
+			],
+			"commands": [
+				"actions.find"
+			]
+		},
+		// buffers and tabs (editors): Tab/Shift+Tab, H/L
+		{
+			"before": [
+				"<Tab>"
+			],
+			"commands": [
+				"workbench.action.nextEditor"
+			]
+		},
+		{
+			"before": [
+				"<S-Tab>"
+			],
+			"commands": [
+				"workbench.action.previousEditor"
+			]
+		},
+		{
+			"before": [
+				"L"
+			],
+			"commands": [
+				"workbench.action.nextEditor"
+			]
+		},
+		{
+			"before": [
+				"H"
+			],
+			"commands": [
+				"workbench.action.previousEditor"
+			]
+		},
+		{
+			"before": [
+				"leader",
+				"x"
+			],
+			"commands": [
+				"workbench.action.closeActiveEditor"
+			]
+		},
+		{
+			"before": [
+				"leader",
+				"b"
+			],
+			"commands": [
+				"workbench.action.files.newUntitledFile"
+			]
+		},
+		{
+			"before": [
+				"leader",
+				"s",
+				"b"
+			],
+			"commands": [
+				"workbench.action.showAllEditors"
+			]
+		},
+		{
+			"before": [
+				"leader",
+				"t",
+				"o"
+			],
+			"commands": [
+				"workbench.action.files.newUntitledFile"
+			]
+		},
+		{
+			"before": [
+				"leader",
+				"t",
+				"x"
+			],
+			"commands": [
+				"workbench.action.closeActiveEditor"
+			]
+		},
+		{
+			"before": [
+				"leader",
+				"t",
+				"n"
+			],
+			"commands": [
+				"workbench.action.nextEditor"
+			]
+		},
+		{
+			"before": [
+				"leader",
+				"t",
+				"p"
+			],
+			"commands": [
+				"workbench.action.previousEditor"
+			]
+		},
+		// splits: Ctrl+h/j/k/l between them, the arrows resize
+		{
+			"before": [
+				"leader",
+				"s",
+				"v"
+			],
+			"commands": [
+				"workbench.action.splitEditorRight"
+			]
+		},
+		{
+			"before": [
+				"leader",
+				"s",
+				"h"
+			],
+			"commands": [
+				"workbench.action.splitEditorDown"
+			]
+		},
+		{
+			"before": [
+				"leader",
+				"s",
+				"e"
+			],
+			"commands": [
+				"workbench.action.evenEditorWidths"
+			]
+		},
+		{
+			"before": [
+				"leader",
+				"s",
+				"x"
+			],
+			"commands": [
+				"workbench.action.closeEditorsInGroup"
+			]
+		},
+		{
+			"before": [
+				"<C-h>"
+			],
+			"commands": [
+				"workbench.action.focusLeftGroup"
+			]
+		},
+		{
+			"before": [
+				"<C-j>"
+			],
+			"commands": [
+				"workbench.action.focusBelowGroup"
+			]
+		},
+		{
+			"before": [
+				"<C-k>"
+			],
+			"commands": [
+				"workbench.action.focusAboveGroup"
+			]
+		},
+		{
+			"before": [
+				"<C-l>"
+			],
+			"commands": [
+				"workbench.action.focusRightGroup"
+			]
+		},
+		{
+			"before": [
+				"<Up>"
+			],
+			"commands": [
+				"workbench.action.decreaseViewHeight"
+			]
+		},
+		{
+			"before": [
+				"<Down>"
+			],
+			"commands": [
+				"workbench.action.increaseViewHeight"
+			]
+		},
+		{
+			"before": [
+				"<Left>"
+			],
+			"commands": [
+				"workbench.action.decreaseViewWidth"
+			]
+		},
+		{
+			"before": [
+				"<Right>"
+			],
+			"commands": [
+				"workbench.action.increaseViewWidth"
+			]
+		},
+		// code (nvim: LSP)
+		{
+			"before": [
+				"g",
+				"d"
+			],
+			"commands": [
+				"editor.action.revealDefinition"
+			]
+		},
+		{
+			"before": [
+				"g",
+				"r"
+			],
+			"commands": [
+				"editor.action.goToReferences"
+			]
+		},
+		{
+			"before": [
+				"K"
+			],
+			"commands": [
+				"editor.action.showHover"
+			]
+		},
+		{
+			"before": [
+				"]",
+				"d"
+			],
+			"commands": [
+				"editor.action.marker.next"
+			]
+		},
+		{
+			"before": [
+				"[",
+				"d"
+			],
+			"commands": [
+				"editor.action.marker.prev"
+			]
+		},
+		{
+			"before": [
+				"leader",
+				"c",
+				"a"
+			],
+			"commands": [
+				"editor.action.quickFix"
+			]
+		},
+		{
+			"before": [
+				"leader",
+				"c",
+				"r"
+			],
+			"commands": [
+				"editor.action.rename"
+			]
+		},
+		{
+			"before": [
+				"leader",
+				"c",
+				"f"
+			],
+			"commands": [
+				"editor.action.formatDocument"
+			]
+		},
+		{
+			"before": [
+				"leader",
+				"c",
+				"s"
+			],
+			"commands": [
+				"workbench.action.gotoSymbol"
+			]
+		},
+		{
+			"before": [
+				"leader",
+				"x",
+				"x"
+			],
+			"commands": [
+				"workbench.actions.view.problems"
+			]
+		},
+		// git, ui
+		{
+			"before": [
+				"leader",
+				"g",
+				"s"
+			],
+			"commands": [
+				"workbench.view.scm"
+			]
+		},
+		{
+			"before": [
+				"leader",
+				"g",
+				"b"
+			],
+			"commands": [
+				"git.blame.toggleEditorDecoration"
+			]
+		},
+		{
+			"before": [
+				"leader",
+				"u",
+				"z"
+			],
+			"commands": [
+				"workbench.action.toggleZenMode"
+			]
+		}
+	]
+}

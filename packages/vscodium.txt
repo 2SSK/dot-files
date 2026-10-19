@@ -1,0 +1,10 @@
+# VSCodium extensions, from Open VSX, pinned (packages/plugins.sh installs them where codium is).
+# Columns: id  version
+vscodevim.vim                    1.32.4
+esbenp.prettier-vscode           12.4.0
+dbaeumer.vscode-eslint           3.0.34
+golang.go                        0.56.1
+detachhead.basedpyright          1.40.2
+ms-azuretools.vscode-containers  2.4.5
+redhat.vscode-yaml               2.1.2026101708
+llvm-vs-code-extensions.vscode-clangd  0.6.0

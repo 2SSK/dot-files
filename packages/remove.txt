@@ -33,6 +33,9 @@ polkit-gnome
 archlinux-xdg-menu
 eos-settings-i3wm
 
+# VS Code: VSCodium replaced it (the same editor without Microsoft's telemetry and licence)
+visual-studio-code-bin
+
 # Doubles of what stays: nvim (amp), file-roller (xarchiver), gnome-calculator (galculator),
 # snapshot (cheese), mpv, rmpc and Spotify (amberol)
 amp

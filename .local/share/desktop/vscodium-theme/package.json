@@ -1,0 +1,12 @@
+{
+  "name": "desktop-theme",
+  "displayName": "Desktop",
+  "description": "The desktop theme's colours (theme_render.py renders them; packages/plugins.sh installs this).",
+  "publisher": "desktop",
+  "version": "1.0.0",
+  "engines": { "vscode": "^1.70.0" },
+  "categories": ["Themes"],
+  "contributes": {
+    "themes": [{ "label": "Desktop", "uiTheme": "vs-dark", "path": "./themes/desktop-color-theme.json" }]
+  }
+}

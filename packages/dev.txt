@@ -11,3 +11,4 @@ docker-compose              docker-compose
 docker-buildx               docker-buildx
 ninja                       ninja-build
 python-paramiko             python3-paramiko
+aur:vscodium-bin            @vscodium

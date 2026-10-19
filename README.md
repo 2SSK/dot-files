@@ -50,6 +50,7 @@ with [GNU Stow](https://www.gnu.org/software/stow/): `stow .` links, `stow -R .`
 | [desktop-shell](docs/desktop-shell.md) | the bar, panels, keys and settings |
 | [theme](docs/theme.md) | how a theme is rendered and applied |
 | [shell](docs/shell.md) · [tmux](docs/tmux.md) · [nvim](docs/nvim.md) · [git](docs/git.md) | the terminal side |
+| [vscodium](docs/vscodium.md) | the GUI editor: minimal, vim keys, the desktop theme |
 | [ai](docs/ai.md) · [music](docs/music.md) · [postgres](docs/postgres.md) · [vm](docs/vm.md) | tools |
 
 ## License
