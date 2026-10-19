@@ -19,6 +19,7 @@ gpu-screen-recorder         @gpu-screen-recorder
 imagemagick                 ImageMagick
 inter-font                  rsms-inter-fonts
 ttf-jetbrains-mono-nerd     @nerd-font
+noto-fonts                  google-noto-sans-devanagari-fonts
 noto-fonts-emoji            google-noto-color-emoji-fonts
 adw-gtk-theme               adw-gtk3-theme
 matugen                     -

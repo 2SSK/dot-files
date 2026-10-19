@@ -6,7 +6,7 @@ set -euo pipefail
 if [[ ${CI_SETUP:-1} == 1 ]] && command -v pacman >/dev/null; then
 	pacman -Syu --noconfirm --needed bash bats jq python python-pytest git stow \
 		zsh tmux fzf fd ripgrep imagemagick which diffutils procps-ng xz sudo sway quickshell qt6-wayland \
-		dbus ttf-jetbrains-mono-nerd inter-font libcap >/dev/null
+		dbus ttf-jetbrains-mono-nerd inter-font libcap nodejs >/dev/null
 	# a container can't run a binary with file capabilities, and sway's (cap_sys_nice) isn't needed here
 	setcap -r "$(command -v sway)" 2>/dev/null || true
 	# the static ShellCheck build: Arch's package pulls in a hundred Haskell libraries

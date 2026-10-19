@@ -8,6 +8,7 @@ import Quickshell.Wayland
 import qs
 import qs.services
 import qs.widgets
+import "../Panchang.js" as Panchang
 
 // The lock screen on Wayland, on every screen: the wallpaper blurred, a clock and the date, and a
 // password field checked through PAM (lock/pam/lock).
@@ -192,9 +193,19 @@ Scope {
 						font.pixelSize: Theme.px(128)
 					}
 
+					// राम राम in the morning, का हाल बा? after; the date in Hindi, and the month and its
+					// season as Bihar counts them (Panchang.js)
 					UiText {
 						anchors.horizontalCenter: parent.horizontalCenter
-						text: Qt.formatDate(clock.date, "dddd, d MMMM")
+						text: Panchang.greeting(clock.date)
+						color: Qt.alpha(Theme.fg, 0.9)
+						font.pixelSize: Theme.px(30)
+						font.weight: Font.Medium
+					}
+
+					UiText {
+						anchors.horizontalCenter: parent.horizontalCenter
+						text: `${Panchang.hindiDate(clock.date)}  ·  ${Panchang.season(clock.date)}`
 						color: Qt.alpha(Theme.fg, 0.7)
 						font.pixelSize: Theme.px(20)
 					}
