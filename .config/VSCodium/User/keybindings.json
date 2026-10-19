@@ -1,17 +1,21 @@
-// VSCodium keys that work everywhere, the editor and the terminal alike:
-//   Alt+a         terminal: show or hide it                    Ctrl+b       the sidebar: show or hide
-//   Ctrl+Shift+t  a new terminal                               Ctrl+p       find a file by name
-//   Ctrl+\        split the terminal                           Ctrl+Shift+f search in files
-//   Alt+h / Alt+l the terminal pane to the left / right        Ctrl+Shift+w close this terminal
-// And the nvim way through lists: Ctrl+n/p in pickers and suggestions, j/k and a/A/r/d (new file,
-// new folder, rename, delete) in the file explorer, l opens; Ctrl+h/l back to the editor.
+// VSCodium keys that work everywhere, the editor and the terminal alike. The terminal, all on Alt:
+//   Alt+a         show or hide the terminal                    Alt+j / Alt+k  next / previous terminal
+//   Alt+Shift+a   a new terminal                               Alt+h / Alt+l  the split to the left / right
+//   Alt+s         split the terminal                           Alt+e          terminal <-> editor (focus)
+//   Ctrl+Shift+w  close this terminal
+// Ctrl+b the sidebar, Ctrl+p find a file, Ctrl+Shift+f search in files. And the nvim way through
+// lists: Ctrl+n/p in pickers and suggestions, j/k and a/A/r/d (new file, new folder, rename, delete)
+// in the file explorer, l opens; Ctrl+h/l back to the editor.
 [
 	{ "key": "alt+a", "command": "workbench.action.terminal.toggleTerminal" },
-	{ "key": "ctrl+shift+t", "command": "workbench.action.terminal.new" },
-	{ "key": "ctrl+\\", "command": "workbench.action.terminal.split", "when": "terminalFocus" },
-	{ "key": "ctrl+\\", "command": "workbench.action.terminal.split", "when": "!terminalFocus && terminalIsOpen" },
+	{ "key": "alt+shift+a", "command": "workbench.action.terminal.new" },
+	{ "key": "alt+s", "command": "workbench.action.terminal.split" },
+	{ "key": "alt+j", "command": "workbench.action.terminal.focusNext", "when": "terminalFocus" },
+	{ "key": "alt+k", "command": "workbench.action.terminal.focusPrevious", "when": "terminalFocus" },
 	{ "key": "alt+h", "command": "workbench.action.terminal.focusPreviousPane", "when": "terminalFocus" },
 	{ "key": "alt+l", "command": "workbench.action.terminal.focusNextPane", "when": "terminalFocus" },
+	{ "key": "alt+e", "command": "workbench.action.focusActiveEditorGroup", "when": "terminalFocus" },
+	{ "key": "alt+e", "command": "workbench.action.terminal.focus", "when": "!terminalFocus" },
 	{ "key": "ctrl+shift+w", "command": "workbench.action.terminal.kill", "when": "terminalFocus" },
 	{ "key": "ctrl+h", "command": "workbench.action.focusActiveEditorGroup", "when": "terminalFocus" },
 	{ "key": "ctrl+b", "command": "workbench.action.toggleSidebarVisibility" },

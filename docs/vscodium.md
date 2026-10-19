@@ -25,8 +25,10 @@ yanks go to the system clipboard, `x` and a visual `p` don't overwrite what you 
 | Keys | Does |
 |---|---|
 | `Alt+a` | show or hide the terminal (from the editor or the terminal) |
-| `Ctrl+Shift+t` | a new terminal |
-| `Ctrl+\` | split the terminal; `Alt+h` / `Alt+l` move between its panes; `Ctrl+Shift+w` closes one |
+| `Alt+Shift+a` | a new terminal |
+| `Alt+s` | split the terminal; `Alt+h` / `Alt+l` move between its splits |
+| `Alt+j` / `Alt+k` | the next / previous terminal; `Ctrl+Shift+w` closes one |
+| `Alt+e` | focus: the terminal and the editor, back and forth |
 | `Ctrl+b`, `Space e` | show or hide the sidebar |
 | `Ctrl+p`, `Space f f` | find a file by name; `Space f r` recent, `Space f b` open editors |
 | `Ctrl+Shift+f`, `Space f s` | search in files; `Space /` in this file |

@@ -37,6 +37,7 @@
 	"editor.padding.top": 8,
 	"terminal.integrated.fontFamily": "JetBrainsMono Nerd Font",
 	"terminal.integrated.fontSize": 13,
+	"terminal.integrated.commandsToSkipShell": ["workbench.action.terminal.toggleTerminal", "workbench.action.terminal.new", "workbench.action.terminal.split", "workbench.action.terminal.focusNext", "workbench.action.terminal.focusPrevious", "workbench.action.terminal.focusNextPane", "workbench.action.terminal.focusPreviousPane", "workbench.action.focusActiveEditorGroup"],
 	"explorer.compactFolders": false,
 	"explorer.decorations.badges": false,
 	"explorer.confirmDelete": false,
