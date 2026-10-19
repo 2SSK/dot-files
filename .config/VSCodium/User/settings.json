@@ -1,6 +1,7 @@
 // VSCodium: minimal, the desktop theme's colours (the "Desktop" theme, rendered by `theme`), vim keys
 // that follow ~/.config/nvim (Space leader, jk). Extensions: packages/vscodium.txt (packages/plugins.sh).
 {
+	"workbench.colorTheme": "Desktop",
 	"workbench.activityBar.location": "hidden",
 	"workbench.sideBar.location": "right",
 	"workbench.layoutControl.enabled": false,
