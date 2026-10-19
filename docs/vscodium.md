@@ -5,15 +5,16 @@ own RPM repository, `packages/extra/vscodium.sh`). Opt-in with the dev packages 
 
 - **Look:** nothing but the editor. No activity bar, minimap, scrollbars, breadcrumbs or sticky
   scroll; the sidebar on the right, JetBrains Mono, the native title bar.
-- **Colours:** the **Desktop** theme, the desktop theme's palette rendered by `theme` like every
-  other app (`templates/vscodium/desktop-color-theme.json`). After a theme switch, `Space u r`
-  (*Reload Window*) shows it: VSCodium reads a theme's file once and keeps it until a reload
-  (tested: neither the file changing nor switching themes away and back re-reads it).
+- **Colours:** the desktop theme's, live: a theme switch shows at once, no reload. `theme` renders
+  them (`templates/vscodium/colors.json`) and `desktop-vscodium` writes VSCodium's `settings.json`
+  as the repo's base plus those colours, on VSCodium's own Default Dark/Light Modern. (A theme
+  extension can't do this: VSCodium caches its colours across reloads and restarts. Tested.)
 - **Extensions**, pinned from Open VSX in `packages/vscodium.txt` and installed by
   `packages/plugins.sh`: Vim, Prettier, ESLint, Go, basedpyright (Python), Containers (Docker),
   YAML, clangd. Bumping a version there and rerunning `plugins.sh` installs just that one.
-- **Config:** `.config/VSCodium/User/settings.json` and `keybindings.json` (linked by setup; a
-  setting changed in VSCodium's UI lands in the repo's copy).
+- **Config:** settings in `.config/VSCodium/settings.jsonc` (the base: edit this one, then run
+  `desktop-vscodium` or switch the theme), keys in `.config/VSCodium/User/keybindings.json`. A
+  setting changed in VSCodium's own settings screen lasts until the next theme switch.
 
 ## Keys
 
@@ -35,6 +36,8 @@ yanks go to the system clipboard, `x` and a visual `p` don't overwrite what you 
 | `g d`, `g r`, `K` | definition, references, hover; `] d` / `[ d` next / previous problem |
 | `Space c a`, `c r`, `c f`, `c s` | code action, rename, format, symbols |
 | `Space x x` | problems; `Space g s` git, `Space g b` blame, `Space u z` zen mode, `Space u r` reload |
+| `Space n h` | clear the search highlight (vim's and the find widget's) |
+| `Ctrl+w` `v` `s` `h` `j` `k` `l` `w` `q` `o` `=` `_` | vim's window commands: split, move, close, only, even, maximise |
 
 In the file explorer: `j` / `k` move, `l` opens, `a` new file, `A` new folder, `r` rename, `d` delete,
 `Ctrl+l` back to the editor. `Ctrl+n` / `Ctrl+p` move through pickers and suggestions.

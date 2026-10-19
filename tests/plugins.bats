@@ -82,31 +82,29 @@ list() { printf '%s\n' "$@" >"$LIST"; }
 	[ "$status" -eq 0 ]
 }
 
-# a fake codium: what it has installed in $HOME/codium, and the extension folder for the theme's vsix
+# a fake codium: what it has installed in $HOME/codium
 codium_fake() {
 	mkdir -p "$BATS_TEST_TMPDIR/bin"
 	# shellcheck disable=SC2016 # expands when the fake runs
 	printf '%s\n' '#!/bin/sh' 'case $1 in' \
 		'--list-extensions) cat "$HOME/codium" 2>/dev/null ;;' \
-		'--install-extension) echo "install $2" >>"$HOME/calls"; case $2 in' \
-		'  *.vsix) echo desktop.desktop-theme@1.0.0 >>"$HOME/codium"; mkdir -p "$HOME/.vscode-oss/extensions/desktop.desktop-theme-1.0.0-universal/themes" ;;' \
-		'  *) echo "$2" >>"$HOME/codium" ;; esac ;;' \
+		'--install-extension) echo "install $2" >>"$HOME/calls"; echo "$2" >>"$HOME/codium" ;;' \
 		'esac' >"$BATS_TEST_TMPDIR/bin/codium"
 	chmod +x "$BATS_TEST_TMPDIR/bin/codium"
 	export PATH="$BATS_TEST_TMPDIR/bin:$PATH" VSCODIUM_EXTENSIONS="$BATS_TEST_TMPDIR/vscodium.txt"
-	unset XDG_STATE_HOME
+	unset XDG_CONFIG_HOME XDG_STATE_HOME
 	printf '%s\n' "# comment" "vscodevim.vim 1.32.4" "golang.go 0.56.1" >"$VSCODIUM_EXTENSIONS"
 	list "# none"
 }
 
-@test "VSCodium: the pinned extensions and the Desktop theme, its colours the rendered ones" {
+@test "VSCodium: the pinned extensions, then its settings written from the base" {
 	codium_fake
+	mkdir -p "$HOME/.config/VSCodium" && printf '{\n\t"editor.fontSize": 14\n}\n' >"$HOME/.config/VSCodium/settings.jsonc"
 	run "$PLUGINS" "$LIST"
 	[ "$status" -eq 0 ]
 	grep -qx "install vscodevim.vim@1.32.4" "$HOME/calls"
 	grep -qx "install golang.go@0.56.1" "$HOME/calls"
-	grep -q "install .*/desktop-theme.vsix" "$HOME/calls"
-	[ "$(readlink "$HOME/.vscode-oss/extensions/desktop.desktop-theme-1.0.0-universal/themes/desktop-color-theme.json")" = "$HOME/.local/state/desktop/theme/vscodium/desktop-color-theme.json" ]
+	grep -q '"editor.fontSize": 14' "$HOME/.config/VSCodium/User/settings.json"
 }
 
 @test "VSCodium: a second run installs nothing; a version bump installs just that one" {

@@ -59,6 +59,7 @@ firefox-userChrome.css -            firefox
 yazi-flavor.toml yazi/flavors/desktop.yazi/flavor.toml -
 silicon.tmTheme  yazi/flavors/desktop.yazi/tmtheme.xml -
 yazi-theme.toml  yazi/theme.toml    -
+vscodium/colors.json -              desktop-vscodium
 EOF
 }
 

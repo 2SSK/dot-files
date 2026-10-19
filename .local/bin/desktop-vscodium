@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# VSCodium's settings.json: the repo's base (~/.config/VSCodium/settings.jsonc, comments kept) and the
+# desktop theme's colours (the rendered vscodium/colors.json) on VSCodium's own Default Dark/Light
+# Modern. VSCodium watches the file, so a theme switch shows at once (a theme extension's colours
+# wait for a reload, or longer: VSCodium caches them). `theme` runs this on a switch, setup too.
+#   desktop-vscodium
+set -euo pipefail
+
+config="${XDG_CONFIG_HOME:-$HOME/.config}/VSCodium"
+theme="${XDG_STATE_HOME:-$HOME/.local/state}/desktop/theme"
+[[ -f $config/settings.jsonc ]] || exit 0 # VSCodium isn't set up here
+
+python3 - "$config/settings.jsonc" "$theme" "$config/User/settings.json" <<'PY'
+import json, os, sys, tempfile
+base_path, theme, out = sys.argv[1:]
+base = open(base_path).read().rstrip()
+end = base.rfind("}")
+head = base[:end].rstrip()
+if not head.endswith((",", "{")):
+    head += ","
+
+current = dict(line.split("=", 1) for line in open(f"{theme}/current").read().split()) if os.path.exists(f"{theme}/current") else {}
+mode = current.get("mode", "dark")
+added = {"workbench.colorTheme": "Default Light Modern" if mode == "light" else "Default Dark Modern"}
+try:
+    colours = json.load(open(f"{theme}/vscodium/colors.json"))
+    colours.pop("$comment", None)
+    added.update(colours)
+except FileNotFoundError:
+    pass  # no theme rendered yet: VSCodium's own
+
+body = json.dumps(added, indent="\t", ensure_ascii=False)[1:-1].strip("\n")
+text = (f"// Written by desktop-vscodium: {base_path} (edit that) and the desktop theme's colours.\n"
+        f"{head}\n\n\t// the desktop theme's colours ({current.get('family', '?')} {mode})\n{body}\n}}\n")
+if os.path.isfile(out) and not os.path.islink(out) and open(out).read() == text:
+    sys.exit(0)  # unchanged: VSCodium needn't reread it
+os.makedirs(os.path.dirname(out), exist_ok=True)
+fd, tmp = tempfile.mkstemp(dir=os.path.dirname(out), prefix=".settings.")
+with os.fdopen(fd, "w") as f:
+    f.write(text)
+os.replace(tmp, out)  # also replaces an old link to the repo's file
+PY
