@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# The keyboard's backlight (ASUS: white, levels 0-3), through UPower, so no root: F7 (and the
+# keyboard-light keys) step through the levels, off after the brightest, as on Windows.
+#   desktop-kbd-light cycle | up | down | get
+set -euo pipefail
+call() { gdbus call --system --dest org.freedesktop.UPower --object-path /org/freedesktop/UPower/KbdBacklight \
+	--method "org.freedesktop.UPower.KbdBacklight.$1" "${@:2}"; }
+number() { tr -dc '0-9'; } # gdbus prints "(2,)"
+max="$(call GetMaxBrightness | number)"
+now="$(call GetBrightness | number)"
+case ${1:-} in
+cycle) next=$(((now + 1) % (max + 1))) ;;
+up) next=$((now < max ? now + 1 : max)) ;;
+down) next=$((now > 0 ? now - 1 : 0)) ;;
+get) echo "$now/$max" && exit 0 ;;
+*) echo "usage: desktop-kbd-light cycle | up | down | get" >&2 && exit 2 ;;
+esac
+call SetBrightness "$next" >/dev/null
