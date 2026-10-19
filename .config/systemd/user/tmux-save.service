@@ -1,0 +1,7 @@
+# tmux's sessions saved (tmux-save: tmux-resurrect), attached or not; tmux-save.timer runs it.
+[Unit]
+Description=Save tmux sessions
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/tmux-save

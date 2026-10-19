@@ -9,8 +9,7 @@ rest muted) and the host name on the right. Colours come from the desktop theme
 (`~/.local/state/desktop/theme/tmux.conf`), so `theme` recolours a running tmux too.
 
 Plugins are pinned in `packages/plugins.txt` and installed by `setup.sh` into
-`~/.config/tmux/plugins` (no tpm): tmux-resurrect, tmux-continuum, vim-tmux-navigator
-and tmux-sessionx.
+`~/.config/tmux/plugins` (no tpm): tmux-resurrect, vim-tmux-navigator and tmux-sessionx.
 
 ## Keys (after the prefix)
 
@@ -35,8 +34,11 @@ and tmux-sessionx.
 
 ## Sessions
 
-tmux starts in the background when you log in (i3's and sway's autostart), so the saved
-sessions are already there: `tmux attach -t <name>`, or `tmux attach` and the sessionx picker.
-Sessions are saved every 15 minutes and restored when tmux starts (continuum +
-resurrect, including pane contents and nvim sessions). Auto-save only runs when this is
-the only tmux server, so separate environments don't overwrite each other's saves.
+tmux starts in the background when you log in (i3's and sway's autostart run `tmux-save start`),
+its saved sessions restored, so they're already there: `tmux attach -t <name>`, or `tmux attach` and
+the sessionx picker. They're saved every 15 minutes by `tmux-save.timer` (resurrect: windows,
+splits, folders, pane contents, nvim sessions), whether a client is attached or not. A server up
+less than 2 minutes isn't saved, so a fresh one never replaces a good save; and a save cut short (a
+shutdown) that left resurrect's `last` pointing at nothing is repaired before the restore.
+`prefix v` saves now. (No tmux-continuum: it saved only while an attached client's status bar
+redrew, and its save during a shutdown once left nothing to restore.)

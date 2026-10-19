@@ -38,7 +38,7 @@ signals() { cat "$BATS_TEST_TMPDIR/signals"; }
 	[[ $(signals) == *"pkill -USR2 -x foot"* ]]
 	[[ $(signals) == *"pkill -USR2 -x cava"* ]]
 	[[ $(signals) == *"pkill -USR1 -x nvim"* ]]
-	# the whole config, so plugins (continuum hooks status-right) are re-applied after the theme
+	# the whole config, so plugins are re-applied after the theme
 	[[ $(signals) == *"tmux source-file ${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf"* ]]
 	[[ $(signals) != *"xrdb"* ]] # no X display: st is left alone
 }

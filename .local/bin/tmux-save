@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# tmux's sessions, saved and restored by tmux-resurrect, without tmux-continuum: it saved only as an
+# attached client's status bar redrew, so hours of detached work went unsaved, and a save of its cut
+# short by a shutdown left `last` pointing at nothing: nothing came back at login (2026-10-19).
+# Saving is tmux-save.timer's (every 15 minutes, attached or not).
+#   tmux-save           save, if a server has run 2 minutes (a just-started one may not be restored yet)
+#   tmux-save start     no tmux server yet: start one and restore the saved sessions into it (sway's
+#                       and i3's autostart; resurrect drops the empty session 0 it starts with)
+#   tmux-save repair    `last` at a save that isn't there (cut short): back to the newest good one
+set -euo pipefail
+
+dir="$HOME/.tmux/resurrect" # resurrect's own choice: this one if it exists, else the XDG one
+[[ -d $dir ]] || dir="${XDG_DATA_HOME:-$HOME/.local/share}/tmux/resurrect"
+
+resurrect="$HOME/.config/tmux/plugins/tmux-resurrect/scripts"
+
+case ${1:-} in
+start)
+	tmux has-session 2>/dev/null && exit 0 # running: its sessions are the live ones
+	"$0" repair
+	tmux new-session -d
+	[[ -e $dir/last ]] && tmux run-shell "$resurrect/restore.sh"
+	;;
+repair)
+	[[ -d $dir && ! -s $dir/last ]] || exit 0
+	good="$(find "$dir" -maxdepth 1 -name 'tmux_resurrect_*.txt' -size +0 -printf '%T@ %f\n' | sort -rn | head -1 | cut -d' ' -f2)"
+	[[ -n $good ]] && ln -sfn "$good" "$dir/last"
+	;;
+"")
+	tmux has-session 2>/dev/null || exit 0
+	(($(date +%s) - $(tmux display -p '#{start_time}') >= ${TMUX_SAVE_MIN_AGE:-120})) || exit 0
+	tmux run-shell "$resurrect/save.sh quiet"
+	;;
+*) echo "usage: tmux-save [start | repair]" >&2 && exit 2 ;;
+esac

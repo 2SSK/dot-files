@@ -83,7 +83,7 @@ prune_links() {
 enable_services() {
 	local unit units=()
 	systemctl --user show-environment >/dev/null 2>&1 || { warn 'no systemd user session; services not enabled' && return 0; }
-	for unit in mpd.service mpd-mpris.service desktop-wallpaper-next.service; do
+	for unit in mpd.service mpd-mpris.service desktop-wallpaper-next.service tmux-save.timer; do
 		systemctl --user cat "$unit" >/dev/null 2>&1 && units+=("$unit")
 	done
 	((${#units[@]})) || return 0
