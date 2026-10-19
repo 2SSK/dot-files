@@ -63,7 +63,7 @@
 	},
 	"redhat.telemetry.enabled": false,
 	// vim, as in ~/.vimrc and nvim: Space leader, jk out of insert mode, the system clipboard. Ctrl+b
-	// (sidebar), Ctrl+p (files) and Ctrl+t (terminal) are left to VSCodium (keybindings.json)
+	// (sidebar) and Ctrl+p (files) are left to VSCodium (keybindings.json)
 	"vim.leader": "<space>",
 	"vim.useSystemClipboard": true,
 	"vim.hlsearch": true,
@@ -73,8 +73,7 @@
 	"vim.useCtrlKeys": true,
 	"vim.handleKeys": {
 		"<C-b>": false,
-		"<C-p>": false,
-		"<C-t>": false
+		"<C-p>": false
 	},
 	"vim.smartRelativeLine": true,
 	"vim.highlightedyank.enable": true,
@@ -680,6 +679,8 @@
 			"commands": [
 				"workbench.action.toggleZenMode"
 			]
-		}
+		},
+		// a theme switch shows after a reload (VSCodium keeps a theme until then)
+		{ "before": ["leader", "u", "r"], "commands": ["workbench.action.reloadWindow"] }
 	]
 }

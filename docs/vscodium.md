@@ -6,8 +6,9 @@ own RPM repository, `packages/extra/vscodium.sh`). Opt-in with the dev packages 
 - **Look:** nothing but the editor. No activity bar, minimap, scrollbars, breadcrumbs or sticky
   scroll; the sidebar on the right, JetBrains Mono, the native title bar.
 - **Colours:** the **Desktop** theme, the desktop theme's palette rendered by `theme` like every
-  other app (`templates/vscodium/desktop-color-theme.json`). After a theme switch, *Developer:
-  Reload Window* (or reopen VSCodium) shows it: VSCodium can't reload a theme live.
+  other app (`templates/vscodium/desktop-color-theme.json`). After a theme switch, `Space u r`
+  (*Reload Window*) shows it: VSCodium reads a theme's file once and keeps it until a reload
+  (tested: neither the file changing nor switching themes away and back re-reads it).
 - **Extensions**, pinned from Open VSX in `packages/vscodium.txt` and installed by
   `packages/plugins.sh`: Vim, Prettier, ESLint, Go, basedpyright (Python), Containers (Docker),
   YAML, clangd. Bumping a version there and rerunning `plugins.sh` installs just that one.
@@ -22,7 +23,7 @@ yanks go to the system clipboard, `x` and a visual `p` don't overwrite what you 
 
 | Keys | Does |
 |---|---|
-| `Ctrl+t` | show or hide the terminal (from the editor or the terminal) |
+| `Alt+a` | show or hide the terminal (from the editor or the terminal) |
 | `Ctrl+Shift+t` | a new terminal |
 | `Ctrl+\` | split the terminal; `Alt+h` / `Alt+l` move between its panes; `Ctrl+Shift+w` closes one |
 | `Ctrl+b`, `Space e` | show or hide the sidebar |
@@ -33,7 +34,7 @@ yanks go to the system clipboard, `x` and a visual `p` don't overwrite what you 
 | `Space s v` / `Space s h` | split right / down; `Ctrl+h/j/k/l` between splits, the arrows resize |
 | `g d`, `g r`, `K` | definition, references, hover; `] d` / `[ d` next / previous problem |
 | `Space c a`, `c r`, `c f`, `c s` | code action, rename, format, symbols |
-| `Space x x` | problems; `Space g s` git, `Space g b` blame, `Space u z` zen mode |
+| `Space x x` | problems; `Space g s` git, `Space g b` blame, `Space u z` zen mode, `Space u r` reload |
 
 In the file explorer: `j` / `k` move, `l` opens, `a` new file, `A` new folder, `r` rename, `d` delete,
 `Ctrl+l` back to the editor. `Ctrl+n` / `Ctrl+p` move through pickers and suggestions.

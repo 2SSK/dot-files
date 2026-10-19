@@ -1,12 +1,12 @@
 // VSCodium keys that work everywhere, the editor and the terminal alike:
-//   Ctrl+t        terminal: show or hide it (nvim: Ctrl+t)     Ctrl+b       the sidebar: show or hide
+//   Alt+a         terminal: show or hide it                    Ctrl+b       the sidebar: show or hide
 //   Ctrl+Shift+t  a new terminal                               Ctrl+p       find a file by name
 //   Ctrl+\        split the terminal                           Ctrl+Shift+f search in files
 //   Alt+h / Alt+l the terminal pane to the left / right        Ctrl+Shift+w close this terminal
 // And the nvim way through lists: Ctrl+n/p in pickers and suggestions, j/k and a/A/r/d (new file,
 // new folder, rename, delete) in the file explorer, l opens; Ctrl+h/l back to the editor.
 [
-	{ "key": "ctrl+t", "command": "workbench.action.terminal.toggleTerminal" },
+	{ "key": "alt+a", "command": "workbench.action.terminal.toggleTerminal" },
 	{ "key": "ctrl+shift+t", "command": "workbench.action.terminal.new" },
 	{ "key": "ctrl+\\", "command": "workbench.action.terminal.split", "when": "terminalFocus" },
 	{ "key": "ctrl+\\", "command": "workbench.action.terminal.split", "when": "!terminalFocus && terminalIsOpen" },
