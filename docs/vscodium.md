@@ -32,7 +32,8 @@ yanks go to the system clipboard, `x` and a visual `p` don't overwrite what you 
 | `Ctrl+Shift+f`, `Space f s` | search in files; `Space /` in this file |
 | `Tab` / `Shift+Tab`, `H` / `L` | next / previous editor; `Space x` or `Space q` closes it, `Space Q` all |
 | `Space w` | save (`Space s n` without formatting) |
-| `Space s v` / `Space s h` | split right / down; `Ctrl+h/j/k/l` between splits, the arrows resize |
+| `Space s v` / `Space s h` | split vertically (right) / horizontally (below); `Ctrl+h/j/k/l` between splits, the arrows resize |
+| `Space s t` / `Space s x` | the file in a new window / close the file (its split goes with its last file) |
 | `g d`, `g r`, `K` | definition, references, hover; `] d` / `[ d` next / previous problem |
 | `Space c a`, `c r`, `c f`, `c s` | code action, rename, format, symbols |
 | `Space x x` | problems; `Space g s` git, `Space g b` blame, `Space u z` zen mode, `Space u r` reload |
