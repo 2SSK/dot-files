@@ -21,7 +21,7 @@ theme mode toggle                   # dark ⇄ light (also: mode dark|light)
 | rosepine | main | dawn |
 | eink | near-white ink on charcoal | near-black ink on warm paper; for black-and-white wallpapers |
 | kanagawa | wave | lotus |
-| kesari | inspired by Rajput art; a miniature at night: indigo ink, gold leaf, vermilion, peacock | Indian watercolour on handmade paper |
+| everforest | a green, warm, soft forest at dusk (sainnhe's Everforest, Medium) | the same forest in daylight |
 | nord | Polar Night | Snow Storm (Nord colours; Nord ships no light theme) |
 
 Palette values are copied from each project's official ports, with attribution in
