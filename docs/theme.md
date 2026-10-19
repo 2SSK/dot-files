@@ -21,7 +21,7 @@ theme mode toggle                   # dark ⇄ light (also: mode dark|light)
 | rosepine | main | dawn |
 | eink | near-white ink on charcoal | near-black ink on warm paper; for black-and-white wallpapers |
 | kanagawa | wave | lotus |
-| everforest | a green, warm, soft forest at dusk (sainnhe's Everforest, Medium) | the same forest in daylight |
+| dracula | night purples, pinks and cyans (muted text a shade lighter than its comment colour, for contrast) | Alucard, Dracula's official light |
 | nord | Polar Night | Snow Storm (Nord colours; Nord ships no light theme) |
 
 Palette values are copied from each project's official ports, with attribution in
