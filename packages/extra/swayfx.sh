@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # SwayFX. On Arch, built from its AUR recipe against the repo's scenefx. scenefx 0.5 moved from the
 # AUR (scenefx0.5, now deleted) into extra (scenefx), but the recipe still depends on the AUR name,
-# so yay can't resolve it. Once the recipe names scenefx, the rename below changes nothing.
+# so yay can't resolve it. Once the recipe names scenefx, the rename below changes nothing. A swayfx
+# built against scenefx0.5 before the move is rebuilt.
 set -euo pipefail
 
 # shellcheck source-path=SCRIPTDIR source=lib.sh
@@ -14,7 +15,18 @@ if command -v dnf >/dev/null; then
 	log_info installed name=swayfx via=copr
 	exit 0
 fi
-pacman -Qq swayfx >/dev/null 2>&1 && exit 0
+if pacman -Qq swayfx >/dev/null 2>&1; then
+	# built against the AUR's scenefx0.5 (one built before the move), it blocks every upgrade that
+	# brings in the repo's scenefx (the two conflict): rebuilt against scenefx, which goes in first.
+	# Downloaded before anything is removed, then swapped for scenefx0.5 in place: the same library
+	# (libscenefx-0.5.so), so the running swayfx keeps working and a login never finds it missing.
+	pacman -Qi swayfx | grep -qw 'scenefx0\.5' || exit 0
+	sudo pacman -Sw --noconfirm scenefx
+	scenefx="$(pacman -Sp scenefx)"
+	sudo pacman -Rdd --noconfirm scenefx0.5
+	sudo pacman -U --noconfirm "${scenefx#file://}"
+	log_info swapped from=scenefx0.5 to=scenefx
+fi
 
 sudo pacman -S --needed --noconfirm base-devel git scenefx
 recipe="$tmp/swayfx"
