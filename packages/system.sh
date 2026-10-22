@@ -75,7 +75,8 @@ timeshift_schedule() {
 	local conf="$root/etc/timeshift/timeshift.json" tmp
 	[[ -f $conf ]] || die timeshift_not_set_up msg='run timeshift once to choose the disk, then this again'
 	local want='.schedule_daily = "true" | .count_daily = "3" | .schedule_weekly = "true" | .count_weekly = "1"
-		| .schedule_hourly = "false" | .schedule_boot = "false" | .schedule_monthly = "false"'
+		| .schedule_hourly = "false" | .schedule_boot = "false" | .schedule_monthly = "false"
+		| .btrfs_use_qgroup = "false"'
 	# compared by value: timeshift rewrites the file in its own layout
 	jq -e "($want) == ." "$conf" >/dev/null && return 0
 	tmp="$(mktemp)"
@@ -86,9 +87,21 @@ timeshift_schedule() {
 	changed=1
 }
 
+# btrfs quotas (qgroups) off: Timeshift turns them on to show snapshot sizes, but then deleting a
+# snapshot can leave the accounting inconsistent, and the whole disk is rescanned while every write
+# stalls (shells and nvim froze for minutes after each daily snapshot). Turned back on with
+# `btrfs quota enable /` should sizes be wanted; Timeshift itself works without them.
+quota_off() {
+	compgen -G "$root/sys/fs/btrfs/*/qgroups" >/dev/null || return 0
+	sudo btrfs quota disable "$root/"
+	log_info quota_off msg='btrfs quotas disabled'
+	changed=1
+}
+
 timeshift() {
 	timeshift_list
 	timeshift_schedule
+	quota_off
 	put etc/timeshift-autosnap.conf
 }
 

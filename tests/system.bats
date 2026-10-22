@@ -325,6 +325,20 @@ timeshift_conf() { # a timeshift.json as timeshift writes it: daily, 5 kept
 	[[ $output == *"already in place"* ]]
 }
 
+@test "timeshift: btrfs quotas off, and Timeshift told not to turn them back on" {
+	timeshift_conf
+	mkdir -p "$SYSTEM_ROOT/sys/fs/btrfs/e408de8b/qgroups" # quotas on
+	# shellcheck disable=SC2016 # expands when the fake runs
+	printf '#!/bin/sh\necho "btrfs $*" >>"$CALLS"\n' >"$BATS_TEST_TMPDIR/bin/btrfs" && chmod +x "$BATS_TEST_TMPDIR/bin/btrfs"
+	run "$SYSTEM" timeshift
+	[ "$status" -eq 0 ]
+	grep -qx "btrfs quota disable $SYSTEM_ROOT/" "$CALLS"
+	[ "$(jq -r .btrfs_use_qgroup "$SYSTEM_ROOT/etc/timeshift/timeshift.json")" = false ]
+	rm -r "$SYSTEM_ROOT/sys/fs/btrfs/e408de8b/qgroups" "$CALLS" # off now
+	run "$SYSTEM" timeshift
+	! grep -q "btrfs quota" "$CALLS" 2>/dev/null
+}
+
 @test "timeshift: keeps 3 daily and 1 weekly, nothing hourly, the rest of its config as it was" {
 	timeshift_conf
 	run "$SYSTEM" timeshift
