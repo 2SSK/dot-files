@@ -231,8 +231,10 @@ password field; Escape or Cancel declines, a wrong password shakes it and asks a
 | `left`, `center`, `right` | widgets: `launcher`, `workspaces`, `clock`, `stats`, `volume`, `brightness`, `battery`, `tray`, `recorder`, `notifications`, `scratchpad`, `controls`, `wifi`, `bluetooth`, `tools` (clipboard, todo, notes), `clipboard`, `notes`, `todo`, `power`; with `capsules` each sits in a capsule |
 
 Workspaces are dots: the ones with windows and the one you're on (i3 and sway drop empty ones), the
-current one a wide pill. After them, the scratchpad's window count while it holds any; a click brings
-one up.
+current one a wide pill. After them, the scratchpad's window count while it holds any; a click shows or
+hides it. The scratchpad is one floating workspace (`desktop-scratch`): `$mod+Shift+Return` adds the
+window to a tabbed, centred group, `$mod+minus` shows or hides the whole group, and inside it the usual
+keys tab, split and focus.
 Hidden with `$mod+Shift+b`, the bar comes back over the windows while the pointer is at its edge.
 
 ## Keys (i3)

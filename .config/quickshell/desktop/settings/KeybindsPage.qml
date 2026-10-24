@@ -83,6 +83,15 @@ Column {
 		const i3 = { "reload": "Reload i3's config", "restart": "Restart i3 in place", "exit": "Log out" };
 		if (i3[cmd])
 			return { group: "i3", label: i3[cmd] };
+		const tools = {
+			"desktop-scratch add": ["Windows", "Add the window to the scratchpad (one floating workspace)"],
+			"desktop-scratch toggle": ["Windows", "Show or hide the scratchpad"],
+			"desktop-kbd-light cycle": ["Shell", "Keyboard backlight: off, low, mid, high"],
+			"desktop-kbd-light up": ["Shell", "Keyboard backlight up"],
+			"desktop-kbd-light down": ["Shell", "Keyboard backlight down"]
+		};
+		if ((m = cmd.match(/^exec\s+(?:--no-startup-id\s+)?(desktop-(?:scratch|kbd-light) \w+)$/)) && tools[m[1]])
+			return { group: tools[m[1]][0], label: tools[m[1]][1] };
 		if (/^exec\s+(?:--no-startup-id\s+)?desktop-capture shot region$/.test(cmd))
 			return { group: "Shell", label: "Screenshot a region (panels stay open)" };
 		if ((m = cmd.match(/^exec\s+(?:--no-startup-id\s+)?(.*)$/)))

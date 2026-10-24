@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# The scratchpad as one floating workspace (after isamert.net's "A more intuitive sway scratchpad"):
+# windows added to it gather in one floating, tabbed container in the middle of the screen, shown and
+# hidden together; inside it the usual keys tab, split and focus. A window leaves it as from any
+# workspace ($mod+Shift+<n>). Sway can't add a window to a hidden container, so the group comes out
+# for a moment as one joins.
+#   desktop-scratch add      the focused window into the group (made around it when there's none)
+#   desktop-scratch toggle   show or hide the group (no group yet: the scratchpad as before)
+set -euo pipefail
+
+msg=i3-msg
+[[ -n ${SWAYSOCK:-} ]] && msg=swaymsg
+group='[con_mark="^_scratch_workspace$"]'
+incoming='[con_mark="^_scratch_incoming$"]'
+
+has_group() { "$msg" -t get_marks | grep -q '"_scratch_workspace"'; }
+# hidden: inside the scratchpad's own workspace (not out on screen)
+hidden() { "$msg" -t get_tree | jq -e '.. | objects | select(.name? == "__i3_scratch") | .. | objects | select((.marks? // []) | index("_scratch_workspace"))' >/dev/null; }
+
+case ${1:-} in
+add)
+	if has_group; then
+		was_hidden=0
+		hidden && was_hidden=1
+		"$msg" -q "fullscreen disable; floating disable; mark --add _scratch_incoming"
+		if ((was_hidden)); then # out for a moment: only then can it take one
+			"$msg" -q "$group scratchpad show"
+		fi
+		"$msg" -q "$incoming move container to mark _scratch_workspace; $incoming unmark _scratch_incoming"
+		if ((was_hidden)); then # and back as it was: shown stays shown
+			"$msg" -q "$group move scratchpad"
+		fi
+	else
+		"$msg" -q "fullscreen disable; floating enable; split h; layout tabbed; focus parent; mark --add _scratch_workspace"
+		"$msg" -q "$group resize set width 80 ppt height 75 ppt; $group move position center; $group move scratchpad"
+	fi
+	;;
+toggle)
+	if has_group; then
+		"$msg" -q "$group scratchpad show"
+	else
+		"$msg" -q "scratchpad show"
+	fi
+	;;
+*)
+	echo "usage: desktop-scratch add | toggle" >&2
+	exit 2
+	;;
+esac

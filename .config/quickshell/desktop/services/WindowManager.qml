@@ -27,8 +27,9 @@ Singleton {
 		command(`workspace number ${num}`);
 	}
 
+	// the floating group (desktop-scratch), else the scratchpad as sway and i3 have it
 	function showScratchpad(): void {
-		Quickshell.execDetached([msg, "-q", "scratchpad show"]);
+		Quickshell.execDetached(["desktop-scratch", "toggle"]);
 	}
 
 	Process {
@@ -140,14 +141,18 @@ Singleton {
 		stdout: StdioCollector {
 			onStreamFinished: {
 				let total = 0, shown = 0;
-				// i3 marks the floating container around a scratchpad window, not the window itself
+				// i3 marks the floating container around a scratchpad window, not the window itself; the
+				// floating group (desktop-scratch) counts as the windows in it
+				const windows = node => (node.nodes ?? []).length + (node.floating_nodes ?? []).length === 0 ? 1
+					: [...(node.nodes ?? []), ...(node.floating_nodes ?? [])].reduce((n, c) => n + windows(c), 0);
 				const walk = (node, hidden) => {
 					if (node.name === "__i3_scratch")
 						hidden = true;
 					if (node.scratchpad_state && node.scratchpad_state !== "none") {
-						total++;
+						const n = (node.marks ?? []).includes("_scratch_workspace") ? windows(node) : 1;
+						total += n;
 						if (!hidden)
-							shown++;
+							shown += n;
 						return;
 					}
 					for (const child of [...(node.nodes ?? []), ...(node.floating_nodes ?? [])])
