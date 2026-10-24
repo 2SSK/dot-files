@@ -9,7 +9,11 @@ setup() {
 	# shellcheck disable=SC2016 # expands when the fake runs
 	printf '%s\n' '#!/bin/sh' 'case "$1 $2" in' \
 		'"-t get_marks") [ "$GROUP" = none ] && echo "[]" || echo "[\"_scratch_workspace\"]" ;;' \
-		'"-t get_tree") if [ "$GROUP" = hidden ]; then echo "{\"name\":\"__i3_scratch\",\"floating_nodes\":[{\"marks\":[\"_scratch_workspace\"]}]}"; else echo "{\"nodes\":[{\"marks\":[\"_scratch_workspace\"]}]}"; fi ;;' \
+		'"-t get_tree") case "$GROUP" in' \
+		'  hidden) echo "{\"name\":\"__i3_scratch\",\"floating_nodes\":[{\"type\":\"floating_con\",\"marks\":[\"_scratch_workspace\"]}]}" ;;' \
+		'  inside) echo "{\"nodes\":[{\"type\":\"floating_con\",\"marks\":[\"_scratch_workspace\"],\"nodes\":[{\"type\":\"con\",\"focused\":true}]}]}" ;;' \
+		'  tiled) echo "{\"nodes\":[{\"type\":\"con\",\"marks\":[\"_scratch_workspace\"],\"nodes\":[{\"type\":\"con\",\"id\":7}]}]}" ;;' \
+		'  *) echo "{\"nodes\":[{\"type\":\"floating_con\",\"marks\":[\"_scratch_workspace\"]}]}" ;; esac ;;' \
 		'*) shift; echo "$*" >>"$CALLS" ;;' 'esac' >"$bin/swaymsg"
 	chmod +x "$bin/swaymsg"
 	export PATH="$bin:$PATH"
@@ -43,4 +47,18 @@ setup() {
 	rm "$CALLS"
 	GROUP=none run "$SCRATCH" toggle
 	[ "$(cat "$CALLS")" = "scratchpad show" ]
+}
+
+@test "pressed on a window already in the group: the group goes away, as the scratchpad key did" {
+	GROUP=inside run "$SCRATCH" add
+	[ "$status" -eq 0 ]
+	[ "$(cat "$CALLS")" = '[con_mark="^_scratch_workspace$"] move scratchpad' ]
+}
+
+@test "a group that ended up tiled is floated again (tabbed, centred) before anything else" {
+	GROUP=tiled run "$SCRATCH" toggle
+	[ "$status" -eq 0 ]
+	grep -q '\[con_mark="^_scratch_workspace\$"\] floating enable' "$CALLS"
+	grep -q '\[con_id=7\] layout tabbed' "$CALLS"
+	[ "$(grep -n 'floating enable' "$CALLS" | cut -d: -f1)" -lt "$(grep -n 'scratchpad show' "$CALLS" | cut -d: -f1)" ]
 }

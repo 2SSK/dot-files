@@ -4,7 +4,8 @@
 # hidden together; inside it the usual keys tab, split and focus. A window leaves it as from any
 # workspace ($mod+Shift+<n>). Sway can't add a window to a hidden container, so the group comes out
 # for a moment as one joins.
-#   desktop-scratch add      the focused window into the group (made around it when there's none)
+#   desktop-scratch add      the focused window into the group (made around it when there's none);
+#                            on one of the group's own windows, the group goes away
 #   desktop-scratch toggle   show or hide the group (no group yet: the scratchpad as before)
 set -euo pipefail
 
@@ -16,17 +17,33 @@ incoming='[con_mark="^_scratch_incoming$"]'
 has_group() { "$msg" -t get_marks | grep -q '"_scratch_workspace"'; }
 # hidden: inside the scratchpad's own workspace (not out on screen)
 hidden() { "$msg" -t get_tree | jq -e '.. | objects | select(.name? == "__i3_scratch") | .. | objects | select((.marks? // []) | index("_scratch_workspace"))' >/dev/null; }
+# the focused window is one of the group's
+inside() { "$msg" -t get_tree | jq -e '.. | objects | select((.marks? // []) | index("_scratch_workspace")) | .. | objects | select(.focused? == true)' >/dev/null; }
+# the group, floating and back in the scratchpad should it have been tiled (floating disable on one
+# of its windows takes the whole group down with it, and out of the scratchpad)
+heal() {
+	"$msg" -t get_tree | jq -e '.. | objects | select((.marks? // []) | index("_scratch_workspace")) | select(.type != "floating_con")' >/dev/null || return 0
+	local child
+	child="$("$msg" -t get_tree | jq -r 'first(.. | objects | select((.marks? // []) | index("_scratch_workspace")) | .nodes[0].id // empty)')"
+	"$msg" -q "$group floating enable"
+	# layout aimed at a window sets its container's (aimed at the container itself, it may not take)
+	[[ -z $child ]] || "$msg" -q "[con_id=$child] layout tabbed"
+	"$msg" -q "$group resize set width 80 ppt height 75 ppt; $group move position center; $group move scratchpad"
+}
 
 case ${1:-} in
 add)
-	if has_group; then
+	has_group && heal
+	if has_group && inside; then # its own key on one of its windows: put the group away, as ever
+		"$msg" -q "$group move scratchpad"
+	elif has_group; then
 		was_hidden=0
 		hidden && was_hidden=1
 		"$msg" -q "fullscreen disable; floating disable; mark --add _scratch_incoming"
 		if ((was_hidden)); then # out for a moment: only then can it take one
 			"$msg" -q "$group scratchpad show"
 		fi
-		"$msg" -q "$incoming move container to mark _scratch_workspace; $incoming unmark _scratch_incoming"
+		"$msg" -q "$incoming move container to mark _scratch_workspace; $incoming layout tabbed; $incoming unmark _scratch_incoming"
 		if ((was_hidden)); then # and back as it was: shown stays shown
 			"$msg" -q "$group move scratchpad"
 		fi
@@ -37,6 +54,7 @@ add)
 	;;
 toggle)
 	if has_group; then
+		heal
 		"$msg" -q "$group scratchpad show"
 	else
 		"$msg" -q "scratchpad show"
