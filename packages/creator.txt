@@ -1,0 +1,10 @@
+# YouTube and recording (opt-in: install.sh creator). Columns: arch  fedora (format: see base.txt)
+# OBS records and streams (scenes, webcam, mic filters); gpu-screen-recorder (base) stays for quick clips
+obs-studio                  obs-studio
+# editing: LosslessCut trims without re-encoding, Kdenlive for full edits
+aur:losslesscut-bin         -
+kdenlive                    kdenlive
+# a clean mic (noise suppression), and the voiceover and captions tools (voiceover, captions)
+easyeffects                 easyeffects
+@piper                      @piper
+@whisper                    @whisper

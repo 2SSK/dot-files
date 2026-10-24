@@ -52,6 +52,7 @@ with [GNU Stow](https://www.gnu.org/software/stow/): `stow .` links, `stow -R .`
 | [shell](docs/shell.md) · [tmux](docs/tmux.md) · [nvim](docs/nvim.md) · [git](docs/git.md) | the terminal side |
 | [vscodium](docs/vscodium.md) | the GUI editor: minimal, vim keys, the desktop theme |
 | [ai](docs/ai.md) · [music](docs/music.md) · [postgres](docs/postgres.md) · [vm](docs/vm.md) | tools |
+| [youtube](docs/youtube.md) | recording, editing, voiceover and captions (the creator layer) |
 
 ## License
 

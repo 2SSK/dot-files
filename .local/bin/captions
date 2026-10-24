@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Subtitles for a video or audio file, offline (Whisper via whisper-ctranslate2): <file>.srt beside
+# it, for YouTube's captions or burning into Shorts. The model is downloaded the first time.
+#   captions <file> [--hindi | --lang CODE] [--model tiny|base|small|medium]   (default: auto, small)
+set -euo pipefail
+lang=auto model=small file=""
+while (($#)); do
+	case $1 in
+	--hindi) lang=hi ;;
+	--lang) lang=${2:?language code} && shift ;;
+	--model) model=${2:?model} && shift ;;
+	-h | --help) sed -n '2,4p' "$0" | sed 's/^# \{0,1\}//' && exit 0 ;;
+	*) file=$1 ;;
+	esac
+	shift
+done
+[[ -f $file ]] || { echo "captions: no file '$file' (captions --help)" >&2 && exit 2; }
+# on the CPU: CUDA isn't installed, and the NVIDIA GPU stays asleep
+opts=(--model "$model" --device cpu --compute_type int8 --output_format srt --output_dir "$(dirname "$file")" --vad_filter True)
+[[ $lang == auto ]] || opts+=(--language "$lang")
+srt="${file%.*}.srt"
+rm -f "$srt"
+whisper-ctranslate2 "${opts[@]}" "$file" >/dev/null
+[[ -s $srt ]] || { echo "captions: no subtitles written (see above)" >&2 && exit 1; }
+echo "$srt"

@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# A voiceover from text, offline (Piper's neural voices): for videos without talking. The voice is
+# downloaded the first time it's used; the result is levelled for YouTube (-16 LUFS).
+#   voiceover <script.txt> [out.wav]     default out: audio/voiceover.wav beside a yt-new project, else <script>.wav
+#     --hindi                hi_IN-rohan-medium instead of en_US-ryan-high
+#     --voice NAME           any Piper voice (https://rhasspy.github.io/piper-samples)
+#     --speed N              1 normal, 1.2 faster, 0.9 slower
+set -euo pipefail
+voice=en_US-ryan-high speed=1 args=()
+while (($#)); do
+	case $1 in
+	--hindi) voice=hi_IN-rohan-medium ;;
+	--voice) voice=${2:?voice name} && shift ;;
+	--speed) speed=${2:?speed} && shift ;;
+	-h | --help) sed -n '2,8p' "$0" | sed 's/^# \{0,1\}//' && exit 0 ;;
+	*) args+=("$1") ;;
+	esac
+	shift
+done
+text=${args[0]:-}
+[[ -f $text ]] || { echo "voiceover: no script file '$text' (voiceover --help)" >&2 && exit 2; }
+if [[ -n ${args[1]:-} ]]; then
+	out=${args[1]}
+elif [[ -d $(dirname "$text")/audio ]]; then
+	out="$(dirname "$text")/audio/voiceover.wav"
+else
+	out="${text%.*}.wav"
+fi
+voices="${XDG_DATA_HOME:-$HOME/.local/share}/piper/voices"
+python="${PIPER_PYTHON:-${XDG_DATA_HOME:-$HOME/.local/share}/uv/tools/piper-tts/bin/python}"
+if [[ ! -f $voices/$voice.onnx ]]; then
+	echo "voiceover: downloading the voice $voice (once)…" >&2
+	mkdir -p "$voices"
+	"$python" -m piper.download_voices --data-dir "$voices" "$voice" >&2
+fi
+raw="$(mktemp --suffix=.wav)"
+trap 'rm -f "$raw"' EXIT
+length=$(awk -v s="$speed" 'BEGIN { printf "%.3f", 1 / s }')
+piper -m "$voices/$voice.onnx" -i "$text" -f "$raw" --length-scale "$length" --sentence-silence 0.35 2>/dev/null
+ffmpeg -v error -y -i "$raw" -af loudnorm=I=-16:TP=-1.5:LRA=11 -ar 48000 "$out"
+echo "$out"

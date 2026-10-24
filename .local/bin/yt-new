@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# A YouTube project: ~/Videos/YouTube/<date>-<title>/ with raw (recordings), audio (voiceover),
+# edit (the editor's project), export (the upload), thumbs, and script.txt to write in.
+#   yt-new "video title"     prints the folder
+set -euo pipefail
+[[ -n ${1:-} ]] || { echo 'usage: yt-new "video title"' >&2 && exit 2; }
+slug="$(printf '%s' "$1" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+|-+$//g')"
+[[ -n $slug ]] || slug=video
+dir="${YT_DIR:-$HOME/Videos/YouTube}/$(date +%F)-$slug"
+[[ -e $dir ]] && { echo "yt-new: $dir already exists" >&2 && exit 1; }
+mkdir -p "$dir"/{raw,audio,edit,export,thumbs}
+cat >"$dir/script.txt" <<SCRIPT
+$1
+
+Write the voiceover here, a paragraph per beat; a blank line is a pause.
+Then: voiceover script.txt   (English; --hindi for Hindi)  ->  audio/voiceover.wav
+SCRIPT
+echo "$dir"
