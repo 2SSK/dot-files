@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Pick a folder in ~/Music, play it shuffled through mpd, and open the player (rmpc).
+# Pick a folder in ~/Music, play it shuffled and on repeat through mpd, and open the player (rmpc).
 # usage: music [folder]
 set -euo pipefail
 
@@ -24,5 +24,6 @@ mpc -q update --wait "$folder"
 mpc -q clear
 mpc -q add "$folder"
 mpc -q random on
+mpc -q repeat on # a one-track folder (Rainy Night) loops
 mpc -q play
 exec rmpc

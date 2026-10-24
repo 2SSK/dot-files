@@ -1,40 +1,34 @@
 # YouTube
 
-The tools come in the opt-in **creator** layer: `packages/install.sh creator` (OBS Studio, LosslessCut,
-Kdenlive, EasyEffects, and the voiceover and captions tools: Piper and whisper-ctranslate2, pinned, as
-uv tools in `~/.local`). Everything runs offline once the voice and the captions model have downloaded.
+Two tools: **gpu-screen-recorder** records (the capture panel, in base) and **Kdenlive** edits and
+makes subtitles (the opt-in **creator** layer: `packages/install.sh creator`). The rain plays from
+`music`.
 
 ## A video, start to finish
 
 1. **Start a project:** `yt-new "Kubernetes in 60 seconds"` makes
-   `~/Videos/YouTube/<date>-kubernetes-in-60-seconds/` with `raw/` (recordings), `audio/` (voiceover),
-   `edit/` (the editor's project), `export/` (the upload), `thumbs/` and `script.txt`.
-2. **Write the script** in `script.txt`: a paragraph per beat, a blank line for a pause.
-3. **Record** into `raw/`:
-   - **OBS Studio** for proper videos: add a *Screen Capture (PipeWire)* source and the screen-sharing
-     picker (the capture panel) asks which screen or window; webcam and mic as sources. Encoder:
-     *FFmpeg VAAPI H.264* (the Intel GPU: little CPU, a cool laptop).
-   - Quick clips: the capture panel (F12), **Shift+R / W / S** to record a region, window or screen.
-4. **Voice:**
-   - Talking: EasyEffects cleans the mic (below).
-   - Not talking: `voiceover script.txt` speaks the script with an offline neural voice into
-     `audio/voiceover.wav`, levelled for YouTube (-16 LUFS). `--hindi` for Hindi, `--speed 1.15`
-     faster, `--voice NAME` for any [Piper voice](https://rhasspy.github.io/piper-samples).
-5. **Edit:** **LosslessCut** to trim recordings without re-encoding (fast, no quality lost);
-   **Kdenlive** to put the video, voiceover, music and titles together. Export into `export/`.
-6. **Captions:** `captions export/video.mp4` writes `export/video.srt` (Whisper, on the CPU: about
-   a third of real time). Upload it to YouTube as subtitles, or import it into Kdenlive to burn
-   captions into Shorts. `--hindi` for Hindi; `--model medium` is slower and more accurate.
+   `~/Videos/YouTube/<date>-kubernetes-in-60-seconds/` with `raw/` (recordings), `audio/` (voice,
+   music), `edit/` (Kdenlive's project), `export/` (the upload), `thumbs/` and `script.txt`.
+2. **Rain on:** in the scratchpad (`$mod+Shift+Return` adds a terminal, `$mod+minus` shows it),
+   `music "Rainy Night"` loops the rain; the player's volume sets how loud it is in the video.
+3. **Record** with the capture panel (F12): **Shift+R / W / S** records a region, a window or the
+   screen, on the GPU, with the desktop's sound (the rain; not the mic). Notifications wait while it
+   records. Hide the scratchpad first if you record the whole screen. Recordings land in
+   `~/Videos/Recordings`: move them into `raw/`.
+4. **Edit in Kdenlive**, its project in `edit/`:
+   - Drop the recordings on video track V1 and the voice file (in `audio/`) on A1.
+   - Cut: put the playhead on a spot, **Shift+R** cuts the clip there; select the bit you don't want,
+     **Delete**. Close the gap: right-click it, *Remove space*.
+   - Text on screen: *Project → Add Title Clip*, onto V2.
+5. **Subtitles** (Kdenlive's own speech-to-text): once, *Settings → Configure Kdenlive → Speech to
+   Text*, choose **Whisper** and let it install its model. Then *Project → Subtitles → Speech
+   Recognition* writes them from the voice; fix any words on the subtitle track. They're burned into
+   the video on export, or *Subtitles → Export* gives a `.srt` to upload to YouTube instead.
+6. **Export:** *Project → Render*, the **MP4-H264/AAC** profile, into `export/`.
 
-## A clean mic (EasyEffects)
+## The rain
 
-Once: open EasyEffects, **Input**, add **Noise Reduction** (RNNoise) and **Limiter**, and save the
-preset as *voice*. It filters every app's mic from then on (OBS, calls) while EasyEffects runs; the
-switch at the top turns it off.
-
-## While recording
-
-The scratchpad (`$mod+Shift+Return` to add, `$mod+minus` to show) holds what you need on hand,
-like the script, OBS's controls and notes, in one floating group you can hide from the recording.
-Notifications wait while the capture panel records (the shell holds them back); for OBS, turn on
-Do Not Disturb in the control center first, so nothing pops into the video.
+`~/Music/Rainy Night/` holds one 30-minute track of slow rain with distant thunder now and then (made
+with ffmpeg; no fades, so it loops without a seam; nothing to license). `music` plays any folder
+on repeat, so it runs as long as you record. Keep it well under your voice: about a third of the
+volume you'd listen at.

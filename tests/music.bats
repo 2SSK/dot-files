@@ -13,11 +13,11 @@ setup() {
 	export PATH="$BATS_TEST_TMPDIR/bin:$PATH"
 }
 
-@test "plays a folder shuffled, then opens the player" {
+@test "plays a folder shuffled and on repeat, then opens the player" {
 	run "$MUSIC" 90s
 	[ "$status" -eq 0 ]
 	[ "$(cat "$CALLS")" = "$(printf '%s\n' 'mpc -q update --wait 90s' 'mpc -q clear' 'mpc -q add 90s' \
-		'mpc -q random on' 'mpc -q play' 'rmpc ')" ]
+		'mpc -q random on' 'mpc -q repeat on' 'mpc -q play' 'rmpc ')" ]
 }
 
 @test "a missing folder fails without touching mpd" {

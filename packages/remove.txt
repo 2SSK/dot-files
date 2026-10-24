@@ -68,3 +68,8 @@ decklink-sdk
 
 # TLP manages power (packages/system.sh power); auto-cpufreq fights it over the CPU
 auto-cpufreq
+
+# the creator layer slimmed to recorder, Kdenlive and Piper
+obs-studio
+losslesscut-bin
+easyeffects

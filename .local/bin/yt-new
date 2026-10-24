@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# A YouTube project: ~/Videos/YouTube/<date>-<title>/ with raw (recordings), audio (voiceover),
+# A YouTube project: ~/Videos/YouTube/<date>-<title>/ with raw (recordings), audio (voice, music),
 # edit (the editor's project), export (the upload), thumbs, and script.txt to write in.
 #   yt-new "video title"     prints the folder
 set -euo pipefail
@@ -12,7 +12,6 @@ mkdir -p "$dir"/{raw,audio,edit,export,thumbs}
 cat >"$dir/script.txt" <<SCRIPT
 $1
 
-Write the voiceover here, a paragraph per beat; a blank line is a pause.
-Then: voiceover script.txt   (English; --hindi for Hindi)  ->  audio/voiceover.wav
+What to say, a paragraph per beat.
 SCRIPT
 echo "$dir"
