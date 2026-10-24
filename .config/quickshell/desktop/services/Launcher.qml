@@ -29,7 +29,9 @@ Singleton {
 	function findApps(query: string): var {
 		const q = query.trim().toLowerCase();
 		const uses = adapter.apps;
-		const apps = Array.from(DesktopEntries.applications.values).filter(a => !a.noDisplay);
+		// not Waydroid's shortcut for each Android app (waydroid.<package>, rewritten every session):
+		// they're opened from Waydroid itself, which stays listed
+		const apps = Array.from(DesktopEntries.applications.values).filter(a => !a.noDisplay && !a.id.startsWith("waydroid."));
 		const scored = apps.map(a => ({ app: a, rank: q ? rank(a, q) : 0, uses: uses[a.id] ?? 0 })).filter(s => s.rank >= 0);
 		scored.sort((a, b) => a.rank - b.rank || b.uses - a.uses || a.app.name.localeCompare(b.app.name));
 		return scored.map(s => s.app);
