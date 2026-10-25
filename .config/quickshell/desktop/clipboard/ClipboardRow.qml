@@ -6,8 +6,8 @@ import qs
 import qs.services
 import qs.widgets
 
-// An entry of the clipboard's history: a thumbnail for a picture (an icon for text or files), its
-// headline, and pinned, how many files, how long ago.
+// An entry of the clipboard's history: a thumbnail for a picture (an icon for text or files, a pin
+// when pinned), its headline, and pinned, how many files, how long ago.
 Rectangle {
 	id: row
 
@@ -66,9 +66,9 @@ Rectangle {
 		Glyph {
 			visible: row.modelData.kind !== "image"
 			anchors.centerIn: parent
-			glyph: Icons.g(row.modelData.kind === "files" ? "paperclip" : "file-text")
+			glyph: Icons.g(row.modelData.pinned ? "pin" : row.modelData.kind === "files" ? "paperclip" : "file-text")
 			font.pixelSize: 18
-			color: row.on ? Theme.primary : Theme.fgMuted
+			color: row.on || row.modelData.pinned ? Theme.primary : Theme.fgMuted
 		}
 	}
 

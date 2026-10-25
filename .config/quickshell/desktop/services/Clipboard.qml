@@ -97,7 +97,7 @@ Singleton {
 			Quickshell.execDetached(["cp", "-n", e.path, kept]);
 			adapter.pins = [{ kind: "image", path: kept, time: Date.now() }, ...pins];
 		} else {
-			adapter.pins = [Object.assign({}, e, { time: Date.now() }), ...pins];
+			adapter.pins = [Object.assign({}, e, { pinned: undefined, time: Date.now() }), ...pins]; // pinned: the window's mark, not kept
 		}
 		file.writeAdapter();
 	}

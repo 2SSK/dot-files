@@ -13,7 +13,7 @@ HangingPanel {
 
 	readonly property var entries: {
 		const q = search.text.toLowerCase();
-		const pinned = Clipboard.pins.map(p => Object.assign({ pinned: true }, p));
+		const pinned = Clipboard.pins.map(p => Object.assign({}, p, { pinned: true }));
 		const recent = Clipboard.history.filter(h => !Clipboard.isPinned(h)).map(h => Object.assign({ pinned: false }, h));
 		return [...pinned, ...recent].filter(e => !q || root.words(e).toLowerCase().includes(q));
 	}
