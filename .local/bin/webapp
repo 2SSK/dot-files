@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+# Websites as apps (as Omarchy's web apps): Brave in app mode, a window of its own with no tabs or
+# address bar, in the launcher with the site's icon. The sign-in is Brave's own profile.
+#   webapp add NAME URL [ICON]   ICON: a png path or URL (default: the site's, at 256 px)
+#   webapp remove NAME
+#   webapp list
+# Its window's app_id is brave-<host>__-Default (sway rules can match it).
+set -euo pipefail
+
+apps="${XDG_DATA_HOME:-$HOME/.local/share}/applications"
+icons="${XDG_DATA_HOME:-$HOME/.local/share}/icons/webapps"
+slug() { printf '%s' "$1" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+|-+$//g'; }
+usage() { sed -n '2,7p' "$0" | sed 's/^# \{0,1\}//' >&2 && exit 2; }
+
+case ${1:-} in
+add)
+	name=${2:-} url=${3:-}
+	[[ -n $name && $url =~ ^https?://[^/]+ ]] || usage
+	id="$(slug "$name")" host="${url#*://}" && host="${host%%/*}"
+	mkdir -p "$apps" "$icons"
+	icon="$icons/$id.png"
+	case ${4:-} in
+	"") curl -fsSL -m 15 -o "$icon" "https://www.google.com/s2/favicons?domain=$host&sz=256" || rm -f "$icon" ;;
+	http*) curl -fsSL -m 15 -o "$icon" "$4" || rm -f "$icon" ;;
+	*) cp "$4" "$icon" ;;
+	esac
+	[[ -s $icon ]] || icon=web-browser # no icon to be had: the theme's browser icon
+	cat >"$apps/webapp-$id.desktop" <<EOF
+[Desktop Entry]
+Type=Application
+Name=$name
+Comment=$url (webapp)
+Exec=brave --app=$url
+Icon=$icon
+StartupWMClass=brave-${host}__-Default
+Categories=Network;WebBrowser;
+EOF
+	echo "$apps/webapp-$id.desktop"
+	;;
+remove)
+	id="$(slug "${2:?usage: webapp remove NAME}")"
+	[[ -f $apps/webapp-$id.desktop ]] || { echo "webapp: no webapp '$2' (webapp list)" >&2 && exit 1; }
+	rm -f "$apps/webapp-$id.desktop" "$icons/$id.png"
+	;;
+list)
+	for f in "$apps"/webapp-*.desktop; do
+		[[ -e $f ]] || continue
+		printf '%-20s %s\n' "$(sed -n 's/^Name=//p' "$f")" "$(sed -n 's/^Exec=brave --app=//p' "$f")"
+	done
+	;;
+*) usage ;;
+esac
