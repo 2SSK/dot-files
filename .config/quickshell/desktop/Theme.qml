@@ -12,18 +12,39 @@ Singleton {
 	property var palette: ({})
 	readonly property var ui: palette.ui ?? ({})
 
-	readonly property color bg: ui.bg ?? "#1a1b26"
-	readonly property color surface: ui.surface ?? "#292e42"
-	readonly property color overlay: ui.overlay ?? "#3b4261"
-	readonly property color fg: ui.fg ?? "#c0caf5"
-	readonly property color fgMuted: ui.fg_muted ?? "#737aa2"
-	readonly property color primary: ui.primary ?? "#7aa2f7"
-	readonly property color primaryText: ui.on_primary ?? "#1a1b26"
-	readonly property color border: ui.border ?? "#3b4261"
-	readonly property color error: ui.error ?? "#f7768e"
-	readonly property color success: ui.success ?? "#9ece6a"
-	readonly property color warning: ui.warning ?? "#e0af68"
-	readonly property color secondary: ui.secondary ?? "#bb9af7"
+	property color bg: ui.bg ?? "#1a1b26"
+	property color surface: ui.surface ?? "#292e42"
+	property color overlay: ui.overlay ?? "#3b4261"
+	property color fg: ui.fg ?? "#c0caf5"
+	property color fgMuted: ui.fg_muted ?? "#737aa2"
+	property color primary: ui.primary ?? "#7aa2f7"
+	property color primaryText: ui.on_primary ?? "#1a1b26"
+	property color border: ui.border ?? "#3b4261"
+	property color error: ui.error ?? "#f7768e"
+	property color success: ui.success ?? "#9ece6a"
+	property color warning: ui.warning ?? "#e0af68"
+	property color secondary: ui.secondary ?? "#bb9af7"
+
+	// a theme switch fades every colour across, the way the wallpaper does (not at startup: from the
+	// fallbacks to the first palette is no change to see)
+	property bool fades: false
+	Behavior on bg { enabled: root.fades; Fade {} }
+	Behavior on surface { enabled: root.fades; Fade {} }
+	Behavior on overlay { enabled: root.fades; Fade {} }
+	Behavior on fg { enabled: root.fades; Fade {} }
+	Behavior on fgMuted { enabled: root.fades; Fade {} }
+	Behavior on primary { enabled: root.fades; Fade {} }
+	Behavior on primaryText { enabled: root.fades; Fade {} }
+	Behavior on border { enabled: root.fades; Fade {} }
+	Behavior on error { enabled: root.fades; Fade {} }
+	Behavior on success { enabled: root.fades; Fade {} }
+	Behavior on warning { enabled: root.fades; Fade {} }
+	Behavior on secondary { enabled: root.fades; Fade {} }
+
+	component Fade: ColorAnimation {
+		duration: root.slow
+		easing.type: root.curve
+	}
 
 	readonly property string fontSans: Config.fonts.sans || "Inter"
 	readonly property string fontHeading: Config.fonts.heading || fontSans
@@ -65,7 +86,10 @@ Singleton {
 		path: (Quickshell.env("XDG_STATE_HOME") || Quickshell.env("HOME") + "/.local/state") + "/desktop/theme/palette.json"
 		watchChanges: true
 		onFileChanged: reload()
-		onLoaded: root.palette = JSON.parse(text())
+		onLoaded: {
+			root.palette = JSON.parse(text());
+			root.fades = true;
+		}
 	}
 
 	IpcHandler {
