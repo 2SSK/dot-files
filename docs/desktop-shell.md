@@ -64,7 +64,7 @@ and swayfx's touches for the shell. What differs underneath:
 | Idle | X's timers (`desktop-idle apply`) and xss-lock | swayidle, run by the shell with the same settings |
 | Alt+Tab ends | `desktop-key-release alt` watches X | the ring holds the keyboard and sees Alt let go |
 | Clipboard history | Qt's clipboard signal | `wl-paste --watch` |
-| Wallpaper | feh | the shell's background layer (`wallpaper/Backdrop.qml`), cross-fading |
+| Wallpaper | feh | awww, cross-fading (`desktop-wallpaper`) |
 | Screens, touchpad | `desktop-displays`, `desktop-input` | sway's `outputs` and `input` |
 
 ## Launcher
@@ -165,9 +165,9 @@ you log in. A logout keeps the wallpaper; only a shutdown or reboot picks a new 
 `desktop-wallpaper set <image>` does the setting: it points `~/.local/state/desktop/wallpaper` at it
 (the lock screen and sddm use it too) and fades over to it. On X11 feh has no transitions, so
 it shows three half-size blended frames (made in parallel with ImageMagick) before the full image;
-on Wayland the shell draws it itself, on the background layer of each screen, cross-fading over
-0.8 s (no wallpaper daemon), and follows a change made elsewhere (`wallpaper-changed`).
-`desktop-wallpaper restore` draws the remembered one at login on X11.
+on Wayland awww draws it, cross-fading over 0.8 s (its daemon holds one frame per screen: about
+13 MB, where the shell drawing it took 50). `desktop-wallpaper restore` draws the remembered one at
+login, without a fade, starting awww's daemon on sway.
 
 The login screen follows the wallpaper too. It can't read the home folder, so
 `packages/system.sh sddm` gives you its background file (in `/var/lib/desktop/sddm`), and every

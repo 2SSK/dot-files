@@ -1,5 +1,6 @@
 #!/usr/bin/env bats
-# desktop-wallpaper, with fake feh/magick/swaymsg recording what they're asked.
+# desktop-wallpaper, with fake feh/magick/swaymsg/awww recording what they're asked (never the real
+# ones: a real awww-daemon would draw on the live session).
 
 setup() {
 	# never the real login screen (system.sh shares their backgrounds and colours with us)
@@ -7,13 +8,18 @@ setup() {
 	WALL="$BATS_TEST_DIRNAME/../.local/bin/desktop-wallpaper"
 	export XDG_STATE_HOME="$BATS_TEST_TMPDIR/state" CALLS="$BATS_TEST_TMPDIR/calls"
 	mkdir -p "$BATS_TEST_TMPDIR/bin" "$BATS_TEST_TMPDIR/pics"
-	for tool in feh swaymsg; do
+	for tool in feh swaymsg swaybg; do
 		# shellcheck disable=SC2016 # expands when the fake runs
 		printf '#!/bin/sh\necho "%s $*" >>"$CALLS"\n' "$tool" >"$BATS_TEST_TMPDIR/bin/$tool"
 	done
 	# magick: a frame file for its last argument
 	# shellcheck disable=SC2016
 	printf '#!/bin/sh\nfor last; do :; done\necho frame >"$last"\necho "magick" >>"$CALLS"\n' >"$BATS_TEST_TMPDIR/bin/magick"
+	# awww: up once its daemon has started; awww-daemon starts it
+	{
+		printf '#!/bin/sh\necho "awww $*" >>"$CALLS"\n[ "$1" != query ] || [ -e "$BATS_TEST_TMPDIR/up" ]\n' >"$BATS_TEST_TMPDIR/bin/awww"
+		printf '#!/bin/sh\necho "awww-daemon" >>"$CALLS"\ntouch "$BATS_TEST_TMPDIR/up"\n' >"$BATS_TEST_TMPDIR/bin/awww-daemon"
+	}
 	chmod +x "$BATS_TEST_TMPDIR"/bin/*
 	export PATH="$BATS_TEST_TMPDIR/bin:$PATH"
 	unset WAYLAND_DISPLAY
@@ -38,17 +44,6 @@ setup() {
 	rm "$CALLS"
 	run "$WALL" restore
 	[ "$(cat "$CALLS")" = "feh --no-fehbg --bg-fill $BATS_TEST_TMPDIR/pics/a.jpg" ]
-}
-
-@test "Wayland: remembered and announced, drawn by nothing here (the shell's background layer fades it in)" {
-	WAYLAND_DISPLAY=wayland-1 run "$WALL" set "$BATS_TEST_TMPDIR/pics/a.jpg"
-	[ "$status" -eq 0 ]
-	[ "$(readlink "$XDG_STATE_HOME/desktop/wallpaper")" = "$BATS_TEST_TMPDIR/pics/a.jpg" ]
-	[ -s "$XDG_STATE_HOME/desktop/wallpaper-changed" ] # what the shell watches
-	! grep -q '^swaymsg\|^feh\|^magick' "$CALLS"
-	WAYLAND_DISPLAY=wayland-1 run "$WALL" restore
-	[ "$status" -eq 0 ]
-	! grep -q '^swaymsg\|^feh' "$CALLS"
 }
 
 @test "set refuses what isn't a file" {
@@ -142,4 +137,19 @@ next_boot_fakes() { # shell.json rotating at boot over the pictures, a shutdown 
 	ln -sfn "$BATS_TEST_TMPDIR/pics/nord/x.png" "$XDG_STATE_HOME/desktop/wallpaper"
 	run "$WALL" next-boot
 	[ "$(readlink "$XDG_STATE_HOME/desktop/wallpaper")" = "$BATS_TEST_TMPDIR/pics/nord/y.png" ]
+}
+
+@test "wayland: awww fades to a new one, restores without a fade, its daemon started when it isn't up" {
+	export WAYLAND_DISPLAY=wayland-test
+	"$WALL" set "$BATS_TEST_TMPDIR/pics/a.jpg"
+	grep -qx "awww-daemon" "$CALLS"
+	grep -q "^awww img $BATS_TEST_TMPDIR/pics/a.jpg --transition-type fade" "$CALLS"
+	run grep -q "^feh\|^magick" "$CALLS"
+	[ "$status" -ne 0 ]
+	rm "$CALLS"
+	"$WALL" restore
+	run grep -qx "awww-daemon" "$CALLS"
+	[ "$status" -ne 0 ] # already up
+	grep -q "^awww img $BATS_TEST_TMPDIR/pics/a.jpg --transition-type none" "$CALLS"
+	[ "$(readlink "$XDG_STATE_HOME/desktop/wallpaper")" = "$BATS_TEST_TMPDIR/pics/a.jpg" ]
 }

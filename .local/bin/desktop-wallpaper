@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
-# Set the wallpaper with a short cross-fade, or put the last one back. On Wayland the shell draws it
-# (its background layer fades to whatever ~/.local/state/desktop/wallpaper points at, and watches
-# wallpaper-changed), so this only remembers the choice there; on X11 feh draws it.
+# Set the wallpaper with a short cross-fade, or put the last one back. On Wayland awww draws it (its
+# daemon started here when it isn't running; swaybg, without a fade, where there's no awww), on X11 feh.
 #   desktop-wallpaper set <image>   fade from the current one to it, and remember it
 #   desktop-wallpaper restore       draw the remembered one (login), no fade
 #   desktop-wallpaper screens       redraw the login screen's background from it
@@ -12,6 +11,7 @@
 # (sddm) can't read the home folder: packages/system.sh sddm gives us a background file of its,
 # which set redraws.
 # X11: feh, through a few half-size blended frames made in parallel (feh has no transitions).
+# Wayland: awww fades by itself, over the time the shell's slow fades take twice (0.8 s).
 set -euo pipefail
 
 here="$(dirname "$(readlink -f "$0")")"
@@ -23,8 +23,23 @@ source "$here/../lib/desktop/screens.sh"
 source "$here/../lib/desktop/state.sh"
 state="$desktop_state"
 
-draw() { # <image>: X11 only (the shell draws it on Wayland)
-	[[ -n ${WAYLAND_DISPLAY:-} ]] || feh --no-fehbg --bg-fill "$1"
+draw() { # <image> [fade]
+	if [[ -z ${WAYLAND_DISPLAY:-} ]]; then
+		feh --no-fehbg --bg-fill "$1"
+	elif command -v awww >/dev/null; then
+		if ! awww query >/dev/null 2>&1; then
+			setsid -f awww-daemon >/dev/null 2>&1
+			for _ in $(seq 30); do awww query >/dev/null 2>&1 && break; sleep 0.1; done
+		fi
+		awww img "$1" --transition-type "$([[ -n ${2:-} ]] && echo fade || echo none)" \
+			--transition-duration 0.8 --transition-fps 60
+	else # one swaybg at a time: the new one up before the old one goes
+		local old
+		old="$(pgrep -x swaybg || true)"
+		setsid -f swaybg -m fill -i "$1" >/dev/null 2>&1
+		sleep 0.3
+		[[ -z $old ]] || kill $old 2>/dev/null || true
+	fi
 }
 
 fade() { # <from> <to>: blended frames between them, then the new one
@@ -99,7 +114,7 @@ set)
 	mkdir -p "$state"
 	from="$(current_wallpaper)"
 	fade "$from" "$2"
-	draw "$2"
+	draw "$2" fade
 	ln -sfn "$2" "$state/wallpaper"
 	date +%s >"$state/wallpaper-changed"
 	screens

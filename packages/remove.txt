@@ -9,7 +9,6 @@ noctalia
 aylurs-gtk-shell-git
 libastal-niri-git
 xwayland-satellite
-awww
 mpvpaper
 matugen-bin
 wallust

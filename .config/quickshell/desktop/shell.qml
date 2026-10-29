@@ -28,13 +28,6 @@ ShellRoot {
 	// services that watch on their own, started with the shell
 	readonly property var watchers: [Locks, Recorder, Notifications, Clipboard, Events, Alarms, Wallpaper, Windows, Battery, NightLight, Idle]
 
-	// the wallpaper, on sway's background layer (on i3 feh draws it: desktop-wallpaper)
-	Variants {
-		model: Config.wayland ? Quickshell.screens : []
-
-		Backdrop {}
-	}
-
 	Variants {
 		model: Quickshell.screens
 

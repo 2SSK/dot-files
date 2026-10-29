@@ -3,6 +3,8 @@
 foot                        foot
 swayidle                    swayidle
 swaylock                    swaylock
+# the wallpaper (desktop-wallpaper): awww fades between them; Fedora has no awww, swaybg cuts
+awww                        swaybg
 grim                        grim
 slurp                       slurp
 wl-clipboard                wl-clipboard
