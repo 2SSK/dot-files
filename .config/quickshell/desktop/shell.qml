@@ -18,7 +18,7 @@ import qs.services
 
 ShellRoot {
 	// A saved file doesn't reload the running shell (a half-written change once hung it, and a reload
-	// while locked crashes it): desktop-reload checks that the config loads, then restarts the shell
+	// while locked crashes it): desktop reload checks that the config loads, then restarts the shell
 	Binding {
 		target: Quickshell
 		property: "watchFiles"

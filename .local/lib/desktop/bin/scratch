@@ -4,9 +4,9 @@
 # hidden together; inside it the usual keys tab, split and focus. A window leaves it as from any
 # workspace ($mod+Shift+<n>). Sway can't add a window to a hidden container, so the group comes out
 # for a moment as one joins.
-#   desktop-scratch add      the focused window into the group (made around it when there's none);
+#   desktop scratch add      the focused window into the group (made around it when there's none);
 #                            on one of the group's own windows, the group goes away
-#   desktop-scratch toggle   show or hide the group (no group yet: the scratchpad as before)
+#   desktop scratch toggle   show or hide the group (no group yet: the scratchpad as before)
 set -euo pipefail
 
 msg=i3-msg
@@ -61,7 +61,7 @@ toggle)
 	fi
 	;;
 *)
-	echo "usage: desktop-scratch add | toggle" >&2
+	echo "usage: desktop scratch add | toggle" >&2
 	exit 2
 	;;
 esac

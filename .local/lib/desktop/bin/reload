@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 # The shell restarted on its config, once that is checked to load in a throwaway session: a config
 # that doesn't load leaves the running shell as it is. Never while the screen is locked.
-#   desktop-reload
+#   desktop reload
 set -uo pipefail
 
-lib="$(dirname "$(readlink -f "$0")")/../lib/desktop"
+lib="$(dirname "$(readlink -f "$0")")/.."
 if [[ $(timeout 3 qs -c desktop ipc call lock locked 2>/dev/null) == true ]]; then
-	echo "desktop-reload: the screen is locked; unlock first" >&2
+	echo "desktop reload: the screen is locked; unlock first" >&2
 	exit 1
 fi
 # the config as the shell loads it (linked file by file: a new file not linked yet fails here)
 if ! "$lib/shell-check.sh" "${XDG_CONFIG_HOME:-$HOME/.config}/quickshell/desktop"; then
-	echo "desktop-reload: not reloaded, the running shell stays as it is" >&2
+	echo "desktop reload: not reloaded, the running shell stays as it is" >&2
 	exit 1
 fi
 if systemctl --user is-active -q desktop-shell.service; then
@@ -21,8 +21,8 @@ else # i3, or a shell not started by the service
 	setsid -f qs -c desktop --no-duplicate --daemonize >/dev/null 2>&1
 fi
 for _ in $(seq 40); do
-	timeout 2 qs -c desktop ipc call lock locked >/dev/null 2>&1 && { echo "desktop-reload: done" && exit 0; }
+	timeout 2 qs -c desktop ipc call lock locked >/dev/null 2>&1 && { echo "desktop reload: done" && exit 0; }
 	sleep 0.5
 done
-echo "desktop-reload: the shell didn't come back; see: qs -c desktop log" >&2
+echo "desktop reload: the shell didn't come back; see: qs -c desktop log" >&2
 exit 1

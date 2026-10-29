@@ -4,7 +4,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-// Timeshift's snapshots for the settings page through desktop-timeshift. Listing needs no password
+// Timeshift's snapshots for the settings page through desktop timeshift. Listing needs no password
 // once `packages/system.sh timeshift` allowed it; making and deleting ask through the polkit prompt.
 Singleton {
 	id: root
@@ -18,16 +18,16 @@ Singleton {
 		if (state === "working")
 			return;
 		state = "loading";
-		lister.command = ["desktop-timeshift", "list", ...(ask ? ["--ask"] : [])];
+		lister.command = ["desktop", "timeshift", "list", ...(ask ? ["--ask"] : [])];
 		lister.running = true;
 	}
 
 	function create(comment: string): void {
-		run(["desktop-timeshift", "create", comment.trim() || "From the desktop"], "Making a snapshot…");
+		run(["desktop", "timeshift", "create", comment.trim() || "From the desktop"], "Making a snapshot…");
 	}
 
 	function remove(name: string): void {
-		run(["desktop-timeshift", "delete", name], "Deleting " + name + "…");
+		run(["desktop", "timeshift", "delete", name], "Deleting " + name + "…");
 	}
 
 	function openApp(): void {

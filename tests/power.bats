@@ -1,10 +1,10 @@
 #!/usr/bin/env bats
-# desktop-power (the shell's power profile and charge limit) and desktop-charge-limit (root's side
+# desktop power (the shell's power profile and charge limit) and desktop-charge-limit (root's side
 # of the limit). Fakes: TLP's state and the battery under a scratch root; sudo -n and pkexec run
 # the command or refuse, and record it.
 
 setup() {
-	POWER="$BATS_TEST_DIRNAME/../.local/bin/desktop-power"
+	POWER="$BATS_TEST_DIRNAME/../.local/lib/desktop/bin/power"
 	LIMIT="$BATS_TEST_DIRNAME/../system/usr/local/bin/desktop-charge-limit"
 	export CALLS="$BATS_TEST_TMPDIR/calls" DESKTOP_POWER_ROOT="$BATS_TEST_TMPDIR/root"
 	mkdir -p "$DESKTOP_POWER_ROOT/run/tlp" "$DESKTOP_POWER_ROOT/sys/class/power_supply/BAT1" "$DESKTOP_POWER_ROOT/etc/tlp.d"

@@ -38,7 +38,7 @@ Singleton {
 			if (p.kind === "record")
 				Recorder.start(p.mode, p.monitor);
 			else
-				Quickshell.execDetached(["desktop-capture", "shot", p.mode, ...(p.monitor ? ["--monitor", p.monitor, "--geometry", p.geometry] : [])]);
+				Quickshell.execDetached(["desktop", "capture", "shot", p.mode, ...(p.monitor ? ["--monitor", p.monitor, "--geometry", p.geometry] : [])]);
 		}
 	}
 }

@@ -71,7 +71,7 @@ Column {
 			}
 		}
 
-		// TLP keeps the charge limit (desktop-power), not shell.json; it applies once let go
+		// TLP keeps the charge limit (desktop power), not shell.json; it applies once let go
 		SettingRow {
 			visible: Power.limit > 0
 			label: "Charge limit"

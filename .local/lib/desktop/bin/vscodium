@@ -3,7 +3,7 @@
 # desktop theme's colours (the rendered vscodium/colors.json) on VSCodium's own Default Dark/Light
 # Modern. VSCodium watches the file, so a theme switch shows at once (a theme extension's colours
 # wait for a reload, or longer: VSCodium caches them). `theme` runs this on a switch, setup too.
-#   desktop-vscodium
+#   desktop vscodium
 set -euo pipefail
 
 config="${XDG_CONFIG_HOME:-$HOME/.config}/VSCodium"
@@ -30,7 +30,7 @@ except FileNotFoundError:
     pass  # no theme rendered yet: VSCodium's own
 
 body = json.dumps(added, indent="\t", ensure_ascii=False)[1:-1].strip("\n")
-text = (f"// Written by desktop-vscodium: {base_path} (edit that) and the desktop theme's colours.\n"
+text = (f"// Written by desktop vscodium: {base_path} (edit that) and the desktop theme's colours.\n"
         f"{head}\n\n\t// the desktop theme's colours ({current.get('family', '?')} {mode})\n{body}\n}}\n")
 if os.path.isfile(out) and not os.path.islink(out) and open(out).read() == text:
     sys.exit(0)  # unchanged: VSCodium needn't reread it

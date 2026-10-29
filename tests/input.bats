@@ -1,8 +1,8 @@
 #!/usr/bin/env bats
-# desktop-input: the touchpad set up on X11 as sway's input config does, through a fake xinput.
+# desktop input: the touchpad set up on X11 as sway's input config does, through a fake xinput.
 
 setup() {
-	INPUT="$BATS_TEST_DIRNAME/../.local/bin/desktop-input"
+	INPUT="$BATS_TEST_DIRNAME/../.local/lib/desktop/bin/input"
 	export CALLS="$BATS_TEST_TMPDIR/calls"
 	mkdir -p "$BATS_TEST_TMPDIR/bin"
 	# xinput: a touchpad (10) and a mouse (9); set-prop calls are recorded

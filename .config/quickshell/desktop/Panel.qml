@@ -164,7 +164,7 @@ Singleton {
 	function execute(id: string): void {
 		if (id === "suspend")
 			return Lock.suspend();
-		// the locker (desktop-lock, run by xss-lock on X11) locks for lock-session and before sleep
+		// the locker (desktop lock, run by xss-lock on X11) locks for lock-session and before sleep
 		Quickshell.execDetached({
 			lock: ["loginctl", "lock-session"],
 			logout: [WindowManager.msg, "exit"],

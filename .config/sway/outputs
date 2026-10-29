@@ -1,3 +1,3 @@
 # The laptop panel at the left; sway puts each external screen (no position here) to the right of
-# it, as desktop-displays does on i3. Which workspaces go where is i3's workspaces.conf.
+# it, as desktop displays does on i3. Which workspaces go where is i3's workspaces.conf.
 output eDP-1 scale 1 pos 0 0

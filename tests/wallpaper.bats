@@ -1,11 +1,11 @@
 #!/usr/bin/env bats
-# desktop-wallpaper, with fake feh/magick/swaymsg/awww recording what they're asked (never the real
+# desktop wallpaper, with fake feh/magick/swaymsg/awww recording what they're asked (never the real
 # ones: a real awww-daemon would draw on the live session).
 
 setup() {
 	# never the real login screen (system.sh shares their backgrounds and colours with us)
 	export DESKTOP_SDDM_DIR="$BATS_TEST_TMPDIR/no-sddm"
-	WALL="$BATS_TEST_DIRNAME/../.local/bin/desktop-wallpaper"
+	WALL="$BATS_TEST_DIRNAME/../.local/lib/desktop/bin/wallpaper"
 	export XDG_STATE_HOME="$BATS_TEST_TMPDIR/state" CALLS="$BATS_TEST_TMPDIR/calls"
 	mkdir -p "$BATS_TEST_TMPDIR/bin" "$BATS_TEST_TMPDIR/pics"
 	for tool in feh swaymsg swaybg; do

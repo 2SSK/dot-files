@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Checks the parts of the desktop that have failed silently before, and says what to do about each.
-#   desktop-doctor        exit 1 when anything is wrong
+#   desktop doctor        exit 1 when anything is wrong
 set -uo pipefail
 
 failed=0
@@ -26,9 +26,9 @@ fi
 if [[ -n ${WAYLAND_DISPLAY:-} ]]; then
 	state="$(ipc lock state)"
 	if [[ -z $state ]]; then
-		bad "lock: the shell doesn't answer" "desktop-reload"
+		bad "lock: the shell doesn't answer" "desktop reload"
 	elif jq -e '(.curtain or .locked) and (.secure | not)' <<<"$state" >/dev/null; then
-		bad "lock: stuck half-way ($state)" "desktop-reload"
+		bad "lock: stuck half-way ($state)" "desktop reload"
 	else
 		ok "lock ready"
 	fi
@@ -40,7 +40,7 @@ if [[ -n ${WAYLAND_DISPLAY:-} ]]; then
 	done
 	read -ra idle <<<"$idle"
 	if ((${#idle[@]} != 1)); then
-		bad "idle: ${#idle[@]} swayidle for this display" "desktop-reload (the shell runs exactly one)"
+		bad "idle: ${#idle[@]} swayidle for this display" "desktop reload (the shell runs exactly one)"
 	else
 		stuck=""
 		for c in $(pgrep -P "${idle[0]}"); do (($(age "$c") > 60)) && stuck="$(ps -o args= -p "$c")"; done
@@ -51,13 +51,13 @@ if [[ -n ${WAYLAND_DISPLAY:-} ]]; then
 		fi
 	fi
 
-	if ! pgrep -f 'wl-paste --watch .*desktop-clipboard store' >/dev/null; then
-		bad "clipboard history: not watching" "desktop-reload"
+	if ! pgrep -f 'wl-paste --watch .*desktop/bin/clipboard store' >/dev/null; then
+		bad "clipboard history: not watching" "desktop reload"
 	else
 		stuck=""
-		for c in $(pgrep -f '^python3 .*desktop-clipboard store$'); do (($(age "$c") > 30)) && stuck=1; done
+		for c in $(pgrep -f '^python3 .*desktop/bin/clipboard store$'); do (($(age "$c") > 30)) && stuck=1; done
 		if [[ -n $stuck ]]; then
-			bad "clipboard history: stuck on one copy" "pkill -f '^python3 .*desktop-clipboard store\$'"
+			bad "clipboard history: stuck on one copy" "pkill -f '^python3 .*desktop/bin/clipboard store\$'"
 		else
 			ok "clipboard history recording"
 		fi
@@ -67,7 +67,7 @@ if [[ -n ${WAYLAND_DISPLAY:-} ]]; then
 		if [[ -e ${XDG_STATE_HOME:-$HOME/.local/state}/desktop/sway-effects.conf ]]; then
 			ok "SwayFX effects in the config"
 		else
-			bad "SwayFX effects not linked: blur goes after a reload" "run desktop-effects"
+			bad "SwayFX effects not linked: blur goes after a reload" "run desktop effects"
 		fi
 	fi
 fi
@@ -76,12 +76,12 @@ if bluetoothctl list 2>/dev/null | grep -q Controller; then
 	if pgrep -f 'bluetoothctl --agent' >/dev/null; then
 		ok "Bluetooth pairing agent running"
 	else
-		bad "no Bluetooth pairing agent: keyboards and earbuds can't pair" "desktop-reload (the shell runs one)"
+		bad "no Bluetooth pairing agent: keyboards and earbuds can't pair" "desktop reload (the shell runs one)"
 	fi
 fi
 
 if compgen -G '/sys/class/power_supply/BAT*' >/dev/null; then
-	if cmp -s "$(dirname "$(readlink -f "$0")")/../../system/etc/systemd/logind.conf.d/10-lid.conf" /etc/systemd/logind.conf.d/10-lid.conf; then
+	if cmp -s "$(dirname "$(readlink -f "$0")")/../../../../system/etc/systemd/logind.conf.d/10-lid.conf" /etc/systemd/logind.conf.d/10-lid.conf; then
 		ok "closing the lid locks (no suspend)"
 	else
 		bad "closing the lid suspends: the lid setting isn't installed" "packages/system.sh lid"

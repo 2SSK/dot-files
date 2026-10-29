@@ -6,14 +6,14 @@ own RPM repository, `packages/extra/vscodium.sh`). Opt-in with the dev packages 
 - **Look:** nothing but the editor. No activity bar, minimap, scrollbars, breadcrumbs or sticky
   scroll; the sidebar on the right, JetBrains Mono, the native title bar.
 - **Colours:** the desktop theme's, live: a theme switch shows at once, no reload. `theme` renders
-  them (`templates/vscodium/colors.json`) and `desktop-vscodium` writes VSCodium's `settings.json`
+  them (`templates/vscodium/colors.json`) and `desktop vscodium` writes VSCodium's `settings.json`
   as the repo's base plus those colours, on VSCodium's own Default Dark/Light Modern. (A theme
   extension can't do this: VSCodium caches its colours across reloads and restarts. Tested.)
 - **Extensions**, pinned from Open VSX in `packages/vscodium.txt` and installed by
   `packages/plugins.sh`: Vim, Prettier, ESLint, Go, basedpyright (Python), Containers (Docker),
   YAML, clangd. Bumping a version there and rerunning `plugins.sh` installs just that one.
 - **Config:** settings in `.config/VSCodium/settings.jsonc` (the base: edit this one, then run
-  `desktop-vscodium` or switch the theme), keys in `.config/VSCodium/User/keybindings.json`. A
+  `desktop vscodium` or switch the theme), keys in `.config/VSCodium/User/keybindings.json`. A
   setting changed in VSCodium's own settings screen lasts until the next theme switch.
 
 ## Keys

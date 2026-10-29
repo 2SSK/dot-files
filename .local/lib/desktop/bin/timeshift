@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Timeshift for the shell's settings page.
 
-  desktop-timeshift list [--ask]     the snapshots as JSON, newest first: {device, mode, status, free,
+  desktop timeshift list [--ask]     the snapshots as JSON, newest first: {device, mode, status, free,
                                      snapshots: [{name, tags, comment}]}. Through `sudo -n` (allowed
                                      without a password by `packages/system.sh timeshift`); without
                                      that rule it exits 3, or with --ask goes through pkexec.
-  desktop-timeshift create <comment> a snapshot now (pkexec: asks for your password)
-  desktop-timeshift delete <name>    delete one (pkexec)
+  desktop timeshift create <comment> a snapshot now (pkexec: asks for your password)
+  desktop timeshift delete <name>    delete one (pkexec)
 """
 import json
 import re
@@ -56,7 +56,7 @@ def main(argv):
         return subprocess.run(["pkexec", "timeshift", "--create", "--comments", argv[1], "--scripted"]).returncode
     if argv[:1] == ["delete"] and len(argv) == 2:
         if not NAME.match(argv[1]):
-            print(f"desktop-timeshift: not a snapshot name: {argv[1]}", file=sys.stderr)
+            print(f"desktop timeshift: not a snapshot name: {argv[1]}", file=sys.stderr)
             return 2
         return subprocess.run(["pkexec", "timeshift", "--delete", "--snapshot", argv[1], "--scripted"]).returncode
     print(__doc__.strip(), file=sys.stderr)

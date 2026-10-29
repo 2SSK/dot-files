@@ -1,11 +1,11 @@
 #!/usr/bin/env bats
-# desktop-clipboard: what was just copied, as one JSON line for the shell's history (text in
+# desktop clipboard: what was just copied, as one JSON line for the shell's history (text in
 # memory, an image saved to the runtime folder, files by path), and copying an entry back as what it
 # was. Fake xclip and wl-paste answer from files: $TYPES lists the offered types, $DATA_<type> holds
 # each type's bytes.
 
 setup() {
-	CLIP="$BATS_TEST_DIRNAME/../.local/bin/desktop-clipboard"
+	CLIP="$BATS_TEST_DIRNAME/../.local/lib/desktop/bin/clipboard"
 	export CALLS="$BATS_TEST_TMPDIR/calls" XDG_RUNTIME_DIR="$BATS_TEST_TMPDIR/run" OFFER="$BATS_TEST_TMPDIR/offer"
 	mkdir -p "$BATS_TEST_TMPDIR/bin" "$XDG_RUNTIME_DIR" "$OFFER"
 	# xclip: -o -t TARGETS lists the types; -o -t <type> prints it; -i records what's copied

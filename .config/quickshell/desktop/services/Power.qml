@@ -5,7 +5,7 @@ import Quickshell
 import Quickshell.Io
 
 // TLP's power profile and the battery's charge limit, read from /run/tlp/last_pwr and sysfs (which
-// can't be watched, so it's reread). Changes go through desktop-power, which may ask through polkit.
+// can't be watched, so it's reread). Changes go through desktop power, which may ask through polkit.
 Singleton {
 	id: root
 
@@ -17,12 +17,12 @@ Singleton {
 
 	function setProfile(name: string): void {
 		profile = name; // at once; the reread after corrects it if TLP refused
-		run(["desktop-power", "profile", name]);
+		run(["desktop", "power", "profile", name]);
 	}
 
 	function setLimit(percent: int): void {
 		limit = percent;
-		run(["desktop-power", "limit", String(percent)]);
+		run(["desktop", "power", "limit", String(percent)]);
 	}
 
 	function refresh(): void {

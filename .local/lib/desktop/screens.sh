@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 # The login screen's background, made from the wallpaper, and the boot menu's theme, made from the
-# palette. Sourced by packages/system.sh (which installs them), desktop-wallpaper and theme (which
+# palette. Sourced by packages/system.sh (which installs them), desktop wallpaper and theme (which
 # redraw them when the wallpaper or the theme changes).
 
 login_background() { # <wallpaper> <out.jpg>

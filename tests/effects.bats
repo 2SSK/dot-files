@@ -1,10 +1,10 @@
 #!/usr/bin/env bats
-# desktop-effects: on SwayFX effects.conf is linked where sway's config includes it (and sway reloaded
+# desktop effects: on SwayFX effects.conf is linked where sway's config includes it (and sway reloaded
 # once to read it); on plain sway, whose config would refuse it, the link goes. A fake sway reports a
 # version; a fake swaymsg records its calls.
 
 setup() {
-	E="$BATS_TEST_DIRNAME/../.local/bin/desktop-effects"
+	E="$BATS_TEST_DIRNAME/../.local/lib/desktop/bin/effects"
 	export CALLS="$BATS_TEST_TMPDIR/calls" SWAYSOCK=/x XDG_CONFIG_HOME="$BATS_TEST_DIRNAME/../.config"
 	export XDG_STATE_HOME="$BATS_TEST_TMPDIR/state"
 	LINK="$XDG_STATE_HOME/desktop/sway-effects.conf"

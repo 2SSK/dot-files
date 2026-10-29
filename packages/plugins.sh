@@ -34,7 +34,7 @@ sync() {
 }
 
 # VSCodium (where it's installed): its extensions pinned in vscodium.txt, then its settings.json
-# written (desktop-vscodium: the repo's base and the desktop theme's colours)
+# written (desktop vscodium: the repo's base and the desktop theme's colours)
 vscodium() {
 	command -v codium >/dev/null || return 0
 	local have id version
@@ -45,7 +45,7 @@ vscodium() {
 		codium --install-extension "$id@$version" --force >/dev/null 2>&1 </dev/null
 		log_info installed extension="$id" version="$version"
 	done <"${VSCODIUM_EXTENSIONS:-$here/vscodium.txt}"
-	"$here/../.local/bin/desktop-vscodium"
+	"$here/../.local/lib/desktop/bin/vscodium"
 }
 
 list="${1:-$here/plugins.txt}"

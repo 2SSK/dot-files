@@ -5,7 +5,7 @@ import Quickshell
 import Quickshell.Io
 import qs
 
-// Screen sharing's picker: desktop-share-pick (the portal's chooser) hands over what can be shared and
+// Screen sharing's picker: desktop share-pick (the portal's chooser) hands over what can be shared and
 // waits on a FIFO in its folder; the capture panel asks which. Closing the panel declines.
 Singleton {
 	id: root

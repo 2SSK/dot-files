@@ -13,14 +13,14 @@ Scope {
 			if (Config.wayland)
 				Lock.lock();
 		}
-		// true once sway confirms the lock, which desktop-lock waits for before sleep goes ahead
+		// true once sway confirms the lock, which desktop lock waits for before sleep goes ahead
 		function suspend(): void {
 			Lock.suspend();
 		}
 		function locked(): bool {
 			return Lock.secure;
 		}
-		// for desktop-doctor: a lock half-way (curtain up, never confirmed) is stuck
+		// for desktop doctor: a lock half-way (curtain up, never confirmed) is stuck
 		function state(): string {
 			return JSON.stringify({ locked: Lock.locked, secure: Lock.secure, curtain: Lock.curtain, dozing: Lock.dozing });
 		}
@@ -120,7 +120,7 @@ Scope {
 		}
 	}
 
-	// desktop-share-pick, the screen-sharing portal's picker: <dir>/sources lists what can be shared
+	// desktop share-pick, the screen-sharing portal's picker: <dir>/sources lists what can be shared
 	IpcHandler {
 		target: "share"
 

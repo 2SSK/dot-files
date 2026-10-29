@@ -1,14 +1,14 @@
 #!/usr/bin/env bats
-# desktop-displays: connected screens arranged as on sway (externals to the right of the laptop
+# desktop displays: connected screens arranged as on sway (externals to the right of the laptop
 # panel), unplugged ones turned off. A fake xrandr answers from $XRANDR and records what it's told.
 
 setup() {
-	D="$BATS_TEST_DIRNAME/../.local/bin/desktop-displays"
+	D="$BATS_TEST_DIRNAME/../.local/lib/desktop/bin/displays"
 	export CALLS="$BATS_TEST_TMPDIR/calls" XRANDR="$BATS_TEST_TMPDIR/xrandr.txt"
 	mkdir -p "$BATS_TEST_TMPDIR/bin"
 	# shellcheck disable=SC2016 # expands when the fake runs
 	printf '#!/bin/sh\nif [ "$1" = --query ]; then cat "$XRANDR"; else echo "xrandr $*" >>"$CALLS"; fi\n' >"$BATS_TEST_TMPDIR/bin/xrandr"
-	printf '#!/bin/sh\necho "wallpaper $*" >>"$CALLS"\n' >"$BATS_TEST_TMPDIR/bin/desktop-wallpaper"
+	printf '#!/bin/sh\necho "$*" >>"$CALLS"\n' >"$BATS_TEST_TMPDIR/bin/desktop" # desktop wallpaper …
 	chmod +x "$BATS_TEST_TMPDIR"/bin/*
 	export PATH="$BATS_TEST_TMPDIR/bin:$PATH" DISPLAY=:0
 }

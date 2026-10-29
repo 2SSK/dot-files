@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Put stdin on the Wayland clipboard under exactly the MIME types given.
 
-    printf 'file:///home/me/a.pdf\\r\\n' | wl-copy-exact text/uri-list
+    printf 'file:///home/me/a.pdf\\r\\n' | copy-exact text/uri-list
 
 wl-copy cannot do this for a text/* type: it always adds text/plain (and
 TEXT, STRING, UTF8_STRING) next to it. An offer of text/uri-list *and*
@@ -49,7 +49,7 @@ class Connection:
         while True:
             data, ancillary, _, _ = self.sock.recvmsg(65536, socket.CMSG_SPACE(64 * 4))
             if not data:
-                raise SystemExit("wl-copy-exact: compositor closed the connection")
+                raise SystemExit("copy-exact: compositor closed the connection")
             for level, kind, payload in ancillary:
                 if level == socket.SOL_SOCKET and kind == socket.SCM_RIGHTS:
                     count = len(payload) // 4
@@ -74,13 +74,13 @@ class Connection:
 def fail_on_error(obj, opcode, body):
     if obj == DISPLAY and opcode == 0:  # wl_display.error
         length = struct.unpack("<I", body[8:12])[0]
-        raise SystemExit("wl-copy-exact: " + body[12 : 12 + length - 1].decode(errors="replace"))
+        raise SystemExit("copy-exact: " + body[12 : 12 + length - 1].decode(errors="replace"))
 
 
 def main():
     types = sys.argv[1:]
     if not types:
-        raise SystemExit("usage: wl-copy-exact MIME-TYPE... < data")
+        raise SystemExit("usage: copy-exact MIME-TYPE... < data")
     payload = sys.stdin.buffer.read()
 
     conn = Connection()
@@ -100,7 +100,7 @@ def main():
 
     manager = next((m for m in MANAGERS if m in found), None)
     if manager is None or "wl_seat" not in found:
-        raise SystemExit("wl-copy-exact: compositor has no data-control protocol")
+        raise SystemExit("copy-exact: compositor has no data-control protocol")
 
     def bind(interface, new_id):  # wl_registry.bind, at version 1
         name = found[interface][0]

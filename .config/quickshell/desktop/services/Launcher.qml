@@ -62,14 +62,14 @@ Singleton {
 
 	function findFiles(query: string): void {
 		finder.running = false;
-		finder.command = ["desktop-file", "find", query.trim()];
+		finder.command = ["desktop", "file", "find", query.trim()];
 		searching = true;
 		finder.running = true;
 	}
 
 	// open, path or content
 	function file(action: string, path: string): void {
-		Quickshell.execDetached(["desktop-file", action, path]);
+		Quickshell.execDetached(["desktop", "file", action, path]);
 	}
 
 	function loadThemes(): void {

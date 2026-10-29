@@ -1,9 +1,9 @@
 #!/usr/bin/env bats
-# desktop-scratch, the scratchpad as one floating workspace, with a fake swaymsg: $GROUP is none,
+# desktop scratch, the scratchpad as one floating workspace, with a fake swaymsg: $GROUP is none,
 # hidden or shown; it records the commands it's given.
 
 setup() {
-	SCRATCH="$BATS_TEST_DIRNAME/../.local/bin/desktop-scratch"
+	SCRATCH="$BATS_TEST_DIRNAME/../.local/lib/desktop/bin/scratch"
 	export CALLS="$BATS_TEST_TMPDIR/calls" SWAYSOCK=fake
 	bin="$BATS_TEST_TMPDIR/bin" && mkdir -p "$bin"
 	# shellcheck disable=SC2016 # expands when the fake runs

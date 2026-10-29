@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Links ~/.config/sway/effects.conf where sway's config includes it, on SwayFX only (plain sway
 # would refuse it); the first time, sway reloads to read it. Run at startup and on each reload.
-#   desktop-effects
+#   desktop effects
 set -euo pipefail
 
 [[ -n ${SWAYSOCK:-} ]] || exit 0

@@ -5,7 +5,7 @@ import Quickshell
 import Quickshell.Io
 import qs
 
-// Idle dim, lock and screen off after idle.dim, .lock and .off minutes (0: never). On i3 desktop-idle
+// Idle dim, lock and screen off after idle.dim, .lock and .off minutes (0: never). On i3 desktop idle
 // sets X's timers; on sway the shell runs swayidle, which also locks before sleep and on lock-session.
 Singleton {
 	id: root
@@ -22,12 +22,12 @@ Singleton {
 		if (dim > 0 && (lock === 0 || dim < lock))
 			// dim stays running until undim stops it; in the background, since swayidle -w waits for each
 			// command, and a waiting swayidle neither undims nor locks
-			args.push("timeout", String(dim * 60), "desktop-idle dim &", "resume", "desktop-idle undim");
+			args.push("timeout", String(dim * 60), "desktop idle dim &", "resume", "desktop idle undim");
 		if (lock > 0)
-			args.push("timeout", String(lock * 60), "desktop-idle undim; desktop-lock");
+			args.push("timeout", String(lock * 60), "desktop idle undim; desktop lock");
 		if (off > 0)
 			args.push("timeout", String(off * 60), "swaymsg 'output * power off'", "resume", "swaymsg 'output * power on'");
-		args.push("before-sleep", "desktop-lock", "lock", "desktop-lock");
+		args.push("before-sleep", "desktop lock", "lock", "desktop lock");
 		return args;
 	}
 
@@ -51,7 +51,7 @@ Singleton {
 	Process {
 		id: apply
 
-		command: ["desktop-idle", "apply", String(Config.idle.dim), String(Config.idle.lock), String(Config.idle.off)]
+		command: ["desktop", "idle", "apply", String(Config.idle.dim), String(Config.idle.lock), String(Config.idle.off)]
 	}
 
 	Process {

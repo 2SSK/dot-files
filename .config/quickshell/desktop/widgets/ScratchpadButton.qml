@@ -4,7 +4,7 @@ import qs.services
 
 // The scratchpad, after the workspaces: how many windows it holds (those in the floating group
 // counted one by one), while it holds any; the accent while they're out on screen. A click shows or
-// hides the group (desktop-scratch toggle).
+// hides the group (desktop scratch toggle).
 Item {
 	id: root
 

@@ -6,8 +6,8 @@
 # background colour.
 # Wayland (sway): the shell's own lock screen (Quickshell's session lock), else swaylock.
 set -euo pipefail
-# shellcheck source-path=SCRIPTDIR/.. source=.local/lib/desktop/state.sh
-source "$(dirname "$(readlink -f "$0")")/../lib/desktop/state.sh"
+# shellcheck source-path=SCRIPTDIR/../../../.. source=.local/lib/desktop/state.sh
+source "$(dirname "$(readlink -f "$0")")/../state.sh"
 
 # the theme's colours (rrggbb), in one read; tokyonight's without a theme
 palette="$desktop_state/theme/palette.json"

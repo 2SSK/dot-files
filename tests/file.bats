@@ -1,9 +1,9 @@
 #!/usr/bin/env bats
-# desktop-file: open a file with what suits it, or copy its path or its content. Fake tools record
+# desktop file: open a file with what suits it, or copy its path or its content. Fake tools record
 # what they were asked; pgrep answers from $RUNNING.
 
 setup() {
-	FILE="$BATS_TEST_DIRNAME/../.local/bin/desktop-file"
+	FILE="$BATS_TEST_DIRNAME/../.local/lib/desktop/bin/file"
 	export CALLS="$BATS_TEST_TMPDIR/calls" RUNNING=""
 	bin="$BATS_TEST_TMPDIR/bin" && mkdir -p "$bin"
 	for tool in kitty xdg-open brave firefox chromium; do
@@ -75,12 +75,12 @@ setup() {
 	[ "$(cat "$CALLS")" = "xclip -selection clipboard -t text/uri-list -i <file://$d/my%20report%20%C3%A9.pdf"$'\r'">" ]
 }
 
-@test "on Wayland the file goes through wl-copy-exact (wl-copy would add text/plain)" {
+@test "on Wayland the file goes through copy-exact (wl-copy would add text/plain)" {
 	# shellcheck disable=SC2016
-	printf '#!/bin/sh\necho "wl-copy-exact $* <$(cat)>" >>"$CALLS"\n' >"$BATS_TEST_TMPDIR/bin/wl-copy-exact"
-	chmod +x "$BATS_TEST_TMPDIR/bin/wl-copy-exact"
-	WAYLAND_DISPLAY=wayland-1 "$FILE" file "$d/notes.md"
-	grep -q "^wl-copy-exact text/uri-list <file://$d/notes.md" "$CALLS"
+	printf '#!/bin/sh\necho "copy-exact $* <$(cat)>" >>"$CALLS"\n' >"$BATS_TEST_TMPDIR/bin/copy-exact"
+	chmod +x "$BATS_TEST_TMPDIR/bin/copy-exact"
+	DESKTOP_COPY_EXACT="$BATS_TEST_TMPDIR/bin/copy-exact" WAYLAND_DISPLAY=wayland-1 "$FILE" file "$d/notes.md"
+	grep -q "^copy-exact text/uri-list <file://$d/notes.md" "$CALLS"
 }
 
 @test "Wayland copies with wl-copy" {

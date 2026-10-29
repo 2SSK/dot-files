@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 # Open a file with what suits it, or copy its path or its content (the launcher's file picker).
-#   desktop-file open <file>      text and code: $EDITOR (nvim) in $TERMINAL (kitty); web pages,
+#   desktop file open <file>      text and code: $EDITOR (nvim) in $TERMINAL (kitty); web pages,
 #                                 PDFs and SVGs: a new tab of the browser that's running, else of
 #                                 the default one; anything else: its default application
-#   desktop-file file <file>      the file itself, to paste as an attachment (Teams, WhatsApp, mail):
+#   desktop file file <file>      the file itself, to paste as an attachment (Teams, WhatsApp, mail):
 #                                 its file:// URI as text/uri-list alone; with text beside it,
 #                                 apps paste the path instead
-#   desktop-file path <file>      the full path, as text
-#   desktop-file content <file>   text as text, an image as an image, anything else as the file
+#   desktop file path <file>      the full path, as text
+#   desktop file content <file>   text as text, an image as an image, anything else as the file
 #                                 itself (pastes as an attachment)
-#   desktop-file find [query]     up to 60 files and folders whose names hold every word typed
+#   desktop file find [query]     up to 60 files and folders whose names hold every word typed
 #                                 (as Nautilus searches: not scattered letters, not the folder they're
 #                                 in), names starting with it first, then the shorter. The launcher
 #                                 starts it at ~/:
@@ -25,7 +25,7 @@
 set -euo pipefail
 
 usage() {
-	echo "usage: desktop-file open|file|path|content <file> | find [query]" >&2
+	echo "usage: desktop file open|file|path|content <file> | find [query]" >&2
 	exit 2
 }
 
@@ -105,7 +105,7 @@ if [[ ${1:-} == find ]]; then
 fi
 (($# == 2)) || usage
 action=$1
-[[ -e $2 ]] || { echo "desktop-file: no such file: $2" >&2 && exit 1; }
+[[ -e $2 ]] || { echo "desktop file: no such file: $2" >&2 && exit 1; }
 file="$(realpath -- "$2")"
 mime="$(file --brief --mime-type -- "$file")"
 
@@ -121,16 +121,16 @@ open)
 		exec xdg-open "$file"
 	fi
 	;;
-# copies go through desktop-clipboard, as the shell's own do
-file) desktop-clipboard copy files "$file" ;;
-path) printf '%s' "$file" | desktop-clipboard copy text ;;
+# copies go through desktop clipboard, as the shell's own do
+file) desktop clipboard copy files "$file" ;;
+path) printf '%s' "$file" | desktop clipboard copy text ;;
 content)
 	if editable "$mime"; then
-		desktop-clipboard copy text <"$file"
+		desktop clipboard copy text <"$file"
 	elif [[ $mime == image/* ]]; then
-		desktop-clipboard copy image "$file" "$mime"
+		desktop clipboard copy image "$file" "$mime"
 	else
-		desktop-clipboard copy files "$file"
+		desktop clipboard copy files "$file"
 	fi
 	;;
 *) usage ;;

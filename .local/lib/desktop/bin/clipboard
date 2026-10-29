@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 """The clipboard for the shell's history: what each copy was, and copying an entry back as that.
 
-  desktop-clipboard watch               a JSON line for every copy from now on (X11: XFixes tells
+  desktop clipboard watch               a JSON line for every copy from now on (X11: XFixes tells
                                         when the clipboard changes hands; Wayland: wl-paste --watch)
-  desktop-clipboard store               the clipboard now, as one JSON line:
+  desktop clipboard store               the clipboard now, as one JSON line:
                                           {"kind": "text", "text": ...}            kept in memory
                                           {"kind": "image", "path": ..., "type"}   saved once, in
                                             $XDG_RUNTIME_DIR/desktop/clipboard (RAM, gone at logout)
                                           {"kind": "files", "paths": [...]}
                                         nothing for what a password manager marks as a password
-  desktop-clipboard copy text           stdin, as text
-  desktop-clipboard copy image <path> [type]  the picture, as an image (pastes into a chat as one);
+  desktop clipboard copy text           stdin, as text
+  desktop clipboard copy image <path> [type]  the picture, as an image (pastes into a chat as one);
                                         its type from the file's extension unless given
-  desktop-clipboard copy files <path>...  as a file manager copies files: their file:// URIs as
+  desktop clipboard copy files <path>...  as a file manager copies files: their file:// URIs as
                                         text/uri-list alone, so a chat or mail attaches them
 """
 import ctypes
@@ -23,6 +23,9 @@ import os
 import subprocess
 import sys
 from urllib.parse import quote, unquote, urlparse
+
+# copy-exact sits beside it (the desktop's helpers are off PATH); the tests put a fake in its place
+COPY_EXACT = os.environ.get("DESKTOP_COPY_EXACT") or os.path.join(os.path.dirname(os.path.realpath(__file__)), "copy-exact")
 
 WAYLAND = bool(os.environ.get("WAYLAND_DISPLAY"))
 # images: where the shell keeps its history (DESKTOP_CLIPBOARD_IMAGES, to outlast a reboot), else RAM
@@ -89,7 +92,7 @@ def put(kind, data):
     if WAYLAND:
         if kind == "text/uri-list":
             # wl-copy would offer text/plain beside it, and apps would paste the path instead
-            if subprocess.run(["wl-copy-exact", kind], input=data, **quiet).returncode == 0:
+            if subprocess.run([COPY_EXACT, kind], input=data, **quiet).returncode == 0:
                 return
         subprocess.run(["wl-copy", "--type", kind], input=data, **quiet)
     else:
@@ -126,11 +129,11 @@ def watch_x11():
     xfixes.XFixesSelectSelectionInput.argtypes = [ctypes.c_void_p, ctypes.c_ulong, ctypes.c_ulong, ctypes.c_ulong]
     display = x11.XOpenDisplay(None)
     if not display:
-        print("desktop-clipboard: no X display", file=sys.stderr)
+        print("desktop clipboard: no X display", file=sys.stderr)
         return 1
     base, error = ctypes.c_int(), ctypes.c_int()
     if not xfixes.XFixesQueryExtension(display, ctypes.byref(base), ctypes.byref(error)):
-        print("desktop-clipboard: no XFixes", file=sys.stderr)
+        print("desktop clipboard: no XFixes", file=sys.stderr)
         return 1
     clipboard = x11.XInternAtom(display, b"CLIPBOARD", 0)
     xfixes.XFixesSelectSelectionInput(display, x11.XDefaultRootWindow(display), clipboard, 1)  # SetSelectionOwnerNotifyMask

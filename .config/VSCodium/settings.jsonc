@@ -1,4 +1,4 @@
-// VSCodium's settings, the base: desktop-vscodium writes VSCodium's settings.json from this plus the
+// VSCodium's settings, the base: desktop vscodium writes VSCodium's settings.json from this plus the
 // desktop theme's colours (`theme` reruns it on a switch, VSCodium applies it live). Edit settings
 // here: changes made in VSCodium's settings screen last only until the next theme switch.
 // Vim keys follow ~/.vimrc and nvim (Space leader, jk). Extensions: packages/vscodium.txt.

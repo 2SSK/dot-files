@@ -2,9 +2,9 @@
 # Screens on X11 (i3), arranged as sway's outputs config does: the laptop panel at the left, each
 # connected external screen to the right of the one before, at its preferred mode; a screen that
 # was unplugged but is still on is turned off. Then the wallpaper is drawn again across them all.
-#   desktop-displays apply   arrange now
-#   desktop-displays watch   arrange now and whenever a screen is plugged in or out (i3 starts it)
-#   desktop-displays rehome  every workspace back on its screen (i3 or sway): the first connected one
+#   desktop displays apply   arrange now
+#   desktop displays watch   arrange now and whenever a screen is plugged in or out (i3 starts it)
+#   desktop displays rehome  every workspace back on its screen (i3 or sway): the first connected one
 #                            its `workspace N output ...` line in workspaces.conf names. The window
 #                            manager applies those lines only when a workspace is made, so one left
 #                            on the panel while a monitor was away stayed there; the shell runs this
@@ -55,7 +55,7 @@ apply() {
 	done
 	for name in "${off[@]}"; do args+=(--output "$name" --off); done
 	xrandr "${args[@]}"
-	desktop-wallpaper restore >/dev/null 2>&1 || true
+	desktop wallpaper restore >/dev/null 2>&1 || true
 }
 
 case ${1:-apply} in
@@ -72,5 +72,5 @@ watch)
 		rehome || true
 	done
 	;;
-*) echo "usage: desktop-displays apply|watch|rehome" >&2 && exit 2 ;;
+*) echo "usage: desktop displays apply|watch|rehome" >&2 && exit 2 ;;
 esac

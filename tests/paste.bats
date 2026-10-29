@@ -1,11 +1,11 @@
 #!/usr/bin/env bats
-# desktop-paste: the clipboard pasted into the focused window, with the key that window pastes on
+# desktop paste: the clipboard pasted into the focused window, with the key that window pastes on
 # (terminals Ctrl+Shift+V, everything else Ctrl+V; an image into a terminal Ctrl+V too). Fakes:
 # swaymsg/xdotool report a focused app, wl-paste/xclip the clipboard's types ($TYPES; never the real
 # clipboard), wtype/xdotool record the keys.
 
 setup() {
-	P="$BATS_TEST_DIRNAME/../.local/bin/desktop-paste"
+	P="$BATS_TEST_DIRNAME/../.local/lib/desktop/bin/paste"
 	export CALLS="$BATS_TEST_TMPDIR/calls" APP=kitty DESKTOP_PASTE_DELAY=0 TYPES="text/plain;charset=utf-8"
 	bin="$BATS_TEST_TMPDIR/bin" && mkdir -p "$bin"
 	# shellcheck disable=SC2016 # expands when the fake runs

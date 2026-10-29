@@ -4,7 +4,7 @@
 # paste on Ctrl+Shift+V (Ctrl+V is a key of their own there), everything else on Ctrl+V. An image
 # into a terminal goes on Ctrl+V too: the terminal pastes only text, and apps in it that take images
 # (Claude Code, opencode) read the clipboard themselves on Ctrl+V.
-#   desktop-paste
+#   desktop paste
 # Wayland: wtype (sway's virtual keyboard). X11: xdotool.
 set -euo pipefail
 

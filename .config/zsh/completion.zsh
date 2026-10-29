@@ -13,3 +13,13 @@ zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/zcompcache"
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*:descriptions' format '[%d]'
 zstyle ':completion:*' menu no # fzf-tab draws the menu
+
+# desktop <command>: the desktop's helpers (.local/lib/desktop/bin), then the files after them
+_desktop() {
+	if (( CURRENT == 2 )); then
+		compadd -- ${HOME}/.local/lib/desktop/bin/*(:t)
+	else
+		_files
+	fi
+}
+compdef _desktop desktop

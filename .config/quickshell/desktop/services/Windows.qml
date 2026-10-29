@@ -6,7 +6,7 @@ import Quickshell.Io
 import qs
 
 // The open windows, most recently focused first, and the switcher's state. i3 can't see Alt let go
-// (it was pressed before the switcher mode began), so desktop-key-release waits for it.
+// (it was pressed before the switcher mode began), so desktop key-release waits for it.
 Singleton {
 	id: root
 
@@ -101,7 +101,7 @@ Singleton {
 	Process {
 		id: ctrl
 
-		command: ["desktop-key-release", "alt"]
+		command: ["desktop", "key-release", "alt"]
 		onExited: code => {
 			if (code === 0 && root.switching)
 				root.commit();

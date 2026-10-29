@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# The desktop's own commands, which the shell, the keys and the services run (in
+# .local/lib/desktop/bin, off PATH): desktop <command> [arguments]
+#   desktop            lists them, with what each is for
+set -euo pipefail
+bin="$(dirname "$(readlink -f "$0")")/../lib/desktop/bin"
+case ${1:-} in
+"" | -h | --help)
+	echo "usage: desktop <command> [arguments]"
+	# each one's first line of description (a comment, or a Python docstring), cut to fit
+	for f in "$bin"/*; do
+		line="$(sed -n '2{s/^# //;s/^"""//;p}' "$f")"
+		((${#line} <= 66)) || line="${line:0:65}…"
+		printf '  %-12s %s\n' "${f##*/}" "$line"
+	done
+	;;
+*)
+	[[ -x $bin/$1 ]] || { echo "desktop: no command '$1' (desktop lists them)" >&2 && exit 2; }
+	cmd=$1 && shift
+	exec "$bin/$cmd" "$@"
+	;;
+esac

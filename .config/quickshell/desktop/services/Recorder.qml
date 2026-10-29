@@ -5,7 +5,7 @@ import Quickshell
 import Quickshell.Io
 import qs
 
-// Screen recording with gpu-screen-recorder through desktop-capture, into ~/Videos/Recordings.
+// Screen recording with gpu-screen-recorder through desktop capture, into ~/Videos/Recordings.
 // Stopping sends SIGINT, which makes it finish the file; a region is dragged before recording starts.
 Singleton {
 	id: root
@@ -41,7 +41,7 @@ Singleton {
 		if (process.running)
 			return;
 		file = `${folder}/Recording ${Qt.formatDateTime(new Date(), "yyyy-MM-dd HH.mm.ss")}.mp4`;
-		process.command = ["desktop-capture", "record", mode, file, ...(monitor ? ["--monitor", monitor] : [])];
+		process.command = ["desktop", "capture", "record", mode, file, ...(monitor ? ["--monitor", monitor] : [])];
 		picking = mode === "region";
 		started = new Date();
 		process.running = true;
@@ -51,7 +51,7 @@ Singleton {
 		id: process
 
 		onRunningChanged: if (!running) root.picking = false
-		// desktop-capture says "recording" once the region is picked and the recorder starts
+		// desktop capture says "recording" once the region is picked and the recorder starts
 		stdout: SplitParser {
 			onRead: line => {
 				if (line === "recording" && root.picking) {

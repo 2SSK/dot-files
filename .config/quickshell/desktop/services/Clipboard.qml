@@ -5,7 +5,7 @@ import Quickshell
 import Quickshell.Io
 import qs
 
-// Clipboard history, newest first, from `desktop-clipboard watch`. Kept in a private folder when
+// Clipboard history, newest first, from `desktop clipboard watch`. Kept in a private folder when
 // persist is on, else text in memory and images in the runtime folder (RAM).
 Singleton {
 	id: root
@@ -77,11 +77,11 @@ Singleton {
 	// the watch brings it back to the top
 	function copy(e: var): void {
 		if (e.kind === "image")
-			Quickshell.execDetached(["desktop-clipboard", "copy", "image", e.path]);
+			Quickshell.execDetached(["desktop", "clipboard", "copy", "image", e.path]);
 		else if (e.kind === "files")
-			Quickshell.execDetached(["desktop-clipboard", "copy", "files", ...e.paths]);
+			Quickshell.execDetached(["desktop", "clipboard", "copy", "files", ...e.paths]);
 		else
-			Quickshell.execDetached(["sh", "-c", 'printf %s "$1" | desktop-clipboard copy text', "sh", e.text]);
+			Quickshell.execDetached(["sh", "-c", 'printf %s "$1" | desktop clipboard copy text', "sh", e.text]);
 	}
 
 	function pin(e: var): void {
@@ -127,7 +127,7 @@ Singleton {
 
 		running: true
 		// on the command line since Process.environment wouldn't take it; empty is the helper's RAM folder
-		command: ["env", "DESKTOP_CLIPBOARD_IMAGES=" + (root.persist ? root.images : ""), "desktop-clipboard", "watch"]
+		command: ["env", "DESKTOP_CLIPBOARD_IMAGES=" + (root.persist ? root.images : ""), "desktop", "clipboard", "watch"]
 		stdout: SplitParser {
 			onRead: line => {
 				try {

@@ -32,14 +32,14 @@ HangingPanel {
 		return e.text.trim().split("\n")[0];
 	}
 
-	// put the entry back and close; paste also pastes it as Ctrl+V or Ctrl+Shift+V would (desktop-paste)
+	// put the entry back and close; paste also pastes it as Ctrl+V or Ctrl+Shift+V would (desktop paste)
 	function choose(paste: bool): void {
 		if (!entry)
 			return;
 		Clipboard.copy(entry);
 		Panel.clipboardOpen = false;
 		if (paste)
-			Quickshell.execDetached(["desktop-paste"]);
+			Quickshell.execDetached(["desktop", "paste"]);
 	}
 
 	name: "clipboard"

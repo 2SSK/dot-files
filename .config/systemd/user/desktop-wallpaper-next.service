@@ -1,5 +1,5 @@
 # With wallpaper.rotate "boot": the next boot's wallpaper is picked as the system shuts down, so the
-# login screen and the desktop already show it (desktop-wallpaper next-boot does nothing on a logout).
+# login screen and the desktop already show it (desktop wallpaper next-boot does nothing on a logout).
 [Unit]
 Description=Pick the next boot's wallpaper while shutting down
 
@@ -7,7 +7,7 @@ Description=Pick the next boot's wallpaper while shutting down
 Type=oneshot
 RemainAfterExit=yes
 ExecStart=/usr/bin/true
-ExecStop=%h/.local/bin/desktop-wallpaper next-boot
+ExecStop=%h/.local/lib/desktop/bin/wallpaper next-boot
 TimeoutStopSec=20
 
 [Install]

@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # What happens when you leave the laptop alone (X11, i3), set from the shell's settings:
-#   desktop-idle apply <dim> <lock> <off>   minutes (0: never). X's screensaver starts at the dim
-#                                          time; xss-lock then runs `desktop-idle dim` and locks
+#   desktop idle apply <dim> <lock> <off>   minutes (0: never). X's screensaver starts at the dim
+#                                          time; xss-lock then runs `desktop idle dim` and locks
 #                                          when the screensaver's cycle ends, at the lock time.
 #                                          The screen switches off (DPMS) at the off time.
-#   desktop-idle dim                       fade the brightness to a quarter; put it back when
+#   desktop idle dim                       fade the brightness to a quarter; put it back when
 #                                          stopped (xss-lock stops it on any key or movement, or
 #                                          as it locks)
-#   desktop-idle undim                     stop a dim (swayidle's resume, on Wayland)
+#   desktop idle undim                     stop a dim (swayidle's resume, on Wayland)
 # On Wayland the shell runs swayidle with the same times, calling dim and undim.
 set -euo pipefail
 
@@ -49,8 +49,8 @@ dim() {
 }
 
 case ${1:-} in
-apply) (($# == 4)) || { echo "usage: desktop-idle apply <dim> <lock> <off>" >&2 && exit 2; }; apply "$2" "$3" "$4" ;;
+apply) (($# == 4)) || { echo "usage: desktop idle apply <dim> <lock> <off>" >&2 && exit 2; }; apply "$2" "$3" "$4" ;;
 dim) dim ;;
 undim) [[ -s $pidfile ]] && kill -TERM "$(cat "$pidfile")" 2>/dev/null || true ;;
-*) echo "usage: desktop-idle apply <dim> <lock> <off> | dim | undim" >&2 && exit 2 ;;
+*) echo "usage: desktop idle apply <dim> <lock> <off> | dim | undim" >&2 && exit 2 ;;
 esac

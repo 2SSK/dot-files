@@ -159,7 +159,7 @@ subvolumes() {
 power() { # TLP alone (auto-cpufreq fights it over the CPU), with system/etc/tlp.d's settings
 	put etc/tlp.d/10-desktop.conf
 	put etc/modprobe.d/btusb.conf
-	# the shell's power controls (desktop-power): TLP's three profiles and the charge limit, without
+	# the shell's power controls (desktop power): TLP's three profiles and the charge limit, without
 	# a password; the helper is root's, so the rule can't be pointed at anything else
 	put usr/local/bin/desktop-charge-limit 755
 	sudoers 90-desktop-power "packages/system.sh power: the shell's power profile and charge limit" \
@@ -231,6 +231,11 @@ docker_daemon() {
 	# Socket-activated: the daemon starts on first use. The docker group is root-equivalent.
 	if ! systemctl is-enabled --quiet docker.socket 2>/dev/null || ! systemctl is-active --quiet docker.socket; then
 		sudo systemctl enable --now docker.socket
+		changed=1
+	fi
+	# not at boot: started there, it waits for the network and held the login screen back ~5 s
+	if systemctl is-enabled --quiet docker.service 2>/dev/null || systemctl is-enabled --quiet containerd.service 2>/dev/null; then
+		sudo systemctl disable docker.service containerd.service
 		changed=1
 	fi
 	if ! id -nG "$USER" | tr ' ' '\n' | grep -qx docker; then

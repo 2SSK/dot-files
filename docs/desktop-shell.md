@@ -45,7 +45,7 @@ or Copy only puts it back. Either way it goes back as what it was and the panel 
 attachments. Pin, Open (images, files), Save as a note (text) and Remove sit under the preview;
 Clear empties the history (pins stay).
 
-`desktop-clipboard watch` reports each copy (X11: XFixes, no polling; Wayland: `wl-paste --watch`).
+`desktop clipboard watch` reports each copy (X11: XFixes, no polling; Wayland: `wl-paste --watch`).
 Text stays in memory and images in `$XDG_RUNTIME_DIR` (RAM, gone at logout; the newest 30 kept), so
 copied passwords and screenshots never reach the disk, and a password manager's copies are left
 out. Pinned entries are kept in `~/.local/state/desktop/clipboard/` (a private folder; a pinned
@@ -60,12 +60,12 @@ and swayfx's touches for the shell. What differs underneath:
 | | i3 (X11) | sway (Wayland) |
 | --- | --- | --- |
 | Panels | a floating window as big as the screen | a layer surface over the screen with the keyboard |
-| Lock screen | i3lock-color (`desktop-lock`) | the shell's own (Quickshell's session lock, PAM `lock/pam/lock`) |
-| Idle | X's timers (`desktop-idle apply`) and xss-lock | swayidle, run by the shell with the same settings |
-| Alt+Tab ends | `desktop-key-release alt` watches X | the ring holds the keyboard and sees Alt let go |
+| Lock screen | i3lock-color (`desktop lock`) | the shell's own (Quickshell's session lock, PAM `lock/pam/lock`) |
+| Idle | X's timers (`desktop idle apply`) and xss-lock | swayidle, run by the shell with the same settings |
+| Alt+Tab ends | `desktop key-release alt` watches X | the ring holds the keyboard and sees Alt let go |
 | Clipboard history | Qt's clipboard signal | `wl-paste --watch` |
-| Wallpaper | feh | awww, cross-fading (`desktop-wallpaper`) |
-| Screens, touchpad | `desktop-displays`, `desktop-input` | sway's `outputs` and `input` |
+| Wallpaper | feh | awww, cross-fading (`desktop wallpaper`) |
+| Screens, touchpad | `desktop displays`, `desktop input` | sway's `outputs` and `input` |
 
 ## Launcher
 
@@ -79,7 +79,7 @@ switch them, the arrows move, Enter picks:
 | Files | `$mod+Shift+f` | **Enter** (or a click) copies the file itself (its `file://` URI as `text/uri-list` alone, as a file manager copies), so Ctrl+V in Teams, WhatsApp or a mail attaches it; **Ctrl+Enter** opens it; **Shift+Enter** copies its full path; **Ctrl+Shift+Enter** its content (text as text, an image as an image); the row's buttons do the same. Without a search, the files changed this week, newest first |
 | Themes | `$mod+Shift+y` | applies it and stays open, to try another; the sun/moon chip switches dark and light |
 
-`desktop-file open|file|path|content <file>` does the file actions (`wl-copy-exact` puts a file on the Wayland clipboard as `text/uri-list` alone; `wl-copy` would add text), `desktop-file find [query]` the
+`desktop file open|file|path|content <file>` does the file actions (`copy-exact` puts a file on the Wayland clipboard as `text/uri-list` alone; `wl-copy` would add text), `desktop file find [query]` the
 search (fd and fzf over `$HOME`, leaving out `.git`, caches and dependencies). Opening picks by type:
 text and code in `$EDITOR` (nvim) inside `$TERMINAL` (kitty); web pages, PDFs and SVGs in a new tab
 of the browser that's running (Brave, Firefox, Chromium, Chrome, LibreWolf, Vivaldi, Zen), else of
@@ -98,18 +98,18 @@ the default one; anything else in its default application. The emoji come from U
 A screenshot is saved to `~/Pictures/Screenshots` and copied to the clipboard as an image, ready
 to paste. A recording (gpu-screen-recorder, 60 fps, the system sound) goes to `~/Videos/Recordings`: a
 region, the focused window, or one screen or all of them; while it runs the bar's camera turns red
-and pulses on a red pill with the time (a click stops it), and the panel's Record row becomes Stop. `desktop-capture shot|record …` does the work (X11: slop, maim,
+and pulses on a red pill with the time (a click stops it), and the panel's Record row becomes Stop. `desktop capture shot|record …` does the work (X11: slop, maim,
 xclip; Wayland: slurp, grim, wl-copy, and a window records through the portal).
 
 Screen sharing (Teams, Meet, OBS, and a window recording) goes through xdg-desktop-portal-wlr, which
 asks the capture panel what to share: the screens, then the open windows most recent first, with their
 app and workspace. The arrows or 1–9 pick, Enter or a click shares it, Escape declines.
-`desktop-share-pick` is the portal's picker (`.config/xdg-desktop-portal-wlr/config`); without the
+`desktop share-pick` is the portal's picker (`.config/xdg-desktop-portal-wlr/config`); without the
 shell running it shares the first screen.
 
 ## Screens (i3)
 
-`desktop-displays` arranges screens as sway's outputs config does: the laptop panel at the left,
+`desktop displays` arranges screens as sway's outputs config does: the laptop panel at the left,
 each connected external screen to the right of the one before at its preferred mode; an unplugged
 screen is turned off, and the wallpaper is drawn again across them. i3 starts it in `watch` mode,
 which listens for plug and unplug events (`udevadm monitor`) and arranges again. Workspaces 2, 3, 9
@@ -119,7 +119,7 @@ capture panel's Screen choice shows a map of them.
 
 ## Touchpad (i3)
 
-`desktop-input`, run when i3 starts or reloads, sets the touchpad up as sway's input config does:
+`desktop input`, run when i3 starts or reloads, sets the touchpad up as sway's input config does:
 tap to click (one finger left, two right, three middle), tap and drag, natural two-finger scrolling,
 click with fingers, no touchpad while typing, middle-click emulation. Scrolling on X is twice as fast
 as on Wayland by default, so it's slowed: one scroll step per 45 pixels of finger movement
@@ -139,7 +139,7 @@ without showing the ring.
 
 The shell's popup can't take the keyboard on X11, so i3's mode "switcher" sends the keys over IPC;
 i3 can't see Alt let go (it was pressed before the mode began), so the shell runs
-`desktop-key-release alt`, which asks X whether Alt is still held (nothing is grabbed). Cards show the
+`desktop key-release alt`, which asks X whether Alt is still held (nothing is grabbed). Cards show the
 app's icon, the window's title, the app and workspace; X11 has no live window previews.
 
 ## Alarms
@@ -158,20 +158,20 @@ sets one at random. The images come from `wallpaper.folders` (shell.json; the re
 `~/Wallpaper-Bank`), from the current theme's folder when it has some (`~/Wallpaper-Bank/nord/`).
 
 Each boot's wallpaper is picked as the system shuts down, not at login: a user service
-(`desktop-wallpaper-next`) runs `desktop-wallpaper next-boot`, which sets the next one and redraws the
+(`desktop-wallpaper-next`) runs `desktop wallpaper next-boot`, which sets the next one and redraws the
 login screen's background. So the login screen and the desktop start on it, with no change after
 you log in. A logout keeps the wallpaper; only a shutdown or reboot picks a new one.
 
-`desktop-wallpaper set <image>` does the setting: it points `~/.local/state/desktop/wallpaper` at it
+`desktop wallpaper set <image>` does the setting: it points `~/.local/state/desktop/wallpaper` at it
 (the lock screen and sddm use it too) and fades over to it. On X11 feh has no transitions, so
 it shows three half-size blended frames (made in parallel with ImageMagick) before the full image;
 on Wayland awww draws it, cross-fading over 0.8 s (its daemon holds one frame per screen: about
-13 MB, where the shell drawing it took 50). `desktop-wallpaper restore` draws the remembered one at
+13 MB, where the shell drawing it took 50). `desktop wallpaper restore` draws the remembered one at
 login, without a fade, starting awww's daemon on sway.
 
 The login screen follows the wallpaper too. It can't read the home folder, so
 `packages/system.sh sddm` gives you its background file (in `/var/lib/desktop/sddm`), and every
-wallpaper change redraws it without sudo. `desktop-wallpaper screens` redraws it by hand.
+wallpaper change redraws it without sudo. `desktop wallpaper screens` redraws it by hand.
 
 ## Settings window
 
@@ -191,7 +191,7 @@ The **Timeshift** page lists the system's snapshots (newest first, with their ki
 makes one now with a comment, and deletes one (a second press confirms); restoring opens Timeshift
 itself. Listing needs root: `packages/system.sh timeshift` allows exactly `timeshift --list
 --scripted` without a password (`/etc/sudoers.d/90-desktop-timeshift`, after the installer's rules); without it the page asks
-once. `desktop-timeshift list|create|delete` does the work.
+once. `desktop timeshift list|create|delete` does the work.
 
 `packages/system.sh timeshift` also sets what is kept: 3 daily snapshots, 1 weekly, and (with
 `timeshift-autosnap`) the last 3 taken before a pacman upgrade. `packages/system.sh subvolumes`
@@ -204,8 +204,8 @@ build cache and unnamed volumes (never containers: a stopped one may hold a data
 ## When idle
 
 Settings → Power → **When idle**: the screen dims after 4 minutes alone (any key or movement brings
-it back), locks after 5 and switches off after 10; each can be Never. On i3, `desktop-idle apply`
-sets X's screensaver and DPMS timers to them; xss-lock runs `desktop-idle dim` when the screensaver
+it back), locks after 5 and switches off after 10; each can be Never. On i3, `desktop idle apply`
+sets X's screensaver and DPMS timers to them; xss-lock runs `desktop idle dim` when the screensaver
 starts and locks when its cycle ends. Video players and browsers playing video hold the screensaver
 off themselves. Locking keeps the laptop running; nothing suspends on its own.
 
@@ -232,7 +232,7 @@ password field; Escape or Cancel declines, a wrong password shakes it and asks a
 
 Workspaces are dots: the ones with windows and the one you're on (i3 and sway drop empty ones), the
 current one a wide pill. After them, the scratchpad's window count while it holds any; a click shows or
-hides it. The scratchpad is one floating workspace (`desktop-scratch`): `$mod+Shift+Return` adds the
+hides it. The scratchpad is one floating workspace (`desktop scratch`): `$mod+Shift+Return` adds the
 window to a tabbed, centred group, `$mod+minus` shows or hides the whole group, and inside it the usual
 keys tab, split and focus.
 Hidden with `$mod+Shift+b`, the bar comes back over the windows while the pointer is at its edge.
@@ -281,7 +281,7 @@ history lasts until the shell restarts.
 Lock, Log Out, Lock & Suspend, Reboot, Shut Down; Log Out, Reboot and Shut Down take a second
 press while `power.confirm` is on. Nothing hibernates.
 
-- **Lock** runs `loginctl lock-session`; on i3, xss-lock starts `desktop-lock`: i3lock-color over the
+- **Lock** runs `loginctl lock-session`; on i3, xss-lock starts `desktop lock`: i3lock-color over the
   blurred, dimmed wallpaper (cached in `~/.cache/desktop`), a clock and a small ring that lights up
   as you type. xss-lock also locks after X's idle timeout. The laptop keeps running.
 - **Closing the lid** only locks, after `packages/system.sh lid` (logind `HandleLidSwitch=lock`),
@@ -293,5 +293,5 @@ press while `power.confirm` is on. Nothing hibernates.
 ## IPC
 
 `qs -c desktop ipc call <target> <function>`: `audio up|down|mute|mic`, `brightness up|down`,
-`bar toggle`, `recorder toggle`, `notifications toggle|dnd|clear`, `settings toggle|page <bar|appearance|notifications|levels|power|timeshift|keys>`, `control toggle|open <page>|page <page>|close`, `clipboard toggle`, `wallpaper toggle|shuffle`, `launcher toggle <apps|emoji|files|themes>|close`, `switcher next|prev|commit|cancel|list`, `nightlight toggle`, `capture toggle|shot <region|window|screen>|record <region|window|screen>|stop`, `share pick <dir>` (desktop-share-pick), `alarm stop|snooze`, `power open|toggle|close|next|prev|activate|pick <n>`,
+`bar toggle`, `recorder toggle`, `notifications toggle|dnd|clear`, `settings toggle|page <bar|appearance|notifications|levels|power|timeshift|keys>`, `control toggle|open <page>|page <page>|close`, `clipboard toggle`, `wallpaper toggle|shuffle`, `launcher toggle <apps|emoji|files|themes>|close`, `switcher next|prev|commit|cancel|list`, `nightlight toggle`, `capture toggle|shot <region|window|screen>|record <region|window|screen>|stop`, `share pick <dir>` (desktop share-pick), `alarm stop|snooze`, `power open|toggle|close|next|prev|activate|pick <n>`,
 `theme reload`.

@@ -1,5 +1,5 @@
 # fd's ignore list (gitignore syntax), for every fd and the launcher's file search
-# (desktop-file find). A leading / anchors a folder to where the search starts: from home, these
+# (desktop file find). A leading / anchors a folder to where the search starts: from home, these
 # tools' data folders are skipped; a search inside them (~/go/...) still sees everything.
 node_modules/
 __pycache__/

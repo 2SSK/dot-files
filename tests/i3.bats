@@ -27,10 +27,10 @@ setup() {
 	[ "$status" -eq 1 ]
 }
 
-@test "desktop-key-release fails cleanly without an X display, and on an unknown key" {
-	run env -u DISPLAY "$BATS_TEST_DIRNAME/../.local/bin/desktop-key-release" alt
+@test "desktop key-release fails cleanly without an X display, and on an unknown key" {
+	run env -u DISPLAY "$BATS_TEST_DIRNAME/../.local/lib/desktop/bin/key-release" alt
 	[ "$status" -eq 1 ]
 	[[ $output == *"no X display"* ]]
-	run "$BATS_TEST_DIRNAME/../.local/bin/desktop-key-release" hyper
+	run "$BATS_TEST_DIRNAME/../.local/lib/desktop/bin/key-release" hyper
 	[ "$status" -eq 2 ]
 }

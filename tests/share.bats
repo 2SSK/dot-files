@@ -1,9 +1,9 @@
 #!/usr/bin/env bats
-# .local/bin/desktop-share-pick, the portal's screen-sharing picker: a fake qs stands in for the shell,
+# .local/lib/desktop/bin/share-pick, the portal's screen-sharing picker: a fake qs stands in for the shell,
 # answering through the FIFO the way the capture panel does (or not running at all).
 
 setup() {
-	PICK="$BATS_TEST_DIRNAME/../.local/bin/desktop-share-pick"
+	PICK="$BATS_TEST_DIRNAME/../.local/lib/desktop/bin/share-pick"
 	bin="$BATS_TEST_TMPDIR/bin" && mkdir -p "$bin"
 	export PATH="$bin:$PATH" SOURCES=$'Monitor: eDP-1 Chimei Innolux 0x1618\nWindow: Teams (meeting) (4f2a)'
 }

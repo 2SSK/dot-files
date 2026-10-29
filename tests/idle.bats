@@ -1,9 +1,9 @@
 #!/usr/bin/env bats
-# desktop-idle: X's screensaver and DPMS timers from the settings (dim, lock, screen off), and the
+# desktop idle: X's screensaver and DPMS timers from the settings (dim, lock, screen off), and the
 # dim step xss-lock runs before locking. Fake xset and brightnessctl record what they're asked.
 
 setup() {
-	IDLE="$BATS_TEST_DIRNAME/../.local/bin/desktop-idle"
+	IDLE="$BATS_TEST_DIRNAME/../.local/lib/desktop/bin/idle"
 	export CALLS="$BATS_TEST_TMPDIR/calls" LEVEL="$BATS_TEST_TMPDIR/level"
 	mkdir -p "$BATS_TEST_TMPDIR/bin"
 	# shellcheck disable=SC2016 # expands when the fake runs

@@ -2,7 +2,7 @@
 # Does the shell's config load? It runs in a throwaway headless sway, apart from everything live (its
 # own D-Bus and state; no swayidle or Bluetooth agent of its own), all in one systemd scope that is
 # stopped at the end with whatever D-Bus started in it; any load or script error is printed.
-# desktop-reload runs it before restarting the shell, and CI on each push.
+# desktop reload runs it before restarting the shell, and CI on each push.
 #   shell-check.sh [config dir]      exit 0: it loads clean
 set -uo pipefail
 

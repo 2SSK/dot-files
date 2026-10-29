@@ -1,8 +1,8 @@
 #!/usr/bin/env bats
-# desktop-lock: the locker in the desktop theme, with fake i3lock/swaylock recording their arguments.
+# desktop lock: the locker in the desktop theme, with fake i3lock/swaylock recording their arguments.
 
 setup() {
-	LOCK="$BATS_TEST_DIRNAME/../.local/bin/desktop-lock"
+	LOCK="$BATS_TEST_DIRNAME/../.local/lib/desktop/bin/lock"
 	export XDG_STATE_HOME="$BATS_TEST_TMPDIR/state" ARGS="$BATS_TEST_TMPDIR/args"
 	mkdir -p "$XDG_STATE_HOME/desktop/theme" "$BATS_TEST_TMPDIR/bin"
 	printf '{"ui": {"bg": "#1f1f28", "fg": "#dcd7ba", "primary": "#7e9cd8", "error": "#e82424"}}\n' >"$XDG_STATE_HOME/desktop/theme/palette.json"

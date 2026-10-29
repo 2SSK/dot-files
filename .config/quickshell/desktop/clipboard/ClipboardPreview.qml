@@ -132,7 +132,7 @@ Rectangle {
 			glyph: Icons.g("external-link")
 			label: "Open"
 			onClicked: {
-				Quickshell.execDetached(["desktop-file", "open", preview.entry.kind === "image" ? preview.entry.path : preview.entry.paths[0]]);
+				Quickshell.execDetached(["desktop", "file", "open", preview.entry.kind === "image" ? preview.entry.path : preview.entry.paths[0]]);
 				Panel.clipboardOpen = false;
 			}
 		}

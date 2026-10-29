@@ -1,5 +1,5 @@
 #!/usr/bin/env bats
-# .local/bin/desktop-shell: which EGL driver the shell gets. A fake qs prints what it was given; fake
+# .local/lib/desktop/bin/shell: which EGL driver the shell gets. A fake qs prints what it was given; fake
 # sysfs cards say which GPU the screen hangs off.
 
 setup() {
@@ -19,18 +19,18 @@ card() { # card <n> <driver> <boot_vga>
 
 @test "screen on Intel, NVIDIA beside it: Mesa only" {
 	card 1 nvidia 0 && card 2 i915 1
-	run "$BATS_TEST_DIRNAME/../.local/bin/desktop-shell"
+	run "$BATS_TEST_DIRNAME/../.local/lib/desktop/bin/shell"
 	[ "$output" = "egl=$DESKTOP_EGL_DIR/50_mesa.json" ]
 }
 
 @test "screen on NVIDIA: left to glvnd" {
 	card 0 nvidia 1
-	run "$BATS_TEST_DIRNAME/../.local/bin/desktop-shell"
+	run "$BATS_TEST_DIRNAME/../.local/lib/desktop/bin/shell"
 	[ "$output" = "egl=" ]
 }
 
 @test "no Mesa installed: left to glvnd" {
 	card 0 amdgpu 1 && rm "$DESKTOP_EGL_DIR/50_mesa.json"
-	run "$BATS_TEST_DIRNAME/../.local/bin/desktop-shell"
+	run "$BATS_TEST_DIRNAME/../.local/lib/desktop/bin/shell"
 	[ "$output" = "egl=" ]
 }

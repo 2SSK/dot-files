@@ -175,3 +175,15 @@ share() {
 		printf '%s' "$urls" | xclip -selection clipboard
 	fi && echo "copied" >&2
 }
+
+# ag / al: the AGENTS.md template / this year's MIT LICENSE (~/.local/share/templates) into the
+# current project, never over one already there
+ag() {
+	[[ ! -e AGENTS.md ]] || { echo "ag: AGENTS.md is already here" >&2 && return 1; }
+	cp "${XDG_DATA_HOME:-$HOME/.local/share}/templates/AGENTS.md" AGENTS.md && echo "AGENTS.md added"
+}
+al() {
+	[[ ! -e LICENSE ]] || { echo "al: LICENSE is already here" >&2 && return 1; }
+	sed "s/^Copyright (c) [0-9]\{4\}/Copyright (c) $(date +%Y)/" "${XDG_DATA_HOME:-$HOME/.local/share}/templates/LICENSE" >LICENSE &&
+		echo "LICENSE added ($(date +%Y))"
+}

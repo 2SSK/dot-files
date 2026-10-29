@@ -27,9 +27,9 @@ Singleton {
 		command(`workspace number ${num}`);
 	}
 
-	// the floating group (desktop-scratch), else the scratchpad as sway and i3 have it
+	// the floating group (desktop scratch), else the scratchpad as sway and i3 have it
 	function showScratchpad(): void {
-		Quickshell.execDetached(["desktop-scratch", "toggle"]);
+		Quickshell.execDetached(["desktop", "scratch", "toggle"]);
 	}
 
 	Process {
@@ -105,12 +105,12 @@ Singleton {
 	}
 
 	// once the screens have settled: the window manager applies workspaces.conf's screens only to
-	// new workspaces, so desktop-displays moves the ones a monitor's absence left elsewhere
+	// new workspaces, so desktop displays moves the ones a monitor's absence left elsewhere
 	Timer {
 		id: rehomeLater
 
 		interval: 1500
-		onTriggered: Quickshell.execDetached(["desktop-displays", "rehome"])
+		onTriggered: Quickshell.execDetached(["desktop", "displays", "rehome"])
 	}
 
 	Timer {
@@ -142,7 +142,7 @@ Singleton {
 			onStreamFinished: {
 				let total = 0, shown = 0;
 				// i3 marks the floating container around a scratchpad window, not the window itself; the
-				// floating group (desktop-scratch) counts as the windows in it
+				// floating group (desktop scratch) counts as the windows in it
 				const windows = node => (node.nodes ?? []).length + (node.floating_nodes ?? []).length === 0 ? 1
 					: [...(node.nodes ?? []), ...(node.floating_nodes ?? [])].reduce((n, c) => n + windows(c), 0);
 				const walk = (node, hidden) => {

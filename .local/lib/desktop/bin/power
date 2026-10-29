@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # The shell's power controls: TLP's profile and the battery's charge limit.
-#   desktop-power state                                  {"profile": "...", "limit": N} as JSON ("" and 0 without TLP or a battery)
-#   desktop-power profile performance|balanced|power-saver
-#   desktop-power limit <50-100>                         through desktop-charge-limit (root's)
+#   desktop power state                                  {"profile": "...", "limit": N} as JSON ("" and 0 without TLP or a battery)
+#   desktop power profile performance|balanced|power-saver
+#   desktop power limit <50-100>                         through desktop-charge-limit (root's)
 # Changes go through `sudo -n` (allowed without a password by `packages/system.sh power`), else
 # pkexec asks for the password (the shell's polkit prompt).
 set -euo pipefail
@@ -27,14 +27,14 @@ state)
 profile)
 	case ${2:-} in
 	performance | balanced | power-saver) as_root tlp "$2" >/dev/null ;;
-	*) echo "usage: desktop-power profile performance|balanced|power-saver" >&2 && exit 2 ;;
+	*) echo "usage: desktop power profile performance|balanced|power-saver" >&2 && exit 2 ;;
 	esac
 	;;
 limit)
 	if ! [[ ${2:-} =~ ^[1-9][0-9]{1,2}$ ]] || (($2 < 50 || $2 > 100)); then
-		echo "usage: desktop-power limit <50-100>" >&2 && exit 2
+		echo "usage: desktop power limit <50-100>" >&2 && exit 2
 	fi
 	as_root desktop-charge-limit "$2"
 	;;
-*) echo "usage: desktop-power state | profile <name> | limit <percent>" >&2 && exit 2 ;;
+*) echo "usage: desktop power state | profile <name> | limit <percent>" >&2 && exit 2 ;;
 esac

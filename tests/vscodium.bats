@@ -1,8 +1,8 @@
 #!/usr/bin/env bats
-# desktop-vscodium: VSCodium's settings.json, the repo's base plus the rendered theme colours.
+# desktop vscodium: VSCodium's settings.json, the repo's base plus the rendered theme colours.
 
 setup() {
-	VSC="$BATS_TEST_DIRNAME/../.local/bin/desktop-vscodium"
+	VSC="$BATS_TEST_DIRNAME/../.local/lib/desktop/bin/vscodium"
 	export XDG_CONFIG_HOME="$BATS_TEST_TMPDIR/config" XDG_STATE_HOME="$BATS_TEST_TMPDIR/state"
 	theme="$XDG_STATE_HOME/desktop/theme" out="$XDG_CONFIG_HOME/VSCodium/User/settings.json"
 	mkdir -p "$XDG_CONFIG_HOME/VSCodium" "$theme/vscodium"

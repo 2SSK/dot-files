@@ -132,12 +132,24 @@ libvirt_fakes() { # <state>: "broken" (nothing set up) or "ok" (everything in pl
 
 @test "docker: once set up, a run changes nothing and says so" {
 	printf '#!/bin/sh\necho "$USER wheel docker"\n' >"$BATS_TEST_TMPDIR/bin/id"
-	printf '#!/bin/sh\nexit 0\n' >"$BATS_TEST_TMPDIR/bin/systemctl" # enabled and running
+	# the socket enabled and running, the daemon itself not started at boot
+	printf '#!/bin/sh\ncase "$*" in *docker.service*|*containerd.service*) exit 1 ;; esac\nexit 0\n' >"$BATS_TEST_TMPDIR/bin/systemctl"
 	chmod +x "$BATS_TEST_TMPDIR/bin/id" "$BATS_TEST_TMPDIR/bin/systemctl"
 	run "$SYSTEM" docker
 	[ "$status" -eq 0 ]
 	[[ $output == *"docker: already in place"* ]]
 	[ ! -e "$CALLS" ]
+}
+
+@test "docker: a daemon started at boot is left to the socket (it held the login screen back)" {
+	printf '#!/bin/sh\necho "$USER wheel docker"\n' >"$BATS_TEST_TMPDIR/bin/id"
+	printf '#!/bin/sh\ncase "$1" in is-enabled|is-active) exit 0 ;; esac\necho "systemctl $*" >>"$CALLS"\n' >"$BATS_TEST_TMPDIR/bin/systemctl"
+	chmod +x "$BATS_TEST_TMPDIR/bin/id" "$BATS_TEST_TMPDIR/bin/systemctl"
+	run "$SYSTEM" docker
+	[ "$status" -eq 0 ]
+	grep -qx "systemctl disable docker.service containerd.service" "$CALLS"
+	run grep -q "enable --now docker.socket" "$CALLS"
+	[ "$status" -ne 0 ] # the socket was already on
 }
 
 grub_fakes() { # /etc/default/grub, a rendered theme, and fake font, mount and grub tools

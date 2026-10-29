@@ -1,9 +1,9 @@
 #!/usr/bin/env bats
-# desktop-timeshift: Timeshift's snapshots as JSON for the settings page; making and deleting them
+# desktop timeshift: Timeshift's snapshots as JSON for the settings page; making and deleting them
 # through pkexec. Fakes: timeshift prints a list like the real one; sudo and pkexec run or refuse.
 
 setup() {
-	TS="$BATS_TEST_DIRNAME/../.local/bin/desktop-timeshift"
+	TS="$BATS_TEST_DIRNAME/../.local/lib/desktop/bin/timeshift"
 	export CALLS="$BATS_TEST_TMPDIR/calls"
 	bin="$BATS_TEST_TMPDIR/bin" && mkdir -p "$bin"
 	cat >"$bin/timeshift" <<'FAKE'

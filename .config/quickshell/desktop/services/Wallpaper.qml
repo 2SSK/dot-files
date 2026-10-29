@@ -31,7 +31,7 @@ Singleton {
 			pending = path;
 			return;
 		}
-		apply.command = ["desktop-wallpaper", "set", path];
+		apply.command = ["desktop", "wallpaper", "set", path];
 		apply.running = true;
 	}
 
@@ -55,7 +55,7 @@ Singleton {
 			const next = root.pending;
 			root.pending = "";
 			if (next && next !== apply.command[2]) {
-				apply.command = ["desktop-wallpaper", "set", next];
+				apply.command = ["desktop", "wallpaper", "set", next];
 				apply.running = true;
 			}
 		}

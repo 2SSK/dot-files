@@ -186,7 +186,7 @@ Scope {
 		}
 	}
 
-	// X11: a popup can't take the keyboard, so the shell watches X for Alt's release (desktop-key-release)
+	// X11: a popup can't take the keyboard, so the shell watches X for Alt's release (desktop key-release)
 	LazyLoader {
 		active: !Config.wayland && root.mapped
 

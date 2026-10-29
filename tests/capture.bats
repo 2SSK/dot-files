@@ -1,9 +1,9 @@
 #!/usr/bin/env bats
-# desktop-capture: screenshots and recordings of a region, the focused window or a screen. Fake
+# desktop capture: screenshots and recordings of a region, the focused window or a screen. Fake
 # tools record what they were asked; slop answers $REGION (or fails as if cancelled).
 
 setup() {
-	CAPTURE="$BATS_TEST_DIRNAME/../.local/bin/desktop-capture"
+	CAPTURE="$BATS_TEST_DIRNAME/../.local/lib/desktop/bin/capture"
 	export CALLS="$BATS_TEST_TMPDIR/calls" REGION="640x480+10+20" HOME="$BATS_TEST_TMPDIR/home"
 	export XDG_PICTURES_DIR="$HOME/Pictures"
 	bin="$BATS_TEST_TMPDIR/bin" && mkdir -p "$bin" "$HOME"

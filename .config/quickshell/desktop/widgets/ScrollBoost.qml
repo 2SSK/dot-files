@@ -2,7 +2,7 @@ import QtQuick
 import qs
 
 // Faster, smooth wheel and touchpad scrolling for the Flickable it sits in: X sends few, coarse steps
-// (desktop-input slows them for apps), so the shell's lists go further per step and ease to each stop.
+// (desktop input slows them for apps), so the shell's lists go further per step and ease to each stop.
 WheelHandler {
 	id: root
 

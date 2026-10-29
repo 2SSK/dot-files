@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Set the wallpaper with a short cross-fade, or put the last one back. On Wayland awww draws it (its
 # daemon started here when it isn't running; swaybg, without a fade, where there's no awww), on X11 feh.
-#   desktop-wallpaper set <image>   fade from the current one to it, and remember it
-#   desktop-wallpaper restore       draw the remembered one (login), no fade
-#   desktop-wallpaper screens       redraw the login screen's background from it
-#   desktop-wallpaper next-boot     while shutting down, with wallpaper.rotate "boot": pick the next
+#   desktop wallpaper set <image>   fade from the current one to it, and remember it
+#   desktop wallpaper restore       draw the remembered one (login), no fade
+#   desktop wallpaper screens       redraw the login screen's background from it
+#   desktop wallpaper next-boot     while shutting down, with wallpaper.rotate "boot": pick the next
 #                                   boot's, so the login screen and the desktop start on it (a user
 #                                   service runs it as the session stops; a logout keeps the old one)
 # The choice is ~/.local/state/desktop/wallpaper, a link the lock screen reads too. The login screen
@@ -17,10 +17,10 @@ set -euo pipefail
 here="$(dirname "$(readlink -f "$0")")"
 frames=(25 50 75)
 
-# shellcheck source-path=SCRIPTDIR/.. source=.local/lib/desktop/screens.sh
-source "$here/../lib/desktop/screens.sh"
-# shellcheck source-path=SCRIPTDIR/.. source=.local/lib/desktop/state.sh
-source "$here/../lib/desktop/state.sh"
+# shellcheck source-path=SCRIPTDIR/../../../.. source=.local/lib/desktop/screens.sh
+source "$here/../screens.sh"
+# shellcheck source-path=SCRIPTDIR/../../../.. source=.local/lib/desktop/state.sh
+source "$here/../state.sh"
 state="$desktop_state"
 
 draw() { # <image> [fade]
@@ -100,8 +100,8 @@ next_boot() {
 	screens
 	# shutting down: matugen's colours made and rendered for the next login, no app reloaded
 	if command -v matugen >/dev/null && [[ $family == matugen ]]; then
-		python3 "$here/../lib/desktop/matugen_theme.py" "$next" "$state/themes/matugen.toml" &&
-			python3 "$here/../lib/desktop/theme_render.py" render matugen "$(current_theme | cut -d' ' -f2)"
+		python3 "$here/../matugen_theme.py" "$next" "$state/themes/matugen.toml" &&
+			python3 "$here/../theme_render.py" render matugen "$(current_theme | cut -d' ' -f2)"
 	fi
 	return 0
 }
@@ -110,7 +110,7 @@ case ${1:-} in
 screens) screens ;;
 next-boot) next_boot ;;
 set)
-	[[ -f ${2:-} ]] || { echo "desktop-wallpaper: not an image: ${2:-}" >&2 && exit 2; }
+	[[ -f ${2:-} ]] || { echo "desktop wallpaper: not an image: ${2:-}" >&2 && exit 2; }
 	mkdir -p "$state"
 	from="$(current_wallpaper)"
 	fade "$from" "$2"
@@ -125,7 +125,7 @@ restore)
 	draw "$current"
 	;;
 *)
-	echo "usage: desktop-wallpaper set <image> | restore | screens | next-boot" >&2
+	echo "usage: desktop wallpaper set <image> | restore | screens | next-boot" >&2
 	exit 2
 	;;
 esac
