@@ -1,0 +1,5 @@
+# Games (opt-in: install.sh games). Columns: arch  fedora (format: see base.txt)
+# Steam (multilib on Arch, RPM Fusion on Fedora) and the 32-bit Vulkan driver its games use; on
+# a laptop with NVIDIA, lib32-nvidia-utils too (launch options: prime-run %command%)
+steam                       steam
+lib32-vulkan-intel          -

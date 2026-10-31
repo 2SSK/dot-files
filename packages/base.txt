@@ -44,6 +44,8 @@ kernel-modules-hook         -
 tlp                         tlp
 tlp-rdw                     tlp-rdw
 sddm                        sddm
+# the browser webapp opens sites in, as apps (its app mode)
+aur:brave-bin               -
 # Spotify, its ads blocked by a preloaded library (.local/share/applications/spotify.desktop)
 aur:spotify                 -
 aur:spotify-adblock         -

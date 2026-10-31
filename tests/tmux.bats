@@ -5,13 +5,15 @@ setup() {
 	export HOME="$BATS_TEST_TMPDIR/home"
 	mkdir -p "$HOME"
 	CONF="$BATS_TEST_DIRNAME/../.config/tmux/tmux.conf"
-	SOCK="bats-$$"
-	tmux -L "$SOCK" -f "$CONF" new-session -d -s t
+	# a socket path, not a name: the tmux-save tests move TMUX_TMPDIR, and a named socket's server was
+	# then never found to be killed, and kept bats waiting on it for ever
+	SOCK="$BATS_TEST_TMPDIR/tmux.sock"
+	tmux -S "$SOCK" -f "$CONF" new-session -d -s t
 }
 
-teardown() { tmux -L "$SOCK" kill-server 2>/dev/null || true; }
+teardown() { tmux -S "$SOCK" kill-server 2>/dev/null || true; }
 
-t() { tmux -L "$SOCK" "$@"; }
+t() { tmux -S "$SOCK" "$@"; }
 
 @test "config loads without errors" {
 	run t show-messages

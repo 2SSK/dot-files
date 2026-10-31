@@ -47,8 +47,6 @@ amberol
 jupyterlab
 nushell
 wine
-steam
-lib32-vulkan-intel
 spicetify-cli
 countryfetch
 nerdfetch
