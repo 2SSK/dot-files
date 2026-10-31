@@ -28,7 +28,8 @@ draw() { # <image> [fade]
 		feh --no-fehbg --bg-fill "$1"
 	elif command -v awww >/dev/null; then
 		if ! awww query >/dev/null 2>&1; then
-			setsid -f awww-daemon >/dev/null 2>&1
+			# no cache: its last picture would load after ours at login and cover it (the shutdown picks anew)
+			setsid -f awww-daemon --no-cache >/dev/null 2>&1
 			for _ in $(seq 30); do awww query >/dev/null 2>&1 && break; sleep 0.1; done
 		fi
 		awww img "$1" --transition-type "$([[ -n ${2:-} ]] && echo fade || echo none)" \

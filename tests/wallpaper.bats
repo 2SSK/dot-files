@@ -18,7 +18,7 @@ setup() {
 	# awww: up once its daemon has started; awww-daemon starts it
 	{
 		printf '#!/bin/sh\necho "awww $*" >>"$CALLS"\n[ "$1" != query ] || [ -e "$BATS_TEST_TMPDIR/up" ]\n' >"$BATS_TEST_TMPDIR/bin/awww"
-		printf '#!/bin/sh\necho "awww-daemon" >>"$CALLS"\ntouch "$BATS_TEST_TMPDIR/up"\n' >"$BATS_TEST_TMPDIR/bin/awww-daemon"
+		printf '#!/bin/sh\necho "awww-daemon $*" >>"$CALLS"\ntouch "$BATS_TEST_TMPDIR/up"\n' >"$BATS_TEST_TMPDIR/bin/awww-daemon"
 	}
 	chmod +x "$BATS_TEST_TMPDIR"/bin/*
 	export PATH="$BATS_TEST_TMPDIR/bin:$PATH"
@@ -142,13 +142,13 @@ next_boot_fakes() { # shell.json rotating at boot over the pictures, a shutdown 
 @test "wayland: awww fades to a new one, restores without a fade, its daemon started when it isn't up" {
 	export WAYLAND_DISPLAY=wayland-test
 	"$WALL" set "$BATS_TEST_TMPDIR/pics/a.jpg"
-	grep -qx "awww-daemon" "$CALLS"
+	grep -qx "awww-daemon --no-cache" "$CALLS" # its cache would cover the new one at login
 	grep -q "^awww img $BATS_TEST_TMPDIR/pics/a.jpg --transition-type fade" "$CALLS"
 	run grep -q "^feh\|^magick" "$CALLS"
 	[ "$status" -ne 0 ]
 	rm "$CALLS"
 	"$WALL" restore
-	run grep -qx "awww-daemon" "$CALLS"
+	run grep -q "^awww-daemon" "$CALLS"
 	[ "$status" -ne 0 ] # already up
 	grep -q "^awww img $BATS_TEST_TMPDIR/pics/a.jpg --transition-type none" "$CALLS"
 	[ "$(readlink "$XDG_STATE_HOME/desktop/wallpaper")" = "$BATS_TEST_TMPDIR/pics/a.jpg" ]
