@@ -70,7 +70,7 @@ and swayfx's touches for the shell. What differs underneath:
 ## Launcher
 
 One panel dropping out of the bar, with one search over four modes; Tab and Shift+Tab (or the chips)
-switch them, the arrows move, Enter picks:
+switch them, the arrows (or Ctrl+N / Ctrl+P) move, Enter picks:
 
 | Mode | Key | Enter |
 | --- | --- | --- |

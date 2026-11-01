@@ -17,11 +17,13 @@ FloatingWindow {
 	readonly property var pages: [
 		{ key: "bar", glyph: Icons.g("app-window"), title: "Bar", flip: Config.position === "top" },
 		{ key: "appearance", glyph: Icons.g("palette"), title: "Appearance" },
+		{ key: "sound", glyph: Icons.g("volume"), title: "Sound" },
 		{ key: "notifications", glyph: Icons.g("bell"), title: "Notifications" },
 		{ key: "levels", glyph: Icons.g("adjustments"), title: "Levels" },
 		{ key: "power", glyph: Icons.g("power"), title: "Power" },
 		{ key: "timeshift", glyph: Icons.g("history"), title: "Timeshift" },
-		{ key: "keys", glyph: Icons.g("keyboard"), title: "Keys" }
+		{ key: "keys", glyph: Icons.g("keyboard"), title: "Keys" },
+		{ key: "about", glyph: Icons.g("info-circle"), title: "About" }
 	]
 
 
@@ -184,7 +186,7 @@ FloatingWindow {
 			Loader {
 				visible: item !== null // none on Keys: no gap above it
 				width: parent.width
-				sourceComponent: ({ bar: bar, appearance: appearance, notifications: popups, levels: levels, power: power, timeshift: timeshift })[root.page] ?? null
+				sourceComponent: ({ bar: bar, appearance: appearance, sound: sound, notifications: popups, levels: levels, power: power, timeshift: timeshift, about: about })[root.page] ?? null
 
 				Component {
 					id: bar
@@ -196,6 +198,18 @@ FloatingWindow {
 					id: appearance
 
 					AppearancePage {}
+				}
+
+				Component {
+					id: sound
+
+					SoundPage {}
+				}
+
+				Component {
+					id: about
+
+					AboutPage {}
 				}
 
 				Component {

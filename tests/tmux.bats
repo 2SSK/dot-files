@@ -96,3 +96,21 @@ save_setup() {
 	tmux kill-server
 	[ "$(wc -l <"$BATS_TEST_TMPDIR/restored")" -eq 1 ]
 }
+
+@test "env-sync: the attached session's display variables become everyone's (a switch kept i3's under sway)" {
+	export TMUX_TMPDIR="$BATS_TEST_TMPDIR/sync" && mkdir -p "$TMUX_TMPDIR" && unset TMUX
+	tmux -f /dev/null new-session -d -s stale
+	tmux set-environment -t stale DISPLAY :0
+	tmux set-environment -t stale XAUTHORITY /tmp/xauth_gone
+	tmux new-session -d -s fresh
+	tmux set-environment -t fresh DISPLAY :1
+	tmux set-environment -t fresh WAYLAND_DISPLAY wayland-1
+	tmux set-environment -t fresh -r XAUTHORITY # the client had none
+	"$BATS_TEST_DIRNAME/../.config/tmux/env-sync.sh" fresh
+	[ "$(tmux show-environment -g DISPLAY)" = DISPLAY=:1 ]
+	[ "$(tmux show-environment -g WAYLAND_DISPLAY)" = WAYLAND_DISPLAY=wayland-1 ]
+	[ "$(tmux show-environment -g XAUTHORITY)" = -XAUTHORITY ]
+	run tmux show-environment -t stale DISPLAY # its own copy gone: the global one shows through
+	[ "$status" -ne 0 ]
+	tmux kill-server
+}

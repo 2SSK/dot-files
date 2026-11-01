@@ -5,15 +5,16 @@ import qs
 import qs.services
 import qs.widgets
 
-// One line to add an event, reminder or alarm to a day, with its time, its text and for an alarm
-// how often. Enter adds it.
+// One line to add an event, reminder or alarm to a day, with its time (a reminder's may run on:
+// "09:30-10:15"), its text and how often. Enter adds it.
 Column {
 	id: root
 
 	property date day: new Date()
 	property bool datePicker: false
 	property string kind: "reminder" // event, reminder or alarm
-	property string repeat: "once"
+	property string repeat: "once" // an alarm's
+	property string eventRepeat: "" // an event's or reminder's (Events.repeats)
 	property bool picking: false
 	readonly property var kinds: ({ event: { label: "Event", glyph: "calendar" }, reminder: { label: "Reminder", glyph: "bell" }, alarm: { label: "Alarm", glyph: "alarm" } })
 	readonly property var repeats: ({ once: "Once", daily: "Daily", weekdays: "Weekdays" })
@@ -24,18 +25,26 @@ Column {
 		(kind === "event" ? what : time).focusField();
 	}
 
+	// a reminder at that time ("14:00", from a click on the timeline's empty hour)
+	function startAt(hhmm: string): void {
+		kind = "reminder";
+		time.text = hhmm;
+		what.focusField();
+	}
+
 	function add(): void {
 		const timed = kind !== "event";
-		if (timed && !/^\d{1,2}:\d{2}$/.test(time.text.trim()))
+		if (kind === "alarm" ? !/^\d{1,2}:\d{2}$/.test(time.text.trim()) : timed && !Events.times(time.text).time)
 			return time.focusField();
 		if (kind === "alarm")
 			Alarms.add(time.text, what.text, repeat, day);
 		else if (what.text.trim())
-			Events.add(day, timed ? time.text : "", what.text);
+			Events.add(day, timed ? time.text : "", what.text, eventRepeat);
 		else
 			return what.focusField();
 		time.text = "";
 		what.text = "";
+		eventRepeat = "";
 		picking = false;
 		added();
 	}
@@ -77,9 +86,9 @@ Column {
 			id: time
 
 			visible: root.kind !== "event"
-			width: 76
+			width: root.kind === "alarm" ? 76 : 120
 			height: 34
-			placeholder: "09:30"
+			placeholder: root.kind === "alarm" ? "09:30" : "09:30-10:15"
 			onAccepted: root.add()
 		}
 
@@ -95,10 +104,15 @@ Column {
 		Chip {
 			id: often
 
-			visible: root.kind === "alarm"
 			anchors.verticalCenter: parent.verticalCenter
-			label: root.repeats[root.repeat]
-			onClicked: root.repeat = root.step(root.repeats, root.repeat)
+			label: root.kind === "alarm" ? root.repeats[root.repeat] : Events.repeats[root.eventRepeat]
+			on: root.kind === "alarm" ? root.repeat !== "once" : root.eventRepeat !== ""
+			onClicked: {
+				if (root.kind === "alarm")
+					root.repeat = root.step(root.repeats, root.repeat);
+				else
+					root.eventRepeat = root.step(Events.repeats, root.eventRepeat);
+			}
 		}
 	}
 

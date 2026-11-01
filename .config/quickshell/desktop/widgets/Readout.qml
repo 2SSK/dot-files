@@ -1,8 +1,9 @@
 import QtQuick
 import qs
 
-// A glyph and a value; the static style shows an accent word instead ("cpu 12%"). The value keeps the
-// width of `widest` with even-width digits, so the bar doesn't shift as it changes.
+// A glyph and a value; the static style shows an accent word instead ("cpu 12%"), on a side bar too
+// (the word over the value). The value keeps the width of `widest` with even-width digits, so the bar
+// doesn't shift as it changes.
 Line {
 	id: root
 
@@ -16,7 +17,7 @@ Line {
 	spacing: Config.vertical ? 0 : 6
 
 	Glyph {
-		visible: Config.island || Config.vertical
+		visible: Config.island
 		glyph: root.glyph
 		color: root.tint
 	}
@@ -24,9 +25,10 @@ Line {
 	Label {
 		font.family: Theme.fontBar
 		font.weight: Theme.barWeight
-		visible: !Config.island && !Config.vertical
+		visible: !Config.island
 		text: root.label
 		color: Theme.primary
+		font.pixelSize: Config.vertical ? Theme.fontSize - 3 : Theme.fontSize
 	}
 
 	Label {

@@ -115,6 +115,8 @@ HangingPanel {
 				root.switchMode(k === Qt.Key_Backtab ? -1 : 1);
 			else if (k === Qt.Key_Up || k === Qt.Key_Down)
 				root.move((k === Qt.Key_Up ? -1 : 1) * root.columns);
+			else if ((k === Qt.Key_N || k === Qt.Key_P) && (event.modifiers & Qt.ControlModifier))
+				root.move((k === Qt.Key_P ? -1 : 1) * root.columns); // as in the clipboard: next, previous
 			else if ((k === Qt.Key_Left || k === Qt.Key_Right) && root.columns > 1)
 				root.move(k === Qt.Key_Left ? -1 : 1);
 			else if (k === Qt.Key_Return || k === Qt.Key_Enter)

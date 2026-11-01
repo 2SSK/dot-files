@@ -25,6 +25,17 @@ Singleton {
 		Networking.wifiEnabled = !Networking.wifiEnabled;
 	}
 
+	// airplane mode: every radio off; off again turns Wi-Fi and Bluetooth back on
+	readonly property bool airplane: (!wifiAvailable || !wifi) && (!bluetoothAvailable || !bluetooth)
+
+	function toggleAirplane(): void {
+		const on = !airplane;
+		if (wifiAvailable && wifi === on)
+			toggleWifi();
+		if (bluetoothAvailable && bluetooth === on)
+			toggleBluetooth();
+	}
+
 	function toggleBluetooth(): void {
 		if (adapter)
 			adapter.enabled = !adapter.enabled;

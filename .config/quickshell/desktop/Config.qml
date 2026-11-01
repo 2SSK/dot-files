@@ -12,6 +12,7 @@ Singleton {
 	readonly property JsonObject bar: adapter.bar
 	readonly property JsonObject osd: adapter.osd
 	readonly property JsonObject notifications: adapter.notifications
+	readonly property JsonObject calendar: adapter.calendar
 	readonly property JsonObject audio: adapter.audio
 	readonly property JsonObject brightness: adapter.brightness
 	readonly property JsonObject power: adapter.power
@@ -83,6 +84,10 @@ Singleton {
 			}
 			property JsonObject notifications: JsonObject {
 				property int timeout: 5000 // ms a popup stays, unless the app sets its own
+			}
+			property JsonObject calendar: JsonObject {
+				property int lead: 10 // minutes before a timed event its heads-up comes (0: only at the time)
+				property int nextUp: 15 // minutes before one that the bar's clock names it
 			}
 			property JsonObject osd: JsonObject {
 				property int timeout: 3000 // ms the OSD stays

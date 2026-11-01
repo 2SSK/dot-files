@@ -2,7 +2,8 @@ import QtQuick
 import qs
 import qs.widgets
 
-// A row in a list (a network, a device): icon, name, detail, and buttons on the right.
+// A row in a list (a network, a device): icon (or something of its own in lead), name, detail, and
+// buttons on the right.
 Rectangle {
 	id: root
 
@@ -11,6 +12,7 @@ Rectangle {
 	property string detail
 	property bool active
 	default property alias buttons: tools.data
+	property alias lead: leadSlot.data // instead of the glyph: signal bars, a picture
 	signal clicked
 
 	width: parent?.width ?? 0
@@ -28,16 +30,30 @@ Rectangle {
 		onClicked: root.clicked()
 	}
 
-	Glyph {
+	Item {
 		id: icon
 
 		x: 16
 		anchors.verticalCenter: parent.verticalCenter
 		width: 22
-		glyph: root.glyph
-		font.pixelSize: 18
-		font.weight: Font.Normal
-		color: root.active ? Theme.primary : Theme.fg
+		height: 22
+
+		Glyph {
+			visible: root.glyph !== ""
+			anchors.centerIn: parent
+			glyph: root.glyph
+			font.pixelSize: 18
+			font.weight: Font.Normal
+			color: root.active ? Theme.primary : Theme.fg
+		}
+
+		Item {
+			id: leadSlot
+
+			anchors.centerIn: parent
+			width: childrenRect.width
+			height: childrenRect.height
+		}
 	}
 
 	Column {

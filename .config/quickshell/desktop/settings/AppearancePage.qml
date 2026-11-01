@@ -31,11 +31,18 @@ Column {
 		apply.running = true;
 	}
 
+	// each family with its palettes, for cards drawn in the theme's own colours
 	Process {
 		running: true
-		command: ["theme", "list"]
+		command: ["theme", "list", "--json"]
 		stdout: StdioCollector {
-			onStreamFinished: page.families = text.split("\n").filter(line => line.trim()).map(line => line.replace("*", "").trim())
+			onStreamFinished: {
+				try {
+					page.families = JSON.parse(text);
+				} catch (e) {
+					page.families = [];
+				}
+			}
 		}
 	}
 
@@ -79,38 +86,92 @@ Column {
 			Repeater {
 				model: page.families
 
+				// a card in the theme's own colours (this mode's, else dark's): its background, a row of its
+				// accents and its name; the chosen one ringed in the current accent, with a tick
 				delegate: Rectangle {
 					id: swatch
 
-					required property string modelData
-					readonly property bool on: page.family === modelData
+					required property var modelData
+					readonly property bool on: page.family === modelData.family
+					readonly property var ui: modelData[page.mode] ?? modelData.dark ?? {}
 
-					width: 150
-					height: 52
-					radius: 12
-					color: on ? Theme.primary : hover.hovered ? Qt.alpha(Theme.overlay, 0.95) : Qt.alpha(Theme.surface, 0.55)
-					border.width: on ? 0 : 1
-					border.color: Qt.alpha(Theme.border, 0.6)
+					width: 168
+					height: 84
+					radius: 14
+					color: ui.bg ?? Theme.surface
+					border.width: on ? 2 : 1
+					border.color: on ? Theme.primary : hover.hovered ? Qt.alpha(Theme.fg, 0.35) : Qt.alpha(Theme.border, 0.7)
 
-					Behavior on color {
+					Behavior on border.color {
 						ColorAnimation {
 							duration: Theme.quick
 							easing.type: Theme.curve
 						}
 					}
 
-					UiText {
-						anchors.centerIn: parent
-						text: swatch.modelData
-						color: swatch.on ? Theme.primaryText : Theme.fg
+					Row {
+						x: 14
+						y: 14
+						spacing: 6
 
-						Behavior on color {
-							ColorAnimation {
-								duration: Theme.quick
-								easing.type: Theme.curve
+						Repeater {
+							model: [swatch.ui.primary, swatch.ui.secondary, swatch.ui.accent, swatch.ui.success, swatch.ui.error]
+
+							Rectangle {
+								required property var modelData
+
+								width: 14
+								height: 14
+								radius: 7
+								color: modelData ?? "transparent"
 							}
 						}
-						font.weight: Font.Medium
+					}
+
+					// a sample line of its text on its surface
+					Rectangle {
+						x: 14
+						y: 38
+						width: parent.width - 28
+						height: 8
+						radius: 4
+						color: swatch.ui.surface ?? "transparent"
+
+						Rectangle {
+							width: parent.width * 0.55
+							height: parent.height
+							radius: 4
+							color: Qt.alpha(swatch.ui.fg_muted ?? "transparent", 0.6)
+						}
+					}
+
+					UiText {
+						x: 14
+						anchors.bottom: parent.bottom
+						anchors.bottomMargin: 10
+						text: swatch.modelData.name ?? swatch.modelData.family
+						color: swatch.ui.fg ?? Theme.fg
+						font.weight: Font.DemiBold
+						font.pixelSize: Theme.textLabel
+					}
+
+					Rectangle {
+						visible: swatch.on
+						anchors.right: parent.right
+						anchors.rightMargin: 10
+						anchors.bottom: parent.bottom
+						anchors.bottomMargin: 10
+						width: 20
+						height: 20
+						radius: 10
+						color: Theme.primary
+
+						Glyph {
+							anchors.centerIn: parent
+							glyph: Icons.g("check")
+							color: Theme.primaryText
+							font.pixelSize: 12
+						}
 					}
 
 					HoverHandler {
@@ -120,7 +181,7 @@ Column {
 					MouseArea {
 						anchors.fill: parent
 						cursorShape: Qt.PointingHandCursor
-						onClicked: page.choose(swatch.modelData, page.mode)
+						onClicked: page.choose(swatch.modelData.family, page.mode)
 					}
 				}
 			}

@@ -11,7 +11,10 @@ Singleton {
 	id: root
 
 	readonly property bool wayland: Config.wayland
-	readonly property var times: [Config.idle.dim, Config.idle.lock, Config.idle.off]
+	// keep awake (the control center): no dimming, locking or screen off until it's turned off again;
+	// sleep still locks first
+	property bool awake: false
+	readonly property var times: awake ? [0, 0, 0] : [Config.idle.dim, Config.idle.lock, Config.idle.off]
 	// swayidle's arguments: each timeout counts from when you stopped
 	readonly property var swayidle: {
 		const [dim, lock, off] = times;

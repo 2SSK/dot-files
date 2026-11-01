@@ -10,6 +10,10 @@ Column {
 
 	readonly property string title: "System monitor"
 	readonly property var actions: []
+	readonly property bool fill: true // the whole height of the control center (ControlCenter)
+	// the graphs share what the two rows of small cards leave, never under their own minimum
+	readonly property int graphs: [true, true, Stats.temp >= 0].filter(v => v).length
+	readonly property real graphHeight: Math.max(104, (height - smallCards.height - wideCards.height - spacing * (graphs + 1)) / graphs)
 
 	// the NVIDIA card is only queried while this page is open (Stats.detail)
 	// the detailed stats are read while it shows (the page is kept: hidden while the panel is closed)
@@ -51,7 +55,7 @@ Column {
 
 			visible: info.show
 			width: parent.width
-			height: 104
+			height: root.graphHeight
 			radius: 14
 			color: Qt.alpha(Theme.surface, 0.8)
 			clip: true
@@ -95,6 +99,8 @@ Column {
 	}
 
 	Row {
+		id: smallCards
+
 		width: parent.width
 		spacing: 12
 
@@ -152,6 +158,8 @@ Column {
 	}
 
 	Row {
+		id: wideCards
+
 		width: parent.width
 		spacing: 12
 

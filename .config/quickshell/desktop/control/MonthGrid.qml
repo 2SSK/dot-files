@@ -7,7 +7,8 @@ import qs.services
 import qs.widgets
 
 // A month from the start of the week holding the 1st: today filled, the chosen day ringed, a dot
-// under days with something on. A click picks a day.
+// under days with something on, weekends softer, the ISO week down the side. A click picks a day;
+// Today comes back to it.
 Column {
 	id: root
 
@@ -28,6 +29,21 @@ Column {
 		const next = new Date(year, month + months, 1);
 		year = next.getFullYear();
 		month = next.getMonth();
+	}
+
+	function today(): void {
+		const now = new Date();
+		year = now.getFullYear();
+		month = now.getMonth();
+		chosen = now;
+		picked(now);
+	}
+
+	// ISO 8601: the week of the year its Thursday falls in
+	function isoWeek(day: date): int {
+		const d = new Date(Date.UTC(day.getFullYear(), day.getMonth(), day.getDate()));
+		d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+		return Math.ceil(((d - new Date(Date.UTC(d.getUTCFullYear(), 0, 1))) / 86400000 + 1) / 7);
 	}
 
 	function busy(day: date): bool {
@@ -60,6 +76,35 @@ Column {
 			anchors.right: parent.right
 			anchors.verticalCenter: parent.verticalCenter
 			spacing: 6
+
+			// back to today, from another month or day
+			Rectangle {
+				visible: root.year !== clock.date.getFullYear() || root.month !== clock.date.getMonth() || root.chosen.toDateString() !== clock.date.toDateString()
+				width: todayLabel.implicitWidth + 22
+				height: 30
+				radius: 10
+				color: todayHover.hovered ? Qt.alpha(Theme.primary, 0.25) : Qt.alpha(Theme.primary, 0.15)
+
+				UiText {
+					id: todayLabel
+
+					anchors.centerIn: parent
+					text: "Today"
+					color: Theme.primary
+					font.pixelSize: Theme.textLabel
+					font.weight: Font.DemiBold
+				}
+
+				HoverHandler {
+					id: todayHover
+				}
+
+				MouseArea {
+					anchors.fill: parent
+					cursorShape: Qt.PointingHandCursor
+					onClicked: root.today()
+				}
+			}
 
 			Repeater {
 				model: [{ glyph: Icons.g("chevron-left"), step: -1 }, { glyph: Icons.g("chevron-right"), step: 1 }]
@@ -100,90 +145,130 @@ Column {
 		radius: 16
 		color: Qt.alpha(Theme.surface, 0.8)
 
-		Grid {
+		Column {
 			id: grid
 
-			readonly property real cell: (parent.width - 20) / 7
+			readonly property real week: 30 // the week numbers' column
+			readonly property real cell: (parent.width - 20 - week) / 7
 
 			x: 10
 			y: 10
-			columns: 7
-			rowSpacing: 2
+			spacing: 2
 
-			Repeater {
-				model: 7
-
-				delegate: Text {
-					required property int index
-
-					width: grid.cell
+			Row {
+				Text {
+					width: grid.week
 					height: 24
 					horizontalAlignment: Text.AlignHCenter
 					verticalAlignment: Text.AlignVCenter
-					text: Qt.locale().dayName((root.first + index) % 7, Locale.ShortFormat).slice(0, 2)
-					color: Theme.fgMuted
+					text: "Wk"
+					color: Qt.alpha(Theme.fgMuted, 0.6)
 					font.family: Theme.fontHeading
 					font.hintingPreference: Theme.hinting
-					font.pixelSize: Theme.textLabel
-					font.weight: Font.DemiBold
+					font.pixelSize: Theme.textCaption
+				}
+
+				Repeater {
+					model: 7
+
+					delegate: Text {
+						required property int index
+						readonly property int weekday: (root.first + index) % 7
+
+						width: grid.cell
+						height: 24
+						horizontalAlignment: Text.AlignHCenter
+						verticalAlignment: Text.AlignVCenter
+						text: Qt.locale().dayName(weekday, Locale.ShortFormat).slice(0, 2)
+						color: weekday === 0 || weekday === 6 ? Qt.alpha(Theme.fgMuted, 0.65) : Theme.fgMuted
+						font.family: Theme.fontHeading
+						font.hintingPreference: Theme.hinting
+						font.pixelSize: Theme.textLabel
+						font.weight: Font.DemiBold
+					}
 				}
 			}
 
 			Repeater {
-				model: root.days
+				model: 6
 
-				delegate: Item {
-					id: day
+				delegate: Row {
+					id: week
 
-					required property var modelData
-					readonly property bool today: modelData.toDateString() === clock.date.toDateString()
-					readonly property bool picked: modelData.toDateString() === root.chosen.toDateString()
-					readonly property bool inMonth: modelData.getMonth() === root.month
+					required property int index
+					readonly property var days: root.days.slice(index * 7, index * 7 + 7)
 
-					width: grid.cell
-					height: root.cellHeight
-
-					Rectangle {
-						anchors.centerIn: parent
-						width: Math.min(32, root.cellHeight - 4)
-						height: width
-						radius: width / 2
-						color: day.today ? Theme.primary : dayHover.hovered ? Qt.alpha(Theme.fg, 0.08) : "transparent"
-						border.width: day.picked && !day.today ? 1 : 0
-						border.color: Theme.primary
+					Text {
+						width: grid.week
+						height: root.cellHeight
+						horizontalAlignment: Text.AlignHCenter
+						verticalAlignment: Text.AlignVCenter
+						// the week's Thursday decides its number
+						text: root.isoWeek(week.days[(4 - root.first + 7) % 7])
+						color: Qt.alpha(Theme.fgMuted, 0.6)
+						font.family: Theme.fontMono
+						font.hintingPreference: Theme.hinting
+						font.pixelSize: Theme.textCaption
 					}
 
-					UiText {
-						anchors.centerIn: parent
-						text: day.modelData.getDate()
-						color: day.today ? Theme.primaryText : day.inMonth ? Theme.fg : Qt.alpha(Theme.fgMuted, 0.5)
-						font.weight: day.today ? Font.Bold : Font.DemiBold // semibold: solid numbers in the grid
-						font.features: ({ tnum: 1 })
-					}
+					Repeater {
+						model: week.days
 
-					Rectangle {
-						visible: root.busy(day.modelData)
-						anchors.horizontalCenter: parent.horizontalCenter
-						anchors.bottom: parent.bottom
-						anchors.bottomMargin: 1
-						width: 4
-						height: 4
-						radius: 2
-						color: day.today ? Theme.primaryText : Theme.primary
-					}
+						delegate: Item {
+							id: day
 
-					HoverHandler {
-						id: dayHover
-					}
+							required property var modelData
+							readonly property bool today: modelData.toDateString() === clock.date.toDateString()
+							readonly property bool picked: modelData.toDateString() === root.chosen.toDateString()
+							readonly property bool inMonth: modelData.getMonth() === root.month
+							readonly property bool weekend: modelData.getDay() === 0 || modelData.getDay() === 6
 
-					MouseArea {
-						anchors.fill: parent
-						cursorShape: Qt.PointingHandCursor
-						onClicked: {
-							root.chosen = day.modelData;
-							if (!day.inMonth)
-								root.shift(day.modelData < new Date(root.year, root.month, 1) ? -1 : 1);
-							root.picked(day.modelData);
+							width: grid.cell
+							height: root.cellHeight
+
+							Rectangle {
+								anchors.centerIn: parent
+								width: Math.min(32, root.cellHeight - 4)
+								height: width
+								radius: width / 2
+								color: day.today ? Theme.primary : dayHover.hovered ? Qt.alpha(Theme.fg, 0.08) : "transparent"
+								border.width: day.picked && !day.today ? 1 : 0
+								border.color: Theme.primary
+							}
+
+							UiText {
+								anchors.centerIn: parent
+								text: day.modelData.getDate()
+								color: day.today ? Theme.primaryText : !day.inMonth ? Qt.alpha(Theme.fgMuted, 0.5) : day.weekend ? Theme.fgMuted : Theme.fg
+								font.weight: day.today ? Font.Bold : Font.DemiBold // semibold: solid numbers in the grid
+								font.features: ({ tnum: 1 })
+							}
+
+							Rectangle {
+								visible: root.busy(day.modelData)
+								anchors.horizontalCenter: parent.horizontalCenter
+								anchors.bottom: parent.bottom
+								anchors.bottomMargin: 1
+								width: 4
+								height: 4
+								radius: 2
+								color: day.today ? Theme.primaryText : Theme.primary
+							}
+
+							HoverHandler {
+								id: dayHover
+							}
+
+							MouseArea {
+								anchors.fill: parent
+								cursorShape: Qt.PointingHandCursor
+								onClicked: {
+									root.chosen = day.modelData;
+									if (!day.inMonth)
+										root.shift(day.modelData < new Date(root.year, root.month, 1) ? -1 : 1);
+									root.picked(day.modelData);
+								}
+							}
 						}
 					}
 				}
