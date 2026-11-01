@@ -228,14 +228,10 @@ libvirt() {
 }
 
 docker_daemon() {
-	# Socket-activated: the daemon starts on first use. The docker group is root-equivalent.
+	# The socket, so docker answers even before the daemon is up; the daemon itself may start at boot
+	# too (it's in daily use). The docker group is root-equivalent.
 	if ! systemctl is-enabled --quiet docker.socket 2>/dev/null || ! systemctl is-active --quiet docker.socket; then
 		sudo systemctl enable --now docker.socket
-		changed=1
-	fi
-	# not at boot: started there, it waits for the network and held the login screen back ~5 s
-	if systemctl is-enabled --quiet docker.service 2>/dev/null || systemctl is-enabled --quiet containerd.service 2>/dev/null; then
-		sudo systemctl disable docker.service containerd.service
 		changed=1
 	fi
 	if ! id -nG "$USER" | tr ' ' '\n' | grep -qx docker; then
