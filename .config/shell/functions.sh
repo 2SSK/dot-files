@@ -89,6 +89,25 @@ fssh() {
 	[[ -n $host ]] && ssh "$host" "$@"
 }
 
+# fts: tmux sessions, the most recent first, each previewed by its active pane. Enter goes there
+# (switches inside tmux, attaches outside); a name that isn't one makes it; Ctrl-X kills the one
+# under the cursor
+# shellcheck disable=SC2016 # expanded by fzf, not here
+fts() {
+	local list='tmux list-sessions -F "#{?session_last_attached,#{session_last_attached},#{session_created}}	#{session_name}	#{session_windows} windows#{?session_attached,  (attached),}" 2>/dev/null | sort -rn | cut -f2-'
+	local out query name
+	out="$(eval "$list" | fzf --print-query --delimiter='\t' --with-nth=1,2 --prompt='tmux> ' \
+		--header='enter: go · a new name: make it · ctrl-x: kill' \
+		--preview 'tmux capture-pane -ep -t {1} 2>/dev/null' --preview-window=right:60% \
+		--bind "ctrl-x:execute-silent(tmux kill-session -t {1})+reload($list)")" || [[ -n $out ]] || return 0
+	query="$(head -1 <<<"$out")"
+	name="$(sed -n 2p <<<"$out" | cut -f1)"
+	name="${name:-$query}"
+	[[ -n $name ]] || return 0
+	tmux has-session -t "=$name" 2>/dev/null || tmux new-session -d -s "$name"
+	if [[ -n $TMUX ]]; then tmux switch-client -t "=$name"; else tmux attach -t "=$name"; fi
+}
+
 # s: search the repos (and the AUR), preview each package, install the ones picked (Tab marks several)
 s() {
 	if command -v yay >/dev/null; then
