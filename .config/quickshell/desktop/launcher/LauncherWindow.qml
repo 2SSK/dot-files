@@ -22,8 +22,11 @@ HangingPanel {
 	readonly property int columns: mode === "emoji" ? 10 : mode === "themes" ? 3 : 1
 	readonly property var results: {
 		const q = search.text;
-		if (mode === "apps")
-			return Launcher.findApps(q);
+		if (mode === "apps") {
+			// a time ("2:00 ist", "14:30 utc", a log timestamp) converted, above the apps
+			const time = Launcher.convertTime(q);
+			return time ? [time, ...Launcher.findApps(q)] : Launcher.findApps(q);
+		}
 		if (mode === "emoji")
 			return Launcher.findEmoji(q);
 		if (mode === "files")
@@ -44,7 +47,9 @@ HangingPanel {
 		const item = results[index];
 		if (item === undefined)
 			return;
-		if (mode === "apps") {
+		if (mode === "apps" && item.convert) {
+			Quickshell.execDetached(["sh", "-c", 'printf %s "$1" | desktop clipboard copy text', "sh", item.copy]);
+		} else if (mode === "apps") {
 			Launcher.launch(item);
 		} else if (mode === "emoji") {
 			Launcher.pickEmoji(item.char);

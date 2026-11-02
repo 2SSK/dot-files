@@ -17,7 +17,8 @@ Item {
 	property bool selected
 	signal moved // the pointer moved over it: select it
 	signal picked(string action) // open (an app, or a file in its app), file, path or content
-	readonly property bool app: typeof modelData !== "string"
+	readonly property bool convert: modelData?.convert === true // a time converted (Launcher.convertTime)
+	readonly property bool app: typeof modelData !== "string" && !convert
 	readonly property string path: typeof modelData === "string" ? modelData : ""
 	readonly property bool folder: path.endsWith("/")
 	readonly property string fileName: Format.fileName(path.replace(/\/$/, ""))
@@ -36,7 +37,7 @@ Item {
 	MouseArea {
 		anchors.fill: parent
 		cursorShape: Qt.PointingHandCursor
-		onClicked: row.picked(row.app || row.folder ? "open" : "file")
+		onClicked: row.picked(row.app || row.convert || row.folder ? "open" : "file")
 	}
 
 	IconImage {
@@ -54,7 +55,7 @@ Item {
 		visible: !row.app
 		x: 16
 		anchors.verticalCenter: parent.verticalCenter
-		glyph: Icons.g(row.kind)
+		glyph: Icons.g(row.convert ? "clock-hour-4" : row.kind)
 		font.pixelSize: 20
 		color: Theme.primary
 	}
@@ -67,7 +68,7 @@ Item {
 
 		UiText {
 			width: parent.width
-			text: row.app ? row.modelData.name : row.fileName
+			text: row.app || row.convert ? row.modelData.name : row.fileName
 			elide: Text.ElideRight
 			font.weight: Font.Medium
 		}
@@ -75,8 +76,8 @@ Item {
 		UiText {
 			width: parent.width
 			visible: text !== ""
-			text: row.app ? (row.modelData.genericName || row.modelData.comment || "") : Format.folder(row.path.replace(/\/$/, ""))
-			elide: row.app ? Text.ElideRight : Text.ElideMiddle
+			text: row.convert ? row.modelData.detail : row.app ? (row.modelData.genericName || row.modelData.comment || "") : Format.folder(row.path.replace(/\/$/, ""))
+			elide: row.app || row.convert ? Text.ElideRight : Text.ElideMiddle
 			color: Theme.fgMuted
 			font.pixelSize: Theme.textLabel
 		}
@@ -85,7 +86,7 @@ Item {
 	Row {
 		id: tools
 
-		visible: !row.app && (rowHover.hovered || row.selected)
+		visible: !row.app && !row.convert && (rowHover.hovered || row.selected)
 		anchors.right: parent.right
 		anchors.rightMargin: 10
 		anchors.verticalCenter: parent.verticalCenter
