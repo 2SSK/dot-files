@@ -3,10 +3,10 @@ import Quickshell
 import qs
 import qs.services
 
-// "07:01 UTC · 12:31 PM Mon, Nov 02": UTC on the left, muted (servers and logs keep it), then the time
-// here and the date; a vertical bar shows hours over minutes. Shortly before a timed event (the
-// calendar's nextUp minutes) it names it instead of the date, in the accent: "· Standup in 12 min".
-// A click opens the calendar.
+// "07:01 UTC · 12:31 PM Mon, Nov 02": UTC on the left, muted (servers and logs keep it; the static bar
+// only, the island keeps to the time here), then the time here and the date; a vertical bar shows
+// hours over minutes. Shortly before a timed event (the calendar's nextUp minutes) it names it
+// instead of the date, in the accent: "· Standup in 12 min". A click opens the calendar.
 Label {
 	id: root
 
@@ -34,7 +34,7 @@ Label {
 	}
 
 	textFormat: Config.vertical ? Text.PlainText : Text.StyledText
-	text: Config.vertical ? Qt.formatDateTime(clock.date, "hh\nmm") : `<font color="${Theme.fgMuted}">${Qt.formatDateTime(utc, "hh:mm")} UTC</font>&nbsp;&nbsp;·&nbsp;&nbsp;` + (next ? `${Qt.formatDateTime(clock.date, "hh:mm AP")}&nbsp;&nbsp;<font color="${Theme.primary}">·&nbsp;&nbsp;${escaped(what)} in ${minutes} min</font>` : Qt.formatDateTime(clock.date, "hh:mm AP ddd, MMM dd"))
+	text: Config.vertical ? Qt.formatDateTime(clock.date, "hh\nmm") : (Config.island ? "" : `<font color="${Theme.fgMuted}">${Qt.formatDateTime(utc, "hh:mm")} UTC</font>&nbsp;&nbsp;·&nbsp;&nbsp;`) + (next ? `${Qt.formatDateTime(clock.date, "hh:mm AP")}&nbsp;&nbsp;<font color="${Theme.primary}">·&nbsp;&nbsp;${escaped(what)} in ${minutes} min</font>` : Qt.formatDateTime(clock.date, "hh:mm AP ddd, MMM dd"))
 	lineHeight: 0.9
 	font.family: Theme.fontBar
 	font.weight: Theme.barWeight
