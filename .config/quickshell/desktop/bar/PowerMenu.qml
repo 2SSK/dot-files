@@ -17,7 +17,7 @@ PopupWindow {
 	readonly property bool open: Panel.view === "power" && WindowManager.focusedOutput === bar.screen?.name
 	readonly property string position: Config.position
 	readonly property real reach: Panel.barShown ? (Config.vertical ? bar.width : bar.height) : 0
-	// mapped while open (see Osd)
+	// mapped while open, unmapped once faded (X stacks by mapping order)
 	property bool shown: false
 
 	onOpenChanged: open ? shown = true : hide.restart()

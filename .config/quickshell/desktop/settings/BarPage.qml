@@ -18,13 +18,17 @@ Column {
 			Choice {
 				options: [{ value: "island", label: "Island" }, { value: "static", label: "Static" }]
 				value: Config.bar.style
-				onPicked: value => Config.set("bar", "style", value)
+				// each style with its own look: the island plain, the static bar in chips (toggle below)
+				onPicked: value => {
+					Config.set("bar", "style", value);
+					Config.set("bar", "capsules", value === "static");
+				}
 			}
 		}
 
 		SettingRow {
 			label: "Capsules"
-			hint: "Each widget in a soft capsule."
+			hint: "Round pills on the island, soft chips on the static bar."
 			Toggle {
 				checked: Config.bar.capsules
 				onToggled: checked => Config.set("bar", "capsules", checked)
@@ -62,36 +66,6 @@ Column {
 				value: Config.bar.opacity
 				format: v => Math.round(v * 100) + " %"
 				onMoved: value => Config.set("bar", "opacity", value)
-			}
-		}
-
-		SettingRow {
-			visible: Config.island
-			label: "Island width"
-			hint: Config.bar.length > 0 ? "A fixed share of the screen edge." : "Follows the screen: more of a narrow one, less of a wide one."
-			Row {
-				spacing: 16
-
-				Toggle {
-					anchors.verticalCenter: parent.verticalCenter
-					checked: Config.bar.length === 0
-					onToggled: checked => Config.set("bar", "length", checked ? 0 : 0.55)
-				}
-
-				UiText {
-					anchors.verticalCenter: parent.verticalCenter
-					text: "Auto"
-				}
-
-				Range {
-					visible: Config.bar.length > 0
-					from: 0.3
-					to: 0.95
-					step: 0.05
-					value: Config.bar.length
-					format: v => Math.round(v * 100) + " %"
-					onMoved: value => Config.set("bar", "length", value)
-				}
 			}
 		}
 	}

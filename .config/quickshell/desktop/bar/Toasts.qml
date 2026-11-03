@@ -7,7 +7,7 @@ import qs
 import qs.widgets
 import qs.services
 
-// Notification popups at the top right under the OSD card, on the focused screen. Each leaves after
+// Notification popups at the top right under the bar, on the focused screen. Each leaves after
 // its timeout unless hovered, critical ones stay until closed, and all stay in the history.
 PopupWindow {
 	id: root
@@ -16,11 +16,10 @@ PopupWindow {
 
 	readonly property bool focused: WindowManager.focusedOutput === bar.screen?.name
 	readonly property int pad: 28
-	readonly property real below: Panel.osdShown ? 84 : 0 // room for the OSD card above
 
 	anchor.window: bar
 	anchor.rect.x: bar.width - implicitWidth
-	anchor.rect.y: (Config.position === "top" ? bar.height : 0) - 14 + below
+	anchor.rect.y: (Config.position === "top" ? bar.height : 0) - 14
 	implicitWidth: 360 + 2 * pad
 	// a fixed height, room for the four it keeps: a popup that grows once shown keeps showing its old
 	// frame (a second toast never appeared); the mask lets clicks through around the cards

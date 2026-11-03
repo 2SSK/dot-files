@@ -42,6 +42,10 @@ Singleton {
 	readonly property string hanging: authOpen ? "auth" : panels.find(p => root[p + "Open"]) ?? ""
 	readonly property int hangingWidth: sizes[hanging]?.width ?? 0
 	property string hangingScreen: "" // the screen a panel hangs on (pinned as it opens: HangingPanel)
+	// a panel out of the island, even while it folds away after closing: the island keeps its width
+	// until it's in (HangingPanel), then shrinks
+	property real heldWidth: 0
+	property string heldScreen: ""
 
 	function opened(name: string): void {
 		if (name === "auth" ? authOpen : root[name + "Open"])

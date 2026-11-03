@@ -62,10 +62,9 @@ Singleton {
 				property string position: "top" // top, bottom, left or right
 				property int size: 34
 				property real opacity: 0.85
-				property real length: 0 // the island's share of the screen edge; 0 picks one for the screen width
 				property var left: ["workspaces", "scratchpad", "stats"]
 				property var center: ["clock"]
-				property var right: ["tray", "brightness", "tools", "recorder", "battery", "wifi", "bluetooth", "notifications", "power"]
+				property var right: ["tray", "battery", "notifications"]
 			}
 			property JsonObject fonts: JsonObject {
 				property real scale: 1.15 // the shell's text against its base sizes

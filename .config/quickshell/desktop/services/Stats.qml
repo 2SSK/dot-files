@@ -16,6 +16,14 @@ Singleton {
 	property real temp: -1 // °C; -1 without a sensor
 	property string tempFile: ""
 	property var cpuHistory: [] // the last 60 samples, oldest first
+	// running hot, for the bar: on at 80% CPU, 85% memory or 85 °C, off a little below (no flicker)
+	property bool cpuHot: false
+	property bool memHot: false
+	property bool tempHot: false
+	readonly property string hot: tempHot ? "temp" : cpuHot ? "cpu" : memHot ? "mem" : ""
+	onCpuChanged: cpuHot = cpu >= 0.8 || (cpuHot && cpu >= 0.7)
+	onMemChanged: memHot = mem >= 0.85 || (memHot && mem >= 0.8)
+	onTempChanged: tempHot = temp >= 85 || (tempHot && temp >= 80)
 	property var memHistory: []
 	property var tempHistory: []
 	property real diskUsed: 0 // GiB, of /

@@ -12,17 +12,14 @@
             "scratchpad",
             "stats"
         ],
-        "length": 0,
         "opacity": 0.85,
         "position": "top",
         "right": [
-            "recorder",
             "battery",
-            "notifications",
-            "power"
+            "notifications"
         ],
         "size": 40,
-        "style": "static"
+        "style": "island"
     },
     "brightness": {
         "step": 5

@@ -14,7 +14,6 @@ Item {
 		id: readout
 
 		glyph: "󰃠"
-		label: "brt"
 		value: Math.round(Brightness.value * 100) + "%"
 	}
 

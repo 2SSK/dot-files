@@ -15,7 +15,7 @@ PopupWindow {
 	readonly property bool vertical: Config.vertical
 	readonly property real reach: Config.bar.size + (Config.island ? 6 : 0) + 24 // bar, gap, shadow room
 
-	// mapped while open (see Osd)
+	// mapped while open, unmapped once faded (X stacks by mapping order)
 	property bool shown: false
 
 	onOpenChanged: {

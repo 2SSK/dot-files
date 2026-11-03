@@ -23,7 +23,22 @@ Scope {
 	// how far out of the bar it is, 0 to 1: it unfolds as it opens and folds back as it closes, from
 	// the moment its window is on screen (mapping it would otherwise take the slide's first frames)
 	property bool ready: false
-	property real progress: open && ready ? 1 : 0
+	// on the island it waits for the island to widen to it first, then unfolds; it folds away
+	// before the island shrinks back (Panel.heldWidth)
+	readonly property bool waits: Config.island && !Config.vertical && Panel.barShown
+	readonly property bool widened: !waits || island.width >= Math.min(panelWidth, screen.width - 12) - 1
+	property real progress: open && ready && widened ? 1 : 0
+
+	onProgressChanged: {
+		if (!waits)
+			return;
+		if (progress > 0 && open) {
+			Panel.heldWidth = panelWidth;
+			Panel.heldScreen = screen.name;
+		} else if (progress === 0 && !open && Panel.heldWidth === panelWidth) {
+			Panel.heldWidth = 0;
+		}
+	}
 
 	readonly property bool wayland: Config.wayland
 	// pinned to the screen it opened on: focus moving to another monitor doesn't carry it along
@@ -36,7 +51,7 @@ Scope {
 	readonly property int sideGap: 10
 	readonly property real px: side ? (Config.position === "left" ? island.x + island.width + sideGap : island.x - panelWidth - sideGap) : Math.round(island.x + (island.width - panelWidth) / 2)
 	readonly property real py: side ? Math.round(Math.max(sideGap, Math.min(screen.height - panelHeight - sideGap, island.y + (island.height - panelHeight) / 2))) : !Panel.barShown ? (below ? 0 : screen.height - panelHeight) : below ? island.y + island.height : island.y - panelHeight
-	readonly property int fillet: side ? 0 : Panel.fillet
+	readonly property int fillet: side || Config.island ? 0 : Panel.fillet // the island widens to it instead
 	readonly property string title: "Desktop " + name
 
 	Behavior on progress {
