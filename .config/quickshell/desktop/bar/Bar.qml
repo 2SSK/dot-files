@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Effects
 import Quickshell
-import Quickshell.Io
 import qs
 import qs.services
 
@@ -59,14 +58,6 @@ PanelWindow {
 			else
 				undock.restart();
 		}
-	}
-
-	// SwayFX shadows a static bar as it does windows (its window is the bar); not an island, whose
-	// window is the whole edge (plain sway refuses the command, which is fine)
-	Process {
-		running: Config.wayland
-		command: ["swaymsg", "-q", `layer_effects quickshell "blur enable; blur_ignore_transparent enable; shadows ${Config.island ? "disable" : "enable"}; corner_radius 0"`]
-		onCommandChanged: if (Config.wayland) running = true
 	}
 
 	Timer {

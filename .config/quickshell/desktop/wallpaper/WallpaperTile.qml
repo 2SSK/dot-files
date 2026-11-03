@@ -41,13 +41,7 @@ Item {
 
 			anchors.fill: parent
 			visible: false
-			// its thumbnail (Wallpaper.thumbOf), the picture itself until that's made: a thumbnail missing
-			// is tried again once the next ones are made
-			property int missedAt: -1
-			readonly property bool whole: missedAt === Wallpaper.thumbsMade
-
-			source: whole ? "file://" + tile.modelData : "file://" + Wallpaper.thumbOf(tile.modelData)
-			onStatusChanged: if (status === Image.Error && !whole) missedAt = Wallpaper.thumbsMade
+			source: "file://" + tile.modelData
 			sourceSize.width: 360
 			fillMode: Image.PreserveAspectCrop
 			asynchronous: true
