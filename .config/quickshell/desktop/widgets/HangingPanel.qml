@@ -27,7 +27,32 @@ Scope {
 	// before the island shrinks back (Panel.heldWidth)
 	readonly property bool waits: Config.island && !Config.vertical && Panel.barShown
 	readonly property bool widened: !waits || island.width >= Math.min(panelWidth, screen.width - 12) - 1
-	property real progress: open && ready && widened ? 1 : 0
+	readonly property bool out: open && ready && widened
+	property real progress: 0
+
+	// out with ease-out; back in eased at both ends and a touch longer (ease-out snapped it away).
+	// Two animations, not a Behavior: its duration would change in the same moment as its target
+	onOutChanged: out ? (folding.stop(), unfolding.restart()) : (unfolding.stop(), folding.restart())
+
+	NumberAnimation {
+		id: unfolding
+
+		target: root
+		property: "progress"
+		to: 1
+		duration: Theme.normal
+		easing.type: Theme.curve
+	}
+
+	NumberAnimation {
+		id: folding
+
+		target: root
+		property: "progress"
+		to: 0
+		duration: 280
+		easing.type: Easing.InOutCubic
+	}
 
 	onProgressChanged: {
 		if (!waits)
@@ -54,12 +79,6 @@ Scope {
 	readonly property int fillet: side || Config.island ? 0 : Panel.fillet // the island widens to it instead
 	readonly property string title: "Desktop " + name
 
-	Behavior on progress {
-		NumberAnimation {
-			duration: Theme.normal
-			easing.type: Theme.curve
-		}
-	}
 
 	function track(window: QtObject): void {
 		if (window.backingWindowVisible)
@@ -93,7 +112,12 @@ Scope {
 	}
 
 	onOpenChanged: open ? appear() : leave()
-	Component.onCompleted: if (open) appear()
+	Component.onCompleted: {
+		if (open)
+			appear();
+		if (out)
+			unfolding.restart();
+	}
 	Component.onDestruction: leave()
 
 	FocusWatch {

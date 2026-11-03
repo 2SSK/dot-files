@@ -23,6 +23,9 @@ PanelWindow {
 	// a panel still folding away after it closed: the island keeps its width and shape until it's in
 	readonly property bool held: Config.island && !vertical && Panel.heldWidth > 0 && Panel.heldScreen === modelData.name
 	readonly property bool merged: joined || held
+	// one shape with it (square where they meet, opaque, no outline there): on the island only once
+	// the panel unfolds, so the island keeps its round ends while it widens
+	readonly property bool attached: Config.island ? held : joined
 	// the island is as long as what it holds, or the panel hanging from it
 	readonly property real length: !Config.island ? edgeLength : Math.min(edgeLength - 2 * gap, Math.max(content.naturalLength, joined ? Panel.hangingWidth : 0, held ? Panel.heldWidth : 0))
 
@@ -40,7 +43,7 @@ PanelWindow {
 	// the bar with its rounded ends (picom blurs only inside it), or the one-pixel edge while hidden
 	mask: Region {
 		item: bar.docked ? shape : edge
-		radius: bar.docked && !bar.merged ? shape.radius : 0
+		radius: bar.docked && !bar.attached ? shape.radius : 0
 	}
 
 	MouseArea {
@@ -112,8 +115,8 @@ PanelWindow {
 		Behavior on width {
 			enabled: !bar.vertical
 			NumberAnimation {
-				duration: bar.merged ? 160 : Theme.normal
-				easing.type: Theme.curve
+				duration: Panel.hangingWidth > 0 ? 160 : Theme.normal
+				easing.type: Easing.InOutCubic
 			}
 		}
 
@@ -137,7 +140,14 @@ PanelWindow {
 			}
 		}
 		// square on the side a panel hangs from (the panel carries on from there)
-		readonly property real joinRadius: Config.island && bar.merged ? 0 : radius
+		property real joinRadius: Config.island && bar.attached ? 0 : radius
+
+		Behavior on joinRadius {
+			NumberAnimation {
+				duration: Theme.quick
+				easing.type: Theme.curve
+			}
+		}
 		bottomLeftRadius: bar.position === "top" ? joinRadius : radius
 		bottomRightRadius: bar.position === "top" ? joinRadius : radius
 		topLeftRadius: bar.position === "bottom" ? joinRadius : radius
@@ -173,7 +183,7 @@ PanelWindow {
 		Item {
 			id: outlineMask
 
-			readonly property bool gap: bar.merged
+			readonly property bool gap: bar.attached
 			// the island's panel is as wide as it; the static bar's meets it with inverse corners
 			readonly property real gapWidth: Config.island ? parent.width : Panel.hangingWidth + 2 * Panel.fillet
 			readonly property real gapX: (parent.width - gapWidth) / 2
