@@ -175,9 +175,9 @@ wallpaper change redraws it without sudo. `desktop wallpaper screens` redraws it
 
 ## Settings window
 
-`$mod+Shift+s` (or `qs -c desktop ipc call settings toggle`): Bar (style, position, height,
-opacity, island width, capsules, widgets dragged between the bar's parts), Appearance (theme and dark/light, through `theme`),
-Notifications, Levels (volume/brightness steps, how long the level card stays) and Power; Escape
+`$mod+Shift+s` (or `qs -c desktop ipc call settings toggle`): Bar (style, capsules, position,
+height, opacity; picking a style also sets its capsules), Appearance (theme and dark/light, through `theme`),
+Notifications, Levels (volume/brightness steps, how long a level shows in the clock's place) and Power; Escape
 or focusing another window closes it. Changes
 apply at once and are written to `shell.json`, through the stow link into the repo, so they show up
 in `git diff`; Quickshell writes it with sorted keys and 4-space indents, as it's kept.
@@ -225,13 +225,15 @@ password field; Escape or Cancel declines, a wrong password shakes it and asks a
 
 | Setting (`bar.*`) | Values |
 | --- | --- |
-| `style` | `island` (a floating pill) or `static` (the whole edge, word labels and separators) |
+| `style` | `island` (a floating pill, as wide as what it holds) or `static` (the whole edge: status, workspace chips, clock) |
+| `capsules` | island: each part in a round pill; static: each widget in a soft chip |
 | `position` | `top`, `bottom`; `left`/`right` on sway only (i3 docks only top or bottom, so X11 uses the top) |
-| `size`, `opacity`, `length` | thickness in px, background opacity, the island's share of the edge (0: by the screen width, 80 % under 1500 px down to 42 % from 2200 px; never shorter than its content) |
-| `left`, `center`, `right` | widgets: `launcher`, `workspaces`, `clock`, `stats`, `volume`, `brightness`, `battery`, `tray`, `recorder`, `notifications`, `scratchpad`, `controls`, `wifi`, `bluetooth`, `tools` (clipboard, todo, notes), `clipboard`, `notes`, `todo`, `power`; with `capsules` each sits in a capsule |
+| `size`, `opacity` | thickness in px, background opacity |
+| `left`, `center`, `right` | widgets: `launcher`, `workspaces`, `clock`, `stats`, `volume`, `brightness`, `battery`, `tray`, `recorder`, `notifications`, `scratchpad`, `controls`, `wifi`, `bluetooth`, `tools` (clipboard, todo, notes), `clipboard`, `notes`, `todo`, `power`. The island follows these lists; the static bar puts the status first, the workspaces in the middle and the clock last. Edited here only: Settings doesn't move them |
 
-Workspaces are dots: the ones with windows and the one you're on (i3 and sway drop empty ones), the
-current one a wide pill. After them, the scratchpad's window count while it holds any; a click shows or
+On the island, workspaces are dots: the ones with windows and the one you're on (i3 and sway drop
+empty ones), the current one a wide pill. The static bar shows its screen's five as Roman-numeral
+chips (VI–X on the laptop while a monitor has I–V), an accent sliding to the current one. After them, the scratchpad's window count while it holds any; a click shows or
 hides it. The scratchpad is one floating workspace (`desktop scratch`): `$mod+Shift+Return` adds the
 window to a tabbed, centred group, `$mod+minus` shows or hides the whole group, and inside it the usual
 keys tab, split and focus.

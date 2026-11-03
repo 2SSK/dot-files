@@ -3,7 +3,8 @@ import qs
 import qs.services
 import qs.widgets
 
-// Settings → Bar: its look, and its widgets in the three parts.
+// Settings → Bar: its look. The widgets are set in shell.json (bar.left, center, right): the design
+// places them, so there's nothing to drag.
 Column {
 	id: page
 
@@ -68,11 +69,5 @@ Column {
 				onMoved: value => Config.set("bar", "opacity", value)
 			}
 		}
-	}
-
-	Section {
-		title: "Widgets"
-
-		WidgetLayout {}
 	}
 }
