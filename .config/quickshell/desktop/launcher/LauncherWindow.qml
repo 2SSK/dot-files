@@ -15,7 +15,7 @@ HangingPanel {
 	readonly property var modes: [
 		{ key: "apps", label: "Apps", glyph: "apps", hint: "Enter opens" },
 		{ key: "emoji", label: "Emoji", glyph: "mood-smile", hint: "Enter copies" },
-		{ key: "files", label: "Files", glyph: "file", hint: "Enter copies the file (paste to attach) · Ctrl+Enter opens · Shift+Enter the path · Ctrl+Shift+Enter the content" },
+		{ key: "files", label: "Files", glyph: "file", hint: "Enter copies the file, a picture as the picture (paste to attach) · Ctrl+Enter opens · Shift+Enter the path · Ctrl+Shift+Enter the content" },
 		{ key: "themes", label: "Themes", glyph: "palette", hint: "Enter applies" }
 	]
 	readonly property string mode: Panel.launcherMode

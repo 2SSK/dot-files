@@ -157,6 +157,9 @@ def usage():
 
 def main(args):
     if args == ["store"]:
+        # wl-paste --watch pipes the new copy in here, which store reads again itself: left unread, a
+        # big picture filled the pipe and held the copier, so for 5 s nothing could paste it
+        os.dup2(os.open(os.devnull, os.O_RDONLY), 0)  # the pipe closed; 0 stays a valid fd for children
         report()
         return 0
     if args == ["watch"]:

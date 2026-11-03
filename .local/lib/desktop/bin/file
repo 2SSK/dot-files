@@ -122,7 +122,14 @@ open)
 	fi
 	;;
 # copies go through desktop clipboard, as the shell's own do
-file) desktop clipboard copy files "$file" ;;
+# a picture goes as the picture (Claude, chats and mail paste it as one; as a file link most don't)
+file)
+	if [[ $mime =~ ^image/(png|jpeg|webp|gif)$ ]]; then
+		desktop clipboard copy image "$file" "$mime"
+	else
+		desktop clipboard copy files "$file"
+	fi
+	;;
 path) printf '%s' "$file" | desktop clipboard copy text ;;
 content)
 	if editable "$mime"; then

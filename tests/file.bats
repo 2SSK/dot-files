@@ -75,6 +75,14 @@ setup() {
 	[ "$(cat "$CALLS")" = "xclip -selection clipboard -t text/uri-list -i <file://$d/my%20report%20%C3%A9.pdf"$'\r'">" ]
 }
 
+@test "file: a picture goes as the picture (pastes into Claude or a chat), anything else as the file" {
+	"$FILE" file "$d/dot.png"
+	grep -aq "^xclip -selection clipboard -t image/png -i <" "$CALLS"
+	rm "$CALLS"
+	"$FILE" file "$d/doc.pdf"
+	[ "$(cat "$CALLS")" = "xclip -selection clipboard -t text/uri-list -i <file://$d/doc.pdf"$'\r'">" ]
+}
+
 @test "on Wayland the file goes through copy-exact (wl-copy would add text/plain)" {
 	# shellcheck disable=SC2016
 	printf '#!/bin/sh\necho "copy-exact $* <$(cat)>" >>"$CALLS"\n' >"$BATS_TEST_TMPDIR/bin/copy-exact"
