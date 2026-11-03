@@ -4,6 +4,7 @@
 #   desktop wallpaper set <image>   fade from the current one to it, and remember it
 #   desktop wallpaper restore       draw the remembered one (login), no fade
 #   desktop wallpaper screens       redraw the login screen's background from it
+#   desktop wallpaper thumbs        small copies for the shell's picker, made where missing or older
 #   desktop wallpaper next-boot     while shutting down, with wallpaper.rotate "boot": pick the next
 #                                   boot's, so the login screen and the desktop start on it (a user
 #                                   service runs it as the session stops; a logout keeps the old one)
@@ -78,6 +79,18 @@ images() {
 		done
 }
 
+# The picker's thumbnails (the shell's wallpaper tiles): ~/.cache/desktop/wallpaper-thumbs/<md5 of the
+# path>.jpg, 480 px wide; a full picture (often a 4K PNG of 10-30 MB) decodes slowly. Made again when
+# the picture is newer; two at a time, niced; each written aside first, so a tile never shows half a one.
+thumbs() {
+	local dir="${XDG_CACHE_HOME:-$HOME/.cache}/desktop/wallpaper-thumbs" file thumb
+	mkdir -p "$dir"
+	images | while IFS= read -r file; do
+		thumb="$dir/$(printf %s "$file" | md5sum | cut -d' ' -f1).jpg"
+		[[ -s $thumb && $thumb -nt $file ]] || printf '%s\0%s\0' "$file" "$thumb"
+	done | nice -n 10 xargs -0 -r -n 2 -P 2 sh -c 'magick -quiet "$1[0]" -thumbnail 480x -strip -quality 82 "$2.part.jpg" && mv -f "$2.part.jpg" "$2"' sh
+}
+
 recolour() { # matugen's theme follows the wallpaper (and is applied when it's the theme in use)
 	command -v matugen >/dev/null || return 0
 	setsid -f theme wallpaper >/dev/null 2>&1
@@ -109,6 +122,7 @@ next_boot() {
 
 case ${1:-} in
 screens) screens ;;
+thumbs) thumbs ;;
 next-boot) next_boot ;;
 set)
 	[[ -f ${2:-} ]] || { echo "desktop wallpaper: not an image: ${2:-}" >&2 && exit 2; }

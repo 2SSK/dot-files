@@ -15,6 +15,14 @@ Singleton {
 	readonly property var folders: (Config.wallpaper.folders ?? []).map(f => f.replace(/^~/, home))
 	readonly property int every: ({ "5m": 300, "1h": 3600, "1d": 86400 })[Config.wallpaper.rotate] ?? 0 // s
 	property var files: []
+	// the picker's thumbnails (desktop wallpaper thumbs): made after each scan; a tile looks again as
+	// the count goes up
+	readonly property string thumbs: (Quickshell.env("XDG_CACHE_HOME") || home + "/.cache") + "/desktop/wallpaper-thumbs"
+	property int thumbsMade: 0
+
+	function thumbOf(path: string): string {
+		return `${thumbs}/${Qt.md5(path)}.jpg`;
+	}
 	// theme folders such as ~/Wallpaper-Bank/tokyonight match the theme's family
 	readonly property string family: Theme.palette.meta?.family ?? ""
 	readonly property var themeFiles: files.filter(f => f.split("/").slice(-2, -1)[0] === family)
@@ -66,8 +74,18 @@ Singleton {
 
 		command: ["sh", "-c", 'for d in "$@"; do [ -d "$d" ] && find -L "$d" -maxdepth 2 -type f \\( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" \\); done | sort', "sh", ...root.folders]
 		stdout: StdioCollector {
-			onStreamFinished: root.files = text.split("\n").filter(f => f)
+			onStreamFinished: {
+				root.files = text.split("\n").filter(f => f);
+				thumbnailer.running = true;
+			}
 		}
+	}
+
+	Process {
+		id: thumbnailer
+
+		command: ["desktop", "wallpaper", "thumbs"]
+		onExited: root.thumbsMade++
 	}
 
 	// changes made elsewhere (a terminal, the shutdown pick) show up through wallpaper-changed

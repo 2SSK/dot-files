@@ -153,3 +153,24 @@ next_boot_fakes() { # shell.json rotating at boot over the pictures, a shutdown 
 	grep -q "^awww img $BATS_TEST_TMPDIR/pics/a.jpg --transition-type none" "$CALLS"
 	[ "$(readlink "$XDG_STATE_HOME/desktop/wallpaper")" = "$BATS_TEST_TMPDIR/pics/a.jpg" ]
 }
+
+@test "thumbs: a small copy of each picture for the picker, made again only when the picture is newer" {
+	export XDG_CACHE_HOME="$BATS_TEST_TMPDIR/cache" XDG_CONFIG_HOME="$BATS_TEST_TMPDIR/config"
+	mkdir -p "$XDG_CONFIG_HOME/desktop"
+	printf '{"wallpaper": {"folders": ["%s"]}}\n' "$BATS_TEST_TMPDIR/pics" >"$XDG_CONFIG_HOME/desktop/shell.json"
+	# shellcheck disable=SC2016 # expands when the fake runs
+	printf '#!/bin/sh\necho "magick $*" >>"$CALLS"\nfor last; do :; done\necho jpg >"$last"\n' >"$BATS_TEST_TMPDIR/bin/magick"
+	chmod +x "$BATS_TEST_TMPDIR/bin/magick"
+	thumbs="$XDG_CACHE_HOME/desktop/wallpaper-thumbs"
+	"$WALL" thumbs
+	[ "$(grep -c '^magick' "$CALLS")" -eq 2 ]
+	[ -s "$thumbs/$(printf %s "$BATS_TEST_TMPDIR/pics/a.jpg" | md5sum | cut -d' ' -f1).jpg" ]
+	[ -z "$(find "$thumbs" -name '*.part.jpg')" ]
+	rm "$CALLS"
+	"$WALL" thumbs
+	[ ! -e "$CALLS" ] # all fresh
+	touch -d '+1 min' "$BATS_TEST_TMPDIR/pics/b.jpg"
+	"$WALL" thumbs
+	[ "$(grep -c '^magick' "$CALLS")" -eq 1 ]
+	grep -q "pics/b.jpg" "$CALLS"
+}
