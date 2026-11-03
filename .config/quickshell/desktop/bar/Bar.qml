@@ -27,7 +27,40 @@ PanelWindow {
 	// the panel unfolds, so the island keeps its round ends while it widens
 	readonly property bool attached: Config.island ? held : joined
 	// the island is as long as what it holds, or the panel hanging from it
-	readonly property real length: !Config.island ? edgeLength : Math.min(edgeLength - 2 * gap, Math.max(content.naturalLength, joined ? Panel.hangingWidth : 0, held ? Panel.heldWidth : 0))
+	readonly property real panelLength: joined ? Panel.hangingWidth : held ? Panel.heldWidth : 0
+	readonly property real target: !Config.island ? edgeLength : Math.min(edgeLength - 2 * gap, Math.max(content.naturalLength, panelLength))
+	// what's drawn. It follows what the island holds frame by frame (a workspace's dot grows in or
+	// shrinks away with its own easing; a second animation chasing it made it stutter) and glides
+	// only over a jump: a panel opening or closing, or the style changing
+	property real length: target
+	property real lastPanel: 0
+	property bool lastIsland: Config.island
+
+	onTargetChanged: {
+		const jump = panelLength !== lastPanel || Config.island !== lastIsland;
+		const opening = panelLength > lastPanel;
+		lastPanel = panelLength;
+		lastIsland = Config.island;
+		if (!jump && !glide.running) {
+			length = target;
+			return;
+		}
+		glide.stop();
+		glide.from = length;
+		glide.to = target;
+		glide.duration = opening ? 160 : Theme.normal;
+		glide.start();
+	}
+
+	NumberAnimation {
+		id: glide
+
+		target: bar
+		property: "length"
+		easing.type: Easing.InOutCubic
+		// it may have moved meanwhile (a dot that was still growing): end on where it is now
+		onFinished: if (bar.length !== bar.target) bar.length = bar.target
+	}
 
 	screen: modelData
 	anchors.top: position !== "bottom"
@@ -110,24 +143,6 @@ PanelWindow {
 
 		width: bar.vertical ? bar.size : bar.length
 		height: bar.vertical ? bar.length : bar.size
-		// as a workspace comes or goes, or the style changes; quicker for a panel, which unfolds once
-		// the island is wide
-		Behavior on width {
-			enabled: !bar.vertical
-			NumberAnimation {
-				duration: Panel.hangingWidth > 0 ? 160 : Theme.normal
-				easing.type: Easing.InOutCubic
-			}
-		}
-
-		Behavior on height {
-			enabled: bar.vertical
-			NumberAnimation {
-				duration: Theme.normal
-				easing.type: Theme.curve
-			}
-		}
-
 		// slid by x/y while hiding, not a transform: the window's shape follows geometry
 		x: !bar.vertical ? (parent.width - width) / 2 : (bar.position === "left" ? bar.gap : 0) + away
 		y: bar.vertical ? (parent.height - height) / 2 : (bar.position === "top" ? bar.gap : 0) + away

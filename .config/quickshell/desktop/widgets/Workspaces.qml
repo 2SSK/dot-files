@@ -149,111 +149,115 @@ Line {
 		}
 	}
 
-	// ---- island: the dots, keyed by number so each keeps its delegate (and its animation)
-	ListView {
-		id: dots
+	// ---- island: the dots. A plain row, not a ListView: that measured itself without a dot on its
+	// way out, so the island shrank before the dot did. A dot leaving stays in `dots` until it has
+	// shrunk away; each is keyed by its number, so the others keep their delegates
+	property var dots: []
 
+	function sync(): void {
+		const all = [...new Set(dots.concat(here.map(ws => ws.num)))].sort((a, b) => a - b);
+		if (all.join() !== dots.join())
+			dots = all;
+	}
+
+	function drop(num: int): void {
+		if (!here.some(ws => ws.num === num))
+			dots = dots.filter(n => n !== num);
+	}
+
+	onHereChanged: sync()
+	Component.onCompleted: sync()
+
+	Line {
 		visible: !root.chips
-		interactive: false
-		orientation: root.vertical ? ListView.Vertical : ListView.Horizontal
-		implicitWidth: root.vertical ? root.dot : contentWidth
-		implicitHeight: root.vertical ? contentHeight : root.dot
-		width: implicitWidth
-		height: implicitHeight
-		model: ScriptModel {
-			values: root.chips ? [] : root.here
-			objectProp: "num"
-		}
+		vertical: root.vertical
 
-		delegate: Item {
-			id: slot
-
-			required property var modelData
-			// the model keeps the first object it saw for a number; the live state is in `here`
-			readonly property var workspace: root.here.find(ws => ws.num === modelData.num) ?? modelData
-			readonly property bool shown: workspace.visible
-			readonly property real long: shown ? root.dot * 2.5 : root.dot
-			readonly property real gap: 7
-			property real grow: 0 // 0 to 1 as it comes, back to 0 as it goes
-
-			width: root.vertical ? root.dot : (long + gap) * grow
-			height: root.vertical ? (long + gap) * grow : root.dot
-
-			Component.onCompleted: grow = 1
-
-			Behavior on grow {
-				NumberAnimation {
-					duration: Theme.slow
-					easing.type: Theme.curve
-				}
+		Repeater {
+			model: ScriptModel {
+				values: root.chips ? [] : root.dots
 			}
 
-			ListView.onRemove: leave.start()
+			delegate: Item {
+				id: slot
 
-			SequentialAnimation {
-				id: leave
+				required property int modelData // its number
+				readonly property var live: root.here.find(ws => ws.num === modelData)
+				// the live state; a dot on its way out keeps the last it had
+				property var workspace: ({ num: modelData })
+				readonly property bool shown: !!workspace.visible
+				property real long: shown ? root.dot * 2.5 : root.dot
+				readonly property real gap: 7
+				property real grow: 0 // 0 to 1 as it comes, back to 0 as it goes
 
-				PropertyAction {
-					target: slot
-					property: "ListView.delayRemove"
-					value: true
+				implicitWidth: root.vertical ? root.dot : (long + gap) * grow
+				implicitHeight: root.vertical ? (long + gap) * grow : root.dot
+
+				property real goal: -1
+
+				// grow towards 1 or 0, started by hand: a Behavior skipped the first one (made while the
+				// delegate was being built), so a new dot appeared at full size
+				function aim(value: real): void {
+					if (goal === value)
+						return;
+					goal = value;
+					growing.to = value;
+					growing.restart();
+				}
+
+				onLiveChanged: {
+					if (live)
+						workspace = live;
+					aim(live ? 1 : 0);
+				}
+				Component.onCompleted: {
+					if (live)
+						workspace = live;
+					aim(live ? 1 : 0);
 				}
 
 				NumberAnimation {
+					id: growing
+
 					target: slot
 					property: "grow"
-					to: 0
 					duration: Theme.slow
-					easing.type: Theme.curve
+					easing.type: Easing.InOutCubic
+					onFinished: if (slot.goal === 0 && !slot.live) root.drop(slot.modelData)
 				}
 
-				PropertyAction {
-					target: slot
-					property: "ListView.delayRemove"
-					value: false
-				}
-			}
-
-			Rectangle {
-				anchors.centerIn: parent
-				width: root.vertical ? root.dot : slot.long * slot.grow
-				height: root.vertical ? slot.long * slot.grow : root.dot
-				radius: root.dot / 2
-				opacity: slot.grow
-				color: slot.workspace.urgent ? Theme.error : slot.shown ? (slot.workspace.focused ? Theme.primary : Qt.alpha(Theme.primary, 0.55)) : hover.containsMouse ? Theme.fg : Qt.alpha(Theme.fg, 0.55)
-
-				Behavior on width {
-					enabled: slot.grow === 1
+				// the pill where you are widens and narrows with the same easing as the island
+				Behavior on long {
 					NumberAnimation {
 						duration: Theme.slow
-						easing.type: Theme.curve
+						easing.type: Easing.InOutCubic
 					}
 				}
 
-				Behavior on height {
-					enabled: slot.grow === 1
-					NumberAnimation {
-						duration: Theme.slow
-						easing.type: Theme.curve
+				Rectangle {
+					anchors.centerIn: parent
+					width: root.vertical ? root.dot : slot.long * slot.grow
+					height: root.vertical ? slot.long * slot.grow : root.dot
+					radius: root.dot / 2
+					opacity: slot.grow
+					color: slot.workspace.urgent ? Theme.error : slot.shown ? (slot.workspace.focused ? Theme.primary : Qt.alpha(Theme.primary, 0.55)) : hover.containsMouse ? Theme.fg : Qt.alpha(Theme.fg, 0.55)
+
+					Behavior on color {
+						ColorAnimation {
+							duration: Theme.normal
+							easing.type: Theme.curve
+						}
 					}
 				}
 
-				Behavior on color {
-					ColorAnimation {
-						duration: Theme.normal
-						easing.type: Theme.curve
-					}
+				MouseArea {
+					id: hover
+
+					anchors.fill: parent
+					anchors.margins: -3
+					hoverEnabled: true
+					cursorShape: Qt.PointingHandCursor
+					onClicked: WindowManager.switchTo(slot.modelData)
 				}
-			}
-
-			MouseArea {
-				id: hover
-
-				anchors.fill: parent
-				anchors.margins: -3
-				hoverEnabled: true
-				cursorShape: Qt.PointingHandCursor
-				onClicked: WindowManager.switchTo(slot.modelData.num)
 			}
 		}
 	}
