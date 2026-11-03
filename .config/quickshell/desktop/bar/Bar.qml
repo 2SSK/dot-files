@@ -1,13 +1,13 @@
 import QtQuick
 import QtQuick.Effects
 import Quickshell
+import Quickshell.Io
 import qs
 import qs.services
-import qs.widgets
 
 // One screen's bar on any edge, an island or the whole edge. The window is only as big as the bar, as
-// i3 reserves a dock's full window (on sway, with room for its shadow outside what it reserves);
-// hidden, it shrinks to a pixel so i3 gives the room back.
+// i3 reserves a dock's full window; on sway an island's window is the island itself, so SwayFX
+// shadows it as it does windows (effects.conf); hidden, it shrinks to a pixel so i3 gives the room back.
 PanelWindow {
 	id: bar
 
@@ -17,9 +17,8 @@ PanelWindow {
 	readonly property bool vertical: Config.vertical
 	readonly property int size: Config.bar.size
 	readonly property int gap: Config.island ? 6 : 0 // the island's distance from the screen edge
-	// room for its shadow on the inner side, outside what it reserves (sway; i3 reserves a dock's whole
-	// window, and picom shadows it there)
-	readonly property int shade: Config.wayland ? 20 : 0
+	// on sway, a docked island's window is just the island, its gap a margin
+	readonly property bool compact: Config.wayland && Config.island && docked
 	readonly property real edgeLength: (vertical ? modelData?.height : modelData?.width) ?? 0 // 0 as its screen goes away
 	property bool docked: true // the window at full size; false only once the bar has slid away
 	// the island's share of the edge, more of a narrow screen, between its content and the whole edge
@@ -27,13 +26,16 @@ PanelWindow {
 	readonly property real length: !Config.island ? edgeLength : Math.min(edgeLength - 2 * gap, Math.max(content.naturalLength, share * edgeLength))
 
 	screen: modelData
-	anchors.top: position !== "bottom"
-	anchors.bottom: position !== "top"
-	anchors.left: position !== "right"
-	anchors.right: position !== "left"
-	implicitWidth: vertical ? (docked ? size + gap + shade : 1) : 0
-	implicitHeight: vertical ? 0 : docked ? size + gap + shade : 1
-	exclusiveZone: docked ? size + gap : 1
+	anchors.top: position === "top" || vertical && !compact
+	anchors.bottom: position === "bottom" || vertical && !compact
+	anchors.left: position === "left" || !vertical && !compact
+	anchors.right: position === "right" || !vertical && !compact
+	margins.top: compact && position === "top" ? gap : 0
+	margins.bottom: compact && position === "bottom" ? gap : 0
+	margins.left: compact && position === "left" ? gap : 0
+	margins.right: compact && position === "right" ? gap : 0
+	implicitWidth: vertical ? (docked ? size + (compact ? 0 : gap) : 1) : compact ? length : 0
+	implicitHeight: vertical ? (compact ? length : 0) : docked ? size + (compact ? 0 : gap) : 1
 	color: "transparent"
 	// the bar with its rounded ends (picom blurs only inside it), or the one-pixel edge while hidden
 	mask: Region {
@@ -51,7 +53,7 @@ PanelWindow {
 	}
 
 	// where the bar is, for the control center to hang from
-	readonly property rect island: Qt.rect(shape.x + (anchors.right && !anchors.left ? (modelData?.width ?? 0) - width : 0), shape.y + (anchors.bottom && !anchors.top ? (modelData?.height ?? 0) - height : 0), shape.width, shape.height)
+	readonly property rect island: Qt.rect(shape.x + (anchors.left ? margins.left : anchors.right ? (modelData?.width ?? 0) - width - margins.right : ((modelData?.width ?? 0) - width) / 2), shape.y + (anchors.top ? margins.top : anchors.bottom ? (modelData?.height ?? 0) - height - margins.bottom : ((modelData?.height ?? 0) - height) / 2), shape.width, shape.height)
 	onIslandChanged: Panel.islands = Object.assign({}, Panel.islands, { [modelData.name]: island })
 	Component.onCompleted: Panel.islands = Object.assign({}, Panel.islands, { [modelData.name]: island })
 
@@ -66,22 +68,19 @@ PanelWindow {
 		}
 	}
 
+	// SwayFX shadows the bar as it does windows (effects.conf): its corners, so the shadow follows the
+	// island's round ends, or the static bar's square ones (plain sway refuses it, which is fine)
+	Process {
+		running: Config.wayland
+		command: ["swaymsg", "-q", `layer_effects quickshell "blur enable; blur_ignore_transparent enable; shadows enable; corner_radius ${Config.island ? Math.round(Config.bar.size / 2) : 0}"`]
+		onCommandChanged: if (Config.wayland) running = true
+	}
+
 	Timer {
 		id: undock
 
 		interval: 280
 		onTriggered: if (!Panel.barShown) bar.docked = false
-	}
-
-	// a soft shadow under it, falling away from the screen's edge
-	Shadow {
-		visible: bar.shade > 0 && bar.docked
-		anchors.fill: shape
-		radius: shape.radius
-		blur: 20
-		offsetY: bar.vertical ? 0 : bar.position === "top" ? 3 : -3
-		offset.x: !bar.vertical ? 0 : bar.position === "left" ? 3 : -3
-		color: Qt.alpha("black", 0.35)
 	}
 
 	Rectangle {
@@ -117,8 +116,8 @@ PanelWindow {
 		width: bar.vertical ? bar.size : bar.length
 		height: bar.vertical ? bar.length : bar.size
 		// slid by x/y while hiding, not a transform: the window's shape follows geometry
-		x: !bar.vertical ? (parent.width - width) / 2 : (bar.position === "left" ? bar.gap : bar.shade) + away
-		y: bar.vertical ? (parent.height - height) / 2 : (bar.position === "top" ? bar.gap : bar.shade) + away
+		x: !bar.vertical ? (parent.width - width) / 2 : (bar.position === "left" && !bar.compact ? bar.gap : 0) + away
+		y: bar.vertical ? (parent.height - height) / 2 : (bar.position === "top" && !bar.compact ? bar.gap : 0) + away
 		radius: Config.island ? bar.size / 2 : 0
 		// opaque while a panel hangs from it, as the panel is: one piece in one colour (see-through, each
 		// would show whatever is behind it, the wallpaper here and a window there)
