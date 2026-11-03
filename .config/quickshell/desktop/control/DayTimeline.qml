@@ -115,7 +115,7 @@ Item {
 			y: root.yOf(modelData.start) + 1
 			width: lane - 4
 			height: Math.max(22, root.yOf(modelData.stop) - root.yOf(modelData.start) - 2)
-			radius: 8
+			radius: Theme.radiusSmall
 			opacity: modelData.done ? 0.6 : 1
 			color: blockHover.hovered ? Qt.alpha(Theme.primary, 0.32) : Qt.alpha(Theme.primary, 0.22)
 			clip: true

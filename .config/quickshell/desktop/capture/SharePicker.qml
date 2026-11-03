@@ -46,7 +46,7 @@ Item {
 
 			width: ListView.view.width
 			height: 46
-			radius: 12
+			radius: Theme.radiusCard
 			color: chosen ? Qt.alpha(Theme.primary, 0.16) : "transparent"
 
 			Behavior on color {
@@ -89,7 +89,7 @@ Item {
 				x: 48
 				anchors.verticalCenter: parent.verticalCenter
 				width: parent.width - x - 12
-				spacing: 1
+				spacing: 2
 
 				UiText {
 					width: parent.width

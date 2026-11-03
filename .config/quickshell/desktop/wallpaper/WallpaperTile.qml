@@ -54,12 +54,12 @@ Item {
 			anchors.fill: parent
 			visible: false
 			layer.enabled: true
-			radius: 12
+			radius: Theme.radiusCard
 		}
 
 		Rectangle {
 			anchors.fill: parent
-			radius: 12
+			radius: Theme.radiusCard
 			color: Qt.alpha(Theme.surface, 0.8)
 		}
 
@@ -103,7 +103,7 @@ Item {
 		Rectangle {
 			anchors.fill: parent
 			anchors.margins: -3
-			radius: 15
+			radius: Theme.radiusCard
 			color: "transparent"
 			border.width: tile.on ? 3 : tile.picked ? 2 : 0
 			border.color: tile.on ? Theme.primary : Qt.alpha(Theme.fg, 0.6)

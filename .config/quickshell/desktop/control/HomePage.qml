@@ -77,7 +77,7 @@ Column {
 
 			Column {
 				anchors.verticalCenter: parent.verticalCenter
-				spacing: 1
+				spacing: 2
 
 				UiText {
 					anchors.right: parent.right
@@ -106,7 +106,7 @@ Column {
 				Rectangle {
 					width: 34
 					height: 18
-					radius: 5
+					radius: Theme.radiusSmall
 					color: "transparent"
 					border.width: 2
 					border.color: Qt.alpha(battery.tint, 0.55)
@@ -267,7 +267,7 @@ Column {
 		Rectangle {
 			width: parent.width
 			height: 30
-			radius: 8
+			radius: Theme.radiusSmall
 			color: pickHover.hovered ? Qt.alpha(Theme.overlay, 0.9) : "transparent"
 
 			HoverHandler {
@@ -320,7 +320,7 @@ Column {
 				x: 30
 				width: picker.width - 30
 				height: 34
-				radius: 8
+				radius: Theme.radiusSmall
 				color: chosen ? Qt.alpha(Theme.primary, 0.16) : optionHover.hovered ? Qt.alpha(Theme.overlay, 0.9) : "transparent"
 
 				HoverHandler {
@@ -373,7 +373,7 @@ Column {
 	Rectangle {
 		width: parent.width
 		height: levels.implicitHeight + 24
-		radius: 16
+		radius: Theme.radiusCard
 		color: Qt.alpha(Theme.surface, 0.8)
 
 		Column {

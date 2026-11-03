@@ -10,7 +10,7 @@ import qs.widgets
 Column {
 	id: page
 
-	spacing: 22
+	spacing: 24
 
 	property string family: ""
 	property string mode: ""
@@ -97,7 +97,7 @@ Column {
 
 					width: 168
 					height: 84
-					radius: 14
+					radius: Theme.radiusCard
 					color: ui.bg ?? Theme.surface
 					border.width: on ? 2 : 1
 					border.color: on ? Theme.primary : hover.hovered ? Qt.alpha(Theme.fg, 0.35) : Qt.alpha(Theme.border, 0.7)

@@ -52,7 +52,7 @@ Column {
 		return Events.has(day) || Alarms.alarms.some(a => a.enabled && a.repeat === "once" && a.date === Qt.formatDate(day, "yyyy-MM-dd"));
 	}
 
-	spacing: 10
+	spacing: 12
 
 	SystemClock {
 		id: clock
@@ -82,7 +82,7 @@ Column {
 				visible: root.year !== clock.date.getFullYear() || root.month !== clock.date.getMonth() || root.chosen.toDateString() !== clock.date.toDateString()
 				width: todayLabel.implicitWidth + 22
 				height: 30
-				radius: 10
+				radius: Theme.radiusCard
 				color: todayHover.hovered ? Qt.alpha(Theme.primary, 0.25) : Qt.alpha(Theme.primary, 0.15)
 
 				UiText {
@@ -116,7 +116,7 @@ Column {
 
 					width: 30
 					height: 30
-					radius: 10
+					radius: Theme.radiusCard
 					color: arrowHover.hovered ? Qt.alpha(Theme.fg, 0.1) : Qt.alpha(Theme.surface, 0.8)
 
 					Glyph {
@@ -142,7 +142,7 @@ Column {
 	Rectangle {
 		width: parent.width
 		height: grid.implicitHeight + 20
-		radius: 16
+		radius: Theme.radiusCard
 		color: Qt.alpha(Theme.surface, 0.8)
 
 		Column {

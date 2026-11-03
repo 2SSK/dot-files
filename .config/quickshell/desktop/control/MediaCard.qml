@@ -18,7 +18,7 @@ Rectangle {
 	}
 
 	height: 116 + (switcher.visible ? 40 : 0)
-	radius: 16
+	radius: Theme.radiusCard
 	color: Qt.alpha(Theme.surface, 0.8)
 
 	UiText {
@@ -52,7 +52,7 @@ Rectangle {
 
 				Row {
 					anchors.centerIn: parent
-					spacing: 5
+					spacing: 4
 
 					Glyph {
 						anchors.verticalCenter: parent.verticalCenter
@@ -96,7 +96,7 @@ Rectangle {
 		y: (switcher.visible ? 40 : 0) + (116 - height) / 2
 		width: 88
 		height: 88
-		radius: 12
+		radius: Theme.radiusCard
 		color: Qt.alpha(Theme.primary, 0.14)
 
 		Glyph {

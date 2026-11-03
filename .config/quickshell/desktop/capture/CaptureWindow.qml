@@ -133,7 +133,7 @@ HangingPanel {
 		x: 16
 		y: 16
 		width: parent.width - 32
-		spacing: 10
+		spacing: 12
 
 		Heading {
 			glyph: "camera"

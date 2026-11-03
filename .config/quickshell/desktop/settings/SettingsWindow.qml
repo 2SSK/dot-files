@@ -80,7 +80,7 @@ FloatingWindow {
 
 					width: parent.width
 					height: 40
-					radius: 10
+					radius: Theme.radiusCard
 					color: on ? Theme.primary : hover.hovered ? Qt.alpha(Theme.fg, 0.07) : "transparent"
 
 					Row {
@@ -180,7 +180,7 @@ FloatingWindow {
 			x: 32
 			y: 16
 			width: content.width - 64
-			spacing: 22
+			spacing: 24
 
 			// made when picked (Keys stays, to keep its search)
 			Loader {

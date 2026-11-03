@@ -7,7 +7,7 @@ import qs.widgets
 Column {
 	id: page
 
-	spacing: 22
+	spacing: 24
 
 	Section {
 		title: "Look"
@@ -70,7 +70,7 @@ Column {
 			label: "Island width"
 			hint: Config.bar.length > 0 ? "A fixed share of the screen edge." : "Follows the screen: more of a narrow one, less of a wide one."
 			Row {
-				spacing: 14
+				spacing: 16
 
 				Toggle {
 					anchors.verticalCenter: parent.verticalCenter

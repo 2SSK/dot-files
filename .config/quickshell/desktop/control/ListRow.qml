@@ -17,7 +17,7 @@ Rectangle {
 
 	width: parent?.width ?? 0
 	height: 58
-	radius: 12
+	radius: Theme.radiusCard
 	color: active ? Qt.alpha(Theme.primary, 0.16) : hover.hovered ? Qt.alpha(Theme.overlay, 0.9) : Qt.alpha(Theme.surface, 0.8)
 
 	HoverHandler {

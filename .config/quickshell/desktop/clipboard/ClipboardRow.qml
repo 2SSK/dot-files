@@ -22,7 +22,7 @@ Rectangle {
 
 	width: ListView.view.width
 	height: 54
-	radius: 11
+	radius: Theme.radiusCard
 	color: on ? Qt.alpha(Theme.primary, 0.16) : hover.hovered ? Qt.alpha(Theme.overlay, 0.8) : "transparent"
 	border.width: on ? 1 : 0
 	border.color: Qt.alpha(Theme.primary, 0.5)
@@ -51,7 +51,7 @@ Rectangle {
 		ClippingRectangle {
 			visible: row.modelData.kind === "image"
 			anchors.fill: parent
-			radius: 8
+			radius: Theme.radiusSmall
 			color: Qt.alpha(Theme.surface, 0.8)
 
 			Image {
@@ -78,7 +78,7 @@ Rectangle {
 		anchors.right: parent.right
 		anchors.rightMargin: 12
 		anchors.verticalCenter: parent.verticalCenter
-		spacing: 3
+		spacing: 4
 
 		UiText {
 			width: parent.width

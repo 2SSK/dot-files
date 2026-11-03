@@ -84,7 +84,7 @@ HangingPanel {
 		y: 14
 		width: 58
 		height: parent.height - 28
-		radius: 16
+		radius: Theme.radiusCard
 		color: Qt.alpha(Theme.surface, 0.7)
 
 		Column {
@@ -103,7 +103,7 @@ HangingPanel {
 
 					width: 42
 					height: 42
-					radius: 12
+					radius: Theme.radiusCard
 					color: on ? Theme.primary : hover.hovered ? Qt.alpha(Theme.fg, 0.08) : "transparent"
 
 					Glyph {
@@ -154,7 +154,7 @@ HangingPanel {
 					required property var modelData
 
 					size: 42
-					radius: 12
+					radius: Theme.radiusCard
 					glyph: modelData.glyph
 					glyphSize: 18
 					hoverAlpha: 0.08
@@ -195,7 +195,7 @@ HangingPanel {
 					required property var modelData
 
 					size: 38
-					radius: 11
+					radius: Theme.radiusCard
 					glyph: modelData.glyph
 					glyphSize: 15
 					on: modelData.on ?? false

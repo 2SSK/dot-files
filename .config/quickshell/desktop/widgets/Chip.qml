@@ -13,7 +13,7 @@ Rectangle {
 
 	implicitWidth: row.implicitWidth + 22
 	implicitHeight: 34
-	radius: 10
+	radius: Theme.radiusCard
 	color: on ? Theme.primary : hover.hovered ? Qt.alpha(Theme.fg, 0.1) : Qt.alpha(Theme.surface, 0.8)
 	border.width: on ? 0 : 1
 	border.color: Qt.alpha(Theme.border, 0.7)

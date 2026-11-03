@@ -14,7 +14,7 @@ Rectangle {
 	property var entry: null
 	signal copied // Copy: back on the clipboard (and the panel closes)
 
-	radius: 14
+	radius: Theme.radiusCard
 	color: Qt.alpha(Theme.surface, 0.55)
 	clip: true
 
@@ -81,7 +81,7 @@ Rectangle {
 			delegate: Row {
 				required property string modelData
 
-				spacing: 10
+				spacing: 12
 
 				Glyph {
 					anchors.verticalCenter: parent.verticalCenter

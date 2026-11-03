@@ -182,7 +182,7 @@ Scope {
 				Column {
 					anchors.centerIn: parent
 					anchors.verticalCenterOffset: -40
-					spacing: 10
+					spacing: 12
 
 					UiText {
 						anchors.horizontalCenter: parent.horizontalCenter

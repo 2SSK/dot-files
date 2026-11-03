@@ -19,7 +19,7 @@ Rectangle {
 	}
 
 	height: 40
-	radius: 10
+	radius: Theme.radiusCard
 	color: Qt.alpha(Theme.surface, 0.9)
 	border.width: 1
 	border.color: input.activeFocus ? Theme.primary : Qt.alpha(Theme.border, 0.8)

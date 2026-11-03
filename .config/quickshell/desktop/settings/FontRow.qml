@@ -29,7 +29,7 @@ Column {
 		Rectangle {
 			width: Math.min(260, name.implicitWidth + 44)
 			height: 34
-			radius: 10
+			radius: Theme.radiusCard
 			color: root.open ? Qt.alpha(Theme.primary, 0.18) : hover.hovered ? Qt.alpha(Theme.fg, 0.1) : Qt.alpha(Theme.overlay, 0.7)
 
 			Behavior on color {
@@ -87,7 +87,7 @@ Column {
 		visible: root.open
 		width: parent.width
 		height: 300
-		radius: 12
+		radius: Theme.radiusCard
 		color: Qt.alpha(Theme.surface, 0.55)
 
 		TextField {
@@ -129,7 +129,7 @@ Column {
 
 				width: ListView.view.width
 				height: 40
-				radius: 9
+				radius: Theme.radiusSmall
 				color: on ? Qt.alpha(Theme.primary, 0.18) : entryHover.hovered ? Qt.alpha(Theme.fg, 0.08) : "transparent"
 
 				UiText {

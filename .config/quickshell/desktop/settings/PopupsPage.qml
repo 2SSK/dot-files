@@ -8,7 +8,7 @@ import qs.widgets
 Column {
 	id: page
 
-	spacing: 22
+	spacing: 24
 
 	Section {
 		title: "Popups"

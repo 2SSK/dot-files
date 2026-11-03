@@ -29,7 +29,7 @@ Item {
 		Rectangle {
 			width: 30
 			height: 30
-			radius: 10
+			radius: Theme.radiusCard
 			color: backHover.hovered ? Qt.alpha(Theme.fg, 0.1) : Qt.alpha(Theme.surface, 0.8)
 
 			Glyph {
@@ -85,7 +85,7 @@ Item {
 				y: (map.height - chooser.spanH * chooser.k) / 2 + (modelData.y - chooser.minY) * chooser.k + 4
 				width: modelData.width * chooser.k - 8
 				height: modelData.height * chooser.k - 8
-				radius: 14
+				radius: Theme.radiusCard
 				readonly property bool chosen: monitorHover.hovered || chooser.monitor === index
 
 				color: chosen ? Qt.alpha(Theme.primary, 0.2) : Qt.alpha(Theme.surface, 0.85)

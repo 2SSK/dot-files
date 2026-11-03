@@ -54,7 +54,7 @@ Item {
 
 				width: ListView.view.width
 				height: 54
-				radius: 11
+				radius: Theme.radiusCard
 				color: on ? Qt.alpha(Theme.primary, 0.18) : hover.hovered ? Qt.alpha(Theme.overlay, 0.9) : Qt.alpha(Theme.surface, 0.8)
 				border.width: on ? 1 : 0
 				border.color: Qt.alpha(Theme.primary, 0.6)
@@ -143,7 +143,7 @@ Item {
 		anchors.leftMargin: 12
 		anchors.right: parent.right
 		height: parent.height
-		radius: 14
+		radius: Theme.radiusCard
 		color: Qt.alpha(Theme.surface, 0.6)
 
 		Column {
@@ -170,7 +170,7 @@ Item {
 
 						width: 96
 						height: 70
-						radius: 12
+						radius: Theme.radiusCard
 						color: starterHover.hovered ? Qt.alpha(Theme.primary, 0.18) : Qt.alpha(Theme.overlay, 0.8)
 
 						Column {

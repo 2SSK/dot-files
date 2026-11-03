@@ -15,7 +15,7 @@ Rectangle {
 	property bool selected
 	property bool hovered
 
-	radius: 14
+	radius: Theme.radiusCard
 	color: card.colours.bg ?? "transparent"
 	border.width: card.applied ? 3 : card.selected ? 2 : 1
 	border.color: card.applied ? Theme.primary : card.selected ? Qt.alpha(Theme.fg, 0.6) : Qt.alpha(Theme.border, 0.8)

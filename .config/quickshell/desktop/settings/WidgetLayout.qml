@@ -121,11 +121,11 @@ Item {
 		id: content
 
 		width: parent.width
-		spacing: 14
+		spacing: 16
 
 		Row {
 			width: parent.width
-			spacing: 10
+			spacing: 12
 
 			Repeater {
 				id: columns
@@ -142,7 +142,7 @@ Item {
 
 					width: (root.width - 20) / 3
 					height: root.columnHeight
-					radius: 12
+					radius: Theme.radiusCard
 					color: Qt.alpha(Theme.surface, 0.55)
 					border.width: hot ? 1 : 0
 					border.color: Theme.primary
@@ -193,7 +193,7 @@ Item {
 								y: root.pad + index * root.step
 								width: list.width - 16
 								height: root.chipHeight
-								radius: 9
+								radius: Theme.radiusSmall
 								opacity: dragged ? 0.35 : 1
 								color: grip.containsMouse ? Qt.alpha(Theme.overlay, 0.95) : Qt.alpha(Theme.overlay, 0.6)
 
@@ -341,7 +341,7 @@ Item {
 		y: root.dragAt.y - height / 2
 		width: ghostLabel.implicitWidth + 30
 		height: root.chipHeight
-		radius: 9
+		radius: Theme.radiusSmall
 		color: Theme.primary
 
 		UiText {

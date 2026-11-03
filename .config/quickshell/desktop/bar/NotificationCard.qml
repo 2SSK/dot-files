@@ -24,7 +24,7 @@ Rectangle {
 
 	implicitWidth: 360
 	implicitHeight: content.implicitHeight + 28
-	radius: 16
+	radius: Theme.radiusCard
 	color: popup ? Qt.alpha(Theme.bg, 0.97) : Qt.alpha(Theme.surface, hover.hovered ? 0.95 : 0.7)
 	border.width: popup || critical ? 1 : 0
 	border.color: critical ? Theme.error : Qt.alpha(Theme.border, 0.8)
@@ -65,7 +65,7 @@ Rectangle {
 
 			Rectangle {
 				anchors.fill: parent
-				radius: 18
+				radius: Theme.radiusPanel
 				color: Qt.alpha(root.critical ? Theme.error : Theme.primary, 0.16)
 				visible: !image.visible
 			}

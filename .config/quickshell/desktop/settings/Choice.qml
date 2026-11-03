@@ -14,7 +14,7 @@ Rectangle {
 
 	implicitWidth: row.implicitWidth + 6
 	implicitHeight: 34
-	radius: 10
+	radius: Theme.radiusCard
 	color: Qt.alpha(Theme.overlay, 0.7)
 
 	Row {
@@ -35,7 +35,7 @@ Rectangle {
 				// whole pixels throughout: a fractional width would shift every option after it
 				width: Math.max(64, Math.ceil(label.implicitWidth) + 24)
 				height: 28
-				radius: 8
+				radius: Theme.radiusSmall
 				color: on ? Theme.primary : hover.hovered ? Qt.alpha(Theme.fg, 0.08) : "transparent"
 
 				Behavior on color {

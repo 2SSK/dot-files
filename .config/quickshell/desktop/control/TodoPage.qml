@@ -75,7 +75,7 @@ Item {
 
 						width: 34
 						height: 34
-						radius: 10
+						radius: Theme.radiusCard
 						color: on ? colour : Qt.alpha(colour, 0.14)
 
 						UiText {
@@ -123,7 +123,7 @@ Item {
 
 				width: root.width
 				height: Math.max(48, label.implicitHeight + 24)
-				radius: 12
+				radius: Theme.radiusCard
 				opacity: dragged ? 0.35 : modelData.done ? 0.6 : 1
 				color: hover.hovered ? Qt.alpha(Theme.overlay, 0.9) : Qt.alpha(Theme.surface, 0.8)
 
@@ -214,7 +214,7 @@ Item {
 					anchors.verticalCenter: parent.verticalCenter
 					width: 24
 					height: 22
-					radius: 7
+					radius: Theme.radiusSmall
 					color: Qt.alpha(item.level.colour, 0.16)
 
 					UiText {
@@ -288,7 +288,7 @@ Item {
 		y: root.dragY - height / 2
 		width: root.width - 48
 		height: 40
-		radius: 12
+		radius: Theme.radiusCard
 		color: Theme.primary
 
 		UiText {

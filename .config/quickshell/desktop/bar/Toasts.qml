@@ -38,7 +38,7 @@ PopupWindow {
 
 		x: root.pad
 		y: root.pad
-		spacing: 10
+		spacing: 12
 
 		// the rest glide up into a gap a toast leaves
 		move: Transition {

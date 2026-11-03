@@ -56,7 +56,7 @@ Column {
 			visible: info.show
 			width: parent.width
 			height: root.graphHeight
-			radius: 14
+			radius: Theme.radiusCard
 			color: Qt.alpha(Theme.surface, 0.8)
 			clip: true
 
@@ -72,7 +72,7 @@ Column {
 			Row {
 				x: 16
 				y: 14
-				spacing: 10
+				spacing: 12
 
 				Glyph {
 					glyph: card.info.glyph
@@ -115,7 +115,7 @@ Column {
 
 				width: (parent.width - 24) / 3
 				height: 76
-				radius: 14
+				radius: Theme.radiusCard
 				color: Qt.alpha(Theme.surface, 0.8)
 
 				Column {
@@ -174,7 +174,7 @@ Column {
 
 				width: (parent.width - 12) / 2
 				height: 118
-				radius: 14
+				radius: Theme.radiusCard
 				color: Qt.alpha(Theme.surface, 0.8)
 				clip: true
 
@@ -201,7 +201,7 @@ Column {
 				Row {
 					x: 16
 					y: 14
-					spacing: 10
+					spacing: 12
 
 					Glyph {
 						glyph: half.info.glyph

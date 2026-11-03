@@ -14,7 +14,7 @@ Line {
 	readonly property var here: WindowManager.workspaces.filter(ws => ws.output === screen?.name)
 
 	vertical: Config.vertical
-	spacing: 7
+	spacing: 8
 
 	Repeater {
 		model: root.here

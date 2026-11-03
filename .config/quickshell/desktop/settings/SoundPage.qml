@@ -12,7 +12,7 @@ import qs.widgets
 Column {
 	id: page
 
-	spacing: 22
+	spacing: 24
 
 	readonly property var nodes: Array.from(Pipewire.nodes.values)
 	readonly property var outputs: nodes.filter(n => n.audio && !n.isStream && n.isSink)

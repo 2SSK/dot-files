@@ -59,7 +59,7 @@ Column {
 		visible: Connectivity.bluetooth
 		width: parent.width
 		height: 64
-		radius: 14
+		radius: Theme.radiusCard
 		color: Qt.alpha(Theme.primary, 0.13)
 		border.width: 1
 		border.color: Qt.alpha(Theme.primary, 0.35)
@@ -71,7 +71,7 @@ Column {
 			anchors.verticalCenter: parent.verticalCenter
 			width: 38
 			height: 38
-			radius: 11
+			radius: Theme.radiusCard
 			color: Qt.alpha(Theme.primary, 0.2)
 
 			Glyph {

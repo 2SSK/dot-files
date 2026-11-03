@@ -91,7 +91,7 @@ Column {
 
 		width: root.width
 		height: 44
-		radius: 11
+		radius: Theme.radiusCard
 		opacity: !editing && (modelData.done || alarm && modelData.enabled === false) ? 0.55 : 1
 		color: editing ? Qt.alpha(Theme.primary, 0.12) : hover.hovered ? Qt.alpha(Theme.overlay, 0.9) : Qt.alpha(Theme.surface, 0.8)
 		border.width: editing ? 1 : 0
@@ -181,7 +181,7 @@ Column {
 			visible: !entry.editing
 			x: 14
 			anchors.verticalCenter: parent.verticalCenter
-			spacing: 10
+			spacing: 12
 
 			Glyph {
 				anchors.verticalCenter: parent.verticalCenter
@@ -220,7 +220,7 @@ Column {
 			anchors.right: parent.right
 			anchors.rightMargin: 12
 			anchors.verticalCenter: parent.verticalCenter
-			spacing: 14
+			spacing: 16
 
 			Glyph {
 				visible: !entry.alarm
@@ -316,7 +316,7 @@ Column {
 					required property var modelData
 
 					size: 30
-					radius: 10
+					radius: Theme.radiusCard
 					glyph: Icons.g(modelData.glyph)
 					glyphSize: 15
 					on: root.dayView === modelData.key
@@ -332,7 +332,7 @@ Column {
 			anchors.right: parent.right
 			anchors.verticalCenter: parent.verticalCenter
 			size: 30
-			radius: 10
+			radius: Theme.radiusCard
 			glyph: Icons.g(root.adding ? "x" : "plus")
 			glyphSize: 15
 			on: root.adding

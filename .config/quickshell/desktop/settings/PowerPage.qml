@@ -9,7 +9,7 @@ import qs.widgets
 Column {
 	id: page
 
-	spacing: 22
+	spacing: 24
 
 	Component.onCompleted: Power.refresh() // the charge limit, as the battery has it now
 

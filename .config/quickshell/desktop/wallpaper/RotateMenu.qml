@@ -13,7 +13,7 @@ Rectangle {
 	property var choices: [] // { value, label }: wallpaper.rotate's values
 
 	height: choices.implicitHeight + 12
-	radius: 12
+	radius: Theme.radiusCard
 	color: Theme.surface
 	border.width: 1
 	border.color: Qt.alpha(Theme.border, 0.8)
@@ -52,7 +52,7 @@ Rectangle {
 
 				width: choices.width
 				height: 32
-				radius: 8
+				radius: Theme.radiusSmall
 				color: choiceHover.hovered ? Qt.alpha(Theme.fg, 0.08) : "transparent"
 
 				UiText {

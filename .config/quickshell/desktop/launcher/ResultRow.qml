@@ -64,7 +64,7 @@ Item {
 		x: 54
 		anchors.verticalCenter: parent.verticalCenter
 		width: parent.width - x - (tools.visible ? tools.width + 16 : 12)
-		spacing: 1
+		spacing: 2
 
 		UiText {
 			width: parent.width
@@ -107,7 +107,7 @@ Item {
 
 				width: 30
 				height: 30
-				radius: 9
+				radius: Theme.radiusSmall
 				color: toolHover.hovered ? Qt.alpha(Theme.fg, 0.12) : "transparent"
 
 				Glyph {

@@ -49,7 +49,7 @@ PopupWindow {
 
 		x: root.position === "left" ? root.reach + 12 : root.position === "right" ? root.width - root.reach - 12 - width : (root.width - width) / 2
 		y: (root.position === "top" ? root.reach + 12 : root.position === "bottom" ? root.height - root.reach - 12 - height : (root.height - height) / 2) + (root.open ? 0 : -12)
-		spacing: 10
+		spacing: 12
 		opacity: root.open ? 1 : 0
 
 		Behavior on y {
@@ -94,7 +94,7 @@ PopupWindow {
 					id: face
 
 					anchors.fill: parent
-					radius: 14
+					radius: Theme.radiusCard
 					color: tile.armed ? Theme.error : tile.selected ? Theme.primary : Qt.alpha(Theme.bg, 0.96)
 					border.width: 1
 					border.color: tile.armed ? Theme.error : tile.selected ? Theme.primary : Qt.alpha(Theme.border, 0.8)

@@ -88,7 +88,7 @@ HangingPanel {
 
 			width: rotateRow.implicitWidth + 26
 			height: 38
-			radius: 11
+			radius: Theme.radiusCard
 			color: menu.open ? Qt.alpha(Theme.fg, 0.1) : rotateHover.hovered ? Qt.alpha(Theme.fg, 0.08) : Qt.alpha(Theme.surface, 0.7)
 			border.width: 1
 			border.color: rotate.on ? Qt.alpha(Theme.primary, 0.7) : Qt.alpha(Theme.border, 0.7)
@@ -97,7 +97,7 @@ HangingPanel {
 				id: rotateRow
 
 				anchors.centerIn: parent
-				spacing: 7
+				spacing: 8
 
 				Glyph {
 					anchors.verticalCenter: parent.verticalCenter
@@ -157,7 +157,7 @@ HangingPanel {
 
 					width: 38
 					height: 38
-					radius: 11
+					radius: Theme.radiusCard
 					color: buttonHover.hovered ? Qt.alpha(Theme.fg, 0.1) : Qt.alpha(Theme.surface, 0.7)
 					border.width: 1
 					border.color: Qt.alpha(Theme.border, 0.7)

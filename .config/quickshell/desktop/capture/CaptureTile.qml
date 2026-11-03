@@ -14,7 +14,7 @@ Rectangle {
 	signal clicked
 
 	height: 78
-	radius: 16
+	radius: Theme.radiusCard
 	color: danger ? (tileHover.hovered || chosen ? Qt.lighter(Theme.error, 1.1) : Theme.error) : tileHover.hovered || chosen ? Qt.alpha(Theme.primary, 0.16) : Qt.alpha(Theme.surface, 0.8)
 	border.width: (tileHover.hovered || chosen) && !danger ? 1 : 0
 	border.color: Qt.alpha(Theme.primary, 0.6)

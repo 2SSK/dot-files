@@ -12,7 +12,7 @@ Rectangle {
 
 	width: parent?.width ?? 0
 	height: Math.max(56, text.implicitHeight + 24, slot.childrenRect.height + 20)
-	radius: 12
+	radius: Theme.radiusCard
 	color: Qt.alpha(Theme.surface, 0.55)
 
 	Column {
@@ -23,7 +23,7 @@ Rectangle {
 		anchors.right: slot.left
 		anchors.rightMargin: 16
 		anchors.verticalCenter: parent.verticalCenter
-		spacing: 3
+		spacing: 4
 
 		UiText {
 			text: root.label

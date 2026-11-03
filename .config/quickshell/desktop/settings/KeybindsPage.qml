@@ -135,7 +135,7 @@ Column {
 		bindings = fold([keysFile, workspacesFile, resizeFile].map(f => parse(f.text())).reduce((all, list) => all.concat(list), []));
 	}
 
-	spacing: 18
+	spacing: 16
 
 	FileView {
 		id: keysFile
@@ -177,7 +177,7 @@ Column {
 
 				width: Math.max(26, key.implicitWidth + 14)
 				height: 24
-				radius: 6
+				radius: Theme.radiusSmall
 				color: Qt.alpha(Theme.surface, 0.9)
 				border.width: 1
 				border.color: Qt.alpha(Theme.border, 0.9)

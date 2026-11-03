@@ -19,7 +19,7 @@ Column {
 		return Qt.formatDateTime(date, new Date().getFullYear() === date.getFullYear() ? "ddd d MMM, hh:mm AP" : "d MMM yyyy, hh:mm AP");
 	}
 
-	spacing: 18
+	spacing: 16
 	Component.onCompleted: Timeshift.refresh(false)
 
 	Section {
@@ -70,7 +70,7 @@ Column {
 		Column {
 			visible: Timeshift.state === "rule" || Timeshift.state === "error"
 			width: parent.width
-			spacing: 10
+			spacing: 12
 
 			UiText {
 				width: parent.width
@@ -109,7 +109,7 @@ Column {
 
 				width: root.width
 				height: 52
-				radius: 12
+				radius: Theme.radiusCard
 				color: hover.hovered ? Qt.alpha(Theme.overlay, 0.9) : Qt.alpha(Theme.surface, 0.8)
 
 				HoverHandler {

@@ -212,7 +212,7 @@ Column {
 				snippet.cursorPosition = snippet.length;
 			}
 
-			radius: 10
+			radius: Theme.radiusCard
 			color: Qt.alpha(Theme.bg, 0.7)
 			border.width: 1
 			border.color: Qt.alpha(Theme.border, 0.8)
@@ -317,7 +317,7 @@ Column {
 
 					width: parent.width
 					height: 38
-					radius: 9
+					radius: Theme.radiusSmall
 					color: lineHover.hovered ? Qt.alpha(Theme.overlay, 0.8) : "transparent"
 
 					HoverHandler {
@@ -331,7 +331,7 @@ Column {
 						anchors.verticalCenter: parent.verticalCenter
 						width: 18
 						height: 18
-						radius: 5
+						radius: Theme.radiusSmall
 						color: line.modelData.done ? Theme.primary : "transparent"
 						border.width: line.modelData.done ? 0 : 2
 						border.color: Theme.fgMuted

@@ -61,7 +61,7 @@ PopupWindow {
 		y: root.pad + (root.open ? 0 : -14)
 		width: 380
 		height: 92
-		radius: 18
+		radius: Theme.radiusPanel
 		opacity: root.open ? 1 : 0
 		color: Qt.alpha(Theme.bg, 0.96)
 		border.width: 1

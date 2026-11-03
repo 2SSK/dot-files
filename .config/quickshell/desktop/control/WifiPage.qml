@@ -177,7 +177,7 @@ Column {
 		visible: Connectivity.wifi && root.current !== null
 		width: parent.width
 		height: cardColumn.implicitHeight + 28
-		radius: 14
+		radius: Theme.radiusCard
 		color: Qt.alpha(Theme.primary, 0.13)
 		border.width: 1
 		border.color: Qt.alpha(Theme.primary, 0.35)
@@ -192,12 +192,12 @@ Column {
 
 			Row {
 				width: parent.width
-				spacing: 14
+				spacing: 16
 
 				Rectangle {
 					width: 40
 					height: 40
-					radius: 12
+					radius: Theme.radiusCard
 					color: Qt.alpha(Theme.primary, 0.2)
 
 					SignalBars {
@@ -270,7 +270,7 @@ Column {
 
 						width: (cardColumn.width - 10) / 2
 						height: 46
-						radius: 10
+						radius: Theme.radiusCard
 						color: factHover.hovered && fact.modelData.value ? Qt.alpha(Theme.bg, 0.55) : Qt.alpha(Theme.bg, 0.35)
 
 						HoverHandler {
@@ -288,7 +288,7 @@ Column {
 							x: 12
 							anchors.verticalCenter: parent.verticalCenter
 							width: parent.width - 36
-							spacing: 1
+							spacing: 2
 
 							UiText {
 								text: fact.modelData.label

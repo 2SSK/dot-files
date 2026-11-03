@@ -28,7 +28,7 @@ Column {
 
 	readonly property var shown: Notifications.history.filter(n => n && (filter === "all" || (filter === "today" && age(n) === 0) || (filter === "yesterday" && age(n) === 1) || (filter === "older" && age(n) > 1)))
 
-	spacing: 14
+	spacing: 16
 
 	Row {
 		width: parent.width
@@ -48,7 +48,7 @@ Column {
 			anchors.verticalCenter: parent.verticalCenter
 			width: clearLabel.implicitWidth + 44
 			height: 34
-			radius: 10
+			radius: Theme.radiusCard
 			opacity: Notifications.history.length > 0 ? 1 : 0.45
 			color: clearHover.hovered && Notifications.history.length > 0 ? Theme.error : Qt.alpha(Theme.overlay, 0.7)
 
@@ -107,7 +107,7 @@ Column {
 		visible: root.shown.length === 0
 		width: parent.width
 		height: 120
-		radius: 14
+		radius: Theme.radiusCard
 		color: Qt.alpha(Theme.surface, 0.6)
 
 		Column {

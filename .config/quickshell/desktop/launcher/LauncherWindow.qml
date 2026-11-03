@@ -190,7 +190,7 @@ HangingPanel {
 			highlightResizeDuration: 0
 			highlightFollowsCurrentItem: true
 			highlight: Rectangle {
-				radius: 12
+				radius: Theme.radiusCard
 				color: Qt.alpha(Theme.primary, 0.16)
 				border.width: 1
 				border.color: Qt.alpha(Theme.primary, 0.5)
@@ -218,7 +218,7 @@ HangingPanel {
 			highlightFollowsCurrentItem: true
 			highlightMoveDuration: 0
 			highlight: Rectangle {
-				radius: 14
+				radius: Theme.radiusCard
 				color: root.mode === "emoji" ? Qt.alpha(Theme.primary, 0.18) : "transparent"
 				border.width: root.mode === "emoji" ? 1 : 0
 				border.color: Qt.alpha(Theme.primary, 0.5)

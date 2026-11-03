@@ -29,7 +29,7 @@ HangingPanel {
 		x: 24
 		y: 22
 		width: parent.width - 48
-		spacing: 14
+		spacing: 16
 
 		Row {
 			spacing: 12

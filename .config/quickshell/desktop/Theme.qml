@@ -67,6 +67,11 @@ Singleton {
 	readonly property int slow: 400
 	readonly property int curve: Easing.OutCubic
 
+	// Shape and space: three corner sizes (controls, cards, panels) and a 4/8 px grid for gaps
+	readonly property int radiusSmall: 8 // buttons, chips, fields
+	readonly property int radiusCard: 12 // rows, cards, tiles
+	readonly property int radiusPanel: 18 // the panels themselves
+
 	readonly property int textCaption: px(12)
 	readonly property int textLabel: px(13)
 	readonly property int textBody: px(14)

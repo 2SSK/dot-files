@@ -15,7 +15,7 @@ Rectangle {
 	signal clicked
 
 	height: 62
-	radius: 14
+	radius: Theme.radiusCard
 	opacity: available ? 1 : 0.45
 	color: on ? Theme.primary : hover.hovered && available ? Qt.alpha(Theme.overlay, 0.95) : Qt.alpha(Theme.surface, 0.8)
 
