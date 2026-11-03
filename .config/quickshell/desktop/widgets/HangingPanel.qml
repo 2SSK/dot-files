@@ -37,6 +37,11 @@ Scope {
 	readonly property real px: side ? (Config.position === "left" ? island.x + island.width + sideGap : island.x - panelWidth - sideGap) : Math.round(island.x + (island.width - panelWidth) / 2)
 	readonly property real py: side ? Math.round(Math.max(sideGap, Math.min(screen.height - panelHeight - sideGap, island.y + (island.height - panelHeight) / 2))) : !Panel.barShown ? (below ? 0 : screen.height - panelHeight) : below ? island.y + island.height : island.y - panelHeight
 	readonly property int fillet: side ? 0 : Panel.fillet
+	// room around the panel for its shadow: every side but the bar's (it hangs from the bar, and the
+	// shadow mustn't fall on it); a side bar's panels float, shadowed all round
+	readonly property int shade: 28
+	readonly property int shadeTop: below && !side ? 0 : shade
+	readonly property int shadeBottom: !below && !side ? 0 : shade
 	readonly property string title: "Desktop " + name
 
 	Behavior on progress {
@@ -119,19 +124,30 @@ Scope {
 		}
 
 		Item {
-			x: root.px - root.fillet
-			y: root.py
-			width: root.panelWidth + 2 * root.fillet
-			height: root.panelHeight
+			x: root.px - root.fillet - root.shade
+			y: root.py - root.shadeTop
+			width: root.panelWidth + 2 * root.fillet + 2 * root.shade
+			height: root.panelHeight + root.shadeTop + root.shadeBottom
 			visible: root.progress > 0
-			clip: true
+			clip: true // slides out from behind the bar, its shadow cut where the bar is
 
 			Item {
-				width: parent.width
-				height: parent.height
-				x: root.side ? (Config.position === "left" ? -1 : 1) * width * (1 - root.progress) : 0
-				y: root.side ? 0 : (root.below ? -1 : 1) * height * (1 - root.progress)
+				x: root.shade + (root.side ? (Config.position === "left" ? -1 : 1) * width * (1 - root.progress) : 0)
+				y: root.shadeTop + (root.side ? 0 : (root.below ? -1 : 1) * height * (1 - root.progress))
+				width: root.panelWidth + 2 * root.fillet
+				height: root.panelHeight
 				opacity: root.progress
+
+				// the panel's shadow, falling away from the bar
+				Shadow {
+					x: root.fillet
+					width: root.panelWidth
+					height: root.panelHeight
+					radius: 18
+					blur: 28
+					offsetY: root.side ? 4 : root.below ? 6 : -6
+					color: Qt.alpha("black", 0.45)
+				}
 
 				Repeater {
 					model: root.side ? [] : [-1, 1]
