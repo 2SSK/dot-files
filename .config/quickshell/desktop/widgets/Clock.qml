@@ -5,7 +5,7 @@ import qs.services
 
 // The clock, and what just happened in its place: a level (volume, mic, brightness) or Caps/Num Lock
 // for osd.timeout, a recording's time, or a timed event coming up (calendar.nextUp minutes before).
-// Static: "07:01 UTC · 12:31 PM  Mon, Nov 02", the event or the recording in place of the date, a
+// Static: "07:01 UTC · 12:31 PM Mon, Nov 02", the event or the recording in place of the date, a
 // level as icon, track and number. Island: the 24-hour time in a slot of one fixed size, everything
 // else swapped in inside it, a level as its icon and a short track. A side bar stacks hours over
 // minutes, a level filling its pill from the bottom. A click opens the calendar, or stops a recording.
@@ -145,9 +145,9 @@ Item {
 			id: wide
 
 			textFormat: Text.StyledText
-			readonly property string dot: `<font color="${Theme.fgMuted}">&nbsp;&nbsp;·&nbsp;&nbsp;</font>`
+			readonly property string dot: `<font color="${Theme.fgMuted}">&nbsp;·&nbsp;</font>`
 			readonly property string tail: root.recording ? `<font color="${Theme.error}">● ${Format.clock(Recorder.seconds)}</font>` : root.next ? `<font color="${Theme.primary}">${root.escaped(root.what)} in ${root.minutes} min</font>` : `<font color="${Theme.fgMuted}">${Qt.formatDateTime(clock.date, "ddd, MMM dd")}</font>`
-			text: `<font color="${Theme.fgMuted}">${Qt.formatDateTime(root.utc, "hh:mm")} UTC</font>${dot}${Qt.formatDateTime(clock.date, "h:mm AP")}&nbsp;&nbsp;&nbsp;${tail}`
+			text: `<font color="${Theme.fgMuted}">${Qt.formatDateTime(root.utc, "hh:mm")} UTC</font>${dot}${Qt.formatDateTime(clock.date, "h:mm AP")}&nbsp;${tail}`
 		}
 	}
 
