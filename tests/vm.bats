@@ -106,6 +106,10 @@ vi_args() { grep '^virt-install' "$CALLS"; }
 @test "bad usage exits 2; an existing name is refused" {
 	run "$VM" create box --nope
 	[ "$status" -eq 2 ]
+	[[ $output == *"event=unknown_option option=--nope"* && $output != *"--image <image>"* ]] # names it, no help dump
+	run "$VM" create box ubuntu:24.04 # the image without --image
+	[ "$status" -eq 2 ]
+	[[ $output == *"option=ubuntu:24.04"* ]]
 	run "$VM" create box --cpus
 	[ "$status" -eq 1 ]
 	VM_EXISTS=1 run "$VM" create box
@@ -116,7 +120,11 @@ vi_args() { grep '^virt-install' "$CALLS"; }
 @test "start, stop, snap, revert, rm" {
 	export VM_EXISTS=1
 	run "$VM" start box
-	[[ $(calls) == *"virsh -q -c qemu:///system start box"* && $(calls) == *"--show-domain-console box"* ]]
+	[[ $(calls) == *"virsh -q -c qemu:///system start box"* ]]
+	[[ $(calls) != *"virt-manager"* ]] # start only starts; vm open opens
+	[[ $output == "started box"*"vm open box"* ]]
+	VM_STATE=running run "$VM" start box
+	[[ $output == "box is already running"* ]]
 	VM_STATE=running run "$VM" stop box
 	[[ $(calls) == *"shutdown box"* ]]
 	VM_STATE=running run "$VM" stop box --force
@@ -144,7 +152,7 @@ vi_args() { grep '^virt-install' "$CALLS"; }
 }
 
 @test "missing or wrong arguments are usage errors with that command's help" {
-	for args in "snaps" "start" "rm" "revert box" "stop box --forse" "rm box --yes" "start box -f" "list box" "snap box -x"; do
+	for args in "snaps" "start" "status" "status box -x" "rm" "revert box" "stop box --forse" "rm box --yes" "start box -f" "list box" "snap box -x"; do
 		# shellcheck disable=SC2086 # word-split on purpose
 		VM_EXISTS=1 run "$VM" $args
 		[ "$status" -eq 2 ] || { echo "vm $args: status $status" && false; }
@@ -180,6 +188,30 @@ vi_args() { grep '^virt-install' "$CALLS"; }
 	run "$VM" snaps box
 	[ "${lines[0]}" = "a                        2026-10-07 09:00" ]
 	[ "${lines[1]}" = "b                        2026-10-08 20:23" ]
+}
+
+@test "snaps says so when there are none" {
+	VM_EXISTS=1 run "$VM" snaps box
+	[ "$status" -eq 0 ]
+	[ "$output" = "no snapshots of box" ]
+}
+
+@test "status: what the VM was given next to what it costs the laptop" {
+	# shellcheck disable=SC2016
+	printf '#!/bin/sh\necho "virsh $*" >>"$CALLS"\ncase "$*" in *dominfo*) printf "CPU(s):         2\\nMax memory:     1572864 KiB\\n" ;; *domstate*) echo "${VM_STATE:-shut off}" ;; *domifaddr*) printf " vnet0  52:54:00:aa:bb:cc  ipv4  192.168.122.27/24\\n" ;; *dommemstat*) printf "actual 1572864\\nrss 1513472\\n" ;; *snapshot-list*) printf " clean   2026-10-07 09:00:00 +0530   shutoff\\n" ;; esac\n' >"$BATS_TEST_TMPDIR/bin/virsh"
+	VM_STATE=running run "$VM" status lab-target
+	[ "$status" -eq 0 ]
+	[ "${lines[0]}" = "state      running" ]
+	[ "${lines[1]}" = "ip         192.168.122.27" ]
+	[ "${lines[2]}" = "cpus       2" ]
+	[ "${lines[3]}" = "memory     1536 MiB (given)" ]
+	[ "${lines[4]}" = "host rss   1478 MiB (actually used on the laptop)" ]
+	[ "${lines[5]}" = "snapshots  1" ]
+	[[ $(calls) == *"dommemstat lab-target"* ]] # libvirt's own count for this VM, not a pgrep
+	run "$VM" status lab-target # off: no IP, nothing used
+	[ "${lines[0]}" = "state      shut off" ]
+	[ "${lines[1]}" = "ip         -" ]
+	[ "${lines[4]}" = "host rss   - (not running)" ]
 }
 
 @test "help: short by default, details per command" {

@@ -19,11 +19,12 @@ usage() {
 		vm — virtual machines, shown in virt-manager
 
 		  vm create  <name> [options]  new VM, started and opened
-		  vm start   <name>            start it and open its window
+		  vm start   <name>            start it (vm open shows it)
 		  vm open    <name>            open its window (or serial console)
 		  vm console <name>            log in on its serial console (Ctrl+] leaves)
 		  vm stop    <name> [--force]  shut down (--force: pull the plug)
 		  vm list                      all VMs with state and IP
+		  vm status  <name>            state, IP, what it was given and what it really uses
 		  vm snap    <name> [label]    snapshot (VM must be off)
 		  vm snaps   <name>            list its snapshots
 		  vm revert  <name> <label>    back to a snapshot
@@ -61,11 +62,12 @@ help_for() { # <command>
 			  vm create srv --image debian:12 --mem 2G
 		EOF
 		;;
-	start) echo 'vm start <name> [--force]   start it (--force: even when memory is low) and open its window' ;;
+	start) echo 'vm start <name> [--force]   start it (--force: even when memory is low); vm open shows it' ;;
 	open) echo 'vm open <name>   its window in virt-manager, or the serial console (Ctrl+] leaves)' ;;
 	console) echo 'vm console <name>   a login on its serial console in this terminal, even when it has a window (Ctrl+] leaves)' ;;
 	stop) echo 'vm stop <name> [--force]   shut down cleanly; --force cuts the power' ;;
 	list) echo 'vm list   every VM with its state, and its IP while running' ;;
+	status) echo 'vm status <name>   state, IP, CPUs, the memory it was given, what it really uses on the laptop (host RSS), snapshots' ;;
 	snap) echo 'vm snap <name> [label]   snapshot a shut-off VM (label: the date and time)' ;;
 	snaps) echo 'vm snaps <name>   its snapshots, oldest first' ;;
 	revert) echo 'vm revert <name> <label>   return to a snapshot (see vm snaps)' ;;
@@ -276,7 +278,7 @@ cmd_create() {
 		--gui) gui=1 ;;
 		--desktop) gui=1 desktop=1 ;;
 		--force) force=1 ;;
-		*) help_for create >&2 && exit 2 ;;
+		*) log_error unknown_option option="$1" msg='see: vm help create' && exit 2 ;;
 		esac
 		shift
 	done
@@ -359,11 +361,10 @@ cmd_start() {
 	need_vm "${1:-}"
 	local force
 	force="$(flag --force "${2:-}")"
-	if ! running "$1"; then
-		guard_memory "$(v dominfo "$1" | awk '/^Max memory/ { print int($3 / 1024) }')" "$force"
-		v start "$1" >/dev/null
-	fi
-	cmd_open "$1"
+	running "$1" && { echo "$1 is already running; vm open $1 shows it" && return; }
+	guard_memory "$(v dominfo "$1" | awk '/^Max memory/ { print int($3 / 1024) }')" "$force"
+	v start "$1" >/dev/null
+	echo "started $1; vm open $1 shows it, vm status $1 has its IP once it's up"
 }
 
 cmd_open() {
@@ -399,10 +400,30 @@ cmd_list() {
 	done < <(v list --all --name)
 }
 
+cmd_status() { # what the VM was given next to what it costs the laptop
+	need_vm "${1:-}"
+	[[ $# -eq 1 ]] || usage_error
+	local state info rss='' ip=''
+	state="$(v domstate "$1")"
+	info="$(v dominfo "$1")"
+	if [[ $state == running ]]; then
+		ip="$(ip_of "$1")"
+		# libvirt's own count for this VM's QEMU process (KiB): no guessing which process is whose
+		rss="$(v dommemstat "$1" | awk '$1 == "rss" { print int($2 / 1024) }')"
+	fi
+	printf '%-10s %s\n' \
+		state "$state" \
+		ip "${ip:--}" \
+		cpus "$(awk -F': *' '/^CPU\(s\)/ { print $2 }' <<<"$info")" \
+		memory "$(awk '/^Max memory/ { print int($3 / 1024) }' <<<"$info") MiB (given)" \
+		"host rss" "$([[ -n $rss ]] && echo "$rss MiB (actually used on the laptop)" || echo '- (not running)')" \
+		snapshots "$(v snapshot-list "$1" | grep -c . || true)"
+}
+
 cmd_snap() {
 	need_vm "${1:-}"
 	[[ ${2:-} != -* ]] || usage_error
-	! running "$1" || die vm_running name="$1" msg="shared folders can't be snapshotted live: vm stop $1"
+	! running "$1" || die vm_running name="$1" msg="snapshots need the VM off: vm stop $1"
 	local label=${2:-$(date +%F-%H%M)}
 	v snapshot-create-as "$1" "$label" >/dev/null
 	echo "snapshot $label of $1"
@@ -410,7 +431,10 @@ cmd_snap() {
 
 cmd_snaps() { # oldest first: name, then when it was taken
 	need_vm "${1:-}"
-	v snapshot-list "$1" | sort -k2,3 | awk '{ printf "%-24s %s %s\n", $1, $2, substr($3, 1, 5) }'
+	local snaps
+	snaps="$(v snapshot-list "$1")"
+	[[ -n $snaps ]] || { echo "no snapshots of $1" && return; }
+	sort -k2,3 <<<"$snaps" | awk '{ printf "%-24s %s %s\n", $1, $2, substr($3, 1, 5) }'
 }
 
 cmd_revert() {
@@ -439,7 +463,7 @@ cmd_rm() {
 cmd=${1:-help}
 shift || true
 case $cmd in
-create | start | open | console | stop | list | snap | snaps | revert | rm) "cmd_$cmd" "$@" ;;
+create | start | open | console | stop | list | status | snap | snaps | revert | rm) "cmd_$cmd" "$@" ;;
 help | -h | --help) help_for "${1:-}" ;;
 guide) guide ;;
 *) log_error unknown_command command="$cmd" && usage >&2 && exit 2 ;;

@@ -18,7 +18,9 @@ at boot for a network that never comes (firewalld drops its DHCP request).
 vm create rice --desktop --share ~/dot-files:dot-files   # the Quickshell test VM
 vm create srv --image debian:13 --mem 2G                             # a server, serial console
 vm list                     # every VM: state, and IP while running
-vm start rice               # start it and open its window
+vm start rice               # start it
+vm open rice                # and open its window
+vm status rice              # state, IP, memory given vs. really used, snapshots
 vm open srv                 # window (display VMs) or serial console (Ctrl+] leaves)
 vm console rice             # log in on its serial console, even with a window (Ctrl+] leaves)
 vm stop rice                # shut down; --force pulls the plug
