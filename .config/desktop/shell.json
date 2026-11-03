@@ -27,6 +27,10 @@
     "brightness": {
         "step": 5
     },
+    "calendar": {
+        "lead": 10,
+        "nextUp": 15
+    },
     "clipboard": {
         "days": 30,
         "images": 30,
