@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# Claude Code status line: model | 5h | 7d | ctx | repo !modified ?untracked
+input=$(cat)
+get() { jq -r "$1 // empty" <<<"$input"; }
+sep=$'\e[2m | \e[0m'
+
+pct() { # <label> <percent>: green, yellow from 50, red from 80; nothing without a value
+	[[ -n $2 ]] || return
+	local n=${2%.*} colour=32
+	((n >= 50)) && colour=33
+	((n >= 80)) && colour=31
+	printf '%s%s \e[%sm%s%%\e[0m' "$sep" "$1" "$colour" "$n"
+}
+
+out=$(printf '\e[35m%s\e[0m' "$(get .model.display_name)")
+out+=$(pct 5h "$(get .rate_limits.five_hour.used_percentage)")
+out+=$(pct 7d "$(get .rate_limits.seven_day.used_percentage)")
+out+=$(pct ctx "$(get .context_window.used_percentage)")
+
+dir=$(get .workspace.current_dir)
+if root=$(git -C "$dir" rev-parse --show-toplevel 2>/dev/null); then
+	status=$(git -C "$dir" status --porcelain 2>/dev/null)
+	changed=$(grep -cv '^??' <<<"$status")
+	untracked=$(grep -c '^??' <<<"$status")
+	[[ -n $status ]] || changed=0
+	out+="$sep"$(printf '\e[36m %s\e[0m' "${root##*/}")
+	((changed)) && out+=$(printf ' \e[33m!%s\e[0m' "$changed")
+	((untracked)) && out+=$(printf ' \e[32m?%s\e[0m' "$untracked")
+fi
+printf '%s\n' "$out"
