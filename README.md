@@ -3,19 +3,19 @@
 My Arch Linux desktop: **sway (swayfx)** and **i3** sharing one config, with a
 [Quickshell](https://quickshell.org) desktop shell, and one theme that colours everything.
 
-![The control center under the island bar](docs/screens/control-center.webp)
+![The desktop: tmux, Neovim and lazygit under the island bar](docs/screens/desktop.webp)
 
 | | |
 |:---:|:---:|
+| ![The static bar](docs/screens/desktop-static.webp) The static bar | ![The control center](docs/screens/control-center.webp) The control center, one shape with the island |
 | ![Launcher](docs/screens/launcher.webp) Launcher | ![File search](docs/screens/files.webp) Files, as Nautilus finds them |
 | ![Emoji](docs/screens/emoji.webp) Emoji, and a screenshot toast | ![Wallpapers](docs/screens/wallpapers.webp) Wallpapers |
 | ![Themes](docs/screens/themes.webp) Themes | ![Screenshot and recording](docs/screens/capture.webp) Screenshot and recording |
 | ![Settings](docs/screens/settings.webp) Settings | ![Bar at the bottom](docs/screens/bar-bottom.webp) The bar, full width at the bottom |
 | ![A light theme](docs/screens/light-theme.webp) A light theme | ![Keys](docs/screens/keys.webp) Every key, searchable |
-| ![Music](docs/screens/music.webp) Music (mpd) in the terminal | |
 
-- **Desktop shell** (`qs -c desktop`): a floating "island" bar per screen, control center (Wi-Fi,
-  Bluetooth, power profiles, media, calendar, notes, todo), launcher, clipboard history,
+- **Desktop shell** (`qs -c desktop`): a bar per screen (a compact floating island, or full width
+  with workspace chips), control center (Wi-Fi, Bluetooth, power profiles, media, calendar, notes, todo), launcher, clipboard history,
   notifications, screenshots and recording, wallpapers, lock screen and settings, the same on
   sway and i3.
 - **One theme**: pick a palette (8 families, dark and light) and kitty, foot, nvim, tmux, GTK, Qt,
