@@ -11,7 +11,7 @@ names in `Icons.qml`), apps' own icons come from the GTK icon theme (Tela Circle
 picom blurs behind the shell, inside the shapes its windows take: the bar's pill, the level card,
 the notification popups, and the control center and clipboard panels (their windows cover the
 screen but take the panel's shape, so clicks beside a panel reach what's below it). Full-screen
-windows that only catch clicks, like the power menu's, are left out.
+windows that only catch clicks are left out.
 
 ## Control center
 
@@ -280,8 +280,9 @@ history lasts until the shell restarts.
 
 ## Power menu
 
-Lock, Log Out, Lock & Suspend, Reboot, Shut Down; Log Out, Reboot and Shut Down take a second
-press while `power.confirm` is on. Nothing hibernates.
+A panel like the control center: the island widens and a row of tiles unfolds from it. Lock, Log Out,
+Lock & Suspend, Reboot, Shut Down; Log Out, Reboot and Shut Down take a second press while
+`power.confirm` is on. Nothing hibernates.
 
 - **Lock** runs `loginctl lock-session`; on i3, xss-lock starts `desktop lock`: i3lock-color over the
   blurred, dimmed wallpaper (cached in `~/.cache/desktop`), a clock and a small ring that lights up

@@ -16,8 +16,15 @@ Rectangle {
 	height: 78
 	radius: Theme.radiusCard
 	color: danger ? (tileHover.hovered || chosen ? Qt.lighter(Theme.error, 1.1) : Theme.error) : tileHover.hovered || chosen ? Qt.alpha(Theme.primary, 0.16) : Qt.alpha(Theme.surface, 0.8)
-	border.width: (tileHover.hovered || chosen) && !danger ? 1 : 0
-	border.color: Qt.alpha(Theme.primary, 0.6)
+	border.width: 1
+	border.color: (tileHover.hovered || chosen) && !danger ? Qt.alpha(Theme.primary, 0.6) : "transparent"
+
+	Behavior on border.color {
+		ColorAnimation {
+			duration: Theme.quick
+			easing.type: Theme.curve
+		}
+	}
 
 	Behavior on color {
 		ColorAnimation {
@@ -36,6 +43,13 @@ Rectangle {
 			font.pixelSize: 22
 			color: tile.danger ? Theme.primaryText : tileHover.hovered || tile.chosen ? Theme.primary : Theme.fg
 			filled: tile.danger
+
+			Behavior on color {
+				ColorAnimation {
+					duration: Theme.normal
+					easing.type: Theme.curve
+				}
+			}
 		}
 
 		UiText {

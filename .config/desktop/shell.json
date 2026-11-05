@@ -37,9 +37,9 @@
     "fonts": {
         "bar": "JetBrainsMono Nerd Font",
         "barWeight": 600,
-        "heading": "Inter",
+        "heading": "JetBrainsMono Nerd Font",
         "mono": "JetBrainsMono Nerd Font",
-        "sans": "Inter",
+        "sans": "JetBrainsMono Nerd Font",
         "scale": 1.15,
         "weight": 500
     },

@@ -1,5 +1,5 @@
 //@ pragma NativeTextRendering
-// The desktop shell (qs -c desktop): one bar per screen, which grows into the OSD and the power menu.
+// The desktop shell (qs -c desktop): one bar per screen, and the panels that hang from it.
 // The pragma above uses fontconfig hinting; Qt Quick's distance-field glyphs look soft at bar sizes.
 import QtQuick
 import Quickshell
@@ -73,6 +73,12 @@ ShellRoot {
 		activeAsync: Config.wayland || Panel.captureOpen
 
 		CaptureWindow {}
+	}
+
+	LazyLoader {
+		activeAsync: Config.wayland || Panel.powerOpen
+
+		PowerMenu {}
 	}
 
 	LazyLoader {

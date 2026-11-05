@@ -186,17 +186,19 @@ Scope {
 
 					UiText {
 						anchors.horizontalCenter: parent.horizontalCenter
-						text: Qt.formatTime(clock.date, "hh:mm AP").slice(0, 5) // 12-hour, as the bar (03:21)
-						font.family: "Inter Display"
-						font.weight: Font.Light
-						font.pixelSize: Theme.px(128)
+						text: Qt.formatTime(clock.date, "HH:mm")
+						color: "white"
+						font.family: Theme.fontMono
+						font.weight: Font.Normal
+						font.pixelSize: 112
+						font.letterSpacing: -6
 					}
 
 					UiText {
 						anchors.horizontalCenter: parent.horizontalCenter
 						text: Qt.formatDate(clock.date, "dddd, d MMMM")
-						color: Qt.alpha(Theme.fg, 0.7)
-						font.pixelSize: Theme.px(20)
+						color: Qt.alpha("white", 0.72)
+						font.pixelSize: 15
 					}
 
 					Item {
@@ -208,10 +210,10 @@ Scope {
 						id: field
 
 						anchors.horizontalCenter: parent.horizontalCenter
-						width: 300
+						width: 280
 						height: 46
 						radius: height / 2
-						color: Qt.alpha(Theme.surface, 0.6)
+						color: Qt.alpha(Theme.bg, 0.62)
 						border.width: 1
 						border.color: root.error ? Theme.error : input.activeFocus && root.password ? Qt.alpha(Theme.primary, 0.8) : Qt.alpha(Theme.fg, 0.15)
 
@@ -219,10 +221,10 @@ Scope {
 							id: input
 
 							anchors.fill: parent
-							anchors.leftMargin: 20
-							anchors.rightMargin: 20
+							anchors.leftMargin: 18
+							anchors.rightMargin: 44
 							verticalAlignment: TextInput.AlignVCenter
-							horizontalAlignment: TextInput.AlignHCenter
+							horizontalAlignment: TextInput.AlignLeft
 							echoMode: TextInput.Password
 							passwordCharacter: "•"
 							color: Theme.fg
@@ -243,10 +245,21 @@ Scope {
 						}
 
 						UiText {
-							anchors.centerIn: parent
+							anchors.left: parent.left
+							anchors.leftMargin: 18
+							anchors.verticalCenter: parent.verticalCenter
 							visible: !root.password
 							text: root.checking ? "Checking…" : "Password"
-							color: Qt.alpha(Theme.fg, 0.4)
+							color: Qt.alpha("white", 0.45)
+						}
+
+						Glyph {
+							anchors.right: parent.right
+							anchors.rightMargin: 16
+							anchors.verticalCenter: parent.verticalCenter
+							glyph: Icons.g("lock")
+							color: Qt.alpha("white", 0.6)
+							font.pixelSize: 18
 						}
 
 						SequentialAnimation on anchors.horizontalCenterOffset {
@@ -268,13 +281,6 @@ Scope {
 					}
 				}
 
-				UiText {
-					anchors.horizontalCenter: parent.horizontalCenter
-					anchors.bottom: parent.bottom
-					anchors.bottomMargin: 48
-					text: "Type to unlock"
-					color: Qt.alpha(Theme.fg, 0.35)
-				}
 			}
 
 			Connections {

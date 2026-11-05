@@ -90,8 +90,9 @@ PanelWindow {
 
 	// where the bar is, for the control center to hang from
 	readonly property rect island: Qt.rect(shape.x + (anchors.right && !anchors.left ? (modelData?.width ?? 0) - width : 0), shape.y + (anchors.bottom && !anchors.top ? (modelData?.height ?? 0) - height : 0), shape.width, shape.height)
-	onIslandChanged: Panel.islands = Object.assign({}, Panel.islands, { [modelData.name]: island })
-	Component.onCompleted: Panel.islands = Object.assign({}, Panel.islands, { [modelData.name]: island })
+	// no screen for a moment as it goes away (a suspend)
+	onIslandChanged: if (modelData) Panel.islands = Object.assign({}, Panel.islands, { [modelData.name]: island })
+	Component.onCompleted: if (modelData) Panel.islands = Object.assign({}, Panel.islands, { [modelData.name]: island })
 
 	Connections {
 		target: Panel
@@ -328,11 +329,6 @@ PanelWindow {
 				easing.type: Theme.curve
 			}
 		}
-	}
-
-	PowerMenu {
-		bar: bar
-		island: shape
 	}
 
 	Peek {

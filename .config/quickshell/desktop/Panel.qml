@@ -4,14 +4,13 @@ import QtQuick
 import Quickshell
 import qs.services
 
-// Shell state: the bar, the OSD card, the hanging panels and the power menu. While the power menu is
-// open i3 is in mode "power" and sends its keys back over IPC, since an X11 popup can't take the keyboard.
+// Shell state: the bar, the levels shown in the clock, and the hanging panels. While the power menu is
+// open i3 or sway is in mode "power" and sends its keys back over IPC.
 Singleton {
 	id: root
 
 	property bool barShown: true
 	property bool peek: false // the hidden bar showing while the pointer is at the edge
-	property string view: "" // "" or "power"
 	property bool osdShown: false
 	property bool settingsOpen: false
 	property string settingsPage: "bar"
@@ -24,10 +23,11 @@ Singleton {
 	property bool launcherOpen: false
 	property string launcherMode: "apps" // apps, emoji, files or themes
 	property bool wallpaperOpen: false
+	property bool powerOpen: false
 	property var islands: ({}) // screen name -> the bar's rect on it (screen coordinates from its origin)
 
 	// One panel open at a time (a panel takes the keyboard only while open, not while it folds away)
-	readonly property var panels: ["control", "clipboard", "capture", "launcher", "wallpaper"]
+	readonly property var panels: ["control", "clipboard", "capture", "launcher", "wallpaper", "power"]
 
 	// each panel's size, centred under the bar, which opens its outline there (hangingWidth)
 	readonly property var sizes: ({
@@ -36,6 +36,7 @@ Singleton {
 			wallpaper: Qt.size(720, 540),
 			launcher: Qt.size(640, 560),
 			capture: Qt.size(520, 324),
+			power: Qt.size(680, 142),
 			auth: Qt.size(480, 250)
 		})
 	readonly property int fillet: 18
@@ -61,6 +62,12 @@ Singleton {
 	onLauncherOpenChanged: opened("launcher")
 	onWallpaperOpenChanged: opened("wallpaper")
 	onAuthOpenChanged: opened("auth")
+	// another panel can close it too, so its keys go back here
+	onPowerOpenChanged: {
+		opened("power");
+		armed = -1;
+		WindowManager.command(powerOpen ? 'mode "power"' : 'mode "default"');
+	}
 
 	// ask is "shot" or "record" to go straight to choosing a screen
 	function openCapture(ask: string): void {
@@ -99,11 +106,11 @@ Singleton {
 	// Lock keeps the laptop running (closing the lid only locks too); nothing hibernates. Actions
 	// that end the session ask for a second press while power.confirm is on.
 	readonly property var actions: [
-		{ id: "lock", glyph: Icons.g("lock"), label: "Lock", confirm: false },
-		{ id: "logout", glyph: Icons.g("logout"), label: "Log Out", confirm: true },
-		{ id: "suspend", glyph: Icons.g("zzz"), label: "Lock & Suspend", confirm: false },
-		{ id: "reboot", glyph: Icons.g("refresh"), label: "Reboot", confirm: true },
-		{ id: "poweroff", glyph: Icons.g("power"), label: "Shut Down", confirm: true }
+		{ id: "lock", glyph: "lock", label: "Lock", confirm: false },
+		{ id: "logout", glyph: "logout", label: "Log Out", confirm: true },
+		{ id: "suspend", glyph: "zzz", label: "Lock & Suspend", confirm: false },
+		{ id: "reboot", glyph: "refresh", label: "Reboot", confirm: true },
+		{ id: "poweroff", glyph: "power", label: "Shut Down", confirm: true }
 	]
 
 	function osd(kind: string, value: real, muted: bool): void {
@@ -121,20 +128,15 @@ Singleton {
 
 	function openPower(): void {
 		selected = 0;
-		armed = -1;
-		view = "power";
-		WindowManager.command('mode "power"');
+		powerOpen = true;
 	}
 
 	function closePower(): void {
-		if (view === "power")
-			view = "";
-		armed = -1;
-		WindowManager.command('mode "default"');
+		powerOpen = false;
 	}
 
 	function togglePower(): void {
-		view === "power" ? closePower() : openPower();
+		powerOpen ? closePower() : openPower();
 	}
 
 	function move(step: int): void {
@@ -153,7 +155,7 @@ Singleton {
 		}
 		closePower();
 		pending = actions[index].id;
-		run.restart(); // once the menu has faded, so the lock screen's blur doesn't catch it
+		run.restart(); // once the menu has folded away, so the lock screen's blur doesn't catch it
 	}
 
 	property string pending: ""
@@ -161,7 +163,7 @@ Singleton {
 	Timer {
 		id: run
 
-		interval: 280
+		interval: 340
 		onTriggered: root.execute(root.pending)
 	}
 
