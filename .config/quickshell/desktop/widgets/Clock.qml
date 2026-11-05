@@ -190,12 +190,20 @@ Item {
 			}
 
 			BarText {
+				visible: !root.level
+				anchors.verticalCenter: parent.verticalCenter
+				text: `${root.kind === "caps" ? "Caps Lock" : "Num Lock"} ${root.muted ? "off" : "on"}`
+				color: root.osdTint
+			}
+
+			BarText {
 				id: wideValue
 
+				visible: root.level
 				anchors.verticalCenter: parent.verticalCenter
-				width: root.level ? wideNumber.width : implicitWidth
-				horizontalAlignment: root.level ? Text.AlignRight : Text.AlignLeft
-				text: root.level ? (root.muted ? "off" : Math.round(Panel.osdValue * 100) + "%") : `${root.kind === "caps" ? "Caps Lock" : "Num Lock"} ${root.muted ? "off" : "on"}`
+				width: wideNumber.width
+				horizontalAlignment: Text.AlignRight
+				text: root.muted ? "off" : Math.round(Panel.osdValue * 100) + "%"
 				color: root.osdTint
 
 				TextMetrics {

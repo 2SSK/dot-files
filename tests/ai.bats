@@ -46,6 +46,7 @@ REPO="$BATS_TEST_DIRNAME/.."
 		printf '#!/bin/sh\necho "%s:$SUPERSET_API_KEY"\n' "$tool" >"$BATS_TEST_TMPDIR/bin/$tool"
 	done
 	chmod +x "$BATS_TEST_TMPDIR"/bin/*
+	unset SUPERSET_API_KEY # run from inside claude, the test would inherit the real one
 	run bash -c "PATH='$BATS_TEST_TMPDIR/bin':\$PATH; source '$REPO/.config/shell/functions.sh'; claude; opencode; echo \"shell:\${SUPERSET_API_KEY:-unset}\""
 	[ "$status" -eq 0 ]
 	[ "$output" = $'claude:s3cret\nopencode:s3cret\nshell:unset' ]

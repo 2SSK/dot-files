@@ -85,6 +85,24 @@ Singleton {
 		}
 	}
 
+	// a screen that appears has no wallpaper: the laptop's own after a suspend (it goes away and comes
+	// back), a monitor plugged in. awww runs without its cache (it would cover a new one at login)
+	Connections {
+		target: Quickshell
+
+		function onScreensChanged(): void {
+			if (Config.wayland)
+				redraw.restart();
+		}
+	}
+
+	Timer {
+		id: redraw
+
+		interval: 1000 // once awww has seen the screen too
+		onTriggered: Quickshell.execDetached(["desktop", "wallpaper", "restore"])
+	}
+
 	FileView {
 		path: root.state + "/wallpaper-changed"
 		watchChanges: true
