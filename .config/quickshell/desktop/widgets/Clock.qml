@@ -4,8 +4,9 @@ import qs
 import qs.services
 
 // The clock, and what just happened in its place: a level (volume, mic, brightness) or Caps/Num Lock
-// for osd.timeout, a recording's time, or a timed event coming up (calendar.nextUp minutes before).
-// Static: "07:01 UTC · 12:31 PM Mon, Nov 02", the event or the recording in place of the date, a
+// for osd.timeout, or a timed event coming up (calendar.nextUp minutes before); a small red dot beside
+// it while recording, quiet enough for the recording itself. Static: "07:01 UTC · 12:31 PM Mon, Nov 02",
+// the event in place of the date, a
 // level as icon, track and number. Island: the 24-hour time in a slot of one fixed size, everything
 // else swapped in inside it, a level as its icon and a short track. A side bar stacks hours over
 // minutes, a level filling its pill from the bottom. A click opens the calendar, or stops a recording.
@@ -29,7 +30,7 @@ Item {
 	// the same moment on a UTC wall clock (formatDateTime only speaks local time)
 	readonly property date utc: new Date(clock.date.getTime() + clock.date.getTimezoneOffset() * 60000)
 	// what the pill shows on the island and a side bar: the newest news first
-	readonly property string showing: osd ? "osd" : recording ? "rec" : next ? "event" : "time"
+	readonly property string showing: osd ? "osd" : next ? "event" : "time"
 
 	readonly property string osdGlyph: ({
 			volume: muted ? Icons.g("volume-off") : Panel.osdValue < 0.5 ? Icons.g("volume-2") : Icons.g("volume"),
@@ -45,7 +46,7 @@ Item {
 	}
 
 	// the island's pill fits any of its contents, so it never changes size for them
-	implicitWidth: vertical ? thick : island ? Math.max(widest.width + (Config.bar.capsules ? 48 : 20), recordingTime.implicitWidth + (Config.bar.capsules ? 40 : 12)) : Math.max(wide.implicitWidth, wideLevel.implicitWidth)
+	implicitWidth: vertical ? thick : island ? widest.width + (Config.bar.capsules ? 48 : 20) : Math.max(wide.implicitWidth, wideLevel.implicitWidth)
 	implicitHeight: vertical ? stackedTime.implicitHeight + 16 : island ? thick : Math.max(wide.implicitHeight, wideLevel.implicitHeight)
 
 	SystemClock {
@@ -128,6 +129,25 @@ Item {
 		}
 	}
 
+	// recording, on the island and a side bar: in the slot's margin, so nothing moves
+	Rectangle {
+		visible: (root.island || root.vertical) && opacity > 0
+		opacity: root.recording && !root.osd ? 1 : 0
+		x: root.vertical ? (root.width - width) / 2 : Math.round((root.width - widest.width) / 2) - width - 4
+		y: root.vertical ? 0 : Math.round((root.height - height) / 2)
+		width: 6
+		height: 6
+		radius: 3
+		color: Theme.error
+
+		Behavior on opacity {
+			NumberAnimation {
+				duration: Theme.normal
+				easing.type: Theme.curve
+			}
+		}
+	}
+
 	component BarText: Label {
 		font.family: Theme.fontBar
 		font.weight: Theme.barWeight
@@ -146,8 +166,8 @@ Item {
 
 			textFormat: Text.StyledText
 			readonly property string dot: `<font color="${Theme.fgMuted}">&nbsp;·&nbsp;</font>`
-			readonly property string tail: root.recording ? `<font color="${Theme.error}">● ${Format.clock(Recorder.seconds)}</font>` : root.next ? `<font color="${Theme.primary}">${root.escaped(root.what)} in ${root.minutes} min</font>` : `<font color="${Theme.fgMuted}">${Qt.formatDateTime(clock.date, "ddd, MMM dd")}</font>`
-			text: `<font color="${Theme.fgMuted}">${Qt.formatDateTime(root.utc, "hh:mm")} UTC</font>${dot}${Qt.formatDateTime(clock.date, "h:mm AP")}&nbsp;${tail}`
+			readonly property string tail: root.next ? `<font color="${Theme.primary}">${root.escaped(root.what)} in ${root.minutes} min</font>` : `<font color="${Theme.fgMuted}">${Qt.formatDateTime(clock.date, "ddd, MMM dd")}</font>`
+			text: `<font color="${Theme.fgMuted}">${Qt.formatDateTime(root.utc, "hh:mm")} UTC</font>${dot}${root.recording ? `<font color="${Theme.error}">●</font>&nbsp;` : ""}${Qt.formatDateTime(clock.date, "h:mm AP")}&nbsp;${tail}`
 		}
 	}
 
@@ -226,32 +246,6 @@ Item {
 			id: stackedTime
 
 			text: Qt.formatDateTime(clock.date, root.vertical ? "HH\nmm" : "HH:mm")
-		}
-	}
-
-	Layer {
-		visible: root.island || root.vertical
-		on: root.showing === "rec"
-
-		Row {
-			spacing: 7
-
-			Rectangle {
-				visible: !root.vertical
-				anchors.verticalCenter: parent.verticalCenter
-				width: 9
-				height: 9
-				radius: 4.5
-				color: Theme.error
-			}
-
-			BarText {
-				id: recordingTime
-
-				// a side bar: minutes over seconds
-				text: root.vertical ? Format.clock(Recorder.seconds).replace(":", "\n") : Format.clock(Recorder.seconds)
-				color: Theme.error
-			}
 		}
 	}
 
