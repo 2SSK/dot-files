@@ -93,6 +93,7 @@ Singleton {
 			}
 			property JsonObject audio: JsonObject {
 				property int step: 5 // percent
+				property bool recordMic: true // screen recordings include the microphone
 			}
 			property JsonObject brightness: JsonObject {
 				property int step: 5

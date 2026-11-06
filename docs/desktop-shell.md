@@ -96,7 +96,7 @@ the default one; anything else in its default application. The emoji come from U
 | Ctrl+F12 / Shift+F12 | without the panel: drag a region / the whole screen you're on, saved and copied at once |
 
 A screenshot is saved to `~/Pictures/Screenshots` and copied to the clipboard as an image, ready
-to paste. A recording (gpu-screen-recorder, 60 fps, the system sound) goes to `~/Videos/Recordings`: a
+to paste. A recording (gpu-screen-recorder, 60 fps, the system sound and the microphone on one track; Settings → Sound turns the microphone off) goes to `~/Videos/Recordings`: a
 region, the focused window, or one screen or all of them; while it runs the bar's camera turns red
 and pulses on a red pill with the time (a click stops it), and the panel's Record row becomes Stop. `desktop capture shot|record …` does the work (X11: slop, maim,
 xclip; Wayland: slurp, grim, wl-copy, and a window records through the portal).

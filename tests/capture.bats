@@ -69,6 +69,13 @@ shot_file() { ls "$XDG_PICTURES_DIR"/Screenshots/*.png; }
 	grep -q "^gpu-screen-recorder -w DP-2 -f 60 -a default_output -o $HOME/c.mp4" "$CALLS"
 }
 
+@test "recording with the microphone: mixed with the system sound into one track" {
+	"$CAPTURE" record screen "$HOME/m.mp4" --mic
+	grep -q "^gpu-screen-recorder -w screen -f 60 -a default_output|default_input -o $HOME/m.mp4" "$CALLS"
+	"$CAPTURE" record screen "$HOME/n.mp4" --monitor DP-2 --mic
+	grep -q "^gpu-screen-recorder -w DP-2 -f 60 -a default_output|default_input -o $HOME/n.mp4" "$CALLS"
+}
+
 @test "recording the whole screen without a monitor" {
 	run "$CAPTURE" record screen "$HOME/d.mp4"
 	[ "${lines[0]}" = recording ]

@@ -4,9 +4,10 @@
 #       region: drag a rectangle; window: the focused one; screen: that monitor (--focused: the one
 #       you're on), else all of them.
 #       Saved to ~/Pictures/Screenshots and copied to the clipboard as an image.
-#   desktop capture record region|window|screen <file> [--monitor NAME]
-#       gpu-screen-recorder at 60 fps with the system sound, into <file>; prints "recording" as it
-#       starts, then runs in the foreground (exec), so SIGINT ends it and finishes the file.
+#   desktop capture record region|window|screen <file> [--monitor NAME] [--mic]
+#       gpu-screen-recorder at 60 fps with the system sound (--mic: and the microphone, on one track),
+#       into <file>; prints "recording" as it starts, then runs in the foreground (exec), so SIGINT
+#       ends it and finishes the file.
 # A cancelled region (Escape, or a right click) exits 1 and does nothing.
 # X11: slop, maim, xdotool. Wayland: slurp, grim; a window records via the portal. The clipboard:
 # desktop clipboard.
@@ -14,7 +15,7 @@ set -euo pipefail
 
 usage() {
 	echo "usage: desktop capture shot region|window|screen [--monitor NAME --geometry WxH+X+Y | --focused]" >&2
-	echo "       desktop capture record region|window|screen <file> [--monitor NAME]" >&2
+	echo "       desktop capture record region|window|screen <file> [--monitor NAME] [--mic]" >&2
 	exit 2
 }
 
@@ -84,13 +85,14 @@ shot() { # <mode> [--monitor NAME --geometry G | --focused]
 	notify-send -a Screenshot -t 3000 -i "$file" "Screenshot copied" "$file"
 }
 
-record() { # <mode> <file> [--monitor NAME]
-	local mode=$1 file=${2:-} monitor='' target area
+record() { # <mode> <file> [--monitor NAME] [--mic]
+	local mode=$1 file=${2:-} monitor='' target area audio=default_output
 	[[ -n $file ]] || usage
 	shift 2
 	while (($#)); do
 		case $1 in
 		--monitor) monitor=${2:-} && shift ;;
+		--mic) audio='default_output|default_input' ;;
 		*) usage ;;
 		esac
 		shift
@@ -111,7 +113,7 @@ record() { # <mode> <file> [--monitor NAME]
 	esac
 	mkdir -p "$(dirname "$file")"
 	echo recording # the region is picked: the shell starts its clock
-	exec gpu-screen-recorder -w "$target" "${extra[@]}" -f 60 -a default_output -o "$file"
+	exec gpu-screen-recorder -w "$target" "${extra[@]}" -f 60 -a "$audio" -o "$file"
 }
 
 case ${1:-} in

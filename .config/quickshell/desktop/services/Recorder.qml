@@ -41,7 +41,7 @@ Singleton {
 		if (process.running)
 			return;
 		file = `${folder}/Recording ${Qt.formatDateTime(new Date(), "yyyy-MM-dd HH.mm.ss")}.mp4`;
-		process.command = ["desktop", "capture", "record", mode, file, ...(monitor ? ["--monitor", monitor] : [])];
+		process.command = ["desktop", "capture", "record", mode, file, ...(monitor ? ["--monitor", monitor] : []), ...(Config.audio.recordMic ? ["--mic"] : [])];
 		picking = mode === "region";
 		started = new Date();
 		process.running = true;

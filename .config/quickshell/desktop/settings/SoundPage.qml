@@ -111,6 +111,15 @@ Column {
 			}
 		}
 
+		SettingRow {
+			label: "Record the microphone"
+			hint: "Screen recordings include your voice along with the system sound. Applies from the next recording."
+			Toggle {
+				checked: Config.audio.recordMic
+				onToggled: checked => Config.set("audio", "recordMic", checked)
+			}
+		}
+
 		Repeater {
 			model: page.inputs
 
