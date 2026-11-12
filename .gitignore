@@ -6,3 +6,5 @@ secrets.env
 /.claude/settings.local.json
 /.config/kitty/local.conf
 .playwright-mcp/
+# temporal-mcp's real config names the Temporal servers: it stays on the machine (the example is tracked)
+.config/temporal-mcp/config.yaml

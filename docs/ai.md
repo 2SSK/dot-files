@@ -9,7 +9,7 @@ MCP servers and secrets.
 | `~/.claude/CLAUDE.md` | Global instructions for Claude Code |
 | `~/.claude/skills/` | Skills, read by Claude Code **and** opencode |
 | `~/.claude/agents/`, `~/.claude/commands/` | Claude Code subagents and slash commands |
-| `~/.config/mcp/claude.json` | Claude Code's MCP servers, registered by `mcp-sync` |
+| `~/.config/mcp/claude.json` | Claude Code's MCP servers: the list to register (`claude mcp add-json`) |
 | `~/.config/opencode/opencode.json` | opencode: MCP servers and the `git` command |
 | `~/.config/opencode/AGENTS.md`, `agent/`, `commands/`, `context/`, `plugins/` | opencode instructions, agents, commands, workmux status plugin |
 | `~/.config/opencode/tui.json` | opencode TUI: the `desktop` theme, `Ctrl+d`/`Ctrl+u` paging |
@@ -41,18 +41,39 @@ starts the binary directly (`timeout claude`, a script) bypasses the function: w
 | grafana | ✓ | ✓ | `GRAFANA_URL`, `GRAFANA_SERVICE_ACCOUNT_TOKEN`, `uvx` |
 | superset | ✓ | ✓ | `SUPERSET_MCP_URL`, `SUPERSET_API_KEY` |
 | supabase | | ✓ | `SUPABASE_MCP_URL` |
+| temporal (Temporal workflows, task queues, history) | ✓ | ✓ | `temporal-mcp` (`dev` layer), `~/.config/temporal-mcp/config.yaml` (see below) |
+| adb (Android devices, emulators, Waydroid) | ✓ | ✓ | `adb` (android-tools), `adb-mcp` (both in the `dev` layer) |
 | postgres, docker | | off | `POSTGRES_DATABASE_URI` |
 
-After editing `~/.config/mcp/claude.json`, run `mcp-sync`: it re-registers those servers in
-user scope (placeholders only, so `~/.claude.json` never holds a key). `claude mcp list` checks
-them and names any variable missing from `secrets.env`. opencode reads `opencode.json` directly.
+Claude Code keeps its servers in `~/.claude.json`, which isn't in the repo; `claude.json` is the
+list of them. Register a new one in user scope with its entry, placeholders and all (so
+`~/.claude.json` never holds a key): `claude mcp add-json --scope user <name> '<its JSON>'`
+(`claude mcp remove --scope user <name>` first to change one). `claude mcp list` checks them and
+names any variable missing from `secrets.env`. opencode reads `opencode.json` directly (stowed).
+
+### Temporal
+
+`temporal-mcp` (Temporal's own, pre-release) reads `~/.config/temporal-mcp/config.yaml`, which stays on
+this machine: it names the servers. Start from the example beside it:
+`cp ~/.config/temporal-mcp/config.yaml.example ~/.config/temporal-mcp/config.yaml`, fill in the
+staging address, restart the agent and ask it to check its connection to `staging`.
+
+Each target is one namespace on one server; agents name the target in every call, so several
+namespaces and servers (staging, production) sit in one file. It's for reading and investigating
+only. Every tool reads except `start_workflow`, and the servers take no credentials, so temporal-mcp
+can't refuse it itself: both clients block it instead. opencode turns it off in `opencode.json`
+(`tools.temporal_start_workflow: false`), and Claude Code denies it in `~/.claude/settings.json`
+(`permissions.deny: ["mcp__temporal__start_workflow"]`; that file isn't in the repo, so add the rule
+on a new machine).
 
 ## New machine
 
 1. `setup.sh` (the `cli` layer) installs both tools, `uv` and node.
 2. `cp ~/.config/secrets.env.example ~/.config/secrets.env && chmod 600 ~/.config/secrets.env`,
    then fill it in.
-3. `mcp-sync`, then log in: `claude` (`/login`) and `opencode auth login`.
+3. Register Claude's servers: for each entry of `~/.config/mcp/claude.json`,
+   `claude mcp add-json --scope user <name> '<its JSON>'`. Then log in: `claude` (`/login`) and
+   `opencode auth login`.
 
 The repo's tests fail if a token-shaped string or a literal credential ever lands in a tracked
 file (`tests/ai.bats`).

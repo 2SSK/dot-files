@@ -1,0 +1,25 @@
+# temporal-mcp (Temporal's MCP server, run by Claude Code and opencode with --stdio). Copy to
+# config.yaml beside this file (not tracked: it names your servers) and fill in the addresses.
+# Reference: https://github.com/temporalio/temporal-mcp/blob/main/docs/config.md
+#
+# Each target is one namespace on one server; agents name a target in every call. Every tool only
+# reads except start_workflow, which the clients block (docs/ai.md): reading and investigating only.
+targets:
+  - name: staging
+    aliases: [stg]
+    description: Staging Temporal (self-hosted). Read and investigate only.
+    address: temporal.staging.example:7233
+    namespace: default
+
+  # A local dev server (temporal server start-dev): no credentials, plaintext.
+  - name: local
+    description: Local Temporal dev server.
+    address: localhost:7233
+    namespace: default
+
+  # Production: another server, same shape.
+  # - name: production
+  #   aliases: [prod]
+  #   description: PRODUCTION Temporal. Read and investigate only.
+  #   address: temporal.production.example:7233
+  #   namespace: default

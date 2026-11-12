@@ -13,7 +13,9 @@ __pycache__
 ^/setup\.sh
 ^/\.github
 ^/\.claude/settings\.local\.json
-# Not stowed yet: the live ~/.claude and ~/.config/opencode stay as they are
+# opencode's own files in its folder, never linked: its plugins' node_modules and lock files, and
+# the local .env of keys (the live one stays the real file)
+^/\.config/opencode/(\.env|\.gitignore|bun\.lock|package\.json|node_modules)
+# Not stowed yet: the live ~/.claude stays as it is
 ^/\.claude
-^/\.config/opencode
 ^/\.githooks

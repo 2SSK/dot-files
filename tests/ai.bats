@@ -1,5 +1,5 @@
 #!/usr/bin/env bats
-# Claude Code and opencode configs: no secrets in the repo, mcp-sync, and the secrets wrappers.
+# Claude Code and opencode configs: no secrets in the repo, and the secrets wrappers.
 
 REPO="$BATS_TEST_DIRNAME/.."
 
@@ -24,20 +24,6 @@ REPO="$BATS_TEST_DIRNAME/.."
 	done
 }
 
-@test "mcp-sync registers every server with placeholders, replacing old entries" {
-	export HOME="$BATS_TEST_TMPDIR/home" XDG_CONFIG_HOME="$BATS_TEST_TMPDIR/home/.config" CALLS="$BATS_TEST_TMPDIR/calls"
-	mkdir -p "$XDG_CONFIG_HOME/mcp" "$BATS_TEST_TMPDIR/bin"
-	cp "$REPO/.config/mcp/claude.json" "$XDG_CONFIG_HOME/mcp/claude.json"
-	# shellcheck disable=SC2016 # expands when the fake runs
-	printf '#!/bin/sh\nprintf "%%s\\n" "claude $*" >>"$CALLS"\n' >"$BATS_TEST_TMPDIR/bin/claude"
-	chmod +x "$BATS_TEST_TMPDIR/bin/claude"
-	PATH="$BATS_TEST_TMPDIR/bin:$PATH" run "$REPO/.local/bin/mcp-sync"
-	[ "$status" -eq 0 ]
-	[ "$(grep -c '^claude mcp add-json --scope user' "$CALLS")" -eq "$(jq length "$REPO/.config/mcp/claude.json")" ]
-	grep -q '^claude mcp remove --scope user superset$' "$CALLS"
-	grep -q 'add-json --scope user superset {"type":"http","url":"${SUPERSET_MCP_URL}","headers":{"X-API-Key":"${SUPERSET_API_KEY}"}}' "$CALLS"
-}
-
 @test "only claude and opencode see ~/.config/secrets.env" {
 	export HOME="$BATS_TEST_TMPDIR/home" XDG_CONFIG_HOME="$BATS_TEST_TMPDIR/home/.config"
 	mkdir -p "$XDG_CONFIG_HOME" "$BATS_TEST_TMPDIR/bin"
@@ -50,4 +36,28 @@ REPO="$BATS_TEST_DIRNAME/.."
 	run bash -c "PATH='$BATS_TEST_TMPDIR/bin':\$PATH; source '$REPO/.config/shell/functions.sh'; claude; opencode; echo \"shell:\${SUPERSET_API_KEY:-unset}\""
 	[ "$status" -eq 0 ]
 	[ "$output" = $'claude:s3cret\nopencode:s3cret\nshell:unset' ]
+}
+
+@test "adb-mcp is in both tools, from a pinned, checksummed release" {
+	jq -e '.adb == {"type": "stdio", "command": "adb-mcp"}' "$REPO/.config/mcp/claude.json"
+	jq -e '.mcp.adb == {"type": "local", "command": ["adb-mcp"], "enabled": true}' "$REPO/.config/opencode/opencode.json"
+	grep -qE '^@adb-mcp +@adb-mcp$' "$REPO/packages/dev.txt"
+	grep -qE '^android-tools +android-tools$' "$REPO/packages/dev.txt"
+	grep -qE '^version=[0-9]+\.[0-9]+\.[0-9]+$' "$REPO/packages/extra/adb-mcp.sh"
+	grep -qE '[0-9a-f]{64} adb-mcp$' "$REPO/packages/extra/adb-mcp.sh"
+}
+
+@test "temporal-mcp: in both tools from a pinned, checksummed release; the real config stays local" {
+	jq -e '.temporal == {"type": "stdio", "command": "temporal-mcp", "args": ["--stdio", "--config", "${HOME}/.config/temporal-mcp/config.yaml"]}' "$REPO/.config/mcp/claude.json"
+	jq -e '.mcp.temporal == {"type": "local", "command": ["temporal-mcp", "--stdio", "--config", "{env:HOME}/.config/temporal-mcp/config.yaml"], "enabled": true}' "$REPO/.config/opencode/opencode.json"
+	grep -qE '^@temporal-mcp +@temporal-mcp$' "$REPO/packages/dev.txt"
+	# reading and investigating only: opencode never gets the one tool that writes (start a workflow)
+	jq -e '.tools.temporal_start_workflow == false' "$REPO/.config/opencode/opencode.json"
+	grep -qE '^version=[0-9]+\.[0-9]+\.[0-9]+$' "$REPO/packages/extra/temporal-mcp.sh"
+	grep -qE '[0-9a-f]{64} temporal-mcp$' "$REPO/packages/extra/temporal-mcp.sh"
+	# the repo has an example only: addresses are placeholders, and the real file is never tracked
+	example="$REPO/.config/temporal-mcp/config.yaml.example"
+	python3 -c 'import sys, yaml; t = yaml.safe_load(open(sys.argv[1]))["targets"]; assert all(x["address"].split(":")[0] in ("localhost", "temporal.staging.example") for x in t), t' "$example"
+	run git -C "$REPO" check-ignore -q .config/temporal-mcp/config.yaml
+	[ "$status" -eq 0 ]
 }

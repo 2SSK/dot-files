@@ -11,4 +11,7 @@ docker-compose              docker-compose
 docker-buildx               docker-buildx
 ninja                       ninja-build
 python-paramiko             python3-paramiko
+android-tools               android-tools
+@adb-mcp                    @adb-mcp
+@temporal-mcp               @temporal-mcp
 aur:vscodium-bin            @vscodium

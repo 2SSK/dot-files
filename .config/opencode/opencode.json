@@ -1,6 +1,9 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "autoupdate": true,
+  "tools": {
+    "temporal_start_workflow": false
+  },
   "command": {
     "git": {
       "agent": "build",
@@ -48,6 +51,16 @@
     "supabase": {
       "type": "remote",
       "url": "{env:SUPABASE_MCP_URL}",
+      "enabled": true
+    },
+    "adb": {
+      "type": "local",
+      "command": ["adb-mcp"],
+      "enabled": true
+    },
+    "temporal": {
+      "type": "local",
+      "command": ["temporal-mcp", "--stdio", "--config", "{env:HOME}/.config/temporal-mcp/config.yaml"],
       "enabled": true
     },
     "postgres": {

@@ -30,5 +30,14 @@
     "type": "http",
     "url": "${SUPERSET_MCP_URL}",
     "headers": { "X-API-Key": "${SUPERSET_API_KEY}" }
+  },
+  "adb": {
+    "type": "stdio",
+    "command": "adb-mcp"
+  },
+  "temporal": {
+    "type": "stdio",
+    "command": "temporal-mcp",
+    "args": ["--stdio", "--config", "${HOME}/.config/temporal-mcp/config.yaml"]
   }
 }
