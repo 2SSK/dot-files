@@ -50,6 +50,7 @@ Palette values are copied from each project's official ports, with attribution i
 | Quickshell (bar, panels, lock) | Reads the rendered `palette.json` | Live (`qs ipc call theme reload`) |
 | nvim, vim | Build their colorscheme `desktop` from `palette.json` | nvim live (SIGUSR1); vim within a second |
 | yazi | `~/.config/yazi/` links to the rendered flavor | Next start |
+| herdr | `~/.config/herdr/config.toml` links to the rendered `herdr.toml` (the whole config: its colours and its tmux keys) | Live (`herdr server reload-config`) |
 | rmpc, pspg, opencode | Their rendered configs (`rmpc.ron`; `PSPG_CONF`; `OPENCODE_CONFIG_DIR`) | Next start |
 | VSCodium | `desktop vscodium` writes its `settings.json`: the repo's base plus the rendered `vscodium/colors.json` | Live |
 | Login screen (SDDM) | The rendered `sddm-theme.conf`, copied to its shared folder | Next login |

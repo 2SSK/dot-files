@@ -9,7 +9,12 @@ setup() {
 	STATE="$XDG_STATE_HOME/desktop/theme"
 	export HOME="$BATS_TEST_TMPDIR/home"
 	mkdir -p "$HOME" "$BATS_TEST_TMPDIR/bin"
-	for tool in pkill xrdb tmux i3-msg kitten; do # fakes record their arguments instead of touching the real session
+	# herdr is "running" (pgrep answers for it alone, so nautilus stays not running) and a fake herdr
+	# records the reload, never the real herdr's
+	# shellcheck disable=SC2016 # expands when the fake runs
+	printf '#!/bin/sh\n[ "$*" = "-x herdr" ]\n' >"$BATS_TEST_TMPDIR/bin/pgrep"
+	chmod +x "$BATS_TEST_TMPDIR/bin/pgrep"
+	for tool in pkill xrdb tmux i3-msg kitten herdr; do # fakes record their arguments instead of touching the real session
 		printf '#!/bin/sh\necho "%s $*" >>"%s"\n' "$tool" "$BATS_TEST_TMPDIR/signals" >"$BATS_TEST_TMPDIR/bin/$tool"
 		chmod +x "$BATS_TEST_TMPDIR/bin/$tool"
 	done
@@ -114,6 +119,29 @@ assert {t["family"] for t in themes} >= {"gruvbox", "tokyonight", "eink"}
 	python3 -c 'import sys, tomllib; t = tomllib.load(open(sys.argv[1], "rb")); assert t["mgr"]["cwd"]["fg"] == "#89b4fa", t["mgr"]; assert "icon" not in t' "$flavor/flavor.toml"
 	python3 -c 'import sys, tomllib; assert tomllib.load(open(sys.argv[1], "rb"))["flavor"]["dark"] == "desktop"' "$XDG_CONFIG_HOME/yazi/theme.toml"
 	ls "$XDG_STATE_HOME"/desktop/backup/theme/yazi/theme.toml.* # noctalia's, moved aside
+}
+
+@test "herdr gets a config in the theme's colours with tmux's keys; a running herdr reloads it" {
+	export XDG_CONFIG_HOME="$BATS_TEST_TMPDIR/config"
+	mkdir -p "$XDG_CONFIG_HOME/herdr"
+	printf '[keys]\nprefix = "ctrl+b"\n' >"$XDG_CONFIG_HOME/herdr/config.toml"
+	run "$THEME" set catppuccin --mode dark
+	[ "$status" -eq 0 ]
+	[ "$(readlink "$XDG_CONFIG_HOME/herdr/config.toml")" = "$STATE/herdr.toml" ]
+	python3 -c '
+import sys, tomllib
+c = tomllib.load(open(sys.argv[1], "rb"))
+assert c["theme"]["custom"]["accent"] == "#89b4fa" and c["theme"]["custom"]["text"] == "#cdd6f4", c["theme"]
+k = c["keys"]
+assert k["prefix"] == "backtick" and k["split_vertical"] == "prefix+w" and k["split_horizontal"] == "prefix+s", k
+assert "ctrl+h" not in str(k).replace("prefix+ctrl+h", ""), "Ctrl+h without the prefix belongs to nvim"
+' "$XDG_CONFIG_HOME/herdr/config.toml"
+	[[ $(signals) == *"herdr server reload-config"* ]]
+	ls "$XDG_STATE_HOME"/desktop/backup/theme/herdr/config.toml.* # the old one, moved aside
+	if [[ -x /usr/bin/herdr ]]; then # herdr's own check: every key valid, none bound twice
+		run env HERDR_CONFIG_PATH="$XDG_CONFIG_HOME/herdr/config.toml" /usr/bin/herdr config check
+		[ "$output" = "config: ok" ]
+	fi
 }
 
 
