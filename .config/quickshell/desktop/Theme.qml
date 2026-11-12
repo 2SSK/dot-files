@@ -59,9 +59,10 @@ Singleton {
 	readonly property string fontMono: fonts.mono || "JetBrainsMono Nerd Font"
 	readonly property string fontBar: fontSans
 	readonly property int barWeight: Config.fonts.barWeight || Font.DemiBold
-	// every text asks for full hinting: Qt on Wayland ignores fontconfig's (slight), and the shell's
-	// windows get no subpixel smoothing, so small text looked soft; full snaps stems to whole pixels
-	readonly property int hinting: Font.PreferFullHinting
+	// every text asks for vertical hinting, as fontconfig's hintslight gives GTK apps (Qt on Wayland
+	// ignores fontconfig): crisp horizontals and baselines without bending the letters sideways, so the
+	// spacing stays even (full hinting snapped Inter's stems and widths, unevenly at 12-14 px)
+	readonly property int hinting: Font.PreferVerticalHinting
 	// body text a step heavier than regular: Qt blends text linearly (kitty boosts its contrast), so
 	// regular strokes at 12-14 px read thin and faint beside the terminal; headings set their own
 	readonly property int textWeight: Config.fonts.weight || Font.Medium
