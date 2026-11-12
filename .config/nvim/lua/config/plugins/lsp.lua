@@ -42,50 +42,7 @@ return {
 				end,
 			})
 
-			-- Copilot as ghost text. Sign in once with :LspCopilotSignIn.
-			--   Ctrl+a or Tab  accept     Ctrl+r or Ctrl+]  reject     Alt+n / Alt+p  next / previous
-			--   Alt+r  ask again. With no suggestion showing, Ctrl+a and Ctrl+r do what they always do
-			--   in insert mode (the last insert again; a register).
-			vim.lsp.inline_completion.enable()
-			local shown = vim.api.nvim_create_namespace("nvim.lsp.inline_completion")
-			local function showing()
-				return #vim.api.nvim_buf_get_extmarks(0, shown, 0, -1, { limit = 1 }) > 0
-			end
-			local function dismiss()
-				vim.lsp.inline_completion.enable(false, { bufnr = 0 })
-				vim.lsp.inline_completion.enable(true, { bufnr = 0 })
-			end
-			vim.keymap.set("i", "<C-a>", function()
-				return vim.lsp.inline_completion.get() and "" or "<C-a>"
-			end, { expr = true, desc = "Accept Copilot suggestion" })
-			vim.keymap.set("i", "<C-r>", function()
-				if not showing() then
-					return "<C-r>"
-				end
-				vim.schedule(dismiss)
-				return ""
-			end, { expr = true, desc = "Reject Copilot suggestion" })
-			vim.keymap.set("i", "<C-]>", dismiss, { desc = "Reject Copilot suggestion" })
-			vim.keymap.set("i", "<M-n>", function()
-				vim.lsp.inline_completion.select({ count = 1 })
-			end, { desc = "Next Copilot suggestion" })
-			vim.keymap.set("i", "<M-p>", function()
-				vim.lsp.inline_completion.select({ count = -1 })
-			end, { desc = "Previous Copilot suggestion" })
-			vim.keymap.set("i", "<M-r>", function()
-				dismiss()
-				vim.api.nvim_exec_autocmds("CursorMovedI", { buffer = 0 }) -- asks Copilot again
-			end, { desc = "New Copilot suggestion" })
-
-			-- Toggle ghost text on/off everywhere. <leader>cd
-			vim.keymap.set("n", "<leader>cd", function()
-				local enabled = not vim.lsp.inline_completion.is_enabled()
-				vim.lsp.inline_completion.enable(enabled)
-				vim.notify("Copilot suggestions " .. (enabled and "enabled" or "disabled"))
-			end, { desc = "Toggle Copilot suggestions" })
-
 			local servers = {
-				copilot = {},
 				lua_ls = {
 					cmd = { vim.fn.stdpath("data") .. "/mason/bin/lua-language-server" },
 					root_markers = { ".git", "init.lua", "lua/" },
@@ -102,8 +59,6 @@ return {
 					},
 				},
 				clangd = {
-					-- the encoding copilot-language-server uses, so nvim doesn't warn about mixed encodings
-					capabilities = { offsetEncoding = { "utf-16" } },
 					init_options = { clangdFileStatus = true },
 					filetypes = { "c", "cpp", "objc", "objcpp" },
 				},

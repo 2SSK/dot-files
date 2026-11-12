@@ -38,14 +38,13 @@ file once a second.
 
 **Editing**
 - Completion menu (blink.cmp): LSP, paths, snippets (friendly-snippets), buffer words, with docs.
-- Copilot as ghost text: accept, reject, cycle suggestions or ask for a new one.
 - Auto pairs, surround (`sa` add, `sd` delete, `sr` replace), move lines with `Alt+h/j/k/l`.
 - Text objects: `af`/`if` function, `ac`/`ic` class, `aa`/`ia` argument, quotes and brackets
   (mini.ai); `an`/`in` in visual mode grow or shrink the selection by syntax node.
 - TODO/FIXME/HACK/NOTE highlighted; hex colours shown in their colour.
 
 **Code**
-- LSP: Lua, Python, TS/JS, C/C++, Zig, Tailwind, GraphQL, HTML/CSS, Emmet, Copilot (Mason
+- LSP: Lua, Python, TS/JS, C/C++, Zig, Tailwind, GraphQL, HTML/CSS, Emmet (Mason
   installs these), plus Go (`gopls`) and Rust (`rust-analyzer`) when their toolchain is installed.
 - Format on save (prettier, stylua, black + isort, beautysh), linting (nvim-lint).
 - Treesitter highlighting, indentation and folding for 30 languages; folds start open.
@@ -99,7 +98,7 @@ open in a vertical / horizontal split, `Tab` select several, `Esc` close.
 | `[d` / `]d` | Previous / next diagnostic |
 | `ca` / `cr` | Code action / rename |
 | `cf` / `cl` | Format (file or selection) / lint |
-| `cd` / `cs` | Line diagnostics / symbols |
+| `xd` / `cs` | Line diagnostics / symbols |
 | `cR` / `cx` | Restart LSP / run `./run.sh` on this file |
 | `xx` / `xX` | Diagnostics / this buffer's diagnostics |
 | `xL` / `xQ` | Location list / quickfix list |
@@ -120,16 +119,10 @@ open in a vertical / horizontal split, `Tab` select several, `Esc` close.
 
 | Key | Action |
 | --- | --- |
-| `Ctrl+a` / `Tab` | Accept the Copilot suggestion (`Tab` jumps in a snippet first) |
-| `Ctrl+r` / `Ctrl+]` | Reject the suggestion |
-| `Alt+n` / `Alt+p` | Next / previous suggestion |
-| `Alt+r` | Ask Copilot for a new suggestion |
+| `Tab` | Jump to the snippet's next field |
 | `Ctrl+Space` | Open the completion menu |
 | `Ctrl+j/k`, `Enter`, `Ctrl+e` | Move, accept, close the menu |
 | `Ctrl+b/f` | Scroll the docs |
-
-With no suggestion showing, `Ctrl+a` and `Ctrl+r` keep their usual insert-mode meaning (the last
-insert again; paste a register).
 
 ### Windows `Space s`, tabs `Space t`, UI `Space u`
 
@@ -154,7 +147,5 @@ The same options and most keys as nvim (`jk`, `Space w/q`, splits `Space s…`, 
 ## First start on a new machine
 
 `tree-sitter-cli` and a C compiler (both in the `cli` package layer) build the treesitter
-parsers; Mason installs the language servers, including `copilot-language-server`. Sign in
-to Copilot once with `:LspCopilotSignIn` (an existing `~/.config/github-copilot` sign-in is
-reused). In a read-only checkout (the test VM's share) lazy.nvim keeps its lockfile in the
+parsers; Mason installs the language servers. In a read-only checkout (the test VM's share) lazy.nvim keeps its lockfile in the
 state dir.

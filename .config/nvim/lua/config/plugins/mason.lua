@@ -14,7 +14,6 @@ return {
 		---@diagnostic disable-next-line: missing-fields
 		require("mason-lspconfig").setup({
 			ensure_installed = {
-				"copilot",
 				"ts_ls",
 				"pyright",
 				"html",

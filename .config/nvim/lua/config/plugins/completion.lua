@@ -1,4 +1,4 @@
--- Completion menu (blink.cmp); Copilot suggestions are inline ghost text (see lsp.lua)
+-- Completion menu (blink.cmp)
 return {
 	"saghen/blink.cmp",
 	version = "1.*", -- release builds ship the prebuilt fuzzy matcher
@@ -11,7 +11,7 @@ return {
 			["<C-k>"] = { "select_prev", "fallback" },
 			["<CR>"] = { "accept", "fallback" },
 			["<C-e>"] = { "hide", "fallback" },
-			["<Tab>"] = { "snippet_forward", function() return vim.lsp.inline_completion.get() end, "fallback" },
+			["<Tab>"] = { "snippet_forward", "fallback" },
 		},
 		completion = {
 			list = { selection = { preselect = false, auto_insert = false } },
