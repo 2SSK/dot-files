@@ -269,6 +269,11 @@ boot_menu() { # the folder system.sh grub shares: its theme.txt and background a
 	boot_menu
 	run "$THEME" set catppuccin --mode light
 	[ "$status" -eq 0 ]
+	# drawn in the background (the switch doesn't wait for a picture only the next boot shows)
+	for _ in $(seq 100); do
+		[ "$(magick identify -format '%m %wx%h' "$DESKTOP_GRUB_DIR/background.png" 2>/dev/null)" = "PNG 1920x1080" ] && break
+		sleep 0.1
+	done
 	grep -q 'selected_item_color = "#cdd6f4"' "$DESKTOP_GRUB_DIR/theme.txt" # mocha's text, not latte's
 	grep -q 'item_color = "#a6adc8"' "$DESKTOP_GRUB_DIR/theme.txt"
 	! grep -q '#4c4f69' "$DESKTOP_GRUB_DIR/theme.txt"

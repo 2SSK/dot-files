@@ -14,6 +14,9 @@ login_background() { # <wallpaper> <out.jpg>
 # same theme draws the same picture.
 boot_theme() {
 	local src=$1 dir=$2 bg surface centre edge tmp
+	# the background is drawn from the theme file's colours alone: the same file, nothing to draw (a mode
+	# or font switch; drawing it took about 4 s)
+	cmp -s "$src" "$dir/theme.txt" && [[ -s $dir/background.png ]] && return 0
 	read -r bg surface < <(sed -n 's/^# background: //p' "$src")
 	centre="$(magick xc:"$surface" xc:"$bg" -compose blend -define compose:args=63 -composite -depth 8 -format '#%[hex:p{0,0}]' info:)"
 	edge="$(magick xc:"$bg" -fill black -colorize 25% -depth 8 -format '#%[hex:p{0,0}]' info:)"

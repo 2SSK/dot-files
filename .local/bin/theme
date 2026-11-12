@@ -54,7 +54,7 @@ gtk-4.0.css      -                  nautilus_restart
 qtct.conf        qt5ct/qt5ct.conf   -
 qtct.conf        qt6ct/qt6ct.conf   -
 sddm-theme.conf  -                  sddm
-grub-theme.txt   -                  boot_menu
+grub-theme.txt   -                  boot_menu & disown
 firefox-userChrome.css -            firefox
 yazi-flavor.toml yazi/flavors/desktop.yazi/flavor.toml -
 silicon.tmTheme  yazi/flavors/desktop.yazi/tmtheme.xml -
