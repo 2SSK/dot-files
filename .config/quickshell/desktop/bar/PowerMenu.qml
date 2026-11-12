@@ -25,7 +25,9 @@ HangingPanel {
 		Item {
 			id: tiles
 
-			readonly property real tile: (width - 32) / 5
+			// whole pixels: text on a fraction of one comes out blurred
+			readonly property int gap: 7
+			readonly property int tile: Math.floor((width - 4 * gap) / 5)
 
 			width: parent.width
 			height: 86
@@ -42,7 +44,7 @@ HangingPanel {
 					readonly property bool armed: Panel.armed === index
 					readonly property bool picked: Panel.selected === index
 
-					x: index * (tiles.tile + 8)
+					x: index * (tiles.tile + tiles.gap)
 					width: tiles.tile
 					height: tiles.height
 					radius: Theme.radiusPanel
@@ -78,7 +80,7 @@ HangingPanel {
 							text: action.armed ? "Again" : action.modelData.label
 							color: action.armed ? Theme.primaryText : Theme.fg
 							font.pixelSize: Theme.textCaption
-							font.weight: Font.Medium
+							font.weight: Font.DemiBold
 						}
 					}
 
@@ -92,7 +94,7 @@ HangingPanel {
 
 			// one highlight that slides to the picked tile (a tint and a thin edge; clicks pass through)
 			Rectangle {
-				x: Panel.selected * (tiles.tile + 8)
+				x: Panel.selected * (tiles.tile + tiles.gap)
 				width: tiles.tile
 				height: tiles.height
 				radius: Theme.radiusPanel
@@ -122,6 +124,7 @@ HangingPanel {
 			text: Panel.armed >= 0 ? `Press again to ${Panel.actions[Panel.armed].label.toLowerCase()}.` : "← → pick  ·  Enter runs  ·  1–5 jump"
 			color: Panel.armed >= 0 ? Theme.error : Theme.fgMuted
 			font.pixelSize: Theme.textCaption
+			font.weight: Font.DemiBold
 		}
 	}
 }

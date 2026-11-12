@@ -1,5 +1,6 @@
 {
     "audio": {
+        "recordMic": false,
         "step": 5
     },
     "bar": {
@@ -41,7 +42,7 @@
         "mono": "JetBrainsMono Nerd Font",
         "sans": "JetBrainsMono Nerd Font",
         "scale": 1.15,
-        "weight": 500
+        "weight": 600
     },
     "idle": {
         "dim": 4,

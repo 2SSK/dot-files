@@ -189,7 +189,7 @@ Scope {
 						text: Qt.formatTime(clock.date, "HH:mm")
 						color: "white"
 						font.family: Theme.fontMono
-						font.weight: Font.Normal
+						font.weight: Font.Medium
 						font.pixelSize: 112
 						font.letterSpacing: -6
 					}
@@ -197,8 +197,9 @@ Scope {
 					UiText {
 						anchors.horizontalCenter: parent.horizontalCenter
 						text: Qt.formatDate(clock.date, "dddd, d MMMM")
-						color: Qt.alpha("white", 0.72)
+						color: Qt.alpha("white", 0.8)
 						font.pixelSize: 15
+						font.weight: Font.DemiBold
 					}
 
 					Item {
@@ -250,7 +251,8 @@ Scope {
 							anchors.verticalCenter: parent.verticalCenter
 							visible: !root.password
 							text: root.checking ? "Checking…" : "Password"
-							color: Qt.alpha("white", 0.45)
+							color: Qt.alpha("white", 0.55)
+							font.weight: Font.DemiBold
 						}
 
 						Glyph {
