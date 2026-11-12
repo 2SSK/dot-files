@@ -36,11 +36,8 @@
         "persist": true
     },
     "fonts": {
-        "bar": "JetBrainsMono Nerd Font",
         "barWeight": 600,
-        "heading": "JetBrainsMono Nerd Font",
-        "mono": "JetBrainsMono Nerd Font",
-        "sans": "JetBrainsMono Nerd Font",
+        "collection": "inter",
         "scale": 1.15,
         "weight": 600
     },

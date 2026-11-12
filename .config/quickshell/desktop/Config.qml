@@ -68,10 +68,7 @@ Singleton {
 			}
 			property JsonObject fonts: JsonObject {
 				property real scale: 1.15 // the shell's text against its base sizes
-				property string sans: "Inter"
-				property string heading: "Inter" // titles, labels on tiles, anything semibold or bold
-				property string mono: "JetBrainsMono Nerd Font" // code, the clipboard's text
-				property string bar: "JetBrainsMono Nerd Font"
+				property string collection: "inter" // the whole desktop's fonts (desktop font set): inter, geist or sf
 				property int barWeight: 600 // the bar's text: 500 medium, 600 semibold
 				property int weight: 500 // body text: 400 regular, 500 medium, 600 semibold
 			}

@@ -20,7 +20,6 @@
 	"window.commandCenter": false,
 	"window.restoreWindows": "none",
 	"breadcrumbs.enabled": false,
-	"editor.fontFamily": "JetBrainsMono Nerd Font",
 	"editor.fontSize": 14,
 	"editor.lineHeight": 1.6,
 	"editor.minimap.enabled": false,
@@ -37,7 +36,6 @@
 	"editor.wordWrap": "on",
 	"editor.lineNumbers": "relative",
 	"editor.padding.top": 8,
-	"terminal.integrated.fontFamily": "JetBrainsMono Nerd Font",
 	"terminal.integrated.fontSize": 13,
 	"terminal.integrated.commandsToSkipShell": [
 		"workbench.action.terminal.toggleTerminal",

@@ -42,7 +42,7 @@ foot.ini         -                  pkill -$([[ $mode == dark ]] && echo USR1 ||
 cava             -                  pkill -USR2 -x cava
 palette.json     -                  pkill -USR1 -x nvim
 tmux.conf        -                  tmux info && tmux source-file "${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf"
-i3.conf          -                  if [[ -n ${SWAYSOCK:-} ]]; then swaymsg -q "$(grep '^client\.' "$state/i3.conf" | paste -sd';')"; else i3-msg -t get_version && i3-msg -q reload; fi
+i3.conf          -                  if [[ -n ${SWAYSOCK:-} ]]; then swaymsg -q "$(grep -E '^(client\.|font )' "$state/i3.conf" | paste -sd';')"; else i3-msg -t get_version && i3-msg -q reload; fi
 picom.conf       -                  -
 xsettingsd.conf  -                  pkill -HUP -x xsettingsd
 st.Xresources    -                  [[ -n ${DISPLAY:-} && -r $HOME/.Xresources ]] && xrdb -merge "$HOME/.Xresources" && pkill -USR1 -x st
@@ -59,6 +59,7 @@ firefox-userChrome.css -            firefox
 yazi-flavor.toml yazi/flavors/desktop.yazi/flavor.toml -
 silicon.tmTheme  yazi/flavors/desktop.yazi/tmtheme.xml -
 yazi-theme.toml  yazi/theme.toml    -
+fontconfig.conf  fontconfig/fonts.conf -
 herdr.toml       herdr/config.toml  pgrep -x herdr >/dev/null && herdr server reload-config
 vscodium/colors.json -              desktop vscodium
 EOF
@@ -78,10 +79,15 @@ link_config() { # <path under ~/.config> <rendered file>: apps that only read a 
 	ln -s "$src" "$dest"
 }
 
-gtk_settings() { # what GTK on Wayland and libadwaita read (GTK on X11 reads xsettingsd); the
-	# cursor and fonts, which no theme changes, setup.sh sets once
-	local schema=org.gnome.desktop.interface dark=0
+gtk_settings() { # what GTK on Wayland and libadwaita read (GTK on X11 reads xsettingsd), the font
+	# collection's fonts too; the cursor, which no theme changes, setup.sh sets once
+	local schema=org.gnome.desktop.interface dark=0 ui mono
 	gsettings list-schemas | grep -qx "$schema" || return 0
+	ui="$(jq -r '.fonts.ui // "Inter"' "$state/palette.json" 2>/dev/null || echo Inter)"
+	mono="$(jq -r '.fonts.mono // "JetBrainsMono Nerd Font"' "$state/palette.json" 2>/dev/null || echo 'JetBrainsMono Nerd Font')"
+	gsettings set "$schema" font-name "$ui 11"
+	gsettings set "$schema" document-font-name "$ui 11"
+	gsettings set "$schema" monospace-font-name "$mono 11"
 	[[ $mode == dark ]] && dark=1
 	gsettings set "$schema" color-scheme "$( ((dark)) && echo prefer-dark || echo prefer-light)"
 	gsettings set "$schema" gtk-theme "$( ((dark)) && echo adw-gtk3-dark || echo adw-gtk3)"

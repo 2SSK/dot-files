@@ -26,6 +26,8 @@ THEMES = SHARE / "themes"
 # families made on this machine (matugen's, from the wallpaper), beside the hand-made ones
 MADE = Path(os.environ.get("XDG_STATE_HOME") or Path.home() / ".local/state") / "desktop/themes"
 TEMPLATES = SHARE / "templates"
+FONTS = SHARE / "fonts.toml"  # the font collections; shell.json's fonts.collection picks one
+DEFAULT_FONTS = "inter"
 MODES = ("dark", "light")
 ROLES = ("bg", "bg_alt", "surface", "overlay", "fg", "fg_muted", "primary", "on_primary", "secondary",
          "accent", "success", "warning", "error", "border", "border_active", "selection")
@@ -98,6 +100,25 @@ def lint(theme):
     return problems
 
 
+def collections():
+    with FONTS.open("rb") as f:
+        return tomllib.load(f)
+
+
+def fonts():
+    """The chosen collection (shell.json's fonts.collection, else inter): its name and fonts."""
+    config = Path(os.environ.get("XDG_CONFIG_HOME") or Path.home() / ".config") / "desktop/shell.json"
+    try:
+        chosen = json.loads(config.read_text()).get("fonts", {}).get("collection") or DEFAULT_FONTS
+    except (OSError, ValueError, AttributeError):
+        chosen = DEFAULT_FONTS
+    known = collections()
+    if chosen not in known:
+        chosen = DEFAULT_FONTS
+    c = known[chosen]
+    return {"collection": chosen, "ui": c["ui"], "display": c["display"], "mono": c["mono"]}
+
+
 def variables(theme, family, mode, state):
     dark = mode == "dark"
     values = {
@@ -106,6 +127,7 @@ def variables(theme, family, mode, state):
         "gtk_theme": "adw-gtk3-dark" if dark else "adw-gtk3",
         "color_scheme": "prefer-dark" if dark else "prefer-light",
         "icon_theme": f"Tela-circle-blue-{mode}",
+        **{f"font_{role}": name for role, name in fonts().items()},
     }
     for m in MODES:
         for key, colour in {**theme[m]["ui"], **theme[m]["ansi"]}.items():
@@ -122,6 +144,7 @@ def fingerprint(family, mode, state):
     h = hashlib.sha256(f"{family}\0{mode}\0{state}\0".encode())
     h.update(Path(__file__).read_bytes())  # the renderer itself
     h.update(path_of(family).read_bytes())
+    h.update(json.dumps(fonts(), sort_keys=True).encode())  # another collection is another render
     for target in targets():
         h.update(f"\0{target}\0".encode())
         h.update((TEMPLATES / target).read_bytes())
@@ -152,7 +175,8 @@ def render(family, mode, state):
             out = new / target
             out.parent.mkdir(parents=True, exist_ok=True)
             out.write_text(Template((TEMPLATES / target).read_text()).substitute(values))
-        palette = {"meta": theme["meta"], "mode": mode, "ui": theme[mode]["ui"], "ansi": theme[mode]["ansi"]}
+        palette = {"meta": theme["meta"], "mode": mode, "ui": theme[mode]["ui"], "ansi": theme[mode]["ansi"],
+                   "fonts": fonts()}
         (new / "palette.json").write_text(json.dumps(palette, indent=2) + "\n")
         (new / "current").write_text(f"family={family}\nmode={mode}\n")
         (new / ".fingerprint").write_text(digest)

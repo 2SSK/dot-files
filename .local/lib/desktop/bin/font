@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+# One font collection for the whole desktop, as one theme is: the shell, GTK and Qt apps, browsers
+# and anything asking for sans-serif or monospace (fontconfig), the terminals, VSCodium and window
+# titles. The collections are in ~/.local/share/desktop/fonts.toml; the choice is shell.json's
+# fonts.collection, which the theme renders into every app's config.
+#   desktop font list          the collections, * marks the current one, and any font not installed
+#   desktop font current       the chosen collection's name
+#   desktop font set <name>    choose it: refused when one of its fonts isn't installed; then the
+#                              current theme is rendered again and kitty reads its config again
+#                              (open foot and st windows keep their font, new ones get it)
+set -euo pipefail
+
+here="$(dirname "$(readlink -f "$0")")"
+collections="$here/../../../share/desktop/fonts.toml"
+config="${XDG_CONFIG_HOME:-$HOME/.config}/desktop/shell.json"
+
+usage() {
+	echo "usage: desktop font list | current | set <collection>" >&2
+	exit 2
+}
+
+# list | current | missing <name> | save <name>: the TOML, shell.json and fc-list work, in Python
+read -r -d '' program <<'PY' || true
+import json, os, sys, tomllib
+path, config, what, *args = sys.argv[1:]
+known = tomllib.load(open(path, "rb"))
+installed = {name.strip() for line in os.environ["FONTS_INSTALLED"].splitlines() for name in line.split(",")}
+try:
+    settings = json.load(open(config))
+except (OSError, ValueError):
+    settings = {}
+current = settings.get("fonts", {}).get("collection") or "inter"
+
+def missing(c):
+    return [known[c][r] for r in ("ui", "display", "mono") if known[c][r] not in installed]
+
+if what == "list":
+    for name, c in known.items():
+        gone = list(dict.fromkeys(missing(name)))
+        print(f"{'*' if name == current else ' '} {name:<6} {c['name']}" + (f"  (missing: {', '.join(gone)})" if gone else ""))
+elif what == "current":
+    print(current)
+elif what == "missing":
+    name = args[0]
+    if name not in known:
+        print(f"desktop font: unknown collection '{name}' (known: {', '.join(known)})", file=sys.stderr)
+        sys.exit(2)
+    gone = list(dict.fromkeys(missing(name)))
+    if gone:
+        print(f"desktop font: {', '.join(gone)} not installed; install {known[name]['packages']}", file=sys.stderr)
+        sys.exit(1)
+elif what == "save":  # as the shell writes it: four spaces, keys in order, the rest kept
+    settings.setdefault("fonts", {})["collection"] = args[0]
+    os.makedirs(os.path.dirname(config), exist_ok=True)
+    tmp = config + ".font"
+    with open(tmp, "w") as f:
+        json.dump(settings, f, indent=4, sort_keys=True)
+        f.write("\n")
+    os.replace(tmp, os.path.realpath(config) if os.path.islink(config) else config)
+PY
+
+py() { FONTS_INSTALLED="$(fc-list : family)" python3 -I -c "$program" "$collections" "$config" "$@"; }
+
+case ${1:-} in
+list) py list ;;
+current) py current ;;
+set)
+	[[ -n ${2:-} ]] || usage
+	py missing "$2"
+	py save "$2"
+	read -r family mode < <(theme current)
+	theme set "$family" --mode "$mode" # the fonts are part of the render: every app's config again
+	pkill -USR1 -x kitty || true       # kitty reads its config again: the new font in open windows
+	;;
+*) usage ;;
+esac

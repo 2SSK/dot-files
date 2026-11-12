@@ -1,0 +1,27 @@
+# Font collections: one is chosen for the whole desktop (`desktop font set <name>`, or Settings →
+# Appearance → Fonts), and the theme renders it into every app's config, as it does the colours.
+#   ui        menus, buttons, the file manager, browsers' interface, the shell
+#   display   large text: the clock, big numbers, titles (the shell and its lock screen)
+#   mono      terminals, editors, code (a Nerd Font keeps prompts' and file lists' icons)
+# packages: where the fonts come from, said when one is missing.
+
+[inter]
+name = "Inter + JetBrains Mono"
+ui = "Inter"
+display = "Inter Display"
+mono = "JetBrainsMono Nerd Font"
+packages = "inter-font, ttf-jetbrains-mono-nerd"
+
+[geist]
+name = "Geist + Geist Mono"
+ui = "Geist"
+display = "Geist"
+mono = "GeistMono Nerd Font"
+packages = "otf-geist (AUR), otf-geist-mono-nerd"
+
+[sf]
+name = "San Francisco"
+ui = "SF Pro Text"
+display = "SF Compact Display"
+mono = "SF Mono"
+packages = "apple-fonts (AUR; Apple licenses these for its own devices)"

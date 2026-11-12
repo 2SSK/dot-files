@@ -19,3 +19,4 @@ st.color12: $c12
 st.color13: $c13
 st.color14: $c14
 st.color15: $c15
+st.font: $font_mono:size=14:antialias=true:autohint=true

@@ -202,12 +202,10 @@ main() {
 	((packages == 0)) || enable_services
 
 	step 'Theme'
-	# the cursor and fonts GTK on Wayland and libadwaita read (the theme sets the rest)
+	# the cursor GTK on Wayland and libadwaita read (the theme sets the rest, fonts too)
 	if gsettings list-schemas 2>/dev/null | grep -qx org.gnome.desktop.interface; then
 		gsettings set org.gnome.desktop.interface cursor-theme Bibata-Modern-Ice
 		gsettings set org.gnome.desktop.interface cursor-size 24
-		gsettings set org.gnome.desktop.interface font-name 'Inter 11'
-		gsettings set org.gnome.desktop.interface monospace-font-name 'JetBrainsMono Nerd Font 11'
 	fi
 	if command -v python3 >/dev/null; then
 		"$repo/.local/bin/theme" set "$family" --mode "$mode"

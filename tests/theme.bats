@@ -291,3 +291,64 @@ boot_menu() { # the folder system.sh grub shares: its theme.txt and background a
 	[ "$(cat "$DESKTOP_GRUB_DIR/theme.txt")" = old ]
 	[ "$(cat "$DESKTOP_GRUB_DIR/background.png")" = old ]
 }
+
+fonts_collection() { # <name>: the desktop's chosen font collection, as the shell saves it
+	export XDG_CONFIG_HOME="$BATS_TEST_TMPDIR/config"
+	mkdir -p "$XDG_CONFIG_HOME/desktop"
+	printf '{"bar": {"style": "island"}, "fonts": {"collection": "%s", "scale": 1.15}}\n' "$1" >"$XDG_CONFIG_HOME/desktop/shell.json"
+}
+
+@test "fonts: the chosen collection reaches every app's rendered config" {
+	fonts_collection geist
+	run "$THEME" set catppuccin --mode dark
+	[ "$status" -eq 0 ]
+	grep -qx 'gtk-font-name=Geist 11' "$STATE/gtk-settings.ini"
+	grep -qx 'Gtk/FontName "Geist 11"' "$STATE/xsettingsd.conf"
+	grep -qx 'Gtk/MonospaceFontName "GeistMono Nerd Font 11"' "$STATE/xsettingsd.conf"
+	grep -qx 'general="Geist,11"' "$STATE/qtct.conf"
+	grep -qx 'fixed="GeistMono Nerd Font,11"' "$STATE/qtct.conf"
+	grep -qx 'font_family GeistMono Nerd Font' "$STATE/kitty.conf"
+	grep -qx 'font=GeistMono Nerd Font:size=14' "$STATE/foot.ini"
+	grep -q '^st.font: GeistMono Nerd Font:size=14' "$STATE/st.Xresources"
+	grep -qx 'font pango:Geist, GeistMono Nerd Font, JetBrainsMono Nerd Font Medium 13' "$STATE/i3.conf"
+	grep -qx 'font=Geist' "$STATE/sddm-theme.conf"
+	python3 -c '
+import json, sys
+s = sys.argv[1]
+c = json.load(open(s + "/vscodium/colors.json"))
+assert c["editor.fontFamily"].startswith("GeistMono Nerd Font") and c["terminal.integrated.fontFamily"] == "GeistMono Nerd Font", c
+p = json.load(open(s + "/palette.json"))["fonts"]
+assert p == {"collection": "geist", "ui": "Geist", "display": "Geist", "mono": "GeistMono Nerd Font"}, p
+' "$STATE"
+	# fontconfig: what browsers and anything asking for sans-serif or monospace get, linked into place
+	[ "$(readlink "$XDG_CONFIG_HOME/fontconfig/fonts.conf")" = "$STATE/fontconfig.conf" ]
+	grep -q '<family>sans-serif</family>' "$STATE/fontconfig.conf"
+	python3 -c '
+import sys, xml.etree.ElementTree as E
+alias = {a.find("family").text: [f.text for f in a.find("prefer")] for a in E.parse(sys.argv[1]).getroot().iter("alias")}
+assert alias["sans-serif"][0] == "Geist" and alias["monospace"][0] == "GeistMono Nerd Font", alias
+assert "JetBrainsMono Nerd Font" in alias["monospace"], "icons fall back to the Nerd Font"
+' "$STATE/fontconfig.conf"
+	# GTK on Wayland and libadwaita read gsettings
+	[[ $(signals) == *"gsettings set org.gnome.desktop.interface font-name Geist 11"* ]]
+	[[ $(signals) == *"gsettings set org.gnome.desktop.interface monospace-font-name GeistMono Nerd Font 11"* ]]
+}
+
+@test "fonts: Inter and JetBrains Mono when none is chosen" {
+	export XDG_CONFIG_HOME="$BATS_TEST_TMPDIR/config"
+	run "$THEME" set catppuccin
+	[ "$status" -eq 0 ]
+	grep -qx 'gtk-font-name=Inter 11' "$STATE/gtk-settings.ini"
+	grep -qx 'font_family JetBrainsMono Nerd Font' "$STATE/kitty.conf"
+	python3 -c 'import json, sys; assert json.load(open(sys.argv[1]))["fonts"]["display"] == "Inter Display"' "$STATE/palette.json"
+}
+
+@test "fonts: another collection renders again, even with the same theme" {
+	fonts_collection inter
+	"$THEME" set catppuccin --mode dark
+	grep -qx 'font_family JetBrainsMono Nerd Font' "$STATE/kitty.conf"
+	fonts_collection sf
+	"$THEME" set catppuccin --mode dark
+	grep -qx 'font_family SF Mono' "$STATE/kitty.conf"
+	grep -qx 'gtk-font-name=SF Pro Text 11' "$STATE/gtk-settings.ini"
+}

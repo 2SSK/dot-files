@@ -16,6 +16,25 @@ Column {
 	property string mode: ""
 	property var families: []
 	property string applied: "" // "family mode" the last switch made (or being made)
+	readonly property var fontNames: ({ inter: "Inter and JetBrains Mono", geist: "Geist and Geist Mono", sf: "SF Pro Text, SF Compact Display and SF Mono" })
+	property string fontError: "" // what desktop font set said, when it refused
+
+	function chooseFonts(name: string): void {
+		if (fontSwitch.running)
+			return;
+		fontError = "";
+		fontSwitch.command = ["desktop", "font", "set", name];
+		fontSwitch.running = true;
+	}
+
+	// the font command checks the fonts are installed, saves the choice and renders the theme again
+	Process {
+		id: fontSwitch
+
+		stderr: StdioCollector {
+			onStreamFinished: page.fontError = text.trim().replace(/^desktop font: /, "")
+		}
+	}
 
 	// the switch (render, then reload every app) runs one at a time, so a burst of clicks ends on the last
 	function choose(family: string, mode: string): void {
@@ -247,25 +266,15 @@ Column {
 	Section {
 		title: "Fonts"
 
-		FontRow {
-			label: "Interface"
-			hint: "Most of the shell's text."
-			value: Theme.fontSans
-			onPicked: family => Config.set("fonts", "sans", family)
-		}
-
-		FontRow {
-			label: "Headings"
-			hint: "Titles, tile names, the clock and other semibold text."
-			value: Theme.fontHeading
-			onPicked: family => Config.set("fonts", "heading", family)
-		}
-
-		FontRow {
-			label: "Bar"
-			hint: "The clock, figures and labels on the bar."
-			value: Theme.fontBar
-			onPicked: family => Config.set("fonts", "bar", family)
+		// one collection for the whole desktop: the shell, apps, terminals, browsers (desktop font set)
+		SettingRow {
+			label: "Collection"
+			hint: page.fontError || (page.fontNames[Theme.fonts.collection || "inter"] ?? "") + ", everywhere: apps, terminals, browsers and the shell."
+			Choice {
+				options: [{ value: "inter", label: "Inter" }, { value: "geist", label: "Geist" }, { value: "sf", label: "San Francisco" }]
+				value: Theme.fonts.collection || "inter"
+				onPicked: value => page.chooseFonts(value)
+			}
 		}
 
 		SettingRow {
@@ -275,14 +284,6 @@ Column {
 				value: Theme.barWeight
 				onPicked: value => Config.set("fonts", "barWeight", value)
 			}
-		}
-
-		FontRow {
-			label: "Code"
-			hint: "The clipboard's text, code notes."
-			value: Theme.fontMono
-			mono: true
-			onPicked: family => Config.set("fonts", "mono", family)
 		}
 
 		SettingRow {

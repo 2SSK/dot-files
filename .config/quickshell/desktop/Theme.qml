@@ -46,10 +46,13 @@ Singleton {
 		easing.type: root.curve
 	}
 
-	readonly property string fontSans: Config.fonts.sans || "Inter"
-	readonly property string fontHeading: Config.fonts.heading || fontSans
-	readonly property string fontMono: Config.fonts.mono || "JetBrainsMono Nerd Font"
-	readonly property string fontBar: Config.fonts.bar || fontMono
+	// the desktop's font collection (desktop font set, Settings → Appearance), as the theme rendered it:
+	// the interface font for text and the bar, the display font for headings and the clocks
+	readonly property var fonts: palette.fonts ?? ({})
+	readonly property string fontSans: fonts.ui || "Inter"
+	readonly property string fontHeading: fonts.display || fontSans
+	readonly property string fontMono: fonts.mono || "JetBrainsMono Nerd Font"
+	readonly property string fontBar: fontSans
 	readonly property int barWeight: Config.fonts.barWeight || Font.DemiBold
 	// every text asks for full hinting: Qt on Wayland ignores fontconfig's (slight), and the shell's
 	// windows get no subpixel smoothing, so small text looked soft; full snaps stems to whole pixels
