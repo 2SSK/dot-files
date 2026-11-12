@@ -57,4 +57,19 @@ return {
 		{ "<leader>un", function() Snacks.notifier.hide() end, desc = "Dismiss notifications" },
 		{ "<leader>uh", function() Snacks.notifier.show_history() end, desc = "Notification history" },
 	},
+	config = function(_, opts)
+		require("snacks").setup(opts)
+		-- nvim 0.12 refuses a window size that isn't a whole number, and snacks can make one: the
+		-- code action menu's list is min(items, lines * 0.8 - 10) high, so 20 actions in a 33-line
+		-- window asked for 18.4 rows ("Invalid 'height': Number is not integral"). Whole cells, always.
+		local Win = require("snacks.win")
+		local dim = Win.dim
+		Win.dim = function(self, parent)
+			local d = dim(self, parent)
+			for _, k in ipairs({ "height", "width", "row", "col" }) do
+				d[k] = math.floor(d[k])
+			end
+			return d
+		end
+	end,
 }
