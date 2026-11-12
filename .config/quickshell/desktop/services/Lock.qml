@@ -129,7 +129,7 @@ Singleton {
 	Timer {
 		id: away
 
-		interval: Theme.normal // the lock screen's fade out
+		interval: 460 // the clock, date and field lifting away, the picture sharpening back (LockScreen)
 		onTriggered: {
 			root.locked = false;
 			root.leaving = false;
