@@ -94,6 +94,7 @@ Line {
 					color: workspace?.urgent && !on ? Theme.error : on ? "transparent" : Qt.alpha(Theme.fg, full ? (hover.containsMouse ? 0.16 : 0.08) : hover.containsMouse ? 0.06 : 0)
 
 					Behavior on color {
+						enabled: !Theme.switching
 						ColorAnimation {
 							duration: Theme.normal
 							easing.type: Theme.curve
@@ -118,6 +119,7 @@ Line {
 							font.weight: Font.Bold
 
 							Behavior on color {
+								enabled: !Theme.switching
 								ColorAnimation {
 									duration: Theme.normal
 									easing.type: Theme.curve
@@ -253,6 +255,7 @@ Line {
 					color: slot.workspace.urgent ? Theme.error : slot.shown ? (slot.workspace.focused ? Theme.primary : Qt.alpha(Theme.primary, 0.55)) : hover.containsMouse ? Theme.fg : Qt.alpha(Theme.fg, 0.55)
 
 					Behavior on color {
+						enabled: !Theme.switching
 						ColorAnimation {
 							duration: Theme.normal
 							easing.type: Theme.curve

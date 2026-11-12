@@ -14,6 +14,7 @@ Rectangle {
 	color: checked ? Theme.primary : Qt.alpha(Theme.overlay, 0.9)
 
 	Behavior on color {
+		enabled: !Theme.switching
 		ColorAnimation {
 			duration: Theme.quick
 			easing.type: Theme.curve

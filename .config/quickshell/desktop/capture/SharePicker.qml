@@ -50,6 +50,7 @@ Item {
 			color: chosen ? Qt.alpha(Theme.primary, 0.16) : "transparent"
 
 			Behavior on color {
+				enabled: !Theme.switching
 				ColorAnimation {
 					duration: Theme.quick
 					easing.type: Theme.curve

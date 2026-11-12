@@ -93,6 +93,7 @@ Item {
 				border.color: chosen ? Theme.primary : Qt.alpha(Theme.border, 0.9)
 
 				Behavior on color {
+					enabled: !Theme.switching
 					ColorAnimation {
 						duration: Theme.quick
 						easing.type: Theme.curve

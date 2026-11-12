@@ -65,6 +65,7 @@ Item {
 		color: root.alert ? (root.alertCrit ? Theme.error : Theme.warning) : Qt.alpha(Theme.fg, 0.08)
 
 		Behavior on color {
+			enabled: !Theme.switching
 			ColorAnimation {
 				duration: Theme.normal
 				easing.type: Theme.curve

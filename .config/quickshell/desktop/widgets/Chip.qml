@@ -19,6 +19,7 @@ Rectangle {
 	border.color: Qt.alpha(Theme.border, 0.7)
 
 	Behavior on color {
+		enabled: !Theme.switching
 		ColorAnimation {
 			duration: Theme.quick
 			easing.type: Theme.curve

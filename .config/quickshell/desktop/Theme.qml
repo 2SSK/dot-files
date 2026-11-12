@@ -25,26 +25,11 @@ Singleton {
 	property color warning: ui.warning ?? "#e0af68"
 	property color secondary: ui.secondary ?? "#bb9af7"
 
-	// a theme switch fades every colour across, the way the wallpaper does (not at startup: from the
-	// fallbacks to the first palette is no change to see)
-	property bool fades: false
-	Behavior on bg { enabled: root.fades; Fade {} }
-	Behavior on surface { enabled: root.fades; Fade {} }
-	Behavior on overlay { enabled: root.fades; Fade {} }
-	Behavior on fg { enabled: root.fades; Fade {} }
-	Behavior on fgMuted { enabled: root.fades; Fade {} }
-	Behavior on primary { enabled: root.fades; Fade {} }
-	Behavior on primaryText { enabled: root.fades; Fade {} }
-	Behavior on border { enabled: root.fades; Fade {} }
-	Behavior on error { enabled: root.fades; Fade {} }
-	Behavior on success { enabled: root.fades; Fade {} }
-	Behavior on warning { enabled: root.fades; Fade {} }
-	Behavior on secondary { enabled: root.fades; Fade {} }
+	// a theme or mode switch shows in one frame, at once with the terminals and apps (the shell fading
+	// over 400 ms showed it behind them, light against dark); while it lands, the colour fades of hovers
+	// and presses (Behavior on color, enabled: !Theme.switching) stand aside
+	property bool switching: false
 
-	component Fade: ColorAnimation {
-		duration: root.slow
-		easing.type: root.curve
-	}
 
 	// the desktop's font collection (desktop font set, Settings → Appearance): the one shell.json names,
 	// its fonts from the palette's list of them all, so the shell switches as soon as the choice is saved
@@ -101,9 +86,17 @@ Singleton {
 		watchChanges: true
 		onFileChanged: reload()
 		onLoaded: {
+			root.switching = true;
 			root.palette = JSON.parse(text());
-			root.fades = true;
+			settled.restart();
 		}
+	}
+
+	Timer {
+		id: settled
+
+		interval: 60 // a frame or three
+		onTriggered: root.switching = false
 	}
 
 	IpcHandler {

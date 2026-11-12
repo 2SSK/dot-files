@@ -67,6 +67,7 @@ Column {
 			color: conn.on ? Theme.primary : Qt.alpha(Theme.fg, knobHover.hovered ? 0.18 : 0.12)
 
 			Behavior on color {
+				enabled: !Theme.switching
 				ColorAnimation {
 					duration: Theme.normal
 					easing.type: Theme.curve

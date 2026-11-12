@@ -311,12 +311,14 @@ Scope {
 							border.color: root.error ? Theme.error : root.ok ? Theme.success : input.activeFocus && root.password ? Qt.alpha(Theme.primary, 0.85) : Qt.alpha("white", 0.2)
 
 							Behavior on color {
+								enabled: !Theme.switching
 								ColorAnimation {
 									duration: Theme.quick
 								}
 							}
 
 							Behavior on border.color {
+								enabled: !Theme.switching
 								ColorAnimation {
 									duration: Theme.normal
 								}

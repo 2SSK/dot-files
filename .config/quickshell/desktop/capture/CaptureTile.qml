@@ -20,6 +20,7 @@ Rectangle {
 	border.color: (tileHover.hovered || chosen) && !danger ? Qt.alpha(Theme.primary, 0.6) : "transparent"
 
 	Behavior on border.color {
+		enabled: !Theme.switching
 		ColorAnimation {
 			duration: Theme.quick
 			easing.type: Theme.curve
@@ -27,6 +28,7 @@ Rectangle {
 	}
 
 	Behavior on color {
+		enabled: !Theme.switching
 		ColorAnimation {
 			duration: Theme.quick
 			easing.type: Theme.curve
@@ -45,6 +47,7 @@ Rectangle {
 			filled: tile.danger
 
 			Behavior on color {
+				enabled: !Theme.switching
 				ColorAnimation {
 					duration: Theme.normal
 					easing.type: Theme.curve

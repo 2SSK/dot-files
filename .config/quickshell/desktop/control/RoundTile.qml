@@ -22,6 +22,7 @@ Rectangle {
 	scale: press.pressed ? 0.97 : 1
 
 	Behavior on color {
+		enabled: !Theme.switching
 		ColorAnimation {
 			duration: Theme.quick
 		}
@@ -45,6 +46,7 @@ Rectangle {
 		color: root.on ? Theme.primary : Qt.alpha(Theme.fg, 0.12)
 
 		Behavior on color {
+			enabled: !Theme.switching
 			ColorAnimation {
 				duration: Theme.normal
 				easing.type: Theme.curve

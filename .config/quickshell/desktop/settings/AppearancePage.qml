@@ -125,6 +125,7 @@ Column {
 					border.color: on ? Theme.primary : hover.hovered ? Qt.alpha(Theme.fg, 0.35) : Qt.alpha(Theme.border, 0.7)
 
 					Behavior on border.color {
+						enabled: !Theme.switching
 						ColorAnimation {
 							duration: Theme.quick
 							easing.type: Theme.curve

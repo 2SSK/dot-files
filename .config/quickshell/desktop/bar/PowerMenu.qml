@@ -51,6 +51,7 @@ HangingPanel {
 					color: armed ? Theme.error : Theme.surface
 
 					Behavior on color {
+						enabled: !Theme.switching
 						ColorAnimation {
 							duration: Theme.quick
 							easing.type: Theme.curve
@@ -68,6 +69,7 @@ HangingPanel {
 							color: action.armed ? Theme.primaryText : action.picked ? Theme.primary : Theme.fg
 
 							Behavior on color {
+								enabled: !Theme.switching
 								ColorAnimation {
 									duration: Theme.normal
 									easing.type: Theme.curve

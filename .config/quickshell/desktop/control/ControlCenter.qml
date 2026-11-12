@@ -142,6 +142,7 @@ HangingPanel {
 							color: tab.on || tabHover.hovered ? Theme.fg : Theme.fgMuted
 
 							Behavior on color {
+								enabled: !Theme.switching
 								ColorAnimation {
 									duration: Theme.quick
 								}

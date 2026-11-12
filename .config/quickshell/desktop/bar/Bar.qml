@@ -173,6 +173,7 @@ PanelWindow {
 		color: Qt.alpha(Theme.bg, outlineMask.gap ? 1 : Config.bar.opacity)
 
 		Behavior on color {
+			enabled: !Theme.switching
 			ColorAnimation {
 				duration: Theme.normal
 				easing.type: Theme.curve
