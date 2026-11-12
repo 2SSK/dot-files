@@ -178,6 +178,20 @@ The login screen follows the wallpaper too. It can't read the home folder, so
 `packages/system.sh sddm` gives you its background file (in `/var/lib/desktop/sddm`), and every
 wallpaper change redraws it without sudo. `desktop wallpaper screens` redraws it by hand.
 
+### Live wallpapers (sway)
+
+Videos and GIFs in the same folders (`~/Wallpaper-Bank/animated/`) show under **All** with a
+**Live** badge (a video as a still frame, made once with ffmpeg and cached). A click plays it over
+the still wallpaper; a click on it again, or on a still one, stops it. Nothing switches it on or off
+by itself: it plays until you stop it, across logins too, and pauses only while the screen is
+locked. The still one stays set beneath it, so the lock screen, login screen and theme colours
+don't change. Rotation never touches it.
+
+`desktop wallpaper live <file>|off|pause|resume` does it: mpvpaper (AUR), muted, looped, hardware
+decoding, over every screen, paused and resumed over mpv's control socket. It costs battery the whole
+time it plays, more for a 4K file on a 1080p screen: `ffmpeg -i in.mp4 -vf scale=-2:1080 -an out.mp4`
+makes it lighter. i3 has no live wallpapers.
+
 ## Settings window
 
 `$mod+Shift+s` (or `qs -c desktop ipc call settings toggle`): Bar (style, capsules, position,

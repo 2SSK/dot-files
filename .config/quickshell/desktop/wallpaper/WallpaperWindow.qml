@@ -7,7 +7,9 @@ import qs.services
 import qs.widgets
 
 // Wallpapers, dropping out of the bar (a HangingPanel): search by name, the current theme's folder
-// or all of them, a rotate chip for how often a new one comes, and shuffle.
+// or all of them, a rotate chip for how often a new one comes, and shuffle. On sway "All" lists the
+// live ones (videos, GIFs) too: one plays over the still wallpaper, picked again it stops, and picking
+// a still one stops it as well.
 HangingPanel {
 	id: root
 
@@ -21,12 +23,23 @@ HangingPanel {
 	property bool all: Wallpaper.themeFiles.length === 0
 	readonly property var shown: {
 		const words = search.text.toLowerCase().split(/\s+/).filter(w => w);
-		return (all ? Wallpaper.files : Wallpaper.themeFiles).filter(f => {
+		return (all ? Wallpaper.files.concat(Wallpaper.liveFiles) : Wallpaper.themeFiles).filter(f => {
 			const name = Format.fileName(f).toLowerCase();
 			return words.every(w => name.includes(w));
 		});
 	}
 	property int current: Math.max(0, shown.indexOf(Wallpaper.current))
+
+	function choose(path: string): void {
+		if (!path)
+			return;
+		if (Wallpaper.isLive(path)) {
+			Wallpaper.setLive(path);
+		} else {
+			Wallpaper.stopLive();
+			Wallpaper.set(path);
+		}
+	}
 
 	function label(path: string): string {
 		return Format.fileName(path).replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ");
@@ -59,7 +72,7 @@ HangingPanel {
 			width: parent.width - scope.width - rotate.width - buttons.width - 24
 			height: 38
 			placeholder: "Search wallpapers"
-			onAccepted: Wallpaper.set(root.shown[root.current] ?? "")
+			onAccepted: root.choose(root.shown[root.current] ?? "")
 			onTextChanged: root.current = 0
 			Keys.onUpPressed: grid.moveCurrentIndexUp()
 			Keys.onDownPressed: grid.moveCurrentIndexDown()
@@ -209,7 +222,7 @@ HangingPanel {
 			searching: search.text !== ""
 			onChosen: {
 				root.current = index;
-				Wallpaper.set(modelData);
+				root.choose(modelData);
 			}
 		}
 	}

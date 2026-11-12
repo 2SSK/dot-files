@@ -4,6 +4,12 @@
 #   desktop wallpaper set <image>   fade from the current one to it, and remember it
 #   desktop wallpaper restore       draw the remembered one (login), no fade
 #   desktop wallpaper screens       redraw the login screen's background from it
+#   desktop wallpaper live <file>   play a video or GIF over it (sway: mpvpaper, muted, looped), and
+#                                   remember it; restore plays it again. The still one stays set:
+#                                   the lock screen, login screen and theme colours keep using it
+#   desktop wallpaper live off|pause|resume   stop and forget it / pause it (the lock) / play on
+#   desktop wallpaper thumbs <file>...  a small picture of each (a video's frame), for the picker,
+#                                   made once per file and version: "file<TAB>jpg" as each is ready
 #   desktop wallpaper next-boot     while shutting down, with wallpaper.rotate "boot": pick the next
 #                                   boot's, so the login screen and the desktop start on it (a user
 #                                   service runs it as the session stops; a logout keeps the old one)
@@ -83,6 +89,60 @@ recolour() { # matugen's theme follows the wallpaper (and is applied when it's t
 	setsid -f theme wallpaper >/dev/null 2>&1
 }
 
+# Live wallpapers: one player at a time, told to pause and play over mpv's own control socket
+player="${DESKTOP_LIVE_PLAYER:-mpvpaper}"
+live_socket="${DESKTOP_LIVE_SOCKET:-${XDG_RUNTIME_DIR:-/tmp}/desktop-live-wallpaper.sock}"
+
+play() { # <file>
+	pkill -x "$player" >/dev/null 2>&1 || true
+	setsid -f "$player" -o "no-audio loop hwdec=auto panscan=1.0 input-ipc-server=$live_socket" ALL "$1" >/dev/null 2>&1
+}
+
+tell() { # <json>: to the player, when one is playing
+	[[ -S $live_socket ]] || return 0
+	python3 -I -c 'import socket, sys
+s = socket.socket(socket.AF_UNIX); s.connect(sys.argv[1]); s.sendall(sys.argv[2].encode() + b"\n")' \
+		"$live_socket" "$1" 2>/dev/null || true
+}
+
+live() { # <file>|off|pause|resume
+	case ${1:-} in
+	off)
+		rm -f "$state/live-wallpaper"
+		pkill -x "$player" >/dev/null 2>&1 || true
+		;;
+	pause) tell '{"command": ["set_property", "pause", true]}' ;;
+	resume) tell '{"command": ["set_property", "pause", false]}' ;;
+	*)
+		[[ -f ${1:-} ]] || { echo "desktop wallpaper: not a file: ${1:-}" >&2 && exit 2; }
+		[[ -n ${WAYLAND_DISPLAY:-} ]] || { echo "desktop wallpaper: live wallpapers need sway" >&2 && exit 1; }
+		command -v "$player" >/dev/null || { echo "desktop wallpaper: live wallpapers need mpvpaper (yay -S mpvpaper)" >&2 && exit 1; }
+		mkdir -p "$state"
+		ln -sfn "$1" "$state/live-wallpaper"
+		play "$1"
+		;;
+	esac
+}
+
+# The picker shows wallpapers 360 px wide: decoding the file itself each time took up to 3 s for an
+# 8K PNG, its small copy 40 ms
+thumbs() { # <file>...
+	local dir="${XDG_CACHE_HOME:-$HOME/.cache}/desktop/wallpaper-thumbs" file thumb
+	mkdir -p "$dir"
+	for file in "$@"; do
+		[[ -f $file && ! ${file,,} =~ \.gif$ ]] || continue # GIFs are small: their first frame as they are
+		thumb="$dir/$(printf '%s:%s' "$file" "$(stat -c %Y "$file")" | sha1sum | cut -c1-16).jpg"
+		if [[ ! -s $thumb ]]; then
+			if [[ ${file,,} =~ \.(mp4|webm|mkv|mov)$ ]]; then # a frame a second in
+				ffmpeg -v error -y -ss 1 -i "$file" -frames:v 1 -vf scale=480:-2 "$thumb" </dev/null || continue
+			else
+				magick "${file}[0]" -thumbnail 480x -quality 85 "$thumb" || continue
+			fi
+		fi
+		printf '%s\t%s\n' "$file" "$thumb"
+	done
+}
+
 next_boot() {
 	[[ $(systemctl is-system-running 2>/dev/null || true) == stopping ]] || return 0
 	local conf="${XDG_CONFIG_HOME:-$HOME/.config}/desktop/shell.json"
@@ -121,12 +181,17 @@ set)
 	screens
 	recolour
 	;;
-restore)
+restore) # also when a screen appears: the player is started again to cover it
 	current="$(current_wallpaper)"
 	draw "$current"
+	if [[ -n ${WAYLAND_DISPLAY:-} && -f $state/live-wallpaper ]] && command -v "$player" >/dev/null; then
+		play "$(readlink -f "$state/live-wallpaper")"
+	fi
 	;;
+live) live "${2:-}" ;;
+thumbs) shift && thumbs "$@" ;;
 *)
-	echo "usage: desktop wallpaper set <image> | restore | screens | next-boot" >&2
+	echo "usage: desktop wallpaper set <image> | restore | screens | next-boot | live <file>|off|pause|resume | thumbs <file>..." >&2
 	exit 2
 	;;
 esac

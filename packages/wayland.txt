@@ -5,6 +5,8 @@ swayidle                    swayidle
 swaylock                    swaylock
 # the wallpaper (desktop wallpaper): awww fades between them; Fedora has no awww, swaybg cuts
 awww                        swaybg
+# live wallpapers (videos and GIFs over the still one, picked by hand in the wallpaper picker)
+aur:mpvpaper                -
 grim                        grim
 slurp                       slurp
 wl-clipboard                wl-clipboard

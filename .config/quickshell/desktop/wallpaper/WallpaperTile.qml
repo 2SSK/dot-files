@@ -7,13 +7,15 @@ import qs.services
 import qs.widgets
 
 // A wallpaper in the picker's grid: the picture with rounded corners, its name on hover, a ring and
-// a tick on the one set, a thinner ring on the one picked with the keys.
+// a tick on the one set, a thinner ring on the one picked with the keys. A live one (video, GIF)
+// shows a still frame and a "Live" badge.
 Item {
 	id: tile
 
 	required property string modelData
 	required property int index
-	readonly property bool on: Wallpaper.current === modelData
+	readonly property bool live: Wallpaper.isLive(modelData)
+	readonly property bool on: live ? Wallpaper.live === modelData : Wallpaper.current === modelData
 	property bool picked // the one Enter sets (the keys' pick)
 	property string label // its name, shown on hover or when picked while searching
 	property bool searching
@@ -41,7 +43,7 @@ Item {
 
 			anchors.fill: parent
 			visible: false
-			source: "file://" + tile.modelData
+			source: "file://" + (Wallpaper.thumbs[tile.modelData] ?? tile.modelData)
 			sourceSize.width: 360
 			fillMode: Image.PreserveAspectCrop
 			asynchronous: true
@@ -138,6 +140,40 @@ Item {
 				glyph: Icons.g("check")
 				font.pixelSize: 14
 				color: Theme.primaryText
+			}
+		}
+
+		Rectangle {
+			visible: tile.live
+			anchors.left: parent.left
+			anchors.top: parent.top
+			anchors.margins: 8
+			width: liveRow.implicitWidth + 14
+			height: 22
+			radius: 11
+			color: Qt.alpha("black", 0.55)
+
+			Row {
+				id: liveRow
+
+				anchors.centerIn: parent
+				spacing: 4
+
+				Glyph {
+					anchors.verticalCenter: parent.verticalCenter
+					glyph: Icons.g("player-play")
+					font.pixelSize: 11
+					color: "white"
+					filled: true
+				}
+
+				UiText {
+					anchors.verticalCenter: parent.verticalCenter
+					text: "Live"
+					color: "white"
+					font.pixelSize: Theme.textCaption
+					font.weight: Font.DemiBold
+				}
 			}
 		}
 	}
