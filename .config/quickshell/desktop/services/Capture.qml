@@ -11,7 +11,7 @@ Singleton {
 
 	property var pending: null
 
-	// kind: shot, record or text; mode: region, window or screen
+	// kind: shot, record, text or colour; mode: region, window or screen
 	function start(kind: string, mode: string): void {
 		if (mode === "screen" && Quickshell.screens.length > 1)
 			Panel.openCapture(kind);
@@ -37,8 +37,8 @@ Singleton {
 				return;
 			if (p.kind === "record")
 				Recorder.start(p.mode, p.monitor);
-			else if (p.kind === "text")
-				Quickshell.execDetached(["desktop", "capture", "text"]);
+			else if (p.kind === "text" || p.kind === "colour")
+				Quickshell.execDetached(["desktop", "capture", p.kind]);
 			else
 				Quickshell.execDetached(["desktop", "capture", "shot", p.mode, ...(p.monitor ? ["--monitor", p.monitor, "--geometry", p.geometry] : [])]);
 		}

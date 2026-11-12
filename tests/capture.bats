@@ -198,3 +198,19 @@ ocr_fakes() {
 	grep -q "^tesseract " "$BATS_TEST_DIRNAME/../packages/base.txt"
 	grep -q "^tesseract-data-eng " "$BATS_TEST_DIRNAME/../packages/base.txt"
 }
+
+@test "colour: a clicked pixel's colour is copied as #rrggbb and shown" {
+	ocr_fakes
+	export MEAN=89b4fa # the fake magick's answer to a format query
+	run "$CAPTURE" colour
+	[ "$status" -eq 0 ]
+	grep -q "^maim -u -g 640x480+10+20 " "$CALLS" # where slop says
+	[ "$(cat "$HOME/copied")" = "#89b4fa" ]
+	grep -q "^notify-send .*Colour copied.*#89b4fa" "$CALLS"
+	export WAYLAND_DISPLAY=wayland-1
+	run "$CAPTURE" colour
+	[ "$status" -eq 0 ]
+	grep -q "^grim -g 10,20 640x480 " "$CALLS"
+	REGION="" run "$CAPTURE" colour # cancelled: nothing copied
+	[ "$status" -eq 1 ]
+}

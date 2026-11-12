@@ -97,6 +97,7 @@ the default one; anything else in its default application. The emoji come from U
 | `$mod+F12`, the camera in the bar | stops a recording, else opens the capture panel |
 | Ctrl+F12 / Shift+F12 | without the panel: drag a region / the whole screen you're on, saved and copied at once |
 | `T` in the capture panel | drag over text on screen: it's read and copied as text, the image not kept |
+| `C` in the capture panel | click a pixel: its colour is copied as `#rrggbb` and shown (`desktop capture colour`) |
 
 A screenshot is saved to `~/Pictures/Screenshots` and copied to the clipboard as an image, ready
 to paste. A recording (gpu-screen-recorder, 60 fps, the system sound and the microphone on one track; Settings → Sound turns the microphone off) goes to `~/Videos/Recordings`: a

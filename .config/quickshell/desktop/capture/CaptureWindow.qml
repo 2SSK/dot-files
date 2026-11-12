@@ -8,7 +8,7 @@ import qs.widgets
 
 // Capture, a HangingPanel: a screenshot or recording of a region, the focused window or a screen.
 // R, W, S act at once (with Shift they record); a screenshot is saved and copied to the clipboard.
-// T drags a region and copies the text in it.
+// T drags a region and copies the text in it; C copies a clicked pixel's colour.
 // Screen sharing (a call) asks here too what to share: SharePicker.
 HangingPanel {
 	id: root
@@ -21,7 +21,7 @@ HangingPanel {
 		{ mode: "window", label: "Window", glyph: "app-window", key: Qt.Key_W },
 		{ mode: "screen", label: "Screen", glyph: "device-desktop", key: Qt.Key_S }
 	]
-	property int selected: 0 // 0–2 screenshot, 3–5 record, 6 copy text
+	property int selected: 0 // 0–2 screenshot, 3–5 record, 6 copy text, 7 pick colour
 	property int monitor: 0 // the screen picked when asking which
 	readonly property var sortedScreens: [...Quickshell.screens].sort((a, b) => a.x - b.x || a.y - b.y)
 
@@ -79,18 +79,20 @@ HangingPanel {
 		if (!asking && (k === Qt.Key_Left || k === Qt.Key_Right)) {
 			if (selected < 6)
 				selected = Math.floor(selected / 3) * 3 + (selected % 3 + (k === Qt.Key_Left ? 2 : 1)) % 3;
+			else // the last row: copy text and pick colour
+				selected = selected === 6 ? 7 : 6;
 			event.accepted = true;
 			return;
 		}
 		if (!asking && (k === Qt.Key_Up || k === Qt.Key_Down)) {
 			const row = (Math.floor(selected / 3) + (k === Qt.Key_Up ? 2 : 1)) % 3;
-			selected = row === 2 ? 6 : row * 3 + selected % 3;
+			selected = row === 2 ? (selected % 3 === 0 ? 6 : 7) : row * 3 + selected % 3;
 			event.accepted = true;
 			return;
 		}
 		if (!asking && (k === Qt.Key_Return || k === Qt.Key_Enter || k === Qt.Key_Space)) {
-			if (selected === 6) {
-				pick("text", "region");
+			if (selected >= 6) {
+				pick(selected === 6 ? "text" : "colour", "region");
 			} else if (selected >= 3 && Recorder.recording) {
 				Recorder.stop();
 				Panel.captureOpen = false;
@@ -100,8 +102,8 @@ HangingPanel {
 			event.accepted = true;
 			return;
 		}
-		if (k === Qt.Key_T && !asking) {
-			pick("text", "region");
+		if ((k === Qt.Key_T || k === Qt.Key_C) && !asking) {
+			pick(k === Qt.Key_T ? "text" : "colour", "region");
 			event.accepted = true;
 			return;
 		}
@@ -214,12 +216,25 @@ HangingPanel {
 			}
 		}
 
-		CaptureTile {
+		Row {
 			width: parent.width
-			chosen: root.selected === 6
-			glyph: "file-text"
-			label: "Copy text"
-			onClicked: root.pick("text", "region")
+			spacing: 8
+
+			CaptureTile {
+				width: (parent.width - 8) / 2
+				chosen: root.selected === 6
+				glyph: "file-text"
+				label: "Copy text"
+				onClicked: root.pick("text", "region")
+			}
+
+			CaptureTile {
+				width: (parent.width - 8) / 2
+				chosen: root.selected === 7
+				glyph: "palette"
+				label: "Pick colour"
+				onClicked: root.pick("colour", "region")
+			}
 		}
 	}
 
@@ -251,7 +266,7 @@ HangingPanel {
 		x: 16
 		anchors.bottom: parent.bottom
 		anchors.bottomMargin: 10
-		text: root.sharing ? "↑↓ or 1–9 pick · Enter shares it · Esc declines" : root.asking ? "←→ or 1–9 pick · Enter takes it · A all screens · Esc back" : "←→↑↓ pick · Enter · R W S shot · Shift+R W S record · T text"
+		text: root.sharing ? "↑↓ or 1–9 pick · Enter shares it · Esc declines" : root.asking ? "←→ or 1–9 pick · Enter takes it · A all screens · Esc back" : "←→↑↓ · Enter · R W S shot · ⇧ record · T text · C colour"
 		color: Theme.fgMuted
 		font.pixelSize: Theme.textCaption
 	}

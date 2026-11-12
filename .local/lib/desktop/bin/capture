@@ -11,6 +11,8 @@
 #   desktop capture text
 #       drag a region: its text (read here, offline, by tesseract) goes to the clipboard; the image
 #       isn't kept.
+#   desktop capture colour
+#       click a pixel: its colour goes to the clipboard as #rrggbb, and shows in a notification.
 # A cancelled region (Escape, or a right click) exits 1 and does nothing.
 # X11: slop, maim, xdotool. Wayland: slurp, grim; a window records via the portal. The clipboard:
 # desktop clipboard.
@@ -20,6 +22,7 @@ usage() {
 	echo "usage: desktop capture shot region|window|screen [--monitor NAME --geometry WxH+X+Y | --focused]" >&2
 	echo "       desktop capture record region|window|screen <file> [--monitor NAME] [--mic]" >&2
 	echo "       desktop capture text" >&2
+	echo "       desktop capture colour" >&2
 	exit 2
 }
 
@@ -114,6 +117,17 @@ read_text() {
 	notify-send -a Screenshot -t 3000 "Text copied" "$(wc -w <<<"$found") words" # never the text: notifications are kept
 }
 
+colour() { # a clicked pixel (its region's top-left one) as #rrggbb, copied
+	local at hex
+	if wayland; then at="$(slurp -p)" || exit 1; else at="$(slop -t 0 -f '%g')" || exit 1; fi
+	tmp="$(mktemp -d)" # not local: the trap runs after this function has returned
+	trap 'rm -rf -- "$tmp"' EXIT
+	if wayland; then grim -g "$at" "$tmp/pixel.png"; else maim -u -g "$at" "$tmp/pixel.png"; fi
+	hex="#$(magick "$tmp/pixel.png" -format '%[hex:p{0,0}]' info: | cut -c1-6 | tr 'A-F' 'a-f')"
+	printf '%s' "$hex" | desktop clipboard copy text
+	notify-send -a Screenshot -t 4000 "Colour copied" "$hex"
+}
+
 record() { # <mode> <file> [--monitor NAME] [--mic]
 	local mode=$1 file=${2:-} monitor='' target area audio=default_output
 	[[ -n $file ]] || usage
@@ -149,5 +163,6 @@ case ${1:-} in
 shot) (($# >= 2)) || usage && shift && shot "$@" ;;
 record) (($# >= 3)) || usage && shift && record "$@" ;;
 text) (($# == 1)) || usage && read_text ;;
+colour | color) (($# == 1)) || usage && colour ;;
 *) usage ;;
 esac
