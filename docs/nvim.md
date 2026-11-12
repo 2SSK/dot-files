@@ -46,7 +46,7 @@ file once a second.
 **Code**
 - LSP: Lua, Python, TS/JS, C/C++, Zig, Tailwind, GraphQL, HTML/CSS, Emmet (Mason
   installs these), plus Go (`gopls`) and Rust (`rust-analyzer`) when their toolchain is installed.
-- Format on save (prettier, stylua, black + isort, beautysh), linting (nvim-lint).
+- Format on save (prettier, stylua, black + isort, shfmt), linting (nvim-lint).
 - Treesitter highlighting, indentation and folding for 30 languages; folds start open.
 
 **Git**

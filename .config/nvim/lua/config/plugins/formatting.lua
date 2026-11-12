@@ -20,8 +20,13 @@ return {
 				liquid = { "prettier" },
 				lua = { "stylua" },
 				python = { "isort", "black" },
-				sh = { "beautysh" },
-				bash = { "beautysh" },
+				sh = { "shfmt" }, -- tabs, as the repo (beautysh turned them into four spaces)
+				bash = { "shfmt" },
+			},
+			-- shfmt as it is: tabs, or a project's .editorconfig (conform otherwise adds -i <shiftwidth>
+			-- when expandtab is on, turning tabs into spaces)
+			formatters = {
+				shfmt = { args = { "-filename", "$FILENAME" } },
 			},
 			format_on_save = opts,
 		})
