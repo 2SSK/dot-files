@@ -66,6 +66,23 @@ can't refuse it itself: both clients block it instead. opencode turns it off in 
 (`permissions.deny: ["mcp__temporal__start_workflow"]`; that file isn't in the repo, so add the rule
 on a new machine).
 
+## Mentors
+
+`mentor` (recreational programming) and `devops-sre-mentor` teach through hints instead of writing
+the code. Both need a live conversation, so they run as the main session rather than as subagents:
+`claude --agent mentor`, or Tab to it in opencode.
+
+Each has the same prompt in both tools (`tests/ai.bats` checks this). They can't edit files with
+the normal tools. For a repair, say "rescue" or "fix it": the mentor uses `sed` and asks for
+approval first. opencode enforces this per command. Claude Code can't limit Bash to `sed` here, so
+there it rests on the prompt and on approving each command, which also means Bash isn't confined
+in a mode that skips approvals. Project notes go in a `LEARNING.md` that the learner writes and the
+mentor only reads.
+
+`.config/opencode` is stowed like the rest (its own `node_modules`, lock files and `.env` of keys
+aren't linked), so opencode sees changes at once. `.claude` isn't stowed yet: copy changed agents
+to `~/.claude/agents/` by hand.
+
 ## New machine
 
 1. `setup.sh` (the `cli` layer) installs both tools, `uv` and node.

@@ -226,11 +226,12 @@ gates:
 - **typescript-pro** - TypeScript/React frontend
 - **cpp-pro** - C++/systems programming
 - **devops-engineer** - Infrastructure and deployment
+- **mentor** - Recreational programming, taught through hints
+- **devops-sre-mentor** - DevOps and SRE, taught through hints
 
 ### Subagents (invoked with @)
 - **code-reviewer** - Code quality review
 - **security-reviewer** - Security audit
 - **observability-reviewer** - Observability check
-- **devops-sre-mentor** - Learning and guidance
 - **sre-engineer** - SLO/SLI implementation
 - **kubernetes-specialist** - K8s deployment
