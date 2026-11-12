@@ -2,7 +2,7 @@ import QtQuick
 import qs
 import qs.widgets
 
-// A thick level bar, as macOS draws them: a pill filled in the text colour to the value, its icon
+// A thick level bar (not the shell's Bar), as macOS draws them: a pill filled in the text colour to the value, its icon
 // inside at the left (a click on it mutes) and the percentage at the right. Drag or click to set.
 Rectangle {
 	id: root

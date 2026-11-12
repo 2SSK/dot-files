@@ -31,7 +31,7 @@ Singleton {
 
 	// each panel's size, centred under the bar, which opens its outline there (hangingWidth)
 	readonly property var sizes: ({
-			control: Qt.size(480, 700), // the redesigned home page at 115% text; other pages fit its width
+			control: Qt.size(760, 700), // the home page with two players and 115% text
 			clipboard: Qt.size(920, 580),
 			wallpaper: Qt.size(720, 540),
 			launcher: Qt.size(640, 560),

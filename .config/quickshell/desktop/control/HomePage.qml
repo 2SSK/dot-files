@@ -277,7 +277,7 @@ Column {
 			font.pixelSize: Theme.textLabel
 		}
 
-		Bar {
+		LevelBar {
 			width: parent.width
 			glyph: Icons.g("sun")
 			value: Brightness.value
@@ -292,7 +292,7 @@ Column {
 			font.pixelSize: Theme.textLabel
 		}
 
-		Bar {
+		LevelBar {
 			width: parent.width
 			glyph: Audio.muted ? Icons.g("volume-off") : Icons.g("volume")
 			value: Audio.volume
@@ -305,7 +305,7 @@ Column {
 			kind: "out"
 		}
 
-		Bar {
+		LevelBar {
 			width: parent.width
 			glyph: Audio.micMuted ? Icons.g("microphone-off") : Icons.g("microphone")
 			value: Audio.micVolume

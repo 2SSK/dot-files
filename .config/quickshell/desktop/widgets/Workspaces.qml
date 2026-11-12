@@ -7,8 +7,8 @@ import qs.services
 
 // This screen's workspaces. Static: its five as chips in Roman numerals, always there:
 // an accent that slides to where you are, a faint tint with windows, just a dim numeral when empty. Island:
-// only those in use, as round dots, the one showing a taller capsule across the bar; a dot grows in as
-// a workspace appears and shrinks away as it goes. An urgent one is red.
+// only those in use, as short capsules across the bar, the one showing a taller one; a capsule grows
+// in as a workspace appears and shrinks away as it goes. An urgent one is red.
 Line {
 	id: root
 
@@ -185,10 +185,10 @@ Line {
 				// the live state; a dot on its way out keeps the last it had
 				property var workspace: ({ num: modelData })
 				readonly property bool shown: !!workspace.visible
-				// along the bar and across it: a round dot, the one showing as wide but taller, a capsule
+				// along the bar and across it: a short capsule, the one showing as wide but taller
 				readonly property real tallest: Math.min(root.thick - 8, Math.round(root.dot * 2.2))
 				readonly property real along: root.dot
-				property real across: shown ? tallest : root.dot
+				property real across: shown ? tallest : Math.round(root.dot * 1.5)
 				readonly property real gap: 6
 				property real grow: 0 // 0 to 1 as it comes, back to 0 as it goes
 

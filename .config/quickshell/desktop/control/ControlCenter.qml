@@ -8,8 +8,8 @@ import qs.widgets
 
 // The control center (a HangingPanel): a row of page tabs at the top (a highlight slides to the one
 // open) with the page's buttons, Settings and Power beside it, then the page; the bar's widgets open
-// their page (Panel.controlPage). To-do and Notes have keys of their own and no tab: open, they show
-// a way back instead.
+// their page (Panel.controlPage); Settings and Power only on the home page. To-do and Notes have keys
+// of their own and no tab: open, they show a way back instead.
 HangingPanel {
 	id: root
 
@@ -31,8 +31,7 @@ HangingPanel {
 
 	name: "control center"
 	open: Panel.controlOpen
-	// Notes keeps its list beside the editor: the panel widens for it alone
-	panelWidth: pageKey === "notes" ? 760 : Panel.sizes.control.width
+	panelWidth: Panel.sizes.control.width
 	panelHeight: Panel.sizes.control.height
 	onDismissed: Panel.controlOpen = false
 	function turn(by: int): void {
@@ -203,9 +202,11 @@ HangingPanel {
 			spacing: 4
 
 			Repeater {
+				// Settings and Power on the home page only; the other pages' own buttons in their place
 				model: [...(root.page?.item?.actions ?? []).filter(a => a.show !== false),
-					{ glyph: Icons.g("settings"), act: () => { Panel.controlOpen = false; Panel.settingsOpen = true; } },
-					{ glyph: Icons.g("power"), act: () => { Panel.controlOpen = false; Panel.openPower(); } }]
+					...(root.pageKey !== "home" ? [] : [
+						{ glyph: Icons.g("settings"), act: () => { Panel.controlOpen = false; Panel.settingsOpen = true; } },
+						{ glyph: Icons.g("power"), act: () => { Panel.controlOpen = false; Panel.openPower(); } }])]
 
 				delegate: IconButton {
 					required property var modelData
