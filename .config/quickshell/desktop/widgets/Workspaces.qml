@@ -185,10 +185,10 @@ Line {
 				// the live state; a dot on its way out keeps the last it had
 				property var workspace: ({ num: modelData })
 				readonly property bool shown: !!workspace.visible
-				// along the bar and across it: a short capsule, the one showing as wide but taller
+				// along the bar and across it: a small capsule, the one showing wider and taller
 				readonly property real tallest: Math.min(root.thick - 8, Math.round(root.dot * 2.2))
-				readonly property real along: root.dot
-				property real across: shown ? tallest : Math.round(root.dot * 1.5)
+				property real along: shown ? root.dot : Math.round(root.dot * 0.75)
+				property real across: shown ? tallest : Math.round(root.dot * 1.3)
 				readonly property real gap: 6
 				property real grow: 0 // 0 to 1 as it comes, back to 0 as it goes
 
@@ -230,6 +230,13 @@ Line {
 
 				// a switch is quick off the mark (the shell's normal speed and curve); only a workspace
 				// coming or going takes the island's slower easing
+				Behavior on along {
+					NumberAnimation {
+						duration: Theme.normal
+						easing.type: Theme.curve
+					}
+				}
+
 				Behavior on across {
 					NumberAnimation {
 						duration: Theme.normal

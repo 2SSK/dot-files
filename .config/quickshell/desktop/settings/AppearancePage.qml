@@ -18,11 +18,13 @@ Column {
 	property string applied: "" // "family mode" the last switch made (or being made)
 	readonly property var fontNames: ({ inter: "Inter and JetBrains Mono", geist: "Geist and Geist Mono", sf: "SF Pro Text, SF Compact Display and SF Mono" })
 	property string fontError: "" // what desktop font set said, when it refused
+	property string fontPending: "" // picked, while the theme renders it for the apps
 
 	function chooseFonts(name: string): void {
-		if (fontSwitch.running)
+		if (fontSwitch.running || name === (Theme.fonts.collection || "inter"))
 			return;
 		fontError = "";
+		fontPending = name;
 		fontSwitch.command = ["desktop", "font", "set", name];
 		fontSwitch.running = true;
 	}
@@ -34,6 +36,7 @@ Column {
 		stderr: StdioCollector {
 			onStreamFinished: page.fontError = text.trim().replace(/^desktop font: /, "")
 		}
+		onExited: page.fontPending = ""
 	}
 
 	// the switch (render, then reload every app) runs one at a time, so a burst of clicks ends on the last
@@ -272,7 +275,7 @@ Column {
 			hint: page.fontError || (page.fontNames[Theme.fonts.collection || "inter"] ?? "") + ", everywhere: apps, terminals, browsers and the shell."
 			Choice {
 				options: [{ value: "inter", label: "Inter" }, { value: "geist", label: "Geist" }, { value: "sf", label: "San Francisco" }]
-				value: Theme.fonts.collection || "inter"
+				value: page.fontPending || Theme.fonts.collection || "inter"
 				onPicked: value => page.chooseFonts(value)
 			}
 		}

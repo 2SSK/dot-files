@@ -14,6 +14,22 @@ FloatingWindow {
 
 	property string page: Panel.settingsPage
 
+	// Ctrl+Tab / Ctrl+Shift+Tab (or Ctrl+PgDn / PgUp) turn the pages, in the sidebar's order
+	function turn(by: int): void {
+		const at = pages.findIndex(p => p.key === page);
+		Panel.settingsPage = pages[(Math.max(0, at) + by + pages.length) % pages.length].key;
+	}
+
+	Shortcut {
+		sequences: ["Ctrl+Tab", "Ctrl+PgDown"]
+		onActivated: root.turn(1)
+	}
+
+	Shortcut {
+		sequences: ["Ctrl+Shift+Tab", "Ctrl+Backtab", "Ctrl+PgUp"]
+		onActivated: root.turn(-1)
+	}
+
 	readonly property var pages: [
 		{ key: "bar", glyph: Icons.g("app-window"), title: "Bar", flip: Config.position === "top" },
 		{ key: "appearance", glyph: Icons.g("palette"), title: "Appearance" },
@@ -182,11 +198,26 @@ FloatingWindow {
 			width: content.width - 64
 			spacing: 24
 
-			// made when picked (Keys stays, to keep its search)
-			Loader {
-				visible: item !== null // none on Keys: no gap above it
+			// each page made the first time it shows, then kept, so switching back to one is instant (Keys
+			// is apart, below, to keep its search); a hidden one takes no room in the column
+			Column {
 				width: parent.width
-				sourceComponent: ({ bar: bar, appearance: appearance, sound: sound, notifications: popups, levels: levels, power: power, timeshift: timeshift, about: about })[root.page] ?? null
+
+				Repeater {
+					model: ["bar", "appearance", "sound", "notifications", "levels", "power", "timeshift", "about"]
+
+					delegate: Loader {
+						required property string modelData
+						readonly property bool current: root.page === modelData
+						property bool used: current
+
+						onCurrentChanged: if (current) used = true
+						active: used
+						visible: current && item !== null
+						width: parent.width
+						sourceComponent: ({ bar: bar, appearance: appearance, sound: sound, notifications: popups, levels: levels, power: power, timeshift: timeshift, about: about })[modelData] ?? null
+					}
+				}
 
 				Component {
 					id: bar

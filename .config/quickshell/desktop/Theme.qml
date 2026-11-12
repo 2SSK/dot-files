@@ -46,9 +46,14 @@ Singleton {
 		easing.type: root.curve
 	}
 
-	// the desktop's font collection (desktop font set, Settings → Appearance), as the theme rendered it:
-	// the interface font for text and the bar, the display font for headings and the clocks
-	readonly property var fonts: palette.fonts ?? ({})
+	// the desktop's font collection (desktop font set, Settings → Appearance): the one shell.json names,
+	// its fonts from the palette's list of them all, so the shell switches as soon as the choice is saved
+	// (the apps follow once the theme has rendered it); the interface font for text and the bar, the
+	// display font for headings and the clocks
+	readonly property var fonts: {
+		const chosen = (palette.fonts?.all ?? {})[Config.fonts.collection];
+		return chosen ? Object.assign({ collection: Config.fonts.collection }, chosen) : (palette.fonts ?? {});
+	}
 	readonly property string fontSans: fonts.ui || "Inter"
 	readonly property string fontHeading: fonts.display || fontSans
 	readonly property string fontMono: fonts.mono || "JetBrainsMono Nerd Font"

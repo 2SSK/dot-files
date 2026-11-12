@@ -176,7 +176,9 @@ def render(family, mode, state):
             out.parent.mkdir(parents=True, exist_ok=True)
             out.write_text(Template((TEMPLATES / target).read_text()).substitute(values))
         palette = {"meta": theme["meta"], "mode": mode, "ui": theme[mode]["ui"], "ansi": theme[mode]["ansi"],
-                   "fonts": fonts()}
+                   # every collection too: the shell switches font the moment shell.json changes
+                   "fonts": {**fonts(), "all": {name: {r: c[r] for r in ("ui", "display", "mono")}
+                                                for name, c in collections().items()}}}
         (new / "palette.json").write_text(json.dumps(palette, indent=2) + "\n")
         (new / "current").write_text(f"family={family}\nmode={mode}\n")
         (new / ".fingerprint").write_text(digest)

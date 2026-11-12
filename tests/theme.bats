@@ -318,7 +318,8 @@ s = sys.argv[1]
 c = json.load(open(s + "/vscodium/colors.json"))
 assert c["editor.fontFamily"].startswith("GeistMono Nerd Font") and c["terminal.integrated.fontFamily"] == "GeistMono Nerd Font", c
 p = json.load(open(s + "/palette.json"))["fonts"]
-assert p == {"collection": "geist", "ui": "Geist", "display": "Geist", "mono": "GeistMono Nerd Font"}, p
+assert {k: p[k] for k in ("collection", "ui", "display", "mono")} == {"collection": "geist", "ui": "Geist", "display": "Geist", "mono": "GeistMono Nerd Font"}, p
+assert p["all"]["sf"]["display"] == "SF Compact Display" and set(p["all"]) == {"inter", "geist", "sf"}, p["all"]
 ' "$STATE"
 	# fontconfig: what browsers and anything asking for sans-serif or monospace get, linked into place
 	[ "$(readlink "$XDG_CONFIG_HOME/fontconfig/fonts.conf")" = "$STATE/fontconfig.conf" ]

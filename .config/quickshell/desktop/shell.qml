@@ -26,7 +26,7 @@ ShellRoot {
 	}
 
 	// services that watch on their own, started with the shell
-	readonly property var watchers: [Locks, Recorder, Notifications, Clipboard, Events, Alarms, Wallpaper, Windows, Battery, NightLight, Idle]
+	readonly property var watchers: [Locks, Recorder, Notifications, Clipboard, Events, Alarms, Wallpaper, Windows, Battery, NightLight, Idle, AboutInfo]
 
 	Variants {
 		model: Quickshell.screens
