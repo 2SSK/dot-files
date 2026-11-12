@@ -37,13 +37,15 @@ HangingPanel {
 
 	onKeyPressed: event => {
 		const ctrl = event.modifiers & Qt.ControlModifier;
-		if (ctrl && (event.key === Qt.Key_Tab || event.key === Qt.Key_PageDown)) {
-			turn(1);
+		// with Ctrl held, Shift+Tab arrives as Tab and Shift, not as Backtab
+		const back = event.key === Qt.Key_Backtab || (event.key === Qt.Key_Tab && (event.modifiers & Qt.ShiftModifier));
+		if (ctrl && (back || event.key === Qt.Key_PageUp)) {
+			turn(-1);
 			event.accepted = true;
 			return;
 		}
-		if (ctrl && (event.key === Qt.Key_Backtab || event.key === Qt.Key_PageUp)) {
-			turn(-1);
+		if (ctrl && (event.key === Qt.Key_Tab || event.key === Qt.Key_PageDown)) {
+			turn(1);
 			event.accepted = true;
 			return;
 		}
