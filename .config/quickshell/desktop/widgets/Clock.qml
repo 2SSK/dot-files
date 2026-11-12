@@ -165,9 +165,9 @@ Item {
 			id: wide
 
 			textFormat: Text.StyledText
-			readonly property string dot: `<font color="${Theme.fgMuted}">&nbsp;·&nbsp;</font>`
+			readonly property string dot: `<font color="${Theme.fgMuted}">&nbsp;&nbsp;·&nbsp;&nbsp;</font>` // room either side
 			readonly property string tail: root.next ? `<font color="${Theme.primary}">${root.escaped(root.what)} in ${root.minutes} min</font>` : `<font color="${Theme.fgMuted}">${Qt.formatDateTime(clock.date, "ddd, MMM dd")}</font>`
-			text: `<font color="${Theme.fgMuted}">${Qt.formatDateTime(root.utc, "hh:mm")} UTC</font>${dot}${root.recording ? `<font color="${Theme.error}">●</font>&nbsp;` : ""}${Qt.formatDateTime(clock.date, "h:mm AP")}&nbsp;${tail}`
+			text: `<font color="${Theme.fgMuted}">${Qt.formatDateTime(root.utc, "hh:mm")} UTC</font>${dot}${root.recording ? `<font color="${Theme.error}">●</font>&nbsp;` : ""}${Qt.formatDateTime(clock.date, "h:mm AP")}${dot}${tail}`
 		}
 	}
 

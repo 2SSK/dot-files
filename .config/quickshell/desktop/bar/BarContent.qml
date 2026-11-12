@@ -16,7 +16,7 @@ Item {
 	readonly property bool vertical: Config.vertical
 	readonly property bool pill: Config.island && Config.bar.capsules
 	// capsules: the same gap at the ends as above and below them; else room for the round ends
-	readonly property int pad: Config.bar.capsules ? Theme.barInset : Config.island ? Math.round(Config.bar.size / 3) : 8
+	readonly property int pad: Config.bar.capsules ? Theme.barInset : Config.island ? Math.round(Config.bar.size / 3) : 16
 	readonly property real gap: pill ? Theme.barInset : Config.island ? 18 : 40 // between the centre and either side
 	// the island's pills are as long as each other, the clock in the very middle; without pills that
 	// padding would only show as a gap, so the parts sit side by side, every gap the same
