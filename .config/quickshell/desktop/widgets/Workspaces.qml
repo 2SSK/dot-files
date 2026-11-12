@@ -228,11 +228,12 @@ Line {
 					onFinished: if (slot.goal === 0 && !slot.live) root.drop(slot.modelData)
 				}
 
-				// the capsule where you are grows and shrinks with the same easing as the island
+				// a switch is quick off the mark (the shell's normal speed and curve); only a workspace
+				// coming or going takes the island's slower easing
 				Behavior on across {
 					NumberAnimation {
-						duration: Theme.slow
-						easing.type: Easing.InOutCubic
+						duration: Theme.normal
+						easing.type: Theme.curve
 					}
 				}
 
