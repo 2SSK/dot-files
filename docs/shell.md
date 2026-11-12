@@ -79,6 +79,7 @@ history expansions like `!!` are shown for confirmation before they run.
 | `mkcd <dir>` | Create a directory and enter it |
 | `extract <archive>` | Unpack tar.*, zip, rar, 7z, gz, bz2, xz, zst into the current directory |
 | `killport <port>` | Stop whatever listens on a TCP port |
+| `thock [klack args]` | Turn mechanical key sounds on or off; follows the laptop keyboard unless given `--device` (Klack is installed by hand, not by `setup.sh`) |
 
 ## Aliases
 

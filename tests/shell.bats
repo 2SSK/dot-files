@@ -132,3 +132,21 @@ setup() {
 	run zsh -i -c "extract '$BATS_TEST_TMPDIR/x/f'"
 	[ "$status" -ne 0 ]
 }
+
+@test "thock starts the key sounds, and stops them when they are running" {
+	local bin="$BATS_TEST_TMPDIR/bin" log="$BATS_TEST_TMPDIR/log" on="$BATS_TEST_TMPDIR/on"
+	mkdir -p "$bin"
+	printf '#!/bin/sh\necho "klack $*" >>"%s"\n: >"%s"\n' "$log" "$on" >"$bin/klack"
+	printf '#!/bin/sh\n[ "$*" = "-x klack" ] && [ -e "%s" ]\n' "$on" >"$bin/pgrep"
+	printf '#!/bin/sh\necho "pkill $*" >>"%s"\nrm -f "%s"\n' "$log" "$on" >"$bin/pkill"
+	chmod +x "$bin"/*
+	for sh in zsh bash; do
+		: >"$log"
+		run "$sh" -c "PATH='$bin':\$PATH; source '$BATS_TEST_DIRNAME/../.config/shell/functions.sh'; thock --device Corne; thock"
+		[ "$status" -eq 0 ]
+		[ "${lines[0]}" = "thock on" ]
+		[ "${lines[1]}" = "thock off" ]
+		[ "$(sed -n 1p "$log")" = "klack -s $HOME/.local/share/klack/mechanical -v 0.7 -b --device Corne" ]
+		[ "$(sed -n 2p "$log")" = "pkill -x klack" ]
+	done
+}

@@ -123,6 +123,16 @@ killport() {
 	fuser -k -TERM "$1/tcp" || echo "nothing on port $1"
 }
 
+# thock [klack args]: mechanical key sounds on, or off if they're on (klack is built by hand, into
+# /usr/local/bin; its sound packs are in ~/.local/share/klack)
+thock() {
+	if pgrep -x klack >/dev/null; then
+		pkill -x klack && echo "thock off"
+	else
+		klack -s "${XDG_DATA_HOME:-$HOME/.local/share}/klack/mechanical" -v 0.7 -b "$@" && echo "thock on"
+	fi
+}
+
 # myip: the address on the local network, and the one the internet sees
 myip() {
 	ip -4 route get 1.1.1.1 | awk '{ for (i = 1; i < NF; i++) if ($i == "src") print "Local:    " $(i + 1) }'
