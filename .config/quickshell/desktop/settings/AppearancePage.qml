@@ -117,7 +117,8 @@ Column {
 					readonly property bool on: page.family === modelData.family
 					readonly property var ui: modelData[page.mode] ?? modelData.dark ?? {}
 
-					width: 168
+					// four to a row: eight themes in two even rows (a fixed width left one alone on a second)
+					width: Math.floor((parent.width - 3 * 8) / 4)
 					height: 84
 					radius: Theme.radiusCard
 					color: ui.bg ?? Theme.surface
