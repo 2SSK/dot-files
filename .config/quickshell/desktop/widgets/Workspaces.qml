@@ -7,8 +7,8 @@ import qs.services
 
 // This screen's workspaces. Static: its five as chips in Roman numerals, always there:
 // an accent that slides to where you are, a faint tint with windows, just a dim numeral when empty. Island:
-// only those in use, as dots, the one showing a wide pill; a dot grows in as a workspace appears and
-// shrinks away as it goes. An urgent one is red.
+// only those in use, as round dots, the one showing a taller capsule across the bar; a dot grows in as
+// a workspace appears and shrinks away as it goes. An urgent one is red.
 Line {
 	id: root
 
@@ -185,12 +185,15 @@ Line {
 				// the live state; a dot on its way out keeps the last it had
 				property var workspace: ({ num: modelData })
 				readonly property bool shown: !!workspace.visible
-				property real long: shown ? root.dot * 2.5 : root.dot
-				readonly property real gap: 7
+				// along the bar and across it: a round dot, the one showing as wide but taller, a capsule
+				readonly property real tallest: Math.min(root.thick - 8, Math.round(root.dot * 2.2))
+				readonly property real along: root.dot
+				property real across: shown ? tallest : root.dot
+				readonly property real gap: 6
 				property real grow: 0 // 0 to 1 as it comes, back to 0 as it goes
 
-				implicitWidth: root.vertical ? root.dot : (long + gap) * grow
-				implicitHeight: root.vertical ? (long + gap) * grow : root.dot
+				implicitWidth: root.vertical ? tallest : (along + gap) * grow
+				implicitHeight: root.vertical ? (along + gap) * grow : tallest
 
 				property real goal: -1
 
@@ -225,8 +228,8 @@ Line {
 					onFinished: if (slot.goal === 0 && !slot.live) root.drop(slot.modelData)
 				}
 
-				// the pill where you are widens and narrows with the same easing as the island
-				Behavior on long {
+				// the capsule where you are grows and shrinks with the same easing as the island
+				Behavior on across {
 					NumberAnimation {
 						duration: Theme.slow
 						easing.type: Easing.InOutCubic
@@ -235,9 +238,9 @@ Line {
 
 				Rectangle {
 					anchors.centerIn: parent
-					width: root.vertical ? root.dot : slot.long * slot.grow
-					height: root.vertical ? slot.long * slot.grow : root.dot
-					radius: root.dot / 2
+					width: (root.vertical ? slot.across : slot.along) * slot.grow
+					height: (root.vertical ? slot.along : slot.across) * slot.grow
+					radius: Math.min(width, height) / 2
 					opacity: slot.grow
 					color: slot.workspace.urgent ? Theme.error : slot.shown ? (slot.workspace.focused ? Theme.primary : Qt.alpha(Theme.primary, 0.55)) : hover.containsMouse ? Theme.fg : Qt.alpha(Theme.fg, 0.55)
 
