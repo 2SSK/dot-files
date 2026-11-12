@@ -94,12 +94,17 @@ the default one; anything else in its default application. The emoji come from U
 | F12 | the capture panel (again closes it): Screenshot or Record × Region, Window, Screen. The arrows pick a tile, Enter does it; R, W, S take a screenshot straight away, with Shift they record. Only Region uses the mouse: drag a rectangle (Escape or a right click cancels). Window is the focused one. Screen with more than one monitor: a map of them as they're arranged, the panel's own screen picked; the arrows or 1–9 pick, Enter takes it, A takes all, Backspace goes back |
 | `$mod+F12`, the camera in the bar | stops a recording, else opens the capture panel |
 | Ctrl+F12 / Shift+F12 | without the panel: drag a region / the whole screen you're on, saved and copied at once |
+| `T` in the capture panel | drag over text on screen: it's read and copied as text, the image not kept |
 
 A screenshot is saved to `~/Pictures/Screenshots` and copied to the clipboard as an image, ready
 to paste. A recording (gpu-screen-recorder, 60 fps, the system sound and the microphone on one track; Settings → Sound turns the microphone off) goes to `~/Videos/Recordings`: a
 region, the focused window, or one screen or all of them; while it runs a small red dot sits beside
 the bar's clock (a click on the clock stops it), and the panel's Record row becomes Stop. `desktop capture shot|record …` does the work (X11: slop, maim,
 xclip; Wayland: slurp, grim, wl-copy, and a window records through the portal).
+
+Copying text (`desktop capture text`) reads the region offline with Tesseract, English only by
+default. Normal text comes out well; check code and commands, since indentation can be lost and
+look-alikes such as `0`/`O` and `1`/`l` get confused.
 
 Screen sharing (Teams, Meet, OBS, and a window recording) goes through xdg-desktop-portal-wlr, which
 asks the capture panel what to share: the screens, then the open windows most recent first, with their

@@ -35,7 +35,7 @@ Singleton {
 			clipboard: Qt.size(920, 580),
 			wallpaper: Qt.size(720, 540),
 			launcher: Qt.size(640, 560),
-			capture: Qt.size(520, 324),
+			capture: Qt.size(520, 414),
 			power: Qt.size(680, 142),
 			auth: Qt.size(480, 250)
 		})

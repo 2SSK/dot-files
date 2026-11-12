@@ -17,6 +17,8 @@ rmpc                        @rmpc
 mpd-mpris                   @mpd-mpris
 gpu-screen-recorder         @gpu-screen-recorder
 imagemagick                 ImageMagick
+tesseract                   tesseract
+tesseract-data-eng          tesseract-langpack-eng
 inter-font                  rsms-inter-fonts
 ttf-jetbrains-mono-nerd     @nerd-font
 noto-fonts                  google-noto-sans-devanagari-fonts

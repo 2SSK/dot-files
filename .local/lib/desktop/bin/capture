@@ -8,6 +8,9 @@
 #       gpu-screen-recorder at 60 fps with the system sound (--mic: and the microphone, on one track),
 #       into <file>; prints "recording" as it starts, then runs in the foreground (exec), so SIGINT
 #       ends it and finishes the file.
+#   desktop capture text
+#       drag a region: its text (read here, offline, by tesseract) goes to the clipboard; the image
+#       isn't kept.
 # A cancelled region (Escape, or a right click) exits 1 and does nothing.
 # X11: slop, maim, xdotool. Wayland: slurp, grim; a window records via the portal. The clipboard:
 # desktop clipboard.
@@ -16,6 +19,7 @@ set -euo pipefail
 usage() {
 	echo "usage: desktop capture shot region|window|screen [--monitor NAME --geometry WxH+X+Y | --focused]" >&2
 	echo "       desktop capture record region|window|screen <file> [--monitor NAME] [--mic]" >&2
+	echo "       desktop capture text" >&2
 	exit 2
 }
 
@@ -85,6 +89,31 @@ shot() { # <mode> [--monitor NAME --geometry G | --focused]
 	notify-send -a Screenshot -t 3000 -i "$file" "Screenshot copied" "$file"
 }
 
+# Tesseract wants large dark text on a light ground: raw screen text at 13 px scored 85%, this 99%
+read_text() {
+	local area found negate=()
+	command -v tesseract >/dev/null || {
+		notify-send -a Screenshot -t 5000 "Can't read text" "tesseract isn't installed"
+		exit 1
+	}
+	area="$(region)" || exit 1
+	tmp="$(mktemp -d)" # not local: the trap runs after this function has returned
+	trap 'rm -rf -- "$tmp"' EXIT
+	if wayland; then grim -g "$area" "$tmp/shot.png"; else maim -u -g "$area" "$tmp/shot.png"; fi
+	if awk "BEGIN { exit !($(magick "$tmp/shot.png" -colorspace Gray -format '%[fx:mean]' info:) < 0.5) }"; then negate=(-negate); fi
+	magick "$tmp/shot.png" -colorspace Gray "${negate[@]}" -resize 300% -normalize "$tmp/ready.png"
+	found="$(OMP_THREAD_LIMIT=1 tesseract "$tmp/ready.png" - -l eng --dpi 300 --psm 6 -c preserve_interword_spaces=1 2>/dev/null | tr -d '\f')" || {
+		notify-send -a Screenshot -t 5000 "Can't read text" "tesseract failed"
+		exit 1
+	}
+	if [[ -z ${found//[[:space:]]/} ]]; then
+		notify-send -a Screenshot -t 3000 "No text found"
+		exit 1
+	fi
+	printf '%s' "$found" | desktop clipboard copy text
+	notify-send -a Screenshot -t 3000 "Text copied" "$(wc -w <<<"$found") words" # never the text: notifications are kept
+}
+
 record() { # <mode> <file> [--monitor NAME] [--mic]
 	local mode=$1 file=${2:-} monitor='' target area audio=default_output
 	[[ -n $file ]] || usage
@@ -119,5 +148,6 @@ record() { # <mode> <file> [--monitor NAME] [--mic]
 case ${1:-} in
 shot) (($# >= 2)) || usage && shift && shot "$@" ;;
 record) (($# >= 3)) || usage && shift && record "$@" ;;
+text) (($# == 1)) || usage && read_text ;;
 *) usage ;;
 esac

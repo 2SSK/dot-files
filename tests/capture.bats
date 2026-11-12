@@ -120,3 +120,81 @@ shot_file() { ls "$XDG_PICTURES_DIR"/Screenshots/*.png; }
 	[ "$status" -eq 0 ]
 	grep -q '^grim -o eDP-1 ' "$CALLS"
 }
+
+# text: a fake tesseract says $OCR_TEXT; a fake magick answers $MEAN for the brightness and records
+# how it prepares the image; the clipboard's fakes keep what was copied
+ocr_fakes() {
+	# shellcheck disable=SC2016 # expands when the fake runs
+	printf '#!/bin/sh\necho "tesseract $*" >>"$CALLS"\nprintf "%%s" "$OCR_TEXT"\n' >"$bin/tesseract"
+	# shellcheck disable=SC2016
+	printf '#!/bin/sh\ncase "$*" in *info:*) echo "$MEAN" ;; *) echo "magick $*" >>"$CALLS"; for last; do :; done; echo png >"$last" ;; esac\n' >"$bin/magick"
+	# shellcheck disable=SC2016
+	printf '#!/bin/sh\necho "xclip $*" >>"$CALLS"\ncat >"$HOME/copied"\n' >"$bin/xclip"
+	# shellcheck disable=SC2016
+	printf '#!/bin/sh\necho "wl-copy $*" >>"$CALLS"\ncat >"$HOME/copied"\n' >"$bin/wl-copy"
+	chmod +x "$bin"/*
+	export OCR_TEXT=$'hello world\n\f' MEAN=0.9
+}
+
+@test "text: a dragged region is read and copied as text, no screenshot kept" {
+	ocr_fakes
+	run "$CAPTURE" text
+	[ "$status" -eq 0 ]
+	grep -q "^maim -u -g 640x480+10+20 " "$CALLS"
+	[ "$(cat "$HOME/copied")" = "hello world" ]
+	[ ! -e "$XDG_PICTURES_DIR/Screenshots" ]
+	grep -q "^notify-send .*Text copied" "$CALLS"
+	run grep -c "^notify-send .*hello" "$CALLS" # what was read stays out of the notification history
+	[ "$output" = 0 ]
+}
+
+@test "text: light on dark is inverted first, dark on light isn't" {
+	ocr_fakes
+	"$CAPTURE" text
+	run grep -c "^magick .*-negate" "$CALLS"
+	[ "$output" = 0 ]
+	rm "$CALLS"
+	MEAN=0.2 "$CAPTURE" text
+	grep -q "^magick .*-negate" "$CALLS"
+	grep -q "^magick .*-resize 300%" "$CALLS"
+}
+
+@test "text: a cancelled region reads and copies nothing" {
+	ocr_fakes
+	REGION="" run "$CAPTURE" text
+	[ "$status" -eq 1 ]
+	! grep -q "^maim\|^tesseract\|^xclip" "$CALLS" 2>/dev/null
+}
+
+@test "text: nothing found says so and leaves the clipboard alone" {
+	ocr_fakes
+	OCR_TEXT=$' \n\f' run "$CAPTURE" text
+	[ "$status" -eq 1 ]
+	grep -q "^notify-send .*No text found" "$CALLS"
+	run grep -c "^xclip" "$CALLS"
+	[ "$output" = 0 ]
+}
+
+@test "text: without tesseract it says so, before asking for a region" {
+	ocr_fakes
+	mkdir "$bin/none"
+	ln -s "$(command -v bash)" "$bin/none/bash"
+	cp "$bin/notify-send" "$bin/none/"
+	PATH="$bin/none" run "$CAPTURE" text
+	[ "$status" -eq 1 ]
+	grep -q "^notify-send .*tesseract" "$CALLS"
+}
+
+@test "text on Wayland: grim and wl-copy" {
+	ocr_fakes
+	export WAYLAND_DISPLAY=wayland-1
+	run "$CAPTURE" text
+	[ "$status" -eq 0 ]
+	grep -q "^grim -g 10,20 640x480 " "$CALLS"
+	[ "$(cat "$HOME/copied")" = "hello world" ]
+}
+
+@test "text: its packages are listed" {
+	grep -q "^tesseract " "$BATS_TEST_DIRNAME/../packages/base.txt"
+	grep -q "^tesseract-data-eng " "$BATS_TEST_DIRNAME/../packages/base.txt"
+}
