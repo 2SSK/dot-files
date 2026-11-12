@@ -3,6 +3,7 @@ pragma Singleton
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import Quickshell.Wayland
 import qs
 
 // The wallpaper: the images in wallpaper.folders, the one set, and rotation. Setting one points
@@ -37,6 +38,27 @@ Singleton {
 			return stopLive();
 		live = path;
 		Quickshell.execDetached(["desktop", "wallpaper", "live", path]);
+		settle.restart();
+	}
+
+	// a player just started (picked, or at login) is told once its control socket is up
+	Timer {
+		id: settle
+
+		interval: 2000
+		onTriggered: if (root.livePaused) root.tellLive()
+	}
+
+	// it plays only while someone can enjoy it on power: paused while locked, on battery, or behind a
+	// fullscreen window (a video, a game), playing on again when none of those holds
+	readonly property bool fullscreen: Config.wayland && ToplevelManager.toplevels.values.some(t => t.fullscreen)
+	readonly property bool livePaused: Lock.locked || (Battery.present && !Battery.charging) || fullscreen
+
+	onLivePausedChanged: tellLive()
+
+	function tellLive(): void {
+		if (live)
+			Quickshell.execDetached(["desktop", "wallpaper", "live", livePaused ? "pause" : "resume"]);
 	}
 
 	function stopLive(): void {
@@ -138,19 +160,14 @@ Singleton {
 		running: Config.wayland
 		command: ["sh", "-c", 'readlink -f "$1/live-wallpaper" || true', "sh", root.state]
 		stdout: StdioCollector {
-			onStreamFinished: root.live = text.trim()
+			onStreamFinished: {
+				root.live = text.trim();
+				if (root.live)
+					settle.restart();
+			}
 		}
 	}
 
-	// nobody sees it behind the lock: paused, not decoding
-	Connections {
-		target: Lock
-
-		function onLockedChanged(): void {
-			if (root.live)
-				Quickshell.execDetached(["desktop", "wallpaper", "live", Lock.locked ? "pause" : "resume"]);
-		}
-	}
 
 	// changes made elsewhere (a terminal, the shutdown pick) show up through wallpaper-changed
 	Process {

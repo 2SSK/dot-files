@@ -186,8 +186,8 @@ wallpaper change redraws it without sudo. `desktop wallpaper screens` redraws it
 Videos and GIFs in the same folders (`~/Wallpaper-Bank/animated/`) show under **All** with a
 **Live** badge (a video as a still frame, made once with ffmpeg and cached). A click plays it over
 the still wallpaper; a click on it again, or on a still one, stops it. Nothing switches it on or off
-by itself: it plays until you stop it, across logins too, and pauses only while the screen is
-locked. The still one stays set beneath it, so the lock screen, login screen and theme colours
+by itself: it plays until you stop it, across logins too, and pauses while the screen is
+locked, the laptop is on battery or a window is fullscreen (a video, a game). The still one stays set beneath it, so the lock screen, login screen and theme colours
 don't change. Rotation never touches it.
 
 `desktop wallpaper live <file>|off|pause|resume` does it: mpvpaper (AUR), muted, looped, hardware

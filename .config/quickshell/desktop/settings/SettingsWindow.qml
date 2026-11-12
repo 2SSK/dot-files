@@ -26,7 +26,8 @@ FloatingWindow {
 	}
 
 	Shortcut {
-		sequences: ["Ctrl+Shift+Tab", "Ctrl+Backtab", "Ctrl+PgUp"]
+		// with Shift held, Tab often arrives as Backtab, Shift still down
+		sequences: ["Ctrl+Shift+Tab", "Ctrl+Shift+Backtab", "Ctrl+Backtab", "Ctrl+PgUp"]
 		onActivated: root.turn(-1)
 	}
 
