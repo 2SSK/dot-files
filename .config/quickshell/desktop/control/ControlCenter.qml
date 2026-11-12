@@ -6,8 +6,10 @@ import qs
 import qs.services
 import qs.widgets
 
-// The control center (a HangingPanel): an icon sidebar of pages, a header with the page's title,
-// its buttons and ✕, then the page; the bar's widgets open their page (Panel.controlPage).
+// The control center (a HangingPanel): a row of page tabs at the top (a highlight slides to the one
+// open) with the page's buttons, Settings and Power beside it, then the page; the bar's widgets open
+// their page (Panel.controlPage). To-do and Notes have keys of their own and no tab: open, they show
+// a way back instead.
 HangingPanel {
 	id: root
 
@@ -18,21 +20,24 @@ HangingPanel {
 		{ key: "notifications", glyph: Icons.g("bell"), component: notifications },
 		{ key: "wifi", glyph: Icons.g("wifi"), component: wifi },
 		{ key: "bluetooth", glyph: Icons.g("bluetooth"), component: bluetooth },
-		{ key: "todo", glyph: Icons.g("checklist"), component: todo },
-		{ key: "notes", glyph: Icons.g("notes"), component: notes }
+		{ key: "todo", glyph: Icons.g("checklist"), component: todo, tab: false },
+		{ key: "notes", glyph: Icons.g("notes"), component: notes, tab: false }
 	]
+	readonly property var tabs: pages.filter(p => p.tab !== false)
+	readonly property int tabIndex: tabs.findIndex(p => p.key === pageKey)
 
 	readonly property string pageKey: pages.some(p => p.key === Panel.controlPage) ? Panel.controlPage : pages[0].key
 	property Loader page: null // the page showing: its title and buttons go in the header
 
 	name: "control center"
 	open: Panel.controlOpen
-	panelWidth: Panel.sizes.control.width
+	// Notes keeps its list beside the editor: the panel widens for it alone
+	panelWidth: pageKey === "notes" ? 760 : Panel.sizes.control.width
 	panelHeight: Panel.sizes.control.height
 	onDismissed: Panel.controlOpen = false
 	function turn(by: int): void {
-		const at = pages.findIndex(p => p.key === Panel.controlPage);
-		Panel.controlPage = pages[(Math.max(0, at) + by + pages.length) % pages.length].key;
+		const at = tabs.findIndex(p => p.key === Panel.controlPage);
+		Panel.controlPage = tabs[(Math.max(0, at) + by + tabs.length) % tabs.length].key;
 	}
 
 	onKeyPressed: event => {
@@ -49,8 +54,8 @@ HangingPanel {
 			event.accepted = true;
 			return;
 		}
-		if ((event.modifiers & Qt.AltModifier) && event.key >= Qt.Key_1 && event.key < Qt.Key_1 + pages.length) {
-			Panel.controlPage = pages[event.key - Qt.Key_1].key;
+		if ((event.modifiers & Qt.AltModifier) && event.key >= Qt.Key_1 && event.key < Qt.Key_1 + tabs.length) {
+			Panel.controlPage = tabs[event.key - Qt.Key_1].key;
 			event.accepted = true;
 			return;
 		}
@@ -79,130 +84,138 @@ HangingPanel {
 		}
 	}
 
-	Rectangle {
-		id: sidebar
-
-		x: 14
-		y: 14
-		width: 58
-		height: parent.height - 28
-		radius: Theme.radiusCard
-		color: Qt.alpha(Theme.surface, 0.7)
-
-		Column {
-			anchors.horizontalCenter: parent.horizontalCenter
-			y: 10
-			spacing: 6
-
-			Repeater {
-				model: root.pages
-
-				delegate: Rectangle {
-					id: entry
-
-					required property var modelData
-					readonly property bool on: Panel.controlPage === modelData.key
-
-					width: 42
-					height: 42
-					radius: Theme.radiusCard
-					color: on ? Theme.primary : hover.hovered ? Qt.alpha(Theme.fg, 0.08) : "transparent"
-
-					Glyph {
-						anchors.centerIn: parent
-						glyph: entry.modelData.glyph
-						font.pixelSize: 18
-						font.weight: Font.Normal
-						color: entry.on ? Theme.primaryText : Theme.fg
-						filled: true
-					}
-
-					Rectangle {
-						visible: entry.modelData.key === "notifications" && Notifications.unread > 0 && !entry.on
-						x: parent.width - 12
-						y: 7
-						width: 7
-						height: 7
-						radius: 4
-						color: Theme.primary
-					}
-
-					HoverHandler {
-						id: hover
-					}
-
-					MouseArea {
-						anchors.fill: parent
-						cursorShape: Qt.PointingHandCursor
-						onClicked: Panel.controlPage = entry.modelData.key
-					}
-				}
-			}
-		}
-
-		Column {
-			anchors.horizontalCenter: parent.horizontalCenter
-			anchors.bottom: parent.bottom
-			anchors.bottomMargin: 10
-			spacing: 6
-
-			Repeater {
-				model: [
-					{ glyph: Icons.g("settings"), act: () => { Panel.controlOpen = false; Panel.settingsOpen = true; } },
-					{ glyph: Icons.g("power"), act: () => { Panel.controlOpen = false; Panel.openPower(); } }
-				]
-
-				delegate: IconButton {
-					required property var modelData
-
-					size: 42
-					radius: Theme.radiusCard
-					glyph: modelData.glyph
-					glyphSize: 18
-					hoverAlpha: 0.08
-					onClicked: modelData.act()
-				}
-			}
-		}
-	}
-
 	Item {
 		id: header
 
-		anchors.left: sidebar.right
-		anchors.leftMargin: 18
-		anchors.right: parent.right
-		anchors.rightMargin: 16
+		x: 14
 		y: 14
-		height: 42
+		width: parent.width - 28
+		height: 34
 
-		UiText {
+		// the tabs, a highlight sliding under the one open
+		Rectangle {
+			id: strip
+
+			readonly property real cell: 36
+
+			visible: root.tabIndex >= 0
+			width: root.tabs.length * cell + 6
+			height: parent.height
+			radius: Theme.radiusCard
+			color: Qt.alpha(Theme.surface, 0.62)
+
+			Rectangle {
+				x: 3 + Math.max(0, root.tabIndex) * strip.cell
+				y: 3
+				width: strip.cell
+				height: parent.height - 6
+				radius: Theme.radiusCard - 3
+				color: Theme.bg
+
+				Behavior on x {
+					NumberAnimation {
+						duration: Theme.normal
+						easing.type: Theme.curve
+					}
+				}
+			}
+
+			Row {
+				x: 3
+				y: 3
+
+				Repeater {
+					model: root.tabs
+
+					delegate: Item {
+						id: tab
+
+						required property var modelData
+						readonly property bool on: root.pageKey === modelData.key
+
+						width: strip.cell
+						height: strip.height - 6
+
+						Glyph {
+							anchors.centerIn: parent
+							glyph: tab.modelData.glyph
+							font.pixelSize: 16
+							color: tab.on || tabHover.hovered ? Theme.fg : Theme.fgMuted
+
+							Behavior on color {
+								ColorAnimation {
+									duration: Theme.quick
+								}
+							}
+						}
+
+						Rectangle {
+							visible: tab.modelData.key === "notifications" && Notifications.unread > 0 && !tab.on
+							x: parent.width - 11
+							y: 4
+							width: 6
+							height: 6
+							radius: 3
+							color: Theme.primary
+						}
+
+						HoverHandler {
+							id: tabHover
+						}
+
+						MouseArea {
+							anchors.fill: parent
+							cursorShape: Qt.PointingHandCursor
+							onClicked: Panel.controlPage = tab.modelData.key
+						}
+					}
+				}
+			}
+		}
+
+		// a page without a tab (To-do, Notes): the way back, and its name
+		Row {
+			visible: root.tabIndex < 0
 			anchors.verticalCenter: parent.verticalCenter
-			text: root.page?.item?.title ?? ""
-			color: Theme.primary
-			font.family: Theme.fontHeading
-			font.pixelSize: Theme.px(18)
-			font.weight: Font.DemiBold
+			spacing: 10
+
+			IconButton {
+				anchors.verticalCenter: parent.verticalCenter
+				size: 30
+				radius: Theme.radiusCard
+				glyph: Icons.g("chevron-left")
+				glyphSize: 16
+				onClicked: Panel.controlPage = "home"
+			}
+
+			UiText {
+				anchors.verticalCenter: parent.verticalCenter
+				text: root.page?.item?.title ?? ""
+				font.family: Theme.fontHeading
+				font.pixelSize: Theme.px(16)
+				font.weight: Font.DemiBold
+			}
 		}
 
 		Row {
 			anchors.right: parent.right
 			anchors.verticalCenter: parent.verticalCenter
-			spacing: 8
+			spacing: 4
 
 			Repeater {
-				model: [...(root.page?.item?.actions ?? []).filter(a => a.show !== false), { glyph: Icons.g("x"), on: false, act: () => Panel.controlOpen = false }]
+				model: [...(root.page?.item?.actions ?? []).filter(a => a.show !== false),
+					{ glyph: Icons.g("settings"), act: () => { Panel.controlOpen = false; Panel.settingsOpen = true; } },
+					{ glyph: Icons.g("power"), act: () => { Panel.controlOpen = false; Panel.openPower(); } }]
 
 				delegate: IconButton {
 					required property var modelData
 
-					size: 38
+					size: 32
 					radius: Theme.radiusCard
 					glyph: modelData.glyph
-					glyphSize: 15
+					glyphSize: 16
 					on: modelData.on ?? false
-					bordered: true
-					idle: Qt.alpha(Theme.surface, 0.7)
+					hoverAlpha: 0.08
 					onClicked: modelData.act()
 				}
 			}
@@ -217,7 +230,7 @@ HangingPanel {
 		anchors.left: header.left
 		anchors.right: header.right
 		anchors.top: header.bottom
-		anchors.topMargin: 14
+		anchors.topMargin: 12
 		anchors.bottom: parent.bottom
 		contentHeight: (root.page?.height ?? 0) + 16
 		clip: true

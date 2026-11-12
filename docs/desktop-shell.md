@@ -15,23 +15,25 @@ windows that only catch clicks are left out.
 
 ## Control center
 
-A panel that drops out of the middle of the bar, in its colour: an icon sidebar of pages, a header with
-the page's title, its buttons and ✕, then the page. The bar's widgets open their page; from the
-keyboard, **Ctrl+Tab** / **Ctrl+Shift+Tab** (or Ctrl+PgDn / PgUp) turn the pages and **Alt+1…8**
-jump to one, in the sidebar's order:
+A panel that drops out of the middle of the bar, in its colour: the island widens, then it unfolds. At
+the top a row of six page tabs (a highlight slides to the one open) with the page's buttons, Settings
+and Power beside it, then the page. The bar's widgets open their page; from the keyboard,
+**Ctrl+Tab** / **Ctrl+Shift+Tab** (or Ctrl+PgDn / PgUp) turn the tabs and **Alt+1…6** jump to one.
+Todo and Notes have no tab: their keys open them, with a ‹ back to Home (Notes widens the panel for
+its list beside the editor).
 
 | Page | Opened by | What's there |
 | --- | --- | --- |
-| Home | `$mod+c` | quick toggles (Wi-Fi, Bluetooth, Do Not Disturb, microphone, recording, bar), volume / mic / brightness, the media player (any MPRIS player, browsers included; a switcher when several play; Space plays or pauses, ← → skip) |
+| Home | `$mod+c` | Wi-Fi, Bluetooth and Airplane mode in one card (a name opens its page); Do Not Disturb and screen recording; Night light, keep awake, microphone and dark mode as round tiles; the display and sound as thick bars (the output and input to pick); the power profile; the media player (any MPRIS player, browsers included; a switcher when several play; Space plays or pauses, ← → skip); the date and battery |
 | Calendar | the clock | two views, switched in the header. **Calendar**: a month (‹ ›; a dot under days with something on); a click picks a day, whose events, reminders and alarms show below; its + adds one to it. **Reminders & alarms**: one line to add an event, reminder or alarm on any day (click the kind to change it, the date chip for a small month, a time, the text, and for an alarm once / daily / weekdays), then the reminders coming up and every alarm with its switch. A reminder notifies when due; see Alarms. Kept in `~/.local/share/desktop/events.json` and `alarms.json` |
 | System monitor | cpu / mem / temp | CPU, memory and temperature with two minutes of history, disk, uptime, load |
 | Notifications | the bell, `$mod+n` | the history by day, Clear all; Do Not Disturb in the header |
 | Wi-Fi | the Wi-Fi icon | networks by signal: connect (a password for new secured ones), disconnect, forget; scans while open |
 | Bluetooth | the Bluetooth icon | devices: pair, connect, disconnect, forget, battery; the header scans. Paired devices are kept trusted (so they reconnect by themselves); one that can't connect, keeps dropping or can't pair says so and offers Re-pair (forget, pair again, connect). If that fails too, clear the device's own Bluetooth profile (ZMK: `&bt BT_CLR`) and Pair |
-| Todo | the checklist icon, `$mod+Shift+t` | tasks with a priority (H/M/L, a click on it changes it), grouped high to low, done ones last; drag a task (anywhere on it) to reorder it (among another priority's tasks it takes theirs); kept in `~/.local/share/desktop/todo.json` |
-| Notes | the notebook icon, `$mod+Shift+n` | notes of three kinds (text, checklist, code with Copy) with a colour tag; new, pin and delete in the header, search beside the list; kept in `~/.local/share/desktop/notes/` (a private folder) |
+| Todo | `$mod+Shift+t` | tasks with a priority (H/M/L, a click on it changes it), grouped high to low, done ones last; drag a task (anywhere on it) to reorder it (among another priority's tasks it takes theirs); kept in `~/.local/share/desktop/todo.json` |
+| Notes | `$mod+Shift+n` | notes of three kinds (text, checklist, code with Copy) with a colour tag; new, pin and delete in the header, search beside the list; kept in `~/.local/share/desktop/notes/` (a private folder) |
 
-The gear opens the settings, the power icon the power menu. Escape, ✕ or focusing another window
+The gear opens the settings, the power icon the power menu. Escape or focusing another window
 closes it. Wi-Fi needs NetworkManager, Bluetooth BlueZ; without them the pages
 say so and their bar icons hide.
 
