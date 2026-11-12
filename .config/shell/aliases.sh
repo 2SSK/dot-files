@@ -19,8 +19,8 @@ alias vi='nvim' lg='lazygit' ldc='lazydocker' ff='fastfetch' tt='ttyper'
 # no -u: with it, zsh's tmux completion took the flag for a subcommand ("subcommand -u not known"),
 # and a UTF-8 locale gives tmux UTF-8 anyway
 alias t='tmux' tl='tmux ls' ta='tmux attach -t' tn='tmux new -s' tk='tmux kill-session -t' td='tmux detach'
-# fts: the session picker (prefix + Space inside tmux): pick, make or kill sessions through fzf
-alias fts='~/.config/tmux/sessions.sh'
+# ts: the session picker (prefix + Space inside tmux): pick, make or kill sessions through fzf
+alias ts='~/.config/tmux/sessions.sh'
 alias lazydocker='CONFIG_DIR="$XDG_STATE_HOME/desktop/theme/lazydocker" lazydocker' # config rendered from the theme
 alias top='btop'
 alias cava='cava -p "$XDG_STATE_HOME/desktop/theme/cava"' # config rendered from the theme
@@ -56,3 +56,5 @@ alias status='nmcli device status' list='nmcli device wifi list' connect='nmcli 
 
 alias weather='curl wttr.in/bengaluru?u'
 alias tc='tty-clock -t' sl='sl --help -F -a' p='pipes.sh' cb='cbonsai -liv' aq='asciiquarium -t' cm='cmatrix -abs'
+
+alias vsh='virsh -c qemu:///system'

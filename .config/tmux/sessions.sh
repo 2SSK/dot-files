@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# tmux sessions through fzf (prefix + Space opens it in a popup; fts in a shell): the most recent
+# tmux sessions through fzf (prefix + Space opens it in a popup; ts in a shell): the most recent
 # first, each previewed by its active pane. Enter goes there (switches inside tmux, attaches outside),
 # a name that isn't one makes it, Ctrl-X kills the one under the cursor.
 #   sessions.sh            pick

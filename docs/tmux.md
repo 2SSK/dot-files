@@ -20,7 +20,7 @@ Plugins are pinned in `packages/plugins.txt` and installed by `setup.sh` into
 | `Ctrl+h/j/k/l` | Resize the pane (repeatable) |
 | `m` | Zoom the pane |
 | `Ctrl+←` / `Ctrl+→` | Move the window left / right |
-| `Space` | Session picker (fzf in a popup): Enter goes, a new name makes one, Ctrl-X kills; `fts` in a shell |
+| `Space` | Session picker (fzf in a popup): Enter goes, a new name makes one, Ctrl-X kills; `ts` in a shell |
 | `y` | Toggle typing into all panes at once |
 | `v` | Save the session now (resurrect) |
 | `r` | Reload the config |
@@ -36,7 +36,7 @@ Plugins are pinned in `packages/plugins.txt` and installed by `setup.sh` into
 
 tmux starts in the background when you log in (i3's and sway's autostart run `tmux-save start`),
 its saved sessions restored, so they're already there: `tmux attach -t <name>`, or `tmux attach` and
-the session picker (`fts`). They're saved every 15 minutes by `tmux-save.timer` (resurrect: windows,
+the session picker (`ts`). They're saved every 15 minutes by `tmux-save.timer` (resurrect: windows,
 splits, folders, pane contents, nvim sessions), whether a client is attached or not. A server up
 less than 2 minutes isn't saved, so a fresh one never replaces a good save; and a save cut short (a
 shutdown) that left resurrect's `last` pointing at nothing is repaired before the restore.
