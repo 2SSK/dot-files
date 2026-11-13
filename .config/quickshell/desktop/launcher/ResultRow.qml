@@ -17,7 +17,7 @@ Item {
 	property bool selected
 	signal moved // the pointer moved over it: select it
 	signal picked(string action) // open (an app, or a file in its app), file, path or content
-	readonly property bool convert: modelData?.convert === true // a time converted (Launcher.convertTime)
+	readonly property bool convert: modelData?.convert === true // a time converted or a sum worked out: Enter copies it
 	readonly property bool app: typeof modelData !== "string" && !convert
 	readonly property string path: typeof modelData === "string" ? modelData : ""
 	readonly property bool folder: path.endsWith("/")
@@ -55,7 +55,7 @@ Item {
 		visible: !row.app
 		x: 16
 		anchors.verticalCenter: parent.verticalCenter
-		glyph: Icons.g(row.convert ? "clock-hour-4" : row.kind)
+		glyph: Icons.g(row.convert ? (row.modelData.glyph ?? "clock-hour-4") : row.kind)
 		font.pixelSize: 20
 		color: Theme.primary
 	}

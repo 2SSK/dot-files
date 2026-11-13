@@ -6,6 +6,7 @@ import Quickshell.Widgets
 import qs
 import qs.services
 import qs.widgets
+import "../services/calc.js" as Calc
 
 // The launcher, dropping out of the bar (a HangingPanel): one search over apps, emoji, files and
 // themes, switched with Tab, Shift+Tab or the chips.
@@ -23,9 +24,10 @@ HangingPanel {
 	readonly property var results: {
 		const q = search.text;
 		if (mode === "apps") {
-			// a time ("2:00 ist", "14:30 utc", a log timestamp) converted, above the apps
-			const time = Launcher.convertTime(q);
-			return time ? [time, ...Launcher.findApps(q)] : Launcher.findApps(q);
+			// a time ("2:00 ist", "14:30 utc", a log timestamp) converted, or a sum ("12*4", "15% of 80")
+			// worked out, above the apps
+			const answer = Launcher.convertTime(q) ?? Calc.calculate(q);
+			return answer ? [answer, ...Launcher.findApps(q)] : Launcher.findApps(q);
 		}
 		if (mode === "emoji")
 			return Launcher.findEmoji(q);

@@ -31,6 +31,7 @@ Singleton {
 			"bolt": 0xea38,
 			"brightness-up": 0xeb7e,
 			"calendar": 0xea53,
+			"calculator": 0xeb80,
 			"camera": 0xea54,
 			"check": 0xea5e,
 			"checkbox": 0xeba6,

@@ -76,7 +76,7 @@ switch them, the arrows (or Ctrl+N / Ctrl+P) move, Enter picks:
 
 | Mode | Key | Enter |
 | --- | --- | --- |
-| Apps | `$mod+d` | launches it; the ones used most come first |
+| Apps | `$mod+d` | launches it; the ones used most come first. A time (`2:00 ist`, `14:30 utc`, a log timestamp) shows converted, and a sum (`12*4`, `3 x 4`, `2^10`, `15% of 80`, `200 + 10%`, `sqrt(2)`) worked out, above the apps: Enter copies the answer |
 | Emoji | `$mod+;` | copies it; recent ones first, search by name or group (`heart`, `food`) |
 | Files | `$mod+Shift+f` | **Enter** (or a click) copies the file itself (its `file://` URI as `text/uri-list` alone, as a file manager copies), so Ctrl+V in Teams, WhatsApp or a mail attaches it; **Ctrl+Enter** opens it; **Shift+Enter** copies its full path; **Ctrl+Shift+Enter** its content (text as text, an image as an image); the row's buttons do the same. Without a search, the files changed this week, newest first |
 | Themes | `$mod+Shift+y` | applies it and stays open, to try another; the sun/moon chip switches dark and light |
