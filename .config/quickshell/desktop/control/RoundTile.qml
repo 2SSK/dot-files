@@ -15,7 +15,7 @@ Rectangle {
 	property bool available: true
 	signal clicked
 
-	implicitHeight: wide ? 58 : 76
+	implicitHeight: wide ? 58 : 64
 	radius: Theme.radiusCard + 4
 	color: hover.hovered && available ? Qt.alpha(Theme.surface, 0.85) : Qt.alpha(Theme.surface, 0.62)
 	opacity: available ? 1 : 0.5
@@ -39,10 +39,10 @@ Rectangle {
 		id: round
 
 		x: 12
-		y: root.wide ? (root.height - height) / 2 : 12
-		width: 32
-		height: 32
-		radius: 16
+		y: root.wide ? (root.height - height) / 2 : 10
+		width: root.wide ? 32 : 28
+		height: width
+		radius: width / 2
 		color: root.on ? Theme.primary : Qt.alpha(Theme.fg, 0.12)
 
 		Behavior on color {
@@ -92,7 +92,7 @@ Rectangle {
 		visible: !root.wide
 		x: 12
 		anchors.bottom: parent.bottom
-		anchors.bottomMargin: 10
+		anchors.bottomMargin: 8
 		width: parent.width - 20
 		text: root.label
 		elide: Text.ElideRight

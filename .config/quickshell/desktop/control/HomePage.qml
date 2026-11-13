@@ -265,32 +265,19 @@ Column {
 			x: 12
 			y: 12
 			width: parent.width - 24
-			spacing: 8
+			spacing: 4
 		}
 	}
 
+	// the levels in one card, each icon saying what it is: the display, then the sound out and in, each
+	// with its device to pick
 	Card {
-		visible: Brightness.available
-
-		UiText {
-			text: "Display"
-			font.weight: Font.DemiBold
-			font.pixelSize: Theme.textLabel
-		}
-
 		LevelBar {
+			visible: Brightness.available
 			width: parent.width
 			glyph: Icons.g("sun")
 			value: Brightness.value
 			onMoved: value => Brightness.set(value)
-		}
-	}
-
-	Card {
-		UiText {
-			text: "Sound"
-			font.weight: Font.DemiBold
-			font.pixelSize: Theme.textLabel
 		}
 
 		LevelBar {
@@ -420,7 +407,7 @@ Column {
 
 		Rectangle {
 			width: parent.width
-			height: 30
+			height: 26
 			radius: Theme.radiusSmall
 			color: pickHover.hovered ? Qt.alpha(Theme.overlay, 0.9) : "transparent"
 
