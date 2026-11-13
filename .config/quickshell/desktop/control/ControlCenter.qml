@@ -32,11 +32,34 @@ HangingPanel {
 	name: "control center"
 	open: Panel.controlOpen
 	panelWidth: Panel.sizes.control.width
-	panelHeight: Panel.sizes.control.height
+	// as tall as the page showing (a player coming, a device list opening), up to the panel's size, so
+	// there's no empty foot; a page that fills it (Notes, System) takes it all. 76: the header and margins
+	panelHeight: page?.item?.fill ? Panel.sizes.control.height : Math.min(Panel.sizes.control.height, Math.max(320, 76 + Math.ceil(page?.item?.implicitHeight ?? 0)))
+
+	Behavior on panelHeight {
+		NumberAnimation {
+			duration: Theme.normal
+			easing.type: Theme.curve
+		}
+	}
 	onDismissed: Panel.controlOpen = false
 	function turn(by: int): void {
 		const at = tabs.findIndex(p => p.key === Panel.controlPage);
 		Panel.controlPage = tabs[(Math.max(0, at) + by + tabs.length) % tabs.length].key;
+	}
+
+	// the window's own shortcuts, as Settings has: they come before anything inside takes the keys (with
+	// Shift held, Tab often arrives as Backtab, Shift still down)
+	Shortcut {
+		enabled: Panel.controlOpen
+		sequences: ["Ctrl+Tab", "Ctrl+PgDown"]
+		onActivated: root.turn(1)
+	}
+
+	Shortcut {
+		enabled: Panel.controlOpen
+		sequences: ["Ctrl+Shift+Tab", "Ctrl+Shift+Backtab", "Ctrl+Backtab", "Ctrl+PgUp"]
+		onActivated: root.turn(-1)
 	}
 
 	onKeyPressed: event => {
