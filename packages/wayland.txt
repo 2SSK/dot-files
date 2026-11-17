@@ -7,6 +7,8 @@ swaylock                    swaylock
 awww                        swaybg
 # live wallpapers (videos and GIFs over the still one, picked by hand in the wallpaper picker)
 aur:mpvpaper                -
+# zooming into the screen ($mod+Shift+z, desktop zoom)
+aur:woomer                  -
 grim                        grim
 slurp                       slurp
 wl-clipboard                wl-clipboard

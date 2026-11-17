@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Zoom into the screen, as Tsoding's boomer does: the screen frozen, the wheel zooms, a drag pans, Ctrl
+# a flashlight round the pointer, Esc or q to quit. Wayland: woomer (its port); X11: boomer.
+#   desktop zoom
+set -euo pipefail
+if [[ -n ${WAYLAND_DISPLAY:-} ]]; then tool=woomer package="woomer (AUR)"; else tool=boomer package="boomer-git (AUR)"; fi
+command -v "$tool" >/dev/null || {
+	notify-send -a Desktop -t 5000 "Zoom needs $tool" "Install $package"
+	exit 1
+}
+exec "$tool"

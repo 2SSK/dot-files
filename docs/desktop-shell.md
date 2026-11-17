@@ -272,6 +272,7 @@ Hidden with `$mod+Shift+b`, the bar comes back over the windows while the pointe
 | F12 | capture panel: screenshots and recordings (F12 no longer reaches apps, e.g. browser dev tools) |
 | Ctrl+F12 | screenshot of a dragged region, no panel |
 | Shift+F12 | screenshot of the screen you're on, no panel |
+| `$mod+Shift+z` | zoom into the screen, as Tsoding's boomer does: the wheel zooms, a drag pans, Ctrl lights round the pointer, Esc quits (woomer on sway, boomer on i3: `desktop zoom`) |
 | `$mod+Shift+b` | hide / show the bar |
 | `$mod+n` | notifications (control center) |
 | `$mod+Shift+s` | settings |

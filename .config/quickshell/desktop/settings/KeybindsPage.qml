@@ -92,6 +92,8 @@ Column {
 		};
 		if ((m = cmd.match(/^exec\s+(?:--no-startup-id\s+)?(desktop-(?:scratch|kbd-light) \w+)$/)) && tools[m[1]])
 			return { group: tools[m[1]][0], label: tools[m[1]][1] };
+		if (/^exec\s+(?:--no-startup-id\s+)?desktop zoom$/.test(cmd))
+			return { group: "Shell", label: "Zoom into the screen" };
 		if (/^exec\s+(?:--no-startup-id\s+)?desktop capture shot region$/.test(cmd))
 			return { group: "Shell", label: "Screenshot a region (panels stay open)" };
 		if ((m = cmd.match(/^exec\s+(?:--no-startup-id\s+)?(.*)$/)))
