@@ -1,0 +1,206 @@
+#!/usr/bin/env python3
+"""Clipboard history on i3 (on sway the shell keeps it): the same history and pins as the shell's.
+
+  desktop cliphist keep    follow `desktop clipboard watch` and keep each copy, newest first (i3's
+                           autostart runs it). With clipboard.persist on (Settings), in
+                           ~/.local/state/desktop/clipboard/history.json, the shell's own file, so
+                           sway and i3 share one history; else in the runtime folder (RAM)
+  desktop cliphist menu    rofi: pins first, then the history. Enter copies it back (as text, an
+                           image or files), Alt+d forgets it, Alt+p pins or unpins it, Alt+c clears
+                           the history (pins stay)
+  desktop cliphist list    the history, as JSON lines
+Limits from shell.json's clipboard: max entries, days kept, images kept.
+"""
+import json
+import os
+import shutil
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+HOME = Path.home()
+CONFIG = Path(os.environ.get("XDG_CONFIG_HOME") or HOME / ".config") / "desktop/shell.json"
+STATE = Path(os.environ.get("XDG_STATE_HOME") or HOME / ".local/state") / "desktop/clipboard"
+RUNTIME = Path(os.environ.get("XDG_RUNTIME_DIR") or "/tmp") / "desktop/clipboard"
+
+
+def settings():
+    try:
+        c = json.loads(CONFIG.read_text()).get("clipboard", {})
+    except (OSError, ValueError):
+        c = {}
+    return {"persist": c.get("persist", False), "max": c.get("max", 200), "days": c.get("days", 30),
+            "images": c.get("images", 30)}
+
+
+def folder(s):
+    return STATE if s["persist"] else RUNTIME
+
+
+def history_file(s):
+    return folder(s) / "history.json"
+
+
+def read(path, key):
+    try:
+        return [e for e in json.loads(path.read_text()).get(key, []) if isinstance(e, dict) and e.get("kind")]
+    except (OSError, ValueError, AttributeError):
+        return []
+
+
+def write(path, key, entries):
+    path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
+    tmp = path.with_suffix(".tmp")
+    tmp.write_text(json.dumps({key: entries}))
+    tmp.replace(path)
+
+
+def ident(e):
+    if e["kind"] == "image":
+        return "image:" + Path(e.get("path", "")).name
+    if e["kind"] == "files":
+        return "files:" + "\n".join(e.get("paths", []))
+    return "text:" + e.get("text", "")
+
+
+def forget(e, s):
+    """An image's file goes with it, unless it's a pinned copy."""
+    if e["kind"] != "image":
+        return
+    path = Path(e.get("path", ""))
+    if path.parent == folder(s) / "images" or not str(path).startswith(str(STATE)):
+        path.unlink(missing_ok=True)
+
+
+def trim(entries, s):
+    oldest = (time.time() - s["days"] * 86400) * 1000
+    kept = [e for e in entries if e.get("time", 0) >= oldest][: s["max"]]
+    images = [e for e in kept if e["kind"] == "image"]
+    for old in images[s["images"]:]:
+        forget(old, s)
+        kept.remove(old)
+    for gone in entries:
+        if gone not in kept:
+            forget(gone, s)
+    return kept
+
+
+def add(entry, s):
+    path = history_file(s)
+    entries = read(path, "entries")
+    k = ident(entry)
+    entries = [dict(entry, time=int(time.time() * 1000))] + [e for e in entries if ident(e) != k]
+    write(path, "entries", trim(entries, s))
+
+
+def keep():
+    s = settings()
+    images = folder(s) / "images"
+    images.mkdir(parents=True, exist_ok=True, mode=0o700)
+    env = dict(os.environ, DESKTOP_CLIPBOARD_IMAGES=str(images) if s["persist"] else "")
+    while True:  # the watch ends when the display does; started again if it fails sooner
+        with subprocess.Popen(["desktop", "clipboard", "watch"], stdout=subprocess.PIPE, text=True, env=env) as watch:
+            for line in watch.stdout:
+                try:
+                    entry = json.loads(line)
+                except ValueError:
+                    continue
+                if isinstance(entry, dict) and entry.get("kind"):
+                    add(entry, settings())
+        if not os.environ.get("DISPLAY"):
+            return
+        time.sleep(2)
+
+
+def label(e):
+    if e["kind"] == "image":
+        return "󰋩  Image  " + Path(e.get("path", "")).name
+    if e["kind"] == "files":
+        paths = e.get("paths", [])
+        return f"󰈔  {len(paths)} file{'s' if len(paths) != 1 else ''}  " + ", ".join(Path(p).name for p in paths[:3])
+    return " ".join(e.get("text", "").split())[:140] or "(blank)"
+
+
+def age(e):
+    s = time.time() - e.get("time", 0) / 1000
+    for unit, size in (("d", 86400), ("h", 3600), ("m", 60)):
+        if s >= size:
+            return f"{int(s // size)}{unit}"
+    return "now"
+
+
+def copy(e):
+    if e["kind"] == "image":
+        subprocess.run(["desktop", "clipboard", "copy", "image", e["path"]], check=False)
+    elif e["kind"] == "files":
+        subprocess.run(["desktop", "clipboard", "copy", "files", *e["paths"]], check=False)
+    else:
+        subprocess.run(["desktop", "clipboard", "copy", "text"], input=e["text"].encode(), check=False)
+
+
+def menu():
+    s = settings()
+    path, pins_path = history_file(s), STATE / "pins.json"
+    while True:
+        pins, entries = read(pins_path, "pins"), read(path, "entries")
+        pinned = {ident(p) for p in pins}
+        rows = [(p, True) for p in pins] + [(e, False) for e in entries if ident(e) not in pinned]
+        lines = []
+        for e, is_pin in rows:
+            icon = f"\0icon\x1f{e['path']}" if e["kind"] == "image" else ""
+            lines.append(("󰐃 " if is_pin else "") + label(e) + f"   ·  {age(e)}" + icon)
+        done = subprocess.run(
+            ["rofi", "-dmenu", "-i", "-format", "i", "-p", "clipboard", "-no-custom", "-show-icons",
+             "-mesg", "Enter copies it  ·  Alt+p pin  ·  Alt+d forget  ·  Alt+c clear the history",
+             "-theme-str", "window { width: 680px; } element-icon { size: 36px; }",
+             "-kb-custom-1", "Alt+d", "-kb-custom-2", "Alt+p", "-kb-custom-3", "Alt+c"],
+            input="\n".join(lines) if lines else "", capture_output=True, text=True, check=False)
+        if done.returncode not in (0, 10, 11, 12) or (not rows and done.returncode != 12):
+            return
+        if done.returncode == 12:
+            for e in entries:
+                forget(e, s)
+            write(path, "entries", [])
+            return
+        e, is_pin = rows[int(done.stdout.strip())]
+        if done.returncode == 0:
+            copy(e)
+            return
+        if done.returncode == 10:  # forget: from the history, and from the pins
+            write(path, "entries", [x for x in entries if ident(x) != ident(e)])
+            if is_pin:
+                write(pins_path, "pins", [p for p in pins if ident(p) != ident(e)])
+            forget(e, s)
+        elif done.returncode == 11:
+            if is_pin:
+                write(pins_path, "pins", [p for p in pins if ident(p) != ident(e)])
+                if e["kind"] == "image":
+                    Path(e["path"]).unlink(missing_ok=True)
+            else:
+                pin = dict(e, time=int(time.time() * 1000))
+                if e["kind"] == "image":  # kept past logout: a copy beside the pins
+                    STATE.mkdir(parents=True, exist_ok=True, mode=0o700)
+                    kept = STATE / Path(e["path"]).name
+                    if not kept.exists():
+                        shutil.copy(e["path"], kept)
+                    pin["path"] = str(kept)
+                write(pins_path, "pins", [pin] + pins)
+
+
+def main(argv):
+    if argv == ["keep"]:
+        keep()
+    elif argv == ["menu"]:
+        menu()
+    elif argv == ["list"]:
+        for e in read(history_file(settings()), "entries"):
+            print(json.dumps(e))
+    else:
+        print(__doc__.split("\n\n", 1)[1].rstrip(), file=sys.stderr)
+        return 2
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

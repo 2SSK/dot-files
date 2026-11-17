@@ -1,0 +1,60 @@
+/* rofi, the i3 session's launcher and menus (desktop menu <name> opens each). One look for all of
+   them: a card at the top centre of the screen, a search field, a list that keeps its height as a search
+   narrows it, in the font collection's monospace (as the bar); menus without a search (power,
+   capture) hide the field. Colours and font from the desktop theme: theme.rasi, a link `theme`
+   renders and points here. Reference: man rofi-theme. */
+configuration {
+	modi: "drun,window";
+	show-icons: true;
+	icon-theme: "Tela-circle-blue-dark";
+	drun-display-format: "{name}";
+	window-format: "{c}  ·  {t}";
+	display-drun: "apps";
+	display-window: "windows";
+	matching: "fuzzy";
+	sort: true;
+	sorting-method: "fzf";
+	scroll-method: 1;
+	hover-select: false; /* the pointer resting on a list mustn't move the selection */
+	me-select-entry: "";
+	me-accept-entry: "MousePrimary";
+	kb-cancel: "Escape,Control+g,Control+bracketleft";
+	kb-remove-char-forward: "Delete";
+	kb-delete-entry: "";
+}
+
+@import "theme.rasi"
+
+window {
+	location: north; /* top centre, under the bar */
+	anchor: north;
+	y-offset: 80px;
+	width: 560px;
+	border: 1px;
+	border-radius: 12px;
+	border-color: @overlay;
+	background-color: @bg;
+	padding: 12px;
+}
+mainbox { spacing: 8px; background-color: transparent; children: [ inputbar, message, listview ]; }
+inputbar {
+	padding: 8px 12px;
+	spacing: 10px;
+	border-radius: 8px;
+	background-color: @surface;
+	children: [ prompt, entry ];
+}
+prompt { text-color: @primary; background-color: transparent; font: inherit; }
+entry { text-color: @fg; background-color: transparent; placeholder: "Search"; placeholder-color: @fg-muted; cursor: text; }
+message { padding: 0 4px; background-color: transparent; border: 0; }
+textbox { text-color: @fg-muted; background-color: transparent; }
+/* the same height however few rows a search leaves */
+listview { lines: 8; columns: 1; fixed-height: true; dynamic: false; spacing: 2px; scrollbar: false; border: 0; background-color: transparent; }
+element { padding: 7px 10px; spacing: 10px; border-radius: 7px; background-color: transparent; text-color: @fg; cursor: pointer; }
+element normal.normal, element alternate.normal { background-color: transparent; text-color: @fg; }
+element normal.active, element alternate.active { background-color: transparent; text-color: @primary; }
+element normal.urgent, element alternate.urgent { background-color: transparent; text-color: @error; }
+element selected.normal, element selected.active { background-color: @surface; text-color: @fg; }
+element selected.urgent { background-color: @surface; text-color: @error; }
+element-icon { size: 20px; background-color: transparent; }
+element-text { background-color: transparent; text-color: inherit; vertical-align: 0.5; highlight: bold; }

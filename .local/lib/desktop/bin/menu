@@ -1,0 +1,292 @@
+#!/usr/bin/env bash
+# The i3 session's menus, in rofi (~/.config/rofi): what the shell's panels are on sway.
+#   desktop menu apps            the app launcher
+#   desktop menu windows [prev]  Alt+Tab: every window, the last one first; letting go of Alt switches
+#   desktop menu emoji           pick one: it's copied
+#   desktop menu files           a file under home: it's opened
+#   desktop menu theme           the theme families (Enter applies one; Alt+m dark or light)
+#   desktop menu font            the font collections
+#   desktop menu wallpaper       a grid of the wallpapers (Enter sets one)
+#   desktop menu capture         screenshot, record, copy text, pick colour (r w s, R W S, t, c)
+#   desktop menu power           lock, sleep, log out, reboot, shut down: a row, 1–5 or ← → and Enter
+#   desktop menu notifications   the ones kept, newest first (Enter shows one again and its
+#                                actions; Alt+d dismisses one, Alt+c clears all, Alt+n do-not-disturb)
+#   desktop menu dnd             toggle do-not-disturb
+#   desktop menu keys            every key binding of i3 (Enter runs it)
+#   desktop menu settings        theme, dark or light, fonts, wallpaper, keys
+set -euo pipefail
+# shellcheck source-path=SCRIPTDIR/../../../.. source=.local/lib/desktop/state.sh
+source "$(dirname "$(readlink -f "$0")")/../state.sh"
+share="$(dirname "$(readlink -f "$0")")/../../../share/desktop"
+config="${XDG_CONFIG_HOME:-$HOME/.config}/desktop/shell.json"
+palette="$desktop_state/theme/palette.json"
+
+colour() { jq -r --arg k "$1" '.ui[$k] // empty' "$palette" 2>/dev/null || true; }
+# rofi as a list to pick from: the chosen row's index on stdout. Its exit status says how: 0 Enter,
+# 1 cancelled, 10 + n for the (n+1)th -kb-custom key.
+pick() { rofi -dmenu -i -format i "$@"; }
+# runs pick; sets $row and $how (never fails: Esc is a choice too)
+choose() {
+	how=0
+	row="$(pick "$@")" || how=$?
+}
+quiet() { "$@" >/dev/null 2>&1 || true; }
+
+apps() { exec rofi -show drun; }
+
+windows() { # [prev]
+	# rofi lists the windows most recent first: row 1 is the last one, so a quick Alt+Tab goes back
+	local start=1
+	[[ ${1:-} == prev ]] && start=-1
+	exec rofi -show window -selected-row "$start" \
+		-kb-row-down 'Alt+Tab,Down,Control+n' -kb-row-up 'Alt+ISO_Left_Tab,Alt+Shift+Tab,Up,Control+p' \
+		-kb-element-next '' -kb-element-prev '' -kb-accept-entry '!Alt_L,!Alt+Alt_L,Return,KP_Enter'
+}
+
+emoji() {
+	local list line
+	list="$(grep -v '^#' "$share/emoji.tsv" | awk -F'\t' '{ print $1 "  " $2 }')"
+	choose -p emoji <<<"$list"
+	[[ $how == 0 ]] || return 0
+	line="$(sed -n "$((row + 1))p" <<<"$list")"
+	printf '%s' "${line%%  *}" | desktop clipboard copy text
+	quiet notify-send -a Emoji -t 2000 "Copied ${line%%  *}" "${line#*  }"
+}
+
+files() {
+	local list
+	list="$(cd "$HOME" && fd --type f --max-depth 7 --exclude node_modules --exclude go . 2>/dev/null)"
+	choose -p files <<<"$list"
+	[[ $how == 0 ]] || return 0
+	setsid -f xdg-open "$HOME/$(sed -n "$((row + 1))p" <<<"$list")" >/dev/null 2>&1
+}
+
+theme_menu() {
+	local list current mode names=()
+	read -r current mode < <(current_theme)
+	mapfile -t names < <(theme list | sed 's/^[* ] *//')
+	local i active=0
+	for i in "${!names[@]}"; do [[ ${names[i]} == "$current" ]] && active=$i; done
+	choose -p theme -a "$active" -selected-row "$active" -mesg "Enter applies it  ·  Alt+m switches to $([[ $mode == dark ]] && echo light || echo dark)" \
+		-kb-custom-1 Alt+m < <(printf '%s\n' "${names[@]}")
+	case $how in
+	0) theme set "${names[row]}" ;;
+	10) theme mode toggle ;;
+	esac
+}
+
+font() {
+	local names=() labels=() current i active=0 name label
+	current="$(desktop font current)"
+	while read -r name label; do
+		names+=("$name") && labels+=("$label")
+	done < <(desktop font list | sed 's/^[* ] *//')
+	for i in "${!names[@]}"; do [[ ${names[i]} == "$current" ]] && active=$i; done
+	choose -p fonts -a "$active" -selected-row "$active" < <(printf '%s\n' "${labels[@]}")
+	[[ $how == 0 ]] && desktop font set "${names[row]}"
+	return 0
+}
+
+wallpaper() {
+	local folders=() files=() f thumb current i active=0
+	mapfile -t folders < <(jq -r '.wallpaper.folders[]? // empty' "$config" 2>/dev/null | sed "s|^~|$HOME|")
+	((${#folders[@]})) || folders=("$share/wallpapers")
+	mapfile -t files < <(for f in "${folders[@]}"; do
+		[[ -d $f ]] && find -L "$f" -maxdepth 2 -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \)
+	done | sort)
+	((${#files[@]})) || { quiet notify-send -a Wallpaper "No wallpapers" "in ${folders[*]}" && return 0; }
+	current="$(current_wallpaper)"
+	declare -A thumbs=()
+	while IFS=$'\t' read -r f thumb; do thumbs[$f]=$thumb; done < <(nice -n 19 desktop wallpaper thumbs "${files[@]}" 2>/dev/null)
+	for i in "${!files[@]}"; do [[ ${files[i]} == "$current" ]] && active=$i; done
+	# a grid: the arrows move through it (not through the search text), a page at a time, and the
+	# one picked has an accent frame
+	choose -p wallpaper -selected-row "$active" -show-icons -scroll-method 0 \
+		-kb-move-char-back Control+b -kb-move-char-forward Control+f -kb-row-left Left -kb-row-right Right \
+		-theme-str 'window { width: 980px; } listview { columns: 4; lines: 3; spacing: 10px; flow: horizontal; }
+			element { orientation: vertical; padding: 8px; spacing: 6px; border: 2px; border-color: transparent; }
+			element selected.normal { background-color: @surface; border-color: @primary; }
+			element-icon { size: 150px; } element-text { horizontal-align: 0.5; text-color: @fg-muted; }' \
+		< <(for f in "${files[@]}"; do printf '%s\0icon\x1f%s\n' "$(basename "${f%.*}")" "${thumbs[$f]:-$f}"; done)
+	[[ $how == 0 ]] && setsid -f desktop wallpaper set "${files[row]}" >/dev/null 2>&1
+	return 0
+}
+
+capture() {
+	local recording=0 rows
+	desktop record running && recording=1
+	rows="󰩭  Screenshot a region\n󰖯  Screenshot this window\n󰍹  Screenshot the screen"
+	if ((recording)); then
+		rows+="\n󰓛  Stop recording"
+	else
+		rows+="\n󰑋  Record a region\n󰑋  Record this window\n󰑋  Record the screen"
+	fi
+	rows+="\n󰊄  Copy text from a region\n󰏘  Pick a colour"
+	choose -p capture -no-custom -mesg 'r w s screenshot  ·  R W S record  ·  t text  ·  c colour' \
+		-theme-str 'mainbox { children: [ message, listview ]; } window { width: 440px; }' \
+		-kb-custom-1 r -kb-custom-2 w -kb-custom-3 s -kb-custom-4 Shift+r -kb-custom-5 Shift+w -kb-custom-6 Shift+s \
+		-kb-custom-7 t -kb-custom-8 c < <(echo -e "$rows")
+	local act
+	case $how in
+	0) # a row: the list is shorter by two while recording
+		local acts=(shot-region shot-window shot-screen record-region record-window record-screen text colour)
+		((recording)) && acts=(shot-region shot-window shot-screen stop text colour)
+		act=${acts[row]}
+		;;
+	10) act=shot-region ;; 11) act=shot-window ;; 12) act=shot-screen ;;
+	13) act=record-region ;; 14) act=record-window ;; 15) act=record-screen ;;
+	16) act=text ;; 17) act=colour ;;
+	*) return 0 ;;
+	esac
+	sleep 0.2 # rofi's window gone from the screen first
+	case $act in
+	shot-screen) setsid -f desktop capture shot screen --focused >/dev/null 2>&1 ;;
+	shot-*) setsid -f desktop capture shot "${act#shot-}" >/dev/null 2>&1 ;;
+	record-*) if ((recording)); then desktop record stop; else desktop record start "${act#record-}"; fi ;;
+	stop) desktop record stop ;;
+	text | colour) setsid -f desktop capture "$act" >/dev/null 2>&1 ;;
+	esac
+}
+
+power() {
+	# A row of five tiles, as the shell's power menu (and the v1 rofi one): one large icon each,
+	# centred both ways, no names; under them a quiet line with the keys. 1–5 or ← → pick one,
+	# Enter runs it; Log Out, Reboot and Shut Down ask for a second press while power.confirm is on
+	# (the line says so, in red): Enter or the number again. Nothing hibernates.
+	local ids=(lock suspend logout reboot poweroff) glyphs=(󰌾 󰒲 󰍃 󰜉 󰐥) names=(Lock Sleep "Log out" Reboot "Shut down")
+	local error muted pending="" selected=0 rows i act confirm=1 hint
+	error="$(colour error)" muted="$(colour fg_muted)"
+	[[ $(jq -r '.power.confirm != false' "$config" 2>/dev/null || echo true) == false ]] && confirm=0
+	while :; do
+		rows=""
+		for i in "${!ids[@]}"; do
+			if [[ ${ids[i]} == poweroff ]]; then rows+="<span foreground='$error'>${glyphs[i]}</span>"$'\n'; else rows+="${glyphs[i]}"$'\n'; fi
+		done
+		hint="<span foreground='$muted'>1 – 5  or  ← →  ·  Enter</span>"
+		for i in "${!ids[@]}"; do
+			[[ ${ids[i]} == "$pending" ]] && hint="<span foreground='$error'>${names[i]}? press $((i + 1)) or Enter again</span>"
+		done
+		# tiles of 120 × 96: the icon about half their height, alone in them (no app-icon slot beside
+		# it, which every other menu has and which pushed it off centre), centred both ways
+		choose -markup-rows -no-custom -show-icons false -selected-row "$selected" -mesg "$hint" \
+			-theme-str 'mainbox { children: [ listview, message ]; spacing: 12px; } window { width: 684px; padding: 12px; }
+				listview { columns: 5; lines: 1; spacing: 12px; flow: horizontal; fixed-height: true; fixed-columns: true; }
+				element { children: [ element-text ]; padding: 0; border: 2px; border-color: transparent; }
+				element normal.normal, element alternate.normal { background-color: @surface; }
+				element selected.normal { background-color: @overlay; border-color: @primary; }
+				element-text { expand: true; padding: 24px 0; font: "JetBrainsMono Nerd Font Propo 32";
+					horizontal-align: 0.5; vertical-align: 0.5; }
+				textbox { horizontal-align: 0.5; font: @mono; }' \
+			-kb-move-char-back Control+b -kb-move-char-forward Control+f -kb-row-left Left,h -kb-row-right Right,l \
+			-kb-custom-1 1 -kb-custom-2 2 -kb-custom-3 3 -kb-custom-4 4 -kb-custom-5 5 \
+			< <(printf '%s' "$rows")
+		case $how in
+		0) act=${ids[row]} ;;
+		1[0-4]) act=${ids[how - 10]} ;;
+		*) return 0 ;;
+		esac
+		# the ones that end the session: the first press only asks
+		if ((confirm)) && [[ $act =~ ^(logout|reboot|poweroff)$ && $act != "$pending" ]]; then
+			pending=$act
+			for i in "${!ids[@]}"; do [[ ${ids[i]} == "$act" ]] && selected=$i; done
+			continue
+		fi
+		break
+	done
+	case $act in
+	lock) loginctl lock-session ;;
+	suspend) systemctl suspend ;; # xss-lock locks first (--transfer-sleep-lock)
+	logout) i3-msg -q exit ;;
+	reboot) systemctl reboot ;;
+	poweroff) systemctl poweroff ;;
+	esac
+}
+
+notifications() {
+	pgrep -u "$UID" -x dunst >/dev/null || { quiet notify-send "No notifications" && return 0; }
+	local json uptime ids=() rows="" paused mesg
+	json="$(dunstctl history)"
+	uptime="$(cut -d' ' -f1 /proc/uptime)"
+	paused="$(dunstctl is-paused)"
+	# each: id, then "summary<TAB>body<TAB>app<TAB>age"; the timestamp is µs since boot
+	while IFS=$'\t' read -r id summary body app age; do
+		ids+=("$id")
+		rows+="<b>$(markup "$summary")</b>  <span alpha='60%'>$(markup "$app") · $age</span>"$'\n'
+		[[ -n $body ]] && rows+="<span alpha='70%' size='small'>$(markup "$body")</span>"
+		rows+=$'\x00'
+	done < <(jq -r --argjson up "$uptime" '.data[0][]? | [.id.data, .summary.data, (.body.data | gsub("[\\n\\t]+"; " ") | .[0:110]), .appname.data,
+		((($up * 1000000 - .timestamp.data) / 1000000) as $s | if $s < 60 then "now" elif $s < 3600 then "\($s / 60 | floor)m"
+			elif $s < 86400 then "\($s / 3600 | floor)h" else "\($s / 86400 | floor)d" end)] | @tsv' <<<"$json")
+	mesg="Enter shows it again  ·  Alt+d dismiss  ·  Alt+c clear all  ·  Alt+n do-not-disturb ($([[ $paused == true ]] && echo on || echo off))"
+	((${#ids[@]})) || rows="<span alpha='60%'>Nothing new</span>"$'\x00'
+	choose -sep '\0' -eh 2 -markup-rows -no-custom -p "$( ((${#ids[@]})) && echo "${#ids[@]} kept" || echo notifications)" -mesg "$mesg" \
+		-kb-custom-1 Alt+d -kb-custom-2 Alt+c -kb-custom-3 Alt+n < <(printf '%s' "$rows")
+	case $how in
+	0) ((${#ids[@]})) && dunstctl history-pop "${ids[row]}" ;;
+	10) ((${#ids[@]})) && dunstctl history-rm "${ids[row]}" && exec "$0" notifications ;;
+	11) dunstctl history-clear ;;
+	12) dunstctl set-paused toggle && exec "$0" notifications ;;
+	esac
+	return 0
+}
+# pango's escapes (the replacements quoted: bash 5.2 reads a bare & there as the text matched)
+markup() {
+	local s=${1//&/"&amp;"}
+	s=${s//</"&lt;"}
+	printf '%s' "${s//>/"&gt;"}"
+}
+
+dnd() {
+	dunstctl set-paused toggle
+}
+
+keys() {
+	local list keys=() cmds=() shown=() line key cmd
+	while read -r line; do
+		key=${line#bindsym } && key=${key%% *}
+		cmd=${line#bindsym "$key" }
+		[[ $cmd == *'mode "'* ]] && continue
+		cmd=${cmd//\$shell /exec --no-startup-id desktop i3 } # keys.conf's $shell: see desktop i3
+		keys+=("${key/\$mod/Super}") && cmds+=("$cmd")
+		cmd=${cmd#exec --no-startup-id } && cmd=${cmd#desktop i3 } && shown+=("${cmd#desktop }")
+	done < <(sed -n '/^mode /,/^}/d; s/^\s*\(bindsym .*\)/\1/p' "${XDG_CONFIG_HOME:-$HOME/.config}"/i3/conf.d/*.conf)
+	list="$(for i in "${!keys[@]}"; do printf '%-24s %s\n' "${keys[i]}" "${shown[i]}"; done)"
+	choose -p keys -mesg "Enter runs it" -theme-str 'window { width: 760px; } element-text { font: @mono; } listview { lines: 14; }' <<<"$list"
+	[[ $how == 0 ]] && i3-msg -q "${cmds[row]}"
+	return 0
+}
+
+settings() {
+	choose -p settings -no-custom -theme-str 'window { width: 380px; }' \
+		<<<$'󰏘  Theme\n󰔎  Dark or light\n󰛖  Fonts\n󰸉  Wallpaper\n󰌌  Keys'
+	[[ $how == 0 ]] || return 0
+	case $row in
+	0) theme_menu ;;
+	1) theme mode toggle ;;
+	2) font ;;
+	3) wallpaper ;;
+	4) keys ;;
+	esac
+}
+
+case ${1:-} in
+apps) apps ;;
+windows) windows "${2:-}" ;;
+emoji) emoji ;;
+files) files ;;
+theme) theme_menu ;;
+font) font ;;
+wallpaper) wallpaper ;;
+capture) capture ;;
+power) power ;;
+notifications) notifications ;;
+dnd) dnd ;;
+clipboard) exec desktop cliphist menu ;;
+keys) keys ;;
+settings) settings ;;
+*)
+	echo "usage: desktop menu apps | windows [prev] | emoji | files | theme | font | wallpaper | capture | power |" >&2
+	echo "                    notifications | dnd | clipboard | keys | settings" >&2
+	exit 2
+	;;
+esac

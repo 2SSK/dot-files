@@ -1,0 +1,64 @@
+# dunst, the i3 session's notifications (on sway the shell shows them; dunst's user service stays
+# masked so it never starts there). i3's autostart runs it. Cards top right, one look for all; the
+# volume and brightness levels (desktop level) are one card with a bar, replaced on each press.
+# Colours and font: dunstrc.d/90-theme.conf, a link `theme` renders (dunstctl reload on a switch).
+# The history (the bar's bell, desktop menu notifications) keeps 50. Reference: man dunst.
+
+[global]
+	follow = keyboard
+	origin = top-right
+	offset = (12, 42)
+	width = (280, 380)
+	height = (0, 160)
+	notification_limit = 4
+	gap_size = 8
+	padding = 12
+	horizontal_padding = 14
+	text_icon_padding = 12
+	frame_width = 1
+	corner_radius = 10
+	separator_height = 0
+	progress_bar = true
+	progress_bar_height = 6
+	progress_bar_frame_width = 0
+	progress_bar_corner_radius = 3
+	progress_bar_min_width = 200
+	progress_bar_max_width = 340
+	icon_position = left
+	min_icon_size = 24
+	max_icon_size = 36
+	enable_recursive_icon_lookup = true
+	markup = full
+	format = "<b>%s</b>\n%b"
+	alignment = left
+	vertical_alignment = center
+	word_wrap = yes
+	ellipsize = end
+	ignore_newline = no
+	show_age_threshold = -1
+	stack_duplicates = true
+	hide_duplicate_count = true
+	sticky_history = yes
+	history_length = 50
+	idle_threshold = 120
+	show_indicators = no
+	mouse_left_click = do_action, close_current
+	mouse_middle_click = close_current
+	mouse_right_click = close_all
+	dmenu = /usr/bin/rofi -dmenu -p action
+
+[urgency_low]
+	timeout = 4
+
+[urgency_normal]
+	timeout = 6
+
+[urgency_critical]
+	timeout = 0
+
+# desktop level: a slim card, the title and the bar only, kept out of the history
+[level]
+	appname = Level
+	format = "<b>%s</b>"
+	history_ignore = yes
+	timeout = 1.4

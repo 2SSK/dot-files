@@ -62,3 +62,46 @@ setup() {
 	grep -q '\[con_id=7\] layout tabbed' "$CALLS"
 	[ "$(grep -n 'floating enable' "$CALLS" | cut -d: -f1)" -lt "$(grep -n 'scratchpad show' "$CALLS" | cut -d: -f1)" ]
 }
+
+# i3: the same commands through i3-msg, with i3's tree (the group is the container inside the
+# floating one, floating "user_on")
+i3_fake() {
+	unset SWAYSOCK
+	# shellcheck disable=SC2016 # expands when the fake runs
+	printf '%s\n' '#!/bin/sh' 'case "$1 $2" in' \
+		'"-t get_marks") [ "$GROUP" = none ] && echo "[]" || echo "[\"_scratch_workspace\"]" ;;' \
+		'"-t get_tree") case "$GROUP" in' \
+		'  none) echo "{\"nodes\":[{\"type\":\"con\",\"id\":42,\"nodes\":[{\"type\":\"con\",\"marks\":[\"_scratch_incoming\"]}]}]}" ;;' \
+		'  hidden) echo "{\"name\":\"__i3_scratch\",\"floating_nodes\":[{\"type\":\"floating_con\",\"nodes\":[{\"type\":\"con\",\"floating\":\"user_on\",\"marks\":[\"_scratch_workspace\"]}]}]}" ;;' \
+		'  *) echo "{\"nodes\":[{\"type\":\"floating_con\",\"nodes\":[{\"type\":\"con\",\"floating\":\"user_on\",\"marks\":[\"_scratch_workspace\"]}]}]}" ;; esac ;;' \
+		'*) shift; echo "$*" >>"$CALLS" ;;' 'esac' >"$bin/i3-msg"
+	chmod +x "$bin/i3-msg"
+}
+
+@test "i3: the first window is wrapped beside a placeholder, then the wrapper floats as the group" {
+	i3_fake
+	GROUP=none run "$SCRATCH" add
+	[ "$status" -eq 0 ]
+	[ "$(sed -n 2p "$CALLS")" = "open; mark --add _scratch_placeholder" ]
+	grep -qx '\[con_mark="^_scratch_incoming$"\] split v' "$CALLS"
+	grep -qx '\[con_mark="^_scratch_placeholder$"\] kill' "$CALLS"
+	grep -qx '\[con_id=42\] mark --add _scratch_workspace' "$CALLS"
+	! grep -q 'focus parent' "$CALLS"
+	[ "$(tail -1 "$CALLS")" = '[con_mark="^_scratch_workspace$"] resize set width 80 ppt height 75 ppt; [con_mark="^_scratch_workspace$"] move position center; [con_mark="^_scratch_workspace$"] move scratchpad' ]
+}
+
+@test "i3: a window joins while the group is tiled for a moment, and the group hides again" {
+	i3_fake
+	GROUP=hidden run "$SCRATCH" add
+	[ "$status" -eq 0 ]
+	[ "$(sed -n 3p "$CALLS")" = '[con_mark="^_scratch_workspace$"] floating disable' ]
+	grep -q 'move container to mark _scratch_workspace' "$CALLS"
+	[ "$(tail -1 "$CALLS")" = '[con_mark="^_scratch_workspace$"] move scratchpad' ]
+}
+
+@test "i3: toggle only shows or hides a floating group (it isn't healed)" {
+	i3_fake
+	GROUP=shown run "$SCRATCH" toggle
+	[ "$status" -eq 0 ]
+	[ "$(cat "$CALLS")" = '[con_mark="^_scratch_workspace$"] scratchpad show' ]
+}

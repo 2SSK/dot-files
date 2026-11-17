@@ -17,6 +17,8 @@ REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO / ".local/lib/desktop"))
 import theme_render as tr  # noqa: E402
 
+# no shell.json of the machine's: the default font collection, whatever this laptop has chosen
+os.environ["XDG_CONFIG_HOME"] = tempfile.mkdtemp(prefix="theme-render-config.")
 GOLDEN = REPO / "tests/golden/theme/tokyonight-dark"
 FAMILIES = sorted(p.stem for p in tr.THEMES.glob("*.toml"))
 

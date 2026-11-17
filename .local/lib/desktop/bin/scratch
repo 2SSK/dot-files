@@ -22,7 +22,8 @@ inside() { "$msg" -t get_tree | jq -e '.. | objects | select((.marks? // []) | i
 # the group, floating and back in the scratchpad should it have been tiled (floating disable on one
 # of its windows takes the whole group down with it, and out of the scratchpad)
 heal() {
-	"$msg" -t get_tree | jq -e '.. | objects | select((.marks? // []) | index("_scratch_workspace")) | select(.type != "floating_con")' >/dev/null || return 0
+	# (sway marks the floating container itself; i3 the container inside it, its floating "user_on")
+	"$msg" -t get_tree | jq -e '.. | objects | select((.marks? // []) | index("_scratch_workspace")) | select(.type != "floating_con" and ((.floating // "") | endswith("_on") | not))' >/dev/null || return 0
 	local child
 	child="$("$msg" -t get_tree | jq -r 'first(.. | objects | select((.marks? // []) | index("_scratch_workspace")) | .nodes[0].id // empty)')"
 	"$msg" -q "$group floating enable"
@@ -31,11 +32,43 @@ heal() {
 	"$msg" -q "$group resize set width 80 ppt height 75 ppt; $group move position center; $group move scratchpad"
 }
 
+# i3 differs from sway: a lone window can't be wrapped (split only turns the workspace), focus parent
+# from a floating window lands on the workspace, and nothing moves into a floating container. So the
+# group is made around the window while it's tiled (an empty placeholder beside it lets split wrap
+# it), and a window joins while the group is tiled for a moment.
+i3_new() {
+	"$msg" -q "fullscreen disable; floating disable; mark --add _scratch_incoming"
+	"$msg" -q "open; mark --add _scratch_placeholder"
+	"$msg" -q "$incoming split v"
+	local id
+	id="$("$msg" -t get_tree | jq -r 'first(.. | objects | select(.nodes? and any(.nodes[]; (.marks? // []) | index("_scratch_incoming"))) | .id)')"
+	"$msg" -q '[con_mark="^_scratch_placeholder$"] kill'
+	"$msg" -q "[con_id=$id] mark --add _scratch_workspace"
+	"$msg" -q "$incoming layout tabbed; $incoming unmark _scratch_incoming"
+	"$msg" -q "$group floating enable"
+	"$msg" -q "$group resize set width 80 ppt height 75 ppt; $group move position center; $group move scratchpad"
+}
+
+i3_join() {
+	local was_hidden=0
+	hidden && was_hidden=1
+	"$msg" -q "fullscreen disable; floating disable; mark --add _scratch_incoming"
+	((was_hidden)) && "$msg" -q "$group scratchpad show"
+	"$msg" -q "$group floating disable"
+	"$msg" -q "$incoming move container to mark _scratch_workspace; $incoming unmark _scratch_incoming"
+	"$msg" -q "$group floating enable"
+	"$msg" -q "$group resize set width 80 ppt height 75 ppt; $group move position center"
+	((was_hidden)) && "$msg" -q "$group move scratchpad"
+	return 0
+}
+
 case ${1:-} in
 add)
 	has_group && heal
 	if has_group && inside; then # its own key on one of its windows: put the group away, as ever
 		"$msg" -q "$group move scratchpad"
+	elif has_group && [[ $msg == i3-msg ]]; then
+		i3_join
 	elif has_group; then
 		was_hidden=0
 		hidden && was_hidden=1
@@ -47,6 +80,8 @@ add)
 		if ((was_hidden)); then # and back as it was: shown stays shown
 			"$msg" -q "$group move scratchpad"
 		fi
+	elif [[ $msg == i3-msg ]]; then
+		i3_new
 	else
 		"$msg" -q "fullscreen disable; floating enable; split h; layout tabbed; focus parent; mark --add _scratch_workspace"
 		"$msg" -q "$group resize set width 80 ppt height 75 ppt; $group move position center; $group move scratchpad"

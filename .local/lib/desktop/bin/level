@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+# Volume, microphone and brightness on i3 (on sway the shell does this): change it, then show the
+# level as one dunst card with a bar, replaced by the next press rather than stacked.
+#   desktop level volume up|down|mute     5 % a step, never past 100 %
+#   desktop level mic mute
+#   desktop level brightness up|down      5 % a step, never below 1 %
+set -euo pipefail
+
+show() { # <icon> <title> <percent>
+	notify-send -a Level -i "$1" -t 1400 -h "int:value:$3" -h string:x-dunst-stack-tag:level \
+		-h string:synchronous:level "$2" 2>/dev/null || true
+}
+
+volume() { # <action> <sink or source> <title>
+	local target=$2 now level
+	case $1 in
+	up) wpctl set-mute "$target" 0 && wpctl set-volume -l 1.0 "$target" 5%+ ;;
+	down) wpctl set-volume "$target" 5%- ;;
+	mute) wpctl set-mute "$target" toggle ;;
+	*) usage ;;
+	esac
+	now="$(wpctl get-volume "$target")" # "Volume: 0.40" and " [MUTED]" when muted
+	level="$(awk '{ printf "%d", $2 * 100 + 0.5 }' <<<"$now")"
+	if [[ $now == *MUTED* ]]; then
+		show "$([[ $3 == Volume ]] && echo audio-volume-muted || echo microphone-sensitivity-muted)" "$3 off" 0
+	else
+		show "$([[ $3 == Volume ]] && echo audio-volume-high || echo audio-input-microphone)" "$3 $level%" "$level"
+	fi
+}
+
+brightness() { # up|down
+	case $1 in
+	up) brightnessctl -q set 5%+ ;;
+	down) brightnessctl -q -n1 set 5%- ;; # -n1: never quite dark
+	*) usage ;;
+	esac
+	local level
+	level="$(brightnessctl -m | cut -d, -f4 | tr -d %)"
+	show display-brightness "Brightness $level%" "$level"
+}
+
+usage() {
+	echo "usage: desktop level volume up|down|mute | mic mute | brightness up|down" >&2
+	exit 2
+}
+
+case ${1:-} in
+volume) volume "${2:-}" @DEFAULT_AUDIO_SINK@ Volume ;;
+mic) [[ ${2:-} == mute ]] || usage && volume mute @DEFAULT_AUDIO_SOURCE@ Microphone ;;
+brightness) brightness "${2:-}" ;;
+*) usage ;;
+esac

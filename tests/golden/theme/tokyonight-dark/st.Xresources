@@ -19,3 +19,4 @@ st.color12: #8db0ff
 st.color13: #c7a9ff
 st.color14: #a4daff
 st.color15: #c0caf5
+st.font: JetBrainsMono Nerd Font:size=14:antialias=true:autohint=true

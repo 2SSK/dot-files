@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# What the keys ask of the shell, done on i3 without it: keys.conf (sway's too) says
+# `$shell <target> <function>`, which sway sends to Quickshell and i3 to this, which answers each
+# with rofi (desktop menu), polybar (desktop bar), dunst or a desktop command.
+#   desktop i3 <target> <function> [argument]   e.g. desktop i3 launcher toggle apps
+set -euo pipefail
+
+# keys.conf's power and switcher keys also switch i3 into a mode that hands the next keys to the
+# shell; rofi takes the keyboard itself, so i3 goes back to its usual keys (the binding switched
+# the mode before this ran: i3 runs a binding's commands before it reads IPC)
+leave_mode() { i3-msg -q mode default || true; }
+
+target=${1:-} fn=${2:-} arg=${3:-}
+case $target:$fn in
+launcher:*)
+	case $arg in
+	apps | "") exec desktop menu apps ;;
+	emoji) exec desktop menu emoji ;;
+	files) exec desktop menu files ;;
+	themes) exec desktop menu theme ;;
+	esac
+	;;
+switcher:next) leave_mode && exec desktop menu windows ;;
+switcher:prev) leave_mode && exec desktop menu windows prev ;;
+switcher:*) leave_mode && exit 0 ;; # rofi has the keys: commit and cancel are its own
+power:open) leave_mode && exec desktop menu power ;;
+power:*) leave_mode && exit 0 ;;
+audio:up) exec desktop level volume up ;;
+audio:down) exec desktop level volume down ;;
+audio:mute) exec desktop level volume mute ;;
+audio:mic) exec desktop level mic mute ;;
+brightness:up | brightness:down) exec desktop level brightness "$fn" ;;
+bar:toggle) exec desktop bar toggle ;;
+recorder:toggle) exec desktop record toggle ;;
+capture:toggle) exec desktop menu capture ;;
+notifications:toggle) exec desktop menu notifications ;;
+settings:page) if [[ $arg == keys ]]; then exec desktop menu keys; else exec desktop menu settings; fi ;;
+settings:toggle | control:toggle) exec desktop menu settings ;;
+clipboard:toggle) exec desktop menu clipboard ;;
+wallpaper:toggle) exec desktop menu wallpaper ;;
+esac
+echo "desktop i3: nothing for '$*'" >&2
+exit 2

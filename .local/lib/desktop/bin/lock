@@ -13,6 +13,9 @@ source "$(dirname "$(readlink -f "$0")")/../state.sh"
 palette="$desktop_state/theme/palette.json"
 read -r bg fg primary error < <(jq -r '.ui | [.bg, .fg, .primary, .error] | map(ltrimstr("#")) | join(" ")' "$palette" 2>/dev/null) ||
 	read -r bg fg primary error <<<"1a1b26 c0caf5 7aa2f7 f7768e"
+# the font collection's (display for the clock, monospace for the rest, as the bar)
+display="$(jq -r '.fonts.display // "Inter Display"' "$palette" 2>/dev/null || echo 'Inter Display')"
+mono="$(jq -r '.fonts.mono // "JetBrainsMono Nerd Font"' "$palette" 2>/dev/null || echo 'JetBrainsMono Nerd Font')"
 
 if [[ -n ${WAYLAND_DISPLAY:-} ]]; then
 	# the shell's session lock; once it holds the screen this returns (sleep may go ahead). About 4.5 s,
@@ -45,22 +48,30 @@ backdrop() {
 	echo "$out"
 }
 
+# Locked already (idle, then the lid, then sleep: each asks): wait on that lock, don't stack another
+# (a second i3lock under the first needs the password twice)
+if pgrep -u "$UID" -x i3lock >/dev/null; then
+	while pgrep -u "$UID" -x i3lock >/dev/null; do sleep 0.5; done
+	exit 0
+fi
+
 if i3lock --version 2>&1 | grep -q 'i3lock-color\|\.c\.'; then
 	image=(--blur 8)
 	if picture="$(backdrop)"; then image=(--image "$picture" --fill); fi
-	# The clock and date in the middle; under them a small ring, faint until a key lights it in the
-	# accent colour (accent while checking, red when wrong); a quiet hint at the bottom. i3lock never
-	# shows the typed characters.
+	# Minimal, as the bar: a large clock (24-hour) in the display font, the date under it and a quiet
+	# hint at the bottom in the monospace; a ring, faint until a key lights
+	# it in the accent colour (accent while checking, red when wrong). i3lock never shows the typed
+	# characters.
 	exec i3lock --nofork --ignore-empty-password --show-failed-attempts "${image[@]}" --color "$bg" \
-		--clock --force-clock --time-str '%I:%M' --date-str '%A, %-d %B' --time-size 128 --date-size 20 \
-		--time-font 'Inter Display Light' --date-font Inter --greeter-font Inter --verif-font Inter --wrong-font Inter --layout-font Inter \
+		--clock --force-clock --time-str '%H:%M' --date-str '%A %-d %B' --time-size 120 --date-size 18 \
+		--time-font "$display" --date-font "$mono" --greeter-font "$mono" --verif-font "$mono" --wrong-font "$mono" --layout-font "$mono" \
 		--time-color "${fg}ff" --date-color "${fg}aa" --time-pos 'x+w/2:y+h/2-40' --date-pos 'tx:ty+48' \
-		--greeter-text 'Type to unlock' --greeter-size 13 --greeter-color "${fg}55" --greeter-pos 'x+w/2:y+h-56' \
-		--ind-pos 'x+w/2:y+h/2+110' --radius 14 --ring-width 2 --inside-color "${bg}00" --ring-color "${fg}22" \
+		--greeter-text 'type to unlock' --greeter-size 13 --greeter-color "${fg}55" --greeter-pos 'x+w/2:y+h-56' \
+		--ind-pos 'x+w/2:y+h/2+140' --radius 34 --ring-width 4 --inside-color "${bg}00" --ring-color "${fg}22" \
 		--line-uses-inside --separator-color 00000000 --keyhl-color "${primary}ff" --bshl-color "${error}ff" \
 		--insidever-color "${bg}00" --ringver-color "${primary}ff" --insidewrong-color "${bg}00" --ringwrong-color "${error}ff" \
-		--verif-text '' --wrong-text 'Wrong password' --noinput-text '' --verif-size 14 --wrong-size 14 \
-		--verif-color "${fg}cc" --wrong-color "${error}ff" --verif-pos 'ix:iy+40' --wrong-pos 'ix:iy+40' \
+		--verif-text '' --wrong-text 'wrong password' --noinput-text '' --verif-size 14 --wrong-size 14 \
+		--verif-color "${fg}cc" --wrong-color "${error}ff" --verif-pos 'ix:iy+62' --wrong-pos 'ix:iy+62' \
 		--pass-media-keys --pass-volume-keys --pass-screen-keys
 fi
 exec i3lock --nofork --ignore-empty-password --show-failed-attempts --color "$bg"

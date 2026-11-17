@@ -1,6 +1,7 @@
 # Desktop shell (Quickshell)
 
-`qs -c desktop`, started by sway (`.config/sway/desktop/startup.conf`) and i3 (`.config/i3/conf.d/autostart.conf`). Sources: `.config/quickshell/desktop/`.
+`qs -c desktop`, started by sway (`.config/sway/desktop/startup.conf`). Sources: `.config/quickshell/desktop/`. i3 runs
+without it, a minimal session of polybar, rofi and dunst with the same keys: see [i3.md](i3.md).
 Colours come from the desktop theme (see [theme.md](theme.md)); icons are Tabler
 (filled versions for active states; the font sits in `fonts/` beside the config, MIT licensed;
 names in `Icons.qml`), apps' own icons come from the GTK icon theme (Tela Circle); settings from
@@ -8,10 +9,7 @@ names in `Icons.qml`), apps' own icons come from the GTK icon theme (Tela Circle
 
 ## Blur
 
-picom blurs behind the shell, inside the shapes its windows take: the bar's pill, the level card,
-the notification popups, and the control center and clipboard panels (their windows cover the
-screen but take the panel's shape, so clicks beside a panel reach what's below it). Full-screen
-windows that only catch clicks are left out.
+SwayFX rounds, shadows and blurs behind translucent windows (`.config/sway/effects.conf`).
 
 ## Control center
 
@@ -19,8 +17,7 @@ A panel that drops out of the middle of the bar, in its colour: the island widen
 the top a row of six page tabs (a highlight slides to the one open) with the page's buttons, Settings
 and Power beside it, then the page. The bar's widgets open their page; from the keyboard,
 **Ctrl+Tab** / **Ctrl+Shift+Tab** (or Ctrl+PgDn / PgUp) turn the tabs and **Alt+1…6** jump to one.
-Todo and Notes have no tab: their keys open them, with a ‹ back to Home (Notes widens the panel for
-its list beside the editor).
+To-dos and notes aren't here: they're rofi menus, the same on i3 ([notes.md](notes.md)).
 
 | Page | Opened by | What's there |
 | --- | --- | --- |
@@ -30,8 +27,6 @@ its list beside the editor).
 | Notifications | the bell, `$mod+n` | the history by day, Clear all; Do Not Disturb in the header |
 | Wi-Fi | the Wi-Fi icon | networks by signal: connect (a password for new secured ones), disconnect, forget; scans while open |
 | Bluetooth | the Bluetooth icon | devices: pair, connect, disconnect, forget, battery; the header scans. Paired devices are kept trusted (so they reconnect by themselves); one that can't connect, keeps dropping or can't pair says so and offers Re-pair (forget, pair again, connect). If that fails too, clear the device's own Bluetooth profile (ZMK: `&bt BT_CLR`) and Pair |
-| Todo | `$mod+Shift+t` | tasks with a priority (H/M/L, a click on it changes it), grouped high to low, done ones last; drag a task (anywhere on it) to reorder it (among another priority's tasks it takes theirs); kept in `~/.local/share/desktop/todo.json` |
-| Notes | `$mod+Shift+n` | notes of three kinds (text, checklist, code with Copy) with a colour tag; new, pin and delete in the header, search beside the list; kept in `~/.local/share/desktop/notes/` (a private folder) |
 
 The gear opens the settings, the power icon the power menu. Escape or focusing another window
 closes it. Wi-Fi needs NetworkManager, Bluetooth BlueZ; without them the pages
@@ -54,20 +49,11 @@ out. Pinned entries are kept in `~/.local/state/desktop/clipboard/` (a private f
 image is copied there). Region and window screenshots (F12) land in it like any copy.
 ## Sway
 
-The same shell runs on sway: `~/.config/sway/config` includes `desktop.conf`, with the same keys as i3. It reuses i3's keys, workspaces,
-window rules, colours and resize mode as they are, sway's variables (swayfx's corners, shadows and
-blur), outputs and input; `sway/desktop/` adds what only sway needs: what starts with the session,
-and swayfx's touches for the shell. What differs underneath:
-
-| | i3 (X11) | sway (Wayland) |
-| --- | --- | --- |
-| Panels | a floating window as big as the screen | a layer surface over the screen with the keyboard |
-| Lock screen | i3lock-color (`desktop lock`) | the shell's own (Quickshell's session lock, PAM `lock/pam/lock`) |
-| Idle | X's timers (`desktop idle apply`) and xss-lock | swayidle, run by the shell with the same settings |
-| Alt+Tab ends | `desktop key-release alt` watches X | the ring holds the keyboard and sees Alt let go |
-| Clipboard history | Qt's clipboard signal | `wl-paste --watch` |
-| Wallpaper | feh | awww, cross-fading (`desktop wallpaper`) |
-| Screens, touchpad | `desktop displays`, `desktop input` | sway's `outputs` and `input` |
+`~/.config/sway/config` includes `desktop.conf`. It reuses i3's keys, workspaces, window rules,
+colours and resize mode as they are, with sway's variables (swayfx's corners, shadows and blur),
+outputs and input; `sway/desktop/` adds what only sway needs: what starts with the session, and
+swayfx's touches for the shell. The keys reach the shell as `$shell <target> <function>` (its IPC);
+on i3 the same keys reach `desktop i3` instead ([i3.md](i3.md)).
 
 ## Launcher
 
@@ -115,28 +101,6 @@ app and workspace. The arrows or 1–9 pick, Enter or a click shares it, Escape 
 `desktop share-pick` is the portal's picker (`.config/xdg-desktop-portal-wlr/config`); without the
 shell running it shares the first screen.
 
-## Screens (i3)
-
-`desktop displays` arranges screens as sway's outputs config does: the laptop panel at the left,
-each connected external screen to the right of the one before at its preferred mode; an unplugged
-screen is turned off, and the wallpaper is drawn again across them. i3 starts it in `watch` mode,
-which listens for plug and unplug events (`udevadm monitor`) and arranges again. Workspaces 2, 3, 9
-and 10 live on the external screen (HDMI-1, else DP-1), the rest on the panel, as on sway; with no
-external screen they all stay on the panel. The bar and its panels follow onto each screen; the
-capture panel's Screen choice shows a map of them.
-
-## Touchpad (i3)
-
-`desktop input`, run when i3 starts or reloads, sets the touchpad up as sway's input config does:
-tap to click (one finger left, two right, three middle), tap and drag, natural two-finger scrolling,
-click with fingers, no touchpad while typing, middle-click emulation. Scrolling on X is twice as fast
-as on Wayland by default, so it's slowed: one scroll step per 45 pixels of finger movement
-(`DESKTOP_SCROLL_DISTANCE`, 10–50; X's default is 15). Displays use no scaling, as on sway.
-
-picom is started by i3 alone (the package's XDG autostart entry is hidden in
-`~/.config/autostart/picom.desktop`: two at login raced, and ours fell back to the flickering
-xrender backend); if it ever falls back, why is in `$XDG_RUNTIME_DIR/picom.log`.
-
 ## Window switcher
 
 Hold Alt and tap Tab: the open windows come up as rounded cards on a ring, most recently used
@@ -145,10 +109,7 @@ turn it back); cards further round shrink, fade and turn away. Let go of Alt to 
 one; Escape cancels, a click picks one. A quick Alt+Tab goes straight back to the last window
 without showing the ring.
 
-The shell's popup can't take the keyboard on X11, so i3's mode "switcher" sends the keys over IPC;
-i3 can't see Alt let go (it was pressed before the mode began), so the shell runs
-`desktop key-release alt`, which asks X whether Alt is still held (nothing is grabbed). Cards show the
-app's icon, the window's title, the app and workspace; X11 has no live window previews.
+Cards show the app's icon, the window's title, the app and workspace.
 
 ## Alarms
 
@@ -226,9 +187,8 @@ build cache and unnamed volumes (never containers: a stopped one may hold a data
 ## When idle
 
 Settings → Power → **When idle**: the screen dims after 4 minutes alone (any key or movement brings
-it back), locks after 5 and switches off after 10; each can be Never. On i3, `desktop idle apply`
-sets X's screensaver and DPMS timers to them; xss-lock runs `desktop idle dim` when the screensaver
-starts and locks when its cycle ends. Video players and browsers playing video hold the screensaver
+it back), locks after 5 and switches off after 10; each can be Never. swayidle, run by the shell, keeps them
+(i3 reads the same minutes at login: [i3.md](i3.md)). Video players and browsers playing video hold the screensaver
 off themselves. Locking keeps the laptop running; nothing suspends on its own.
 
 ## Night light
@@ -240,7 +200,7 @@ hours keeps it off until they end). It fades in and back out. `nightlight toggle
 
 ## Password prompts (polkit)
 
-The shell is the session's polkit agent on i3: when an app asks for admin rights (pkexec,
+The shell is the session's polkit agent on sway (on i3 it's polkit-gnome): when an app asks for admin rights (pkexec,
 Timeshift, a package manager's GUI), a small panel drops from the bar with what's asked and a
 password field; Escape or Cancel declines, a wrong password shakes it and asks again.
 ## Bar
@@ -261,7 +221,7 @@ window to a tabbed, centred group, `$mod+minus` shows or hides the whole group, 
 keys tab, split and focus.
 Hidden with `$mod+Shift+b`, the bar comes back over the windows while the pointer is at its edge.
 
-## Keys (i3)
+## Keys
 
 | Key | Does |
 | --- | --- |
@@ -284,14 +244,14 @@ Hidden with `$mod+Shift+b`, the bar comes back over the windows while the pointe
 | Alt+Tab (hold Alt) | window switcher |
 | `$mod+Shift+/` (Super+?) | every key binding, in words (Settings → Keys) |
 | `$mod+Escape` | keys to the VM (or anything nested) until pressed again; the bar shows "VM keys" |
-| `$mod+Shift+t` / `$mod+Shift+n` | todo / notes |
+| `$mod+Shift+t` / `$mod+Shift+n` | to-dos / notes: rofi menus ([notes.md](notes.md)) |
 | `$mod+p` | power menu (again, Escape or a click beside it closes): arrows or 1–5 pick, Enter runs |
 
 Each change shows in a card at the top right; Caps Lock and Num Lock show there by themselves.
 
 ## Notifications
 
-The shell is the notification daemon on i3. New ones pop up at the top right and leave after their
+The shell is the notification daemon on sway (dunst is i3's). New ones pop up at the top right and leave after their
 timeout (5 s unless the app sets one), not while hovered; critical ones stay until closed. A click
 runs the app's default action; ✕ dismisses for good.
 

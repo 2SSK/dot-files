@@ -1,0 +1,95 @@
+#!/usr/bin/env bash
+# The i3 session's bar, polybar (~/.config/polybar/config.ini), and its own modules.
+#   desktop bar start       a bar on every screen (again: restarts them; theme does on a switch)
+#   desktop bar toggle      hide or show it
+#   desktop bar scratch     the scratchpad's window count, printed again whenever a window changes
+#   desktop bar recording   while recording: "rec" and the time it has run, else nothing
+#   desktop bar battery     "bat" and the level, "chr" while charging (nothing without a battery)
+# Polybar runs the modules (tail: one long-running process each, a line per change).
+set -euo pipefail
+# shellcheck source-path=SCRIPTDIR/../../../.. source=.local/lib/desktop/state.sh
+source "$(dirname "$(readlink -f "$0")")/../state.sh"
+
+palette="$desktop_state/theme/palette.json"
+runtime="${XDG_RUNTIME_DIR:-/tmp}/desktop"
+config="${XDG_CONFIG_HOME:-$HOME/.config}/desktop"
+colour() { jq -r --arg k "$1" '.ui[$k] // empty' "$palette" 2>/dev/null || true; }
+# a builtin sleep: read times out on a descriptor that never has input (no process a second)
+exec {never}<> <(:)
+pause() { read -rt "$1" -u "$never" _ || true; }
+
+start() {
+	command -v polybar >/dev/null || { echo "desktop bar: polybar isn't installed" >&2 && return 1; }
+	polybar-msg cmd quit >/dev/null 2>&1 || true
+	for _ in $(seq 20); do
+		pgrep -u "$UID" -x polybar >/dev/null || break
+		pause 0.1
+	done
+	local monitor
+	while read -r monitor; do
+		MONITOR=$monitor setsid -f polybar --reload main >>"${XDG_RUNTIME_DIR:-/tmp}/polybar.log" 2>&1
+	done < <(polybar --list-monitors 2>/dev/null | cut -d: -f1 | grep . || echo "")
+}
+
+# an item as the bar shows them: "label value", the label in the accent
+item() { # <label> <value> [value colour]
+	local value=$2
+	[[ -n ${3:-} ]] && value="%{F$3}$2%{F-}"
+	echo "%{F$(colour primary)}$1%{F-} $value"
+}
+
+scratch() { # "scratch 2" while it holds windows
+	count() {
+		local n
+		n="$(i3-msg -t get_tree | jq '[.. | objects | select(.name? == "__i3_scratch") | .. | objects | select(.window? != null)] | length')"
+		if ((n > 0)); then item scratch "$n"; else echo; fi
+	}
+	count
+	i3-msg -t subscribe -m '["window"]' | while read -r _; do count; done
+}
+
+recording() { # "rec 01:23" while recording, the time in red
+	local pid="$runtime/recording.pid" start now last=x red
+	red="$(colour error)"
+	while :; do
+		if [[ -s $pid ]] && kill -0 "$(<"$pid")" 2>/dev/null; then
+			start="$(stat -c %Y "$pid")"
+			now="$(item rec "$(date -u -d "@$(($(date +%s) - start))" +%M:%S)" "$red")"
+		else
+			now=""
+		fi
+		[[ $now == "$last" ]] || echo "$now"
+		last=$now
+		pause 1
+	done
+}
+
+battery() { # "bat 64%"; "chr 64%" while charging; the number red when low
+	local bat level status low
+	for bat in "${DESKTOP_POWER_SUPPLY:-/sys/class/power_supply}"/BAT*; do
+		[[ -r $bat/capacity ]] || continue
+		level="$(<"$bat/capacity")" status="$(<"$bat/status")"
+		low="$(jq -r '.power.batteryLow // 20' "$config/shell.json" 2>/dev/null || echo 20)"
+		if [[ $status == Charging || $status == Full ]]; then
+			item chr "$level%" "$(colour success)"
+		elif ((level <= low)); then
+			item bat "$level%" "$(colour error)"
+		else
+			item bat "$level%"
+		fi
+		return 0
+	done
+	echo
+}
+
+case ${1:-} in
+start) start ;;
+toggle) polybar-msg cmd toggle >/dev/null ;;
+scratch) scratch ;;
+recording) recording ;;
+battery) battery ;;
+*)
+	echo "usage: desktop bar start | toggle | scratch | recording | battery" >&2
+	exit 2
+	;;
+esac

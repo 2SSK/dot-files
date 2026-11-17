@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+# Screen recording on i3 (on sway the shell records): desktop capture record in the background,
+# into ~/Videos/Recordings, the microphone too when the shell's audio.recordMic is on.
+#   desktop record start region|window|screen   pick and start (the bar shows a red dot and the time)
+#   desktop record stop                         stop it; the file is saved and announced
+#   desktop record toggle [mode]                stop one that runs, else start (screen by default)
+#   desktop record running                      exit 0 while recording
+set -euo pipefail
+runtime="${XDG_RUNTIME_DIR:-/tmp}/desktop"
+pid="$runtime/recording.pid"
+config="${XDG_CONFIG_HOME:-$HOME/.config}/desktop/shell.json"
+
+running() { [[ -s $pid ]] && kill -0 "$(<"$pid")" 2>/dev/null; }
+
+start() { # <mode>
+	running && { echo "desktop record: already recording" >&2 && return 1; }
+	local folder file
+	folder="${XDG_VIDEOS_DIR:-$HOME/Videos}/Recordings"
+	file="$folder/Recording $(date '+%Y-%m-%d %H.%M.%S').mp4"
+	mkdir -p "$runtime"
+	setsid -f "$0" _watch "$1" "$file" >/dev/null 2>&1
+}
+
+# Runs detached: starts the recording, notes its pid once the region is picked (the bar's clock
+# starts then), and announces the file when it ends.
+watch() { # <mode> <file>
+	local mode=$1 file=$2 line mic=()
+	[[ $(jq -r '.audio.recordMic // false' "$config" 2>/dev/null) == true ]] && mic=(--mic)
+	# in the background bash ignores SIGINT for it; stop needs it back (gpu-screen-recorder saves on it)
+	coproc REC { trap - INT && exec desktop capture record "$mode" "$file" "${mic[@]}" 2>"$runtime/recording.log"; }
+	local rec=$REC_PID
+	if ! read -r line <&"${REC[0]}" || [[ $line != recording ]]; then
+		wait "$rec" 2>/dev/null || true # a cancelled region: nothing recorded
+		return 0
+	fi
+	echo "$rec" >"$pid"
+	wait "$rec" 2>/dev/null || true
+	rm -f "$pid"
+	if [[ -s $file ]]; then
+		notify-send -a "Screen recording" -i video-x-generic -t 4000 "Recording saved" "$file"
+	else
+		notify-send -a "Screen recording" -u critical -t 6000 "Recording failed" "$(tail -n 3 "$runtime/recording.log" 2>/dev/null)"
+	fi
+}
+
+stop() {
+	running || return 0
+	kill -INT "$(<"$pid")"
+}
+
+case ${1:-} in
+start) [[ ${2:-} =~ ^(region|window|screen)$ ]] || { echo "usage: desktop record start region|window|screen" >&2 && exit 2; } && start "$2" ;;
+stop) stop ;;
+toggle) if running; then stop; else start "${2:-screen}"; fi ;;
+running) running ;;
+_watch) watch "$2" "$3" ;;
+*)
+	echo "usage: desktop record start region|window|screen | stop | toggle [mode] | running" >&2
+	exit 2
+	;;
+esac

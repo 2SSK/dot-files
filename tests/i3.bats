@@ -21,10 +21,19 @@ setup() {
 	[[ $output != *"ERROR"* ]] || { grep ERROR <<<"$output" && false; }
 }
 
-@test "i3 starts nothing that Quickshell or the desktop-* commands replace" {
-	run grep -nE 'polybar|nm-applet|i3status|pactl|brightnessctl|scrot|lockscreen|powermenu|xrandr --output' \
+@test "i3 runs the minimal session: polybar, dunst, the clipboard history; no Quickshell" {
+	run grep -nE 'qs -c|quickshell|nm-applet|i3status|pactl|scrot|lockscreen|xrandr --output' \
 		"$REPO/.config/i3/config" "$REPO"/.config/i3/conf.d/*.conf
 	[ "$status" -eq 1 ]
+	grep -qx 'exec --no-startup-id desktop bar start' "$REPO/.config/i3/conf.d/autostart.conf"
+	grep -q '|| dunst$' "$REPO/.config/i3/conf.d/autostart.conf"
+	grep -qx 'exec --no-startup-id desktop cliphist keep' "$REPO/.config/i3/conf.d/autostart.conf"
+	grep -qx 'set $shell exec --no-startup-id desktop i3' "$REPO/.config/i3/config"
+}
+
+@test "sway keeps the Quickshell shell for the keys i3 shares with it" {
+	grep -qx 'set $shell exec --no-startup-id qs -c desktop ipc call' "$REPO/.config/sway/desktop.conf"
+	grep -qx 'include ~/.config/i3/conf.d/keys.conf' "$REPO/.config/sway/desktop.conf"
 }
 
 @test "desktop key-release fails cleanly without an X display, and on an unknown key" {

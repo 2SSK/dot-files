@@ -2,22 +2,19 @@
 # needed). One name per line; comments say why. Kept on purpose: GNOME (a fallback session), dev, yay, jq,
 # Kubernetes and database tools, media apps, the terminal toys with aliases (aliases.sh).
 
-# Old desktops and their tools: the desktop shell (Quickshell) replaced them on i3 and sway
+# Old desktops and their tools: the desktop shell (Quickshell, on sway) and the minimal i3 session
+# (polybar, rofi, dunst) replaced them
 hyprland
 hyprshot
 noctalia
 aylurs-gtk-shell-git
 libastal-niri-git
 xwayland-satellite
-mpvpaper
 matugen-bin
 wallust
-rofi
 tofi
 dmenu
 i3status
-polybar
-dunst
 cliphist
 sway-contrib
 smile
@@ -28,7 +25,6 @@ nwg-look
 blueberry
 network-manager-applet
 mate-polkit
-polkit-gnome
 archlinux-xdg-menu
 eos-settings-i3wm
 

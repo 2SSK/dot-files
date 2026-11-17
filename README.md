@@ -1,7 +1,7 @@
 # dot-files
 
-My Arch Linux desktop: **sway (swayfx)** and **i3** sharing one config, with a
-[Quickshell](https://quickshell.org) desktop shell, and one theme that colours everything.
+My Arch Linux desktop: **sway (swayfx)** with a [Quickshell](https://quickshell.org) desktop shell,
+and a minimal **i3** (polybar, rofi, dunst) on the same keys, with one theme that colours everything.
 
 ![The desktop: tmux, Neovim and lazygit under the island bar](docs/screens/desktop.webp)
 
@@ -14,12 +14,16 @@ My Arch Linux desktop: **sway (swayfx)** and **i3** sharing one config, with a
 | ![Settings](docs/screens/settings.webp) Settings | ![Bar at the bottom](docs/screens/bar-bottom.webp) The bar, full width at the bottom |
 | ![A light theme](docs/screens/light-theme.webp) A light theme | ![Keys](docs/screens/keys.webp) Every key, searchable |
 
-- **Desktop shell** (`qs -c desktop`): a bar per screen (a compact floating island, or full width
-  with workspace chips), control center (Wi-Fi, Bluetooth, power profiles, media, calendar, notes, todo), launcher, clipboard history,
-  notifications, screenshots and recording, wallpapers, lock screen and settings, the same on
-  sway and i3.
+- **Desktop shell** on sway (`qs -c desktop`): a bar per screen (a compact floating island, or full
+  width with workspace chips), control center (Wi-Fi, Bluetooth, power profiles, media, calendar),
+  launcher, clipboard history, notifications, screenshots and recording, wallpapers, lock screen
+  and settings ([docs/desktop-shell.md](docs/desktop-shell.md)).
+- **Minimal i3**: polybar, rofi menus for everything (clipboard, capture, wallpapers, themes,
+  power, notifications), dunst and a light picom ([docs/i3.md](docs/i3.md)).
+- **Notes and to-dos**: Markdown files behind rofi menus, the same in both sessions
+  ([docs/notes.md](docs/notes.md)).
 - **One theme**: pick a palette (8 families, dark and light) and kitty, foot, nvim, tmux, GTK, Qt,
-  i3/sway, the shell, the login screen and the boot menu follow it live.
+  i3/sway, the shell, polybar, rofi, dunst, the login screen and the boot menu follow it live.
 - **Terminal**: zsh, tmux (sessions restored at login), Neovim with LSP and Copilot, yazi.
 - **System**: TLP power profiles and an 80% charge limit, zram and systemd-oomd, Timeshift
   snapshots, a minimal themed boot menu (GRUB) and login screen (SDDM).
@@ -47,7 +51,8 @@ with [GNU Stow](https://www.gnu.org/software/stow/): `stow .` links, `stow -R .`
 
 | | |
 |---|---|
-| [desktop-shell](docs/desktop-shell.md) | the bar, panels, keys and settings |
+| [desktop-shell](docs/desktop-shell.md) | sway's shell: the bar, panels, keys and settings |
+| [i3](docs/i3.md) · [notes](docs/notes.md) | the minimal i3 session; notes and to-dos |
 | [theme](docs/theme.md) | how a theme is rendered and applied |
 | [shell](docs/shell.md) · [tmux](docs/tmux.md) · [nvim](docs/nvim.md) · [git](docs/git.md) | the terminal side |
 | [vscodium](docs/vscodium.md) | the GUI editor: minimal, vim keys, the desktop theme |

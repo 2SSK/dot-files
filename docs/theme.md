@@ -42,7 +42,10 @@ Palette values are copied from each project's official ports, with attribution i
 | starship, fzf, zsh autosuggestions, `ls` / eza, bat, btop, fastfetch, pgcli | The terminal's 16 ANSI colours | With the terminal |
 | cava | `cava` alias loads the rendered config (gradient from the ANSI colours) | Live (SIGUSR2) |
 | i3 / sway window borders | `include` of the rendered `i3.conf` | Live (i3: `i3-msg reload`; sway: its colours sent as commands) |
-| picom (i3): shadow colours | Started with the rendered `picom.conf` | At its next start |
+| picom (i3) | Started with the rendered `picom.conf` (light: vsync and corners, no colours) | At its next start |
+| polybar (i3's bar) | `~/.config/polybar/theme.ini` links to the rendered `polybar.ini` (colours, fonts) | Live (`polybar-msg cmd restart`) |
+| rofi (menus) | `~/.config/rofi/theme.rasi` links to the rendered `rofi.rasi` | The next menu |
+| dunst (i3's notifications) | `~/.config/dunst/dunstrc.d/90-theme.conf` links to the rendered `dunst.conf` | Live (`dunstctl reload`) |
 | GTK theme, icons, cursor, fonts | X11: xsettingsd reads the rendered `xsettingsd.conf`; Wayland: `gsettings` (org.gnome.desktop.interface). adw-gtk3, Tela-circle-blue dark/light, Bibata-Modern-Ice, the font collection (see Fonts) | Live |
 | GTK 3 | adw-gtk3 (dark or light) with its named colours from the rendered `gtk-3.0.css` (`~/.config/gtk-3.0/gtk.css` links to it); `settings.ini` (both GTK versions) from `gtk-settings.ini` | Dark/light live; colours on app restart |
 | GTK 4 / libadwaita | libadwaita's CSS variables in the rendered `gtk-4.0.css` (`~/.config/gtk-4.0/gtk.css` links to it); `gsettings` color-scheme | Dark/light live; colours on app restart |
@@ -75,7 +78,7 @@ reload command or `-`).
 | `~/.local/share/desktop/templates/` | One template per rendered target |
 | `~/.local/state/desktop/theme/current` | `family=` and `mode=` of the active theme |
 | `~/.local/state/desktop/theme/palette.json` | Active variant for apps that read JSON |
-| `~/.local/state/desktop/theme/` `kitty.conf`, `foot.ini`, `i3.conf`, `picom.conf`, `xsettingsd.conf`, `st.Xresources`, `cava`, `tmux.conf`, `git.conf`, `lazygit.yml`, `lazydocker/`, `pspg/`, `rmpc.ron`, `silicon.tmTheme` | Rendered configs |
+| `~/.local/state/desktop/theme/` `kitty.conf`, `foot.ini`, `i3.conf`, `picom.conf`, `polybar.ini`, `rofi.rasi`, `dunst.conf`, `xsettingsd.conf`, `st.Xresources`, `cava`, `tmux.conf`, `git.conf`, `lazygit.yml`, `lazydocker/`, `pspg/`, `rmpc.ron`, `silicon.tmTheme` | Rendered configs |
 
 ## Fonts
 

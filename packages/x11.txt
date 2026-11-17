@@ -3,6 +3,10 @@ i3-wm                       i3
 xorg-server                 xorg-x11-server-Xorg
 xorg-xinput                 xinput
 picom                       picom
+# the bar, notifications and the admin password prompt (sway has the Quickshell shell for these)
+polybar                     polybar
+dunst                       dunst
+polkit-gnome                polkit-gnome
 feh                         feh
 maim                        maim
 slop                        slop

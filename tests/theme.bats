@@ -315,7 +315,7 @@ fonts_collection() { # <name>: the desktop's chosen font collection, as the shel
 	grep -qx 'font_family GeistMono Nerd Font' "$STATE/kitty.conf"
 	grep -qx 'font=GeistMono Nerd Font:size=14' "$STATE/foot.ini"
 	grep -q '^st.font: GeistMono Nerd Font:size=14' "$STATE/st.Xresources"
-	grep -qx 'font pango:Geist, GeistMono Nerd Font, JetBrainsMono Nerd Font Medium 13' "$STATE/i3.conf"
+	grep -qx 'font pango:Geist, GeistMono Nerd Font, JetBrainsMono Nerd Font Medium 15' "$STATE/i3.conf"
 	grep -qx 'font=Geist' "$STATE/sddm-theme.conf"
 	python3 -c '
 import json, sys

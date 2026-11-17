@@ -1,15 +1,19 @@
-# i3 (X11). The bar, notifications, OSD, lock and power menu come from the Quickshell shell and the
-# desktop-* commands, so nothing here draws them. Colours come from the desktop theme.
+# i3 (X11), minimal: polybar, rofi menus, dunst and a light picom (sway keeps the Quickshell shell).
+# Everything the keys open is a desktop command (desktop menu, level, record, todo, notes...).
+# Colours and fonts come from the desktop theme.
 #   conf.d/look.conf        theme colours, fonts, borders, gaps, floating windows
 #   conf.d/keys.conf        apps, focus, moving, layouts, scratchpad, i3 itself
 #   conf.d/workspaces.conf  switching and moving between workspaces
 #   conf.d/resize.conf      the resize mode
-#   conf.d/autostart.conf   wallpaper, compositor, settings daemon, autotiling
+#   conf.d/autostart.conf   bar, notifications, clipboard history, wallpaper, compositor, ...
 
 set $mod Mod4
 set $term kitty
-# the shell, over its IPC: qs -c desktop ipc call <target> <function>
-set $shell exec --no-startup-id qs -c desktop ipc call
+# What the keys ask of the shell (keys.conf is sway's too, where $shell is the Quickshell shell's IPC):
+# here desktop i3 does each with rofi, polybar or dunst
+set $shell exec --no-startup-id desktop i3
+# a note being written (desktop notes opens it in kitty) floats in the middle, as big as the scratchpad
+for_window [class="^desktop-notes$"] floating enable, resize set width 80 ppt height 75 ppt, move position center
 
 include ~/.config/i3/conf.d/look.conf
 include ~/.config/i3/conf.d/keys.conf

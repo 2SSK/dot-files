@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # What happens when you leave the laptop alone (X11, i3), set from the shell's settings:
-#   desktop idle apply <dim> <lock> <off>   minutes (0: never). X's screensaver starts at the dim
+#   desktop idle apply [<dim> <lock> <off>] minutes (0: never; none given: shell.json's idle, as
+#                                          i3's autostart does). X's screensaver starts at the dim
 #                                          time; xss-lock then runs `desktop idle dim` and locks
 #                                          when the screensaver's cycle ends, at the lock time.
 #                                          The screen switches off (DPMS) at the off time.
@@ -49,8 +50,15 @@ dim() {
 }
 
 case ${1:-} in
-apply) (($# == 4)) || { echo "usage: desktop idle apply <dim> <lock> <off>" >&2 && exit 2; }; apply "$2" "$3" "$4" ;;
+apply)
+	if (($# == 1)); then
+		# shellcheck disable=SC2046 # three numbers
+		set -- apply $(jq -r '.idle | "\(.dim // 4) \(.lock // 5) \(.off // 10)"' "${XDG_CONFIG_HOME:-$HOME/.config}/desktop/shell.json" 2>/dev/null || echo 4 5 10)
+	fi
+	(($# == 4)) || { echo "usage: desktop idle apply [<dim> <lock> <off>]" >&2 && exit 2; }
+	apply "$2" "$3" "$4"
+	;;
 dim) dim ;;
 undim) [[ -s $pidfile ]] && kill -TERM "$(cat "$pidfile")" 2>/dev/null || true ;;
-*) echo "usage: desktop idle apply <dim> <lock> <off> | dim | undim" >&2 && exit 2 ;;
+*) echo "usage: desktop idle apply [<dim> <lock> <off>] | dim | undim" >&2 && exit 2 ;;
 esac

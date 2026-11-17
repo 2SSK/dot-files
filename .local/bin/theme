@@ -44,6 +44,9 @@ palette.json     -                  pkill -USR1 -x nvim
 tmux.conf        -                  tmux info && tmux source-file "${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf"
 i3.conf          -                  if [[ -n ${SWAYSOCK:-} ]]; then swaymsg -q "$(grep -E '^(client\.|font )' "$state/i3.conf" | paste -sd';')"; else i3-msg -t get_version && i3-msg -q reload; fi
 picom.conf       -                  -
+polybar.ini      polybar/theme.ini  pgrep -u "$UID" -x polybar && polybar-msg cmd restart
+rofi.rasi        rofi/theme.rasi    -
+dunst.conf       dunst/dunstrc.d/90-theme.conf pgrep -u "$UID" -x dunst && dunstctl reload
 xsettingsd.conf  -                  pkill -HUP -x xsettingsd
 st.Xresources    -                  [[ -n ${DISPLAY:-} && -r $HOME/.Xresources ]] && xrdb -merge "$HOME/.Xresources" && pkill -USR1 -x st
 gtk-3.0.css      gtk-3.0/gtk.css    -
