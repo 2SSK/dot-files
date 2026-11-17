@@ -79,11 +79,12 @@ prune_links() {
 
 # User services: mpd plays music, mpd-mpris exposes it to media keys and the bar, and
 # desktop-wallpaper-next picks the next boot's wallpaper as the system shuts down.
+# desktop-todo-check.timer tells to-do reminders and due times.
 # Run after stow: mpd reads its config from the links. One that won't start is a warning, not a stop.
 enable_services() {
 	local unit units=()
 	systemctl --user show-environment >/dev/null 2>&1 || { warn 'no systemd user session; services not enabled' && return 0; }
-	for unit in mpd.service mpd-mpris.service desktop-wallpaper-next.service tmux-save.timer; do
+	for unit in mpd.service mpd-mpris.service desktop-wallpaper-next.service tmux-save.timer desktop-todo-check.timer; do
 		systemctl --user cat "$unit" >/dev/null 2>&1 && units+=("$unit")
 	done
 	((${#units[@]})) || return 0

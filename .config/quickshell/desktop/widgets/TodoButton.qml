@@ -1,19 +1,9 @@
 import QtQuick
+import Quickshell
 import qs
-import qs.services
 
-// Opens the todo list; a dot while tasks are open.
+// Opens the to-dos: desktop todo, a rofi menu over ~/.local/share/desktop/todo.md (as on i3).
 BarButton {
 	glyph: Icons.g("checklist")
-	page: "todo"
-
-	Rectangle {
-		visible: Todo.open > 0
-		anchors.right: parent.right
-		anchors.top: parent.top
-		width: 6
-		height: 6
-		radius: 3
-		color: Theme.primary
-	}
+	onClicked: Quickshell.execDetached(["desktop", "todo"])
 }

@@ -1,0 +1,344 @@
+#!/usr/bin/env python3
+"""Notes as Markdown files, in rofi, on sway and i3 alike (after JustAGuyLinux's ButterNotes).
+
+  desktop notes                  rofi: the inbox, your notes, the projects (folders of notes) and a
+                                 search through every note. Enter opens one in nvim (a floating
+                                 kitty); type a new name and Enter to start a note; Alt+q puts
+                                 what's typed in the inbox; Alt+v the clipboard; Alt+d deletes;
+                                 Alt+m moves a note into a project
+  desktop notes quick <text>     a line in the inbox, timestamped
+  desktop notes clip [text]      the clipboard (or the text) in the inbox, as a block
+  desktop notes migrate          the shell's old notes.json as files (once; the JSON is kept as
+                                 notes.json.bak)
+
+~/.local/share/desktop/notes/
+  inbox.md                  quick notes, newest last: "[2026-11-17 09:30] a thought"
+  <name>.md                 a note
+  <project>/<name>.md       a project's notes
+"""
+import datetime as dt
+import json
+import os
+import re
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+
+ROOT = Path(os.environ.get("XDG_DATA_HOME") or Path.home() / ".local/share") / "desktop/notes"
+INBOX = ROOT / "inbox.md"
+STAMP = re.compile(r"^\[(\d{4}-\d\d-\d\d \d\d:\d\d(?::\d\d)?)\] ?(.*)$")
+
+
+def rofi(rows, *args):
+    """(code, index, typed): code 0 Enter, 1 cancelled, 10+ the custom keys; index -1 for text typed
+    that matches no row."""
+    done = subprocess.run(["rofi", "-dmenu", "-i", "-format", "i f", *args], input="\n".join(rows),
+                          capture_output=True, text=True, check=False)
+    index, _, typed = done.stdout.rstrip("\n").partition(" ")
+    try:
+        index = int(index)
+    except ValueError:
+        index = -1
+    return done.returncode, index, typed.strip()
+
+
+def ask(prompt, hint=""):
+    code, _, typed = rofi([], "-p", prompt, "-mesg", hint, "-theme-str", "listview { enabled: false; }")
+    return typed if code == 0 and typed else None
+
+
+def confirm(question):
+    code, i, _ = rofi(["Cancel", "Delete"], "-p", question, "-no-custom", "-selected-row", "0",
+                      "-theme-str", "window { width: 360px; } listview { columns: 2; lines: 1; } entry { enabled: false; }")
+    return code == 0 and i == 1
+
+
+def notify(title, body=""):
+    subprocess.run(["notify-send", "-a", "Notes", "-i", "accessories-text-editor", "-t", "3000", title, body], check=False)
+
+
+def ago(path):
+    s = dt.datetime.now().timestamp() - path.stat().st_mtime
+    for unit, size in (("d", 86400), ("h", 3600), ("m", 60)):
+        if s >= size:
+            return f"{int(s // size)}{unit}"
+    return "now"
+
+
+def safe(name):
+    """A note's name as a file name: no slashes, no leading dot."""
+    name = re.sub(r"[/\x00]", "-", name).strip().lstrip(".")
+    return name[:120] or "untitled"
+
+
+def edit(path, line=None):
+    """The note in nvim, in a floating kitty (i3 and sway float class/app_id desktop-notes); the
+    editor in $TERMINAL otherwise."""
+    editor = os.environ.get("NOTES_EDITOR") or "nvim"
+    args = [editor, *([f"+{line}"] if line else []), str(path)]
+    if shutil.which("kitty"):
+        command = ["kitty", "--class", "desktop-notes", "--title", path.stem, "--directory", str(path.parent), *args]
+    else:
+        command = [os.environ.get("TERMINAL") or "xterm", "-e", *args]
+    subprocess.Popen(command, start_new_session=True, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+
+def new_note(folder, name):
+    path = folder / f"{safe(name)}.md"
+    if not path.exists():
+        folder.mkdir(parents=True, exist_ok=True)
+        path.write_text(f"# {name}\n\n")
+    edit(path, 3)
+
+
+def now():
+    return dt.datetime.now().strftime("%Y-%m-%d %H:%M")
+
+
+def quick(text):
+    ROOT.mkdir(parents=True, exist_ok=True)
+    with INBOX.open("a") as f:
+        f.write(f"[{now()}] {text}\n")
+
+
+def clip(text=None):
+    if text is None:
+        command = ["wl-paste", "--no-newline"] if os.environ.get("WAYLAND_DISPLAY") else ["xclip", "-selection", "clipboard", "-o"]
+        text = subprocess.run(command, capture_output=True, text=True, check=False).stdout
+    if not text.strip():
+        notify("The clipboard holds no text")
+        return
+    ROOT.mkdir(parents=True, exist_ok=True)
+    with INBOX.open("a") as f:
+        f.write(f"[{now()}] [clipboard]\n" + "".join(f"    {line}\n" for line in text.rstrip("\n").split("\n")))
+    notify("Clipboard kept in the inbox", text.strip().split("\n")[0][:80])
+
+
+def inbox_entries():
+    """Each entry: [stamp, text, first line number, last line number]; a clipboard block's text is
+    its indented lines."""
+    if not INBOX.exists():
+        return []
+    entries = []
+    for n, line in enumerate(INBOX.read_text().splitlines(), 1):
+        m = STAMP.match(line)
+        if m:
+            entries.append([m[1], "" if m[2] == "[clipboard]" else m[2], n, n])
+        elif entries and line.startswith("    "):
+            entries[-1][1] += ("\n" if entries[-1][1] else "") + line[4:]
+            entries[-1][3] = n
+    return entries
+
+
+def drop_lines(first, last):
+    lines = INBOX.read_text().splitlines(keepends=True)
+    INBOX.write_text("".join(lines[: first - 1] + lines[last:]))
+
+
+def notes_in(folder):
+    return sorted((p for p in folder.glob("*.md") if p != INBOX), key=lambda p: p.stat().st_mtime, reverse=True)
+
+
+def projects():
+    return sorted((p for p in ROOT.iterdir() if p.is_dir() and not p.name.startswith(".")), key=lambda p: p.name.lower()) if ROOT.exists() else []
+
+
+def choose_project(prompt):
+    folders = projects()
+    code, i, typed = rofi([f"󰉋  {p.name}" for p in folders], "-p", prompt, "-mesg", "Pick one, or type a new project's name")
+    if code != 0:
+        return None
+    if 0 <= i < len(folders):
+        return folders[i]
+    return ROOT / safe(typed) if typed else None
+
+
+def inbox():
+    while True:
+        entries = list(reversed(inbox_entries()))
+        rows = [f"{e[1].splitlines()[0][:110] if e[1] else '(blank)'}   ·  {e[0][5:]}" for e in entries]
+        code, i, typed = rofi(rows, "-p", "inbox", "-mesg", "Type + Enter adds · Enter: copy it · Alt+m into a project · Alt+d delete · Alt+e edit the inbox",
+                              "-kb-custom-1", "Alt+m", "-kb-custom-2", "Alt+d", "-kb-custom-3", "Alt+e", "-theme-str", "window { width: 680px; }")
+        if code == 1:
+            return
+        if code == 0 and i < 0:
+            if typed:
+                quick(typed)
+            continue
+        if code == 12:
+            edit(INBOX)
+            return
+        if not 0 <= i < len(entries):
+            return
+        stamp, text, first, last = entries[i]
+        if code == 0:
+            subprocess.run(["desktop", "clipboard", "copy", "text"], input=text.encode(), check=False)
+            notify("Copied", text.split("\n")[0][:80])
+            return
+        if code == 10:
+            folder = choose_project("into project")
+            if folder is None:
+                continue
+            name = ask("note name", f"Into {folder.name}: a note's name (a new one, or one there)")
+            if not name:
+                continue
+            path = folder / f"{safe(name)}.md"
+            folder.mkdir(parents=True, exist_ok=True)
+            if not path.exists():
+                path.write_text(f"# {name}\n\n")
+            with path.open("a") as f:
+                f.write(("\n" if not path.read_text().endswith("\n\n") else "") + text + "\n")
+            drop_lines(first, last)
+        elif code == 11:
+            drop_lines(first, last)
+
+
+def search():
+    if not ROOT.exists():
+        return
+    hits = []
+    for path in sorted(ROOT.rglob("*.md")):
+        for n, line in enumerate(path.read_text(errors="replace").splitlines(), 1):
+            if line.strip():
+                hits.append((path, n, line.strip()))
+    rows = [f"{h[0].relative_to(ROOT).with_suffix('')}:{h[1]}   {h[2][:120]}" for h in hits]
+    code, i, _ = rofi(rows, "-p", "search", "-no-custom", "-theme-str", "window { width: 820px; } listview { lines: 14; }")
+    if code == 0 and 0 <= i < len(hits):
+        edit(hits[i][0], hits[i][1])
+
+
+def folder_view(folder):
+    """A project: its notes. True to go back to the top."""
+    while True:
+        notes = notes_in(folder) if folder.exists() else []
+        rows = [f"󰈙  {p.stem}   ·  {ago(p)}" for p in notes]
+        code, i, typed = rofi(rows, "-p", folder.name, "-mesg", "Enter opens it · type a new name + Enter starts one · Alt+d delete · Esc back",
+                              "-kb-custom-2", "Alt+d", "-theme-str", "window { width: 600px; }")
+        if code == 1:
+            return True
+        if code == 0 and i < 0:
+            if typed:
+                new_note(folder, typed)
+                return False
+            continue
+        if not 0 <= i < len(notes):
+            return True
+        if code == 0:
+            edit(notes[i])
+            return False
+        if code == 11 and confirm(f"Delete {notes[i].stem}?"):
+            notes[i].unlink()
+            if folder != ROOT and not any(folder.iterdir()):
+                folder.rmdir()
+                return True
+
+
+def menu():
+    migrate(quiet=True)
+    while True:
+        ROOT.mkdir(parents=True, exist_ok=True)
+        count = len(inbox_entries())
+        notes, folders = notes_in(ROOT), projects()
+        rows = [f"󰚇  Inbox   ·  {count}", "󰍉  Search every note"]
+        rows += [f"󰈙  {p.stem}   ·  {ago(p)}" for p in notes]
+        rows += [f"󰉋  {p.name}   ·  {len(list(p.glob('*.md')))} notes" for p in folders]
+        code, i, typed = rofi(
+            rows, "-p", "notes", "-mesg", "Enter opens · a new name + Enter starts a note · Alt+q quick note · Alt+v clipboard · Alt+m move · Alt+d delete",
+            "-kb-custom-1", "Alt+q", "-kb-custom-2", "Alt+d", "-kb-custom-3", "Alt+m", "-kb-custom-4", "Alt+v",
+            "-theme-str", "window { width: 640px; } entry { placeholder: \"Search, or a new note's name\"; }")
+        if code == 1:
+            return
+        if code == 10:  # the typed text, as a quick note
+            if typed:
+                quick(typed)
+                notify("In the inbox", typed[:80])
+            return
+        if code == 13:
+            clip()
+            return
+        if code == 0 and i < 0:
+            if typed:
+                new_note(ROOT, typed)
+            return
+        if i == 0:
+            if code == 0:
+                inbox()
+            continue
+        if i == 1:
+            if code == 0:
+                search()
+                return
+            continue
+        if 2 <= i < 2 + len(notes):
+            note = notes[i - 2]
+            if code == 0:
+                edit(note)
+                return
+            if code == 11 and confirm(f"Delete {note.stem}?"):
+                note.unlink()
+            elif code == 12:
+                folder = choose_project("move to")
+                if folder:
+                    folder.mkdir(parents=True, exist_ok=True)
+                    target = folder / note.name
+                    if target.exists():
+                        notify("Not moved", f"{folder.name} already has {note.stem}")
+                    else:
+                        note.rename(target)
+            continue
+        if 2 + len(notes) <= i < len(rows):
+            folder = folders[i - 2 - len(notes)]
+            if code == 0:
+                if not folder_view(folder):
+                    return
+            elif code == 11 and confirm(f"Delete the project {folder.name} and its notes?"):
+                shutil.rmtree(folder)
+
+
+def migrate(quiet=False):
+    """The shell's notes.json: each note a file (its checklist as - [ ] lines, a code note fenced)."""
+    old = ROOT / "notes.json"
+    if not old.exists():
+        return 0
+    try:
+        notes = json.loads(old.read_text()).get("notes", [])
+    except ValueError:
+        print(f"desktop notes: {old} isn't JSON; left as it is", file=sys.stderr)
+        return 1
+    for n in notes:
+        title = n.get("title") or n.get("body", "").strip().split("\n")[0][:40] or "untitled"
+        path = ROOT / f"{safe(title)}.md"
+        k = 2
+        while path.exists():
+            path, k = ROOT / f"{safe(title)} {k}.md", k + 1
+        body = n.get("body", "").rstrip("\n")
+        if n.get("type") == "code" and body:
+            body = f"```\n{body}\n```"
+        items = "".join(f"- [{'x' if i.get('done') else ' '}] {i.get('text', '')}\n" for i in n.get("items", []))
+        path.write_text(f"# {title}\n\n" + (body + "\n" if body else "") + ("\n" if body and items else "") + items)
+        if n.get("updated"):
+            os.utime(path, (n["updated"] / 1000, n["updated"] / 1000))
+    old.rename(old.with_name("notes.json.bak"))
+    if not quiet:
+        print(f"desktop notes: {len(notes)} moved into {ROOT}")
+    return 0
+
+
+def main(argv):
+    if not argv:
+        menu()
+    elif argv[0] == "quick" and len(argv) > 1:
+        quick(" ".join(argv[1:]))
+    elif argv[0] == "clip":
+        clip(" ".join(argv[1:]) if len(argv) > 1 else None)
+    elif argv == ["migrate"]:
+        return migrate()
+    else:
+        print(__doc__.split("\n\n")[1], file=sys.stderr)
+        return 2
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

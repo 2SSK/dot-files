@@ -1,0 +1,367 @@
+#!/usr/bin/env python3
+"""To-dos in one Markdown file, in rofi, on sway and i3 alike (after JustAGuyLinux's ButterTodo).
+
+  desktop todo                     the list in rofi: open tasks first (high priority, then the
+                                   soonest due), done ones after. Type and Enter to add one
+                                   ("@friday" or "@tomorrow 9am" at the end sets its due date);
+                                   Enter on a task opens its actions; Alt+x done or not, Alt+d
+                                   delete, Alt+a add what's typed even when it matches a task
+  desktop todo add <text>          add one from a terminal (with "@when" as above)
+  desktop todo list                the open ones, numbered
+  desktop todo done <n>            mark the nth open one done
+  desktop todo check               notify reminders and due times that have come (a user timer
+                                   runs it every few minutes); each is told once
+  desktop todo migrate             move the shell's old todo.json into the file (once; the JSON
+                                   is kept beside it as todo.json.bak)
+
+The file, ~/.local/share/desktop/todo.md, is plain Markdown, fine to edit by hand:
+  - [ ] Review the config *(added: 2026-11-16, due: 2026-11-17 17:00, priority: high)*
+  - [ ] Rip the CDs *(added: 2026-11-15, remind: 2026-11-21 10:00)*
+  - [x] ~~Install woomer~~ *(added: 2026-11-14, done: 2026-11-17)*
+"""
+import datetime as dt
+import json
+import os
+import re
+import subprocess
+import sys
+from pathlib import Path
+
+DATA = Path(os.environ.get("XDG_DATA_HOME") or Path.home() / ".local/share") / "desktop"
+FILE = DATA / "todo.md"
+TOLD = Path(os.environ.get("XDG_STATE_HOME") or Path.home() / ".local/state") / "desktop/todo-told.json"
+HEADER = "# To-do\n\n"
+LINE = re.compile(r"^- \[(?P<done>[ xX])\] (?P<text>.*?)(?: \*\((?P<meta>[^()]*)\)\*)?\s*$")
+ORDER = {"high": 0, "medium": 1, "low": 2}
+
+
+class Task:
+    def __init__(self, text, done=False, meta=None):
+        self.text, self.done, self.meta = text, done, dict(meta or {})
+
+    @classmethod
+    def parse(cls, line):
+        m = LINE.match(line)
+        if not m:
+            return None
+        text = m["text"]
+        if m["done"] != " " and text.startswith("~~") and text.endswith("~~") and len(text) > 4:
+            text = text[2:-2]
+        meta = {}
+        for part in (m["meta"] or "").split(","):
+            key, _, value = part.partition(":")
+            if key.strip() and value.strip():
+                meta[key.strip()] = value.strip()
+        return cls(text, m["done"] != " ", meta)
+
+    def line(self):
+        text = f"~~{self.text}~~" if self.done else self.text
+        order = ["added", "due", "remind", "priority", "done"]
+        keys = sorted(self.meta, key=lambda k: order.index(k) if k in order else len(order))
+        meta = ", ".join(f"{k}: {self.meta[k]}" for k in keys)
+        return f"- [{'x' if self.done else ' '}] {text}" + (f" *({meta})*" if meta else "")
+
+    @property
+    def priority(self):
+        return self.meta.get("priority", "medium")
+
+    def due(self):
+        return when(self.meta.get("due"))
+
+    def overdue(self, now):
+        d = self.due()
+        if d is None or self.done:
+            return False
+        if len(self.meta["due"]) == 10:  # a day without a time: due by its end
+            return d.date() < now.date()
+        return d <= now
+
+
+def when(stamp):
+    for form in ("%Y-%m-%d %H:%M", "%Y-%m-%d"):
+        try:
+            return dt.datetime.strptime(stamp or "", form)
+        except ValueError:
+            pass
+    return None
+
+
+def parse_when(words):
+    """'friday', 'tomorrow 9am', '2 hours', '2026-12-01': a stamp, the day alone when no time was
+    said; None when GNU date can't read it."""
+    if not words.strip():
+        return None
+    done = subprocess.run(["date", "-d", words, "+%Y-%m-%d %H:%M"], capture_output=True, text=True, check=False)
+    if done.returncode != 0:
+        return None
+    stamp = done.stdout.strip()
+    said_time = re.search(r"\d:\d|\d\s*(am|pm)\b|\b(hour|minute|min|noon|midnight)", words, re.I)
+    return stamp if said_time else stamp[:10]
+
+
+def load():
+    try:
+        lines = FILE.read_text().splitlines()
+    except FileNotFoundError:
+        return [], []
+    tasks, other = [], []
+    for line in lines:
+        task = Task.parse(line)
+        if task:
+            tasks.append(task)
+        elif line.strip() and line.strip() != HEADER.strip():
+            other.append(line)  # anything else written by hand stays, at the end
+    return tasks, other
+
+
+def save(tasks, other):
+    FILE.parent.mkdir(parents=True, exist_ok=True)
+    tmp = FILE.with_suffix(".tmp")
+    tmp.write_text(HEADER + "".join(t.line() + "\n" for t in tasks) + ("\n" + "\n".join(other) + "\n" if other else ""))
+    tmp.replace(FILE)
+
+
+def today():
+    return dt.date.today().isoformat()
+
+
+def new_task(text):
+    """'Pay rent @friday' is due on Friday; '!' at the start makes it high priority."""
+    meta = {"added": today()}
+    m = re.search(r"\s@(\S.*)$", text)
+    if m and (stamp := parse_when(m[1])):
+        meta["due"] = stamp
+        text = text[: m.start()]
+    if text.startswith("!"):
+        meta["priority"] = "high"
+        text = text[1:]
+    return Task(text.strip(), False, meta) if text.strip() else None
+
+
+def ordered(tasks):
+    far = dt.datetime.max
+    return sorted(tasks, key=lambda t: (t.done, ORDER.get(t.priority, 1), t.due() or far))
+
+
+def label(t, now, c):
+    def esc(s):
+        return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+    if t.done:
+        return f"<span alpha='45%'><s>{esc(t.text)}</s></span>"
+    mark = {"high": f"<span foreground='{c['error']}'>!</span> ", "low": "<span alpha='55%'>↓</span> "}.get(t.priority, "")
+    out = mark + esc(t.text)
+    if t.meta.get("due"):
+        d = t.due()
+        shown = d.strftime("%a %d %b" if d.year == now.year else "%a %d %b %Y") + ("" if len(t.meta["due"]) == 10 else d.strftime(" %H:%M"))
+        if d.date() == now.date():
+            shown = "today" + ("" if len(t.meta["due"]) == 10 else d.strftime(" %H:%M"))
+        colour = c["error"] if t.overdue(now) else c["muted"]
+        out += f"   <span foreground='{colour}' size='small'>{'⚠ ' if t.overdue(now) else ''}{shown}</span>"
+    if t.meta.get("remind"):
+        r = when(t.meta["remind"])
+        out += f"   <span foreground='{c['muted']}' size='small'>🔔 {r.strftime('%a %d %b %H:%M') if r else ''}</span>"
+    return out
+
+
+def colours():
+    palette = Path(os.environ.get("XDG_STATE_HOME") or Path.home() / ".local/state") / "desktop/theme/palette.json"
+    try:
+        ui = json.loads(palette.read_text())["ui"]
+        return {"error": ui["error"], "muted": ui["fg_muted"]}
+    except (OSError, ValueError, KeyError):
+        return {"error": "#f38ba8", "muted": "#a6adc8"}
+
+
+def rofi(rows, *args, markup=True):
+    """(code, index, typed): code 0 Enter, 1 cancelled, 10+ the custom keys; index -1 for text typed
+    that matches no row."""
+    command = ["rofi", "-dmenu", "-i", "-format", "i f", *args]
+    if markup:
+        command.append("-markup-rows")
+    done = subprocess.run(command, input="\n".join(rows), capture_output=True, text=True, check=False)
+    index, _, typed = done.stdout.rstrip("\n").partition(" ")
+    try:
+        index = int(index)
+    except ValueError:
+        index = -1
+    return done.returncode, index, typed
+
+
+def ask(prompt, hint="", value=""):
+    code, _, typed = rofi([], "-p", prompt, "-mesg", hint, "-filter", value, "-theme-str", "listview { enabled: false; }", markup=False)
+    return typed.strip() if code == 0 else None
+
+
+def actions(task, tasks, other):
+    rows = ["Mark done" if not task.done else "Mark not done", "Set due date", "Set reminder", "Edit",
+            "Priority: " + {"high": "high → low", "low": "low → medium"}.get(task.priority, "medium → high"), "Delete"]
+    code, i, _ = rofi(rows, "-p", "task", "-no-custom", "-mesg", task.text, "-theme-str", "window { width: 420px; }", markup=False)
+    if code != 0 or i < 0:
+        return
+    if i == 0:
+        toggle(task)
+    elif i in (1, 2):
+        key = "due" if i == 1 else "remind"
+        typed = ask("due" if i == 1 else "remind", "friday, tomorrow 9am, 2 hours, 2026-12-01 · clear removes it", task.meta.get(key, ""))
+        if typed is None:
+            return
+        if typed == "clear":
+            task.meta.pop(key, None)
+        elif stamp := parse_when(typed):
+            if key == "remind" and len(stamp) == 10:
+                stamp += " 09:00"  # a reminder on a day: in the morning
+            task.meta[key] = stamp
+        else:
+            notify("Can't read that date", typed)
+            return
+    elif i == 3:
+        typed = ask("edit", "", task.text)
+        if not typed:
+            return
+        task.text = typed
+    elif i == 4:
+        task.meta["priority"] = {"medium": "high", "high": "low", "low": "medium"}.get(task.priority, "high")
+        if task.meta["priority"] == "medium":
+            del task.meta["priority"]
+    elif i == 5:
+        tasks.remove(task)
+    save(tasks, other)
+
+
+def toggle(task):
+    task.done = not task.done
+    if task.done:
+        task.meta["done"] = today()
+    else:
+        task.meta.pop("done", None)
+
+
+def notify(title, body="", urgency="normal"):
+    subprocess.run(["notify-send", "-a", "To-do", "-u", urgency, "-i", "checkbox-checked", title, body], check=False)
+
+
+def menu():
+    selected = 0
+    while True:
+        tasks, other = load()
+        now = dt.datetime.now()
+        shown = ordered(tasks)
+        c = colours()
+        rows = [label(t, now, c) for t in shown]
+        left = sum(not t.done for t in tasks)
+        code, i, typed = rofi(
+            rows, "-p", f"todo · {left}" if left else "todo", "-selected-row", str(selected),
+            "-mesg", "Type + Enter adds (@friday sets due, ! first: high) · Enter: actions · Alt+x done · Alt+d delete",
+            "-kb-custom-1", "Alt+x", "-kb-custom-2", "Alt+d", "-kb-custom-3", "Alt+a",
+            "-theme-str", "window { width: 640px; } entry { placeholder: \"Search, or a new task\"; }")
+        if code == 1:
+            return
+        if code == 0 and i < 0 or code == 12:  # something new
+            if task := new_task(typed):
+                tasks.append(task)
+                save(tasks, other)
+            continue
+        if not 0 <= i < len(shown):
+            return
+        task, selected = shown[i], i
+        if code == 0:
+            actions(task, tasks, other)
+        elif code == 10:
+            toggle(task)
+            save(tasks, other)
+        elif code == 11:
+            tasks.remove(task)
+            save(tasks, other)
+
+
+def check():
+    """Reminders and due times that have come: a notification each, once."""
+    tasks, _ = load()
+    now = dt.datetime.now()
+    try:
+        told = set(json.loads(TOLD.read_text()))
+    except (OSError, ValueError):
+        told = set()
+    keep = set()
+    for t in tasks:
+        if t.done:
+            continue
+        for key in ("remind", "due"):
+            stamp = t.meta.get(key)
+            moment = when(stamp)
+            if not moment:
+                continue
+            if len(stamp) == 10:
+                moment = moment.replace(hour=9)  # a day: told in the morning
+            ident = f"{key}\0{t.text}\0{stamp}"
+            keep.add(ident)
+            if moment <= now and ident not in told:
+                notify(("Reminder: " if key == "remind" else "Due: ") + t.text,
+                       stamp, "critical" if key == "due" and t.overdue(now) else "normal")
+                told.add(ident)
+    TOLD.parent.mkdir(parents=True, exist_ok=True)
+    TOLD.write_text(json.dumps(sorted(told & keep)))
+
+
+def migrate():
+    old = DATA / "todo.json"
+    if not old.exists():
+        return 0
+    tasks, other = load()
+    try:
+        items = json.loads(old.read_text()).get("items", [])
+    except ValueError:
+        print(f"desktop todo: {old} isn't JSON; left as it is", file=sys.stderr)
+        return 1
+    known = {t.text for t in tasks}
+    for item in sorted(items, key=lambda x: x.get("rank", 0)):
+        if not item.get("text") or item["text"] in known:
+            continue
+        meta = {"added": today()}
+        if item.get("priority") in ("high", "low"):
+            meta["priority"] = item["priority"]
+        if item.get("done"):
+            meta["done"] = today()
+        tasks.append(Task(item["text"], bool(item.get("done")), meta))
+    save(tasks, other)
+    old.rename(old.with_name("todo.json.bak"))
+    print(f"desktop todo: {len(items)} moved into {FILE}")
+    return 0
+
+
+def main(argv):
+    if not argv:
+        migrate()
+        menu()
+    elif argv[0] == "add" and len(argv) > 1:
+        tasks, other = load()
+        task = new_task(" ".join(argv[1:]))
+        if not task:
+            return 2
+        tasks.append(task)
+        save(tasks, other)
+    elif argv == ["list"]:
+        for n, t in enumerate((t for t in ordered(load()[0]) if not t.done), 1):
+            print(f"{n:3}  {t.text}" + (f"  (due {t.meta['due']})" if t.meta.get("due") else ""))
+    elif argv[0] == "done" and len(argv) == 2 and argv[1].isdigit():
+        tasks, other = load()
+        open_ = [t for t in ordered(tasks) if not t.done]
+        n = int(argv[1])
+        if not 1 <= n <= len(open_):
+            print(f"desktop todo: no open task {n}", file=sys.stderr)
+            return 1
+        toggle(open_[n - 1])
+        save(tasks, other)
+    elif argv == ["check"]:
+        check()
+    elif argv == ["migrate"]:
+        return migrate()
+    else:
+        print(__doc__.split("\n\n")[1], file=sys.stderr)
+        return 2
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

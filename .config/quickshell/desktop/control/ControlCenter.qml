@@ -8,8 +8,8 @@ import qs.widgets
 
 // The control center (a HangingPanel): a row of page tabs at the top (a highlight slides to the one
 // open) with the page's buttons, Settings and Power beside it, then the page; the bar's widgets open
-// their page (Panel.controlPage); Settings and Power only on the home page. To-do and Notes have keys
-// of their own and no tab: open, they show a way back instead.
+// their page (Panel.controlPage); Settings and Power only on the home page. (To-dos and notes are
+// desktop todo and desktop notes, rofi menus, as on i3.)
 HangingPanel {
 	id: root
 
@@ -19,11 +19,9 @@ HangingPanel {
 		{ key: "system", glyph: Icons.g("activity"), component: system },
 		{ key: "notifications", glyph: Icons.g("bell"), component: notifications },
 		{ key: "wifi", glyph: Icons.g("wifi"), component: wifi },
-		{ key: "bluetooth", glyph: Icons.g("bluetooth"), component: bluetooth },
-		{ key: "todo", glyph: Icons.g("checklist"), component: todo, tab: false },
-		{ key: "notes", glyph: Icons.g("notes"), component: notes, tab: false }
+		{ key: "bluetooth", glyph: Icons.g("bluetooth"), component: bluetooth }
 	]
-	readonly property var tabs: pages.filter(p => p.tab !== false)
+	readonly property var tabs: pages
 	readonly property int tabIndex: tabs.findIndex(p => p.key === pageKey)
 
 	readonly property string pageKey: pages.some(p => p.key === Panel.controlPage) ? Panel.controlPage : pages[0].key
@@ -33,7 +31,7 @@ HangingPanel {
 	open: Panel.controlOpen
 	panelWidth: Panel.sizes.control.width
 	// as tall as the page showing (a player coming, a device list opening), up to the panel's size, so
-	// there's no empty foot; a page that fills it (Notes, System) takes it all. 76: the header and margins
+	// there's no empty foot; a page that fills it (System) takes it all. 76: the header and margins
 	panelHeight: page?.item?.fill ? Panel.sizes.control.height : Math.min(Panel.sizes.control.height, Math.max(320, 76 + Math.ceil(page?.item?.implicitHeight ?? 0)))
 
 	Behavior on panelHeight {
@@ -196,30 +194,6 @@ HangingPanel {
 			}
 		}
 
-		// a page without a tab (To-do, Notes): the way back, and its name
-		Row {
-			visible: root.tabIndex < 0
-			anchors.verticalCenter: parent.verticalCenter
-			spacing: 10
-
-			IconButton {
-				anchors.verticalCenter: parent.verticalCenter
-				size: 30
-				radius: Theme.radiusCard
-				glyph: Icons.g("chevron-left")
-				glyphSize: 16
-				onClicked: Panel.controlPage = "home"
-			}
-
-			UiText {
-				anchors.verticalCenter: parent.verticalCenter
-				text: root.page?.item?.title ?? ""
-				font.family: Theme.fontHeading
-				font.pixelSize: Theme.px(16)
-				font.weight: Font.DemiBold
-			}
-		}
-
 		Row {
 			anchors.right: parent.right
 			anchors.verticalCenter: parent.verticalCenter
@@ -263,7 +237,7 @@ HangingPanel {
 
 		// Each page made the first time it shows and then kept, so neither opening nor switching builds
 		// one; a page's scans and polling run only while it's visible. It sizes to its content, or with
-		// fill (Notes) takes the whole panel.
+		// fill (System) takes the whole panel.
 		Repeater {
 			model: root.pages
 
@@ -320,17 +294,5 @@ HangingPanel {
 		id: bluetooth
 
 		BluetoothPage {}
-	}
-
-	Component {
-		id: todo
-
-		TodoPage {}
-	}
-
-	Component {
-		id: notes
-
-		NotesPage {}
 	}
 }

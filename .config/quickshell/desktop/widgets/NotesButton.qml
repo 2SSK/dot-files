@@ -1,9 +1,9 @@
 import QtQuick
+import Quickshell
 import qs
-import qs.services
 
-// Opens the scratch note.
+// Opens the notes: desktop notes, a rofi menu over ~/.local/share/desktop/notes (as on i3).
 BarButton {
 	glyph: Icons.g("notes")
-	page: "notes"
+	onClicked: Quickshell.execDetached(["desktop", "notes"])
 }

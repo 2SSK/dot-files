@@ -1,0 +1,8 @@
+# To-do reminders and due times (desktop todo check): a notification for each that has come, once.
+# desktop-todo-check.timer runs it.
+[Unit]
+Description=Notify to-do reminders and due times
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/desktop todo check

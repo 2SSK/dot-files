@@ -19,6 +19,8 @@ gpu-screen-recorder         @gpu-screen-recorder
 imagemagick                 ImageMagick
 tesseract                   tesseract
 tesseract-data-eng          tesseract-langpack-eng
+# notes and to-dos (desktop notes, desktop todo), and every menu on i3
+rofi                        rofi
 inter-font                  rsms-inter-fonts
 ttf-jetbrains-mono-nerd     @nerd-font
 noto-fonts                  google-noto-sans-devanagari-fonts
