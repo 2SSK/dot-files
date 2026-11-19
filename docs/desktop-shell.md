@@ -17,7 +17,8 @@ A panel that drops out of the middle of the bar, in its colour: the island widen
 the top a row of six page tabs (a highlight slides to the one open) with the page's buttons, Settings
 and Power beside it, then the page. The bar's widgets open their page; from the keyboard,
 **Ctrl+Tab** / **Ctrl+Shift+Tab** (or Ctrl+PgDn / PgUp) turn the tabs and **Alt+1…6** jump to one.
-To-dos and notes aren't here: they're rofi menus, the same on i3 ([notes.md](notes.md)).
+Todo and Notes have no tab: their keys open them, with a ‹ back to Home (Notes widens the panel for
+its list beside the editor).
 
 | Page | Opened by | What's there |
 | --- | --- | --- |
@@ -27,6 +28,8 @@ To-dos and notes aren't here: they're rofi menus, the same on i3 ([notes.md](not
 | Notifications | the bell, `$mod+n` | the history by day, Clear all; Do Not Disturb in the header |
 | Wi-Fi | the Wi-Fi icon | networks by signal: connect (a password for new secured ones), disconnect, forget; scans while open |
 | Bluetooth | the Bluetooth icon | devices: pair, connect, disconnect, forget, battery; the header scans. Paired devices are kept trusted (so they reconnect by themselves); one that can't connect, keeps dropping or can't pair says so and offers Re-pair (forget, pair again, connect). If that fails too, clear the device's own Bluetooth profile (ZMK: `&bt BT_CLR`) and Pair |
+| Todo | `$mod+Shift+t` | tasks with a priority (H/M/L, a click on it changes it), grouped high to low, done ones last; drag a task (anywhere on it) to reorder it (among another priority's tasks it takes theirs); kept in `~/.local/share/desktop/todo.json` |
+| Notes | `$mod+Shift+n` | notes of three kinds (text, checklist, code with Copy) with a colour tag; new, pin and delete in the header, search beside the list; kept in `~/.local/share/desktop/notes/` (a private folder) |
 
 The gear opens the settings, the power icon the power menu. Escape or focusing another window
 closes it. Wi-Fi needs NetworkManager, Bluetooth BlueZ; without them the pages
@@ -244,7 +247,7 @@ Hidden with `$mod+Shift+b`, the bar comes back over the windows while the pointe
 | Alt+Tab (hold Alt) | window switcher |
 | `$mod+Shift+/` (Super+?) | every key binding, in words (Settings → Keys) |
 | `$mod+Escape` | keys to the VM (or anything nested) until pressed again; the bar shows "VM keys" |
-| `$mod+Shift+t` / `$mod+Shift+n` | to-dos / notes: rofi menus ([notes.md](notes.md)) |
+| `$mod+Shift+t` / `$mod+Shift+n` | todo / notes (on i3: rofi menus, [notes.md](notes.md)) |
 | `$mod+p` | power menu (again, Escape or a click beside it closes): arrows or 1–5 pick, Enter runs |
 
 Each change shows in a card at the top right; Caps Lock and Num Lock show there by themselves.

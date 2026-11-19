@@ -27,38 +27,31 @@ REPO="$BATS_TEST_DIRNAME/.."
 # The prompt after the frontmatter
 agent_body() { awk 'f>=2; /^---$/{f++}' "$1"; }
 
-@test "both tools give each mentor the same teaching prompt" {
-	for pair in "mentor.md mentor.md" "devops-sre-mentor.md devops/devops-sre-mentor.md"; do
-		read -r claude opencode <<<"$pair"
-		[ -n "$(agent_body "$REPO/.claude/agents/$claude")" ]
-		[ "$(agent_body "$REPO/.claude/agents/$claude")" = "$(agent_body "$REPO/.config/opencode/agent/$opencode")" ]
-	done
+@test "both tools give the mentor the same teaching prompt" {
+	[ -n "$(agent_body "$REPO/.claude/agents/mentor.md")" ]
+	[ "$(agent_body "$REPO/.claude/agents/mentor.md")" = "$(agent_body "$REPO/.config/opencode/agent/mentor.md")" ]
 }
 
-@test "mentors teach with hints and keep a rescue, not hand over code" {
-	for file in "$REPO/.claude/agents/mentor.md" "$REPO/.claude/agents/devops-sre-mentor.md"; do
-		body=$(agent_body "$file")
-		for section in "## Hint ladder" "## Rescue" "sed -i"; do
-			grep -qF "$section" <<<"$body" || { echo "$file lacks: $section" && false; }
-		done
-		! grep -qE 'Show the corrected version|Give me ONLY the code|Hand-hold' <<<"$body"
+@test "the mentor teaches with hints from the learner's plan and keeps a rescue" {
+	body=$(agent_body "$REPO/.claude/agents/mentor.md")
+	for section in "## Hint ladder" "## Rescue" "sed -i" "~/Code/Learning/plan/CAREER.md" "~/Code/Learning/plan/LEARNING-PLAN.md"; do
+		grep -qF "$section" <<<"$body" || { echo "mentor lacks: $section" && false; }
 	done
+	! grep -qE 'Show the corrected version|Give me ONLY the code|Hand-hold' <<<"$body"
 }
 
-@test "claude mentors can only change files through a prompted Bash" {
-	for file in "$REPO/.claude/agents/mentor.md" "$REPO/.claude/agents/devops-sre-mentor.md"; do
-		grep -qx 'tools: Read, Grep, Glob, WebSearch, WebFetch, Bash' "$file"
-		grep -qx 'permissionMode: default' "$file"
-	done
+@test "the claude mentor can only change files through a prompted Bash" {
+	grep -qx 'tools: Read, Grep, Glob, WebSearch, WebFetch, Bash' "$REPO/.claude/agents/mentor.md"
+	grep -qx 'permissionMode: default' "$REPO/.claude/agents/mentor.md"
 }
 
-@test "opencode mentors deny everything but reading, search and sed" {
-	for file in "$REPO/.config/opencode/agent/mentor.md" "$REPO/.config/opencode/agent/devops/devops-sre-mentor.md"; do
-		grep -qx 'mode: primary' "$file"
-		grep -qx '  "\*": deny' "$file"
-		grep -qx '    "sed \*": ask' "$file"
-		! grep -qE '^  (edit|write): allow' "$file"
-	done
+@test "the opencode mentor denies everything but reading, search, the plan and sed" {
+	file="$REPO/.config/opencode/agent/mentor.md"
+	grep -qx 'mode: primary' "$file"
+	grep -qx '  "\*": deny' "$file"
+	grep -qx '    "sed \*": ask' "$file"
+	grep -qx '    "~/Code/Learning/plan/\*": allow' "$file"
+	! grep -qE '^  (edit|write): allow' "$file"
 }
 
 @test "only claude and opencode see ~/.config/secrets.env" {

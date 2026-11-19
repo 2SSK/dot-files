@@ -1,7 +1,10 @@
-# Notes and to-dos
+# Notes and to-dos on i3
 
-Two rofi menus over plain Markdown files, the same on sway and i3, after JustAGuyLinux's
-ButterNotes and ButterTodo. The files are fine to edit by hand, sync or grep.
+On sway the shell's own pages keep them (the control center's Todo and Notes, `$mod+Shift+t` and
+`$mod+Shift+n`: see [desktop-shell.md](desktop-shell.md)). i3 has no shell, so there the same keys
+open two rofi menus over plain Markdown files, after JustAGuyLinux's ButterNotes and ButterTodo.
+The files are fine to edit by hand, sync or grep. The two keep separate files: the shell's JSON
+and these Markdown ones.
 
 ## To-dos: `desktop todo` (`$mod+Shift+t`)
 
@@ -45,12 +48,11 @@ The menu shows the inbox, a search through every note, your notes (latest first)
 - The inbox: Enter copies an entry, Alt+m files it into a project's note, Alt+d drops it, Alt+e
   opens the inbox itself.
 - The search lists every line of every note; Enter opens that note at that line.
-- From a terminal: `desktop notes quick <text>`, `desktop notes clip [text]`. The shell's clipboard
-  panel on sway has "Keep in the notes' inbox".
+- From a terminal: `desktop notes quick <text>`, `desktop notes clip [text]`.
 
-## From the old shell pages
+## From the shell's pages
 
-The first time each menu opens it moves the shell's old data across: `todo.json` (priorities kept)
-and `notes/notes.json` (each note a file: a checklist as `- [ ]` lines, a code note fenced). The
-JSON is kept beside them as `.bak`. Colour tags and pins have no place in plain files and are
-dropped.
+`desktop todo migrate` and `desktop notes migrate` copy the shell's `todo.json` and
+`notes/notes.json` into the Markdown files (a checklist as `- [ ]` lines, a code note fenced), by
+hand only; the JSON is kept as `.bak`, so put it back if sway's pages should keep it. Colour tags
+and pins have no place in plain files and are dropped.

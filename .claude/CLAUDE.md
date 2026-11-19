@@ -313,7 +313,7 @@ Claude Code doesn't have native multi-agent. Adopt these roles by context:
 | architecture | api-designer, architect-reviewer, cloud-architect, graphql-architect |
 | backend | backend-developer, cpp-pro, golang-pro, python-pro, rust-engineer, sql-pro |
 | data | database-administrator, postgres-pro |
-| devops | azure-infra-engineer, deployment-engineer, devops-engineer, devops-sre-mentor, kubernetes-specialist, terraform-engineer |
+| devops | azure-infra-engineer, deployment-engineer, devops-engineer, kubernetes-specialist, terraform-engineer |
 | frontend | frontend-developer, javascript-pro, nextjs-developer, react-specialist, typescript-pro |
 | fullstack | fullstack-developer |
 | incident-response | debugger, devops-incident-responder, error-detective, incident-responder, temporal-investigator |

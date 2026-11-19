@@ -57,8 +57,10 @@ EOF
 	"$LIB/i3" settings page keys
 	"$LIB/i3" switcher next
 	"$LIB/i3" power open
+	"$LIB/i3" control page todo
+	"$LIB/i3" control page notes
 	[ "$(grep -v '^i3-msg' "$CALLS")" = "$(printf '%s\n' 'desktop menu emoji' 'desktop level volume up' 'desktop level brightness down' \
-		'desktop menu keys' 'desktop menu windows' 'desktop menu power')" ]
+		'desktop menu keys' 'desktop menu windows' 'desktop menu power' 'desktop todo' 'desktop notes')" ]
 	[ "$(grep -c '^i3-msg -q mode default' "$CALLS")" -eq 2 ]
 }
 
@@ -72,7 +74,7 @@ EOF
 	"$LIB/menu" power
 	! grep -q "^systemctl" "$CALLS"
 	grep -q "^rofi .*-mesg <span foreground='[^']*'>Reboot? press 4 or Enter again</span>" "$CALLS" # it asks
-	grep -q "^rofi .*-selected-row 3 " "$CALLS"    # and stays picked
+	grep -q "^rofi .*-selected-row 3 " "$CALLS"                                                     # and stays picked
 	: >"$CALLS" && : >"$BATS_TEST_TMPDIR/rofi-count" && : >"$ROFI_ANSWERS"
 	answer 13 "" # 4 once
 	answer 10 "" # then 1: lock instead, at once

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Notes as Markdown files, in rofi, on sway and i3 alike (after JustAGuyLinux's ButterNotes).
+"""Notes as Markdown files, in rofi: i3's notes (after JustAGuyLinux's ButterNotes); sway has the
+shell's own page.
 
   desktop notes                  rofi: the inbox, your notes, the projects (folders of notes) and a
                                  search through every note. Enter opens one in nvim (a floating
@@ -8,8 +9,8 @@
                                  Alt+m moves a note into a project
   desktop notes quick <text>     a line in the inbox, timestamped
   desktop notes clip [text]      the clipboard (or the text) in the inbox, as a block
-  desktop notes migrate          the shell's old notes.json as files (once; the JSON is kept as
-                                 notes.json.bak)
+  desktop notes migrate          the shell's notes.json as files (by hand only: the shell keeps
+                                 using its JSON; kept as notes.json.bak)
 
 ~/.local/share/desktop/notes/
   inbox.md                  quick notes, newest last: "[2026-11-17 09:30] a thought"
@@ -235,7 +236,6 @@ def folder_view(folder):
 
 
 def menu():
-    migrate(quiet=True)
     while True:
         ROOT.mkdir(parents=True, exist_ok=True)
         count = len(inbox_entries())

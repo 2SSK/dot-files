@@ -104,3 +104,9 @@ setup() {
 	[ "$(grep -c '^notify-send' "$CALLS")" -eq 1 ]
 	grep -q "Reminder: Past" "$CALLS"
 }
+
+@test "the menu leaves the shell's todo.json alone (sway's to-do page keeps using it)" {
+	echo '{"items":[{"text":"Shell task"}]}' >"$XDG_DATA_HOME/desktop/todo.json"
+	run "$TODO"
+	[ -f "$XDG_DATA_HOME/desktop/todo.json" ] && [ ! -e "$XDG_DATA_HOME/desktop/todo.json.bak" ]
+}

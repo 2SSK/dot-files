@@ -120,3 +120,9 @@ opened() { # waits for kitty (started in the background) to be asked to open som
 	opened
 	grep -q "nvim +4 $DIR/A.md$" "$CALLS"
 }
+
+@test "the menu leaves the shell's notes.json alone (sway's notes page keeps using it)" {
+	echo '{"notes":[]}' >"$DIR/notes.json"
+	run "$NOTES"
+	[ -f "$DIR/notes.json" ] && [ ! -e "$DIR/notes.json.bak" ]
+}

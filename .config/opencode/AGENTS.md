@@ -226,8 +226,7 @@ gates:
 - **typescript-pro** - TypeScript/React frontend
 - **cpp-pro** - C++/systems programming
 - **devops-engineer** - Infrastructure and deployment
-- **mentor** - Recreational programming, taught through hints
-- **devops-sre-mentor** - DevOps and SRE, taught through hints
+- **mentor** - Career-aware teacher for Linux, SRE, infrastructure and programming, through hints
 
 ### Subagents (invoked with @)
 - **code-reviewer** - Code quality review

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""To-dos in one Markdown file, in rofi, on sway and i3 alike (after JustAGuyLinux's ButterTodo).
+"""To-dos in one Markdown file, in rofi: i3's to-dos (after JustAGuyLinux's ButterTodo); sway has
+the shell's own page.
 
   desktop todo                     the list in rofi: open tasks first (high priority, then the
                                    soonest due), done ones after. Type and Enter to add one
@@ -11,8 +12,8 @@
   desktop todo done <n>            mark the nth open one done
   desktop todo check               notify reminders and due times that have come (a user timer
                                    runs it every few minutes); each is told once
-  desktop todo migrate             move the shell's old todo.json into the file (once; the JSON
-                                   is kept beside it as todo.json.bak)
+  desktop todo migrate             copy the shell's todo.json (sway's to-do page) into the file
+                                   (by hand only: the shell keeps using its JSON; kept as .bak)
 
 The file, ~/.local/share/desktop/todo.md, is plain Markdown, fine to edit by hand:
   - [ ] Review the config *(added: 2026-11-16, due: 2026-11-17 17:00, priority: high)*
@@ -332,7 +333,6 @@ def migrate():
 
 def main(argv):
     if not argv:
-        migrate()
         menu()
     elif argv[0] == "add" and len(argv) > 1:
         tasks, other = load()

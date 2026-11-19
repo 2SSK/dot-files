@@ -6,7 +6,7 @@ h="$(dirname "$(readlink -f "$0")")/harness.sh"
 T="${XDG_CACHE_HOME:-$HOME/.cache}/qs-test"
 out="$T/$1" && rm -rf "$out" && mkdir -p "$out"
 shot() { sleep "${2:-1.2}"; WAYLAND_DISPLAY=$(cat "$T/display") grim "$out/$1.png"; }
-for p in home calendar system notifications wifi bluetooth; do "$h" ipc control open "$p"; shot "control-$p"; done
+for p in home calendar system notifications wifi bluetooth todo notes; do "$h" ipc control open "$p"; shot "control-$p"; done
 "$h" ipc control close; sleep 0.6
 for m in apps files emoji themes; do "$h" ipc launcher toggle "$m"; shot "launcher-$m" 1.5; done
 "$h" ipc launcher close; sleep 0.6

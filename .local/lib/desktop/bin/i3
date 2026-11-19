@@ -35,6 +35,13 @@ recorder:toggle) exec desktop record toggle ;;
 capture:toggle) exec desktop menu capture ;;
 notifications:toggle) exec desktop menu notifications ;;
 settings:page) if [[ $arg == keys ]]; then exec desktop menu keys; else exec desktop menu settings; fi ;;
+control:page)
+	case $arg in
+	todo) exec desktop todo ;;
+	notes) exec desktop notes ;;
+	*) exec desktop menu settings ;;
+	esac
+	;;
 settings:toggle | control:toggle) exec desktop menu settings ;;
 clipboard:toggle) exec desktop menu clipboard ;;
 wallpaper:toggle) exec desktop menu wallpaper ;;

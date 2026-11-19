@@ -140,10 +140,12 @@ Rectangle {
 		Chip {
 			visible: preview.entry?.kind === "text"
 			glyph: Icons.g("notes")
-			label: "Keep in the notes' inbox"
+			label: "Save as a note"
 			onClicked: {
-				Quickshell.execDetached(["desktop", "notes", "clip", preview.entry.text]);
+				Notes.addSnippet(preview.entry.text);
 				Panel.clipboardOpen = false;
+				Panel.controlPage = "notes";
+				Panel.controlOpen = true;
 			}
 		}
 

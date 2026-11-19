@@ -20,7 +20,7 @@ and a minimal **i3** (polybar, rofi, dunst) on the same keys, with one theme tha
   and settings ([docs/desktop-shell.md](docs/desktop-shell.md)).
 - **Minimal i3**: polybar, rofi menus for everything (clipboard, capture, wallpapers, themes,
   power, notifications), dunst and a light picom ([docs/i3.md](docs/i3.md)).
-- **Notes and to-dos**: Markdown files behind rofi menus, the same in both sessions
+- **Notes and to-dos**: the shell's pages on sway; on i3, Markdown files behind rofi menus
   ([docs/notes.md](docs/notes.md)).
 - **One theme**: pick a palette (8 families, dark and light) and kitty, foot, nvim, tmux, GTK, Qt,
   i3/sway, the shell, polybar, rofi, dunst, the login screen and the boot menu follow it live.

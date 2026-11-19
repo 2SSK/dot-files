@@ -66,18 +66,25 @@ can't refuse it itself: both clients block it instead. opencode turns it off in 
 (`permissions.deny: ["mcp__temporal__start_workflow"]`; that file isn't in the repo, so add the rule
 on a new machine).
 
-## Mentors
+## Mentor
 
-`mentor` (recreational programming) and `devops-sre-mentor` teach through hints instead of writing
-the code. Both need a live conversation, so they run as the main session rather than as subagents:
+`mentor` is a career-aware teacher for Linux, SRE, infrastructure and programming. It teaches
+through attempts, hints and lab experiments instead of writing the code, and switches between
+modes: learn, lab, drill (incidents from symptoms), review, a weekly check-in and mock interviews.
+It needs a live conversation, so it runs as the main session rather than as a subagent:
 `claude --agent mentor`, or Tab to it in opencode.
 
-Each has the same prompt in both tools (`tests/ai.bats` checks this). They can't edit files with
-the normal tools. For a repair, say "rescue" or "fix it": the mentor uses `sed` and asks for
-approval first. opencode enforces this per command. Claude Code can't limit Bash to `sed` here, so
-there it rests on the prompt and on approving each command, which also means Bash isn't confined
-in a mode that skips approvals. Project notes go in a `LEARNING.md` that the learner writes and the
-mentor only reads.
+Every session starts from the learner's plan, which lives outside this repo:
+`~/Code/Learning/plan/CAREER.md` (goal, roles, project order, rules) and `LEARNING-PLAN.md` (Now /
+Next / Later, mastery checks it quizzes from, the tracker, the parking lot). opencode only lets it
+read outside the project in that folder (`external_directory`).
+
+It has the same prompt in both tools (`tests/ai.bats` checks this). It can't edit files with the
+normal tools. For a repair, say "rescue" or "fix it": the mentor uses `sed` and asks for approval
+first. opencode enforces this per command. Claude Code can't limit Bash to `sed` here, so there it
+rests on the prompt and on approving each command, which also means Bash isn't confined in a mode
+that skips approvals. Project notes go in a `LEARNING.md` and the plan files, which the learner
+writes and the mentor only reads.
 
 `.config/opencode` is stowed like the rest (its own `node_modules`, lock files and `.env` of keys
 aren't linked), so opencode sees changes at once. `.claude` isn't stowed yet: copy changed agents
