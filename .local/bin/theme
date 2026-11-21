@@ -37,7 +37,7 @@ EOF
 consumers() {
 	cat <<'EOF'
 palette.json     -                  qs -c desktop ipc call theme reload
-kitty.conf       -                  for s in "${XDG_RUNTIME_DIR:-/run/user/$UID}"/kitty-*; do [[ -S $s ]] && kitten @ --to "unix:$s" set-colors --all --configured "$state/kitty.conf"; done
+kitty.conf       -                  for s in "${XDG_RUNTIME_DIR:-/run/user/$UID}"/kitty-*; do [[ -S $s ]] && kitten @ --to "unix:$s" set-colors --all --configured "$state/kitty.conf" && kitten @ --to "unix:$s" set-background-opacity --all "$([[ $mode == dark ]] && echo 0.9 || echo 1)"; done
 foot.ini         -                  pkill -$([[ $mode == dark ]] && echo USR1 || echo USR2) -x foot
 cava             -                  pkill -USR2 -x cava
 palette.json     -                  pkill -USR1 -x nvim

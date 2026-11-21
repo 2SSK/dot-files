@@ -32,7 +32,7 @@ Palette values are copied from each project's official ports, with attribution i
 
 | App | How | When it updates |
 | --- | --- | --- |
-| kitty | `include` of the rendered `kitty.conf` | Live (`kitten @ set-colors` on each kitty) |
+| kitty | `include` of the rendered `kitty.conf` (its opacity too: 0.9 in dark mode, opaque in light, as foot and nvim) | Live (`kitten @ set-colors` and `set-background-opacity` on each kitty) |
 | foot | `include` of the rendered `foot.ini` with dark and light variants | Mode live (SIGUSR1/2); family in new windows |
 | st | `~/.Xresources` includes the rendered `st.Xresources`; `xrdb -merge` + SIGUSR1 (reload patch) | Live on X11 |
 | tmux | `source-file` of the rendered `tmux.conf` | Live (re-sourced) |

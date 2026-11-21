@@ -120,6 +120,13 @@ class Render(unittest.TestCase):
         with self.assertRaises(tr.ThemeError):
             tr.render("tokyonight", "dim", self.state)
 
+    def test_terminals_opaque_in_light_mode(self):
+        """See-through in dark mode; opaque in light, where a wallpaper behind would grey it out."""
+        tr.render("rosepine", "dark", self.state)
+        self.assertIn("background_opacity 0.9\n", (self.state / "kitty.conf").read_text())
+        tr.render("rosepine", "light", self.state)
+        self.assertIn("background_opacity 1.0\n", (self.state / "kitty.conf").read_text())
+
     def test_golden_output(self):
         tr.render("tokyonight", "dark", self.state)
         for name in tr.targets():

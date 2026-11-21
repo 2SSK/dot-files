@@ -228,6 +228,9 @@ assert "ctrl+h" not in str(k).replace("prefix+ctrl+h", ""), "Ctrl+h without the 
 	[[ $(signals) == *"kitten @ --to unix:$XDG_RUNTIME_DIR/kitty-101 set-colors --all --configured $STATE/kitty.conf"* ]]
 	[[ $(signals) == *"kitten @ --to unix:$XDG_RUNTIME_DIR/kitty-202 set-colors"* ]]
 	[[ $(signals) != *"picom"* ]] # its reset would redraw the whole screen
+	[[ $(signals) == *"kitten @ --to unix:$XDG_RUNTIME_DIR/kitty-101 set-background-opacity --all 0.9"* ]]
+	run "$THEME" set rosepine --mode light # light: opaque, the wallpaper kept out
+	[[ $(signals) == *"kitten @ --to unix:$XDG_RUNTIME_DIR/kitty-101 set-background-opacity --all 1"* ]]
 }
 
 @test "a switch prints nothing unless something goes wrong" {

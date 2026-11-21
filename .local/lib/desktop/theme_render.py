@@ -127,6 +127,8 @@ def variables(theme, family, mode, state):
         "gtk_theme": "adw-gtk3-dark" if dark else "adw-gtk3",
         "color_scheme": "prefer-dark" if dark else "prefer-light",
         "icon_theme": f"Tela-circle-blue-{mode}",
+        # terminals see-through in dark mode; opaque in light, where a wallpaper behind greys it out
+        "terminal_opacity": "0.9" if dark else "1.0",
         **{f"font_{role}": name for role, name in fonts().items()},
     }
     for m in MODES:

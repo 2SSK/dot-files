@@ -32,10 +32,14 @@ function M.apply()
 end
 
 function M.setup()
-	-- Transparent background, so the terminal's opacity shows through
+	-- Transparent background in dark mode, so the terminal's opacity shows through; in light mode
+	-- the terminal is opaque and nvim keeps the theme's background
 	vim.api.nvim_create_autocmd("ColorScheme", {
 		group = vim.api.nvim_create_augroup("desktop-theme", { clear = true }),
 		callback = function()
+			if vim.o.background ~= "dark" then
+				return
+			end
 			for _, group in ipairs({
 				"Normal", "NormalNC", "NormalFloat", "FloatBorder", "SignColumn", "FoldColumn", "EndOfBuffer",
 				"LineNr", "LineNrAbove", "LineNrBelow", "CursorLineNr", "TabLine", "TabLineFill",
