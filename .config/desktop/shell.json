@@ -37,7 +37,7 @@
     },
     "fonts": {
         "barWeight": 600,
-        "collection": "sf",
+        "collection": "inter",
         "scale": 1.15,
         "weight": 600
     },
