@@ -37,6 +37,25 @@ t() { tmux -S "$SOCK" "$@"; }
 	[[ $output == *' s '*'split-window -v -c "#{pane_current_path}"'* ]]
 }
 
+@test "prefix t: a floating window on the session's own companion session; inside it, t closes it" {
+	run t list-keys -T prefix t
+	[[ $output == *'if-shell -F "#{m:float-*,#{session_name}}" { detach-client }'* ]]
+	[[ $output == *"display-popup -E"*"TMUX= tmux new-session -A -s 'float-#{session_name}' -c '#{pane_current_path}' ';' set-option status off"* ]]
+	# the popup's command, as its shell runs it (detached here: no client to show it)
+	TMUX= sh -c "tmux -S '$SOCK' new-session -d -A -s float-t -c '$HOME' ';' set-option -t float-t status off"
+	[ "$(t show -t float-t -v status)" = off ]
+	[ "$(t display -p -t float-t '#{pane_current_path}')" = "$HOME" ]
+}
+
+@test "the session picker leaves the floating windows' companion sessions out" {
+	t new-session -d -s float-t
+	mkdir -p "$BATS_TEST_TMPDIR/bin"
+	printf '#!/bin/sh\nexec %s -S %s "$@"\n' "$(command -v tmux)" "$SOCK" >"$BATS_TEST_TMPDIR/bin/tmux"
+	chmod +x "$BATS_TEST_TMPDIR/bin/tmux"
+	run env PATH="$BATS_TEST_TMPDIR/bin:$PATH" "$BATS_TEST_DIRNAME/../.config/tmux/sessions.sh" --list
+	[ "$output" = t ]
+}
+
 @test "i3 and sway start tmux detached at login, so the saved sessions are there to attach to" {
 	local line='exec --no-startup-id tmux-save start'
 	grep -qxF "$line" "$BATS_TEST_DIRNAME/../.config/i3/conf.d/autostart.conf"

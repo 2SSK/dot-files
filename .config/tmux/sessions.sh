@@ -5,7 +5,8 @@
 #   sessions.sh            pick
 #   sessions.sh --list     the names, most recent first
 if [[ ${1:-} == --list ]]; then
-	tmux list-sessions -F '#{session_activity} #{session_name}' 2>/dev/null | sort -rn | cut -d' ' -f2-
+	# (not the floating windows' companion sessions, float-*: prefix t opens those)
+	tmux list-sessions -F '#{session_activity} #{session_name}' 2>/dev/null | sort -rn | cut -d' ' -f2- | grep -v '^float-' || true
 	exit
 fi
 out="$("$0" --list | fzf --print-query --prompt='tmux> ' --header='enter: go · new name: make it · ctrl-x: kill' \

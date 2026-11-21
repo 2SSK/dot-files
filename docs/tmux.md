@@ -3,9 +3,9 @@
 Config: `~/.config/tmux/tmux.conf`. The prefix is **`` ` ``** (backtick); press it twice
 to type a literal backtick.
 
-The status bar sits at the top, with no plugin: the session name on the left (`●` while the
-prefix is held), the windows centred (the current one bold in the theme's primary colour, the
-rest muted) and the host name on the right. Colours come from the desktop theme
+The status bar sits at the top, with no plugin, and keeps to two things: the windows on the left
+(the current one bold in the theme's primary colour, the rest muted) and the session name on the
+right (`●` before it while the prefix is held). Colours come from the desktop theme
 (`~/.local/state/desktop/theme/tmux.conf`), so `theme` recolours a running tmux too.
 
 Plugins are pinned in `packages/plugins.txt` and installed by `setup.sh` into
@@ -20,6 +20,7 @@ Plugins are pinned in `packages/plugins.txt` and installed by `setup.sh` into
 | `Ctrl+h/j/k/l` | Resize the pane (repeatable) |
 | `m` | Zoom the pane |
 | `Ctrl+←` / `Ctrl+→` | Move the window left / right |
+| `t` | A floating window for this session (a popup on its own companion session, `float-<session>`, started where the pane is): what runs there, such as `make test`, keeps running when it's closed and is as you left it when `t` opens it again; inside it `t` closes it, and copy mode works as anywhere. The session picker leaves these out |
 | `Space` | Session picker (fzf in a popup): Enter goes, a new name makes one, Ctrl-X kills; `ts` in a shell |
 | `y` | Toggle typing into all panes at once |
 | `v` | Save the session now (resurrect) |
